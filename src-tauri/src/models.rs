@@ -372,7 +372,7 @@ pub struct RecipeStats {
 
 // --- Input types for create/update commands ---
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Default)]
 pub struct CreateRecipeInput {
     pub name: String,
     pub type_: Option<String>,
@@ -383,7 +383,7 @@ pub struct CreateRecipeInput {
     pub source_id: Option<String>,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Default)]
 pub struct UpdateRecipeInput {
     pub name: Option<String>,
     pub type_: Option<String>,
