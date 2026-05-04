@@ -4,7 +4,8 @@ mod error;
 pub mod models;
 pub mod brewing;
 
-use sqlx::SqlitePool;
+use sqlx::sqlite::{SqliteConnectOptions, SqlitePool};
+use std::str::FromStr;
 use tauri::Manager;
 
 pub struct AppState {
@@ -20,8 +21,10 @@ pub fn run() {
             std::fs::create_dir_all(&app_dir)?;
             let db_url = format!("sqlite:{}", app_dir.join("brewski.db").display());
 
+            let opts = SqliteConnectOptions::from_str(&db_url)?
+                .create_if_missing(true);
             let pool = tauri::async_runtime::block_on(
-                SqlitePool::connect(&db_url)
+                SqlitePool::connect_with(opts)
             )?;
 
             tauri::async_runtime::block_on(
