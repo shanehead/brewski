@@ -1,0 +1,119 @@
+<script lang="ts">
+  import type { Recipe, Hop } from "$lib/api";
+  import { listHopLibrary, createRecipeHop, deleteRecipeHop } from "$lib/api";
+  import { onMount } from "svelte";
+
+  let { recipe, onchange }: { recipe: Recipe; onchange: () => void } = $props();
+
+  let library = $state<Hop[]>([]);
+  let adding = $state(false);
+  let selectedLibId = $state("");
+  let amount = $state(0.028);
+  let use_ = $state("boil");
+  let time = $state(60);
+
+  onMount(async () => { library = await listHopLibrary(); });
+
+  const selectedLib = $derived(library.find((h) => h.id === selectedLibId));
+
+  async function handleAdd() {
+    if (!selectedLib) return;
+    await createRecipeHop(recipe.id, {
+      hop_id: selectedLib.id,
+      name: selectedLib.name,
+      alpha_pct: selectedLib.alpha_pct,
+      form: selectedLib.form,
+      amount_kg: amount,
+      use_,
+      time_min: time,
+    });
+    adding = false;
+    selectedLibId = "";
+    onchange();
+  }
+
+  async function handleDelete(id: string) {
+    await deleteRecipeHop(id);
+    onchange();
+  }
+
+  const HOP_USES = ["boil", "aroma", "dry hop", "first wort", "whirlpool"] as const;
+</script>
+
+<div class="flex flex-col gap-2">
+  <div class="flex items-center justify-between">
+    <h3 class="text-sm font-semibold" style="color: var(--color-text-primary);">Hops</h3>
+    <button onclick={() => adding = !adding} class="text-xs px-2 py-1 rounded"
+            style="background: var(--color-accent); color: #fff;">+ Add</button>
+  </div>
+
+  {#if adding}
+    <div class="flex flex-wrap gap-2 items-end p-2 rounded" style="background: var(--color-bg-elevated);">
+      <div class="flex-1 min-w-32">
+        <label class="text-xs mb-1 block" style="color: var(--color-text-secondary);">Hop</label>
+        <select bind:value={selectedLibId} class="w-full px-2 py-1.5 rounded text-sm"
+                style="background: var(--color-bg-base); color: var(--color-text-primary); border: 1px solid var(--color-border);">
+          <option value="">Choose…</option>
+          {#each library as h}
+            <option value={h.id}>{h.name} ({h.alpha_pct}% AA)</option>
+          {/each}
+        </select>
+      </div>
+      <div class="w-20">
+        <label class="text-xs mb-1 block" style="color: var(--color-text-secondary);">Amount (kg)</label>
+        <input type="number" step="0.001" bind:value={amount} min="0.001"
+               class="w-full px-2 py-1.5 rounded text-sm"
+               style="background: var(--color-bg-base); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
+      </div>
+      <div class="w-28">
+        <label class="text-xs mb-1 block" style="color: var(--color-text-secondary);">Use</label>
+        <select bind:value={use_} class="w-full px-2 py-1.5 rounded text-sm"
+                style="background: var(--color-bg-base); color: var(--color-text-primary); border: 1px solid var(--color-border);">
+          {#each HOP_USES as u}
+            <option value={u}>{u}</option>
+          {/each}
+        </select>
+      </div>
+      <div class="w-16">
+        <label class="text-xs mb-1 block" style="color: var(--color-text-secondary);">Time (min)</label>
+        <input type="number" step="5" bind:value={time} min="0"
+               class="w-full px-2 py-1.5 rounded text-sm"
+               style="background: var(--color-bg-base); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
+      </div>
+      <button onclick={handleAdd} class="text-xs px-3 py-1.5 rounded self-end"
+              style="background: var(--color-accent); color: #fff;">Add</button>
+      <button onclick={() => adding = false} class="text-xs px-2 py-1.5 rounded self-end"
+              style="color: var(--color-text-secondary);">Cancel</button>
+    </div>
+  {/if}
+
+  {#if recipe.hops.length > 0}
+    <table class="w-full text-sm">
+      <thead>
+        <tr style="color: var(--color-text-muted);">
+          <th class="text-left py-1 font-medium text-xs">Name</th>
+          <th class="text-right py-1 font-medium text-xs">AA%</th>
+          <th class="text-right py-1 font-medium text-xs">g</th>
+          <th class="text-right py-1 font-medium text-xs">Use</th>
+          <th class="text-right py-1 font-medium text-xs">Time</th>
+          <th class="w-6"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {#each recipe.hops as h (h.id)}
+          <tr class="border-t" style="border-color: var(--color-border);">
+            <td class="py-1.5" style="color: var(--color-text-primary);">{h.name}</td>
+            <td class="text-right py-1.5" style="color: var(--color-text-secondary);">{h.alpha_pct}%</td>
+            <td class="text-right py-1.5" style="color: var(--color-text-secondary);">{(h.amount_kg * 1000).toFixed(0)}g</td>
+            <td class="text-right py-1.5" style="color: var(--color-text-secondary);">{h.use_}</td>
+            <td class="text-right py-1.5" style="color: var(--color-text-secondary);">{h.time_min}min</td>
+            <td class="pl-1">
+              <button onclick={() => handleDelete(h.id)} class="text-xs opacity-40 hover:opacity-100"
+                      style="color: var(--color-text-secondary);">×</button>
+            </td>
+          </tr>
+        {/each}
+      </tbody>
+    </table>
+  {/if}
+</div>
