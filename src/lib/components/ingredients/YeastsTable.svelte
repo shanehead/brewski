@@ -46,8 +46,8 @@
   {#if adding}
     <div class="flex gap-2 items-end p-2 rounded" style="background: var(--color-bg-elevated);">
       <div class="flex-1">
-        <label class="text-xs mb-1 block" style="color: var(--color-text-secondary);">Yeast</label>
-        <select bind:value={selectedLibId} class="w-full px-2 py-1.5 rounded text-sm"
+        <label for="yeast-select" class="text-xs mb-1 block" style="color: var(--color-text-secondary);">Yeast</label>
+        <select id="yeast-select" bind:value={selectedLibId} class="w-full px-2 py-1.5 rounded text-sm"
                 style="background: var(--color-bg-base); color: var(--color-text-primary); border: 1px solid var(--color-border);">
           <option value="">Choose…</option>
           {#each library as y}

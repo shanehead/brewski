@@ -54,8 +54,8 @@
   {#if adding}
     <div class="flex gap-2 items-end p-2 rounded" style="background: var(--color-bg-elevated);">
       <div class="flex-1">
-        <label class="text-xs mb-1 block" style="color: var(--color-text-secondary);">Fermentable</label>
-        <select bind:value={selectedLibId} class="w-full px-2 py-1.5 rounded text-sm"
+        <label for="fermentable-select" class="text-xs mb-1 block" style="color: var(--color-text-secondary);">Fermentable</label>
+        <select id="fermentable-select" bind:value={selectedLibId} class="w-full px-2 py-1.5 rounded text-sm"
                 style="background: var(--color-bg-base); color: var(--color-text-primary); border: 1px solid var(--color-border);">
           <option value="">Choose…</option>
           {#each library as f}
@@ -64,8 +64,8 @@
         </select>
       </div>
       <div class="w-24">
-        <label class="text-xs mb-1 block" style="color: var(--color-text-secondary);">Amount (kg)</label>
-        <input type="number" step="0.1" bind:value={amount} min="0.01"
+        <label for="fermentable-amount" class="text-xs mb-1 block" style="color: var(--color-text-secondary);">Amount (kg)</label>
+        <input id="fermentable-amount" type="number" step="0.1" bind:value={amount} min="0.01"
                class="w-full px-2 py-1.5 rounded text-sm"
                style="background: var(--color-bg-base); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
       </div>

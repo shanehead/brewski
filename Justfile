@@ -5,17 +5,17 @@ default:
 
 # Start the Tauri dev server
 dev:
-    npm run tauri dev
+    bun run tauri dev
 
 # Start the frontend dev server only (no Tauri)
 dev-web:
-    npm run dev
+    bun run dev
 
 # ── Build ─────────────────────────────────────────────────────────────────────
 
 # Build the app for release
 build:
-    npm run tauri build
+    bun run tauri build --no-bundle
 
 # ── Check & Lint ──────────────────────────────────────────────────────────────
 
@@ -24,12 +24,12 @@ check: check-ts lint-openapi
 
 # TypeScript / Svelte type check
 check-ts:
-    npm run check
+    bun run check
 
 # Lint the OpenAPI spec with Redocly
 lint-openapi:
-    npx redocly lint
+    bunx redocly lint
 
 # Preview the OpenAPI docs in a browser
 preview-docs:
-    npx redocly preview-docs docs/openapi.yaml
+    bunx redocly build-docs docs/openapi.yaml --output docs/openapi.html && open docs/openapi.html

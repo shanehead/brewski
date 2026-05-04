@@ -52,22 +52,22 @@
   <!-- Mash profile settings -->
   <div class="grid grid-cols-2 gap-3">
     <div class="flex flex-col gap-1">
-      <label class="text-xs font-medium" style="color: var(--color-text-secondary);">Profile Name</label>
-      <input type="text" value={mash?.name ?? "Single Infusion"}
+      <label for="mash-name" class="text-xs font-medium" style="color: var(--color-text-secondary);">Profile Name</label>
+      <input id="mash-name" type="text" value={mash?.name ?? "Single Infusion"}
              onblur={(e) => handleMashField("name", (e.target as HTMLInputElement).value)}
              class="px-2 py-1.5 rounded text-sm"
              style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
     </div>
     <div class="flex flex-col gap-1">
-      <label class="text-xs font-medium" style="color: var(--color-text-secondary);">Grain Temp (°C)</label>
-      <input type="number" step="1" value={mash?.grain_temp_c ?? 21}
+      <label for="mash-grain-temp" class="text-xs font-medium" style="color: var(--color-text-secondary);">Grain Temp (°C)</label>
+      <input id="mash-grain-temp" type="number" step="1" value={mash?.grain_temp_c ?? 21}
              onblur={(e) => handleMashField("grain_temp_c", parseFloat((e.target as HTMLInputElement).value))}
              class="px-2 py-1.5 rounded text-sm"
              style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
     </div>
     <div class="flex flex-col gap-1">
-      <label class="text-xs font-medium" style="color: var(--color-text-secondary);">Sparge Temp (°C)</label>
-      <input type="number" step="1" value={mash?.sparge_temp_c ?? ""}
+      <label for="mash-sparge-temp" class="text-xs font-medium" style="color: var(--color-text-secondary);">Sparge Temp (°C)</label>
+      <input id="mash-sparge-temp" type="number" step="1" value={mash?.sparge_temp_c ?? ""}
              placeholder="75"
              onblur={(e) => {
                const v = (e.target as HTMLInputElement).value;
@@ -77,8 +77,8 @@
              style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
     </div>
     <div class="flex flex-col gap-1">
-      <label class="text-xs font-medium" style="color: var(--color-text-secondary);">Mash pH</label>
-      <input type="number" step="0.1" value={mash?.ph ?? ""}
+      <label for="mash-ph" class="text-xs font-medium" style="color: var(--color-text-secondary);">Mash pH</label>
+      <input id="mash-ph" type="number" step="0.1" value={mash?.ph ?? ""}
              placeholder="5.4"
              onblur={(e) => {
                const v = (e.target as HTMLInputElement).value;

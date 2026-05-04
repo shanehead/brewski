@@ -12,8 +12,8 @@
 
 <div class="flex flex-col gap-4 max-w-2xl">
   <div class="flex flex-col gap-1">
-    <label class="text-xs font-medium" style="color: var(--color-text-secondary);">Recipe Notes</label>
-    <textarea value={recipe.notes ?? ""}
+    <label for="notes-recipe" class="text-xs font-medium" style="color: var(--color-text-secondary);">Recipe Notes</label>
+    <textarea id="notes-recipe" value={recipe.notes ?? ""}
               onblur={(e) => save("notes", (e.target as HTMLTextAreaElement).value || null)}
               rows="8"
               placeholder="Process notes, observations…"
@@ -22,8 +22,8 @@
   </div>
 
   <div class="flex flex-col gap-1">
-    <label class="text-xs font-medium" style="color: var(--color-text-secondary);">Taste Notes</label>
-    <textarea value={recipe.taste_notes ?? ""}
+    <label for="notes-taste" class="text-xs font-medium" style="color: var(--color-text-secondary);">Taste Notes</label>
+    <textarea id="notes-taste" value={recipe.taste_notes ?? ""}
               onblur={(e) => save("taste_notes", (e.target as HTMLTextAreaElement).value || null)}
               rows="4"
               placeholder="Aroma, flavor, appearance, mouthfeel…"
@@ -32,8 +32,8 @@
   </div>
 
   <div class="flex flex-col gap-1">
-    <label class="text-xs font-medium" style="color: var(--color-text-secondary);">Taste Rating (0–50)</label>
-    <input type="number" step="1" min="0" max="50"
+    <label for="notes-rating" class="text-xs font-medium" style="color: var(--color-text-secondary);">Taste Rating (0–50)</label>
+    <input id="notes-rating" type="number" step="1" min="0" max="50"
            value={recipe.taste_rating ?? ""}
            onblur={(e) => {
              const v = (e.target as HTMLInputElement).value;

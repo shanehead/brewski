@@ -51,8 +51,8 @@
     <section class="flex flex-col gap-3">
       <h2 class="text-sm font-semibold" style="color: var(--color-text-secondary);">Appearance</h2>
       <div class="flex items-center justify-between">
-        <label class="text-sm" style="color: var(--color-text-primary);">Theme</label>
-        <select value={$settings.theme ?? "midnight"} onchange={handleThemeChange}
+        <label for="select-theme" class="text-sm" style="color: var(--color-text-primary);">Theme</label>
+        <select id="select-theme" value={$settings.theme ?? "midnight"} onchange={handleThemeChange}
                 class="px-2 py-1.5 rounded text-sm"
                 style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);">
           <option value="midnight">Midnight</option>
@@ -64,8 +64,8 @@
     <section class="flex flex-col gap-3">
       <h2 class="text-sm font-semibold" style="color: var(--color-text-secondary);">Units</h2>
       <div class="flex items-center justify-between">
-        <label class="text-sm" style="color: var(--color-text-primary);">Measurement System</label>
-        <select value={$settings.units ?? "metric"} onchange={handleUnitsChange}
+        <label for="select-units" class="text-sm" style="color: var(--color-text-primary);">Measurement System</label>
+        <select id="select-units" value={$settings.units ?? "metric"} onchange={handleUnitsChange}
                 class="px-2 py-1.5 rounded text-sm"
                 style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);">
           <option value="metric">Metric (L, kg, °C)</option>
@@ -78,8 +78,8 @@
     <section class="flex flex-col gap-3">
       <h2 class="text-sm font-semibold" style="color: var(--color-text-secondary);">Equipment Profiles</h2>
       <div class="flex items-center justify-between">
-        <label class="text-sm" style="color: var(--color-text-primary);">Default Profile</label>
-        <select value={$settings.default_equipment_profile_id ?? ""}
+        <label for="select-default-profile" class="text-sm" style="color: var(--color-text-primary);">Default Profile</label>
+        <select id="select-default-profile" value={$settings.default_equipment_profile_id ?? ""}
                 onchange={handleDefaultEquipChange}
                 class="px-2 py-1.5 rounded text-sm"
                 style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);">

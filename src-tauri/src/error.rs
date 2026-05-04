@@ -4,8 +4,6 @@ pub enum AppError {
     Sqlx(#[from] sqlx::Error),
     #[error("not found")]
     NotFound,
-    #[error("{0}")]
-    Other(String),
 }
 
 impl serde::Serialize for AppError {

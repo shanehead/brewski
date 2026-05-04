@@ -24,8 +24,8 @@
     { field: "tertiary_temp_c", label: "Tertiary Temp (°C)" },
   ] as row}
     <div class="flex flex-col gap-1">
-      <label class="text-xs font-medium" style="color: var(--color-text-secondary);">{row.label}</label>
-      <input type="number" step="1"
+      <label for="ferm-{row.field}" class="text-xs font-medium" style="color: var(--color-text-secondary);">{row.label}</label>
+      <input id="ferm-{row.field}" type="number" step="1"
              value={(recipe as any)[row.field] ?? ""}
              onblur={(e) => {
                const v = (e.target as HTMLInputElement).value;
@@ -41,8 +41,8 @@
   </div>
 
   <div class="flex flex-col gap-1">
-    <label class="text-xs font-medium" style="color: var(--color-text-secondary);">CO₂ Volumes</label>
-    <input type="number" step="0.1" value={recipe.carbonation_vols ?? ""}
+    <label for="ferm-carb-vols" class="text-xs font-medium" style="color: var(--color-text-secondary);">CO₂ Volumes</label>
+    <input id="ferm-carb-vols" type="number" step="0.1" value={recipe.carbonation_vols ?? ""}
            onblur={(e) => {
              const v = (e.target as HTMLInputElement).value;
              save("carbonation_vols", v ? parseFloat(v) : null);
@@ -52,7 +52,7 @@
   </div>
 
   <div class="flex flex-col gap-1">
-    <label class="text-xs font-medium" style="color: var(--color-text-secondary);">Forced Carbonation</label>
+    <p class="text-xs font-medium" style="color: var(--color-text-secondary);">Forced Carbonation</p>
     <label class="flex items-center gap-2 mt-1 cursor-pointer">
       <input type="checkbox" checked={recipe.forced_carbonation}
              onchange={(e) => save("forced_carbonation", (e.target as HTMLInputElement).checked)}

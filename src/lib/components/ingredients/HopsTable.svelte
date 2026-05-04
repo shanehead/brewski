@@ -50,8 +50,8 @@
   {#if adding}
     <div class="flex flex-wrap gap-2 items-end p-2 rounded" style="background: var(--color-bg-elevated);">
       <div class="flex-1 min-w-32">
-        <label class="text-xs mb-1 block" style="color: var(--color-text-secondary);">Hop</label>
-        <select bind:value={selectedLibId} class="w-full px-2 py-1.5 rounded text-sm"
+        <label for="hop-select" class="text-xs mb-1 block" style="color: var(--color-text-secondary);">Hop</label>
+        <select id="hop-select" bind:value={selectedLibId} class="w-full px-2 py-1.5 rounded text-sm"
                 style="background: var(--color-bg-base); color: var(--color-text-primary); border: 1px solid var(--color-border);">
           <option value="">Choose…</option>
           {#each library as h}
@@ -60,14 +60,14 @@
         </select>
       </div>
       <div class="w-20">
-        <label class="text-xs mb-1 block" style="color: var(--color-text-secondary);">Amount (kg)</label>
-        <input type="number" step="0.001" bind:value={amount} min="0.001"
+        <label for="hop-amount" class="text-xs mb-1 block" style="color: var(--color-text-secondary);">Amount (kg)</label>
+        <input id="hop-amount" type="number" step="0.001" bind:value={amount} min="0.001"
                class="w-full px-2 py-1.5 rounded text-sm"
                style="background: var(--color-bg-base); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
       </div>
       <div class="w-28">
-        <label class="text-xs mb-1 block" style="color: var(--color-text-secondary);">Use</label>
-        <select bind:value={use_} class="w-full px-2 py-1.5 rounded text-sm"
+        <label for="hop-use" class="text-xs mb-1 block" style="color: var(--color-text-secondary);">Use</label>
+        <select id="hop-use" bind:value={use_} class="w-full px-2 py-1.5 rounded text-sm"
                 style="background: var(--color-bg-base); color: var(--color-text-primary); border: 1px solid var(--color-border);">
           {#each HOP_USES as u}
             <option value={u}>{u}</option>
@@ -75,8 +75,8 @@
         </select>
       </div>
       <div class="w-16">
-        <label class="text-xs mb-1 block" style="color: var(--color-text-secondary);">Time (min)</label>
-        <input type="number" step="5" bind:value={time} min="0"
+        <label for="hop-time" class="text-xs mb-1 block" style="color: var(--color-text-secondary);">Time (min)</label>
+        <input id="hop-time" type="number" step="5" bind:value={time} min="0"
                class="w-full px-2 py-1.5 rounded text-sm"
                style="background: var(--color-bg-base); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
       </div>
