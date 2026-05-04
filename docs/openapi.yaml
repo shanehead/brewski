@@ -1,0 +1,2090 @@
+openapi: 3.1.0
+info:
+  title: Brewski
+  description: |
+    Tauri IPC interface for the Brewski homebrewing recipe manager.
+
+    All operations are invoked via Tauri's `invoke()` IPC mechanism rather than
+    HTTP. This spec models each command as a POST to `/commands/{commandName}`,
+    with the request body carrying the command's named parameters and the
+    response body carrying the return value.
+
+    **Usage in frontend:**
+    ```typescript
+    import { invoke } from "@tauri-apps/api/core";
+    const recipes = await invoke("list_recipes");
+    ```
+
+    **Error handling:** All commands return a `Result<T, String>` in Rust. On
+    error, Tauri rejects the invoke promise with the error string.
+  version: 1.0.0
+
+servers:
+  - url: tauri://localhost
+    description: Tauri IPC (desktop app)
+
+tags:
+  - name: Recipes
+    description: Create, read, update, and delete brewing recipes
+  - name: Fermentables
+    description: Fermentable grain/sugar additions on a recipe
+  - name: Hops
+    description: Hop additions on a recipe
+  - name: Yeasts
+    description: Yeast additions on a recipe
+  - name: Misc
+    description: Miscellaneous ingredient additions on a recipe
+  - name: Water
+    description: Water profile additions on a recipe
+  - name: Mash
+    description: Mash schedule and steps for a recipe
+  - name: Equipment
+    description: Equipment profiles used for volume and efficiency calculations
+  - name: Library
+    description: Read-only reference data (styles, ingredients)
+  - name: Settings
+    description: User-level application settings
+  - name: Import/Export
+    description: BeerXML import and export
+
+paths:
+
+  # ── Recipes ──────────────────────────────────────────────────────────────
+
+  /commands/list_recipes:
+    post:
+      operationId: listRecipes
+      summary: List all recipes
+      tags: [Recipes]
+      responses:
+        "200":
+          description: Array of recipe summaries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/RecipeSummary"
+        "500":
+          $ref: "#/components/responses/Error"
+
+  /commands/get_recipe:
+    post:
+      operationId: getRecipe
+      summary: Get a full recipe by ID
+      tags: [Recipes]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [id]
+              properties:
+                id:
+                  type: string
+                  description: Recipe UUID
+      responses:
+        "200":
+          description: Full recipe with all ingredients and mash
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Recipe"
+        "500":
+          $ref: "#/components/responses/Error"
+
+  /commands/create_recipe:
+    post:
+      operationId: createRecipe
+      summary: Create a new recipe
+      tags: [Recipes]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [input]
+              properties:
+                input:
+                  $ref: "#/components/schemas/CreateRecipeInput"
+      responses:
+        "200":
+          description: Created recipe
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Recipe"
+        "500":
+          $ref: "#/components/responses/Error"
+
+  /commands/update_recipe:
+    post:
+      operationId: updateRecipe
+      summary: Update a recipe
+      tags: [Recipes]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [id, input]
+              properties:
+                id:
+                  type: string
+                input:
+                  $ref: "#/components/schemas/UpdateRecipeInput"
+      responses:
+        "200":
+          description: Updated recipe
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Recipe"
+        "500":
+          $ref: "#/components/responses/Error"
+
+  /commands/delete_recipe:
+    post:
+      operationId: deleteRecipe
+      summary: Delete a recipe
+      tags: [Recipes]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [id]
+              properties:
+                id:
+                  type: string
+      responses:
+        "200":
+          description: Recipe deleted
+        "500":
+          $ref: "#/components/responses/Error"
+
+  /commands/get_recipe_stats:
+    post:
+      operationId: getRecipeStats
+      summary: Calculate stats for a recipe (OG, FG, ABV, IBU, SRM, etc.)
+      tags: [Recipes]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [recipeId]
+              properties:
+                recipeId:
+                  type: string
+      responses:
+        "200":
+          description: Calculated recipe statistics
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RecipeStats"
+        "500":
+          $ref: "#/components/responses/Error"
+
+  # ── Fermentables ─────────────────────────────────────────────────────────
+
+  /commands/create_recipe_fermentable:
+    post:
+      operationId: createRecipeFermentable
+      summary: Add a fermentable to a recipe
+      tags: [Fermentables]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [recipeId, input]
+              properties:
+                recipeId:
+                  type: string
+                input:
+                  $ref: "#/components/schemas/CreateFermentableAdditionInput"
+      responses:
+        "200":
+          description: Created fermentable addition
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RecipeAdditionFermentable"
+        "500":
+          $ref: "#/components/responses/Error"
+
+  /commands/update_recipe_fermentable:
+    post:
+      operationId: updateRecipeFermentable
+      summary: Update a fermentable addition
+      tags: [Fermentables]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [id, input]
+              properties:
+                id:
+                  type: string
+                input:
+                  $ref: "#/components/schemas/UpdateFermentableAdditionInput"
+      responses:
+        "200":
+          description: Updated fermentable addition
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RecipeAdditionFermentable"
+        "500":
+          $ref: "#/components/responses/Error"
+
+  /commands/delete_recipe_fermentable:
+    post:
+      operationId: deleteRecipeFermentable
+      summary: Remove a fermentable from a recipe
+      tags: [Fermentables]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [id]
+              properties:
+                id:
+                  type: string
+      responses:
+        "200":
+          description: Fermentable addition deleted
+        "500":
+          $ref: "#/components/responses/Error"
+
+  # ── Hops ─────────────────────────────────────────────────────────────────
+
+  /commands/create_recipe_hop:
+    post:
+      operationId: createRecipeHop
+      summary: Add a hop to a recipe
+      tags: [Hops]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [recipeId, input]
+              properties:
+                recipeId:
+                  type: string
+                input:
+                  $ref: "#/components/schemas/CreateHopAdditionInput"
+      responses:
+        "200":
+          description: Created hop addition
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RecipeAdditionHop"
+        "500":
+          $ref: "#/components/responses/Error"
+
+  /commands/update_recipe_hop:
+    post:
+      operationId: updateRecipeHop
+      summary: Update a hop addition
+      tags: [Hops]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [id, input]
+              properties:
+                id:
+                  type: string
+                input:
+                  $ref: "#/components/schemas/UpdateHopAdditionInput"
+      responses:
+        "200":
+          description: Updated hop addition
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RecipeAdditionHop"
+        "500":
+          $ref: "#/components/responses/Error"
+
+  /commands/delete_recipe_hop:
+    post:
+      operationId: deleteRecipeHop
+      summary: Remove a hop from a recipe
+      tags: [Hops]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [id]
+              properties:
+                id:
+                  type: string
+      responses:
+        "200":
+          description: Hop addition deleted
+        "500":
+          $ref: "#/components/responses/Error"
+
+  # ── Yeasts ────────────────────────────────────────────────────────────────
+
+  /commands/create_recipe_yeast:
+    post:
+      operationId: createRecipeYeast
+      summary: Add a yeast to a recipe
+      tags: [Yeasts]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [recipeId, input]
+              properties:
+                recipeId:
+                  type: string
+                input:
+                  $ref: "#/components/schemas/CreateYeastAdditionInput"
+      responses:
+        "200":
+          description: Created yeast addition
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RecipeAdditionYeast"
+        "500":
+          $ref: "#/components/responses/Error"
+
+  /commands/update_recipe_yeast:
+    post:
+      operationId: updateRecipeYeast
+      summary: Update a yeast addition
+      tags: [Yeasts]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [id, input]
+              properties:
+                id:
+                  type: string
+                input:
+                  $ref: "#/components/schemas/UpdateYeastAdditionInput"
+      responses:
+        "200":
+          description: Updated yeast addition
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RecipeAdditionYeast"
+        "500":
+          $ref: "#/components/responses/Error"
+
+  /commands/delete_recipe_yeast:
+    post:
+      operationId: deleteRecipeYeast
+      summary: Remove a yeast from a recipe
+      tags: [Yeasts]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [id]
+              properties:
+                id:
+                  type: string
+      responses:
+        "200":
+          description: Yeast addition deleted
+        "500":
+          $ref: "#/components/responses/Error"
+
+  # ── Misc ──────────────────────────────────────────────────────────────────
+
+  /commands/create_recipe_misc:
+    post:
+      operationId: createRecipeMisc
+      summary: Add a miscellaneous ingredient to a recipe
+      tags: [Misc]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [recipeId, input]
+              properties:
+                recipeId:
+                  type: string
+                input:
+                  $ref: "#/components/schemas/CreateMiscAdditionInput"
+      responses:
+        "200":
+          description: Created misc addition
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RecipeAdditionMisc"
+        "500":
+          $ref: "#/components/responses/Error"
+
+  /commands/update_recipe_misc:
+    post:
+      operationId: updateRecipeMisc
+      summary: Update a miscellaneous ingredient addition
+      tags: [Misc]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [id, input]
+              properties:
+                id:
+                  type: string
+                input:
+                  $ref: "#/components/schemas/UpdateMiscAdditionInput"
+      responses:
+        "200":
+          description: Updated misc addition
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RecipeAdditionMisc"
+        "500":
+          $ref: "#/components/responses/Error"
+
+  /commands/delete_recipe_misc:
+    post:
+      operationId: deleteRecipeMisc
+      summary: Remove a miscellaneous ingredient from a recipe
+      tags: [Misc]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [id]
+              properties:
+                id:
+                  type: string
+      responses:
+        "200":
+          description: Misc addition deleted
+        "500":
+          $ref: "#/components/responses/Error"
+
+  # ── Water ─────────────────────────────────────────────────────────────────
+
+  /commands/create_recipe_water:
+    post:
+      operationId: createRecipeWater
+      summary: Add a water profile to a recipe
+      tags: [Water]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [recipeId, input]
+              properties:
+                recipeId:
+                  type: string
+                input:
+                  $ref: "#/components/schemas/CreateWaterAdditionInput"
+      responses:
+        "200":
+          description: Created water addition
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RecipeAdditionWater"
+        "500":
+          $ref: "#/components/responses/Error"
+
+  /commands/update_recipe_water:
+    post:
+      operationId: updateRecipeWater
+      summary: Update a water addition
+      tags: [Water]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [id, input]
+              properties:
+                id:
+                  type: string
+                input:
+                  $ref: "#/components/schemas/UpdateWaterAdditionInput"
+      responses:
+        "200":
+          description: Updated water addition
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RecipeAdditionWater"
+        "500":
+          $ref: "#/components/responses/Error"
+
+  /commands/delete_recipe_water:
+    post:
+      operationId: deleteRecipeWater
+      summary: Remove a water profile from a recipe
+      tags: [Water]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [id]
+              properties:
+                id:
+                  type: string
+      responses:
+        "200":
+          description: Water addition deleted
+        "500":
+          $ref: "#/components/responses/Error"
+
+  # ── Mash ──────────────────────────────────────────────────────────────────
+
+  /commands/get_mash:
+    post:
+      operationId: getMash
+      summary: Get the mash schedule for a recipe
+      tags: [Mash]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [recipeId]
+              properties:
+                recipeId:
+                  type: string
+      responses:
+        "200":
+          description: Mash schedule with steps
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Mash"
+        "500":
+          $ref: "#/components/responses/Error"
+
+  /commands/update_mash:
+    post:
+      operationId: updateMash
+      summary: Update the mash schedule for a recipe
+      tags: [Mash]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [recipeId, input]
+              properties:
+                recipeId:
+                  type: string
+                input:
+                  $ref: "#/components/schemas/UpdateMashInput"
+      responses:
+        "200":
+          description: Updated mash schedule
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Mash"
+        "500":
+          $ref: "#/components/responses/Error"
+
+  /commands/create_mash_step:
+    post:
+      operationId: createMashStep
+      summary: Add a step to a mash schedule
+      tags: [Mash]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [mashId, input]
+              properties:
+                mashId:
+                  type: string
+                input:
+                  $ref: "#/components/schemas/CreateMashStepInput"
+      responses:
+        "200":
+          description: Created mash step
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MashStep"
+        "500":
+          $ref: "#/components/responses/Error"
+
+  /commands/update_mash_step:
+    post:
+      operationId: updateMashStep
+      summary: Update a mash step
+      tags: [Mash]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [id, input]
+              properties:
+                id:
+                  type: string
+                input:
+                  $ref: "#/components/schemas/UpdateMashStepInput"
+      responses:
+        "200":
+          description: Updated mash step
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MashStep"
+        "500":
+          $ref: "#/components/responses/Error"
+
+  /commands/delete_mash_step:
+    post:
+      operationId: deleteMashStep
+      summary: Remove a step from a mash schedule
+      tags: [Mash]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [id]
+              properties:
+                id:
+                  type: string
+      responses:
+        "200":
+          description: Mash step deleted
+        "500":
+          $ref: "#/components/responses/Error"
+
+  /commands/update_mash_step_order:
+    post:
+      operationId: updateMashStepOrder
+      summary: Reorder mash steps by providing IDs in the desired order
+      tags: [Mash]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [orderedIds]
+              properties:
+                orderedIds:
+                  type: array
+                  items:
+                    type: string
+                  description: Step IDs in the desired display order
+      responses:
+        "200":
+          description: Step order updated
+        "500":
+          $ref: "#/components/responses/Error"
+
+  # ── Equipment ─────────────────────────────────────────────────────────────
+
+  /commands/list_equipment_profiles:
+    post:
+      operationId: listEquipmentProfiles
+      summary: List all equipment profiles
+      tags: [Equipment]
+      responses:
+        "200":
+          description: Array of equipment profiles
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/EquipmentProfile"
+        "500":
+          $ref: "#/components/responses/Error"
+
+  /commands/create_equipment_profile:
+    post:
+      operationId: createEquipmentProfile
+      summary: Create an equipment profile
+      tags: [Equipment]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [input]
+              properties:
+                input:
+                  $ref: "#/components/schemas/CreateEquipmentProfileInput"
+      responses:
+        "200":
+          description: Created equipment profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EquipmentProfile"
+        "500":
+          $ref: "#/components/responses/Error"
+
+  /commands/update_equipment_profile:
+    post:
+      operationId: updateEquipmentProfile
+      summary: Update an equipment profile
+      tags: [Equipment]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [id, input]
+              properties:
+                id:
+                  type: string
+                input:
+                  $ref: "#/components/schemas/UpdateEquipmentProfileInput"
+      responses:
+        "200":
+          description: Updated equipment profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EquipmentProfile"
+        "500":
+          $ref: "#/components/responses/Error"
+
+  /commands/delete_equipment_profile:
+    post:
+      operationId: deleteEquipmentProfile
+      summary: Delete an equipment profile
+      tags: [Equipment]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [id]
+              properties:
+                id:
+                  type: string
+      responses:
+        "200":
+          description: Equipment profile deleted
+        "500":
+          $ref: "#/components/responses/Error"
+
+  # ── Library ───────────────────────────────────────────────────────────────
+
+  /commands/list_styles:
+    post:
+      operationId: listStyles
+      summary: List all beer styles
+      tags: [Library]
+      responses:
+        "200":
+          description: Array of beer styles
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Style"
+        "500":
+          $ref: "#/components/responses/Error"
+
+  /commands/list_fermentable_library:
+    post:
+      operationId: listFermentableLibrary
+      summary: List all fermentables in the ingredient library
+      tags: [Library]
+      responses:
+        "200":
+          description: Array of fermentables
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Fermentable"
+        "500":
+          $ref: "#/components/responses/Error"
+
+  /commands/list_hop_library:
+    post:
+      operationId: listHopLibrary
+      summary: List all hops in the ingredient library
+      tags: [Library]
+      responses:
+        "200":
+          description: Array of hops
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Hop"
+        "500":
+          $ref: "#/components/responses/Error"
+
+  /commands/list_yeast_library:
+    post:
+      operationId: listYeastLibrary
+      summary: List all yeasts in the ingredient library
+      tags: [Library]
+      responses:
+        "200":
+          description: Array of yeasts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Yeast"
+        "500":
+          $ref: "#/components/responses/Error"
+
+  /commands/list_misc_library:
+    post:
+      operationId: listMiscLibrary
+      summary: List all miscellaneous ingredients in the ingredient library
+      tags: [Library]
+      responses:
+        "200":
+          description: Array of misc ingredients
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Misc"
+        "500":
+          $ref: "#/components/responses/Error"
+
+  /commands/list_water_library:
+    post:
+      operationId: listWaterLibrary
+      summary: List all water profiles in the library
+      tags: [Library]
+      responses:
+        "200":
+          description: Array of water profiles
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Water"
+        "500":
+          $ref: "#/components/responses/Error"
+
+  # ── Settings ──────────────────────────────────────────────────────────────
+
+  /commands/get_settings:
+    post:
+      operationId: getSettings
+      summary: Get all application settings as key/value pairs
+      tags: [Settings]
+      responses:
+        "200":
+          description: Settings map
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+        "500":
+          $ref: "#/components/responses/Error"
+
+  /commands/update_setting:
+    post:
+      operationId: updateSetting
+      summary: Set a single application setting
+      tags: [Settings]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [key, value]
+              properties:
+                key:
+                  type: string
+                value:
+                  type: string
+      responses:
+        "200":
+          description: Setting updated
+        "500":
+          $ref: "#/components/responses/Error"
+
+  # ── Import / Export ───────────────────────────────────────────────────────
+
+  /commands/get_recipe_beerxml:
+    post:
+      operationId: getRecipeBeerxml
+      summary: Export a recipe as BeerXML
+      tags: [Import/Export]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [recipeId]
+              properties:
+                recipeId:
+                  type: string
+      responses:
+        "200":
+          description: BeerXML string
+          content:
+            application/json:
+              schema:
+                type: string
+                description: BeerXML-formatted XML document
+        "500":
+          $ref: "#/components/responses/Error"
+
+  /commands/create_recipes_from_beerxml:
+    post:
+      operationId: createRecipesFromBeerxml
+      summary: Import one or more recipes from a BeerXML string
+      tags: [Import/Export]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [xml]
+              properties:
+                xml:
+                  type: string
+                  description: BeerXML-formatted XML document
+      responses:
+        "200":
+          description: Array of created recipe summaries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/RecipeSummary"
+        "500":
+          $ref: "#/components/responses/Error"
+
+# ── Components ──────────────────────────────────────────────────────────────
+
+components:
+  responses:
+    Error:
+      description: Command error
+      content:
+        application/json:
+          schema:
+            type: string
+            description: Human-readable error message from the Rust backend
+
+  schemas:
+
+    # ── Domain objects ──────────────────────────────────────────────────────
+
+    RecipeSummary:
+      type: object
+      required: [id, name, type_, batch_size_l, created_at, updated_at]
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        style_name:
+          type: [string, "null"]
+        type_:
+          type: string
+          description: "Recipe type (e.g. All Grain, Extract, Partial Mash)"
+        batch_size_l:
+          type: number
+          description: Target batch volume in litres
+        created_at:
+          type: integer
+          format: int64
+          description: Unix timestamp (milliseconds)
+        updated_at:
+          type: integer
+          format: int64
+          description: Unix timestamp (milliseconds)
+
+    Recipe:
+      type: object
+      required:
+        - id
+        - name
+        - type_
+        - batch_size_l
+        - boil_size_l
+        - boil_time_min
+        - forced_carbonation
+        - fermentation_stages
+        - created_at
+        - updated_at
+        - fermentables
+        - hops
+        - yeasts
+        - miscs
+        - waters
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        type_:
+          type: string
+          description: "Recipe type (e.g. All Grain, Extract, Partial Mash)"
+        brewer:
+          type: [string, "null"]
+        asst_brewer:
+          type: [string, "null"]
+        batch_size_l:
+          type: number
+        boil_size_l:
+          type: number
+        boil_time_min:
+          type: number
+        efficiency_pct:
+          type: [number, "null"]
+        style_id:
+          type: [string, "null"]
+        equipment_profile_id:
+          type: [string, "null"]
+        notes:
+          type: [string, "null"]
+        taste_notes:
+          type: [string, "null"]
+        taste_rating:
+          type: [number, "null"]
+        og:
+          type: [number, "null"]
+          description: Measured original gravity
+        fg:
+          type: [number, "null"]
+          description: Measured final gravity
+        fermentation_stages:
+          type: integer
+        primary_age_days:
+          type: [number, "null"]
+        primary_temp_c:
+          type: [number, "null"]
+        secondary_age_days:
+          type: [number, "null"]
+        secondary_temp_c:
+          type: [number, "null"]
+        tertiary_age_days:
+          type: [number, "null"]
+        tertiary_temp_c:
+          type: [number, "null"]
+        age_days:
+          type: [number, "null"]
+          description: Conditioning/bottle age in days
+        age_temp_c:
+          type: [number, "null"]
+        carbonation_vols:
+          type: [number, "null"]
+          description: Target carbonation in volumes of CO2
+        forced_carbonation:
+          type: boolean
+        priming_sugar_name:
+          type: [string, "null"]
+        carbonation_temp_c:
+          type: [number, "null"]
+        priming_sugar_equiv:
+          type: [number, "null"]
+        keg_priming_factor:
+          type: [number, "null"]
+        date:
+          type: [string, "null"]
+          description: Brew date (free-form string)
+        created_at:
+          type: integer
+          format: int64
+        updated_at:
+          type: integer
+          format: int64
+        equipment_profile:
+          oneOf:
+            - $ref: "#/components/schemas/EquipmentProfile"
+            - type: "null"
+        style:
+          oneOf:
+            - $ref: "#/components/schemas/Style"
+            - type: "null"
+        fermentables:
+          type: array
+          items:
+            $ref: "#/components/schemas/RecipeAdditionFermentable"
+        hops:
+          type: array
+          items:
+            $ref: "#/components/schemas/RecipeAdditionHop"
+        yeasts:
+          type: array
+          items:
+            $ref: "#/components/schemas/RecipeAdditionYeast"
+        miscs:
+          type: array
+          items:
+            $ref: "#/components/schemas/RecipeAdditionMisc"
+        waters:
+          type: array
+          items:
+            $ref: "#/components/schemas/RecipeAdditionWater"
+        mash:
+          oneOf:
+            - $ref: "#/components/schemas/Mash"
+            - type: "null"
+
+    RecipeStats:
+      type: object
+      required:
+        - og
+        - fg
+        - abv_pct
+        - ibu
+        - srm
+        - calories_per_355ml
+        - bu_gu_ratio
+        - pre_boil_gravity
+        - pre_boil_volume_l
+        - post_boil_volume_l
+      properties:
+        og:
+          type: number
+          description: Calculated original gravity (specific gravity)
+        fg:
+          type: number
+          description: Calculated final gravity (specific gravity)
+        abv_pct:
+          type: number
+          description: Alcohol by volume percentage
+        ibu:
+          type: number
+          description: International Bitterness Units
+        srm:
+          type: number
+          description: Standard Reference Method color value
+        calories_per_355ml:
+          type: number
+          description: Estimated calories per 355 ml (12 oz) serving
+        bu_gu_ratio:
+          type: number
+          description: Bitterness/gravity ratio
+        pre_boil_gravity:
+          type: number
+          description: Estimated pre-boil specific gravity
+        pre_boil_volume_l:
+          type: number
+          description: Estimated pre-boil volume in litres
+        post_boil_volume_l:
+          type: number
+          description: Estimated post-boil volume in litres
+
+    Style:
+      type: object
+      required:
+        - id
+        - name
+        - category
+        - category_number
+        - style_letter
+        - style_guide
+        - type_
+        - og_min
+        - og_max
+        - fg_min
+        - fg_max
+        - ibu_min
+        - ibu_max
+        - color_min_srm
+        - color_max_srm
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        category:
+          type: string
+        category_number:
+          type: string
+        style_letter:
+          type: string
+        style_guide:
+          type: string
+        type_:
+          type: string
+        og_min:
+          type: number
+        og_max:
+          type: number
+        fg_min:
+          type: number
+        fg_max:
+          type: number
+        ibu_min:
+          type: number
+        ibu_max:
+          type: number
+        color_min_srm:
+          type: number
+        color_max_srm:
+          type: number
+        carb_min_vols:
+          type: [number, "null"]
+        carb_max_vols:
+          type: [number, "null"]
+        abv_min_pct:
+          type: [number, "null"]
+        abv_max_pct:
+          type: [number, "null"]
+        notes:
+          type: [string, "null"]
+        profile:
+          type: [string, "null"]
+        ingredients:
+          type: [string, "null"]
+        examples:
+          type: [string, "null"]
+
+    EquipmentProfile:
+      type: object
+      required:
+        - id
+        - name
+        - boil_size_l
+        - batch_size_l
+        - calc_boil_volume
+        - lauter_deadspace_l
+        - top_up_kettle_l
+        - trub_chiller_loss_l
+        - evap_rate_pct_hr
+        - boil_time_min
+        - top_up_water_l
+        - fermenter_loss_l
+        - hop_utilization_pct
+        - efficiency_pct
+        - created_at
+        - updated_at
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        notes:
+          type: [string, "null"]
+        boil_size_l:
+          type: number
+        batch_size_l:
+          type: number
+        calc_boil_volume:
+          type: boolean
+        tun_volume_l:
+          type: [number, "null"]
+        tun_weight_kg:
+          type: [number, "null"]
+        tun_specific_heat:
+          type: [number, "null"]
+        lauter_deadspace_l:
+          type: number
+        top_up_kettle_l:
+          type: number
+        trub_chiller_loss_l:
+          type: number
+          description: Volume lost to trub and chiller in litres
+        evap_rate_pct_hr:
+          type: number
+          description: Boil evaporation rate as a percentage per hour
+        boil_time_min:
+          type: number
+        top_up_water_l:
+          type: number
+        fermenter_loss_l:
+          type: number
+        hop_utilization_pct:
+          type: number
+        efficiency_pct:
+          type: number
+        created_at:
+          type: integer
+          format: int64
+        updated_at:
+          type: integer
+          format: int64
+
+    Fermentable:
+      type: object
+      required: [id, name, type_, yield_pct, color_lovibond, add_after_boil]
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        type_:
+          type: string
+          description: "Grain, Sugar, Extract, Dry Extract, Adjunct"
+        yield_pct:
+          type: number
+        color_lovibond:
+          type: number
+        origin:
+          type: [string, "null"]
+        supplier:
+          type: [string, "null"]
+        notes:
+          type: [string, "null"]
+        add_after_boil:
+          type: boolean
+        coarse_fine_diff_pct:
+          type: [number, "null"]
+        moisture_pct:
+          type: [number, "null"]
+        diastatic_power_lintner:
+          type: [number, "null"]
+        protein_pct:
+          type: [number, "null"]
+        max_in_batch_pct:
+          type: [number, "null"]
+        recommend_mash:
+          type: [boolean, "null"]
+        ibu_gal_per_lb:
+          type: [number, "null"]
+
+    Hop:
+      type: object
+      required: [id, name, alpha_pct, form]
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        alpha_pct:
+          type: number
+        beta_pct:
+          type: [number, "null"]
+        form:
+          type: string
+          description: "Pellet, Plug, Leaf"
+        type_:
+          type: [string, "null"]
+          description: "Bittering, Aroma, Both"
+        origin:
+          type: [string, "null"]
+        year:
+          type: [string, "null"]
+        notes:
+          type: [string, "null"]
+        substitutes:
+          type: [string, "null"]
+        hsi_pct:
+          type: [number, "null"]
+        humulene_pct:
+          type: [number, "null"]
+        caryophyllene_pct:
+          type: [number, "null"]
+        cohumulone_pct:
+          type: [number, "null"]
+        myrcene_pct:
+          type: [number, "null"]
+
+    Yeast:
+      type: object
+      required: [id, name, type_, form, add_to_secondary]
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        type_:
+          type: string
+          description: "Ale, Lager, Wheat, Wine, Champagne"
+        form:
+          type: string
+          description: "Liquid, Dry, Slant, Culture"
+        laboratory:
+          type: [string, "null"]
+        product_id:
+          type: [string, "null"]
+        min_temperature_c:
+          type: [number, "null"]
+        max_temperature_c:
+          type: [number, "null"]
+        flocculation:
+          type: [string, "null"]
+          description: "Low, Medium, High, Very High"
+        attenuation_pct:
+          type: [number, "null"]
+        notes:
+          type: [string, "null"]
+        best_for:
+          type: [string, "null"]
+        max_reuse:
+          type: [integer, "null"]
+        add_to_secondary:
+          type: boolean
+
+    Misc:
+      type: object
+      required: [id, name, type_, use_, time_min, amount_is_weight]
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        type_:
+          type: string
+          description: "Spice, Fining, Water Agent, Herb, Flavor, Other"
+        use_:
+          type: string
+          description: "Boil, Mash, Primary, Secondary, Bottling"
+        time_min:
+          type: number
+        notes:
+          type: [string, "null"]
+        use_for:
+          type: [string, "null"]
+        amount_is_weight:
+          type: boolean
+
+    Water:
+      type: object
+      required:
+        - id
+        - name
+        - calcium_ppm
+        - bicarbonate_ppm
+        - sulfate_ppm
+        - chloride_ppm
+        - sodium_ppm
+        - magnesium_ppm
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        calcium_ppm:
+          type: number
+        bicarbonate_ppm:
+          type: number
+        sulfate_ppm:
+          type: number
+        chloride_ppm:
+          type: number
+        sodium_ppm:
+          type: number
+        magnesium_ppm:
+          type: number
+        ph:
+          type: [number, "null"]
+        notes:
+          type: [string, "null"]
+
+    RecipeAdditionFermentable:
+      type: object
+      required:
+        - id
+        - recipe_id
+        - name
+        - type_
+        - yield_pct
+        - color_lovibond
+        - amount_kg
+        - add_after_boil
+        - addition_order
+      properties:
+        id:
+          type: string
+        recipe_id:
+          type: string
+        fermentable_id:
+          type: [string, "null"]
+          description: Source library ingredient ID (null if manually entered)
+        name:
+          type: string
+        type_:
+          type: string
+        yield_pct:
+          type: number
+        color_lovibond:
+          type: number
+        amount_kg:
+          type: number
+        add_after_boil:
+          type: boolean
+        addition_order:
+          type: integer
+
+    RecipeAdditionHop:
+      type: object
+      required:
+        - id
+        - recipe_id
+        - name
+        - alpha_pct
+        - form
+        - amount_kg
+        - use_
+        - time_min
+        - addition_order
+      properties:
+        id:
+          type: string
+        recipe_id:
+          type: string
+        hop_id:
+          type: [string, "null"]
+        name:
+          type: string
+        alpha_pct:
+          type: number
+        form:
+          type: string
+        amount_kg:
+          type: number
+        use_:
+          type: string
+          description: "Boil, Dry Hop, Mash, First Wort, Aroma"
+        time_min:
+          type: number
+        addition_order:
+          type: integer
+
+    RecipeAdditionYeast:
+      type: object
+      required:
+        - id
+        - recipe_id
+        - name
+        - type_
+        - form
+        - amount_is_weight
+        - add_to_secondary
+        - times_cultured
+      properties:
+        id:
+          type: string
+        recipe_id:
+          type: string
+        yeast_id:
+          type: [string, "null"]
+        name:
+          type: string
+        type_:
+          type: string
+        form:
+          type: string
+        laboratory:
+          type: [string, "null"]
+        product_id:
+          type: [string, "null"]
+        attenuation_pct:
+          type: [number, "null"]
+        amount:
+          type: [number, "null"]
+        amount_is_weight:
+          type: boolean
+        add_to_secondary:
+          type: boolean
+        times_cultured:
+          type: integer
+
+    RecipeAdditionMisc:
+      type: object
+      required:
+        - id
+        - recipe_id
+        - name
+        - type_
+        - use_
+        - amount
+        - amount_is_weight
+        - time_min
+        - addition_order
+      properties:
+        id:
+          type: string
+        recipe_id:
+          type: string
+        misc_id:
+          type: [string, "null"]
+        name:
+          type: string
+        type_:
+          type: string
+        use_:
+          type: string
+        amount:
+          type: number
+        amount_is_weight:
+          type: boolean
+        time_min:
+          type: number
+        addition_order:
+          type: integer
+
+    RecipeAdditionWater:
+      type: object
+      required: [id, recipe_id, name, amount_l]
+      properties:
+        id:
+          type: string
+        recipe_id:
+          type: string
+        water_id:
+          type: [string, "null"]
+        name:
+          type: string
+        amount_l:
+          type: number
+
+    Mash:
+      type: object
+      required: [id, recipe_id, name, grain_temp_c, equip_adjust, steps]
+      properties:
+        id:
+          type: string
+        recipe_id:
+          type: string
+        name:
+          type: string
+        grain_temp_c:
+          type: number
+        tun_temp_c:
+          type: [number, "null"]
+        sparge_temp_c:
+          type: [number, "null"]
+        ph:
+          type: [number, "null"]
+        tun_weight_kg:
+          type: [number, "null"]
+        tun_specific_heat:
+          type: [number, "null"]
+        equip_adjust:
+          type: boolean
+        notes:
+          type: [string, "null"]
+        steps:
+          type: array
+          items:
+            $ref: "#/components/schemas/MashStep"
+
+    MashStep:
+      type: object
+      required:
+        - id
+        - mash_id
+        - name
+        - type_
+        - step_temp_c
+        - step_time_min
+        - step_order
+      properties:
+        id:
+          type: string
+        mash_id:
+          type: string
+        name:
+          type: string
+        type_:
+          type: string
+          description: "Infusion, Temperature, Decoction"
+        infuse_amount_l:
+          type: [number, "null"]
+        step_temp_c:
+          type: number
+        step_time_min:
+          type: integer
+        ramp_time_min:
+          type: [integer, "null"]
+        end_temp_c:
+          type: [number, "null"]
+        step_order:
+          type: integer
+
+    # ── Input schemas ───────────────────────────────────────────────────────
+
+    CreateRecipeInput:
+      type: object
+      required: [name]
+      properties:
+        name:
+          type: string
+        type_:
+          type: string
+          default: "All Grain"
+        batch_size_l:
+          type: number
+        boil_size_l:
+          type: number
+        boil_time_min:
+          type: number
+        equipment_profile_id:
+          type: string
+        source_id:
+          type: string
+          description: ID of a recipe to copy ingredients from
+
+    UpdateRecipeInput:
+      type: object
+      properties:
+        name:
+          type: string
+        type_:
+          type: string
+        brewer:
+          type: string
+        asst_brewer:
+          type: string
+        batch_size_l:
+          type: number
+        boil_size_l:
+          type: number
+        boil_time_min:
+          type: number
+        efficiency_pct:
+          type: number
+        style_id:
+          type: string
+        equipment_profile_id:
+          type: string
+        notes:
+          type: string
+        taste_notes:
+          type: string
+        taste_rating:
+          type: number
+        fermentation_stages:
+          type: integer
+        primary_age_days:
+          type: number
+        primary_temp_c:
+          type: number
+        secondary_age_days:
+          type: number
+        secondary_temp_c:
+          type: number
+        tertiary_age_days:
+          type: number
+        tertiary_temp_c:
+          type: number
+        age_days:
+          type: number
+        age_temp_c:
+          type: number
+        carbonation_vols:
+          type: number
+        forced_carbonation:
+          type: boolean
+        priming_sugar_name:
+          type: string
+        carbonation_temp_c:
+          type: number
+        date:
+          type: string
+
+    CreateFermentableAdditionInput:
+      type: object
+      required: [name, type_, yield_pct, color_lovibond, amount_kg]
+      properties:
+        fermentable_id:
+          type: string
+        name:
+          type: string
+        type_:
+          type: string
+        yield_pct:
+          type: number
+        color_lovibond:
+          type: number
+        amount_kg:
+          type: number
+        add_after_boil:
+          type: boolean
+          default: false
+
+    UpdateFermentableAdditionInput:
+      type: object
+      properties:
+        amount_kg:
+          type: number
+        add_after_boil:
+          type: boolean
+        addition_order:
+          type: integer
+
+    CreateHopAdditionInput:
+      type: object
+      required: [name, alpha_pct, amount_kg, use_, time_min]
+      properties:
+        hop_id:
+          type: string
+        name:
+          type: string
+        alpha_pct:
+          type: number
+        form:
+          type: string
+          default: "Pellet"
+        amount_kg:
+          type: number
+        use_:
+          type: string
+        time_min:
+          type: number
+
+    UpdateHopAdditionInput:
+      type: object
+      properties:
+        amount_kg:
+          type: number
+        use_:
+          type: string
+        time_min:
+          type: number
+        addition_order:
+          type: integer
+
+    CreateYeastAdditionInput:
+      type: object
+      required: [name, type_, form]
+      properties:
+        yeast_id:
+          type: string
+        name:
+          type: string
+        type_:
+          type: string
+        form:
+          type: string
+        laboratory:
+          type: string
+        product_id:
+          type: string
+        attenuation_pct:
+          type: number
+        amount:
+          type: number
+        amount_is_weight:
+          type: boolean
+          default: false
+
+    UpdateYeastAdditionInput:
+      type: object
+      properties:
+        attenuation_pct:
+          type: number
+        amount:
+          type: number
+        amount_is_weight:
+          type: boolean
+        add_to_secondary:
+          type: boolean
+        times_cultured:
+          type: integer
+
+    CreateMiscAdditionInput:
+      type: object
+      required: [name, type_, use_, amount, time_min]
+      properties:
+        misc_id:
+          type: string
+        name:
+          type: string
+        type_:
+          type: string
+        use_:
+          type: string
+        amount:
+          type: number
+        amount_is_weight:
+          type: boolean
+          default: false
+        time_min:
+          type: number
+
+    UpdateMiscAdditionInput:
+      type: object
+      properties:
+        amount:
+          type: number
+        amount_is_weight:
+          type: boolean
+        use_:
+          type: string
+        time_min:
+          type: number
+        addition_order:
+          type: integer
+
+    CreateWaterAdditionInput:
+      type: object
+      required: [name, amount_l]
+      properties:
+        water_id:
+          type: string
+        name:
+          type: string
+        amount_l:
+          type: number
+
+    UpdateWaterAdditionInput:
+      type: object
+      properties:
+        amount_l:
+          type: number
+
+    UpdateMashInput:
+      type: object
+      properties:
+        name:
+          type: string
+        grain_temp_c:
+          type: number
+        tun_temp_c:
+          type: number
+        sparge_temp_c:
+          type: number
+        ph:
+          type: number
+        notes:
+          type: string
+
+    CreateMashStepInput:
+      type: object
+      required: [name, step_temp_c, step_time_min]
+      properties:
+        name:
+          type: string
+        type_:
+          type: string
+          default: "Infusion"
+        infuse_amount_l:
+          type: number
+        step_temp_c:
+          type: number
+        step_time_min:
+          type: integer
+        ramp_time_min:
+          type: integer
+        end_temp_c:
+          type: number
+
+    UpdateMashStepInput:
+      type: object
+      properties:
+        name:
+          type: string
+        type_:
+          type: string
+        infuse_amount_l:
+          type: number
+        step_temp_c:
+          type: number
+        step_time_min:
+          type: integer
+        ramp_time_min:
+          type: integer
+        end_temp_c:
+          type: number
+
+    CreateEquipmentProfileInput:
+      type: object
+      required: [name, boil_size_l, batch_size_l, efficiency_pct]
+      properties:
+        name:
+          type: string
+        notes:
+          type: string
+        boil_size_l:
+          type: number
+        batch_size_l:
+          type: number
+        boil_time_min:
+          type: number
+        evap_rate_pct_hr:
+          type: number
+        trub_chiller_loss_l:
+          type: number
+        fermenter_loss_l:
+          type: number
+        efficiency_pct:
+          type: number
+
+    UpdateEquipmentProfileInput:
+      type: object
+      properties:
+        name:
+          type: string
+        notes:
+          type: string
+        boil_size_l:
+          type: number
+        batch_size_l:
+          type: number
+        boil_time_min:
+          type: number
+        evap_rate_pct_hr:
+          type: number
+        trub_chiller_loss_l:
+          type: number
+        fermenter_loss_l:
+          type: number
+        efficiency_pct:
+          type: number

@@ -1,0 +1,13 @@
+apis:
+  brewski@v1:
+    root: docs/openapi.yaml
+
+rules:
+  # Not applicable — this is a Tauri IPC interface, not an authenticated HTTP API
+  security-defined: off
+  # Not applicable — RPC-style commands, not REST; errors map to the single 500 response
+  operation-4xx-response: off
+  # tauri://localhost is intentional, not a placeholder
+  no-server-example.com: off
+  # Desktop app, no license required
+  info-license: off
