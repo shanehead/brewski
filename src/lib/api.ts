@@ -233,6 +233,71 @@ export interface Yeast {
   attenuation_pct: number | null;
 }
 
+// --- Input types ---
+
+export interface UpdateRecipeInput {
+  name?: string;
+  type_?: string;
+  brewer?: string;
+  asst_brewer?: string;
+  batch_size_l?: number;
+  boil_size_l?: number;
+  boil_time_min?: number;
+  efficiency_pct?: number;
+  style_id?: string;
+  equipment_profile_id?: string;
+  notes?: string;
+  taste_notes?: string;
+  taste_rating?: number;
+  fermentation_stages?: number;
+  primary_age_days?: number;
+  primary_temp_c?: number;
+  secondary_age_days?: number;
+  secondary_temp_c?: number;
+  tertiary_age_days?: number;
+  tertiary_temp_c?: number;
+  age_days?: number;
+  age_temp_c?: number;
+  carbonation_vols?: number;
+  forced_carbonation?: boolean;
+  priming_sugar_name?: string;
+  carbonation_temp_c?: number;
+  date?: string;
+}
+
+export interface UpdateFermentableAdditionInput {
+  amount_kg?: number;
+  add_after_boil?: boolean;
+  addition_order?: number;
+}
+
+export interface UpdateHopAdditionInput {
+  amount_kg?: number;
+  use_?: string;
+  time_min?: number;
+  addition_order?: number;
+}
+
+export interface UpdateYeastAdditionInput {
+  attenuation_pct?: number;
+  amount?: number;
+  amount_is_weight?: boolean;
+  add_to_secondary?: boolean;
+  times_cultured?: number;
+}
+
+export interface UpdateMiscAdditionInput {
+  amount?: number;
+  amount_is_weight?: boolean;
+  use_?: string;
+  time_min?: number;
+  addition_order?: number;
+}
+
+export interface UpdateWaterAdditionInput {
+  amount_l?: number;
+}
+
 export interface Misc {
   id: string;
   name: string;
@@ -269,7 +334,7 @@ export const createRecipe = (input: {
   equipment_profile_id?: string;
   source_id?: string;
 }) => invoke<Recipe>("create_recipe", { input });
-export const updateRecipe = (id: string, input: Partial<Recipe>) =>
+export const updateRecipe = (id: string, input: UpdateRecipeInput) =>
   invoke<Recipe>("update_recipe", { id, input });
 export const deleteRecipe = (id: string) => invoke<void>("delete_recipe", { id });
 export const getRecipeStats = (recipeId: string) =>
@@ -278,32 +343,32 @@ export const getRecipeStats = (recipeId: string) =>
 // --- Recipe additions ---
 export const createRecipeFermentable = (recipeId: string, input: object) =>
   invoke<RecipeAdditionFermentable>("create_recipe_fermentable", { recipeId, input });
-export const updateRecipeFermentable = (id: string, input: object) =>
+export const updateRecipeFermentable = (id: string, input: UpdateFermentableAdditionInput) =>
   invoke<RecipeAdditionFermentable>("update_recipe_fermentable", { id, input });
 export const deleteRecipeFermentable = (id: string) =>
   invoke<void>("delete_recipe_fermentable", { id });
 
 export const createRecipeHop = (recipeId: string, input: object) =>
   invoke<RecipeAdditionHop>("create_recipe_hop", { recipeId, input });
-export const updateRecipeHop = (id: string, input: object) =>
+export const updateRecipeHop = (id: string, input: UpdateHopAdditionInput) =>
   invoke<RecipeAdditionHop>("update_recipe_hop", { id, input });
 export const deleteRecipeHop = (id: string) => invoke<void>("delete_recipe_hop", { id });
 
 export const createRecipeYeast = (recipeId: string, input: object) =>
   invoke<RecipeAdditionYeast>("create_recipe_yeast", { recipeId, input });
-export const updateRecipeYeast = (id: string, input: object) =>
+export const updateRecipeYeast = (id: string, input: UpdateYeastAdditionInput) =>
   invoke<RecipeAdditionYeast>("update_recipe_yeast", { id, input });
 export const deleteRecipeYeast = (id: string) => invoke<void>("delete_recipe_yeast", { id });
 
 export const createRecipeMisc = (recipeId: string, input: object) =>
   invoke<RecipeAdditionMisc>("create_recipe_misc", { recipeId, input });
-export const updateRecipeMisc = (id: string, input: object) =>
+export const updateRecipeMisc = (id: string, input: UpdateMiscAdditionInput) =>
   invoke<RecipeAdditionMisc>("update_recipe_misc", { id, input });
 export const deleteRecipeMisc = (id: string) => invoke<void>("delete_recipe_misc", { id });
 
 export const createRecipeWater = (recipeId: string, input: object) =>
   invoke<RecipeAdditionWater>("create_recipe_water", { recipeId, input });
-export const updateRecipeWater = (id: string, input: object) =>
+export const updateRecipeWater = (id: string, input: UpdateWaterAdditionInput) =>
   invoke<RecipeAdditionWater>("update_recipe_water", { id, input });
 export const deleteRecipeWater = (id: string) => invoke<void>("delete_recipe_water", { id });
 
