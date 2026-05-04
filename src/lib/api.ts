@@ -78,15 +78,20 @@ export interface RecipeAdditionYeast {
   product_id: string | null;
   attenuation_pct: number | null;
   amount: number | null;
+  amount_is_weight: boolean;
+  add_to_secondary: boolean;
+  times_cultured: number;
 }
 
 export interface RecipeAdditionMisc {
   id: string;
   recipe_id: string;
+  misc_id: string | null;
   name: string;
   type_: string;
   use_: string;
   amount: number;
+  amount_is_weight: boolean;
   time_min: number;
   addition_order: number;
 }
@@ -94,6 +99,7 @@ export interface RecipeAdditionMisc {
 export interface RecipeAdditionWater {
   id: string;
   recipe_id: string;
+  water_id: string | null;
   name: string;
   amount_l: number;
 }
