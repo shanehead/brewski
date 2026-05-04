@@ -72,6 +72,10 @@ pub fn run() {
             commands::mash::update_mash_step,
             commands::mash::delete_mash_step,
             commands::mash::update_mash_step_order,
+            commands::settings::get_settings,
+            commands::settings::update_setting,
+            commands::import_export::get_recipe_beerxml,
+            commands::import_export::create_recipes_from_beerxml,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
