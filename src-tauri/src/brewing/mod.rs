@@ -2,3 +2,4 @@
 pub mod abv;
 pub mod ibu;
 pub mod og;
+pub mod srm;
