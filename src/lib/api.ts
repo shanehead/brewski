@@ -16,10 +16,18 @@ export interface EquipmentProfile {
   notes: string | null;
   boil_size_l: number;
   batch_size_l: number;
-  boil_time_min: number;
-  evap_rate_pct_hr: number;
+  calc_boil_volume: boolean;
+  tun_volume_l: number | null;
+  tun_weight_kg: number | null;
+  tun_specific_heat: number | null;
+  lauter_deadspace_l: number;
+  top_up_kettle_l: number;
   trub_chiller_loss_l: number;
+  evap_rate_pct_hr: number;
+  boil_time_min: number;
+  top_up_water_l: number;
   fermenter_loss_l: number;
+  hop_utilization_pct: number;
   efficiency_pct: number;
   created_at: number;
   updated_at: number;
@@ -29,6 +37,10 @@ export interface Style {
   id: string;
   name: string;
   category: string;
+  category_number: string;
+  style_letter: string;
+  style_guide: string;
+  type_: string;
   og_min: number;
   og_max: number;
   fg_min: number;
@@ -37,8 +49,14 @@ export interface Style {
   ibu_max: number;
   color_min_srm: number;
   color_max_srm: number;
+  carb_min_vols: number | null;
+  carb_max_vols: number | null;
   abv_min_pct: number | null;
   abv_max_pct: number | null;
+  notes: string | null;
+  profile: string | null;
+  ingredients: string | null;
+  examples: string | null;
 }
 
 export interface RecipeAdditionFermentable {
@@ -137,6 +155,7 @@ export interface Recipe {
   name: string;
   type_: string;
   brewer: string | null;
+  asst_brewer: string | null;
   batch_size_l: number;
   boil_size_l: number;
   boil_time_min: number;
@@ -146,14 +165,26 @@ export interface Recipe {
   notes: string | null;
   taste_notes: string | null;
   taste_rating: number | null;
+  og: number | null;
+  fg: number | null;
   fermentation_stages: number;
   primary_age_days: number | null;
   primary_temp_c: number | null;
   secondary_age_days: number | null;
   secondary_temp_c: number | null;
+  tertiary_age_days: number | null;
+  tertiary_temp_c: number | null;
+  age_days: number | null;
+  age_temp_c: number | null;
   carbonation_vols: number | null;
   forced_carbonation: boolean;
+  priming_sugar_name: string | null;
+  carbonation_temp_c: number | null;
+  priming_sugar_equiv: number | null;
+  keg_priming_factor: number | null;
   date: string | null;
+  created_at: number;
+  updated_at: number;
   equipment_profile: EquipmentProfile | null;
   style: Style | null;
   fermentables: RecipeAdditionFermentable[];
