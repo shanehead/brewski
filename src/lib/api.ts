@@ -113,6 +113,7 @@ export interface MashStep {
   step_temp_c: number;
   step_time_min: number;
   ramp_time_min: number | null;
+  end_temp_c: number | null;
   step_order: number;
 }
 
@@ -121,8 +122,12 @@ export interface Mash {
   recipe_id: string;
   name: string;
   grain_temp_c: number;
+  tun_temp_c: number | null;
   sparge_temp_c: number | null;
   ph: number | null;
+  tun_weight_kg: number | null;
+  tun_specific_heat: number | null;
+  equip_adjust: boolean;
   notes: string | null;
   steps: MashStep[];
 }
