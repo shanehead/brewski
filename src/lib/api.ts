@@ -191,6 +191,30 @@ export interface Yeast {
   attenuation_pct: number | null;
 }
 
+export interface Misc {
+  id: string;
+  name: string;
+  type_: string;
+  use_: string;
+  time_min: number;
+  notes: string | null;
+  use_for: string | null;
+  amount_is_weight: boolean;
+}
+
+export interface Water {
+  id: string;
+  name: string;
+  calcium_ppm: number;
+  bicarbonate_ppm: number;
+  sulfate_ppm: number;
+  chloride_ppm: number;
+  sodium_ppm: number;
+  magnesium_ppm: number;
+  ph: number | null;
+  notes: string | null;
+}
+
 // --- Recipes ---
 export const listRecipes = () => invoke<RecipeSummary[]>("list_recipes");
 export const getRecipe = (id: string) => invoke<Recipe>("get_recipe", { id });
@@ -266,6 +290,8 @@ export const listStyles = () => invoke<Style[]>("list_styles");
 export const listFermentableLibrary = () => invoke<Fermentable[]>("list_fermentable_library");
 export const listHopLibrary = () => invoke<Hop[]>("list_hop_library");
 export const listYeastLibrary = () => invoke<Yeast[]>("list_yeast_library");
+export const listMiscLibrary = () => invoke<Misc[]>("list_misc_library");
+export const listWaterLibrary = () => invoke<Water[]>("list_water_library");
 
 // --- Settings ---
 export const getSettings = () => invoke<Record<string, string>>("get_settings");
