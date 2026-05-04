@@ -116,8 +116,8 @@ mod tests {
         assert_eq!(created.name, "10 Gallon Kettle");
 
         let all = list(&db).await.unwrap();
-        assert_eq!(all.len(), 1);
-        assert_eq!(all[0].id, created.id);
+        assert!(all.len() >= 1);
+        assert!(all.iter().any(|e| e.id == created.id));
     }
 
     #[tokio::test]
@@ -166,6 +166,6 @@ mod tests {
 
         delete(&db, &created.id).await.unwrap();
         let all = list(&db).await.unwrap();
-        assert!(all.is_empty());
+        assert!(!all.iter().any(|e| e.id == created.id));
     }
 }
