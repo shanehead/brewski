@@ -1,19 +1,18 @@
 import { defineConfig } from "vite";
 import { sveltekit } from "@sveltejs/kit/vite";
-
-const host = process.env.TAURI_DEV_HOST;
+import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
-  plugins: [sveltekit()],
+  plugins: [sveltekit(), tailwindcss()],
   clearScreen: false,
   server: {
     port: 1420,
     strictPort: true,
-    host: host || false,
-    hmr: host
+    host: process.env.TAURI_DEV_HOST || false,
+    hmr: process.env.TAURI_DEV_HOST
       ? {
           protocol: "ws",
-          host,
+          host: process.env.TAURI_DEV_HOST,
           port: 1421,
         }
       : undefined,
