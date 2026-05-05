@@ -7,6 +7,7 @@ pub mod mash;
 pub mod misc;
 pub mod recipe;
 pub mod settings;
+pub mod water;
 pub mod yeast;
 
 use rust_decimal::Decimal;
