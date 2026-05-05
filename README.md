@@ -59,3 +59,7 @@ just preview-docs   # render API docs in a browser
 ## API
 
 The full Tauri IPC interface is documented as an OpenAPI 3.1 spec at [`docs/openapi.yaml`](docs/openapi.yaml).
+
+## License
+
+MIT — see [LICENSE](LICENSE).
