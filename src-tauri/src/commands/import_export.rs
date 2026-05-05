@@ -1,7 +1,8 @@
 use tauri::State;
 use crate::AppState;
 use crate::models::{CreateFermentableAdditionInput, CreateHopAdditionInput, CreateRecipeInput, RecipeSummary};
-use crate::repositories::addition::AdditionRepository;
+use crate::repositories::fermentable::FermentableRepository;
+use crate::repositories::hop::HopRepository;
 use crate::repositories::recipe::RecipeRepository;
 
 #[tauri::command]
@@ -51,7 +52,8 @@ pub async fn create_recipes_from_beerxml(state: State<'_, AppState>, xml: String
     let boil_time = extract_tag(recipe_xml, "BOIL_TIME").and_then(|v| v.parse().ok()).unwrap_or(60.0);
 
     let recipe_repo = RecipeRepository::new(&state.db);
-    let addition_repo = AdditionRepository::new(&state.db);
+    let fermentable_repo = FermentableRepository::new(&state.db);
+    let hop_repo = HopRepository::new(&state.db);
 
     let recipe = recipe_repo.create(CreateRecipeInput {
         name, type_: Some(type_), batch_size_l: Some(batch_size),
@@ -63,7 +65,7 @@ pub async fn create_recipes_from_beerxml(state: State<'_, AppState>, xml: String
     for ferm_block in split_tags(&ferm_xml, "FERMENTABLE") {
         let fermentable_name = extract_tag(&ferm_block, "NAME").unwrap_or_default();
         if fermentable_name.is_empty() { continue; }
-        let _ = addition_repo.create_fermentable(&recipe.id, CreateFermentableAdditionInput {
+        let _ = fermentable_repo.create(&recipe.id, CreateFermentableAdditionInput {
             fermentable_id: None, name: fermentable_name,
             type_: extract_tag(&ferm_block, "TYPE").unwrap_or("grain".to_string()),
             yield_pct: extract_tag(&ferm_block, "YIELD").and_then(|v| v.parse().ok()).unwrap_or(75.0),
@@ -77,7 +79,7 @@ pub async fn create_recipes_from_beerxml(state: State<'_, AppState>, xml: String
     for hop_block in split_tags(&hops_xml, "HOP") {
         let hop_name = extract_tag(&hop_block, "NAME").unwrap_or_default();
         if hop_name.is_empty() { continue; }
-        let _ = addition_repo.create_hop(&recipe.id, CreateHopAdditionInput {
+        let _ = hop_repo.create(&recipe.id, CreateHopAdditionInput {
             hop_id: None, name: hop_name,
             alpha_pct: extract_tag(&hop_block, "ALPHA").and_then(|v| v.parse().ok()).unwrap_or(5.0),
             form: extract_tag(&hop_block, "FORM"),
