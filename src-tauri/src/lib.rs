@@ -7,7 +7,7 @@ pub mod models;
 pub mod brewing;
 
 #[cfg(test)]
-mod db;
+mod test_helpers;
 
 use sea_orm::Database;
 use sea_orm_migration::MigratorTrait;

@@ -26,7 +26,7 @@ fn d_opt(v: Option<rust_decimal::Decimal>) -> Result<Option<f64>, AppError> {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, sqlx::FromRow)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Style {
     pub id: String,
     pub name: String,
@@ -34,7 +34,6 @@ pub struct Style {
     pub category_number: String,
     pub style_letter: String,
     pub style_guide: String,
-    #[sqlx(rename = "type")]
     pub type_: String,
     pub og_min: f64,
     pub og_max: f64,
@@ -85,7 +84,7 @@ impl TryFrom<entities::styles::Model> for Style {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, sqlx::FromRow)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct EquipmentProfile {
     pub id: String,
     pub name: String,
@@ -137,11 +136,10 @@ impl TryFrom<entities::equipment_profiles::Model> for EquipmentProfile {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, sqlx::FromRow)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Fermentable {
     pub id: String,
     pub name: String,
-    #[sqlx(rename = "type")]
     pub type_: String,
     pub yield_pct: f64,
     pub color_lovibond: f64,
@@ -182,14 +180,13 @@ impl TryFrom<entities::fermentables::Model> for Fermentable {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, sqlx::FromRow)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Hop {
     pub id: String,
     pub name: String,
     pub alpha_pct: f64,
     pub beta_pct: Option<f64>,
     pub form: String,
-    #[sqlx(rename = "type")]
     pub type_: Option<String>,
     pub origin: Option<String>,
     pub year: Option<String>,
@@ -225,11 +222,10 @@ impl TryFrom<entities::hops::Model> for Hop {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, sqlx::FromRow)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Yeast {
     pub id: String,
     pub name: String,
-    #[sqlx(rename = "type")]
     pub type_: String,
     pub form: String,
     pub laboratory: Option<String>,
@@ -266,13 +262,11 @@ impl TryFrom<entities::yeasts::Model> for Yeast {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, sqlx::FromRow)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Misc {
     pub id: String,
     pub name: String,
-    #[sqlx(rename = "type")]
     pub type_: String,
-    #[sqlx(rename = "use")]
     pub use_: String,
     pub time_min: f64,
     pub notes: Option<String>,
@@ -296,7 +290,7 @@ impl TryFrom<entities::miscs::Model> for Misc {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, sqlx::FromRow)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Water {
     pub id: String,
     pub name: String,
@@ -328,12 +322,11 @@ impl TryFrom<entities::waters::Model> for Water {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, sqlx::FromRow)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct RecipeSummary {
     pub id: String,
     pub name: String,
     pub style_name: Option<String>,
-    #[sqlx(rename = "type")]
     pub type_: String,
     pub batch_size_l: f64,
     pub created_at: i64,
@@ -386,52 +379,12 @@ pub struct Recipe {
     pub mash: Option<Mash>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, sqlx::FromRow)]
-pub struct RecipeRow {
-    pub id: String,
-    pub name: String,
-    #[sqlx(rename = "type")]
-    pub type_: String,
-    pub brewer: Option<String>,
-    pub asst_brewer: Option<String>,
-    pub batch_size_l: f64,
-    pub boil_size_l: f64,
-    pub boil_time_min: f64,
-    pub efficiency_pct: Option<f64>,
-    pub style_id: Option<String>,
-    pub equipment_profile_id: Option<String>,
-    pub notes: Option<String>,
-    pub taste_notes: Option<String>,
-    pub taste_rating: Option<f64>,
-    pub og: Option<f64>,
-    pub fg: Option<f64>,
-    pub fermentation_stages: i64,
-    pub primary_age_days: Option<f64>,
-    pub primary_temp_c: Option<f64>,
-    pub secondary_age_days: Option<f64>,
-    pub secondary_temp_c: Option<f64>,
-    pub tertiary_age_days: Option<f64>,
-    pub tertiary_temp_c: Option<f64>,
-    pub age_days: Option<f64>,
-    pub age_temp_c: Option<f64>,
-    pub carbonation_vols: Option<f64>,
-    pub forced_carbonation: bool,
-    pub priming_sugar_name: Option<String>,
-    pub carbonation_temp_c: Option<f64>,
-    pub priming_sugar_equiv: Option<f64>,
-    pub keg_priming_factor: Option<f64>,
-    pub date: Option<String>,
-    pub created_at: i64,
-    pub updated_at: i64,
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone, sqlx::FromRow)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct RecipeAdditionFermentable {
     pub id: String,
     pub recipe_id: String,
     pub fermentable_id: Option<String>,
     pub name: String,
-    #[sqlx(rename = "type")]
     pub type_: String,
     pub yield_pct: f64,
     pub color_lovibond: f64,
@@ -458,7 +411,7 @@ impl TryFrom<entities::recipe_addition_fermentables::Model> for RecipeAdditionFe
     }
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, sqlx::FromRow)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct RecipeAdditionHop {
     pub id: String,
     pub recipe_id: String,
@@ -467,7 +420,6 @@ pub struct RecipeAdditionHop {
     pub alpha_pct: f64,
     pub form: String,
     pub amount_kg: f64,
-    #[sqlx(rename = "use")]
     pub use_: String,
     pub time_min: f64,
     pub addition_order: i64,
@@ -491,13 +443,12 @@ impl TryFrom<entities::recipe_addition_hops::Model> for RecipeAdditionHop {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, sqlx::FromRow)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct RecipeAdditionYeast {
     pub id: String,
     pub recipe_id: String,
     pub yeast_id: Option<String>,
     pub name: String,
-    #[sqlx(rename = "type")]
     pub type_: String,
     pub form: String,
     pub laboratory: Option<String>,
@@ -530,15 +481,13 @@ impl TryFrom<entities::recipe_addition_yeasts::Model> for RecipeAdditionYeast {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, sqlx::FromRow)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct RecipeAdditionMisc {
     pub id: String,
     pub recipe_id: String,
     pub misc_id: Option<String>,
     pub name: String,
-    #[sqlx(rename = "type")]
     pub type_: String,
-    #[sqlx(rename = "use")]
     pub use_: String,
     pub amount: f64,
     pub amount_is_weight: bool,
@@ -564,7 +513,7 @@ impl TryFrom<entities::recipe_addition_miscs::Model> for RecipeAdditionMisc {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, sqlx::FromRow)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct RecipeAdditionWater {
     pub id: String,
     pub recipe_id: String,
@@ -602,27 +551,11 @@ pub struct Mash {
     pub steps: Vec<MashStep>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, sqlx::FromRow)]
-pub struct MashRow {
-    pub id: String,
-    pub recipe_id: String,
-    pub name: String,
-    pub grain_temp_c: f64,
-    pub tun_temp_c: Option<f64>,
-    pub sparge_temp_c: Option<f64>,
-    pub ph: Option<f64>,
-    pub tun_weight_kg: Option<f64>,
-    pub tun_specific_heat: Option<f64>,
-    pub equip_adjust: bool,
-    pub notes: Option<String>,
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone, sqlx::FromRow)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct MashStep {
     pub id: String,
     pub mash_id: String,
     pub name: String,
-    #[sqlx(rename = "type")]
     pub type_: String,
     pub infuse_amount_l: Option<f64>,
     pub step_temp_c: f64,

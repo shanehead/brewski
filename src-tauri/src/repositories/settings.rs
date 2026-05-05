@@ -35,7 +35,7 @@ impl<'a> SettingsRepository<'a> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::db::test_helpers::setup_test_db;
+    use crate::test_helpers::setup_test_db;
 
     #[tokio::test]
     async fn test_get_all_returns_defaults() {

@@ -2,12 +2,10 @@
 pub enum AppError {
     #[error("database error: {0}")]
     Database(#[from] sea_orm::DbErr),
-    #[error("database error: {0}")]
-    Sqlx(#[from] sqlx::Error),
+    #[error("conversion error: {0}")]
+    Conversion(String),
     #[error("not found")]
     NotFound,
-    #[error("type conversion error: {0}")]
-    Conversion(String),
 }
 
 impl serde::Serialize for AppError {
