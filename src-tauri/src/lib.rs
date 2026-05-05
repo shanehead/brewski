@@ -1,4 +1,5 @@
 pub mod migration;
+pub mod entities;
 mod commands;
 mod db;
 mod error;
