@@ -844,7 +844,7 @@ pub struct CreateEquipmentProfileInput {
     pub efficiency_pct: f64,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Default)]
 pub struct UpdateEquipmentProfileInput {
     pub name: Option<String>,
     pub notes: Option<String>,
