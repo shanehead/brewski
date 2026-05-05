@@ -2,17 +2,20 @@ pub mod migration;
 pub mod entities;
 pub mod repositories;
 mod commands;
-mod db;
 mod error;
 pub mod models;
 pub mod brewing;
 
-use sqlx::sqlite::{SqliteConnectOptions, SqlitePool};
-use std::str::FromStr;
+#[cfg(test)]
+mod db;
+
+use sea_orm::Database;
+use sea_orm_migration::MigratorTrait;
 use tauri::Manager;
+use crate::migration::Migrator;
 
 pub struct AppState {
-    pub db: SqlitePool,
+    pub db: sea_orm::DatabaseConnection,
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -22,19 +25,17 @@ pub fn run() {
         .setup(|app| {
             let app_dir = app.path().app_data_dir()?;
             std::fs::create_dir_all(&app_dir)?;
-            let db_url = format!("sqlite:{}", app_dir.join("brewski.db").display());
-
-            let opts = SqliteConnectOptions::from_str(&db_url)?
-                .create_if_missing(true);
-            let pool = tauri::async_runtime::block_on(
-                SqlitePool::connect_with(opts)
+            let db_url = format!(
+                "sqlite://{}?mode=rwc",
+                app_dir.join("brewski.db").display()
+            );
+            let db = tauri::async_runtime::block_on(
+                Database::connect(&db_url)
             )?;
-
             tauri::async_runtime::block_on(
-                sqlx::migrate!("src/db/migrations").run(&pool)
+                Migrator::up(&db, None)
             )?;
-
-            app.manage(AppState { db: pool });
+            app.manage(AppState { db });
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![

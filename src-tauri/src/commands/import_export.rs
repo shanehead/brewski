@@ -1,16 +1,12 @@
 use tauri::State;
 use crate::AppState;
-use crate::models::{RecipeSummary, CreateRecipeInput, CreateFermentableAdditionInput, CreateHopAdditionInput};
-use crate::db;
+use crate::models::{CreateFermentableAdditionInput, CreateHopAdditionInput, CreateRecipeInput, RecipeSummary};
+use crate::repositories::addition::AdditionRepository;
+use crate::repositories::recipe::RecipeRepository;
 
 #[tauri::command]
-pub async fn get_recipe_beerxml(
-    state: State<'_, AppState>,
-    recipe_id: String,
-) -> Result<String, String> {
-    let recipe = db::recipes::get(&state.db, &recipe_id)
-        .await
-        .map_err(|e| e.to_string())?;
+pub async fn get_recipe_beerxml(state: State<'_, AppState>, recipe_id: String) -> Result<String, String> {
+    let recipe = RecipeRepository::new(&state.db).get(&recipe_id).await.map_err(|e| e.to_string())?;
 
     let style_block = recipe.style.as_ref().map(|s| format!(
         "    <STYLE>\n      <NAME>{}</NAME>\n      <CATEGORY>{}</CATEGORY>\n      <STYLE_GUIDE>{}</STYLE_GUIDE>\n    </STYLE>",
@@ -32,90 +28,68 @@ pub async fn get_recipe_beerxml(
         y.name, y.type_, y.form, y.amount.unwrap_or(0.0)
     )).collect::<Vec<_>>().join("\n");
 
-    let xml = format!(
+    Ok(format!(
         "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<RECIPES>\n  <RECIPE>\n    <NAME>{name}</NAME>\n    <VERSION>1</VERSION>\n    <TYPE>{type_}</TYPE>\n    <BREWER>{brewer}</BREWER>\n    <BATCH_SIZE>{batch:.1}</BATCH_SIZE>\n    <BOIL_SIZE>{boil:.1}</BOIL_SIZE>\n    <BOIL_TIME>{boil_time:.0}</BOIL_TIME>\n    <EFFICIENCY>{eff:.1}</EFFICIENCY>\n{style}\n    <FERMENTABLES>\n{fermentables}\n    </FERMENTABLES>\n    <HOPS>\n{hops}\n    </HOPS>\n    <YEASTS>\n{yeasts}\n    </YEASTS>\n  </RECIPE>\n</RECIPES>",
-        name = recipe.name,
-        type_ = recipe.type_,
+        name = recipe.name, type_ = recipe.type_,
         brewer = recipe.brewer.as_deref().unwrap_or(""),
-        batch = recipe.batch_size_l,
-        boil = recipe.boil_size_l,
-        boil_time = recipe.boil_time_min,
-        eff = recipe.efficiency_pct.unwrap_or(72.0),
-        style = style_block,
-        fermentables = fermentables,
-        hops = hops,
-        yeasts = yeasts,
-    );
-
-    Ok(xml)
+        batch = recipe.batch_size_l, boil = recipe.boil_size_l,
+        boil_time = recipe.boil_time_min, eff = recipe.efficiency_pct.unwrap_or(72.0),
+        style = style_block, fermentables = fermentables, hops = hops, yeasts = yeasts,
+    ))
 }
 
 #[tauri::command]
-pub async fn create_recipes_from_beerxml(
-    state: State<'_, AppState>,
-    xml: String,
-) -> Result<Vec<RecipeSummary>, String> {
-    let mut results = Vec::new();
-
+pub async fn create_recipes_from_beerxml(state: State<'_, AppState>, xml: String) -> Result<Vec<RecipeSummary>, String> {
     let recipes_start = xml.find("<RECIPE>").ok_or("No <RECIPE> found in XML")?;
     let recipes_end = xml.rfind("</RECIPE>").ok_or("No </RECIPE> found in XML")?;
     let recipe_xml = &xml[recipes_start..recipes_end + 9];
 
     let name = extract_tag(recipe_xml, "NAME").unwrap_or("Imported Recipe".to_string());
     let type_ = extract_tag(recipe_xml, "TYPE").unwrap_or("all_grain".to_string());
-    let batch_size: f64 = extract_tag(recipe_xml, "BATCH_SIZE")
-        .and_then(|v| v.parse().ok()).unwrap_or(23.0);
-    let boil_size: f64 = extract_tag(recipe_xml, "BOIL_SIZE")
-        .and_then(|v| v.parse().ok()).unwrap_or(27.0);
-    let boil_time: f64 = extract_tag(recipe_xml, "BOIL_TIME")
-        .and_then(|v| v.parse().ok()).unwrap_or(60.0);
+    let batch_size = extract_tag(recipe_xml, "BATCH_SIZE").and_then(|v| v.parse().ok()).unwrap_or(23.0);
+    let boil_size = extract_tag(recipe_xml, "BOIL_SIZE").and_then(|v| v.parse().ok()).unwrap_or(27.0);
+    let boil_time = extract_tag(recipe_xml, "BOIL_TIME").and_then(|v| v.parse().ok()).unwrap_or(60.0);
 
-    let recipe = db::recipes::create(&state.db, CreateRecipeInput {
-        name,
-        type_: Some(type_),
-        batch_size_l: Some(batch_size),
-        boil_size_l: Some(boil_size),
-        boil_time_min: Some(boil_time),
-        equipment_profile_id: None,
-        source_id: None,
+    let recipe_repo = RecipeRepository::new(&state.db);
+    let addition_repo = AdditionRepository::new(&state.db);
+
+    let recipe = recipe_repo.create(CreateRecipeInput {
+        name, type_: Some(type_), batch_size_l: Some(batch_size),
+        boil_size_l: Some(boil_size), boil_time_min: Some(boil_time),
+        equipment_profile_id: None, source_id: None,
     }).await.map_err(|e| e.to_string())?;
 
     let ferm_xml = extract_between(&xml, "<FERMENTABLES>", "</FERMENTABLES>").unwrap_or_default();
     for ferm_block in split_tags(&ferm_xml, "FERMENTABLE") {
         let fname = extract_tag(&ferm_block, "NAME").unwrap_or_default();
-        let ftype = extract_tag(&ferm_block, "TYPE").unwrap_or("grain".to_string());
-        let amount: f64 = extract_tag(&ferm_block, "AMOUNT").and_then(|v| v.parse().ok()).unwrap_or(0.0);
-        let yield_pct: f64 = extract_tag(&ferm_block, "YIELD").and_then(|v| v.parse().ok()).unwrap_or(75.0);
-        let color: f64 = extract_tag(&ferm_block, "COLOR").and_then(|v| v.parse().ok()).unwrap_or(2.0);
-        if !fname.is_empty() {
-            let _ = db::additions::create_fermentable(&state.db, &recipe.id, CreateFermentableAdditionInput {
-                fermentable_id: None, name: fname, type_: ftype,
-                yield_pct, color_lovibond: color, amount_kg: amount, add_after_boil: None,
-            }).await;
-        }
+        if fname.is_empty() { continue; }
+        let _ = addition_repo.create_fermentable(&recipe.id, CreateFermentableAdditionInput {
+            fermentable_id: None, name: fname,
+            type_: extract_tag(&ferm_block, "TYPE").unwrap_or("grain".to_string()),
+            yield_pct: extract_tag(&ferm_block, "YIELD").and_then(|v| v.parse().ok()).unwrap_or(75.0),
+            color_lovibond: extract_tag(&ferm_block, "COLOR").and_then(|v| v.parse().ok()).unwrap_or(2.0),
+            amount_kg: extract_tag(&ferm_block, "AMOUNT").and_then(|v| v.parse().ok()).unwrap_or(0.0),
+            add_after_boil: None,
+        }).await;
     }
 
     let hops_xml = extract_between(&xml, "<HOPS>", "</HOPS>").unwrap_or_default();
     for hop_block in split_tags(&hops_xml, "HOP") {
         let hname = extract_tag(&hop_block, "NAME").unwrap_or_default();
-        let alpha: f64 = extract_tag(&hop_block, "ALPHA").and_then(|v| v.parse().ok()).unwrap_or(5.0);
-        let amount: f64 = extract_tag(&hop_block, "AMOUNT").and_then(|v| v.parse().ok()).unwrap_or(0.0);
-        let use_ = extract_tag(&hop_block, "USE").unwrap_or("boil".to_string());
-        let time: f64 = extract_tag(&hop_block, "TIME").and_then(|v| v.parse().ok()).unwrap_or(60.0);
-        let form = extract_tag(&hop_block, "FORM").unwrap_or("pellet".to_string());
-        if !hname.is_empty() {
-            let _ = db::additions::create_hop(&state.db, &recipe.id, CreateHopAdditionInput {
-                hop_id: None, name: hname, alpha_pct: alpha, form: Some(form),
-                amount_kg: amount, use_: use_, time_min: time,
-            }).await;
-        }
+        if hname.is_empty() { continue; }
+        let _ = addition_repo.create_hop(&recipe.id, CreateHopAdditionInput {
+            hop_id: None, name: hname,
+            alpha_pct: extract_tag(&hop_block, "ALPHA").and_then(|v| v.parse().ok()).unwrap_or(5.0),
+            form: extract_tag(&hop_block, "FORM"),
+            amount_kg: extract_tag(&hop_block, "AMOUNT").and_then(|v| v.parse().ok()).unwrap_or(0.0),
+            use_: extract_tag(&hop_block, "USE").unwrap_or("boil".to_string()),
+            time_min: extract_tag(&hop_block, "TIME").and_then(|v| v.parse().ok()).unwrap_or(60.0),
+        }).await;
     }
 
-    let summary = db::recipes::list(&state.db).await.map_err(|e| e.to_string())?
-        .into_iter().filter(|r| r.id == recipe.id).collect::<Vec<_>>();
-    results.extend(summary);
-
-    Ok(results)
+    let summary = recipe_repo.list().await.map_err(|e| e.to_string())?
+        .into_iter().filter(|r| r.id == recipe.id).collect();
+    Ok(summary)
 }
 
 fn extract_tag(xml: &str, tag: &str) -> Option<String> {
@@ -123,21 +97,13 @@ fn extract_tag(xml: &str, tag: &str) -> Option<String> {
     let close = format!("</{}>", tag);
     let start = xml.find(&open)? + open.len();
     let end = xml.find(&close)?;
-    if end > start {
-        Some(xml[start..end].trim().to_string())
-    } else {
-        None
-    }
+    if end > start { Some(xml[start..end].trim().to_string()) } else { None }
 }
 
 fn extract_between(xml: &str, open: &str, close: &str) -> Option<String> {
     let start = xml.find(open)? + open.len();
     let end = xml.find(close)?;
-    if end > start {
-        Some(xml[start..end].to_string())
-    } else {
-        None
-    }
+    if end > start { Some(xml[start..end].to_string()) } else { None }
 }
 
 fn split_tags(xml: &str, tag: &str) -> Vec<String> {
