@@ -13,13 +13,7 @@ use crate::models::{
     Style, UpdateRecipeInput,
 };
 
-use super::{new_id, now_secs, to_dec};
-
-fn from_dec(v: rust_decimal::Decimal) -> Result<f64, AppError> {
-    use rust_decimal::prelude::ToPrimitive;
-    v.to_f64()
-        .ok_or_else(|| AppError::Conversion(format!("cannot convert {} to f64", v)))
-}
+use super::{new_id, now_secs, to_dec, from_dec};
 
 pub struct RecipeRepository<'a> {
     db: &'a DatabaseConnection,

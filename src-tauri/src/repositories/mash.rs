@@ -7,20 +7,7 @@ use crate::entities::{mash_steps, mashes};
 use crate::error::AppError;
 use crate::models::{CreateMashStepInput, Mash, MashStep, UpdateMashInput, UpdateMashStepInput};
 
-use super::{new_id, to_dec, to_dec_opt};
-
-fn from_dec(v: rust_decimal::Decimal) -> Result<f64, AppError> {
-    use rust_decimal::prelude::ToPrimitive;
-    v.to_f64()
-        .ok_or_else(|| AppError::Conversion(format!("cannot convert {} to f64", v)))
-}
-
-fn from_dec_opt(v: Option<rust_decimal::Decimal>) -> Result<Option<f64>, AppError> {
-    match v {
-        Some(dec) => Ok(Some(from_dec(dec)?)),
-        None => Ok(None),
-    }
-}
+use super::{new_id, to_dec, to_dec_opt, from_dec, from_dec_opt};
 
 pub struct MashRepository<'a> {
     db: &'a DatabaseConnection,
