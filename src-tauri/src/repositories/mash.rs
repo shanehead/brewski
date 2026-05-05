@@ -1,4 +1,3 @@
-use rust_decimal::prelude::FromPrimitive;
 use sea_orm::{
     ActiveModelTrait, ColumnTrait, DatabaseConnection, EntityTrait, PaginatorTrait, QueryFilter,
     QueryOrder, Set,
@@ -8,15 +7,7 @@ use crate::entities::{mash_steps, mashes};
 use crate::error::AppError;
 use crate::models::{CreateMashStepInput, Mash, MashStep, UpdateMashInput, UpdateMashStepInput};
 
-use super::new_id;
-
-fn to_dec(v: f64) -> rust_decimal::Decimal {
-    rust_decimal::Decimal::from_f64(v).unwrap_or_default()
-}
-
-fn to_dec_opt(v: Option<f64>) -> Option<rust_decimal::Decimal> {
-    v.map(|x| rust_decimal::Decimal::from_f64(x).unwrap_or_default())
-}
+use super::{new_id, to_dec, to_dec_opt};
 
 fn from_dec(v: rust_decimal::Decimal) -> Result<f64, AppError> {
     use rust_decimal::prelude::ToPrimitive;

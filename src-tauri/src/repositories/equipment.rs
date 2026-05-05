@@ -1,19 +1,10 @@
-use rust_decimal::prelude::FromPrimitive;
 use sea_orm::{ActiveModelTrait, DatabaseConnection, EntityTrait, QueryOrder, Set};
 
 use crate::entities::equipment_profiles;
 use crate::error::AppError;
 use crate::models::{CreateEquipmentProfileInput, EquipmentProfile, UpdateEquipmentProfileInput};
 
-use super::{new_id, now_secs};
-
-fn to_dec(v: f64) -> rust_decimal::Decimal {
-    rust_decimal::Decimal::from_f64(v).unwrap_or_default()
-}
-
-fn to_dec_opt(v: Option<f64>) -> Option<rust_decimal::Decimal> {
-    v.map(|x| rust_decimal::Decimal::from_f64(x).unwrap_or_default())
-}
+use super::{new_id, now_secs, to_dec, to_dec_opt};
 
 pub struct EquipmentRepository<'a> {
     db: &'a DatabaseConnection,

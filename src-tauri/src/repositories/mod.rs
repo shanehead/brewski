@@ -5,6 +5,9 @@ pub mod mash;
 pub mod recipe;
 pub mod settings;
 
+use rust_decimal::Decimal;
+use rust_decimal::prelude::FromPrimitive;
+
 pub(crate) fn now_secs() -> i64 {
     std::time::SystemTime::now()
         .duration_since(std::time::UNIX_EPOCH)
@@ -14,4 +17,12 @@ pub(crate) fn now_secs() -> i64 {
 
 pub(crate) fn new_id() -> String {
     uuid::Uuid::new_v4().to_string()
+}
+
+pub(crate) fn to_dec(v: f64) -> Decimal {
+    Decimal::from_f64(v).unwrap_or_default()
+}
+
+pub(crate) fn to_dec_opt(v: Option<f64>) -> Option<Decimal> {
+    v.map(|x| Decimal::from_f64(x).unwrap_or_default())
 }

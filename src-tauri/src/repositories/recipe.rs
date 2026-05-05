@@ -1,4 +1,3 @@
-use rust_decimal::prelude::FromPrimitive;
 use sea_orm::{
     ActiveModelTrait, ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter, QueryOrder, Set,
 };
@@ -14,11 +13,7 @@ use crate::models::{
     Style, UpdateRecipeInput,
 };
 
-use super::{new_id, now_secs};
-
-fn to_dec(v: f64) -> rust_decimal::Decimal {
-    rust_decimal::Decimal::from_f64(v).unwrap_or_default()
-}
+use super::{new_id, now_secs, to_dec};
 
 fn from_dec(v: rust_decimal::Decimal) -> Result<f64, AppError> {
     use rust_decimal::prelude::ToPrimitive;

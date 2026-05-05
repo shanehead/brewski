@@ -1,4 +1,3 @@
-use rust_decimal::prelude::FromPrimitive;
 use sea_orm::{
     ActiveModelTrait, ColumnTrait, DatabaseConnection, EntityTrait, PaginatorTrait, QueryFilter,
     Set,
@@ -17,15 +16,7 @@ use crate::models::{
     UpdateWaterAdditionInput, UpdateYeastAdditionInput,
 };
 
-use super::new_id;
-
-fn to_dec(v: f64) -> rust_decimal::Decimal {
-    rust_decimal::Decimal::from_f64(v).unwrap_or_default()
-}
-
-fn to_dec_opt(v: Option<f64>) -> Option<rust_decimal::Decimal> {
-    v.map(|x| rust_decimal::Decimal::from_f64(x).unwrap_or_default())
-}
+use super::{new_id, to_dec, to_dec_opt};
 
 pub struct AdditionRepository<'a> {
     db: &'a DatabaseConnection,
