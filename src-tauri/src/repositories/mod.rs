@@ -4,6 +4,7 @@ pub mod fermentable;
 pub mod hop;
 pub mod library;
 pub mod mash;
+pub mod misc;
 pub mod recipe;
 pub mod settings;
 pub mod yeast;
