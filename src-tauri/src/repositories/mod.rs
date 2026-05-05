@@ -1,0 +1,17 @@
+pub mod addition;
+pub mod equipment;
+pub mod library;
+pub mod mash;
+pub mod recipe;
+pub mod settings;
+
+pub(crate) fn now_secs() -> i64 {
+    std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .unwrap()
+        .as_secs() as i64
+}
+
+pub(crate) fn new_id() -> String {
+    uuid::Uuid::new_v4().to_string()
+}
