@@ -6,6 +6,7 @@ pub mod library;
 pub mod mash;
 pub mod recipe;
 pub mod settings;
+pub mod yeast;
 
 use rust_decimal::Decimal;
 use rust_decimal::prelude::FromPrimitive;

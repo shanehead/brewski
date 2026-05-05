@@ -689,6 +689,8 @@ pub struct CreateYeastAdditionInput {
     pub attenuation_pct: Option<f64>,
     pub amount: Option<f64>,
     pub amount_is_weight: Option<bool>,
+    pub add_to_secondary: Option<bool>,
+    pub times_cultured: Option<i64>,
 }
 
 #[derive(Debug, Deserialize)]
