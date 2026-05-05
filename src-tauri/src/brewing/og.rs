@@ -3,14 +3,14 @@ pub fn calculate_og(
     batch_size_l: f64,
     efficiency_pct: f64,
 ) -> f64 {
-    let batch_gal = batch_size_l * 0.264172;
+    let batch_gallons = batch_size_l * 0.264172;
     let total_points: f64 = fermentables.iter().map(|(yield_pct, amount_kg, add_after_boil)| {
-        let eff = if *add_after_boil { 100.0 } else { efficiency_pct };
-        let lbs = *amount_kg * 2.20462;
-        let ppg = *yield_pct / 100.0 * 46.0;
-        lbs * ppg * (eff / 100.0)
+        let efficiency = if *add_after_boil { 100.0 } else { efficiency_pct };
+        let pounds = *amount_kg * 2.20462;
+        let points_per_pound_per_gallon = *yield_pct / 100.0 * 46.0;
+        pounds * points_per_pound_per_gallon * (efficiency / 100.0)
     }).sum();
-    1.0 + (total_points / batch_gal) / 1000.0
+    1.0 + (total_points / batch_gallons) / 1000.0
 }
 
 #[cfg(test)]

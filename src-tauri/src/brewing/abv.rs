@@ -8,14 +8,14 @@ pub fn calculate_abv(og: f64, fg: f64) -> f64 {
 
 // ASBC formula: kcal per 355 mL (12 oz)
 pub fn calculate_calories_per_355ml(og: f64, fg: f64) -> f64 {
-    let abw = (og - fg) * 105.0;
-    let re = 0.1808 * og_to_plato(og) + 0.8192 * og_to_plato(fg);
-    let cal_per_ml = (6.9 * abw + 4.0 * (re - 0.1)) * fg * 10.0 / 1000.0;
-    cal_per_ml * 355.0
+    let alcohol_by_weight = (og - fg) * 105.0;
+    let real_extract = 0.1808 * og_to_plato(og) + 0.8192 * og_to_plato(fg);
+    let calories_per_ml = (6.9 * alcohol_by_weight + 4.0 * (real_extract - 0.1)) * fg * 10.0 / 1000.0;
+    calories_per_ml * 355.0
 }
 
-fn og_to_plato(sg: f64) -> f64 {
-    (-1.0 * 616.868) + (1111.14 * sg) - (630.272 * sg * sg) + (135.997 * sg * sg * sg)
+fn og_to_plato(specific_gravity: f64) -> f64 {
+    (-1.0 * 616.868) + (1111.14 * specific_gravity) - (630.272 * specific_gravity * specific_gravity) + (135.997 * specific_gravity * specific_gravity * specific_gravity)
 }
 
 #[cfg(test)]

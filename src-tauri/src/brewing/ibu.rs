@@ -3,7 +3,7 @@ pub fn tinseth_ibu(
     og: f64,
     post_boil_volume_l: f64,
 ) -> f64 {
-    let vol_gal = post_boil_volume_l * 0.264172;
+    let volume_gallons = post_boil_volume_l * 0.264172;
     hops.iter().map(|(alpha_pct, amount_kg, time_min, is_dry_hop)| {
         if *is_dry_hop || **time_min <= 0.0 {
             return 0.0;
@@ -11,9 +11,9 @@ pub fn tinseth_ibu(
         let bigness = 1.65 * 0.000125f64.powf(og - 1.0);
         let time_factor = (1.0 - f64::exp(-0.04 * *time_min)) / 4.15;
         let utilization = bigness * time_factor;
-        let oz = *amount_kg * 35.274;
-        let alpha = *alpha_pct / 100.0;
-        (utilization * alpha * oz * 7490.0) / vol_gal
+        let ounces = *amount_kg * 35.274;
+        let alpha_fraction = *alpha_pct / 100.0;
+        (utilization * alpha_fraction * ounces * 7490.0) / volume_gallons
     }).sum()
 }
 

@@ -7,17 +7,17 @@ pub fn calculate_boil_volumes(
     fermenter_loss_l: f64,
     top_up_water_l: f64,
 ) -> (f64, f64) {
-    let post_boil = batch_size_l + trub_chiller_loss_l + fermenter_loss_l - top_up_water_l;
-    let boil_hrs = boil_time_min / 60.0;
-    let evap_fraction = evap_rate_pct_hr / 100.0 * boil_hrs;
-    let pre_boil = post_boil / (1.0 - evap_fraction);
-    (pre_boil, post_boil)
+    let post_boil_volume = batch_size_l + trub_chiller_loss_l + fermenter_loss_l - top_up_water_l;
+    let boil_hours = boil_time_min / 60.0;
+    let evaporation_fraction = evap_rate_pct_hr / 100.0 * boil_hours;
+    let pre_boil_volume = post_boil_volume / (1.0 - evaporation_fraction);
+    (pre_boil_volume, post_boil_volume)
 }
 
 pub fn calculate_pre_boil_gravity(og: f64, post_boil_volume_l: f64, pre_boil_volume_l: f64) -> f64 {
-    let og_points = (og - 1.0) * 1000.0;
-    let pbg_points = og_points * post_boil_volume_l / pre_boil_volume_l;
-    1.0 + pbg_points / 1000.0
+    let original_gravity_points = (og - 1.0) * 1000.0;
+    let pre_boil_gravity_points = original_gravity_points * post_boil_volume_l / pre_boil_volume_l;
+    1.0 + pre_boil_gravity_points / 1000.0
 }
 
 #[cfg(test)]

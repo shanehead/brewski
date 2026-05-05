@@ -20,25 +20,25 @@ pub fn calculate_stats(recipe: &Recipe) -> RecipeStats {
     let fg = recipe.yeasts.iter()
         .filter_map(|y| y.attenuation_pct)
         .next()
-        .map(|att| abv::calculate_fg(og, att))
+        .map(|attenuation| abv::calculate_fg(og, attenuation))
         .unwrap_or_else(|| abv::calculate_fg(og, 75.0));
 
     let abv_pct = abv::calculate_abv(og, fg);
     let calories = abv::calculate_calories_per_355ml(og, fg);
 
-    let eq = recipe.equipment_profile.as_ref();
-    let evap_rate = eq.map(|e| e.evap_rate_pct_hr).unwrap_or(10.0);
-    let trub_loss = eq.map(|e| e.trub_chiller_loss_l).unwrap_or(1.0);
-    let fermenter_loss = eq.map(|e| e.fermenter_loss_l).unwrap_or(1.0);
-    let top_up = eq.map(|e| e.top_up_water_l).unwrap_or(0.0);
+    let equipment = recipe.equipment_profile.as_ref();
+    let evaporation_rate = equipment.map(|e| e.evap_rate_pct_hr).unwrap_or(10.0);
+    let trub_chiller_loss = equipment.map(|e| e.trub_chiller_loss_l).unwrap_or(1.0);
+    let fermenter_loss = equipment.map(|e| e.fermenter_loss_l).unwrap_or(1.0);
+    let top_up_water = equipment.map(|e| e.top_up_water_l).unwrap_or(0.0);
 
     let (pre_boil_volume_l, post_boil_volume_l) = volumes::calculate_boil_volumes(
         recipe.batch_size_l,
         recipe.boil_time_min,
-        evap_rate,
-        trub_loss,
+        evaporation_rate,
+        trub_chiller_loss,
         fermenter_loss,
-        top_up,
+        top_up_water,
     );
 
     let pre_boil_gravity = volumes::calculate_pre_boil_gravity(og, post_boil_volume_l, pre_boil_volume_l);
@@ -55,8 +55,8 @@ pub fn calculate_stats(recipe: &Recipe) -> RecipeStats {
 
     let srm = srm::morey_srm(&srm_inputs, recipe.batch_size_l);
 
-    let gu = (og - 1.0) * 1000.0;
-    let bu_gu_ratio = if gu > 0.0 { ibu / gu } else { 0.0 };
+    let gravity_units = (og - 1.0) * 1000.0;
+    let bu_gu_ratio = if gravity_units > 0.0 { ibu / gravity_units } else { 0.0 };
 
     RecipeStats {
         og,

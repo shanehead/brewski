@@ -1,4 +1,4 @@
-CREATE TABLE styles (
+CREATE TABLE IF NOT EXISTS styles (
   id               TEXT PRIMARY KEY,
   name             TEXT NOT NULL,
   category         TEXT NOT NULL,
@@ -24,7 +24,7 @@ CREATE TABLE styles (
   examples         TEXT
 );
 
-CREATE TABLE equipment_profiles (
+CREATE TABLE IF NOT EXISTS equipment_profiles (
   id                    TEXT PRIMARY KEY,
   name                  TEXT NOT NULL,
   notes                 TEXT,
@@ -47,7 +47,7 @@ CREATE TABLE equipment_profiles (
   updated_at            INTEGER NOT NULL
 );
 
-CREATE TABLE fermentables (
+CREATE TABLE IF NOT EXISTS fermentables (
   id                        TEXT PRIMARY KEY,
   name                      TEXT NOT NULL,
   type                      TEXT NOT NULL,
@@ -66,7 +66,7 @@ CREATE TABLE fermentables (
   ibu_gal_per_lb            REAL
 );
 
-CREATE TABLE hops (
+CREATE TABLE IF NOT EXISTS hops (
   id                  TEXT PRIMARY KEY,
   name                TEXT NOT NULL,
   alpha_pct           REAL NOT NULL,
@@ -84,7 +84,7 @@ CREATE TABLE hops (
   myrcene_pct         REAL
 );
 
-CREATE TABLE yeasts (
+CREATE TABLE IF NOT EXISTS yeasts (
   id                TEXT PRIMARY KEY,
   name              TEXT NOT NULL,
   type              TEXT NOT NULL,
@@ -103,7 +103,7 @@ CREATE TABLE yeasts (
 
 -- BeerXML requires use and time_min on the library record as suggested defaults.
 -- recipe_addition_miscs holds the actual use/time_min values for a specific recipe.
-CREATE TABLE miscs (
+CREATE TABLE IF NOT EXISTS miscs (
   id                TEXT PRIMARY KEY,
   name              TEXT NOT NULL,
   type              TEXT NOT NULL,
@@ -114,7 +114,7 @@ CREATE TABLE miscs (
   amount_is_weight  INTEGER DEFAULT 0
 );
 
-CREATE TABLE waters (
+CREATE TABLE IF NOT EXISTS waters (
   id              TEXT PRIMARY KEY,
   name            TEXT NOT NULL,
   calcium_ppm     REAL NOT NULL,
@@ -127,7 +127,7 @@ CREATE TABLE waters (
   notes           TEXT
 );
 
-CREATE TABLE recipes (
+CREATE TABLE IF NOT EXISTS recipes (
   id                    TEXT PRIMARY KEY,
   name                  TEXT NOT NULL,
   type                  TEXT NOT NULL DEFAULT 'all_grain',
@@ -164,7 +164,7 @@ CREATE TABLE recipes (
   updated_at            INTEGER NOT NULL
 );
 
-CREATE TABLE recipe_addition_fermentables (
+CREATE TABLE IF NOT EXISTS recipe_addition_fermentables (
   id              TEXT PRIMARY KEY,
   recipe_id       TEXT NOT NULL REFERENCES recipes(id) ON DELETE CASCADE,
   fermentable_id  TEXT REFERENCES fermentables(id),
@@ -177,7 +177,7 @@ CREATE TABLE recipe_addition_fermentables (
   addition_order  INTEGER NOT NULL DEFAULT 0
 );
 
-CREATE TABLE recipe_addition_hops (
+CREATE TABLE IF NOT EXISTS recipe_addition_hops (
   id             TEXT PRIMARY KEY,
   recipe_id      TEXT NOT NULL REFERENCES recipes(id) ON DELETE CASCADE,
   hop_id         TEXT REFERENCES hops(id),
@@ -190,7 +190,7 @@ CREATE TABLE recipe_addition_hops (
   addition_order INTEGER NOT NULL DEFAULT 0
 );
 
-CREATE TABLE recipe_addition_yeasts (
+CREATE TABLE IF NOT EXISTS recipe_addition_yeasts (
   id               TEXT PRIMARY KEY,
   recipe_id        TEXT NOT NULL REFERENCES recipes(id) ON DELETE CASCADE,
   yeast_id         TEXT REFERENCES yeasts(id),
@@ -206,7 +206,7 @@ CREATE TABLE recipe_addition_yeasts (
   times_cultured   INTEGER DEFAULT 0
 );
 
-CREATE TABLE recipe_addition_miscs (
+CREATE TABLE IF NOT EXISTS recipe_addition_miscs (
   id               TEXT PRIMARY KEY,
   recipe_id        TEXT NOT NULL REFERENCES recipes(id) ON DELETE CASCADE,
   misc_id          TEXT REFERENCES miscs(id),
@@ -219,7 +219,7 @@ CREATE TABLE recipe_addition_miscs (
   addition_order   INTEGER NOT NULL DEFAULT 0
 );
 
-CREATE TABLE recipe_addition_waters (
+CREATE TABLE IF NOT EXISTS recipe_addition_waters (
   id        TEXT PRIMARY KEY,
   recipe_id TEXT NOT NULL REFERENCES recipes(id) ON DELETE CASCADE,
   water_id  TEXT REFERENCES waters(id),
@@ -227,7 +227,7 @@ CREATE TABLE recipe_addition_waters (
   amount_l  REAL NOT NULL
 );
 
-CREATE TABLE mashes (
+CREATE TABLE IF NOT EXISTS mashes (
   id                TEXT PRIMARY KEY,
   recipe_id         TEXT NOT NULL UNIQUE REFERENCES recipes(id) ON DELETE CASCADE,
   name              TEXT NOT NULL DEFAULT 'Single Infusion',
@@ -241,7 +241,7 @@ CREATE TABLE mashes (
   notes             TEXT
 );
 
-CREATE TABLE mash_steps (
+CREATE TABLE IF NOT EXISTS mash_steps (
   id              TEXT PRIMARY KEY,
   mash_id         TEXT NOT NULL REFERENCES mashes(id) ON DELETE CASCADE,
   name            TEXT NOT NULL,
@@ -254,11 +254,11 @@ CREATE TABLE mash_steps (
   step_order      INTEGER NOT NULL
 );
 
-CREATE TABLE settings (
+CREATE TABLE IF NOT EXISTS settings (
   key   TEXT PRIMARY KEY,
   value TEXT NOT NULL
 );
 
-INSERT INTO settings (key, value) VALUES
+INSERT OR IGNORE INTO settings (key, value) VALUES
   ('theme', 'midnight'),
   ('units', 'metric');

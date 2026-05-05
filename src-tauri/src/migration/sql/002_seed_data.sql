@@ -1,5 +1,5 @@
 -- BJCP 2021 style subset (American ales)
-INSERT INTO styles (id, name, category, category_number, style_letter, style_guide, type, og_min, og_max, fg_min, fg_max, ibu_min, ibu_max, color_min_srm, color_max_srm, abv_min_pct, abv_max_pct) VALUES
+INSERT OR IGNORE INTO styles (id, name, category, category_number, style_letter, style_guide, type, og_min, og_max, fg_min, fg_max, ibu_min, ibu_max, color_min_srm, color_max_srm, abv_min_pct, abv_max_pct) VALUES
 ('bjcp-18b', 'American Pale Ale', 'Pale American Ale', '18', 'B', 'BJCP 2021', 'Ale', 1.045, 1.060, 1.010, 1.015, 30, 50, 5, 10, 4.5, 6.2),
 ('bjcp-21a', 'American IPA', 'IPA', '21', 'A', 'BJCP 2021', 'Ale', 1.056, 1.070, 1.008, 1.014, 40, 70, 6, 14, 5.5, 7.5),
 ('bjcp-15b', 'American Porter', 'Dark British Beer', '15', 'B', 'BJCP 2021', 'Ale', 1.050, 1.070, 1.012, 1.018, 25, 40, 22, 40, 4.8, 6.5),
@@ -9,7 +9,7 @@ INSERT INTO styles (id, name, category, category_number, style_letter, style_gui
 ('bjcp-9c', 'Baltic Porter', 'Brown British Beer', '9', 'C', 'BJCP 2021', 'Lager', 1.060, 1.090, 1.016, 1.024, 20, 40, 17, 30, 6.5, 9.5);
 
 -- Common fermentables
-INSERT INTO fermentables (id, name, type, yield_pct, color_lovibond) VALUES
+INSERT OR IGNORE INTO fermentables (id, name, type, yield_pct, color_lovibond) VALUES
 ('f-pale-malt', 'Pale Malt (2-row)', 'grain', 78.0, 1.8),
 ('f-pale-malt-6', 'Pale Malt (6-row)', 'grain', 73.0, 1.8),
 ('f-pilsner', 'Pilsner Malt', 'grain', 75.0, 1.6),
@@ -27,7 +27,7 @@ INSERT INTO fermentables (id, name, type, yield_pct, color_lovibond) VALUES
 ('f-corn-sugar', 'Corn Sugar (Dextrose)', 'sugar', 96.0, 0.5);
 
 -- Common hops
-INSERT INTO hops (id, name, alpha_pct, form, type, origin) VALUES
+INSERT OR IGNORE INTO hops (id, name, alpha_pct, form, type, origin) VALUES
 ('h-cascade', 'Cascade', 5.5, 'pellet', 'aroma', 'US'),
 ('h-centennial', 'Centennial', 10.0, 'pellet', 'bittering/aroma', 'US'),
 ('h-chinook', 'Chinook', 13.0, 'pellet', 'bittering', 'US'),
@@ -42,7 +42,7 @@ INSERT INTO hops (id, name, alpha_pct, form, type, origin) VALUES
 ('h-willamette', 'Willamette', 5.0, 'pellet', 'aroma', 'US');
 
 -- Common yeasts
-INSERT INTO yeasts (id, name, type, form, laboratory, product_id, min_temperature_c, max_temperature_c, flocculation, attenuation_pct) VALUES
+INSERT OR IGNORE INTO yeasts (id, name, type, form, laboratory, product_id, min_temperature_c, max_temperature_c, flocculation, attenuation_pct) VALUES
 ('y-us05', 'American Ale (US-05)', 'ale', 'dry', 'Fermentis', 'US-05', 15.0, 24.0, 'medium', 77.0),
 ('y-1056', 'American Ale (WY1056)', 'ale', 'liquid', 'Wyeast', '1056', 16.0, 22.0, 'medium', 75.0),
 ('y-wlp001', 'California Ale (WLP001)', 'ale', 'liquid', 'White Labs', 'WLP001', 20.0, 23.0, 'medium', 77.0),
@@ -54,8 +54,8 @@ INSERT INTO yeasts (id, name, type, form, laboratory, product_id, min_temperatur
 ('y-s189', 'Lager (S-189)', 'lager', 'dry', 'Fermentis', 'S-189', 9.0, 15.0, 'medium', 80.0);
 
 -- Default equipment profile
-INSERT INTO equipment_profiles (id, name, boil_size_l, batch_size_l, boil_time_min, evap_rate_pct_hr, trub_chiller_loss_l, fermenter_loss_l, hop_utilization_pct, efficiency_pct, created_at, updated_at) VALUES
+INSERT OR IGNORE INTO equipment_profiles (id, name, boil_size_l, batch_size_l, boil_time_min, evap_rate_pct_hr, trub_chiller_loss_l, fermenter_loss_l, hop_utilization_pct, efficiency_pct, created_at, updated_at) VALUES
 ('eq-default', 'Standard 5 Gallon', 27.0, 23.0, 60.0, 10.0, 1.5, 1.0, 100.0, 72.0, 0, 0);
 
-INSERT INTO settings (key, value) VALUES ('default_equipment_profile_id', 'eq-default')
+INSERT OR IGNORE INTO settings (key, value) VALUES ('default_equipment_profile_id', 'eq-default')
   ON CONFLICT(key) DO NOTHING;

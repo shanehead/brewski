@@ -5,12 +5,12 @@ pub fn morey_srm(
     if fermentables.is_empty() {
         return 0.0;
     }
-    let batch_gal = batch_size_l * 0.264172;
-    let mcu: f64 = fermentables.iter().map(|(color_lovibond, amount_kg)| {
-        let lbs = *amount_kg * 2.20462;
-        (*color_lovibond * lbs) / batch_gal
+    let batch_gallons = batch_size_l * 0.264172;
+    let malt_color_units: f64 = fermentables.iter().map(|(color_lovibond, amount_kg)| {
+        let pounds = *amount_kg * 2.20462;
+        (*color_lovibond * pounds) / batch_gallons
     }).sum();
-    1.4922 * mcu.powf(0.6859)
+    1.4922 * malt_color_units.powf(0.6859)
 }
 
 #[cfg(test)]
