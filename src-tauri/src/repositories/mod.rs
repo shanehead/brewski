@@ -1,6 +1,7 @@
 pub mod addition;
 pub mod equipment;
 pub mod fermentable;
+pub mod hop;
 pub mod library;
 pub mod mash;
 pub mod recipe;
