@@ -62,3 +62,9 @@ Use full words for local variables — avoid abbreviations except where noted be
 **Keep as-is (universal brewing acronyms and unit suffixes):**
 - `og`, `fg`, `ibu`, `srm`, `abv` — standard brewing acronyms, expanding them hurts readability
 - `_pct`, `_l`, `_kg`, `_c`, `_min`, `_ppm` — unit suffixes on struct fields that mirror the DB schema
+
+### Domain terminology
+
+**Use `addition`, not `ingredient`**, for recipe line items (e.g. `RecipeAdditionHop`, `recipe_addition_hops`).
+
+In brewing, an *addition* captures a timed event — a hop addition at 60 minutes, a dry-hop addition at day 3 — not just a static ingredient list. The term encodes the temporal/process context that distinguishes a recipe's use of an ingredient from the ingredient itself in the library.

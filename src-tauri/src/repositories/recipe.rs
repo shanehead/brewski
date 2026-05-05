@@ -331,6 +331,12 @@ impl<'a> RecipeRepository<'a> {
         if let Some(v) = input.carbonation_temp_c {
             active.carbonation_temp_c = Set(Some(to_dec(v)));
         }
+        if let Some(v) = input.priming_sugar_equiv {
+            active.priming_sugar_equiv = Set(Some(to_dec(v)));
+        }
+        if let Some(v) = input.keg_priming_factor {
+            active.keg_priming_factor = Set(Some(to_dec(v)));
+        }
         if let Some(v) = input.date {
             active.date = Set(Some(v));
         }

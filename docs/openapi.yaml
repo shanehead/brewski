@@ -1836,6 +1836,10 @@ components:
           type: string
         carbonation_temp_c:
           type: number
+        priming_sugar_equiv:
+          type: number
+        keg_priming_factor:
+          type: number
         date:
           type: string
 

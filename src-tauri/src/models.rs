@@ -379,6 +379,8 @@ pub struct Recipe {
     pub mash: Option<Mash>,
 }
 
+// "Addition" (not "ingredient") — captures a timed process event (amount, order, boil time, etc.)
+// rather than a bare ingredient reference. See CLAUDE.md § Domain terminology.
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct RecipeAdditionFermentable {
     pub id: String,
@@ -638,6 +640,8 @@ pub struct UpdateRecipeInput {
     pub forced_carbonation: Option<bool>,
     pub priming_sugar_name: Option<String>,
     pub carbonation_temp_c: Option<f64>,
+    pub priming_sugar_equiv: Option<f64>,
+    pub keg_priming_factor: Option<f64>,
     pub date: Option<String>,
 }
 
