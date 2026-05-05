@@ -351,6 +351,9 @@ impl<'a> RecipeRepository<'a> {
 mod tests {
     use super::*;
     use crate::test_helpers::setup_test_db;
+    use crate::repositories::fermentable::FermentableRepository;
+    use crate::repositories::hop::HopRepository;
+    use crate::models::{CreateFermentableAdditionInput, CreateHopAdditionInput};
 
     fn basic_input() -> CreateRecipeInput {
         CreateRecipeInput {
@@ -417,6 +420,27 @@ mod tests {
         let db = setup_test_db().await;
         let repo = RecipeRepository::new(&db);
         let original = repo.create(basic_input()).await.unwrap();
+
+        FermentableRepository::new(&db).create(&original.id, CreateFermentableAdditionInput {
+            fermentable_id: None,
+            name: "Pale Malt".into(),
+            type_: "grain".into(),
+            yield_pct: 78.0,
+            color_lovibond: 1.8,
+            amount_kg: 4.5,
+            add_after_boil: None,
+        }).await.unwrap();
+
+        HopRepository::new(&db).create(&original.id, CreateHopAdditionInput {
+            hop_id: None,
+            name: "Cascade".into(),
+            alpha_pct: 5.5,
+            form: None,
+            amount_kg: 0.05,
+            use_: "Boil".into(),
+            time_min: 60.0,
+        }).await.unwrap();
+
         let dupe = repo
             .create(CreateRecipeInput {
                 name: "Copy".into(),
@@ -425,7 +449,12 @@ mod tests {
             })
             .await
             .unwrap();
+
         assert_ne!(dupe.id, original.id);
         assert_eq!(dupe.batch_size_l, original.batch_size_l);
+        assert_eq!(dupe.fermentables.len(), 1);
+        assert_eq!(dupe.fermentables[0].name, "Pale Malt");
+        assert_eq!(dupe.hops.len(), 1);
+        assert_eq!(dupe.hops[0].name, "Cascade");
     }
 }
