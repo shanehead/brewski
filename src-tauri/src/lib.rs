@@ -1,3 +1,4 @@
+pub mod migration;
 mod commands;
 mod db;
 mod error;
