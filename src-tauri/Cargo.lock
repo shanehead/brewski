@@ -457,6 +457,7 @@ name = "brewski"
 version = "0.1.0"
 dependencies = [
  "quick-xml 0.36.2",
+ "rust_decimal",
  "sea-orm",
  "sea-orm-migration",
  "serde",
