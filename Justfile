@@ -33,3 +33,17 @@ lint-openapi:
 # Preview the OpenAPI docs in a browser
 preview-docs:
     bunx redocly build-docs docs/openapi.yaml --output docs/openapi.html && open docs/openapi.html
+
+# ── Database ──────────────────────────────────────────────────────────────────
+
+# Apply SeaORM migrations to a local dev database
+migrate:
+    cargo run --manifest-path src-tauri/Cargo.toml --bin migrate -- sqlite://./dev.db?mode=rwc
+
+# Regenerate SeaORM entities from the dev database (runs migrate first)
+gen-entities: migrate
+    sea-orm-cli generate entity \
+      --database-url sqlite://./dev.db \
+      --output-dir src-tauri/src/entities \
+      --with-serde both \
+      --serde-skip-hidden-column
