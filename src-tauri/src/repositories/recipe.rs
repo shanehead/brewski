@@ -1,19 +1,25 @@
+use rust_decimal::prelude::ToPrimitive;
 use sea_orm::{
-    ActiveModelTrait, ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter, QueryOrder, Set,
+    ActiveModelTrait, DatabaseConnection, EntityTrait, QueryOrder, Set,
 };
 
-use crate::entities::{
-    equipment_profiles, mash_steps, mashes, recipe_addition_fermentables, recipe_addition_hops,
-    recipe_addition_miscs, recipe_addition_waters, recipe_addition_yeasts, recipes, styles,
-};
+use crate::entities::{recipes, styles};
 use crate::error::AppError;
 use crate::models::{
-    CreateRecipeInput, EquipmentProfile, Mash, MashStep, Recipe, RecipeAdditionFermentable,
-    RecipeAdditionHop, RecipeAdditionMisc, RecipeAdditionWater, RecipeAdditionYeast, RecipeSummary,
-    Style, UpdateRecipeInput,
+    CreateFermentableAdditionInput, CreateHopAdditionInput, CreateMiscAdditionInput,
+    CreateRecipeInput, CreateWaterAdditionInput, CreateYeastAdditionInput,
+    Recipe, RecipeSummary, UpdateRecipeInput,
 };
 
-use super::{new_id, now_secs, to_dec, from_dec};
+use super::{from_dec, new_id, now_secs, to_dec};
+use super::equipment::EquipmentRepository;
+use super::fermentable::FermentableRepository;
+use super::hop::HopRepository;
+use super::library::LibraryRepository;
+use super::mash::MashRepository;
+use super::misc::MiscRepository;
+use super::water::WaterRepository;
+use super::yeast::YeastRepository;
 
 pub struct RecipeRepository<'a> {
     db: &'a DatabaseConnection,
@@ -53,121 +59,29 @@ impl<'a> RecipeRepository<'a> {
             .await?
             .ok_or(AppError::NotFound)?;
 
-        // Load all related additions
-        let fermentable_rows = recipe_addition_fermentables::Entity::find()
-            .filter(recipe_addition_fermentables::Column::RecipeId.eq(id))
-            .order_by_asc(recipe_addition_fermentables::Column::AdditionOrder)
-            .all(self.db)
-            .await?;
+        let fermentables = FermentableRepository::new(self.db).list(id).await?;
+        let hops = HopRepository::new(self.db).list(id).await?;
+        let yeasts = YeastRepository::new(self.db).list(id).await?;
+        let miscs = MiscRepository::new(self.db).list(id).await?;
+        let waters = WaterRepository::new(self.db).list(id).await?;
 
-        let hop_rows = recipe_addition_hops::Entity::find()
-            .filter(recipe_addition_hops::Column::RecipeId.eq(id))
-            .order_by_asc(recipe_addition_hops::Column::AdditionOrder)
-            .all(self.db)
-            .await?;
-
-        let yeast_rows = recipe_addition_yeasts::Entity::find()
-            .filter(recipe_addition_yeasts::Column::RecipeId.eq(id))
-            .all(self.db)
-            .await?;
-
-        let misc_rows = recipe_addition_miscs::Entity::find()
-            .filter(recipe_addition_miscs::Column::RecipeId.eq(id))
-            .order_by_asc(recipe_addition_miscs::Column::AdditionOrder)
-            .all(self.db)
-            .await?;
-
-        let water_rows = recipe_addition_waters::Entity::find()
-            .filter(recipe_addition_waters::Column::RecipeId.eq(id))
-            .all(self.db)
-            .await?;
-
-        // Load optional mash
-        let mash = if let Some(mash_row) = mashes::Entity::find()
-            .filter(mashes::Column::RecipeId.eq(id))
-            .one(self.db)
-            .await?
-        {
-            let step_rows = mash_steps::Entity::find()
-                .filter(mash_steps::Column::MashId.eq(&mash_row.id))
-                .order_by_asc(mash_steps::Column::StepOrder)
-                .all(self.db)
-                .await?;
-
-            let steps: Result<Vec<MashStep>, AppError> =
-                step_rows.into_iter().map(MashStep::try_from).collect();
-
-            Some(Mash {
-                id: mash_row.id,
-                recipe_id: mash_row.recipe_id,
-                name: mash_row.name,
-                grain_temp_c: from_dec(mash_row.grain_temp_c)?,
-                tun_temp_c: {
-                    use rust_decimal::prelude::ToPrimitive;
-                    mash_row.tun_temp_c.and_then(|v| v.to_f64())
-                },
-                sparge_temp_c: {
-                    use rust_decimal::prelude::ToPrimitive;
-                    mash_row.sparge_temp_c.and_then(|v| v.to_f64())
-                },
-                ph: {
-                    use rust_decimal::prelude::ToPrimitive;
-                    mash_row.ph.and_then(|v| v.to_f64())
-                },
-                tun_weight_kg: {
-                    use rust_decimal::prelude::ToPrimitive;
-                    mash_row.tun_weight_kg.and_then(|v| v.to_f64())
-                },
-                tun_specific_heat: {
-                    use rust_decimal::prelude::ToPrimitive;
-                    mash_row.tun_specific_heat.and_then(|v| v.to_f64())
-                },
-                equip_adjust: mash_row.equip_adjust.unwrap_or(0) != 0,
-                notes: mash_row.notes,
-                steps: steps?,
-            })
-        } else {
-            None
+        let mash = match MashRepository::new(self.db).get_for_recipe(id).await {
+            Ok(mash) => Some(mash),
+            Err(AppError::NotFound) => None,
+            Err(e) => return Err(e),
         };
 
-        // Load optional equipment profile
         let equipment_profile = if let Some(ep_id) = &recipe_row.equipment_profile_id {
-            equipment_profiles::Entity::find_by_id(ep_id.as_str())
-                .one(self.db)
-                .await?
-                .map(EquipmentProfile::try_from)
-                .transpose()?
+            Some(EquipmentRepository::new(self.db).get(ep_id).await?)
         } else {
             None
         };
 
-        // Load optional style
         let style = if let Some(style_id) = &recipe_row.style_id {
-            styles::Entity::find_by_id(style_id.as_str())
-                .one(self.db)
-                .await?
-                .map(Style::try_from)
-                .transpose()?
+            Some(LibraryRepository::new(self.db).get_style(style_id).await?)
         } else {
             None
         };
-
-        // Convert additions
-        let fermentables: Result<Vec<RecipeAdditionFermentable>, AppError> =
-            fermentable_rows
-                .into_iter()
-                .map(RecipeAdditionFermentable::try_from)
-                .collect();
-        let hops: Result<Vec<RecipeAdditionHop>, AppError> =
-            hop_rows.into_iter().map(RecipeAdditionHop::try_from).collect();
-        let yeasts: Result<Vec<RecipeAdditionYeast>, AppError> =
-            yeast_rows.into_iter().map(RecipeAdditionYeast::try_from).collect();
-        let miscs: Result<Vec<RecipeAdditionMisc>, AppError> =
-            misc_rows.into_iter().map(RecipeAdditionMisc::try_from).collect();
-        let waters: Result<Vec<RecipeAdditionWater>, AppError> =
-            water_rows.into_iter().map(RecipeAdditionWater::try_from).collect();
-
-        use rust_decimal::prelude::ToPrimitive;
 
         Ok(Recipe {
             id: recipe_row.id,
@@ -206,11 +120,11 @@ impl<'a> RecipeRepository<'a> {
             updated_at: recipe_row.updated_at as i64,
             equipment_profile,
             style,
-            fermentables: fermentables?,
-            hops: hops?,
-            yeasts: yeasts?,
-            miscs: miscs?,
-            waters: waters?,
+            fermentables,
+            hops,
+            yeasts,
+            miscs,
+            waters,
             mash,
         })
     }
@@ -260,120 +174,72 @@ impl<'a> RecipeRepository<'a> {
     }
 
     async fn copy_additions(&self, src_id: &str, dst_id: &str) -> Result<(), AppError> {
-        // Copy fermentables
-        let fermentables = recipe_addition_fermentables::Entity::find()
-            .filter(recipe_addition_fermentables::Column::RecipeId.eq(src_id))
-            .order_by_asc(recipe_addition_fermentables::Column::AdditionOrder)
-            .all(self.db)
-            .await?;
+        // Additions are copied rather than referenced so that edits to the
+        // source recipe don't affect the duplicate.
 
-        for f in fermentables {
-            recipe_addition_fermentables::ActiveModel {
-                id: Set(new_id()),
-                recipe_id: Set(dst_id.to_owned()),
-                fermentable_id: Set(f.fermentable_id),
-                name: Set(f.name),
-                r#type: Set(f.r#type),
-                yield_pct: Set(f.yield_pct),
-                color_lovibond: Set(f.color_lovibond),
-                amount_kg: Set(f.amount_kg),
-                add_after_boil: Set(f.add_after_boil),
-                addition_order: Set(f.addition_order),
-            }
-            .insert(self.db)
-            .await?;
+        let fermentable_repo = FermentableRepository::new(self.db);
+        for f in fermentable_repo.list(src_id).await? {
+            fermentable_repo.create(dst_id, CreateFermentableAdditionInput {
+                fermentable_id: f.fermentable_id,
+                name: f.name,
+                type_: f.type_,
+                yield_pct: f.yield_pct,
+                color_lovibond: f.color_lovibond,
+                amount_kg: f.amount_kg,
+                add_after_boil: Some(f.add_after_boil),
+            }).await?;
         }
 
-        // Copy hops
-        let hops = recipe_addition_hops::Entity::find()
-            .filter(recipe_addition_hops::Column::RecipeId.eq(src_id))
-            .order_by_asc(recipe_addition_hops::Column::AdditionOrder)
-            .all(self.db)
-            .await?;
-
-        for h in hops {
-            recipe_addition_hops::ActiveModel {
-                id: Set(new_id()),
-                recipe_id: Set(dst_id.to_owned()),
-                hop_id: Set(h.hop_id),
-                name: Set(h.name),
-                alpha_pct: Set(h.alpha_pct),
-                form: Set(h.form),
-                amount_kg: Set(h.amount_kg),
-                r#use: Set(h.r#use),
-                time_min: Set(h.time_min),
-                addition_order: Set(h.addition_order),
-            }
-            .insert(self.db)
-            .await?;
+        let hop_repo = HopRepository::new(self.db);
+        for h in hop_repo.list(src_id).await? {
+            hop_repo.create(dst_id, CreateHopAdditionInput {
+                hop_id: h.hop_id,
+                name: h.name,
+                alpha_pct: h.alpha_pct,
+                form: Some(h.form),
+                amount_kg: h.amount_kg,
+                use_: h.use_,
+                time_min: h.time_min,
+            }).await?;
         }
 
-        // Copy yeasts
-        let yeasts = recipe_addition_yeasts::Entity::find()
-            .filter(recipe_addition_yeasts::Column::RecipeId.eq(src_id))
-            .all(self.db)
-            .await?;
-
-        for y in yeasts {
-            recipe_addition_yeasts::ActiveModel {
-                id: Set(new_id()),
-                recipe_id: Set(dst_id.to_owned()),
-                yeast_id: Set(y.yeast_id),
-                name: Set(y.name),
-                r#type: Set(y.r#type),
-                form: Set(y.form),
-                laboratory: Set(y.laboratory),
-                product_id: Set(y.product_id),
-                attenuation_pct: Set(y.attenuation_pct),
-                amount: Set(y.amount),
-                amount_is_weight: Set(y.amount_is_weight),
-                add_to_secondary: Set(y.add_to_secondary),
-                times_cultured: Set(y.times_cultured),
-            }
-            .insert(self.db)
-            .await?;
+        let yeast_repo = YeastRepository::new(self.db);
+        for y in yeast_repo.list(src_id).await? {
+            yeast_repo.create(dst_id, CreateYeastAdditionInput {
+                yeast_id: y.yeast_id,
+                name: y.name,
+                type_: y.type_,
+                form: y.form,
+                laboratory: y.laboratory,
+                product_id: y.product_id,
+                attenuation_pct: y.attenuation_pct,
+                amount: y.amount,
+                amount_is_weight: Some(y.amount_is_weight),
+                add_to_secondary: Some(y.add_to_secondary),
+                times_cultured: Some(y.times_cultured),
+            }).await?;
         }
 
-        // Copy miscs
-        let miscs = recipe_addition_miscs::Entity::find()
-            .filter(recipe_addition_miscs::Column::RecipeId.eq(src_id))
-            .order_by_asc(recipe_addition_miscs::Column::AdditionOrder)
-            .all(self.db)
-            .await?;
-
-        for m in miscs {
-            recipe_addition_miscs::ActiveModel {
-                id: Set(new_id()),
-                recipe_id: Set(dst_id.to_owned()),
-                misc_id: Set(m.misc_id),
-                name: Set(m.name),
-                r#type: Set(m.r#type),
-                r#use: Set(m.r#use),
-                amount: Set(m.amount),
-                amount_is_weight: Set(m.amount_is_weight),
-                time_min: Set(m.time_min),
-                addition_order: Set(m.addition_order),
-            }
-            .insert(self.db)
-            .await?;
+        let misc_repo = MiscRepository::new(self.db);
+        for m in misc_repo.list(src_id).await? {
+            misc_repo.create(dst_id, CreateMiscAdditionInput {
+                misc_id: m.misc_id,
+                name: m.name,
+                type_: m.type_,
+                use_: m.use_,
+                amount: m.amount,
+                amount_is_weight: Some(m.amount_is_weight),
+                time_min: m.time_min,
+            }).await?;
         }
 
-        // Copy waters
-        let waters = recipe_addition_waters::Entity::find()
-            .filter(recipe_addition_waters::Column::RecipeId.eq(src_id))
-            .all(self.db)
-            .await?;
-
-        for w in waters {
-            recipe_addition_waters::ActiveModel {
-                id: Set(new_id()),
-                recipe_id: Set(dst_id.to_owned()),
-                water_id: Set(w.water_id),
-                name: Set(w.name),
-                amount_l: Set(w.amount_l),
-            }
-            .insert(self.db)
-            .await?;
+        let water_repo = WaterRepository::new(self.db);
+        for w in water_repo.list(src_id).await? {
+            water_repo.create(dst_id, CreateWaterAdditionInput {
+                water_id: w.water_id,
+                name: w.name,
+                amount_l: w.amount_l,
+            }).await?;
         }
 
         Ok(())
