@@ -25,7 +25,7 @@ impl<'a> EquipmentRepository<'a> {
             .collect()
     }
 
-    async fn find_by_id(&self, id: &str) -> Result<EquipmentProfile, AppError> {
+    pub async fn get(&self, id: &str) -> Result<EquipmentProfile, AppError> {
         equipment_profiles::Entity::find_by_id(id)
             .one(self.db)
             .await?
@@ -57,7 +57,7 @@ impl<'a> EquipmentRepository<'a> {
         }
         .insert(self.db)
         .await?;
-        self.find_by_id(&id).await
+        self.get(&id).await
     }
 
     pub async fn update(
@@ -99,7 +99,7 @@ impl<'a> EquipmentRepository<'a> {
         }
         active.updated_at = Set(now_secs() as i32);
         active.update(self.db).await?;
-        self.find_by_id(id).await
+        self.get(id).await
     }
 
     pub async fn delete(&self, id: &str) -> Result<(), AppError> {

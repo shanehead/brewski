@@ -18,6 +18,14 @@ impl<'a> LibraryRepository<'a> {
             .into_iter().map(Style::try_from).collect()
     }
 
+    pub async fn get_style(&self, id: &str) -> Result<Style, AppError> {
+        styles::Entity::find_by_id(id)
+            .one(self.db)
+            .await?
+            .ok_or(AppError::NotFound)
+            .and_then(Style::try_from)
+    }
+
     pub async fn list_fermentables(&self) -> Result<Vec<Fermentable>, AppError> {
         fermentables::Entity::find()
             .order_by_asc(fermentables::Column::Name)
