@@ -71,3 +71,191 @@ pub fn calculate_stats(recipe: &Recipe) -> RecipeStats {
         post_boil_volume_l,
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::models::{
+        EquipmentProfile, Recipe, RecipeAdditionFermentable, RecipeAdditionHop, RecipeAdditionYeast,
+    };
+
+    fn minimal_recipe() -> Recipe {
+        Recipe {
+            id: "r1".into(),
+            name: "Test".into(),
+            type_: "all_grain".into(),
+            brewer: None,
+            asst_brewer: None,
+            batch_size_l: 23.0,
+            boil_size_l: 27.0,
+            boil_time_min: 60.0,
+            efficiency_pct: Some(75.0),
+            style_id: None,
+            equipment_profile_id: None,
+            notes: None,
+            taste_notes: None,
+            taste_rating: None,
+            og: None,
+            fg: None,
+            fermentation_stages: 1,
+            primary_age_days: None,
+            primary_temp_c: None,
+            secondary_age_days: None,
+            secondary_temp_c: None,
+            tertiary_age_days: None,
+            tertiary_temp_c: None,
+            age_days: None,
+            age_temp_c: None,
+            carbonation_vols: None,
+            forced_carbonation: false,
+            priming_sugar_name: None,
+            carbonation_temp_c: None,
+            priming_sugar_equiv: None,
+            keg_priming_factor: None,
+            date: None,
+            created_at: 0,
+            updated_at: 0,
+            equipment_profile: None,
+            style: None,
+            fermentables: vec![],
+            hops: vec![],
+            yeasts: vec![],
+            miscs: vec![],
+            waters: vec![],
+            mash: None,
+        }
+    }
+
+    fn pale_malt() -> RecipeAdditionFermentable {
+        RecipeAdditionFermentable {
+            id: "f1".into(),
+            recipe_id: "r1".into(),
+            fermentable_id: None,
+            name: "Pale Malt".into(),
+            type_: "grain".into(),
+            yield_pct: 78.0,
+            color_lovibond: 1.8,
+            amount_kg: 4.5,
+            add_after_boil: false,
+            addition_order: 0,
+        }
+    }
+
+    #[test]
+    fn test_stats_empty_recipe() {
+        let stats = calculate_stats(&minimal_recipe());
+        assert_eq!(stats.og, 1.0);
+        assert_eq!(stats.ibu, 0.0);
+        assert_eq!(stats.srm, 0.0);
+        assert_eq!(stats.abv_pct, 0.0);
+        assert_eq!(stats.bu_gu_ratio, 0.0);
+    }
+
+    #[test]
+    fn test_stats_with_grain() {
+        let mut recipe = minimal_recipe();
+        recipe.fermentables = vec![pale_malt()];
+        let stats = calculate_stats(&recipe);
+        assert!(stats.og > 1.0);
+        assert!(stats.srm > 0.0);
+        assert!(stats.fg < stats.og);
+        assert!(stats.abv_pct > 0.0);
+    }
+
+    #[test]
+    fn test_stats_with_hops() {
+        let mut recipe = minimal_recipe();
+        recipe.fermentables = vec![pale_malt()];
+        recipe.hops = vec![RecipeAdditionHop {
+            id: "h1".into(),
+            recipe_id: "r1".into(),
+            hop_id: None,
+            name: "Cascade".into(),
+            alpha_pct: 5.5,
+            form: "pellet".into(),
+            amount_kg: 0.05,
+            use_: "Boil".into(),
+            time_min: 60.0,
+            addition_order: 0,
+        }];
+        let stats = calculate_stats(&recipe);
+        assert!(stats.ibu > 0.0);
+        assert!(stats.bu_gu_ratio > 0.0);
+    }
+
+    #[test]
+    fn test_stats_yeast_attenuation_used() {
+        let mut recipe = minimal_recipe();
+        recipe.fermentables = vec![pale_malt()];
+        recipe.yeasts = vec![RecipeAdditionYeast {
+            id: "y1".into(),
+            recipe_id: "r1".into(),
+            yeast_id: None,
+            name: "US-05".into(),
+            type_: "ale".into(),
+            form: "dry".into(),
+            laboratory: None,
+            product_id: None,
+            attenuation_pct: Some(81.0),
+            amount: Some(1.0),
+            amount_is_weight: true,
+            add_to_secondary: false,
+            times_cultured: 0,
+        }];
+        let stats_81 = calculate_stats(&recipe);
+
+        recipe.yeasts[0].attenuation_pct = Some(75.0);
+        let stats_75 = calculate_stats(&recipe);
+
+        assert!(stats_81.abv_pct > stats_75.abv_pct, "higher attenuation → higher ABV");
+    }
+
+    #[test]
+    fn test_stats_efficiency_falls_back_to_default() {
+        let mut recipe = minimal_recipe();
+        recipe.fermentables = vec![pale_malt()];
+        recipe.efficiency_pct = None;
+        let stats_default = calculate_stats(&recipe);
+
+        recipe.efficiency_pct = Some(72.0);
+        let stats_explicit = calculate_stats(&recipe);
+
+        assert!((stats_default.og - stats_explicit.og).abs() < 0.001);
+    }
+
+    #[test]
+    fn test_stats_equipment_profile_used() {
+        let mut recipe = minimal_recipe();
+        recipe.fermentables = vec![pale_malt()];
+        recipe.efficiency_pct = None;
+        recipe.equipment_profile = Some(EquipmentProfile {
+            id: "ep1".into(),
+            name: "Test Equipment".into(),
+            notes: None,
+            boil_size_l: 27.0,
+            batch_size_l: 23.0,
+            calc_boil_volume: false,
+            tun_volume_l: None,
+            tun_weight_kg: None,
+            tun_specific_heat: None,
+            lauter_deadspace_l: 0.0,
+            top_up_kettle_l: 0.0,
+            trub_chiller_loss_l: 1.0,
+            evap_rate_pct_hr: 10.0,
+            boil_time_min: 60.0,
+            top_up_water_l: 0.0,
+            fermenter_loss_l: 1.0,
+            hop_utilization_pct: 100.0,
+            efficiency_pct: 80.0,
+            created_at: 0,
+            updated_at: 0,
+        });
+        let stats_with_equipment = calculate_stats(&recipe);
+
+        recipe.efficiency_pct = Some(80.0);
+        recipe.equipment_profile = None;
+        let stats_explicit = calculate_stats(&recipe);
+
+        assert!((stats_with_equipment.og - stats_explicit.og).abs() < 0.001);
+    }
+}

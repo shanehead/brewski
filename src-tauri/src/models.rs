@@ -738,7 +738,7 @@ pub struct UpdateWaterAdditionInput {
     pub amount_l: Option<f64>,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Default)]
 pub struct UpdateMashInput {
     pub name: Option<String>,
     pub grain_temp_c: Option<f64>,
@@ -759,7 +759,7 @@ pub struct CreateMashStepInput {
     pub end_temp_c: Option<f64>,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Default)]
 pub struct UpdateMashStepInput {
     pub name: Option<String>,
     pub type_: Option<String>,

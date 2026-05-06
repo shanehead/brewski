@@ -61,3 +61,58 @@ impl<'a> LibraryRepository<'a> {
             .into_iter().map(Water::try_from).collect()
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::test_helpers::setup_test_db;
+
+    #[tokio::test]
+    async fn test_list_styles() {
+        let db = setup_test_db().await;
+        let result = LibraryRepository::new(&db).list_styles().await.unwrap();
+        assert!(!result.is_empty());
+    }
+
+    #[tokio::test]
+    async fn test_list_fermentables() {
+        let db = setup_test_db().await;
+        let result = LibraryRepository::new(&db).list_fermentables().await.unwrap();
+        assert!(!result.is_empty());
+    }
+
+    #[tokio::test]
+    async fn test_list_hops() {
+        let db = setup_test_db().await;
+        let result = LibraryRepository::new(&db).list_hops().await.unwrap();
+        assert!(!result.is_empty());
+    }
+
+    #[tokio::test]
+    async fn test_list_yeasts() {
+        let db = setup_test_db().await;
+        let result = LibraryRepository::new(&db).list_yeasts().await.unwrap();
+        assert!(!result.is_empty());
+    }
+
+    #[tokio::test]
+    async fn test_list_miscs() {
+        let db = setup_test_db().await;
+        // miscs are not seeded; just verify the query succeeds
+        LibraryRepository::new(&db).list_miscs().await.unwrap();
+    }
+
+    #[tokio::test]
+    async fn test_list_waters() {
+        let db = setup_test_db().await;
+        // waters are not seeded; just verify the query succeeds
+        LibraryRepository::new(&db).list_waters().await.unwrap();
+    }
+
+    #[tokio::test]
+    async fn test_get_style_not_found() {
+        let db = setup_test_db().await;
+        let result = LibraryRepository::new(&db).get_style("nonexistent").await;
+        assert!(matches!(result, Err(AppError::NotFound)));
+    }
+}

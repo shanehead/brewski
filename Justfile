@@ -34,6 +34,23 @@ lint-openapi:
 preview-docs:
     bunx redocly build-docs docs/openapi.yaml --output docs/openapi.html && open docs/openapi.html
 
+# ── Test & Coverage ───────────────────────────────────────────────────────────
+
+# Run tests
+test:
+    cd src-tauri && cargo test
+
+# Show coverage report (excludes Tauri IPC glue and generated entity code)
+coverage:
+    cd src-tauri && cargo llvm-cov \
+        --ignore-filename-regex '(commands/|entities/|bin/|main\.rs|lib\.rs)'
+
+# Enforce 95% line coverage (for CI)
+coverage-ci:
+    cd src-tauri && cargo llvm-cov \
+        --ignore-filename-regex '(commands/|entities/|bin/|main\.rs|lib\.rs)' \
+        --fail-under-lines 95
+
 # ── Database ──────────────────────────────────────────────────────────────────
 
 # Apply SeaORM migrations to a local dev database

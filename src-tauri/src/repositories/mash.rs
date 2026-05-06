@@ -216,3 +216,265 @@ impl<'a> MashRepository<'a> {
         Ok(())
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::models::{CreateMashStepInput, CreateRecipeInput, UpdateMashInput, UpdateMashStepInput};
+    use crate::repositories::recipe::RecipeRepository;
+    use crate::test_helpers::setup_test_db;
+
+    async fn create_recipe(db: &DatabaseConnection) -> String {
+        RecipeRepository::new(db)
+            .create(CreateRecipeInput {
+                name: "Test Recipe".into(),
+                type_: Some("all_grain".into()),
+                batch_size_l: Some(23.0),
+                boil_size_l: Some(27.0),
+                boil_time_min: Some(60.0),
+                equipment_profile_id: None,
+                source_id: None,
+            })
+            .await
+            .unwrap()
+            .id
+    }
+
+    fn mash_input(name: &str) -> UpdateMashInput {
+        UpdateMashInput {
+            name: Some(name.into()),
+            grain_temp_c: Some(20.0),
+            ..Default::default()
+        }
+    }
+
+    #[tokio::test]
+    async fn test_upsert_creates_mash() {
+        let db = setup_test_db().await;
+        let recipe_id = create_recipe(&db).await;
+        let mash = MashRepository::new(&db)
+            .upsert_for_recipe(&recipe_id, mash_input("Single Infusion"))
+            .await
+            .unwrap();
+        assert_eq!(mash.name, "Single Infusion");
+        assert_eq!(mash.recipe_id, recipe_id);
+        assert!(mash.steps.is_empty());
+    }
+
+    #[tokio::test]
+    async fn test_upsert_updates_existing_mash() {
+        let db = setup_test_db().await;
+        let recipe_id = create_recipe(&db).await;
+        let repo = MashRepository::new(&db);
+        repo.upsert_for_recipe(&recipe_id, mash_input("First")).await.unwrap();
+        let updated = repo
+            .upsert_for_recipe(
+                &recipe_id,
+                UpdateMashInput {
+                    name: Some("Updated".into()),
+                    grain_temp_c: Some(22.0),
+                    sparge_temp_c: Some(76.0),
+                    tun_temp_c: Some(20.0),
+                    ph: Some(5.4),
+                    notes: Some("test notes".into()),
+                },
+            )
+            .await
+            .unwrap();
+        assert_eq!(updated.name, "Updated");
+        assert_eq!(updated.sparge_temp_c, Some(76.0));
+    }
+
+    #[tokio::test]
+    async fn test_get_for_recipe() {
+        let db = setup_test_db().await;
+        let recipe_id = create_recipe(&db).await;
+        let repo = MashRepository::new(&db);
+        repo.upsert_for_recipe(&recipe_id, mash_input("Mash")).await.unwrap();
+        let fetched = repo.get_for_recipe(&recipe_id).await.unwrap();
+        assert_eq!(fetched.name, "Mash");
+    }
+
+    #[tokio::test]
+    async fn test_get_for_recipe_not_found() {
+        let db = setup_test_db().await;
+        let result = MashRepository::new(&db).get_for_recipe("nonexistent").await;
+        assert!(matches!(result, Err(AppError::NotFound)));
+    }
+
+    #[tokio::test]
+    async fn test_create_step() {
+        let db = setup_test_db().await;
+        let recipe_id = create_recipe(&db).await;
+        let repo = MashRepository::new(&db);
+        let mash = repo.upsert_for_recipe(&recipe_id, mash_input("Mash")).await.unwrap();
+
+        let step = repo
+            .create_step(
+                &mash.id,
+                CreateMashStepInput {
+                    name: "Mash In".into(),
+                    type_: Some("Infusion".into()),
+                    infuse_amount_l: Some(15.0),
+                    step_temp_c: 68.0,
+                    step_time_min: 60,
+                    ramp_time_min: Some(5),
+                    end_temp_c: Some(70.0),
+                },
+            )
+            .await
+            .unwrap();
+
+        assert_eq!(step.name, "Mash In");
+        assert_eq!(step.step_temp_c, 68.0);
+        assert_eq!(step.step_time_min, 60);
+        assert_eq!(step.ramp_time_min, Some(5));
+        assert_eq!(step.end_temp_c, Some(70.0));
+    }
+
+    #[tokio::test]
+    async fn test_step_appears_in_mash() {
+        let db = setup_test_db().await;
+        let recipe_id = create_recipe(&db).await;
+        let repo = MashRepository::new(&db);
+        let mash = repo.upsert_for_recipe(&recipe_id, mash_input("Mash")).await.unwrap();
+        repo.create_step(
+            &mash.id,
+            CreateMashStepInput {
+                name: "Mash In".into(),
+                type_: None,
+                infuse_amount_l: None,
+                step_temp_c: 68.0,
+                step_time_min: 60,
+                ramp_time_min: None,
+                end_temp_c: None,
+            },
+        )
+        .await
+        .unwrap();
+
+        let fetched = repo.get_for_recipe(&recipe_id).await.unwrap();
+        assert_eq!(fetched.steps.len(), 1);
+        assert_eq!(fetched.steps[0].name, "Mash In");
+    }
+
+    #[tokio::test]
+    async fn test_update_step() {
+        let db = setup_test_db().await;
+        let recipe_id = create_recipe(&db).await;
+        let repo = MashRepository::new(&db);
+        let mash = repo.upsert_for_recipe(&recipe_id, mash_input("Mash")).await.unwrap();
+        let step = repo
+            .create_step(
+                &mash.id,
+                CreateMashStepInput {
+                    name: "Mash In".into(),
+                    type_: None,
+                    infuse_amount_l: None,
+                    step_temp_c: 68.0,
+                    step_time_min: 60,
+                    ramp_time_min: None,
+                    end_temp_c: None,
+                },
+            )
+            .await
+            .unwrap();
+
+        let updated = repo
+            .update_step(
+                &step.id,
+                UpdateMashStepInput {
+                    name: Some("Mash In Updated".into()),
+                    type_: Some("Temperature".into()),
+                    infuse_amount_l: Some(14.0),
+                    step_temp_c: Some(70.0),
+                    step_time_min: Some(45),
+                    ramp_time_min: Some(5),
+                    end_temp_c: Some(72.0),
+                },
+            )
+            .await
+            .unwrap();
+
+        assert_eq!(updated.name, "Mash In Updated");
+        assert_eq!(updated.step_temp_c, 70.0);
+        assert_eq!(updated.step_time_min, 45);
+        assert_eq!(updated.ramp_time_min, Some(5));
+    }
+
+    #[tokio::test]
+    async fn test_delete_step() {
+        let db = setup_test_db().await;
+        let recipe_id = create_recipe(&db).await;
+        let repo = MashRepository::new(&db);
+        let mash = repo.upsert_for_recipe(&recipe_id, mash_input("Mash")).await.unwrap();
+        let step = repo
+            .create_step(
+                &mash.id,
+                CreateMashStepInput {
+                    name: "Step".into(),
+                    type_: None,
+                    infuse_amount_l: None,
+                    step_temp_c: 68.0,
+                    step_time_min: 60,
+                    ramp_time_min: None,
+                    end_temp_c: None,
+                },
+            )
+            .await
+            .unwrap();
+
+        repo.delete_step(&step.id).await.unwrap();
+
+        let fetched = repo.get_for_recipe(&recipe_id).await.unwrap();
+        assert!(fetched.steps.is_empty());
+    }
+
+    #[tokio::test]
+    async fn test_update_step_order() {
+        let db = setup_test_db().await;
+        let recipe_id = create_recipe(&db).await;
+        let repo = MashRepository::new(&db);
+        let mash = repo.upsert_for_recipe(&recipe_id, mash_input("Mash")).await.unwrap();
+
+        let step1 = repo
+            .create_step(
+                &mash.id,
+                CreateMashStepInput {
+                    name: "Step 1".into(),
+                    type_: None,
+                    infuse_amount_l: None,
+                    step_temp_c: 68.0,
+                    step_time_min: 60,
+                    ramp_time_min: None,
+                    end_temp_c: None,
+                },
+            )
+            .await
+            .unwrap();
+
+        let step2 = repo
+            .create_step(
+                &mash.id,
+                CreateMashStepInput {
+                    name: "Step 2".into(),
+                    type_: None,
+                    infuse_amount_l: None,
+                    step_temp_c: 76.0,
+                    step_time_min: 10,
+                    ramp_time_min: None,
+                    end_temp_c: None,
+                },
+            )
+            .await
+            .unwrap();
+
+        repo.update_step_order(vec![step2.id.clone(), step1.id.clone()])
+            .await
+            .unwrap();
+
+        let fetched = repo.get_for_recipe(&recipe_id).await.unwrap();
+        assert_eq!(fetched.steps[0].name, "Step 2");
+        assert_eq!(fetched.steps[1].name, "Step 1");
+    }
+}

@@ -422,6 +422,77 @@ mod tests {
     }
 
     #[tokio::test]
+    async fn test_get_not_found() {
+        let db = setup_test_db().await;
+        let result = RecipeRepository::new(&db).get("nonexistent").await;
+        assert!(matches!(result, Err(crate::error::AppError::NotFound)));
+    }
+
+    #[tokio::test]
+    async fn test_update_not_found() {
+        let db = setup_test_db().await;
+        let result = RecipeRepository::new(&db)
+            .update("nonexistent", UpdateRecipeInput::default())
+            .await;
+        assert!(matches!(result, Err(crate::error::AppError::NotFound)));
+    }
+
+    #[tokio::test]
+    async fn test_update_many_fields() {
+        let db = setup_test_db().await;
+        let repo = RecipeRepository::new(&db);
+        let created = repo.create(basic_input()).await.unwrap();
+
+        let updated = repo
+            .update(
+                &created.id,
+                UpdateRecipeInput {
+                    type_: Some("extract".into()),
+                    brewer: Some("Shane".into()),
+                    asst_brewer: Some("Bob".into()),
+                    batch_size_l: Some(19.0),
+                    boil_size_l: Some(25.0),
+                    boil_time_min: Some(90.0),
+                    efficiency_pct: Some(70.0),
+                    notes: Some("test notes".into()),
+                    taste_notes: Some("tasty".into()),
+                    taste_rating: Some(8.5),
+                    fermentation_stages: Some(2),
+                    primary_age_days: Some(7.0),
+                    primary_temp_c: Some(18.0),
+                    secondary_age_days: Some(14.0),
+                    secondary_temp_c: Some(16.0),
+                    tertiary_age_days: Some(7.0),
+                    tertiary_temp_c: Some(15.0),
+                    age_days: Some(30.0),
+                    age_temp_c: Some(12.0),
+                    carbonation_vols: Some(2.5),
+                    forced_carbonation: Some(true),
+                    priming_sugar_name: Some("Corn Sugar".into()),
+                    carbonation_temp_c: Some(20.0),
+                    priming_sugar_equiv: Some(1.0),
+                    keg_priming_factor: Some(0.5),
+                    date: Some("2026-05-05".into()),
+                    ..Default::default()
+                },
+            )
+            .await
+            .unwrap();
+
+        assert_eq!(updated.type_, "extract");
+        assert_eq!(updated.brewer, Some("Shane".into()));
+        assert_eq!(updated.asst_brewer, Some("Bob".into()));
+        assert_eq!(updated.batch_size_l, 19.0);
+        assert_eq!(updated.efficiency_pct, Some(70.0));
+        assert_eq!(updated.fermentation_stages, 2);
+        assert_eq!(updated.forced_carbonation, true);
+        assert_eq!(updated.priming_sugar_name, Some("Corn Sugar".into()));
+        assert_eq!(updated.priming_sugar_equiv, Some(1.0));
+        assert_eq!(updated.keg_priming_factor, Some(0.5));
+        assert_eq!(updated.date, Some("2026-05-05".into()));
+    }
+
+    #[tokio::test]
     async fn test_duplicate_via_source_id() {
         let db = setup_test_db().await;
         let repo = RecipeRepository::new(&db);
