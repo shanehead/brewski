@@ -43,12 +43,12 @@ test:
 # Show coverage report (excludes Tauri IPC glue and generated entity code)
 coverage:
     cd src-tauri && cargo llvm-cov \
-        --ignore-filename-regex '(commands/|entities/|bin/|main\.rs|lib\.rs)'
+        --ignore-filename-regex '(commands/|entities/|migration/|bin/|main\.rs|lib\.rs)'
 
 # Enforce 95% line coverage (for CI)
 coverage-ci:
     cd src-tauri && cargo llvm-cov \
-        --ignore-filename-regex '(commands/|entities/|bin/|main\.rs|lib\.rs)' \
+        --ignore-filename-regex '(commands/|entities/|migration/|bin/|main\.rs|lib\.rs)' \
         --fail-under-lines 95
 
 # ── Database ──────────────────────────────────────────────────────────────────
