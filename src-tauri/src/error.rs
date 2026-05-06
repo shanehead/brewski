@@ -13,3 +13,17 @@ impl serde::Serialize for AppError {
         s.serialize_str(&self.to_string())
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_serialize_to_string() {
+        assert_eq!(serde_json::to_string(&AppError::NotFound).unwrap(), "\"not found\"");
+        assert_eq!(
+            serde_json::to_string(&AppError::Conversion("bad value".into())).unwrap(),
+            "\"conversion error: bad value\""
+        );
+    }
+}
