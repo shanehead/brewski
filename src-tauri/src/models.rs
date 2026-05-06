@@ -1,30 +1,7 @@
-use rust_decimal::prelude::ToPrimitive;
 use serde::{Deserialize, Serialize};
 
 use crate::entities;
 use crate::error::AppError;
-
-/// Convert a `rust_decimal::Decimal` to `f64`, returning `AppError::Conversion` on failure.
-fn d(v: rust_decimal::Decimal) -> Result<f64, AppError> {
-    v.to_f64()
-        .ok_or_else(|| AppError::Conversion(format!("cannot convert {} to f64", v)))
-}
-
-/// Convert an `Option<rust_decimal::Decimal>` to `f64` with a fallback default.
-fn d_or(v: Option<rust_decimal::Decimal>, default: f64) -> Result<f64, AppError> {
-    match v {
-        Some(dec) => d(dec),
-        None => Ok(default),
-    }
-}
-
-/// Convert an `Option<rust_decimal::Decimal>` to `Option<f64>`.
-fn d_opt(v: Option<rust_decimal::Decimal>) -> Result<Option<f64>, AppError> {
-    match v {
-        Some(dec) => Ok(Some(d(dec)?)),
-        None => Ok(None),
-    }
-}
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Style {
@@ -64,18 +41,18 @@ impl TryFrom<entities::styles::Model> for Style {
             style_letter: m.style_letter,
             style_guide: m.style_guide,
             type_: m.r#type,
-            og_min: d(m.og_min)?,
-            og_max: d(m.og_max)?,
-            fg_min: d(m.fg_min)?,
-            fg_max: d(m.fg_max)?,
-            ibu_min: d(m.ibu_min)?,
-            ibu_max: d(m.ibu_max)?,
-            color_min_srm: d(m.color_min_srm)?,
-            color_max_srm: d(m.color_max_srm)?,
-            carb_min_vols: d_opt(m.carb_min_vols)?,
-            carb_max_vols: d_opt(m.carb_max_vols)?,
-            abv_min_pct: d_opt(m.abv_min_pct)?,
-            abv_max_pct: d_opt(m.abv_max_pct)?,
+            og_min: m.og_min,
+            og_max: m.og_max,
+            fg_min: m.fg_min,
+            fg_max: m.fg_max,
+            ibu_min: m.ibu_min,
+            ibu_max: m.ibu_max,
+            color_min_srm: m.color_min_srm,
+            color_max_srm: m.color_max_srm,
+            carb_min_vols: m.carb_min_vols,
+            carb_max_vols: m.carb_max_vols,
+            abv_min_pct: m.abv_min_pct,
+            abv_max_pct: m.abv_max_pct,
             notes: m.notes,
             profile: m.profile,
             ingredients: m.ingredients,
@@ -115,21 +92,21 @@ impl TryFrom<entities::equipment_profiles::Model> for EquipmentProfile {
             id: m.id,
             name: m.name,
             notes: m.notes,
-            boil_size_l: d(m.boil_size_l)?,
-            batch_size_l: d(m.batch_size_l)?,
+            boil_size_l: m.boil_size_l,
+            batch_size_l: m.batch_size_l,
             calc_boil_volume: m.calc_boil_volume != 0,
-            tun_volume_l: d_opt(m.tun_volume_l)?,
-            tun_weight_kg: d_opt(m.tun_weight_kg)?,
-            tun_specific_heat: d_opt(m.tun_specific_heat)?,
-            lauter_deadspace_l: d_or(m.lauter_deadspace_l, 0.0)?,
-            top_up_kettle_l: d_or(m.top_up_kettle_l, 0.0)?,
-            trub_chiller_loss_l: d_or(m.trub_chiller_loss_l, 0.0)?,
-            evap_rate_pct_hr: d_or(m.evap_rate_pct_hr, 10.0)?,
-            boil_time_min: d(m.boil_time_min)?,
-            top_up_water_l: d_or(m.top_up_water_l, 0.0)?,
-            fermenter_loss_l: d_or(m.fermenter_loss_l, 0.0)?,
-            hop_utilization_pct: d_or(m.hop_utilization_pct, 100.0)?,
-            efficiency_pct: d(m.efficiency_pct)?,
+            tun_volume_l: m.tun_volume_l,
+            tun_weight_kg: m.tun_weight_kg,
+            tun_specific_heat: m.tun_specific_heat,
+            lauter_deadspace_l: m.lauter_deadspace_l.unwrap_or(0.0),
+            top_up_kettle_l: m.top_up_kettle_l.unwrap_or(0.0),
+            trub_chiller_loss_l: m.trub_chiller_loss_l.unwrap_or(0.0),
+            evap_rate_pct_hr: m.evap_rate_pct_hr.unwrap_or(10.0),
+            boil_time_min: m.boil_time_min,
+            top_up_water_l: m.top_up_water_l.unwrap_or(0.0),
+            fermenter_loss_l: m.fermenter_loss_l.unwrap_or(0.0),
+            hop_utilization_pct: m.hop_utilization_pct.unwrap_or(100.0),
+            efficiency_pct: m.efficiency_pct,
             created_at: m.created_at as i64,
             updated_at: m.updated_at as i64,
         })
@@ -163,19 +140,19 @@ impl TryFrom<entities::fermentables::Model> for Fermentable {
             id: m.id,
             name: m.name,
             type_: m.r#type,
-            yield_pct: d(m.yield_pct)?,
-            color_lovibond: d(m.color_lovibond)?,
+            yield_pct: m.yield_pct,
+            color_lovibond: m.color_lovibond,
             origin: m.origin,
             supplier: m.supplier,
             notes: m.notes,
             add_after_boil: m.add_after_boil.unwrap_or(0) != 0,
-            coarse_fine_diff_pct: d_opt(m.coarse_fine_diff_pct)?,
-            moisture_pct: d_opt(m.moisture_pct)?,
-            diastatic_power_lintner: d_opt(m.diastatic_power_lintner)?,
-            protein_pct: d_opt(m.protein_pct)?,
-            max_in_batch_pct: d_opt(m.max_in_batch_pct)?,
+            coarse_fine_diff_pct: m.coarse_fine_diff_pct,
+            moisture_pct: m.moisture_pct,
+            diastatic_power_lintner: m.diastatic_power_lintner,
+            protein_pct: m.protein_pct,
+            max_in_batch_pct: m.max_in_batch_pct,
             recommend_mash: m.recommend_mash.map(|v| v != 0),
-            ibu_gal_per_lb: d_opt(m.ibu_gal_per_lb)?,
+            ibu_gal_per_lb: m.ibu_gal_per_lb,
         })
     }
 }
@@ -205,19 +182,19 @@ impl TryFrom<entities::hops::Model> for Hop {
         Ok(Self {
             id: m.id,
             name: m.name,
-            alpha_pct: d(m.alpha_pct)?,
-            beta_pct: d_opt(m.beta_pct)?,
+            alpha_pct: m.alpha_pct,
+            beta_pct: m.beta_pct,
             form: m.form,
             type_: m.r#type,
             origin: m.origin,
             year: m.year,
             notes: m.notes,
             substitutes: m.substitutes,
-            hsi_pct: d_opt(m.hsi_pct)?,
-            humulene_pct: d_opt(m.humulene_pct)?,
-            caryophyllene_pct: d_opt(m.caryophyllene_pct)?,
-            cohumulone_pct: d_opt(m.cohumulone_pct)?,
-            myrcene_pct: d_opt(m.myrcene_pct)?,
+            hsi_pct: m.hsi_pct,
+            humulene_pct: m.humulene_pct,
+            caryophyllene_pct: m.caryophyllene_pct,
+            cohumulone_pct: m.cohumulone_pct,
+            myrcene_pct: m.myrcene_pct,
         })
     }
 }
@@ -250,10 +227,10 @@ impl TryFrom<entities::yeasts::Model> for Yeast {
             form: m.form,
             laboratory: m.laboratory,
             product_id: m.product_id,
-            min_temperature_c: d_opt(m.min_temperature_c)?,
-            max_temperature_c: d_opt(m.max_temperature_c)?,
+            min_temperature_c: m.min_temperature_c,
+            max_temperature_c: m.max_temperature_c,
             flocculation: m.flocculation,
-            attenuation_pct: d_opt(m.attenuation_pct)?,
+            attenuation_pct: m.attenuation_pct,
             notes: m.notes,
             best_for: m.best_for,
             max_reuse: m.max_reuse.map(|v| v as i64),
@@ -282,7 +259,7 @@ impl TryFrom<entities::miscs::Model> for Misc {
             name: m.name,
             type_: m.r#type,
             use_: m.r#use,
-            time_min: d(m.time_min)?,
+            time_min: m.time_min,
             notes: m.notes,
             use_for: m.use_for,
             amount_is_weight: m.amount_is_weight.unwrap_or(0) != 0,
@@ -310,13 +287,13 @@ impl TryFrom<entities::waters::Model> for Water {
         Ok(Self {
             id: m.id,
             name: m.name,
-            calcium_ppm: d(m.calcium_ppm)?,
-            bicarbonate_ppm: d(m.bicarbonate_ppm)?,
-            sulfate_ppm: d(m.sulfate_ppm)?,
-            chloride_ppm: d(m.chloride_ppm)?,
-            sodium_ppm: d(m.sodium_ppm)?,
-            magnesium_ppm: d(m.magnesium_ppm)?,
-            ph: d_opt(m.ph)?,
+            calcium_ppm: m.calcium_ppm,
+            bicarbonate_ppm: m.bicarbonate_ppm,
+            sulfate_ppm: m.sulfate_ppm,
+            chloride_ppm: m.chloride_ppm,
+            sodium_ppm: m.sodium_ppm,
+            magnesium_ppm: m.magnesium_ppm,
+            ph: m.ph,
             notes: m.notes,
         })
     }
@@ -404,9 +381,9 @@ impl TryFrom<entities::recipe_addition_fermentables::Model> for RecipeAdditionFe
             fermentable_id: m.fermentable_id,
             name: m.name,
             type_: m.r#type,
-            yield_pct: d(m.yield_pct)?,
-            color_lovibond: d(m.color_lovibond)?,
-            amount_kg: d(m.amount_kg)?,
+            yield_pct: m.yield_pct,
+            color_lovibond: m.color_lovibond,
+            amount_kg: m.amount_kg,
             add_after_boil: m.add_after_boil.unwrap_or(0) != 0,
             addition_order: m.addition_order as i64,
         })
@@ -435,11 +412,11 @@ impl TryFrom<entities::recipe_addition_hops::Model> for RecipeAdditionHop {
             recipe_id: m.recipe_id,
             hop_id: m.hop_id,
             name: m.name,
-            alpha_pct: d(m.alpha_pct)?,
+            alpha_pct: m.alpha_pct,
             form: m.form,
-            amount_kg: d(m.amount_kg)?,
+            amount_kg: m.amount_kg,
             use_: m.r#use,
-            time_min: d(m.time_min)?,
+            time_min: m.time_min,
             addition_order: m.addition_order as i64,
         })
     }
@@ -474,8 +451,8 @@ impl TryFrom<entities::recipe_addition_yeasts::Model> for RecipeAdditionYeast {
             form: m.form,
             laboratory: m.laboratory,
             product_id: m.product_id,
-            attenuation_pct: d_opt(m.attenuation_pct)?,
-            amount: d_opt(m.amount)?,
+            attenuation_pct: m.attenuation_pct,
+            amount: m.amount,
             amount_is_weight: m.amount_is_weight.unwrap_or(0) != 0,
             add_to_secondary: m.add_to_secondary.unwrap_or(0) != 0,
             times_cultured: m.times_cultured.unwrap_or(0) as i64,
@@ -507,9 +484,9 @@ impl TryFrom<entities::recipe_addition_miscs::Model> for RecipeAdditionMisc {
             name: m.name,
             type_: m.r#type,
             use_: m.r#use,
-            amount: d(m.amount)?,
+            amount: m.amount,
             amount_is_weight: m.amount_is_weight.unwrap_or(0) != 0,
-            time_min: d(m.time_min)?,
+            time_min: m.time_min,
             addition_order: m.addition_order as i64,
         })
     }
@@ -532,7 +509,7 @@ impl TryFrom<entities::recipe_addition_waters::Model> for RecipeAdditionWater {
             recipe_id: m.recipe_id,
             water_id: m.water_id,
             name: m.name,
-            amount_l: d(m.amount_l)?,
+            amount_l: m.amount_l,
         })
     }
 }
@@ -575,11 +552,11 @@ impl TryFrom<entities::mash_steps::Model> for MashStep {
             mash_id: m.mash_id,
             name: m.name,
             type_: m.r#type,
-            infuse_amount_l: d_opt(m.infuse_amount_l)?,
-            step_temp_c: d(m.step_temp_c)?,
+            infuse_amount_l: m.infuse_amount_l,
+            step_temp_c: m.step_temp_c,
             step_time_min: m.step_time_min as i64,
             ramp_time_min: m.ramp_time_min.map(|v| v as i64),
-            end_temp_c: d_opt(m.end_temp_c)?,
+            end_temp_c: m.end_temp_c,
             step_order: m.step_order as i64,
         })
     }

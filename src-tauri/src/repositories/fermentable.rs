@@ -9,7 +9,7 @@ use crate::models::{
     CreateFermentableAdditionInput, RecipeAdditionFermentable, UpdateFermentableAdditionInput,
 };
 
-use super::{new_id, to_dec};
+use super::new_id;
 
 pub struct FermentableRepository<'a> {
     db: &'a DatabaseConnection,
@@ -48,9 +48,9 @@ impl<'a> FermentableRepository<'a> {
             fermentable_id: Set(input.fermentable_id),
             name: Set(input.name),
             r#type: Set(input.type_),
-            yield_pct: Set(to_dec(input.yield_pct)),
-            color_lovibond: Set(to_dec(input.color_lovibond)),
-            amount_kg: Set(to_dec(input.amount_kg)),
+            yield_pct: Set(input.yield_pct),
+            color_lovibond: Set(input.color_lovibond),
+            amount_kg: Set(input.amount_kg),
             add_after_boil: Set(input.add_after_boil.map(|v| v as i32)),
             addition_order: Set(order),
         }
@@ -77,7 +77,7 @@ impl<'a> FermentableRepository<'a> {
         let mut active: recipe_addition_fermentables::ActiveModel = row.into();
 
         if let Some(v) = input.amount_kg {
-            active.amount_kg = Set(to_dec(v));
+            active.amount_kg = Set(v);
         }
         if let Some(v) = input.add_after_boil {
             active.add_after_boil = Set(Some(v as i32));

@@ -3,7 +3,7 @@
 use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, DeriveEntityModel, Serialize, Deserialize)]
 #[sea_orm(table_name = "yeasts")]
 pub struct Model {
     #[sea_orm(primary_key, auto_increment = false, column_type = "Text")]
@@ -18,11 +18,11 @@ pub struct Model {
     pub laboratory: Option<String>,
     #[sea_orm(column_type = "Text", nullable)]
     pub product_id: Option<String>,
-    pub min_temperature_c: Option<Decimal>,
-    pub max_temperature_c: Option<Decimal>,
+    pub min_temperature_c: Option<f64>,
+    pub max_temperature_c: Option<f64>,
     #[sea_orm(column_type = "Text", nullable)]
     pub flocculation: Option<String>,
-    pub attenuation_pct: Option<Decimal>,
+    pub attenuation_pct: Option<f64>,
     #[sea_orm(column_type = "Text", nullable)]
     pub notes: Option<String>,
     #[sea_orm(column_type = "Text", nullable)]

@@ -4,7 +4,7 @@ use crate::entities::equipment_profiles;
 use crate::error::AppError;
 use crate::models::{CreateEquipmentProfileInput, EquipmentProfile, UpdateEquipmentProfileInput};
 
-use super::{new_id, now_secs, to_dec, to_dec_opt};
+use super::{new_id, now_secs};
 
 pub struct EquipmentRepository<'a> {
     db: &'a DatabaseConnection,
@@ -43,13 +43,13 @@ impl<'a> EquipmentRepository<'a> {
             id: Set(id.clone()),
             name: Set(input.name),
             notes: Set(input.notes),
-            boil_size_l: Set(to_dec(input.boil_size_l)),
-            batch_size_l: Set(to_dec(input.batch_size_l)),
-            boil_time_min: Set(to_dec(input.boil_time_min.unwrap_or(60.0))),
-            evap_rate_pct_hr: Set(to_dec_opt(input.evap_rate_pct_hr)),
-            trub_chiller_loss_l: Set(to_dec_opt(input.trub_chiller_loss_l)),
-            fermenter_loss_l: Set(to_dec_opt(input.fermenter_loss_l)),
-            efficiency_pct: Set(to_dec(input.efficiency_pct)),
+            boil_size_l: Set(input.boil_size_l),
+            batch_size_l: Set(input.batch_size_l),
+            boil_time_min: Set(input.boil_time_min.unwrap_or(60.0)),
+            evap_rate_pct_hr: Set(input.evap_rate_pct_hr),
+            trub_chiller_loss_l: Set(input.trub_chiller_loss_l),
+            fermenter_loss_l: Set(input.fermenter_loss_l),
+            efficiency_pct: Set(input.efficiency_pct),
             calc_boil_volume: Set(0),
             created_at: Set(now),
             updated_at: Set(now),
@@ -77,25 +77,25 @@ impl<'a> EquipmentRepository<'a> {
             active.notes = Set(Some(v));
         }
         if let Some(v) = input.boil_size_l {
-            active.boil_size_l = Set(to_dec(v));
+            active.boil_size_l = Set(v);
         }
         if let Some(v) = input.batch_size_l {
-            active.batch_size_l = Set(to_dec(v));
+            active.batch_size_l = Set(v);
         }
         if let Some(v) = input.boil_time_min {
-            active.boil_time_min = Set(to_dec(v));
+            active.boil_time_min = Set(v);
         }
         if let Some(v) = input.evap_rate_pct_hr {
-            active.evap_rate_pct_hr = Set(Some(to_dec(v)));
+            active.evap_rate_pct_hr = Set(Some(v));
         }
         if let Some(v) = input.trub_chiller_loss_l {
-            active.trub_chiller_loss_l = Set(Some(to_dec(v)));
+            active.trub_chiller_loss_l = Set(Some(v));
         }
         if let Some(v) = input.fermenter_loss_l {
-            active.fermenter_loss_l = Set(Some(to_dec(v)));
+            active.fermenter_loss_l = Set(Some(v));
         }
         if let Some(v) = input.efficiency_pct {
-            active.efficiency_pct = Set(to_dec(v));
+            active.efficiency_pct = Set(v);
         }
         active.updated_at = Set(now_secs() as i32);
         active.update(self.db).await?;

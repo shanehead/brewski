@@ -6,7 +6,7 @@ use crate::entities::recipe_addition_waters;
 use crate::error::AppError;
 use crate::models::{CreateWaterAdditionInput, RecipeAdditionWater, UpdateWaterAdditionInput};
 
-use super::{new_id, to_dec};
+use super::new_id;
 
 pub struct WaterRepository<'a> {
     db: &'a DatabaseConnection,
@@ -38,7 +38,7 @@ impl<'a> WaterRepository<'a> {
             recipe_id: Set(recipe_id.to_string()),
             water_id: Set(input.water_id),
             name: Set(input.name),
-            amount_l: Set(to_dec(input.amount_l)),
+            amount_l: Set(input.amount_l),
         }
         .insert(self.db)
         .await?;
@@ -63,7 +63,7 @@ impl<'a> WaterRepository<'a> {
         let mut active: recipe_addition_waters::ActiveModel = row.into();
 
         if let Some(v) = input.amount_l {
-            active.amount_l = Set(to_dec(v));
+            active.amount_l = Set(v);
         }
 
         active.update(self.db).await?;

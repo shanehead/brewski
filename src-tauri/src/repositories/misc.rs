@@ -7,7 +7,7 @@ use crate::entities::recipe_addition_miscs;
 use crate::error::AppError;
 use crate::models::{CreateMiscAdditionInput, RecipeAdditionMisc, UpdateMiscAdditionInput};
 
-use super::{new_id, to_dec};
+use super::new_id;
 
 pub struct MiscRepository<'a> {
     db: &'a DatabaseConnection,
@@ -47,9 +47,9 @@ impl<'a> MiscRepository<'a> {
             name: Set(input.name),
             r#type: Set(input.type_),
             r#use: Set(input.use_),
-            amount: Set(to_dec(input.amount)),
+            amount: Set(input.amount),
             amount_is_weight: Set(input.amount_is_weight.map(|v| v as i32)),
-            time_min: Set(to_dec(input.time_min)),
+            time_min: Set(input.time_min),
             addition_order: Set(order),
         }
         .insert(self.db)
@@ -75,7 +75,7 @@ impl<'a> MiscRepository<'a> {
         let mut active: recipe_addition_miscs::ActiveModel = row.into();
 
         if let Some(v) = input.amount {
-            active.amount = Set(to_dec(v));
+            active.amount = Set(v);
         }
         if let Some(v) = input.amount_is_weight {
             active.amount_is_weight = Set(Some(v as i32));
@@ -84,7 +84,7 @@ impl<'a> MiscRepository<'a> {
             active.r#use = Set(v);
         }
         if let Some(v) = input.time_min {
-            active.time_min = Set(to_dec(v));
+            active.time_min = Set(v);
         }
         if let Some(v) = input.addition_order {
             active.addition_order = Set(v as i32);

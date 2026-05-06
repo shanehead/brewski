@@ -1,4 +1,3 @@
-use rust_decimal::prelude::ToPrimitive;
 use sea_orm::{
     ActiveModelTrait, DatabaseConnection, EntityTrait, QueryOrder, Set,
 };
@@ -11,7 +10,7 @@ use crate::models::{
     Recipe, RecipeSummary, UpdateRecipeInput,
 };
 
-use super::{from_dec, new_id, now_secs, to_dec};
+use super::{new_id, now_secs};
 use super::equipment::EquipmentRepository;
 use super::fermentable::FermentableRepository;
 use super::hop::HopRepository;
@@ -45,7 +44,7 @@ impl<'a> RecipeRepository<'a> {
                     name: r.name,
                     style_name: s.map(|st| st.name),
                     type_: r.r#type,
-                    batch_size_l: from_dec(r.batch_size_l)?,
+                    batch_size_l: r.batch_size_l,
                     created_at: r.created_at as i64,
                     updated_at: r.updated_at as i64,
                 })
@@ -89,32 +88,32 @@ impl<'a> RecipeRepository<'a> {
             type_: recipe_row.r#type,
             brewer: recipe_row.brewer,
             asst_brewer: recipe_row.asst_brewer,
-            batch_size_l: from_dec(recipe_row.batch_size_l)?,
-            boil_size_l: from_dec(recipe_row.boil_size_l)?,
-            boil_time_min: from_dec(recipe_row.boil_time_min)?,
-            efficiency_pct: recipe_row.efficiency_pct.and_then(|v| v.to_f64()),
+            batch_size_l: recipe_row.batch_size_l,
+            boil_size_l: recipe_row.boil_size_l,
+            boil_time_min: recipe_row.boil_time_min,
+            efficiency_pct: recipe_row.efficiency_pct,
             style_id: recipe_row.style_id,
             equipment_profile_id: recipe_row.equipment_profile_id,
             notes: recipe_row.notes,
             taste_notes: recipe_row.taste_notes,
-            taste_rating: recipe_row.taste_rating.and_then(|v| v.to_f64()),
-            og: recipe_row.og.and_then(|v| v.to_f64()),
-            fg: recipe_row.fg.and_then(|v| v.to_f64()),
+            taste_rating: recipe_row.taste_rating,
+            og: recipe_row.og,
+            fg: recipe_row.fg,
             fermentation_stages: recipe_row.fermentation_stages.unwrap_or(1) as i64,
-            primary_age_days: recipe_row.primary_age_days.and_then(|v| v.to_f64()),
-            primary_temp_c: recipe_row.primary_temp_c.and_then(|v| v.to_f64()),
-            secondary_age_days: recipe_row.secondary_age_days.and_then(|v| v.to_f64()),
-            secondary_temp_c: recipe_row.secondary_temp_c.and_then(|v| v.to_f64()),
-            tertiary_age_days: recipe_row.tertiary_age_days.and_then(|v| v.to_f64()),
-            tertiary_temp_c: recipe_row.tertiary_temp_c.and_then(|v| v.to_f64()),
-            age_days: recipe_row.age_days.and_then(|v| v.to_f64()),
-            age_temp_c: recipe_row.age_temp_c.and_then(|v| v.to_f64()),
-            carbonation_vols: recipe_row.carbonation_vols.and_then(|v| v.to_f64()),
+            primary_age_days: recipe_row.primary_age_days,
+            primary_temp_c: recipe_row.primary_temp_c,
+            secondary_age_days: recipe_row.secondary_age_days,
+            secondary_temp_c: recipe_row.secondary_temp_c,
+            tertiary_age_days: recipe_row.tertiary_age_days,
+            tertiary_temp_c: recipe_row.tertiary_temp_c,
+            age_days: recipe_row.age_days,
+            age_temp_c: recipe_row.age_temp_c,
+            carbonation_vols: recipe_row.carbonation_vols,
             forced_carbonation: recipe_row.forced_carbonation.unwrap_or(0) != 0,
             priming_sugar_name: recipe_row.priming_sugar_name,
-            carbonation_temp_c: recipe_row.carbonation_temp_c.and_then(|v| v.to_f64()),
-            priming_sugar_equiv: recipe_row.priming_sugar_equiv.and_then(|v| v.to_f64()),
-            keg_priming_factor: recipe_row.keg_priming_factor.and_then(|v| v.to_f64()),
+            carbonation_temp_c: recipe_row.carbonation_temp_c,
+            priming_sugar_equiv: recipe_row.priming_sugar_equiv,
+            keg_priming_factor: recipe_row.keg_priming_factor,
             date: recipe_row.date,
             created_at: recipe_row.created_at as i64,
             updated_at: recipe_row.updated_at as i64,
@@ -155,9 +154,9 @@ impl<'a> RecipeRepository<'a> {
             id: Set(id.clone()),
             name: Set(input.name),
             r#type: Set(input.type_.unwrap_or_else(|| "all_grain".to_owned())),
-            batch_size_l: Set(to_dec(batch_size)),
-            boil_size_l: Set(to_dec(boil_size)),
-            boil_time_min: Set(to_dec(boil_time)),
+            batch_size_l: Set(batch_size),
+            boil_size_l: Set(boil_size),
+            boil_time_min: Set(boil_time),
             equipment_profile_id: Set(ep_id),
             created_at: Set(now),
             updated_at: Set(now),
@@ -266,16 +265,16 @@ impl<'a> RecipeRepository<'a> {
             active.asst_brewer = Set(Some(v));
         }
         if let Some(v) = input.batch_size_l {
-            active.batch_size_l = Set(to_dec(v));
+            active.batch_size_l = Set(v);
         }
         if let Some(v) = input.boil_size_l {
-            active.boil_size_l = Set(to_dec(v));
+            active.boil_size_l = Set(v);
         }
         if let Some(v) = input.boil_time_min {
-            active.boil_time_min = Set(to_dec(v));
+            active.boil_time_min = Set(v);
         }
         if let Some(v) = input.efficiency_pct {
-            active.efficiency_pct = Set(Some(to_dec(v)));
+            active.efficiency_pct = Set(Some(v));
         }
         if let Some(v) = input.style_id {
             active.style_id = Set(Some(v));
@@ -290,37 +289,37 @@ impl<'a> RecipeRepository<'a> {
             active.taste_notes = Set(Some(v));
         }
         if let Some(v) = input.taste_rating {
-            active.taste_rating = Set(Some(to_dec(v)));
+            active.taste_rating = Set(Some(v));
         }
         if let Some(v) = input.fermentation_stages {
             active.fermentation_stages = Set(Some(v as i32));
         }
         if let Some(v) = input.primary_age_days {
-            active.primary_age_days = Set(Some(to_dec(v)));
+            active.primary_age_days = Set(Some(v));
         }
         if let Some(v) = input.primary_temp_c {
-            active.primary_temp_c = Set(Some(to_dec(v)));
+            active.primary_temp_c = Set(Some(v));
         }
         if let Some(v) = input.secondary_age_days {
-            active.secondary_age_days = Set(Some(to_dec(v)));
+            active.secondary_age_days = Set(Some(v));
         }
         if let Some(v) = input.secondary_temp_c {
-            active.secondary_temp_c = Set(Some(to_dec(v)));
+            active.secondary_temp_c = Set(Some(v));
         }
         if let Some(v) = input.tertiary_age_days {
-            active.tertiary_age_days = Set(Some(to_dec(v)));
+            active.tertiary_age_days = Set(Some(v));
         }
         if let Some(v) = input.tertiary_temp_c {
-            active.tertiary_temp_c = Set(Some(to_dec(v)));
+            active.tertiary_temp_c = Set(Some(v));
         }
         if let Some(v) = input.age_days {
-            active.age_days = Set(Some(to_dec(v)));
+            active.age_days = Set(Some(v));
         }
         if let Some(v) = input.age_temp_c {
-            active.age_temp_c = Set(Some(to_dec(v)));
+            active.age_temp_c = Set(Some(v));
         }
         if let Some(v) = input.carbonation_vols {
-            active.carbonation_vols = Set(Some(to_dec(v)));
+            active.carbonation_vols = Set(Some(v));
         }
         if let Some(v) = input.forced_carbonation {
             active.forced_carbonation = Set(Some(if v { 1 } else { 0 }));
@@ -329,13 +328,13 @@ impl<'a> RecipeRepository<'a> {
             active.priming_sugar_name = Set(Some(v));
         }
         if let Some(v) = input.carbonation_temp_c {
-            active.carbonation_temp_c = Set(Some(to_dec(v)));
+            active.carbonation_temp_c = Set(Some(v));
         }
         if let Some(v) = input.priming_sugar_equiv {
-            active.priming_sugar_equiv = Set(Some(to_dec(v)));
+            active.priming_sugar_equiv = Set(Some(v));
         }
         if let Some(v) = input.keg_priming_factor {
-            active.keg_priming_factor = Set(Some(to_dec(v)));
+            active.keg_priming_factor = Set(Some(v));
         }
         if let Some(v) = input.date {
             active.date = Set(Some(v));

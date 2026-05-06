@@ -7,7 +7,7 @@ use crate::entities::recipe_addition_hops;
 use crate::error::AppError;
 use crate::models::{CreateHopAdditionInput, RecipeAdditionHop, UpdateHopAdditionInput};
 
-use super::{new_id, to_dec};
+use super::new_id;
 
 pub struct HopRepository<'a> {
     db: &'a DatabaseConnection,
@@ -45,11 +45,11 @@ impl<'a> HopRepository<'a> {
             recipe_id: Set(recipe_id.to_string()),
             hop_id: Set(input.hop_id),
             name: Set(input.name),
-            alpha_pct: Set(to_dec(input.alpha_pct)),
+            alpha_pct: Set(input.alpha_pct),
             form: Set(input.form.unwrap_or_else(|| "Pellet".to_string())),
-            amount_kg: Set(to_dec(input.amount_kg)),
+            amount_kg: Set(input.amount_kg),
             r#use: Set(input.use_),
-            time_min: Set(to_dec(input.time_min)),
+            time_min: Set(input.time_min),
             addition_order: Set(order),
         }
         .insert(self.db)
@@ -75,13 +75,13 @@ impl<'a> HopRepository<'a> {
         let mut active: recipe_addition_hops::ActiveModel = row.into();
 
         if let Some(v) = input.amount_kg {
-            active.amount_kg = Set(to_dec(v));
+            active.amount_kg = Set(v);
         }
         if let Some(v) = input.use_ {
             active.r#use = Set(v);
         }
         if let Some(v) = input.time_min {
-            active.time_min = Set(to_dec(v));
+            active.time_min = Set(v);
         }
         if let Some(v) = input.addition_order {
             active.addition_order = Set(v as i32);

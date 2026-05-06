@@ -6,7 +6,7 @@ use crate::entities::recipe_addition_yeasts;
 use crate::error::AppError;
 use crate::models::{CreateYeastAdditionInput, RecipeAdditionYeast, UpdateYeastAdditionInput};
 
-use super::{new_id, to_dec, to_dec_opt};
+use super::new_id;
 
 pub struct YeastRepository<'a> {
     db: &'a DatabaseConnection,
@@ -42,8 +42,8 @@ impl<'a> YeastRepository<'a> {
             form: Set(input.form),
             laboratory: Set(input.laboratory),
             product_id: Set(input.product_id),
-            attenuation_pct: Set(to_dec_opt(input.attenuation_pct)),
-            amount: Set(to_dec_opt(input.amount)),
+            attenuation_pct: Set(input.attenuation_pct),
+            amount: Set(input.amount),
             amount_is_weight: Set(input.amount_is_weight.map(|v| v as i32)),
             add_to_secondary: Set(input.add_to_secondary.map(|v| v as i32)),
             times_cultured: Set(input.times_cultured.map(|v| v as i32)),
@@ -71,10 +71,10 @@ impl<'a> YeastRepository<'a> {
         let mut active: recipe_addition_yeasts::ActiveModel = row.into();
 
         if let Some(v) = input.attenuation_pct {
-            active.attenuation_pct = Set(Some(to_dec(v)));
+            active.attenuation_pct = Set(Some(v));
         }
         if let Some(v) = input.amount {
-            active.amount = Set(Some(to_dec(v)));
+            active.amount = Set(Some(v));
         }
         if let Some(v) = input.amount_is_weight {
             active.amount_is_weight = Set(Some(v as i32));

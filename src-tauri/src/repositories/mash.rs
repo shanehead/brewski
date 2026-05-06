@@ -7,7 +7,7 @@ use crate::entities::{mash_steps, mashes};
 use crate::error::AppError;
 use crate::models::{CreateMashStepInput, Mash, MashStep, UpdateMashInput, UpdateMashStepInput};
 
-use super::{new_id, to_dec, to_dec_opt, from_dec, from_dec_opt};
+use super::new_id;
 
 pub struct MashRepository<'a> {
     db: &'a DatabaseConnection,
@@ -39,12 +39,12 @@ impl<'a> MashRepository<'a> {
             id: mash_row.id,
             recipe_id: mash_row.recipe_id,
             name: mash_row.name,
-            grain_temp_c: from_dec(mash_row.grain_temp_c)?,
-            tun_temp_c: from_dec_opt(mash_row.tun_temp_c)?,
-            sparge_temp_c: from_dec_opt(mash_row.sparge_temp_c)?,
-            ph: from_dec_opt(mash_row.ph)?,
-            tun_weight_kg: from_dec_opt(mash_row.tun_weight_kg)?,
-            tun_specific_heat: from_dec_opt(mash_row.tun_specific_heat)?,
+            grain_temp_c: mash_row.grain_temp_c,
+            tun_temp_c: mash_row.tun_temp_c,
+            sparge_temp_c: mash_row.sparge_temp_c,
+            ph: mash_row.ph,
+            tun_weight_kg: mash_row.tun_weight_kg,
+            tun_specific_heat: mash_row.tun_specific_heat,
             equip_adjust,
             notes: mash_row.notes,
             steps: steps?,
@@ -79,16 +79,16 @@ impl<'a> MashRepository<'a> {
                 active.name = Set(v);
             }
             if let Some(v) = input.grain_temp_c {
-                active.grain_temp_c = Set(to_dec(v));
+                active.grain_temp_c = Set(v);
             }
             if let Some(v) = input.tun_temp_c {
-                active.tun_temp_c = Set(Some(to_dec(v)));
+                active.tun_temp_c = Set(Some(v));
             }
             if let Some(v) = input.sparge_temp_c {
-                active.sparge_temp_c = Set(Some(to_dec(v)));
+                active.sparge_temp_c = Set(Some(v));
             }
             if let Some(v) = input.ph {
-                active.ph = Set(Some(to_dec(v)));
+                active.ph = Set(Some(v));
             }
             if let Some(v) = input.notes {
                 active.notes = Set(Some(v));
@@ -101,10 +101,10 @@ impl<'a> MashRepository<'a> {
                 id: Set(id.clone()),
                 recipe_id: Set(recipe_id.to_string()),
                 name: Set(input.name.unwrap_or_else(|| "Mash".to_string())),
-                grain_temp_c: Set(to_dec(input.grain_temp_c.unwrap_or(20.0))),
-                tun_temp_c: Set(to_dec_opt(input.tun_temp_c)),
-                sparge_temp_c: Set(to_dec_opt(input.sparge_temp_c)),
-                ph: Set(to_dec_opt(input.ph)),
+                grain_temp_c: Set(input.grain_temp_c.unwrap_or(20.0)),
+                tun_temp_c: Set(input.tun_temp_c),
+                sparge_temp_c: Set(input.sparge_temp_c),
+                ph: Set(input.ph),
                 tun_weight_kg: Set(None),
                 tun_specific_heat: Set(None),
                 equip_adjust: Set(Some(0i32)),
@@ -134,11 +134,11 @@ impl<'a> MashRepository<'a> {
             mash_id: Set(mash_id.to_string()),
             name: Set(input.name),
             r#type: Set(input.type_.unwrap_or_else(|| "Infusion".to_string())),
-            infuse_amount_l: Set(to_dec_opt(input.infuse_amount_l)),
-            step_temp_c: Set(to_dec(input.step_temp_c)),
+            infuse_amount_l: Set(input.infuse_amount_l),
+            step_temp_c: Set(input.step_temp_c),
             step_time_min: Set(input.step_time_min as i32),
             ramp_time_min: Set(input.ramp_time_min.map(|v| v as i32)),
-            end_temp_c: Set(to_dec_opt(input.end_temp_c)),
+            end_temp_c: Set(input.end_temp_c),
             step_order: Set(count),
         }
         .insert(self.db)
@@ -171,10 +171,10 @@ impl<'a> MashRepository<'a> {
             active.r#type = Set(v);
         }
         if let Some(v) = input.infuse_amount_l {
-            active.infuse_amount_l = Set(Some(to_dec(v)));
+            active.infuse_amount_l = Set(Some(v));
         }
         if let Some(v) = input.step_temp_c {
-            active.step_temp_c = Set(to_dec(v));
+            active.step_temp_c = Set(v);
         }
         if let Some(v) = input.step_time_min {
             active.step_time_min = Set(v as i32);
@@ -183,7 +183,7 @@ impl<'a> MashRepository<'a> {
             active.ramp_time_min = Set(Some(v as i32));
         }
         if let Some(v) = input.end_temp_c {
-            active.end_temp_c = Set(Some(to_dec(v)));
+            active.end_temp_c = Set(Some(v));
         }
 
         active.update(self.db).await?;

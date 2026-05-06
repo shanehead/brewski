@@ -3,7 +3,7 @@
 use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, DeriveEntityModel, Serialize, Deserialize)]
 #[sea_orm(table_name = "recipe_addition_yeasts")]
 pub struct Model {
     #[sea_orm(primary_key, auto_increment = false, column_type = "Text")]
@@ -22,8 +22,8 @@ pub struct Model {
     pub laboratory: Option<String>,
     #[sea_orm(column_type = "Text", nullable)]
     pub product_id: Option<String>,
-    pub attenuation_pct: Option<Decimal>,
-    pub amount: Option<Decimal>,
+    pub attenuation_pct: Option<f64>,
+    pub amount: Option<f64>,
     pub amount_is_weight: Option<i32>,
     pub add_to_secondary: Option<i32>,
     pub times_cultured: Option<i32>,

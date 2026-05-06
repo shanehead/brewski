@@ -3,7 +3,7 @@
 use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, DeriveEntityModel, Serialize, Deserialize)]
 #[sea_orm(table_name = "recipe_addition_fermentables")]
 pub struct Model {
     #[sea_orm(primary_key, auto_increment = false, column_type = "Text")]
@@ -16,9 +16,9 @@ pub struct Model {
     pub name: String,
     #[sea_orm(column_type = "Text")]
     pub r#type: String,
-    pub yield_pct: Decimal,
-    pub color_lovibond: Decimal,
-    pub amount_kg: Decimal,
+    pub yield_pct: f64,
+    pub color_lovibond: f64,
+    pub amount_kg: f64,
     pub add_after_boil: Option<i32>,
     pub addition_order: i32,
 }
