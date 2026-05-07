@@ -262,6 +262,8 @@ export interface UpdateRecipeInput {
   forced_carbonation?: boolean;
   priming_sugar_name?: string;
   carbonation_temp_c?: number;
+  priming_sugar_equiv?: number;
+  keg_priming_factor?: number;
   date?: string;
 }
 
