@@ -1,7 +1,11 @@
 <script lang="ts">
   import type { RecipeStats } from "$lib/api";
+  import { settings } from "$lib/stores/settings";
+  import { type Units, lToGal, volumeLabel } from "$lib/units";
 
   let { stats }: { stats: RecipeStats | null } = $props();
+
+  const units = $derived<Units>($settings.units === "imperial" ? "imperial" : "metric");
 
   function fmt(val: number | undefined, decimals = 3): string {
     if (val === undefined || val === null) return "—";
@@ -67,11 +71,11 @@
       <h4 class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--color-text-muted);">Volumes</h4>
       <div class="flex items-center justify-between">
         <span class="text-xs" style="color: var(--color-text-secondary);">Pre-boil</span>
-        <span class="text-xs font-mono" style="color: var(--color-text-primary);">{fmt(stats.pre_boil_volume_l, 1)}L</span>
+        <span class="text-xs font-mono" style="color: var(--color-text-primary);">{fmt(units === "imperial" ? lToGal(stats.pre_boil_volume_l) : stats.pre_boil_volume_l, 1)}{volumeLabel(units)}</span>
       </div>
       <div class="flex items-center justify-between">
         <span class="text-xs" style="color: var(--color-text-secondary);">Post-boil</span>
-        <span class="text-xs font-mono" style="color: var(--color-text-primary);">{fmt(stats.post_boil_volume_l, 1)}L</span>
+        <span class="text-xs font-mono" style="color: var(--color-text-primary);">{fmt(units === "imperial" ? lToGal(stats.post_boil_volume_l) : stats.post_boil_volume_l, 1)}{volumeLabel(units)}</span>
       </div>
       <div class="flex items-center justify-between">
         <span class="text-xs" style="color: var(--color-text-secondary);">Pre-boil G</span>

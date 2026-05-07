@@ -2,6 +2,8 @@
   import { onMount } from "svelte";
   import type { Recipe, Style, EquipmentProfile } from "$lib/api";
   import { updateRecipe, listStyles, listEquipmentProfiles } from "$lib/api";
+  import { settings } from "$lib/stores/settings";
+  import { type Units, lToGal, galToL, volumeLabel } from "$lib/units";
 
   let { recipe, onchange }: { recipe: Recipe; onchange: () => void } = $props();
 
@@ -18,6 +20,7 @@
   }
 
   const RECIPE_TYPES = ["all_grain", "extract", "partial_mash"] as const;
+  const units = $derived<Units>($settings.units === "imperial" ? "imperial" : "metric");
 </script>
 
 <div class="grid grid-cols-2 gap-4 max-w-2xl">
@@ -41,17 +44,19 @@
   </div>
 
   <div class="flex flex-col gap-1">
-    <label for="overview-batch-size" class="text-xs font-medium" style="color: var(--color-text-secondary);">Batch Size (L)</label>
-    <input id="overview-batch-size" type="number" step="0.1" value={recipe.batch_size_l}
-           onblur={(e) => save("batch_size_l", parseFloat((e.target as HTMLInputElement).value))}
+    <label for="overview-batch-size" class="text-xs font-medium" style="color: var(--color-text-secondary);">Batch Size ({volumeLabel(units)})</label>
+    <input id="overview-batch-size" type="number" step="0.1"
+           value={(units === "imperial" ? lToGal(recipe.batch_size_l) : recipe.batch_size_l).toFixed(1)}
+           onblur={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); save("batch_size_l", units === "imperial" ? galToL(v) : v); }}
            class="w-full px-2 py-1.5 rounded text-sm"
            style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
   </div>
 
   <div class="flex flex-col gap-1">
-    <label for="overview-boil-size" class="text-xs font-medium" style="color: var(--color-text-secondary);">Boil Size (L)</label>
-    <input id="overview-boil-size" type="number" step="0.1" value={recipe.boil_size_l}
-           onblur={(e) => save("boil_size_l", parseFloat((e.target as HTMLInputElement).value))}
+    <label for="overview-boil-size" class="text-xs font-medium" style="color: var(--color-text-secondary);">Boil Size ({volumeLabel(units)})</label>
+    <input id="overview-boil-size" type="number" step="0.1"
+           value={(units === "imperial" ? lToGal(recipe.boil_size_l) : recipe.boil_size_l).toFixed(1)}
+           onblur={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); save("boil_size_l", units === "imperial" ? galToL(v) : v); }}
            class="w-full px-2 py-1.5 rounded text-sm"
            style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
   </div>

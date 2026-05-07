@@ -1,6 +1,11 @@
 <script lang="ts">
+  import { onMount } from "svelte";
   import { page } from "$app/stores";
+  import { loadSettings } from "$lib/stores/settings";
+
   let { children } = $props();
+
+  onMount(() => { loadSettings(); });
 
   const isRecipes = $derived($page.url.pathname === "/" || $page.url.pathname.startsWith("/recipe"));
 </script>

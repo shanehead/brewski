@@ -1,6 +1,8 @@
 <script lang="ts">
   import type { Recipe, MashStep } from "$lib/api";
   import { updateMash, createMashStep, deleteMashStep } from "$lib/api";
+  import { settings } from "$lib/stores/settings";
+  import { type Units, cToF, fToC, lToGal, galToL, tempLabel, volumeLabel } from "$lib/units";
 
   let { recipe, onchange }: { recipe: Recipe; onchange: () => void } = $props();
 
@@ -46,6 +48,7 @@
   }
 
   const STEP_TYPES = ["infusion", "temperature", "decoction"] as const;
+  const units = $derived<Units>($settings.units === "imperial" ? "imperial" : "metric");
 </script>
 
 <div class="flex flex-col gap-4 max-w-xl">
@@ -59,19 +62,21 @@
              style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
     </div>
     <div class="flex flex-col gap-1">
-      <label for="mash-grain-temp" class="text-xs font-medium" style="color: var(--color-text-secondary);">Grain Temp (°C)</label>
-      <input id="mash-grain-temp" type="number" step="1" value={mash?.grain_temp_c ?? 21}
-             onblur={(e) => handleMashField("grain_temp_c", parseFloat((e.target as HTMLInputElement).value))}
+      <label for="mash-grain-temp" class="text-xs font-medium" style="color: var(--color-text-secondary);">Grain Temp ({tempLabel(units)})</label>
+      <input id="mash-grain-temp" type="number" step={units === "imperial" ? 1 : 0.5}
+             value={(units === "imperial" ? cToF(mash?.grain_temp_c ?? 21) : mash?.grain_temp_c ?? 21).toFixed(1)}
+             onblur={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); handleMashField("grain_temp_c", units === "imperial" ? fToC(v) : v); }}
              class="px-2 py-1.5 rounded text-sm"
              style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
     </div>
     <div class="flex flex-col gap-1">
-      <label for="mash-sparge-temp" class="text-xs font-medium" style="color: var(--color-text-secondary);">Sparge Temp (°C)</label>
-      <input id="mash-sparge-temp" type="number" step="1" value={mash?.sparge_temp_c ?? ""}
-             placeholder="75"
+      <label for="mash-sparge-temp" class="text-xs font-medium" style="color: var(--color-text-secondary);">Sparge Temp ({tempLabel(units)})</label>
+      <input id="mash-sparge-temp" type="number" step={units === "imperial" ? 1 : 0.5}
+             value={mash?.sparge_temp_c != null ? (units === "imperial" ? cToF(mash.sparge_temp_c) : mash.sparge_temp_c).toFixed(1) : ""}
+             placeholder={units === "imperial" ? "167" : "75"}
              onblur={(e) => {
                const v = (e.target as HTMLInputElement).value;
-               handleMashField("sparge_temp_c", v ? parseFloat(v) : null);
+               handleMashField("sparge_temp_c", v ? (units === "imperial" ? fToC(parseFloat(v)) : parseFloat(v)) : null);
              }}
              class="px-2 py-1.5 rounded text-sm"
              style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
@@ -108,7 +113,10 @@
             <option value={t}>{t}</option>
           {/each}
         </select>
-        <input type="number" bind:value={stepTemp} step="0.5" placeholder="Temp °C"
+        <input type="number" step={units === "imperial" ? 1 : 0.5}
+               value={(units === "imperial" ? cToF(stepTemp) : stepTemp).toFixed(1)}
+               oninput={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); if (!isNaN(v)) stepTemp = units === "imperial" ? fToC(v) : v; }}
+               placeholder="Temp {tempLabel(units)}"
                class="w-20 px-2 py-1.5 rounded text-sm"
                style="background: var(--color-bg-base); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
         <input type="number" bind:value={stepTime} step="5" placeholder="Time min"
@@ -126,8 +134,8 @@
             <div class="flex-1">
               <p class="text-sm" style="color: var(--color-text-primary);">{step.name}</p>
               <p class="text-xs" style="color: var(--color-text-secondary);">
-                {step.step_temp_c}°C · {step.step_time_min} min · {step.type_}
-                {#if step.infuse_amount_l} · {step.infuse_amount_l}L{/if}
+                {(units === "imperial" ? cToF(step.step_temp_c) : step.step_temp_c).toFixed(1)}{tempLabel(units)} · {step.step_time_min} min · {step.type_}
+                {#if step.infuse_amount_l} · {(units === "imperial" ? lToGal(step.infuse_amount_l) : step.infuse_amount_l).toFixed(1)}{volumeLabel(units)}{/if}
               </p>
             </div>
             <button onclick={() => handleDeleteStep(step.id)} class="text-xs opacity-40 hover:opacity-100"

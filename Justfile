@@ -36,16 +36,23 @@ preview-docs:
 
 # ── Test & Coverage ───────────────────────────────────────────────────────────
 
-# Run tests
-test:
+# Run all tests (Rust + frontend)
+test: test-rust test-frontend
+
+# Run Rust tests
+test-rust:
     cd src-tauri && cargo test
 
-# Show coverage report (excludes Tauri IPC glue and generated entity code)
+# Run frontend unit tests
+test-frontend:
+    bun test
+
+# Show Rust coverage report (excludes Tauri IPC glue and generated entity code)
 coverage:
     cd src-tauri && cargo llvm-cov \
         --ignore-filename-regex '(commands/|entities/|migration/|bin/|main\.rs|lib\.rs)'
 
-# Enforce 95% line coverage (for CI)
+# Enforce 95% Rust line coverage (for CI)
 coverage-ci:
     cd src-tauri && cargo llvm-cov \
         --ignore-filename-regex '(commands/|entities/|migration/|bin/|main\.rs|lib\.rs)' \

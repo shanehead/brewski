@@ -4,9 +4,13 @@
   import { recipeList, refreshRecipeList } from "$lib/stores/recipes";
   import { createRecipe, deleteRecipe } from "$lib/api";
   import type { RecipeSummary } from "$lib/api";
+  import { settings } from "$lib/stores/settings";
+  import { type Units, lToGal, volumeLabel } from "$lib/units";
 
   let { selectedId = $bindable<string | null>(null) } = $props();
   let search = $state("");
+
+  const units = $derived<Units>($settings.units === "imperial" ? "imperial" : "metric");
 
   const filtered = $derived(
     search.trim()
@@ -65,7 +69,7 @@
         >
           <span class="text-sm font-medium truncate" style="color: var(--color-text-primary);">{recipe.name}</span>
           <span class="text-xs truncate mt-0.5" style="color: var(--color-text-secondary);">
-            {recipe.style_name ?? recipe.type_} · {recipe.batch_size_l}L
+            {recipe.style_name ?? recipe.type_} · {(units === "imperial" ? lToGal(recipe.batch_size_l) : recipe.batch_size_l).toFixed(1)}{volumeLabel(units)}
           </span>
         </a>
       </li>

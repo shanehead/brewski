@@ -2,13 +2,17 @@
   import type { Recipe, RecipeAdditionFermentable, Fermentable } from "$lib/api";
   import { listFermentableLibrary, createRecipeFermentable, updateRecipeFermentable, deleteRecipeFermentable } from "$lib/api";
   import { onMount } from "svelte";
+  import { settings } from "$lib/stores/settings";
+  import { type Units, kgToLb, lbToKg, weightLabel } from "$lib/units";
 
   let { recipe, onchange }: { recipe: Recipe; onchange: () => void } = $props();
 
   let library = $state<Fermentable[]>([]);
   let adding = $state(false);
   let selectedLibId = $state("");
-  let amount = $state(1.0);
+  let amount = $state(1.0); // always kg internally
+
+  const units = $derived<Units>($settings.units === "imperial" ? "imperial" : "metric");
 
   onMount(async () => { library = await listFermentableLibrary(); });
 
@@ -31,9 +35,9 @@
   }
 
   async function handleAmountChange(f: RecipeAdditionFermentable, value: string) {
-    const kg = parseFloat(value);
-    if (!isNaN(kg) && kg > 0) {
-      await updateRecipeFermentable(f.id, { amount_kg: kg });
+    const display = parseFloat(value);
+    if (!isNaN(display) && display > 0) {
+      await updateRecipeFermentable(f.id, { amount_kg: units === "imperial" ? lbToKg(display) : display });
       onchange();
     }
   }
@@ -64,8 +68,11 @@
         </select>
       </div>
       <div class="w-24">
-        <label for="fermentable-amount" class="text-xs mb-1 block" style="color: var(--color-text-secondary);">Amount (kg)</label>
-        <input id="fermentable-amount" type="number" step="0.1" bind:value={amount} min="0.01"
+        <label for="fermentable-amount" class="text-xs mb-1 block" style="color: var(--color-text-secondary);">Amount ({weightLabel(units)})</label>
+        <input id="fermentable-amount" type="number" step={units === "imperial" ? 0.1 : 0.05}
+               value={(units === "imperial" ? kgToLb(amount) : amount).toFixed(2)}
+               oninput={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); if (!isNaN(v) && v > 0) amount = units === "imperial" ? lbToKg(v) : v; }}
+               min="0.01"
                class="w-full px-2 py-1.5 rounded text-sm"
                style="background: var(--color-bg-base); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
       </div>
@@ -82,7 +89,7 @@
         <tr style="color: var(--color-text-muted);">
           <th class="text-left py-1 font-medium text-xs">Name</th>
           <th class="text-right py-1 font-medium text-xs">Lovibond</th>
-          <th class="text-right py-1 font-medium text-xs">kg</th>
+          <th class="text-right py-1 font-medium text-xs">{weightLabel(units)}</th>
           <th class="w-6"></th>
         </tr>
       </thead>
@@ -92,7 +99,8 @@
             <td class="py-1.5" style="color: var(--color-text-primary);">{f.name}</td>
             <td class="text-right py-1.5" style="color: var(--color-text-secondary);">{f.color_lovibond}°L</td>
             <td class="text-right py-1.5">
-              <input type="number" step="0.05" value={f.amount_kg}
+              <input type="number" step={units === "imperial" ? 0.1 : 0.05}
+                     value={(units === "imperial" ? kgToLb(f.amount_kg) : f.amount_kg).toFixed(2)}
                      onblur={(e) => handleAmountChange(f, (e.target as HTMLInputElement).value)}
                      class="w-16 text-right px-1 rounded text-xs"
                      style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid transparent;" />

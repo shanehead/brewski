@@ -2,13 +2,17 @@
   import type { Recipe, Hop } from "$lib/api";
   import { listHopLibrary, createRecipeHop, deleteRecipeHop } from "$lib/api";
   import { onMount } from "svelte";
+  import { settings } from "$lib/stores/settings";
+  import { type Units, kgToHopDisplay, hopDisplayToKg, hopWeightLabel } from "$lib/units";
 
   let { recipe, onchange }: { recipe: Recipe; onchange: () => void } = $props();
 
   let library = $state<Hop[]>([]);
   let adding = $state(false);
   let selectedLibId = $state("");
-  let amount = $state(0.028);
+  let amount = $state(0.028); // always kg internally
+
+  const units = $derived<Units>($settings.units === "imperial" ? "imperial" : "metric");
   let use_ = $state("boil");
   let time = $state(60);
 
@@ -60,8 +64,11 @@
         </select>
       </div>
       <div class="w-20">
-        <label for="hop-amount" class="text-xs mb-1 block" style="color: var(--color-text-secondary);">Amount (kg)</label>
-        <input id="hop-amount" type="number" step="0.001" bind:value={amount} min="0.001"
+        <label for="hop-amount" class="text-xs mb-1 block" style="color: var(--color-text-secondary);">Amount ({hopWeightLabel(units)})</label>
+        <input id="hop-amount" type="number" step={units === "imperial" ? 0.1 : 1}
+               value={kgToHopDisplay(amount, units).toFixed(units === "imperial" ? 2 : 0)}
+               oninput={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); if (!isNaN(v) && v > 0) amount = hopDisplayToKg(v, units); }}
+               min="0.001"
                class="w-full px-2 py-1.5 rounded text-sm"
                style="background: var(--color-bg-base); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
       </div>
@@ -93,7 +100,7 @@
         <tr style="color: var(--color-text-muted);">
           <th class="text-left py-1 font-medium text-xs">Name</th>
           <th class="text-right py-1 font-medium text-xs">AA%</th>
-          <th class="text-right py-1 font-medium text-xs">g</th>
+          <th class="text-right py-1 font-medium text-xs">{hopWeightLabel(units)}</th>
           <th class="text-right py-1 font-medium text-xs">Use</th>
           <th class="text-right py-1 font-medium text-xs">Time</th>
           <th class="w-6"></th>
@@ -104,7 +111,7 @@
           <tr class="border-t" style="border-color: var(--color-border);">
             <td class="py-1.5" style="color: var(--color-text-primary);">{h.name}</td>
             <td class="text-right py-1.5" style="color: var(--color-text-secondary);">{h.alpha_pct}%</td>
-            <td class="text-right py-1.5" style="color: var(--color-text-secondary);">{(h.amount_kg * 1000).toFixed(0)}g</td>
+            <td class="text-right py-1.5" style="color: var(--color-text-secondary);">{kgToHopDisplay(h.amount_kg, units).toFixed(units === "imperial" ? 2 : 0)}{hopWeightLabel(units)}</td>
             <td class="text-right py-1.5" style="color: var(--color-text-secondary);">{h.use_}</td>
             <td class="text-right py-1.5" style="color: var(--color-text-secondary);">{h.time_min}min</td>
             <td class="pl-1">
