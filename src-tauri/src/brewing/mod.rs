@@ -70,6 +70,7 @@ pub fn calculate_stats(recipe: &Recipe) -> RecipeStats {
         pre_boil_gravity,
         pre_boil_volume_l,
         post_boil_volume_l,
+        strike_temp_c: None,
     }
 }
 

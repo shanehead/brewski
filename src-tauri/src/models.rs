@@ -526,6 +526,7 @@ pub struct Mash {
     pub tun_weight_kg: Option<f64>,
     pub tun_specific_heat: Option<f64>,
     pub equip_adjust: bool,
+    pub ratio_l_per_kg: Option<f64>,
     pub notes: Option<String>,
     pub steps: Vec<MashStep>,
 }
@@ -574,6 +575,7 @@ pub struct RecipeStats {
     pub pre_boil_gravity: f64,
     pub pre_boil_volume_l: f64,
     pub post_boil_volume_l: f64,
+    pub strike_temp_c: Option<f64>,
 }
 
 // --- Input types for create/update commands ---
@@ -723,6 +725,7 @@ pub struct UpdateMashInput {
     pub sparge_temp_c: Option<f64>,
     pub ph: Option<f64>,
     pub notes: Option<String>,
+    pub ratio_l_per_kg: Option<f64>,
 }
 
 #[derive(Debug, Deserialize)]
