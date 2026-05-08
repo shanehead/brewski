@@ -59,6 +59,19 @@ pub fn calculate_stats(recipe: &Recipe) -> RecipeStats {
     let gravity_units = (og - 1.0) * 1000.0;
     let bu_gu_ratio = if gravity_units > 0.0 { ibu / gravity_units } else { 0.0 };
 
+    let strike_temp_c = recipe.mash.as_ref().and_then(|mash| {
+        let grain_temp_c = mash.grain_temp_c;
+        let target_temp_c = mash.steps.first()?.step_temp_c;
+        let total_grain_kg: f64 = recipe.fermentables.iter().map(|f| f.amount_kg).sum();
+        let derived_ratio = if total_grain_kg > 0.0 {
+            mash.steps.iter().find_map(|s| s.infuse_amount_l.map(|vol| vol / total_grain_kg))
+        } else {
+            None
+        };
+        let ratio = derived_ratio.or(mash.ratio_l_per_kg)?;
+        Some(strike::calculate_strike_temp(grain_temp_c, target_temp_c, ratio))
+    });
+
     RecipeStats {
         og,
         fg,
@@ -70,7 +83,7 @@ pub fn calculate_stats(recipe: &Recipe) -> RecipeStats {
         pre_boil_gravity,
         pre_boil_volume_l,
         post_boil_volume_l,
-        strike_temp_c: None,
+        strike_temp_c,
     }
 }
 
@@ -223,6 +236,69 @@ mod tests {
         let stats_explicit = calculate_stats(&recipe);
 
         assert!((stats_default.og - stats_explicit.og).abs() < 0.001);
+    }
+
+    fn mash_with_infusion(grain_temp_c: f64, step_temp_c: f64, infuse_amount_l: f64) -> crate::models::Mash {
+        crate::models::Mash {
+            id: "m1".into(),
+            recipe_id: "r1".into(),
+            name: "Single Infusion".into(),
+            grain_temp_c,
+            tun_temp_c: None,
+            sparge_temp_c: None,
+            ph: None,
+            tun_weight_kg: None,
+            tun_specific_heat: None,
+            equip_adjust: false,
+            ratio_l_per_kg: None,
+            notes: None,
+            steps: vec![crate::models::MashStep {
+                id: "s1".into(),
+                mash_id: "m1".into(),
+                name: "Mash In".into(),
+                type_: "infusion".into(),
+                infuse_amount_l: Some(infuse_amount_l),
+                step_temp_c,
+                step_time_min: 60,
+                ramp_time_min: None,
+                end_temp_c: None,
+                step_order: 0,
+            }],
+        }
+    }
+
+    #[test]
+    fn test_strike_temp_derived_from_infuse_amount() {
+        let mut recipe = minimal_recipe();
+        recipe.fermentables = vec![pale_malt()]; // pale_malt() has amount_kg: 4.5
+        // ratio = 15.0 L / 4.5 kg = 3.333 L/kg
+        // strike = (0.2/3.333)*(67-20)+67 = 0.06*47+67 = 2.82+67 = 69.82°C
+        recipe.mash = Some(mash_with_infusion(20.0, 67.0, 15.0));
+        let stats = calculate_stats(&recipe);
+        let strike = stats.strike_temp_c.expect("strike_temp_c should be Some");
+        assert!((strike - 69.82).abs() < 0.5, "expected ~69.82°C, got {strike:.2}");
+    }
+
+    #[test]
+    fn test_strike_temp_none_without_mash() {
+        let recipe = minimal_recipe();
+        let stats = calculate_stats(&recipe);
+        assert!(stats.strike_temp_c.is_none());
+    }
+
+    #[test]
+    fn test_strike_temp_fallback_to_stored_ratio() {
+        let mut recipe = minimal_recipe();
+        recipe.fermentables = vec![pale_malt()];
+        let mut mash = mash_with_infusion(20.0, 67.0, 15.0);
+        // Remove infuse amount from the step so auto-derive fails
+        mash.steps[0].infuse_amount_l = None;
+        // Set stored fallback ratio
+        mash.ratio_l_per_kg = Some(3.333);
+        recipe.mash = Some(mash);
+        let stats = calculate_stats(&recipe);
+        let strike = stats.strike_temp_c.expect("should fall back to stored ratio");
+        assert!((strike - 69.82).abs() < 0.5, "expected ~69.82°C, got {strike:.2}");
     }
 
     #[test]
