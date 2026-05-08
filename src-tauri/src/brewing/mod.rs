@@ -2,6 +2,7 @@ pub mod abv;
 pub mod ibu;
 pub mod og;
 pub mod srm;
+pub mod strike;
 pub mod volumes;
 
 use crate::models::{Recipe, RecipeStats};
