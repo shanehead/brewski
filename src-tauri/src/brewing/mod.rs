@@ -272,11 +272,11 @@ mod tests {
         let mut recipe = minimal_recipe();
         recipe.fermentables = vec![pale_malt()]; // pale_malt() has amount_kg: 4.5
         // ratio = 15.0 L / 4.5 kg = 3.333 L/kg
-        // strike = (0.2/3.333)*(67-20)+67 = 0.06*47+67 = 2.82+67 = 69.82°C
+        // strike = (0.41/3.333)*(67-20)+67 = 0.123*47+67 = 5.78+67 = 72.78°C
         recipe.mash = Some(mash_with_infusion(20.0, 67.0, 15.0));
         let stats = calculate_stats(&recipe);
         let strike = stats.strike_temp_c.expect("strike_temp_c should be Some");
-        assert!((strike - 69.82).abs() < 0.5, "expected ~69.82°C, got {strike:.2}");
+        assert!((strike - 72.78).abs() < 0.5, "expected ~72.78°C, got {strike:.2}");
     }
 
     #[test]
@@ -298,7 +298,7 @@ mod tests {
         recipe.mash = Some(mash);
         let stats = calculate_stats(&recipe);
         let strike = stats.strike_temp_c.expect("should fall back to stored ratio");
-        assert!((strike - 69.82).abs() < 0.5, "expected ~69.82°C, got {strike:.2}");
+        assert!((strike - 72.78).abs() < 0.5, "expected ~72.78°C, got {strike:.2}");
     }
 
     #[test]
