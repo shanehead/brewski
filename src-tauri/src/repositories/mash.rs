@@ -46,6 +46,7 @@ impl<'a> MashRepository<'a> {
             tun_weight_kg: mash_row.tun_weight_kg,
             tun_specific_heat: mash_row.tun_specific_heat,
             equip_adjust,
+            ratio_l_per_kg: mash_row.ratio_l_per_kg,
             notes: mash_row.notes,
             steps: steps?,
         };
@@ -93,6 +94,9 @@ impl<'a> MashRepository<'a> {
             if let Some(v) = input.notes {
                 active.notes = Set(Some(v));
             }
+            if let Some(v) = input.ratio_l_per_kg {
+                active.ratio_l_per_kg = Set(Some(v));
+            }
             let updated = active.update(self.db).await?;
             updated.id
         } else {
@@ -108,7 +112,7 @@ impl<'a> MashRepository<'a> {
                 tun_weight_kg: Set(None),
                 tun_specific_heat: Set(None),
                 equip_adjust: Set(Some(0i32)),
-                ratio_l_per_kg: Set(None),
+                ratio_l_per_kg: Set(input.ratio_l_per_kg),
                 notes: Set(input.notes),
             }
             .insert(self.db)
@@ -278,12 +282,48 @@ mod tests {
                     tun_temp_c: Some(20.0),
                     ph: Some(5.4),
                     notes: Some("test notes".into()),
+                    ratio_l_per_kg: None,
                 },
             )
             .await
             .unwrap();
         assert_eq!(updated.name, "Updated");
         assert_eq!(updated.sparge_temp_c, Some(76.0));
+    }
+
+    #[tokio::test]
+    async fn test_ratio_l_per_kg_round_trip() {
+        let db = setup_test_db().await;
+        let recipe_id = create_recipe(&db).await;
+        let repo = MashRepository::new(&db);
+
+        let mash = repo
+            .upsert_for_recipe(
+                &recipe_id,
+                UpdateMashInput {
+                    name: Some("Mash".into()),
+                    ratio_l_per_kg: Some(3.5),
+                    ..Default::default()
+                },
+            )
+            .await
+            .unwrap();
+
+        assert_eq!(mash.ratio_l_per_kg, Some(3.5));
+
+        // Update the ratio
+        let updated = repo
+            .upsert_for_recipe(
+                &recipe_id,
+                UpdateMashInput {
+                    ratio_l_per_kg: Some(2.8),
+                    ..Default::default()
+                },
+            )
+            .await
+            .unwrap();
+
+        assert_eq!(updated.ratio_l_per_kg, Some(2.8));
     }
 
     #[tokio::test]
