@@ -97,7 +97,7 @@
         {:else if activeTab === "ingredients"}
           <IngredientsTab {recipe} onchange={refreshRecipe} />
         {:else if activeTab === "mash"}
-          <MashTab {recipe} onchange={refreshRecipe} />
+          <MashTab {recipe} {stats} onchange={refreshRecipe} />
         {:else if activeTab === "fermentation"}
           <FermentationTab {recipe} onchange={refreshRecipe} />
         {:else if activeTab === "notes"}

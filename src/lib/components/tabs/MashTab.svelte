@@ -1,10 +1,10 @@
 <script lang="ts">
-  import type { Recipe, MashStep } from "$lib/api";
+  import type { Recipe, MashStep, RecipeStats, UpdateMashInput } from "$lib/api";
   import { updateMash, createMashStep, deleteMashStep } from "$lib/api";
   import { settings } from "$lib/stores/settings";
-  import { type Units, cToF, fToC, lToGal, galToL, tempLabel, volumeLabel } from "$lib/units";
+  import { type Units, cToF, fToC, lToGal, galToL, tempLabel, volumeLabel, lPerKgToQtPerLb, qtPerLbToLPerKg, ratioLabel } from "$lib/units";
 
-  let { recipe, onchange }: { recipe: Recipe; onchange: () => void } = $props();
+  let { recipe, stats, onchange }: { recipe: Recipe; stats: RecipeStats | null; onchange: () => void } = $props();
 
   let addingStep = $state(false);
   let stepName = $state("Mash In");
@@ -14,6 +14,13 @@
   let stepInfuse = $state<number | null>(null);
 
   const mash = $derived(recipe.mash);
+  const totalGrainKg = $derived(
+    recipe.fermentables.reduce((sum, f) => sum + f.amount_kg, 0)
+  );
+  const firstInfuseAmount = $derived(
+    recipe.mash?.steps.find(s => s.infuse_amount_l != null)?.infuse_amount_l ?? null
+  );
+  const canAutoDerive = $derived(totalGrainKg > 0 && firstInfuseAmount != null);
 
   async function ensureMash() {
     if (!mash) {
@@ -41,9 +48,9 @@
     onchange();
   }
 
-  async function handleMashField(field: string, value: unknown) {
+  async function handleMashField(input: UpdateMashInput) {
     await ensureMash();
-    await updateMash(recipe.id, { [field]: value });
+    await updateMash(recipe.id, input);
     onchange();
   }
 
@@ -57,7 +64,7 @@
     <div class="flex flex-col gap-1">
       <label for="mash-name" class="text-xs font-medium" style="color: var(--color-text-secondary);">Profile Name</label>
       <input id="mash-name" type="text" value={mash?.name ?? "Single Infusion"}
-             onblur={(e) => handleMashField("name", (e.target as HTMLInputElement).value)}
+             onblur={(e) => handleMashField({ name: (e.target as HTMLInputElement).value })}
              class="px-2 py-1.5 rounded text-sm"
              style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
     </div>
@@ -65,7 +72,7 @@
       <label for="mash-grain-temp" class="text-xs font-medium" style="color: var(--color-text-secondary);">Grain Temp ({tempLabel(units)})</label>
       <input id="mash-grain-temp" type="number" step={units === "imperial" ? 1 : 0.5}
              value={(units === "imperial" ? cToF(mash?.grain_temp_c ?? 21) : mash?.grain_temp_c ?? 21).toFixed(1)}
-             onblur={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); handleMashField("grain_temp_c", units === "imperial" ? fToC(v) : v); }}
+             onblur={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); handleMashField({ grain_temp_c: units === "imperial" ? fToC(v) : v }); }}
              class="px-2 py-1.5 rounded text-sm"
              style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
     </div>
@@ -76,7 +83,7 @@
              placeholder={units === "imperial" ? "167" : "75"}
              onblur={(e) => {
                const v = (e.target as HTMLInputElement).value;
-               handleMashField("sparge_temp_c", v ? (units === "imperial" ? fToC(parseFloat(v)) : parseFloat(v)) : null);
+               handleMashField({ sparge_temp_c: v ? (units === "imperial" ? fToC(parseFloat(v)) : parseFloat(v)) : undefined });
              }}
              class="px-2 py-1.5 rounded text-sm"
              style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
@@ -87,11 +94,40 @@
              placeholder="5.4"
              onblur={(e) => {
                const v = (e.target as HTMLInputElement).value;
-               handleMashField("ph", v ? parseFloat(v) : null);
+               handleMashField({ ph: v ? parseFloat(v) : undefined });
              }}
              class="px-2 py-1.5 rounded text-sm"
              style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
     </div>
+
+    {#if stats?.strike_temp_c != null}
+      <div class="flex flex-col gap-1">
+        <span class="text-xs font-medium" style="color: var(--color-text-secondary);">Strike Temp ({tempLabel(units)})</span>
+        <span class="px-2 py-1.5 text-sm" style="color: var(--color-text-primary);">
+          {(units === "imperial" ? cToF(stats.strike_temp_c) : stats.strike_temp_c).toFixed(1)}{tempLabel(units)}
+        </span>
+      </div>
+    {/if}
+
+    {#if mash && !canAutoDerive}
+      <div class="flex flex-col gap-1">
+        <label for="mash-ratio" class="text-xs font-medium" style="color: var(--color-text-secondary);">Water:Grain Ratio ({ratioLabel(units)})</label>
+        <input id="mash-ratio" type="number" step="0.1"
+               value={mash.ratio_l_per_kg != null
+                 ? (units === "imperial" ? lPerKgToQtPerLb(mash.ratio_l_per_kg) : mash.ratio_l_per_kg).toFixed(2)
+                 : ""}
+               placeholder={units === "imperial" ? "1.5" : "3.0"}
+               onblur={(e) => {
+                 const v = (e.target as HTMLInputElement).value;
+                 if (v) {
+                   const parsed = parseFloat(v);
+                   handleMashField({ ratio_l_per_kg: units === "imperial" ? qtPerLbToLPerKg(parsed) : parsed });
+                 }
+               }}
+               class="px-2 py-1.5 rounded text-sm"
+               style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
+      </div>
+    {/if}
   </div>
 
   <!-- Mash steps -->
