@@ -108,6 +108,7 @@ impl<'a> MashRepository<'a> {
                 tun_weight_kg: Set(None),
                 tun_specific_heat: Set(None),
                 equip_adjust: Set(Some(0i32)),
+                ratio_l_per_kg: Set(None),
                 notes: Set(input.notes),
             }
             .insert(self.db)
