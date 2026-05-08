@@ -20,3 +20,7 @@ export function weightLabel(units: Units): string { return units === "imperial" 
 export function hopWeightLabel(units: Units): string { return units === "imperial" ? "oz" : "g"; }
 export function volumeLabel(units: Units): string { return units === "imperial" ? "gal" : "L"; }
 export function tempLabel(units: Units): string { return units === "imperial" ? "°F" : "°C"; }
+
+export function lPerKgToQtPerLb(ratio: number): number { return ratio / 2.0864; }
+export function qtPerLbToLPerKg(ratio: number): number { return ratio * 2.0864; }
+export function ratioLabel(units: Units): string { return units === "imperial" ? "qt/lb" : "L/kg"; }

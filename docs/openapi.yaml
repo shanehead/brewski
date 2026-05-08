@@ -1237,6 +1237,9 @@ components:
         post_boil_volume_l:
           type: number
           description: Estimated post-boil volume in litres
+        strike_temp_c:
+          type: [number, "null"]
+          description: Calculated strike water temperature in degrees Celsius
 
     Style:
       type: object
@@ -1718,6 +1721,9 @@ components:
           type: [number, "null"]
         equip_adjust:
           type: boolean
+        ratio_l_per_kg:
+          type: [number, "null"]
+          description: Water-to-grain ratio in litres per kilogram
         notes:
           type: [string, "null"]
         steps:
@@ -2009,6 +2015,9 @@ components:
           type: number
         notes:
           type: string
+        ratio_l_per_kg:
+          type: number
+          description: Water-to-grain ratio in litres per kilogram
 
     CreateMashStepInput:
       type: object

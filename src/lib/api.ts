@@ -146,6 +146,7 @@ export interface Mash {
   tun_weight_kg: number | null;
   tun_specific_heat: number | null;
   equip_adjust: boolean;
+  ratio_l_per_kg: number | null;
   notes: string | null;
   steps: MashStep[];
 }
@@ -206,6 +207,7 @@ export interface RecipeStats {
   pre_boil_gravity: number;
   pre_boil_volume_l: number;
   post_boil_volume_l: number;
+  strike_temp_c: number | null;
 }
 
 export interface Fermentable {
@@ -375,8 +377,19 @@ export const updateRecipeWater = (id: string, input: UpdateWaterAdditionInput) =
 export const deleteRecipeWater = (id: string) => invoke<void>("delete_recipe_water", { id });
 
 // --- Mash ---
+
+export interface UpdateMashInput {
+  name?: string;
+  grain_temp_c?: number;
+  tun_temp_c?: number;
+  sparge_temp_c?: number;
+  ph?: number;
+  notes?: string;
+  ratio_l_per_kg?: number;
+}
+
 export const getMash = (recipeId: string) => invoke<Mash>("get_mash", { recipeId });
-export const updateMash = (recipeId: string, input: object) =>
+export const updateMash = (recipeId: string, input: UpdateMashInput) =>
   invoke<Mash>("update_mash", { recipeId, input });
 export const createMashStep = (mashId: string, input: object) =>
   invoke<MashStep>("create_mash_step", { mashId, input });
