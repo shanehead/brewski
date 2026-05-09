@@ -256,6 +256,100 @@ export interface Yeast {
 
 // --- Input types ---
 
+export interface CreateFermentableAdditionInput {
+  fermentable_id?: string;
+  name: string;
+  type_: string;
+  yield_pct: number;
+  color_lovibond: number;
+  amount_kg: number;
+  add_after_boil?: boolean;
+}
+
+export interface CreateHopAdditionInput {
+  hop_id?: string;
+  name: string;
+  alpha_pct: number;
+  form?: string;
+  amount_kg: number;
+  use_: string;
+  time_min: number;
+}
+
+export interface CreateYeastAdditionInput {
+  yeast_id?: string | null;
+  name: string;
+  type_: string;
+  form: string;
+  laboratory?: string | null;
+  product_id?: string | null;
+  attenuation_pct?: number | null;
+  amount?: number | null;
+  amount_is_weight?: boolean;
+  add_to_secondary?: boolean;
+  times_cultured?: number;
+}
+
+export interface CreateMiscAdditionInput {
+  misc_id?: string;
+  name: string;
+  type_: string;
+  use_: string;
+  amount: number;
+  amount_is_weight?: boolean;
+  time_min: number;
+}
+
+export interface CreateWaterAdditionInput {
+  water_id?: string;
+  name: string;
+  amount_l: number;
+}
+
+export interface CreateMashStepInput {
+  name: string;
+  type_?: string;
+  infuse_amount_l?: number | null;
+  step_temp_c: number;
+  step_time_min: number;
+  ramp_time_min?: number;
+  end_temp_c?: number;
+}
+
+export interface UpdateMashStepInput {
+  name?: string;
+  type_?: string;
+  infuse_amount_l?: number | null;
+  step_temp_c?: number;
+  step_time_min?: number;
+  ramp_time_min?: number;
+  end_temp_c?: number;
+}
+
+export interface CreateEquipmentProfileInput {
+  name: string;
+  notes?: string;
+  boil_size_l: number;
+  batch_size_l: number;
+  boil_time_min?: number;
+  evap_rate_pct_hr?: number;
+  trub_chiller_loss_l?: number;
+  fermenter_loss_l?: number;
+  efficiency_pct: number;
+}
+
+export interface UpdateEquipmentProfileInput {
+  name?: string;
+  notes?: string;
+  boil_size_l?: number;
+  batch_size_l?: number;
+  boil_time_min?: number;
+  evap_rate_pct_hr?: number;
+  trub_chiller_loss_l?: number;
+  fermenter_loss_l?: number;
+  efficiency_pct?: number;
+}
+
 export interface UpdateRecipeInput {
   name?: string;
   type_?: string;
@@ -364,32 +458,32 @@ export const getRecipeStats = (recipeId: string) =>
   invoke<RecipeStats>("get_recipe_stats", { recipeId });
 
 // --- Recipe additions ---
-export const createRecipeFermentable = (recipeId: string, input: object) =>
+export const createRecipeFermentable = (recipeId: string, input: CreateFermentableAdditionInput) =>
   invoke<RecipeAdditionFermentable>("create_recipe_fermentable", { recipeId, input });
 export const updateRecipeFermentable = (id: string, input: UpdateFermentableAdditionInput) =>
   invoke<RecipeAdditionFermentable>("update_recipe_fermentable", { id, input });
 export const deleteRecipeFermentable = (id: string) =>
   invoke<void>("delete_recipe_fermentable", { id });
 
-export const createRecipeHop = (recipeId: string, input: object) =>
+export const createRecipeHop = (recipeId: string, input: CreateHopAdditionInput) =>
   invoke<RecipeAdditionHop>("create_recipe_hop", { recipeId, input });
 export const updateRecipeHop = (id: string, input: UpdateHopAdditionInput) =>
   invoke<RecipeAdditionHop>("update_recipe_hop", { id, input });
 export const deleteRecipeHop = (id: string) => invoke<void>("delete_recipe_hop", { id });
 
-export const createRecipeYeast = (recipeId: string, input: object) =>
+export const createRecipeYeast = (recipeId: string, input: CreateYeastAdditionInput) =>
   invoke<RecipeAdditionYeast>("create_recipe_yeast", { recipeId, input });
 export const updateRecipeYeast = (id: string, input: UpdateYeastAdditionInput) =>
   invoke<RecipeAdditionYeast>("update_recipe_yeast", { id, input });
 export const deleteRecipeYeast = (id: string) => invoke<void>("delete_recipe_yeast", { id });
 
-export const createRecipeMisc = (recipeId: string, input: object) =>
+export const createRecipeMisc = (recipeId: string, input: CreateMiscAdditionInput) =>
   invoke<RecipeAdditionMisc>("create_recipe_misc", { recipeId, input });
 export const updateRecipeMisc = (id: string, input: UpdateMiscAdditionInput) =>
   invoke<RecipeAdditionMisc>("update_recipe_misc", { id, input });
 export const deleteRecipeMisc = (id: string) => invoke<void>("delete_recipe_misc", { id });
 
-export const createRecipeWater = (recipeId: string, input: object) =>
+export const createRecipeWater = (recipeId: string, input: CreateWaterAdditionInput) =>
   invoke<RecipeAdditionWater>("create_recipe_water", { recipeId, input });
 export const updateRecipeWater = (id: string, input: UpdateWaterAdditionInput) =>
   invoke<RecipeAdditionWater>("update_recipe_water", { id, input });
@@ -410,9 +504,9 @@ export interface UpdateMashInput {
 export const getMash = (recipeId: string) => invoke<Mash>("get_mash", { recipeId });
 export const updateMash = (recipeId: string, input: UpdateMashInput) =>
   invoke<Mash>("update_mash", { recipeId, input });
-export const createMashStep = (mashId: string, input: object) =>
+export const createMashStep = (mashId: string, input: CreateMashStepInput) =>
   invoke<MashStep>("create_mash_step", { mashId, input });
-export const updateMashStep = (id: string, input: object) =>
+export const updateMashStep = (id: string, input: UpdateMashStepInput) =>
   invoke<MashStep>("update_mash_step", { id, input });
 export const deleteMashStep = (id: string) => invoke<void>("delete_mash_step", { id });
 export const updateMashStepOrder = (orderedIds: string[]) =>
@@ -420,9 +514,9 @@ export const updateMashStepOrder = (orderedIds: string[]) =>
 
 // --- Equipment + library ---
 export const listEquipmentProfiles = () => invoke<EquipmentProfile[]>("list_equipment_profiles");
-export const createEquipmentProfile = (input: object) =>
+export const createEquipmentProfile = (input: CreateEquipmentProfileInput) =>
   invoke<EquipmentProfile>("create_equipment_profile", { input });
-export const updateEquipmentProfile = (id: string, input: object) =>
+export const updateEquipmentProfile = (id: string, input: UpdateEquipmentProfileInput) =>
   invoke<EquipmentProfile>("update_equipment_profile", { id, input });
 export const deleteEquipmentProfile = (id: string) =>
   invoke<void>("delete_equipment_profile", { id });
