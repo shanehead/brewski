@@ -13,6 +13,14 @@
 
   const selectedLib = $derived(library.find((y) => y.id === selectedLibId));
 
+  function libraryOptionLabel(y: Yeast): string {
+    const base = `${y.name} (${y.laboratory ?? y.form})`;
+    const attenuation = y.min_attenuation_pct != null && y.max_attenuation_pct != null
+      ? `${y.min_attenuation_pct}–${y.max_attenuation_pct}%`
+      : y.attenuation_pct != null ? `${y.attenuation_pct}%` : null;
+    return attenuation ? `${base} · ${attenuation}` : base;
+  }
+
   async function handleAdd() {
     if (!selectedLib) return;
     await createRecipeYeast(recipe.id, {
@@ -51,7 +59,7 @@
                 style="background: var(--color-bg-base); color: var(--color-text-primary); border: 1px solid var(--color-border);">
           <option value="">Choose…</option>
           {#each library as y}
-            <option value={y.id}>{y.name} ({y.laboratory ?? y.form})</option>
+            <option value={y.id}>{libraryOptionLabel(y)}</option>
           {/each}
         </select>
       </div>
