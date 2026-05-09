@@ -158,6 +158,14 @@
         <input type="number" bind:value={stepTime} step="5" placeholder="Time min"
                class="w-20 px-2 py-1.5 rounded text-sm"
                style="background: var(--color-bg-base); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
+        {#if stepType === "infusion"}
+          <input type="number" step="0.1"
+                 value={stepInfuse != null ? (units === "imperial" ? lToGal(stepInfuse) : stepInfuse).toFixed(1) : ""}
+                 oninput={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); stepInfuse = isNaN(v) ? null : (units === "imperial" ? galToL(v) : v); }}
+                 placeholder="Infuse {volumeLabel(units)}"
+                 class="w-24 px-2 py-1.5 rounded text-sm"
+                 style="background: var(--color-bg-base); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
+        {/if}
         <button onclick={handleAddStep} class="text-xs px-3 py-1.5 rounded"
                 style="background: var(--color-accent); color: #fff;">Add</button>
       </div>
