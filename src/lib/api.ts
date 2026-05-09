@@ -226,13 +226,32 @@ export interface Hop {
 }
 
 export interface Yeast {
+  // BeerXML fields
   id: string;
   name: string;
   type_: string;
   form: string;
   laboratory: string | null;
   product_id: string | null;
+  min_temperature_c: number | null;
+  max_temperature_c: number | null;
+  flocculation: string | null;
+  /** BeerXML single attenuation value; see min/max fields for range */
   attenuation_pct: number | null;
+  notes: string | null;
+  best_for: string | null;
+  max_reuse: number | null;
+  add_to_secondary: boolean;
+  // BeerMaverick extended fields
+  min_attenuation_pct: number | null;
+  max_attenuation_pct: number | null;
+  alcohol_tolerance: string | null;
+  flavor_profile: string | null;
+  styles: string | null;
+  substitutes: string | null;
+  species: string | null;
+  pof_positive: boolean | null;
+  sta1_positive: boolean | null;
 }
 
 // --- Input types ---
