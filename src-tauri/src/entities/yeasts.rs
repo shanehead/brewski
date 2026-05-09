@@ -29,6 +29,21 @@ pub struct Model {
     pub best_for: Option<String>,
     pub max_reuse: Option<i32>,
     pub add_to_secondary: Option<i32>,
+    // BeerMaverick extended fields (m004)
+    pub min_attenuation_pct: Option<f64>,
+    pub max_attenuation_pct: Option<f64>,
+    #[sea_orm(column_type = "Text", nullable)]
+    pub alcohol_tolerance: Option<String>,
+    #[sea_orm(column_type = "Text", nullable)]
+    pub flavor_profile: Option<String>,
+    #[sea_orm(column_type = "Text", nullable)]
+    pub styles: Option<String>,
+    #[sea_orm(column_type = "Text", nullable)]
+    pub substitutes: Option<String>,
+    #[sea_orm(column_type = "Text", nullable)]
+    pub species: Option<String>,
+    pub pof_positive: Option<i32>,
+    pub sta1_positive: Option<i32>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
