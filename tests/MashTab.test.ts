@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/svelte";
+import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import userEvent from "@testing-library/user-event";
 import type { Recipe, Mash, MashStep, RecipeStats, RecipeAdditionFermentable } from "$lib/api";
@@ -134,8 +134,13 @@ describe("MashTab: infuse amount input in Add Step form", () => {
       }
     }
     // Trigger Svelte's binding reset handler directly.
+    // happy-dom doesn't implement :checked for <option>, so Svelte's normal change-event
+    // path can't detect the new value. The reset path uses [selected] attribute instead.
+    // __on_r is a private Svelte internal — assert it exists so a rename fails loudly.
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (select as any).__on_r?.();
+    const resetHandler = (select as any).__on_r;
+    expect(resetHandler, "__on_r handler missing — Svelte internal API may have changed").toBeDefined();
+    resetHandler();
     await tick();
 
     expect(screen.queryByPlaceholderText("Infuse L")).not.toBeInTheDocument();
