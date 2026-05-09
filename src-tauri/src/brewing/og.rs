@@ -7,6 +7,8 @@ pub fn calculate_og(
     let total_points: f64 = fermentables.iter().map(|(yield_pct, amount_kg, add_after_boil)| {
         let efficiency = if *add_after_boil { 100.0 } else { efficiency_pct };
         let pounds = *amount_kg * 2.20462;
+        // 46 gravity points per pound per gallon is the standard PPG for a 100%-yield fermentable.
+        // Actual PPG = yield_pct% of 46. Source: Palmer, "How to Brew".
         let points_per_pound_per_gallon = *yield_pct / 100.0 * 46.0;
         pounds * points_per_pound_per_gallon * (efficiency / 100.0)
     }).sum();

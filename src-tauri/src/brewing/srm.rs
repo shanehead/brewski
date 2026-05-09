@@ -10,6 +10,8 @@ pub fn morey_srm(
         let pounds = *amount_kg * 2.20462;
         (*color_lovibond * pounds) / batch_gallons
     }).sum();
+    // Morey equation: SRM = 1.4922 × MCU^0.6859
+    // Empirically fitted by Dan Morey to correct the linear MCU formula at high color values.
     1.4922 * malt_color_units.powf(0.6859)
 }
 

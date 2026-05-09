@@ -1,4 +1,6 @@
 pub fn calculate_strike_temp(grain_temp_c: f64, target_temp_c: f64, ratio_l_per_kg: f64) -> f64 {
+    // 0.41 is the specific heat of grain relative to water (dimensionless).
+    // Formula from Palmer, "How to Brew": strike = (0.41/r) * (T_target - T_grain) + T_target
     (0.41 / ratio_l_per_kg) * (target_temp_c - grain_temp_c) + target_temp_c
 }
 

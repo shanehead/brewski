@@ -3,13 +3,17 @@ pub fn calculate_fg(og: f64, attenuation_pct: f64) -> f64 {
 }
 
 pub fn calculate_abv(og: f64, fg: f64) -> f64 {
+    // 131.25 is the standard simplified ABV constant (Balling/de Clerck derivation).
     (og - fg) * 131.25
 }
 
 // ASBC formula: kcal per 355 mL (12 oz)
 pub fn calculate_calories_per_355ml(og: f64, fg: f64) -> f64 {
+    // alcohol_by_weight: converts SG drop to g/100mL alcohol. Factor 105 from ASBC Method Beer-4.
     let alcohol_by_weight = (og - fg) * 105.0;
+    // real_extract: Balling's formula weighting OG (18.08%) and FG (81.92%) Plato contributions.
     let real_extract = 0.1808 * og_to_plato(og) + 0.8192 * og_to_plato(fg);
+    // 6.9 kcal/g alcohol, 4.0 kcal/g carbohydrate; fg * 10 converts density to g/100mL.
     let calories_per_ml = (6.9 * alcohol_by_weight + 4.0 * (real_extract - 0.1)) * fg * 10.0 / 1000.0;
     calories_per_ml * 355.0
 }
