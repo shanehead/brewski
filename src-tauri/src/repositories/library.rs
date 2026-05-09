@@ -66,6 +66,7 @@ impl<'a> LibraryRepository<'a> {
 mod tests {
     use super::*;
     use crate::test_helpers::setup_test_db;
+    use sea_orm::ActiveModelTrait;
 
     #[tokio::test]
     async fn test_list_styles() {
@@ -91,8 +92,41 @@ mod tests {
     #[tokio::test]
     async fn test_list_yeasts() {
         let db = setup_test_db().await;
+
+        // Insert a test yeast
+        let yeast_id = "test-yeast-1";
+        yeasts::ActiveModel {
+            id: sea_orm::Set(yeast_id.to_string()),
+            name: sea_orm::Set("Test Yeast".to_string()),
+            r#type: sea_orm::Set("ale".to_string()),
+            form: sea_orm::Set("dry".to_string()),
+            laboratory: sea_orm::Set(None),
+            product_id: sea_orm::Set(None),
+            min_temperature_c: sea_orm::Set(None),
+            max_temperature_c: sea_orm::Set(None),
+            flocculation: sea_orm::Set(None),
+            attenuation_pct: sea_orm::Set(None),
+            notes: sea_orm::Set(None),
+            best_for: sea_orm::Set(None),
+            max_reuse: sea_orm::Set(None),
+            add_to_secondary: sea_orm::Set(None),
+            min_attenuation_pct: sea_orm::Set(None),
+            max_attenuation_pct: sea_orm::Set(None),
+            alcohol_tolerance: sea_orm::Set(None),
+            flavor_profile: sea_orm::Set(None),
+            styles: sea_orm::Set(None),
+            substitutes: sea_orm::Set(None),
+            species: sea_orm::Set(None),
+            pof_positive: sea_orm::Set(None),
+            sta1_positive: sea_orm::Set(None),
+        }
+        .insert(&db)
+        .await
+        .unwrap();
+
         let result = LibraryRepository::new(&db).list_yeasts().await.unwrap();
         assert!(!result.is_empty());
+        assert_eq!(result[0].name, "Test Yeast");
     }
 
     #[tokio::test]
