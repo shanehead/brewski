@@ -4,6 +4,7 @@
   import type { PageData } from "./$types";
   import { getRecipe, getRecipeStats, updateRecipe } from "$lib/api";
   import type { Recipe, RecipeStats } from "$lib/api";
+  import { ipc } from "$lib/stores/error";
   import RecipeList from "$lib/components/RecipeList.svelte";
   import StatsSidebar from "$lib/components/StatsSidebar.svelte";
   import OverviewTab from "$lib/components/tabs/OverviewTab.svelte";
@@ -28,17 +29,17 @@
   ] as const;
 
   onMount(async () => {
-    recipe = await getRecipe(data.id);
+    recipe = await ipc(getRecipe(data.id)) ?? null;
     await refreshStats();
   });
 
   async function refreshStats() {
     if (!recipe) return;
-    stats = await getRecipeStats(recipe.id);
+    stats = await ipc(getRecipeStats(recipe.id)) ?? null;
   }
 
   async function refreshRecipe() {
-    recipe = await getRecipe(data.id);
+    recipe = await ipc(getRecipe(data.id)) ?? null;
     await refreshStats();
   }
 
@@ -46,7 +47,7 @@
     const target = e.currentTarget as HTMLInputElement;
     if (!recipe || target.value === recipe.name) return;
     saving = true;
-    recipe = await updateRecipe(recipe.id, { name: target.value } as any);
+    recipe = await ipc(updateRecipe(recipe.id, { name: target.value })) ?? recipe;
     saving = false;
   }
 </script>

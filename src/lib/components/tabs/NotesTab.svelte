@@ -1,11 +1,12 @@
 <script lang="ts">
   import type { Recipe } from "$lib/api";
   import { updateRecipe } from "$lib/api";
+  import { ipc } from "$lib/stores/error";
 
   let { recipe, onchange }: { recipe: Recipe; onchange: () => void } = $props();
 
   async function save(field: string, value: unknown) {
-    await updateRecipe(recipe.id, { [field]: value } as any);
+    await ipc(updateRecipe(recipe.id, { [field]: value } as any));
     onchange();
   }
 </script>

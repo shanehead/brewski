@@ -4,6 +4,7 @@
   import { recipeList, refreshRecipeList } from "$lib/stores/recipes";
   import { createRecipe, deleteRecipe } from "$lib/api";
   import type { RecipeSummary } from "$lib/api";
+  import { ipc } from "$lib/stores/error";
   import { settings } from "$lib/stores/settings";
   import { type Units, lToGal, volumeLabel } from "$lib/units";
 
@@ -18,11 +19,12 @@
       : $recipeList
   );
 
-  onMount(refreshRecipeList);
+  onMount(() => ipc(refreshRecipeList()));
 
   async function handleNew() {
-    const recipe = await createRecipe({ name: "New Recipe" });
-    await refreshRecipeList();
+    const recipe = await ipc(createRecipe({ name: "New Recipe" }));
+    if (!recipe) return;
+    await ipc(refreshRecipeList());
     goto(`/recipe/${recipe.id}`);
   }
 
@@ -30,8 +32,8 @@
     e.stopPropagation();
     e.preventDefault();
     if (!confirm("Delete this recipe?")) return;
-    await deleteRecipe(id);
-    await refreshRecipeList();
+    await ipc(deleteRecipe(id));
+    await ipc(refreshRecipeList());
     if (selectedId === id) goto("/");
   }
 </script>

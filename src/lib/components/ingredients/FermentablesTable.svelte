@@ -2,6 +2,7 @@
   import type { Recipe, RecipeAdditionFermentable, Fermentable } from "$lib/api";
   import { listFermentableLibrary, createRecipeFermentable, updateRecipeFermentable, deleteRecipeFermentable } from "$lib/api";
   import { onMount } from "svelte";
+  import { ipc } from "$lib/stores/error";
   import { settings } from "$lib/stores/settings";
   import { type Units, kgToLb, lbToKg, weightLabel } from "$lib/units";
 
@@ -14,20 +15,20 @@
 
   const units = $derived<Units>($settings.units === "imperial" ? "imperial" : "metric");
 
-  onMount(async () => { library = await listFermentableLibrary(); });
+  onMount(async () => { library = await ipc(listFermentableLibrary()) ?? []; });
 
   const selectedLib = $derived(library.find((f) => f.id === selectedLibId));
 
   async function handleAdd() {
     if (!selectedLib) return;
-    await createRecipeFermentable(recipe.id, {
+    await ipc(createRecipeFermentable(recipe.id, {
       fermentable_id: selectedLib.id,
       name: selectedLib.name,
       type_: selectedLib.type_,
       yield_pct: selectedLib.yield_pct,
       color_lovibond: selectedLib.color_lovibond,
       amount_kg: amount,
-    });
+    }));
     adding = false;
     selectedLibId = "";
     amount = 1.0;
@@ -37,13 +38,13 @@
   async function handleAmountChange(f: RecipeAdditionFermentable, value: string) {
     const display = parseFloat(value);
     if (!isNaN(display) && display > 0) {
-      await updateRecipeFermentable(f.id, { amount_kg: units === "imperial" ? lbToKg(display) : display });
+      await ipc(updateRecipeFermentable(f.id, { amount_kg: units === "imperial" ? lbToKg(display) : display }));
       onchange();
     }
   }
 
   async function handleDelete(id: string) {
-    await deleteRecipeFermentable(id);
+    await ipc(deleteRecipeFermentable(id));
     onchange();
   }
 </script>

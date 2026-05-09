@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { Recipe, MashStep, RecipeStats, UpdateMashInput } from "$lib/api";
   import { updateMash, createMashStep, deleteMashStep } from "$lib/api";
+  import { ipc } from "$lib/stores/error";
   import { settings } from "$lib/stores/settings";
   import { type Units, cToF, fToC, lToGal, galToL, tempLabel, volumeLabel, lPerKgToQtPerLb, qtPerLbToLPerKg, ratioLabel } from "$lib/units";
 
@@ -24,7 +25,7 @@
 
   async function ensureMash() {
     if (!mash) {
-      await updateMash(recipe.id, { name: "Single Infusion", grain_temp_c: 21 });
+      await ipc(updateMash(recipe.id, { name: "Single Infusion", grain_temp_c: 21 }));
       onchange();
     }
   }
@@ -32,25 +33,25 @@
   async function handleAddStep() {
     await ensureMash();
     const currentMash = recipe.mash!;
-    await createMashStep(currentMash.id, {
+    await ipc(createMashStep(currentMash.id, {
       name: stepName,
       type_: stepType,
       step_temp_c: stepTemp,
       step_time_min: stepTime,
       infuse_amount_l: stepInfuse,
-    });
+    }));
     addingStep = false;
     onchange();
   }
 
   async function handleDeleteStep(id: string) {
-    await deleteMashStep(id);
+    await ipc(deleteMashStep(id));
     onchange();
   }
 
   async function handleMashField(input: UpdateMashInput) {
     await ensureMash();
-    await updateMash(recipe.id, input);
+    await ipc(updateMash(recipe.id, input));
     onchange();
   }
 

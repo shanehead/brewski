@@ -2,6 +2,7 @@
   import type { Recipe, Yeast } from "$lib/api";
   import { listYeastLibrary, createRecipeYeast, deleteRecipeYeast } from "$lib/api";
   import { onMount } from "svelte";
+  import { ipc } from "$lib/stores/error";
 
   let { recipe, onchange }: { recipe: Recipe; onchange: () => void } = $props();
 
@@ -9,7 +10,7 @@
   let adding = $state(false);
   let selectedLibId = $state("");
 
-  onMount(async () => { library = await listYeastLibrary(); });
+  onMount(async () => { library = await ipc(listYeastLibrary()) ?? []; });
 
   const selectedLib = $derived(library.find((y) => y.id === selectedLibId));
 
@@ -23,7 +24,7 @@
 
   async function handleAdd() {
     if (!selectedLib) return;
-    await createRecipeYeast(recipe.id, {
+    await ipc(createRecipeYeast(recipe.id, {
       yeast_id: selectedLib.id,
       name: selectedLib.name,
       type_: selectedLib.type_,
@@ -32,14 +33,14 @@
       product_id: selectedLib.product_id,
       attenuation_pct: selectedLib.attenuation_pct,
       amount: 1,
-    });
+    }));
     adding = false;
     selectedLibId = "";
     onchange();
   }
 
   async function handleDelete(id: string) {
-    await deleteRecipeYeast(id);
+    await ipc(deleteRecipeYeast(id));
     onchange();
   }
 </script>

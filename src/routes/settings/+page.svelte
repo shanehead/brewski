@@ -3,43 +3,44 @@
   import { settings, loadSettings, saveSetting } from "$lib/stores/settings";
   import { listEquipmentProfiles, createEquipmentProfile, deleteEquipmentProfile } from "$lib/api";
   import type { EquipmentProfile } from "$lib/api";
+  import { ipc } from "$lib/stores/error";
 
   let profiles = $state<EquipmentProfile[]>([]);
   let newProfileName = $state("");
 
   onMount(async () => {
-    await loadSettings();
-    profiles = await listEquipmentProfiles();
+    await ipc(loadSettings());
+    profiles = await ipc(listEquipmentProfiles()) ?? [];
   });
 
   async function handleThemeChange(e: Event) {
-    await saveSetting("theme", (e.target as HTMLSelectElement).value);
+    await ipc(saveSetting("theme", (e.target as HTMLSelectElement).value));
   }
 
   async function handleUnitsChange(e: Event) {
-    await saveSetting("units", (e.target as HTMLSelectElement).value);
+    await ipc(saveSetting("units", (e.target as HTMLSelectElement).value));
   }
 
   async function handleDefaultEquipChange(e: Event) {
-    await saveSetting("default_equipment_profile_id", (e.target as HTMLSelectElement).value);
+    await ipc(saveSetting("default_equipment_profile_id", (e.target as HTMLSelectElement).value));
   }
 
   async function handleAddProfile() {
     if (!newProfileName.trim()) return;
-    await createEquipmentProfile({
+    await ipc(createEquipmentProfile({
       name: newProfileName,
       boil_size_l: 27.0,
       batch_size_l: 23.0,
       efficiency_pct: 72.0,
-    });
-    profiles = await listEquipmentProfiles();
+    }));
+    profiles = await ipc(listEquipmentProfiles()) ?? profiles;
     newProfileName = "";
   }
 
   async function handleDeleteProfile(id: string) {
     if (!confirm("Delete this equipment profile?")) return;
-    await deleteEquipmentProfile(id);
-    profiles = await listEquipmentProfiles();
+    await ipc(deleteEquipmentProfile(id));
+    profiles = await ipc(listEquipmentProfiles()) ?? profiles;
   }
 </script>
 

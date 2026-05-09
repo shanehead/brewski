@@ -2,6 +2,7 @@
   import { onMount } from "svelte";
   import type { Recipe, Style, EquipmentProfile } from "$lib/api";
   import { updateRecipe, listStyles, listEquipmentProfiles } from "$lib/api";
+  import { ipc } from "$lib/stores/error";
   import { settings } from "$lib/stores/settings";
   import { type Units, lToGal, galToL, volumeLabel } from "$lib/units";
 
@@ -11,11 +12,14 @@
   let equipmentProfiles = $state<EquipmentProfile[]>([]);
 
   onMount(async () => {
-    [styles, equipmentProfiles] = await Promise.all([listStyles(), listEquipmentProfiles()]);
+    [styles, equipmentProfiles] = await Promise.all([
+      ipc(listStyles()).then(r => r ?? []),
+      ipc(listEquipmentProfiles()).then(r => r ?? []),
+    ]);
   });
 
   async function save(field: string, value: unknown) {
-    await updateRecipe(recipe.id, { [field]: value } as any);
+    await ipc(updateRecipe(recipe.id, { [field]: value } as any));
     onchange();
   }
 

@@ -2,6 +2,7 @@
   import { onMount } from "svelte";
   import { page } from "$app/stores";
   import { loadSettings } from "$lib/stores/settings";
+  import { lastError } from "$lib/stores/error";
 
   let { children } = $props();
 
@@ -45,3 +46,11 @@
     {@render children()}
   </div>
 </div>
+
+{#if $lastError}
+  <div class="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 px-4 py-2.5 rounded shadow-lg text-sm"
+       style="background: #7f1d1d; color: #fecaca; max-width: 480px;">
+    <span class="flex-1 truncate">{$lastError}</span>
+    <button onclick={() => lastError.set(null)} class="opacity-70 hover:opacity-100 flex-shrink-0">✕</button>
+  </div>
+{/if}

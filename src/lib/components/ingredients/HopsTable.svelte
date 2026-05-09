@@ -2,6 +2,7 @@
   import type { Recipe, Hop } from "$lib/api";
   import { listHopLibrary, createRecipeHop, deleteRecipeHop } from "$lib/api";
   import { onMount } from "svelte";
+  import { ipc } from "$lib/stores/error";
   import { settings } from "$lib/stores/settings";
   import { type Units, kgToHopDisplay, hopDisplayToKg, hopWeightLabel } from "$lib/units";
 
@@ -16,13 +17,13 @@
   let use_ = $state("boil");
   let time = $state(60);
 
-  onMount(async () => { library = await listHopLibrary(); });
+  onMount(async () => { library = await ipc(listHopLibrary()) ?? []; });
 
   const selectedLib = $derived(library.find((h) => h.id === selectedLibId));
 
   async function handleAdd() {
     if (!selectedLib) return;
-    await createRecipeHop(recipe.id, {
+    await ipc(createRecipeHop(recipe.id, {
       hop_id: selectedLib.id,
       name: selectedLib.name,
       alpha_pct: selectedLib.alpha_pct,
@@ -30,14 +31,14 @@
       amount_kg: amount,
       use_,
       time_min: time,
-    });
+    }));
     adding = false;
     selectedLibId = "";
     onchange();
   }
 
   async function handleDelete(id: string) {
-    await deleteRecipeHop(id);
+    await ipc(deleteRecipeHop(id));
     onchange();
   }
 
