@@ -201,6 +201,7 @@ impl TryFrom<entities::hops::Model> for Hop {
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Yeast {
+    // BeerXML fields
     pub id: String,
     pub name: String,
     pub type_: String,
@@ -210,11 +211,22 @@ pub struct Yeast {
     pub min_temperature_c: Option<f64>,
     pub max_temperature_c: Option<f64>,
     pub flocculation: Option<String>,
+    /// BeerXML single attenuation value; see min_attenuation_pct / max_attenuation_pct for range
     pub attenuation_pct: Option<f64>,
     pub notes: Option<String>,
     pub best_for: Option<String>,
     pub max_reuse: Option<i64>,
     pub add_to_secondary: bool,
+    // BeerMaverick extended fields
+    pub min_attenuation_pct: Option<f64>,
+    pub max_attenuation_pct: Option<f64>,
+    pub alcohol_tolerance: Option<String>,
+    pub flavor_profile: Option<String>,
+    pub styles: Option<String>,
+    pub substitutes: Option<String>,
+    pub species: Option<String>,
+    pub pof_positive: Option<bool>,
+    pub sta1_positive: Option<bool>,
 }
 
 impl TryFrom<entities::yeasts::Model> for Yeast {
@@ -235,6 +247,15 @@ impl TryFrom<entities::yeasts::Model> for Yeast {
             best_for: m.best_for,
             max_reuse: m.max_reuse.map(|v| v as i64),
             add_to_secondary: m.add_to_secondary.unwrap_or(0) != 0,
+            min_attenuation_pct: m.min_attenuation_pct,
+            max_attenuation_pct: m.max_attenuation_pct,
+            alcohol_tolerance: m.alcohol_tolerance,
+            flavor_profile: m.flavor_profile,
+            styles: m.styles,
+            substitutes: m.substitutes,
+            species: m.species,
+            pof_positive: m.pof_positive.map(|v| v != 0),
+            sta1_positive: m.sta1_positive.map(|v| v != 0),
         })
     }
 }
