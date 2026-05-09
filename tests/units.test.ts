@@ -1,11 +1,12 @@
-import { describe, expect, it } from "bun:test";
+import { describe, expect, it } from "vitest";
 import {
   kgToLb, lbToKg,
   kgToHopDisplay, hopDisplayToKg,
   lToGal, galToL,
   cToF, fToC,
   weightLabel, hopWeightLabel, volumeLabel, tempLabel,
-} from "./units";
+  lPerKgToQtPerLb, qtPerLbToLPerKg, ratioLabel,
+} from "$lib/units";
 
 describe("fermentable weight: kg ↔ lb", () => {
   it("converts 1 kg to lb", () => { expect(kgToLb(1)).toBeCloseTo(2.20462, 4); });
@@ -47,6 +48,12 @@ describe("temperature: °C ↔ °F", () => {
   it("round-trips", () => { expect(fToC(cToF(67))).toBeCloseTo(67, 4); });
 });
 
+describe("water:grain ratio: L/kg ↔ qt/lb", () => {
+  it("converts 3.0 L/kg to qt/lb", () => { expect(lPerKgToQtPerLb(3.0)).toBeCloseTo(1.438, 2); });
+  it("converts 1.5 qt/lb to L/kg", () => { expect(qtPerLbToLPerKg(1.5)).toBeCloseTo(3.130, 2); });
+  it("round-trips", () => { expect(qtPerLbToLPerKg(lPerKgToQtPerLb(3.0))).toBeCloseTo(3.0, 4); });
+});
+
 describe("label helpers", () => {
   it("weightLabel", () => {
     expect(weightLabel("metric")).toBe("kg");
@@ -63,5 +70,9 @@ describe("label helpers", () => {
   it("tempLabel", () => {
     expect(tempLabel("metric")).toBe("°C");
     expect(tempLabel("imperial")).toBe("°F");
+  });
+  it("ratioLabel", () => {
+    expect(ratioLabel("metric")).toBe("L/kg");
+    expect(ratioLabel("imperial")).toBe("qt/lb");
   });
 });
