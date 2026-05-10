@@ -1,18 +1,18 @@
-pub mod migration;
-pub mod entities;
-pub mod repositories;
-mod commands;
-mod error;
-pub mod models;
 pub mod brewing;
+mod commands;
+pub mod entities;
+mod error;
+pub mod migration;
+pub mod models;
+pub mod repositories;
 
 #[cfg(test)]
 mod test_helpers;
 
+use crate::migration::Migrator;
 use sea_orm::Database;
 use sea_orm_migration::MigratorTrait;
 use tauri::Manager;
-use crate::migration::Migrator;
 
 pub struct AppState {
     pub db: sea_orm::DatabaseConnection,
@@ -25,16 +25,9 @@ pub fn run() {
         .setup(|app| {
             let app_dir = app.path().app_data_dir()?;
             std::fs::create_dir_all(&app_dir)?;
-            let db_url = format!(
-                "sqlite://{}?mode=rwc",
-                app_dir.join("brewski.db").display()
-            );
-            let db = tauri::async_runtime::block_on(
-                Database::connect(&db_url)
-            )?;
-            tauri::async_runtime::block_on(
-                Migrator::up(&db, None)
-            )?;
+            let db_url = format!("sqlite://{}?mode=rwc", app_dir.join("brewski.db").display());
+            let db = tauri::async_runtime::block_on(Database::connect(&db_url))?;
+            tauri::async_runtime::block_on(Migrator::up(&db, None))?;
             app.manage(AppState { db });
             Ok(())
         })
@@ -80,6 +73,15 @@ pub fn run() {
             commands::settings::update_setting,
             commands::import_export::get_recipe_beerxml,
             commands::import_export::create_recipes_from_beerxml,
+            commands::tools::calculate_abv_calories,
+            commands::tools::correct_hydrometer_temp,
+            commands::tools::calculate_refractometer,
+            commands::tools::correct_refractometer_fg,
+            commands::tools::calculate_priming_sugar,
+            commands::tools::calculate_co2_pressure,
+            commands::tools::convert_gravity,
+            commands::tools::calculate_pitch_rate,
+            commands::tools::convert_color,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

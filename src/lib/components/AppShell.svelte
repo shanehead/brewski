@@ -9,6 +9,7 @@
   onMount(() => { loadSettings(); });
 
   const isRecipes = $derived($page.url.pathname === "/" || $page.url.pathname.startsWith("/recipe"));
+  const isTools = $derived($page.url.pathname.startsWith("/tools"));
 </script>
 
 <div class="flex h-screen overflow-hidden" style="background: var(--color-bg-base); color: var(--color-text-primary);">
@@ -25,6 +26,15 @@
         <line x1="16" y1="13" x2="8" y2="13"/>
         <line x1="16" y1="17" x2="8" y2="17"/>
         <polyline points="10 9 9 9 8 9"/>
+      </svg>
+    </a>
+
+    <!-- Tools icon -->
+    <a href="/tools" class="w-8 h-8 flex items-center justify-center rounded transition-colors"
+       aria-label="Tools"
+       style={isTools ? "background: var(--color-accent); color: #fff;" : "color: var(--color-text-secondary);"}>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M14.7 6.3a4 4 0 0 0 3 6.8l-7.4 7.4a2 2 0 0 1-2.8-2.8l7.4-7.4a4 4 0 0 1-5-5l2.3 2.3 2.8-2.8-2.3-2.5Z"/>
       </svg>
     </a>
 

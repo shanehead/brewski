@@ -14,12 +14,15 @@ pub fn calculate_calories_per_355ml(og: f64, fg: f64) -> f64 {
     // real_extract: Balling's formula weighting OG (18.08%) and FG (81.92%) Plato contributions.
     let real_extract = 0.1808 * og_to_plato(og) + 0.8192 * og_to_plato(fg);
     // 6.9 kcal/g alcohol, 4.0 kcal/g carbohydrate; fg * 10 converts density to g/100mL.
-    let calories_per_ml = (6.9 * alcohol_by_weight + 4.0 * (real_extract - 0.1)) * fg * 10.0 / 1000.0;
+    let calories_per_ml =
+        (6.9 * alcohol_by_weight + 4.0 * (real_extract - 0.1)) * fg * 10.0 / 1000.0;
     calories_per_ml * 355.0
 }
 
-fn og_to_plato(specific_gravity: f64) -> f64 {
-    (-1.0 * 616.868) + (1111.14 * specific_gravity) - (630.272 * specific_gravity * specific_gravity) + (135.997 * specific_gravity * specific_gravity * specific_gravity)
+pub(crate) fn og_to_plato(specific_gravity: f64) -> f64 {
+    (-1.0 * 616.868) + (1111.14 * specific_gravity)
+        - (630.272 * specific_gravity * specific_gravity)
+        + (135.997 * specific_gravity * specific_gravity * specific_gravity)
 }
 
 #[cfg(test)]
@@ -30,7 +33,10 @@ mod tests {
     fn test_fg_from_attenuation() {
         // OG 1.052, 75% attenuation → FG 1.013
         let fg = calculate_fg(1.052, 75.0);
-        assert!((fg - 1.013).abs() < 0.001, "FG was {fg:.4}, expected ~1.013");
+        assert!(
+            (fg - 1.013).abs() < 0.001,
+            "FG was {fg:.4}, expected ~1.013"
+        );
     }
 
     #[test]

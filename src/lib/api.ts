@@ -461,6 +461,41 @@ export interface Water {
   notes: string | null;
 }
 
+export type SugarType = "table_sugar" | "corn_sugar" | "dry_malt_extract";
+export type GravityUnit = "sg" | "plato" | "brix";
+export type ColorUnit = "srm" | "ebc" | "lovibond";
+
+export interface AbvCaloriesResult {
+  abvPct: number;
+  attenuationPct: number;
+  caloriesPer355ml: number;
+}
+
+export interface RefractometerResult {
+  sg: number;
+}
+
+export interface RefractometerFgResult {
+  fgSg: number;
+}
+
+export interface GravityConversionResult {
+  sg: number;
+  plato: number;
+  brix: number;
+}
+
+export interface PitchRateResult {
+  requiredCells: number;
+  starterVolumeL: number;
+}
+
+export interface ColorConversionResult {
+  srm: number;
+  ebc: number;
+  lovibond: number;
+}
+
 // --- Recipes ---
 export const listRecipes = () => invoke<RecipeSummary[]>("list_recipes");
 export const getRecipe = (id: string) => invoke<Recipe>("get_recipe", { id });
@@ -554,6 +589,55 @@ export const listWaterLibrary = () => invoke<Water[]>("list_water_library");
 export const getSettings = () => invoke<Record<string, string>>("get_settings");
 export const updateSetting = (key: string, value: string) =>
   invoke<void>("update_setting", { key, value });
+
+// --- Tools ---
+export const calculateAbvCalories = (og: number, fg: number) =>
+  invoke<AbvCaloriesResult>("calculate_abv_calories", { og, fg });
+export const correctHydrometerTemp = (
+  measuredSg: number,
+  measuredTempC: number,
+  calibrationTempC: number,
+) =>
+  invoke<number>("correct_hydrometer_temp", { measuredSg, measuredTempC, calibrationTempC });
+export const calculateRefractometer = (brix: number, wortCorrectionFactor: number) =>
+  invoke<RefractometerResult>("calculate_refractometer", { brix, wortCorrectionFactor });
+export const correctRefractometerFg = (
+  ogBrix: number,
+  fgBrix: number,
+  wortCorrectionFactor: number,
+) =>
+  invoke<RefractometerFgResult>("correct_refractometer_fg", {
+    ogBrix,
+    fgBrix,
+    wortCorrectionFactor,
+  });
+export const calculatePrimingSugar = (
+  targetVols: number,
+  batchSizeL: number,
+  tempC: number,
+  sugarType: SugarType,
+) =>
+  invoke<number>("calculate_priming_sugar", { targetVols, batchSizeL, tempC, sugarType });
+export const calculateCo2Pressure = (targetVols: number, tempC: number) =>
+  invoke<number>("calculate_co2_pressure", { targetVols, tempC });
+export const convertGravity = (value: number, fromUnit: GravityUnit) =>
+  invoke<GravityConversionResult>("convert_gravity", { value, fromUnit });
+export const calculatePitchRate = (
+  og: number,
+  batchSizeL: number,
+  pitchRate: number,
+  yeastPackCells: number,
+  viabilityPct: number,
+) =>
+  invoke<PitchRateResult>("calculate_pitch_rate", {
+    og,
+    batchSizeL,
+    pitchRate,
+    yeastPackCells,
+    viabilityPct,
+  });
+export const convertColor = (value: number, fromUnit: ColorUnit) =>
+  invoke<ColorConversionResult>("convert_color", { value, fromUnit });
 
 // --- Import / export ---
 export const getRecipeBeerxml = (recipeId: string) =>

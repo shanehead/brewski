@@ -1,6 +1,12 @@
 pub mod abv;
+pub mod carbonation;
+pub mod color;
+pub mod gravity;
+pub mod hydro;
 pub mod ibu;
 pub mod og;
+pub mod pitch;
+pub mod refractometer;
 pub mod srm;
 pub mod strike;
 pub mod volumes;
@@ -8,17 +14,22 @@ pub mod volumes;
 use crate::models::{Recipe, RecipeStats};
 
 pub fn calculate_stats(recipe: &Recipe) -> RecipeStats {
-    let efficiency = recipe.efficiency_pct
+    let efficiency = recipe
+        .efficiency_pct
         .or_else(|| recipe.equipment_profile.as_ref().map(|e| e.efficiency_pct))
         .unwrap_or(72.0);
 
-    let fermentable_inputs: Vec<(&f64, &f64, bool)> = recipe.fermentables.iter()
+    let fermentable_inputs: Vec<(&f64, &f64, bool)> = recipe
+        .fermentables
+        .iter()
         .map(|f| (&f.yield_pct, &f.amount_kg, f.add_after_boil))
         .collect();
 
     let og = og::calculate_og(&fermentable_inputs, recipe.batch_size_l, efficiency);
 
-    let fg = recipe.yeasts.iter()
+    let fg = recipe
+        .yeasts
+        .iter()
         .filter_map(|y| y.attenuation_pct)
         .next()
         .map(|attenuation| abv::calculate_fg(og, attenuation))
@@ -42,34 +53,49 @@ pub fn calculate_stats(recipe: &Recipe) -> RecipeStats {
         top_up_water,
     );
 
-    let pre_boil_gravity = volumes::calculate_pre_boil_gravity(og, post_boil_volume_l, pre_boil_volume_l);
+    let pre_boil_gravity =
+        volumes::calculate_pre_boil_gravity(og, post_boil_volume_l, pre_boil_volume_l);
 
-    let hop_inputs: Vec<(&f64, &f64, &f64, bool)> = recipe.hops.iter()
+    let hop_inputs: Vec<(&f64, &f64, &f64, bool)> = recipe
+        .hops
+        .iter()
         .map(|h| (&h.alpha_pct, &h.amount_kg, &h.time_min, h.use_ == "dry hop"))
         .collect();
 
     let ibu = ibu::tinseth_ibu(&hop_inputs, og, post_boil_volume_l);
 
-    let srm_inputs: Vec<(&f64, &f64)> = recipe.fermentables.iter()
+    let srm_inputs: Vec<(&f64, &f64)> = recipe
+        .fermentables
+        .iter()
         .map(|f| (&f.color_lovibond, &f.amount_kg))
         .collect();
 
     let srm = srm::morey_srm(&srm_inputs, recipe.batch_size_l);
 
     let gravity_units = (og - 1.0) * 1000.0;
-    let bu_gu_ratio = if gravity_units > 0.0 { ibu / gravity_units } else { 0.0 };
+    let bu_gu_ratio = if gravity_units > 0.0 {
+        ibu / gravity_units
+    } else {
+        0.0
+    };
 
     let strike_temp_c = recipe.mash.as_ref().and_then(|mash| {
         let grain_temp_c = mash.grain_temp_c;
         let target_temp_c = mash.steps.first()?.step_temp_c;
         let total_grain_kg: f64 = recipe.fermentables.iter().map(|f| f.amount_kg).sum();
         let derived_ratio = if total_grain_kg > 0.0 {
-            mash.steps.iter().find_map(|s| s.infuse_amount_l.map(|vol| vol / total_grain_kg))
+            mash.steps
+                .iter()
+                .find_map(|s| s.infuse_amount_l.map(|vol| vol / total_grain_kg))
         } else {
             None
         };
         let ratio = derived_ratio.or(mash.ratio_l_per_kg)?;
-        Some(strike::calculate_strike_temp(grain_temp_c, target_temp_c, ratio))
+        Some(strike::calculate_strike_temp(
+            grain_temp_c,
+            target_temp_c,
+            ratio,
+        ))
     });
 
     RecipeStats {
@@ -222,7 +248,10 @@ mod tests {
         recipe.yeasts[0].attenuation_pct = Some(75.0);
         let stats_75 = calculate_stats(&recipe);
 
-        assert!(stats_81.abv_pct > stats_75.abv_pct, "higher attenuation → higher ABV");
+        assert!(
+            stats_81.abv_pct > stats_75.abv_pct,
+            "higher attenuation → higher ABV"
+        );
     }
 
     #[test]
@@ -238,7 +267,11 @@ mod tests {
         assert!((stats_default.og - stats_explicit.og).abs() < 0.001);
     }
 
-    fn mash_with_infusion(grain_temp_c: f64, step_temp_c: f64, infuse_amount_l: f64) -> crate::models::Mash {
+    fn mash_with_infusion(
+        grain_temp_c: f64,
+        step_temp_c: f64,
+        infuse_amount_l: f64,
+    ) -> crate::models::Mash {
         crate::models::Mash {
             id: "m1".into(),
             recipe_id: "r1".into(),
@@ -271,12 +304,15 @@ mod tests {
     fn test_strike_temp_derived_from_infuse_amount() {
         let mut recipe = minimal_recipe();
         recipe.fermentables = vec![pale_malt()]; // pale_malt() has amount_kg: 4.5
-        // ratio = 15.0 L / 4.5 kg = 3.333 L/kg
-        // strike = (0.41/3.333)*(67-20)+67 = 0.123*47+67 = 5.78+67 = 72.78°C
+                                                 // ratio = 15.0 L / 4.5 kg = 3.333 L/kg
+                                                 // strike = (0.41/3.333)*(67-20)+67 = 0.123*47+67 = 5.78+67 = 72.78°C
         recipe.mash = Some(mash_with_infusion(20.0, 67.0, 15.0));
         let stats = calculate_stats(&recipe);
         let strike = stats.strike_temp_c.expect("strike_temp_c should be Some");
-        assert!((strike - 72.78).abs() < 0.5, "expected ~72.78°C, got {strike:.2}");
+        assert!(
+            (strike - 72.78).abs() < 0.5,
+            "expected ~72.78°C, got {strike:.2}"
+        );
     }
 
     #[test]
@@ -297,8 +333,13 @@ mod tests {
         mash.ratio_l_per_kg = Some(3.333);
         recipe.mash = Some(mash);
         let stats = calculate_stats(&recipe);
-        let strike = stats.strike_temp_c.expect("should fall back to stored ratio");
-        assert!((strike - 72.78).abs() < 0.5, "expected ~72.78°C, got {strike:.2}");
+        let strike = stats
+            .strike_temp_c
+            .expect("should fall back to stored ratio");
+        assert!(
+            (strike - 72.78).abs() < 0.5,
+            "expected ~72.78°C, got {strike:.2}"
+        );
     }
 
     #[test]
