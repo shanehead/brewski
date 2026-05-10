@@ -1,39 +1,28 @@
 <script lang="ts">
-  import type { Recipe, Hop } from "$lib/api";
-  import { listHopLibrary, createRecipeHop, deleteRecipeHop } from "$lib/api";
-  import { onMount } from "svelte";
+  import type { Recipe } from "$lib/api";
+  import { createRecipeHop, deleteRecipeHop } from "$lib/api";
   import { ipc } from "$lib/stores/error";
   import { settings } from "$lib/stores/settings";
-  import { type Units, kgToHopDisplay, hopDisplayToKg, hopWeightLabel } from "$lib/units";
+  import { type Units, kgToHopDisplay, hopWeightLabel } from "$lib/units";
+  import IngredientPicker, { type AddPayload } from "./IngredientPicker.svelte";
 
   let { recipe, onchange }: { recipe: Recipe; onchange: () => void } = $props();
 
-  let library = $state<Hop[]>([]);
   let adding = $state(false);
-  let selectedLibId = $state("");
-  let amount = $state(0.028); // always kg internally
-
   const units = $derived<Units>($settings.units === "imperial" ? "imperial" : "metric");
-  let use_ = $state("boil");
-  let time = $state(60);
 
-  onMount(async () => { library = await ipc(listHopLibrary()) ?? []; });
-
-  const selectedLib = $derived(library.find((h) => h.id === selectedLibId));
-
-  async function handleAdd() {
-    if (!selectedLib) return;
+  async function handlePickerAdd(payload: AddPayload) {
+    if (payload.type !== "hop") return;
     await ipc(createRecipeHop(recipe.id, {
-      hop_id: selectedLib.id,
-      name: selectedLib.name,
-      alpha_pct: selectedLib.alpha_pct,
-      form: selectedLib.form,
-      amount_kg: amount,
-      use_,
-      time_min: time,
+      hop_id: payload.item.id,
+      name: payload.item.name,
+      alpha_pct: payload.item.alpha_pct,
+      form: payload.item.form,
+      amount_kg: payload.amount_kg,
+      use_: payload.use_,
+      time_min: payload.time_min,
     }));
     adding = false;
-    selectedLibId = "";
     onchange();
   }
 
@@ -41,59 +30,21 @@
     await ipc(deleteRecipeHop(id));
     onchange();
   }
-
-  const HOP_USES = ["boil", "aroma", "dry hop", "first wort", "whirlpool"] as const;
 </script>
 
 <div class="flex flex-col gap-2">
   <div class="flex items-center justify-between">
     <h3 class="text-sm font-semibold" style="color: var(--color-text-primary);">Hops</h3>
-    <button onclick={() => adding = !adding} class="text-xs px-2 py-1 rounded"
+    <button onclick={() => adding = true} class="text-xs px-2 py-1 rounded"
             style="background: var(--color-accent); color: #fff;">+ Add</button>
   </div>
 
-  {#if adding}
-    <div class="flex flex-wrap gap-2 items-end p-2 rounded" style="background: var(--color-bg-elevated);">
-      <div class="flex-1 min-w-32">
-        <label for="hop-select" class="text-xs mb-1 block" style="color: var(--color-text-secondary);">Hop</label>
-        <select id="hop-select" bind:value={selectedLibId} class="w-full px-2 py-1.5 rounded text-sm"
-                style="background: var(--color-bg-base); color: var(--color-text-primary); border: 1px solid var(--color-border);">
-          <option value="">Choose…</option>
-          {#each library as h}
-            <option value={h.id}>{h.name} ({h.alpha_pct}% AA)</option>
-          {/each}
-        </select>
-      </div>
-      <div class="w-20">
-        <label for="hop-amount" class="text-xs mb-1 block" style="color: var(--color-text-secondary);">Amount ({hopWeightLabel(units)})</label>
-        <input id="hop-amount" type="number" step={units === "imperial" ? 0.1 : 1}
-               value={kgToHopDisplay(amount, units).toFixed(units === "imperial" ? 2 : 0)}
-               oninput={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); if (!isNaN(v) && v > 0) amount = hopDisplayToKg(v, units); }}
-               min="0.001"
-               class="w-full px-2 py-1.5 rounded text-sm"
-               style="background: var(--color-bg-base); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
-      </div>
-      <div class="w-28">
-        <label for="hop-use" class="text-xs mb-1 block" style="color: var(--color-text-secondary);">Use</label>
-        <select id="hop-use" bind:value={use_} class="w-full px-2 py-1.5 rounded text-sm"
-                style="background: var(--color-bg-base); color: var(--color-text-primary); border: 1px solid var(--color-border);">
-          {#each HOP_USES as u}
-            <option value={u}>{u}</option>
-          {/each}
-        </select>
-      </div>
-      <div class="w-16">
-        <label for="hop-time" class="text-xs mb-1 block" style="color: var(--color-text-secondary);">Time (min)</label>
-        <input id="hop-time" type="number" step="5" bind:value={time} min="0"
-               class="w-full px-2 py-1.5 rounded text-sm"
-               style="background: var(--color-bg-base); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
-      </div>
-      <button onclick={handleAdd} class="text-xs px-3 py-1.5 rounded self-end"
-              style="background: var(--color-accent); color: #fff;">Add</button>
-      <button onclick={() => adding = false} class="text-xs px-2 py-1.5 rounded self-end"
-              style="color: var(--color-text-secondary);">Cancel</button>
-    </div>
-  {/if}
+  <IngredientPicker
+    type="hop"
+    open={adding}
+    onclose={() => adding = false}
+    onadd={handlePickerAdd}
+  />
 
   {#if recipe.hops.length > 0}
     <table class="w-full text-sm">
