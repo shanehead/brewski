@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { Recipe } from "$lib/api";
   import { createRecipeYeast, deleteRecipeYeast } from "$lib/api";
+  import BrewingIcon from "$lib/components/BrewingIcon.svelte";
   import { ipc } from "$lib/stores/error";
   import IngredientPicker, { type AddPayload } from "./IngredientPicker.svelte";
 
@@ -33,7 +34,10 @@
 
 <div class="flex flex-col gap-2">
   <div class="flex items-center justify-between">
-    <h3 class="text-sm font-semibold" style="color: var(--color-text-primary);">Yeast</h3>
+    <h3 class="text-sm font-semibold flex items-center gap-2" style="color: var(--color-text-primary);">
+      <BrewingIcon name="yeast" />
+      Yeast
+    </h3>
     <button onclick={() => adding = true} class="text-xs px-2 py-1 rounded"
             style="background: var(--color-accent); color: #fff;">+ Add</button>
   </div>

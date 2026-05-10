@@ -7,11 +7,13 @@
   import { ipc } from "$lib/stores/error";
   import RecipeList from "$lib/components/RecipeList.svelte";
   import StatsSidebar from "$lib/components/StatsSidebar.svelte";
+  import BrewingIcon from "$lib/components/BrewingIcon.svelte";
   import OverviewTab from "$lib/components/tabs/OverviewTab.svelte";
   import IngredientsTab from "$lib/components/tabs/IngredientsTab.svelte";
   import MashTab from "$lib/components/tabs/MashTab.svelte";
   import FermentationTab from "$lib/components/tabs/FermentationTab.svelte";
   import NotesTab from "$lib/components/tabs/NotesTab.svelte";
+  import type { BrewingIconName } from "$lib/icons";
 
   let { data }: { data: PageData } = $props();
 
@@ -20,12 +22,12 @@
   let activeTab = $state<"overview" | "ingredients" | "mash" | "fermentation" | "notes">("overview");
   let saving = $state(false);
 
-  const TABS = [
-    { key: "overview", label: "Overview" },
-    { key: "ingredients", label: "Ingredients" },
-    { key: "mash", label: "Mash" },
-    { key: "fermentation", label: "Fermentation" },
-    { key: "notes", label: "Notes" },
+  const TABS: { key: "overview" | "ingredients" | "mash" | "fermentation" | "notes"; label: string; icon: BrewingIconName }[] = [
+    { key: "overview", label: "Overview", icon: "overview" },
+    { key: "ingredients", label: "Ingredients", icon: "ingredients" },
+    { key: "mash", label: "Mash", icon: "mash" },
+    { key: "fermentation", label: "Fermentation", icon: "fermentation" },
+    { key: "notes", label: "Notes", icon: "notes" },
   ] as const;
 
   onMount(async () => {
@@ -80,11 +82,12 @@
       {#each TABS as tab}
         <button
           onclick={() => activeTab = tab.key}
-          class="px-4 py-2 text-sm border-b-2 transition-colors"
+          class="px-4 py-2 text-sm border-b-2 transition-colors inline-flex items-center gap-2"
           style={activeTab === tab.key
             ? "border-color: var(--color-accent); color: var(--color-text-primary);"
             : "border-color: transparent; color: var(--color-text-secondary);"}
         >
+          <BrewingIcon name={tab.icon} />
           {tab.label}
         </button>
       {/each}

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import BrewingIcon from "$lib/components/BrewingIcon.svelte";
   import type { Hop, Fermentable, Yeast } from '$lib/api';
   import { listHopLibrary, listFermentableLibrary, listYeastLibrary } from '$lib/api';
   import { ipc } from '$lib/stores/error';
@@ -8,6 +9,7 @@
     kgToLb, lbToKg, weightLabel,
     type Units,
   } from '$lib/units';
+  import type { BrewingIconName } from "$lib/icons";
   export type AddPayload =
     | { type: 'hop'; item: Hop; amount_kg: number; use_: string; time_min: number }
     | { type: 'fermentable'; item: Fermentable; amount_kg: number }
@@ -120,6 +122,14 @@
   function fmt(val: number | null, digits = 1): string {
     return val == null ? '—' : val.toFixed(digits);
   }
+
+  const headerIcon = $derived<BrewingIconName>(
+    type === "hop" ? "hop" : type === "fermentable" ? "fermentable" : "yeast"
+  );
+
+  const headerTitle = $derived(
+    type === "hop" ? "Add Hop" : type === "fermentable" ? "Add Fermentable" : "Add Yeast"
+  );
 </script>
 
 <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
@@ -131,12 +141,33 @@
     width: 80vw; max-width: 960px; min-width: 560px; height: 75vh;
     background: var(--color-bg-surface); border: 1px solid var(--color-border);
     border-radius: 10px; padding: 0; color: var(--color-text-primary); overflow: hidden;
+    position: relative;
   "
 >
+  <button
+    onclick={onclose}
+    style="
+      position: absolute; top: 10px; right: 12px;
+      background: none; border: none; cursor: pointer;
+      font-size: 18px; line-height: 1; padding: 2px 6px;
+      color: var(--color-text-muted); border-radius: 4px;
+    "
+    onmouseenter={(e) => (e.currentTarget as HTMLButtonElement).style.color = 'var(--color-text-primary)'}
+    onmouseleave={(e) => (e.currentTarget as HTMLButtonElement).style.color = 'var(--color-text-muted)'}
+  >×</button>
+
   <div style="display: flex; height: 100%;">
 
     <!-- Left: search + list -->
     <div style="width: 38%; min-width: 200px; display: flex; flex-direction: column; border-right: 1px solid var(--color-border); padding: 12px; gap: 8px;">
+      <div style="display: flex; align-items: center; gap: 8px; padding-right: 28px; min-height: 28px;">
+        <span style="font-size: 18px; line-height: 1; display: inline-flex; align-items: center;">
+          <BrewingIcon name={headerIcon} />
+        </span>
+        <h2 style="font-size: 15px; font-weight: 700; margin: 0; color: var(--color-text-primary);">
+          {headerTitle}
+        </h2>
+      </div>
       <input
         bind:this={searchInput}
         bind:value={query}
@@ -375,6 +406,13 @@
 </dialog>
 
 <style>
+  dialog {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+  }
   dialog::backdrop {
     background: rgba(0, 0, 0, 0.7);
   }

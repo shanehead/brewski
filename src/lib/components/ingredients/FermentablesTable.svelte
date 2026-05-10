@@ -4,6 +4,7 @@
   import { ipc } from "$lib/stores/error";
   import { settings } from "$lib/stores/settings";
   import { type Units, kgToLb, lbToKg, weightLabel } from "$lib/units";
+  import BrewingIcon from "$lib/components/BrewingIcon.svelte";
   import IngredientPicker, { type AddPayload } from "./IngredientPicker.svelte";
 
   let { recipe, onchange }: { recipe: Recipe; onchange: () => void } = $props();
@@ -42,7 +43,10 @@
 
 <div class="flex flex-col gap-2">
   <div class="flex items-center justify-between">
-    <h3 class="text-sm font-semibold" style="color: var(--color-text-primary);">Fermentables</h3>
+    <h3 class="text-sm font-semibold flex items-center gap-2" style="color: var(--color-text-primary);">
+      <BrewingIcon name="fermentable" />
+      Fermentables
+    </h3>
     <button onclick={() => adding = true} class="text-xs px-2 py-1 rounded"
             style="background: var(--color-accent); color: #fff;">+ Add</button>
   </div>
