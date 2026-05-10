@@ -10,7 +10,7 @@
 
   async function handlePickerAdd(payload: AddPayload) {
     if (payload.type !== "yeast") return;
-    await ipc(createRecipeYeast(recipe.id, {
+    const result = await ipc(createRecipeYeast(recipe.id, {
       yeast_id: payload.item.id,
       name: payload.item.name,
       type_: payload.item.type_,
@@ -20,6 +20,7 @@
       attenuation_pct: payload.item.attenuation_pct,
       amount: payload.amount,
     }));
+    if (result === undefined) return;
     adding = false;
     onchange();
   }

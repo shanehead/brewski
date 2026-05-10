@@ -13,7 +13,7 @@
 
   async function handlePickerAdd(payload: AddPayload) {
     if (payload.type !== "fermentable") return;
-    await ipc(createRecipeFermentable(recipe.id, {
+    const result = await ipc(createRecipeFermentable(recipe.id, {
       fermentable_id: payload.item.id,
       name: payload.item.name,
       type_: payload.item.type_,
@@ -21,6 +21,7 @@
       color_lovibond: payload.item.color_lovibond,
       amount_kg: payload.amount_kg,
     }));
+    if (result === undefined) return;
     adding = false;
     onchange();
   }

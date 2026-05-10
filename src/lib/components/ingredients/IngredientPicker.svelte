@@ -8,8 +8,6 @@
     kgToLb, lbToKg, weightLabel,
     type Units,
   } from '$lib/units';
-  import { onMount } from 'svelte';
-
   export type AddPayload =
     | { type: 'hop'; item: Hop; amount_kg: number; use_: string; time_min: number }
     | { type: 'fermentable'; item: Fermentable; amount_kg: number }
@@ -30,8 +28,10 @@
   } = $props();
 
   let dialog = $state<HTMLDialogElement | null>(null);
+  let searchInput = $state<HTMLInputElement | null>(null);
   let query = $state('');
   let library = $state<(Hop | Fermentable | Yeast)[]>([]);
+  let libraryLoaded = $state(false);
   let selected = $state<Hop | Fermentable | Yeast | null>(null);
   let amount = $state(0);
   let use_ = $state('boil');
@@ -39,18 +39,23 @@
 
   const units = $derived<Units>($settings.units === 'imperial' ? 'imperial' : 'metric');
 
-  onMount(async () => {
+  async function loadLibrary() {
+    if (libraryLoaded) return;
     if (type === 'hop') library = (await ipc(listHopLibrary())) ?? [];
     else if (type === 'fermentable') library = (await ipc(listFermentableLibrary())) ?? [];
     else library = (await ipc(listYeastLibrary())) ?? [];
-  });
+    libraryLoaded = true;
+  }
 
   $effect(() => {
     if (!dialog) return;
     if (open) {
+      loadLibrary();
       dialog.showModal();
       query = '';
       selected = null;
+      // autofocus only fires once per element; explicitly focus on each open
+      setTimeout(() => searchInput?.focus(), 0);
     } else if (dialog.open) {
       dialog.close();
     }
@@ -133,9 +138,9 @@
     <!-- Left: search + list -->
     <div style="width: 38%; min-width: 200px; display: flex; flex-direction: column; border-right: 1px solid var(--color-border); padding: 12px; gap: 8px;">
       <input
+        bind:this={searchInput}
         bind:value={query}
         placeholder="Search {type === 'hop' ? 'hops' : type === 'fermentable' ? 'fermentables' : 'yeasts'}…"
-        autofocus
         style="
           background: var(--color-bg-elevated); border: 1px solid var(--color-border);
           border-radius: 6px; padding: 7px 10px; font-size: 13px;
@@ -211,7 +216,7 @@
             <div style="font-size: 10px; color: var(--color-text-muted); margin-bottom: 4px;">Amount ({hopWeightLabel(units)})</div>
             <input type="number" step={units === 'imperial' ? 0.1 : 1}
               value={kgToHopDisplay(amount, units).toFixed(units === 'imperial' ? 2 : 0)}
-              oninput={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); if (!isNaN(v) && v > 0) amount = hopDisplayToKg(v, units); }}
+              oninput={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); if (!isNaN(v)) amount = hopDisplayToKg(v, units); }}
               min="0.001"
               style="width: 70px; background: var(--color-bg-elevated); border: 1px solid var(--color-border); border-radius: 5px; padding: 5px 8px; color: var(--color-text-primary); font-size: 13px;" />
           </div>
@@ -271,7 +276,7 @@
             <div style="font-size: 10px; color: var(--color-text-muted); margin-bottom: 4px;">Amount ({weightLabel(units)})</div>
             <input type="number" step={units === 'imperial' ? 0.1 : 0.05}
               value={(units === 'imperial' ? kgToLb(amount) : amount).toFixed(2)}
-              oninput={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); if (!isNaN(v) && v > 0) amount = units === 'imperial' ? lbToKg(v) : v; }}
+              oninput={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); if (!isNaN(v)) amount = units === 'imperial' ? lbToKg(v) : v; }}
               min="0.01"
               style="width: 80px; background: var(--color-bg-elevated); border: 1px solid var(--color-border); border-radius: 5px; padding: 5px 8px; color: var(--color-text-primary); font-size: 13px;" />
           </div>

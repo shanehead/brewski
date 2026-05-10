@@ -13,7 +13,7 @@
 
   async function handlePickerAdd(payload: AddPayload) {
     if (payload.type !== "hop") return;
-    await ipc(createRecipeHop(recipe.id, {
+    const result = await ipc(createRecipeHop(recipe.id, {
       hop_id: payload.item.id,
       name: payload.item.name,
       alpha_pct: payload.item.alpha_pct,
@@ -22,6 +22,7 @@
       use_: payload.use_,
       time_min: payload.time_min,
     }));
+    if (result === undefined) return;
     adding = false;
     onchange();
   }
