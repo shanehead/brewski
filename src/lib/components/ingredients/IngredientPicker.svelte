@@ -196,7 +196,7 @@
               "
             >
               <span style="font-size: 13px; color: var(--color-text-primary);">{item.name}</span>
-              <span style="font-size: 11px; color: var(--color-text-muted); white-space: nowrap;">{rowSubtext(item)}</span>
+              <span style="font-size: 12px; color: var(--color-text-secondary); white-space: nowrap;">{rowSubtext(item)}</span>
             </button>
           {/each}
         {/if}
@@ -228,7 +228,7 @@
           <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;">
             {#each [['Alpha', hop.alpha_pct + '%'], ['Beta', fmt(hop.beta_pct) + '%'], ['Cohumulone', fmt(hop.cohumulone_pct) + '%'], ['Myrcene', fmt(hop.myrcene_pct) + '%'], ['Humulene', fmt(hop.humulene_pct) + '%'], ['Caryophyllene', fmt(hop.caryophyllene_pct) + '%']] as [label, value]}
               <div style="background: var(--color-bg-elevated); border-radius: 5px; padding: 6px 8px;">
-                <div style="font-size: 10px; color: var(--color-text-muted);">{label}</div>
+                <div style="font-size: 11px; color: var(--color-text-secondary);">{label}</div>
                 <div style="font-size: 13px; font-weight: 600;">{value}</div>
               </div>
             {/each}
@@ -244,7 +244,7 @@
         </div>
         <div style="border-top: 1px solid var(--color-border); padding: 12px 16px; display: flex; gap: 10px; align-items: flex-end; background: var(--color-bg-surface); flex-shrink: 0;">
           <div>
-            <div style="font-size: 10px; color: var(--color-text-muted); margin-bottom: 4px;">Amount ({hopWeightLabel(units)})</div>
+            <div style="font-size: 11px; color: var(--color-text-secondary); margin-bottom: 4px;">Amount ({hopWeightLabel(units)})</div>
             <input type="number" step={units === 'imperial' ? 0.1 : 1}
               value={kgToHopDisplay(amount, units).toFixed(units === 'imperial' ? 2 : 0)}
               oninput={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); if (!isNaN(v)) amount = hopDisplayToKg(v, units); }}
@@ -252,13 +252,13 @@
               style="width: 70px; background: var(--color-bg-elevated); border: 1px solid var(--color-border); border-radius: 5px; padding: 5px 8px; color: var(--color-text-primary); font-size: 13px;" />
           </div>
           <div>
-            <div style="font-size: 10px; color: var(--color-text-muted); margin-bottom: 4px;">Use</div>
+            <div style="font-size: 11px; color: var(--color-text-secondary); margin-bottom: 4px;">Use</div>
             <select bind:value={use_} style="background: var(--color-bg-elevated); border: 1px solid var(--color-border); border-radius: 5px; padding: 5px 8px; color: var(--color-text-primary); font-size: 13px;">
               {#each HOP_USES as u}<option value={u}>{u}</option>{/each}
             </select>
           </div>
           <div>
-            <div style="font-size: 10px; color: var(--color-text-muted); margin-bottom: 4px;">Time (min)</div>
+            <div style="font-size: 11px; color: var(--color-text-secondary); margin-bottom: 4px;">Time (min)</div>
             <input type="number" step="5" bind:value={time} min="0"
               style="width: 60px; background: var(--color-bg-elevated); border: 1px solid var(--color-border); border-radius: 5px; padding: 5px 8px; color: var(--color-text-primary); font-size: 13px;" />
           </div>
@@ -282,29 +282,29 @@
           </div>
           <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;">
             <div style="background: var(--color-bg-elevated); border-radius: 5px; padding: 6px 8px;">
-              <div style="font-size: 10px; color: var(--color-text-muted);">Yield</div>
+              <div style="font-size: 11px; color: var(--color-text-secondary);">Yield</div>
               <div style="font-size: 13px; font-weight: 600;">{ferm.yield_pct.toFixed(1)}%</div>
             </div>
             <div style="background: var(--color-bg-elevated); border-radius: 5px; padding: 6px 8px;">
-              <div style="font-size: 10px; color: var(--color-text-muted);">Color</div>
+              <div style="font-size: 11px; color: var(--color-text-secondary);">Color</div>
               <div style="font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 5px;">
                 <span style="display: inline-block; width: 12px; height: 12px; border-radius: 2px; background: {srmToHex(ferm.color_lovibond)};"></span>
                 {ferm.color_lovibond}°L
               </div>
             </div>
             <div style="background: var(--color-bg-elevated); border-radius: 5px; padding: 6px 8px;">
-              <div style="font-size: 10px; color: var(--color-text-muted);">Diastatic Power</div>
+              <div style="font-size: 11px; color: var(--color-text-secondary);">Diastatic Power</div>
               <div style="font-size: 13px; font-weight: 600;">{ferm.diastatic_power_lintner != null ? ferm.diastatic_power_lintner + '°L' : '—'}</div>
             </div>
             <div style="background: var(--color-bg-elevated); border-radius: 5px; padding: 6px 8px;">
-              <div style="font-size: 10px; color: var(--color-text-muted);">Max in Batch</div>
+              <div style="font-size: 11px; color: var(--color-text-secondary);">Max in Batch</div>
               <div style="font-size: 13px; font-weight: 600;">{ferm.max_in_batch_pct != null ? ferm.max_in_batch_pct + '%' : '—'}</div>
             </div>
           </div>
         </div>
         <div style="border-top: 1px solid var(--color-border); padding: 12px 16px; display: flex; gap: 10px; align-items: flex-end; background: var(--color-bg-surface); flex-shrink: 0;">
           <div>
-            <div style="font-size: 10px; color: var(--color-text-muted); margin-bottom: 4px;">Amount ({weightLabel(units)})</div>
+            <div style="font-size: 11px; color: var(--color-text-secondary); margin-bottom: 4px;">Amount ({weightLabel(units)})</div>
             <input type="number" step={units === 'imperial' ? 0.1 : 0.05}
               value={(units === 'imperial' ? kgToLb(amount) : amount).toFixed(2)}
               oninput={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); if (!isNaN(v)) amount = units === 'imperial' ? lbToKg(v) : v; }}
@@ -337,7 +337,7 @@
           </div>
           <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;">
             <div style="background: var(--color-bg-elevated); border-radius: 5px; padding: 6px 8px;">
-              <div style="font-size: 10px; color: var(--color-text-muted);">Attenuation</div>
+              <div style="font-size: 11px; color: var(--color-text-secondary);">Attenuation</div>
               <div style="font-size: 13px; font-weight: 600;">
                 {yeast.min_attenuation_pct != null && yeast.max_attenuation_pct != null
                   ? `${yeast.min_attenuation_pct}–${yeast.max_attenuation_pct}%`
@@ -345,28 +345,28 @@
               </div>
             </div>
             <div style="background: var(--color-bg-elevated); border-radius: 5px; padding: 6px 8px;">
-              <div style="font-size: 10px; color: var(--color-text-muted);">Temperature</div>
+              <div style="font-size: 11px; color: var(--color-text-secondary);">Temperature</div>
               <div style="font-size: 13px; font-weight: 600;">
                 {yeast.min_temperature_c != null && yeast.max_temperature_c != null
                   ? `${yeast.min_temperature_c}–${yeast.max_temperature_c}°C` : '—'}
               </div>
             </div>
             <div style="background: var(--color-bg-elevated); border-radius: 5px; padding: 6px 8px;">
-              <div style="font-size: 10px; color: var(--color-text-muted);">Flocculation</div>
+              <div style="font-size: 11px; color: var(--color-text-secondary);">Flocculation</div>
               <div style="font-size: 13px; font-weight: 600;">{yeast.flocculation ?? '—'}</div>
             </div>
             <div style="background: var(--color-bg-elevated); border-radius: 5px; padding: 6px 8px;">
-              <div style="font-size: 10px; color: var(--color-text-muted);">Alcohol Tolerance</div>
+              <div style="font-size: 11px; color: var(--color-text-secondary);">Alcohol Tolerance</div>
               <div style="font-size: 13px; font-weight: 600;">{yeast.alcohol_tolerance ?? '—'}</div>
             </div>
             <div style="background: var(--color-bg-elevated); border-radius: 5px; padding: 6px 8px;">
-              <div style="font-size: 10px; color: var(--color-text-muted);">Phenolic</div>
+              <div style="font-size: 11px; color: var(--color-text-secondary);">Phenolic</div>
               <div style="font-size: 13px; font-weight: 600;">
                 {yeast.pof_positive == null ? '—' : yeast.pof_positive ? 'Yes' : 'No'}
               </div>
             </div>
             <div style="background: var(--color-bg-elevated); border-radius: 5px; padding: 6px 8px;">
-              <div style="font-size: 10px; color: var(--color-text-muted);">Diastaticus</div>
+              <div style="font-size: 11px; color: var(--color-text-secondary);">Diastaticus</div>
               <div style="font-size: 13px; font-weight: 600;">
                 {yeast.sta1_positive == null ? '—' : yeast.sta1_positive ? 'Yes' : 'No'}
               </div>
@@ -388,7 +388,7 @@
         </div>
         <div style="border-top: 1px solid var(--color-border); padding: 12px 16px; display: flex; gap: 10px; align-items: flex-end; background: var(--color-bg-surface); flex-shrink: 0;">
           <div>
-            <div style="font-size: 10px; color: var(--color-text-muted); margin-bottom: 4px;">Packages</div>
+            <div style="font-size: 11px; color: var(--color-text-secondary); margin-bottom: 4px;">Packages</div>
             <input type="number" step="1"
               value={amount}
               oninput={(e) => { const v = parseInt((e.target as HTMLInputElement).value, 10); if (!isNaN(v) && v > 0) amount = v; }}
