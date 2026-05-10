@@ -149,7 +149,14 @@ mod tests {
 
         let result = LibraryRepository::new(&db).list_yeasts().await.unwrap();
         assert!(!result.is_empty());
-        assert_eq!(result[0].name, "Test Yeast");
+        assert!(result
+            .iter()
+            .any(|yeast| yeast.id == yeast_id && yeast.name == "Test Yeast"));
+
+        let names: Vec<&str> = result.iter().map(|yeast| yeast.name.as_str()).collect();
+        let mut sorted_names = names.clone();
+        sorted_names.sort_unstable();
+        assert_eq!(names, sorted_names);
     }
 
     #[tokio::test]
