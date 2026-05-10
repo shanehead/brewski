@@ -216,13 +216,35 @@ export interface Fermentable {
   type_: string;
   yield_pct: number;
   color_lovibond: number;
+  origin: string | null;
+  supplier: string | null;
+  notes: string | null;
+  add_after_boil: boolean;
+  coarse_fine_diff_pct: number | null;
+  moisture_pct: number | null;
+  diastatic_power_lintner: number | null;
+  protein_pct: number | null;
+  max_in_batch_pct: number | null;
+  recommend_mash: boolean | null;
+  ibu_gal_per_lb: number | null;
 }
 
 export interface Hop {
   id: string;
   name: string;
   alpha_pct: number;
+  beta_pct: number | null;
   form: string;
+  type_: string | null;
+  origin: string | null;
+  year: string | null;
+  notes: string | null;
+  substitutes: string | null;
+  hsi_pct: number | null;
+  humulene_pct: number | null;
+  caryophyllene_pct: number | null;
+  cohumulone_pct: number | null;
+  myrcene_pct: number | null;
 }
 
 export interface Yeast {
