@@ -17,20 +17,27 @@ impl MigrationTrait for Migration {
     }
 
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
-        let tables = [
-            "settings", "mash_steps", "mashes",
-            "recipe_addition_waters", "recipe_addition_miscs",
-            "recipe_addition_yeasts", "recipe_addition_hops",
-            "recipe_addition_fermentables", "recipes",
-            "waters", "miscs", "yeasts", "hops", "fermentables",
-            "equipment_profiles", "styles",
-        ];
-        for table in tables {
-            manager
-                .get_connection()
-                .execute_unprepared(&format!("DROP TABLE IF EXISTS {table}"))
-                .await?;
-        }
+        manager
+            .get_connection()
+            .execute_unprepared(
+                "DROP TABLE IF EXISTS mash_steps;
+                 DROP TABLE IF EXISTS mashes;
+                 DROP TABLE IF EXISTS recipe_addition_waters;
+                 DROP TABLE IF EXISTS recipe_addition_miscs;
+                 DROP TABLE IF EXISTS recipe_addition_yeasts;
+                 DROP TABLE IF EXISTS recipe_addition_hops;
+                 DROP TABLE IF EXISTS recipe_addition_fermentables;
+                 DROP TABLE IF EXISTS recipes;
+                 DROP TABLE IF EXISTS waters;
+                 DROP TABLE IF EXISTS miscs;
+                 DROP TABLE IF EXISTS yeasts;
+                 DROP TABLE IF EXISTS hops;
+                 DROP TABLE IF EXISTS fermentables;
+                 DROP TABLE IF EXISTS equipment_profiles;
+                 DROP TABLE IF EXISTS styles;
+                 DROP TABLE IF EXISTS settings;",
+            )
+            .await?;
         Ok(())
     }
 }
