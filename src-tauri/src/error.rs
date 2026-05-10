@@ -20,7 +20,10 @@ mod tests {
 
     #[test]
     fn test_serialize_to_string() {
-        assert_eq!(serde_json::to_string(&AppError::NotFound).unwrap(), "\"not found\"");
+        assert_eq!(
+            serde_json::to_string(&AppError::NotFound).unwrap(),
+            "\"not found\""
+        );
         assert_eq!(
             serde_json::to_string(&AppError::Conversion("bad value".into())).unwrap(),
             "\"conversion error: bad value\""

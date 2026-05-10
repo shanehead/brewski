@@ -1,16 +1,13 @@
-use sea_orm::{
-    ActiveModelTrait, DatabaseConnection, EntityTrait, QueryOrder, Set,
-};
+use sea_orm::{ActiveModelTrait, DatabaseConnection, EntityTrait, QueryOrder, Set};
 
 use crate::entities::{recipes, styles};
 use crate::error::AppError;
 use crate::models::{
     CreateFermentableAdditionInput, CreateHopAdditionInput, CreateMiscAdditionInput,
-    CreateRecipeInput, CreateWaterAdditionInput, CreateYeastAdditionInput,
-    Recipe, RecipeSummary, UpdateRecipeInput,
+    CreateRecipeInput, CreateWaterAdditionInput, CreateYeastAdditionInput, Recipe, RecipeSummary,
+    UpdateRecipeInput,
 };
 
-use super::{new_id, now_secs};
 use super::equipment::EquipmentRepository;
 use super::fermentable::FermentableRepository;
 use super::hop::HopRepository;
@@ -19,6 +16,7 @@ use super::mash::MashRepository;
 use super::misc::MiscRepository;
 use super::water::WaterRepository;
 use super::yeast::YeastRepository;
+use super::{new_id, now_secs};
 
 pub struct RecipeRepository<'a> {
     db: &'a DatabaseConnection,
@@ -132,23 +130,22 @@ impl<'a> RecipeRepository<'a> {
         let id = new_id();
         let now = now_secs() as i32;
 
-        let (batch_size, boil_size, boil_time, ep_id) =
-            if let Some(ref src_id) = input.source_id {
-                let src = self.get(src_id).await?;
-                (
-                    src.batch_size_l,
-                    src.boil_size_l,
-                    src.boil_time_min,
-                    src.equipment_profile_id,
-                )
-            } else {
-                (
-                    input.batch_size_l.unwrap_or(23.0),
-                    input.boil_size_l.unwrap_or(27.0),
-                    input.boil_time_min.unwrap_or(60.0),
-                    input.equipment_profile_id,
-                )
-            };
+        let (batch_size, boil_size, boil_time, ep_id) = if let Some(ref src_id) = input.source_id {
+            let src = self.get(src_id).await?;
+            (
+                src.batch_size_l,
+                src.boil_size_l,
+                src.boil_time_min,
+                src.equipment_profile_id,
+            )
+        } else {
+            (
+                input.batch_size_l.unwrap_or(23.0),
+                input.boil_size_l.unwrap_or(27.0),
+                input.boil_time_min.unwrap_or(60.0),
+                input.equipment_profile_id,
+            )
+        };
 
         recipes::ActiveModel {
             id: Set(id.clone()),
@@ -178,67 +175,92 @@ impl<'a> RecipeRepository<'a> {
 
         let fermentable_repo = FermentableRepository::new(self.db);
         for f in fermentable_repo.list(src_id).await? {
-            fermentable_repo.create(dst_id, CreateFermentableAdditionInput {
-                fermentable_id: f.fermentable_id,
-                name: f.name,
-                type_: f.type_,
-                yield_pct: f.yield_pct,
-                color_lovibond: f.color_lovibond,
-                amount_kg: f.amount_kg,
-                add_after_boil: Some(f.add_after_boil),
-            }).await?;
+            fermentable_repo
+                .create(
+                    dst_id,
+                    CreateFermentableAdditionInput {
+                        fermentable_id: f.fermentable_id,
+                        name: f.name,
+                        type_: f.type_,
+                        yield_pct: f.yield_pct,
+                        color_lovibond: f.color_lovibond,
+                        amount_kg: f.amount_kg,
+                        add_after_boil: Some(f.add_after_boil),
+                    },
+                )
+                .await?;
         }
 
         let hop_repo = HopRepository::new(self.db);
         for h in hop_repo.list(src_id).await? {
-            hop_repo.create(dst_id, CreateHopAdditionInput {
-                hop_id: h.hop_id,
-                name: h.name,
-                alpha_pct: h.alpha_pct,
-                form: Some(h.form),
-                amount_kg: h.amount_kg,
-                use_: h.use_,
-                time_min: h.time_min,
-            }).await?;
+            hop_repo
+                .create(
+                    dst_id,
+                    CreateHopAdditionInput {
+                        hop_id: h.hop_id,
+                        name: h.name,
+                        alpha_pct: h.alpha_pct,
+                        form: Some(h.form),
+                        amount_kg: h.amount_kg,
+                        use_: h.use_,
+                        time_min: h.time_min,
+                    },
+                )
+                .await?;
         }
 
         let yeast_repo = YeastRepository::new(self.db);
         for y in yeast_repo.list(src_id).await? {
-            yeast_repo.create(dst_id, CreateYeastAdditionInput {
-                yeast_id: y.yeast_id,
-                name: y.name,
-                type_: y.type_,
-                form: y.form,
-                laboratory: y.laboratory,
-                product_id: y.product_id,
-                attenuation_pct: y.attenuation_pct,
-                amount: y.amount,
-                amount_is_weight: Some(y.amount_is_weight),
-                add_to_secondary: Some(y.add_to_secondary),
-                times_cultured: Some(y.times_cultured),
-            }).await?;
+            yeast_repo
+                .create(
+                    dst_id,
+                    CreateYeastAdditionInput {
+                        yeast_id: y.yeast_id,
+                        name: y.name,
+                        type_: y.type_,
+                        form: y.form,
+                        laboratory: y.laboratory,
+                        product_id: y.product_id,
+                        attenuation_pct: y.attenuation_pct,
+                        amount: y.amount,
+                        amount_is_weight: Some(y.amount_is_weight),
+                        add_to_secondary: Some(y.add_to_secondary),
+                        times_cultured: Some(y.times_cultured),
+                    },
+                )
+                .await?;
         }
 
         let misc_repo = MiscRepository::new(self.db);
         for m in misc_repo.list(src_id).await? {
-            misc_repo.create(dst_id, CreateMiscAdditionInput {
-                misc_id: m.misc_id,
-                name: m.name,
-                type_: m.type_,
-                use_: m.use_,
-                amount: m.amount,
-                amount_is_weight: Some(m.amount_is_weight),
-                time_min: m.time_min,
-            }).await?;
+            misc_repo
+                .create(
+                    dst_id,
+                    CreateMiscAdditionInput {
+                        misc_id: m.misc_id,
+                        name: m.name,
+                        type_: m.type_,
+                        use_: m.use_,
+                        amount: m.amount,
+                        amount_is_weight: Some(m.amount_is_weight),
+                        time_min: m.time_min,
+                    },
+                )
+                .await?;
         }
 
         let water_repo = WaterRepository::new(self.db);
         for w in water_repo.list(src_id).await? {
-            water_repo.create(dst_id, CreateWaterAdditionInput {
-                water_id: w.water_id,
-                name: w.name,
-                amount_l: w.amount_l,
-            }).await?;
+            water_repo
+                .create(
+                    dst_id,
+                    CreateWaterAdditionInput {
+                        water_id: w.water_id,
+                        name: w.name,
+                        amount_l: w.amount_l,
+                    },
+                )
+                .await?;
         }
 
         Ok(())
@@ -355,10 +377,10 @@ impl<'a> RecipeRepository<'a> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::test_helpers::setup_test_db;
+    use crate::models::{CreateFermentableAdditionInput, CreateHopAdditionInput};
     use crate::repositories::fermentable::FermentableRepository;
     use crate::repositories::hop::HopRepository;
-    use crate::models::{CreateFermentableAdditionInput, CreateHopAdditionInput};
+    use crate::test_helpers::setup_test_db;
 
     fn basic_input() -> CreateRecipeInput {
         CreateRecipeInput {
@@ -497,25 +519,37 @@ mod tests {
         let repo = RecipeRepository::new(&db);
         let original = repo.create(basic_input()).await.unwrap();
 
-        FermentableRepository::new(&db).create(&original.id, CreateFermentableAdditionInput {
-            fermentable_id: None,
-            name: "Pale Malt".into(),
-            type_: "grain".into(),
-            yield_pct: 78.0,
-            color_lovibond: 1.8,
-            amount_kg: 4.5,
-            add_after_boil: None,
-        }).await.unwrap();
+        FermentableRepository::new(&db)
+            .create(
+                &original.id,
+                CreateFermentableAdditionInput {
+                    fermentable_id: None,
+                    name: "Pale Malt".into(),
+                    type_: "grain".into(),
+                    yield_pct: 78.0,
+                    color_lovibond: 1.8,
+                    amount_kg: 4.5,
+                    add_after_boil: None,
+                },
+            )
+            .await
+            .unwrap();
 
-        HopRepository::new(&db).create(&original.id, CreateHopAdditionInput {
-            hop_id: None,
-            name: "Cascade".into(),
-            alpha_pct: 5.5,
-            form: None,
-            amount_kg: 0.05,
-            use_: "Boil".into(),
-            time_min: 60.0,
-        }).await.unwrap();
+        HopRepository::new(&db)
+            .create(
+                &original.id,
+                CreateHopAdditionInput {
+                    hop_id: None,
+                    name: "Cascade".into(),
+                    alpha_pct: 5.5,
+                    form: None,
+                    amount_kg: 0.05,
+                    use_: "Boil".into(),
+                    time_min: 60.0,
+                },
+            )
+            .await
+            .unwrap();
 
         let dupe = repo
             .create(CreateRecipeInput {

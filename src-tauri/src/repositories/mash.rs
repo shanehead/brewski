@@ -202,9 +202,7 @@ impl<'a> MashRepository<'a> {
     }
 
     pub async fn delete_step(&self, id: &str) -> Result<(), AppError> {
-        mash_steps::Entity::delete_by_id(id)
-            .exec(self.db)
-            .await?;
+        mash_steps::Entity::delete_by_id(id).exec(self.db).await?;
         Ok(())
     }
 
@@ -225,7 +223,9 @@ impl<'a> MashRepository<'a> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::models::{CreateMashStepInput, CreateRecipeInput, UpdateMashInput, UpdateMashStepInput};
+    use crate::models::{
+        CreateMashStepInput, CreateRecipeInput, UpdateMashInput, UpdateMashStepInput,
+    };
     use crate::repositories::recipe::RecipeRepository;
     use crate::test_helpers::setup_test_db;
 
@@ -271,7 +271,9 @@ mod tests {
         let db = setup_test_db().await;
         let recipe_id = create_recipe(&db).await;
         let repo = MashRepository::new(&db);
-        repo.upsert_for_recipe(&recipe_id, mash_input("First")).await.unwrap();
+        repo.upsert_for_recipe(&recipe_id, mash_input("First"))
+            .await
+            .unwrap();
         let updated = repo
             .upsert_for_recipe(
                 &recipe_id,
@@ -331,7 +333,9 @@ mod tests {
         let db = setup_test_db().await;
         let recipe_id = create_recipe(&db).await;
         let repo = MashRepository::new(&db);
-        repo.upsert_for_recipe(&recipe_id, mash_input("Mash")).await.unwrap();
+        repo.upsert_for_recipe(&recipe_id, mash_input("Mash"))
+            .await
+            .unwrap();
         let fetched = repo.get_for_recipe(&recipe_id).await.unwrap();
         assert_eq!(fetched.name, "Mash");
     }
@@ -348,7 +352,10 @@ mod tests {
         let db = setup_test_db().await;
         let recipe_id = create_recipe(&db).await;
         let repo = MashRepository::new(&db);
-        let mash = repo.upsert_for_recipe(&recipe_id, mash_input("Mash")).await.unwrap();
+        let mash = repo
+            .upsert_for_recipe(&recipe_id, mash_input("Mash"))
+            .await
+            .unwrap();
 
         let step = repo
             .create_step(
@@ -378,7 +385,10 @@ mod tests {
         let db = setup_test_db().await;
         let recipe_id = create_recipe(&db).await;
         let repo = MashRepository::new(&db);
-        let mash = repo.upsert_for_recipe(&recipe_id, mash_input("Mash")).await.unwrap();
+        let mash = repo
+            .upsert_for_recipe(&recipe_id, mash_input("Mash"))
+            .await
+            .unwrap();
         repo.create_step(
             &mash.id,
             CreateMashStepInput {
@@ -404,7 +414,10 @@ mod tests {
         let db = setup_test_db().await;
         let recipe_id = create_recipe(&db).await;
         let repo = MashRepository::new(&db);
-        let mash = repo.upsert_for_recipe(&recipe_id, mash_input("Mash")).await.unwrap();
+        let mash = repo
+            .upsert_for_recipe(&recipe_id, mash_input("Mash"))
+            .await
+            .unwrap();
         let step = repo
             .create_step(
                 &mash.id,
@@ -448,7 +461,10 @@ mod tests {
         let db = setup_test_db().await;
         let recipe_id = create_recipe(&db).await;
         let repo = MashRepository::new(&db);
-        let mash = repo.upsert_for_recipe(&recipe_id, mash_input("Mash")).await.unwrap();
+        let mash = repo
+            .upsert_for_recipe(&recipe_id, mash_input("Mash"))
+            .await
+            .unwrap();
         let step = repo
             .create_step(
                 &mash.id,
@@ -476,7 +492,10 @@ mod tests {
         let db = setup_test_db().await;
         let recipe_id = create_recipe(&db).await;
         let repo = MashRepository::new(&db);
-        let mash = repo.upsert_for_recipe(&recipe_id, mash_input("Mash")).await.unwrap();
+        let mash = repo
+            .upsert_for_recipe(&recipe_id, mash_input("Mash"))
+            .await
+            .unwrap();
 
         let step1 = repo
             .create_step(

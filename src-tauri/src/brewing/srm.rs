@@ -1,15 +1,18 @@
 pub fn morey_srm(
-    fermentables: &[(&f64, &f64)],  // (color_lovibond, amount_kg)
+    fermentables: &[(&f64, &f64)], // (color_lovibond, amount_kg)
     batch_size_l: f64,
 ) -> f64 {
     if fermentables.is_empty() {
         return 0.0;
     }
     let batch_gallons = batch_size_l * 0.264172;
-    let malt_color_units: f64 = fermentables.iter().map(|(color_lovibond, amount_kg)| {
-        let pounds = *amount_kg * 2.20462;
-        (*color_lovibond * pounds) / batch_gallons
-    }).sum();
+    let malt_color_units: f64 = fermentables
+        .iter()
+        .map(|(color_lovibond, amount_kg)| {
+            let pounds = *amount_kg * 2.20462;
+            (*color_lovibond * pounds) / batch_gallons
+        })
+        .sum();
     // Morey equation: SRM = 1.4922 × MCU^0.6859
     // Empirically fitted by Dan Morey to correct the linear MCU formula at high color values.
     1.4922 * malt_color_units.powf(0.6859)

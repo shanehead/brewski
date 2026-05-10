@@ -1,15 +1,17 @@
-use sea_orm::{DatabaseConnection, EntityTrait, Set};
-use sea_orm::sea_query::OnConflict;
-use std::collections::HashMap;
 use crate::entities::settings;
 use crate::error::AppError;
+use sea_orm::sea_query::OnConflict;
+use sea_orm::{DatabaseConnection, EntityTrait, Set};
+use std::collections::HashMap;
 
 pub struct SettingsRepository<'a> {
     db: &'a DatabaseConnection,
 }
 
 impl<'a> SettingsRepository<'a> {
-    pub fn new(db: &'a DatabaseConnection) -> Self { Self { db } }
+    pub fn new(db: &'a DatabaseConnection) -> Self {
+        Self { db }
+    }
 
     pub async fn get_all(&self) -> Result<HashMap<String, String>, AppError> {
         let rows = settings::Entity::find().all(self.db).await?;

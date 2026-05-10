@@ -3,6 +3,10 @@ default:
 
 # ── Dev ───────────────────────────────────────────────────────────────────────
 
+# Configure Git to use the repo-managed hooks in .githooks/
+install-hooks:
+    git config core.hooksPath .githooks
+
 # Start the Tauri dev server
 dev:
     bun run tauri dev

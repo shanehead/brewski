@@ -1,6 +1,4 @@
-use sea_orm::{
-    ActiveModelTrait, ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter, Set,
-};
+use sea_orm::{ActiveModelTrait, ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter, Set};
 
 use crate::entities::recipe_addition_waters;
 use crate::error::AppError;
@@ -92,7 +90,10 @@ mod tests {
 
     async fn make_recipe(db: &DatabaseConnection) -> String {
         RecipeRepository::new(db)
-            .create(CreateRecipeInput { name: "Test".into(), ..Default::default() })
+            .create(CreateRecipeInput {
+                name: "Test".into(),
+                ..Default::default()
+            })
             .await
             .unwrap()
             .id
@@ -125,7 +126,12 @@ mod tests {
         let repo = WaterRepository::new(&db);
         let created = repo.create(&recipe_id, input()).await.unwrap();
         let updated = repo
-            .update(&created.id, UpdateWaterAdditionInput { amount_l: Some(20.0) })
+            .update(
+                &created.id,
+                UpdateWaterAdditionInput {
+                    amount_l: Some(20.0),
+                },
+            )
             .await
             .unwrap();
         assert_eq!(updated.amount_l, 20.0);

@@ -152,7 +152,17 @@ fn parse_recipe(reader: &mut Reader<&[u8]>) -> Result<ParsedRecipe, String> {
         }
     }
 
-    Ok(ParsedRecipe { name, type_, batch_size_l, boil_size_l, boil_time_min, fermentables, hops, yeasts, miscs })
+    Ok(ParsedRecipe {
+        name,
+        type_,
+        batch_size_l,
+        boil_size_l,
+        boil_time_min,
+        fermentables,
+        hops,
+        yeasts,
+        miscs,
+    })
 }
 
 fn parse_fermentable(reader: &mut Reader<&[u8]>) -> Result<CreateFermentableAdditionInput, String> {
@@ -171,7 +181,9 @@ fn parse_fermentable(reader: &mut Reader<&[u8]>) -> Result<CreateFermentableAddi
                 b"YIELD" => yield_pct = read_text(reader)?.parse().unwrap_or(75.0),
                 b"COLOR" => color_lovibond = read_text(reader)?.parse().unwrap_or(2.0),
                 b"AMOUNT" => amount_kg = read_text(reader)?.parse().unwrap_or(0.0),
-                b"ADD_AFTER_BOIL" => add_after_boil = Some(read_text(reader)?.eq_ignore_ascii_case("true")),
+                b"ADD_AFTER_BOIL" => {
+                    add_after_boil = Some(read_text(reader)?.eq_ignore_ascii_case("true"))
+                }
                 _ => skip_element(reader, e.name().as_ref())?,
             },
             Event::End(e) if e.name().as_ref() == b"FERMENTABLE" => break,
@@ -180,7 +192,15 @@ fn parse_fermentable(reader: &mut Reader<&[u8]>) -> Result<CreateFermentableAddi
         }
     }
 
-    Ok(CreateFermentableAdditionInput { fermentable_id: None, name, type_, yield_pct, color_lovibond, amount_kg, add_after_boil })
+    Ok(CreateFermentableAdditionInput {
+        fermentable_id: None,
+        name,
+        type_,
+        yield_pct,
+        color_lovibond,
+        amount_kg,
+        add_after_boil,
+    })
 }
 
 fn parse_hop(reader: &mut Reader<&[u8]>) -> Result<CreateHopAdditionInput, String> {
@@ -208,7 +228,15 @@ fn parse_hop(reader: &mut Reader<&[u8]>) -> Result<CreateHopAdditionInput, Strin
         }
     }
 
-    Ok(CreateHopAdditionInput { hop_id: None, name, alpha_pct, form, amount_kg, use_, time_min })
+    Ok(CreateHopAdditionInput {
+        hop_id: None,
+        name,
+        alpha_pct,
+        form,
+        amount_kg,
+        use_,
+        time_min,
+    })
 }
 
 fn parse_yeast(reader: &mut Reader<&[u8]>) -> Result<CreateYeastAdditionInput, String> {
@@ -232,8 +260,12 @@ fn parse_yeast(reader: &mut Reader<&[u8]>) -> Result<CreateYeastAdditionInput, S
                 b"PRODUCT_ID" => product_id = Some(read_text(reader)?),
                 b"ATTENUATION" => attenuation_pct = read_text(reader)?.parse().ok(),
                 b"AMOUNT" => amount = read_text(reader)?.parse().ok(),
-                b"AMOUNT_IS_WEIGHT" => amount_is_weight = Some(read_text(reader)?.eq_ignore_ascii_case("true")),
-                b"ADD_TO_SECONDARY" => add_to_secondary = Some(read_text(reader)?.eq_ignore_ascii_case("true")),
+                b"AMOUNT_IS_WEIGHT" => {
+                    amount_is_weight = Some(read_text(reader)?.eq_ignore_ascii_case("true"))
+                }
+                b"ADD_TO_SECONDARY" => {
+                    add_to_secondary = Some(read_text(reader)?.eq_ignore_ascii_case("true"))
+                }
                 _ => skip_element(reader, e.name().as_ref())?,
             },
             Event::End(e) if e.name().as_ref() == b"YEAST" => break,
@@ -243,8 +275,17 @@ fn parse_yeast(reader: &mut Reader<&[u8]>) -> Result<CreateYeastAdditionInput, S
     }
 
     Ok(CreateYeastAdditionInput {
-        yeast_id: None, name, type_, form, laboratory, product_id,
-        attenuation_pct, amount, amount_is_weight, add_to_secondary, times_cultured: None,
+        yeast_id: None,
+        name,
+        type_,
+        form,
+        laboratory,
+        product_id,
+        attenuation_pct,
+        amount,
+        amount_is_weight,
+        add_to_secondary,
+        times_cultured: None,
     })
 }
 
@@ -263,7 +304,9 @@ fn parse_misc(reader: &mut Reader<&[u8]>) -> Result<CreateMiscAdditionInput, Str
                 b"TYPE" => type_ = read_text(reader)?,
                 b"USE" => use_ = read_text(reader)?,
                 b"AMOUNT" => amount = read_text(reader)?.parse().unwrap_or(0.0),
-                b"AMOUNT_IS_WEIGHT" => amount_is_weight = Some(read_text(reader)?.eq_ignore_ascii_case("true")),
+                b"AMOUNT_IS_WEIGHT" => {
+                    amount_is_weight = Some(read_text(reader)?.eq_ignore_ascii_case("true"))
+                }
                 b"TIME" => time_min = read_text(reader)?.parse().unwrap_or(0.0),
                 _ => skip_element(reader, e.name().as_ref())?,
             },
@@ -273,7 +316,15 @@ fn parse_misc(reader: &mut Reader<&[u8]>) -> Result<CreateMiscAdditionInput, Str
         }
     }
 
-    Ok(CreateMiscAdditionInput { misc_id: None, name, type_, use_, amount, amount_is_weight, time_min })
+    Ok(CreateMiscAdditionInput {
+        misc_id: None,
+        name,
+        type_,
+        use_,
+        amount,
+        amount_is_weight,
+        time_min,
+    })
 }
 
 /// Read the text content of the current element (already past the opening tag).
@@ -302,7 +353,12 @@ fn skip_element(reader: &mut Reader<&[u8]>, tag_name: &[u8]) -> Result<(), Strin
                     break;
                 }
             }
-            Event::Eof => return Err(format!("Unexpected EOF skipping <{}>", String::from_utf8_lossy(tag_name))),
+            Event::Eof => {
+                return Err(format!(
+                    "Unexpected EOF skipping <{}>",
+                    String::from_utf8_lossy(tag_name)
+                ))
+            }
             _ => {}
         }
     }
@@ -342,23 +398,38 @@ pub async fn create_recipes_from_beerxml(
             .map_err(|e| e.to_string())?;
 
         for f in p.fermentables {
-            fermentable_repo.create(&recipe.id, f).await.map_err(|e| e.to_string())?;
+            fermentable_repo
+                .create(&recipe.id, f)
+                .await
+                .map_err(|e| e.to_string())?;
         }
         for h in p.hops {
-            hop_repo.create(&recipe.id, h).await.map_err(|e| e.to_string())?;
+            hop_repo
+                .create(&recipe.id, h)
+                .await
+                .map_err(|e| e.to_string())?;
         }
         for y in p.yeasts {
-            yeast_repo.create(&recipe.id, y).await.map_err(|e| e.to_string())?;
+            yeast_repo
+                .create(&recipe.id, y)
+                .await
+                .map_err(|e| e.to_string())?;
         }
         for m in p.miscs {
-            misc_repo.create(&recipe.id, m).await.map_err(|e| e.to_string())?;
+            misc_repo
+                .create(&recipe.id, m)
+                .await
+                .map_err(|e| e.to_string())?;
         }
 
         imported_ids.push(recipe.id);
     }
 
     let all = recipe_repo.list().await.map_err(|e| e.to_string())?;
-    Ok(all.into_iter().filter(|r| imported_ids.contains(&r.id)).collect())
+    Ok(all
+        .into_iter()
+        .filter(|r| imported_ids.contains(&r.id))
+        .collect())
 }
 
 #[cfg(test)]
@@ -440,7 +511,11 @@ mod tests {
 
     #[test]
     fn test_parse_multiple_recipes() {
-        let xml = format!("<RECIPES>{0}{0}</RECIPES>", &SINGLE_RECIPE[SINGLE_RECIPE.find("<RECIPE>").unwrap()..SINGLE_RECIPE.rfind("</RECIPE>").unwrap() + 9]);
+        let xml = format!(
+            "<RECIPES>{0}{0}</RECIPES>",
+            &SINGLE_RECIPE[SINGLE_RECIPE.find("<RECIPE>").unwrap()
+                ..SINGLE_RECIPE.rfind("</RECIPE>").unwrap() + 9]
+        );
         let recipes = parse_beerxml(&xml).unwrap();
         assert_eq!(recipes.len(), 2);
     }

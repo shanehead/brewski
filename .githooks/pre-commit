@@ -1,0 +1,19 @@
+#!/bin/sh
+set -eu
+
+repo_root=$(git rev-parse --show-toplevel)
+cd "$repo_root"
+
+staged_rust_files=$(git diff --cached --name-only --diff-filter=ACMR | grep '^src-tauri/.*\.rs$' || true)
+
+if [ -z "$staged_rust_files" ]; then
+  exit 0
+fi
+
+echo "Formatting staged Rust files..."
+
+printf '%s\n' "$staged_rust_files" | while IFS= read -r file; do
+  [ -n "$file" ] || continue
+  cargo fmt --manifest-path src-tauri/Cargo.toml -- "$file"
+  git add "$file"
+done

@@ -3,7 +3,9 @@ use sea_orm_migration::prelude::*;
 pub struct Migration;
 
 impl MigrationName for Migration {
-    fn name(&self) -> &str { "m001_initial" }
+    fn name(&self) -> &str {
+        "m001_initial"
+    }
 }
 
 #[async_trait::async_trait]

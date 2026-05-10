@@ -113,7 +113,10 @@ mod tests {
 
     async fn make_recipe(db: &DatabaseConnection) -> String {
         RecipeRepository::new(db)
-            .create(CreateRecipeInput { name: "Test".into(), ..Default::default() })
+            .create(CreateRecipeInput {
+                name: "Test".into(),
+                ..Default::default()
+            })
             .await
             .unwrap()
             .id
@@ -151,12 +154,15 @@ mod tests {
         let repo = HopRepository::new(&db);
         let created = repo.create(&recipe_id, input()).await.unwrap();
         let updated = repo
-            .update(&created.id, UpdateHopAdditionInput {
-                amount_kg: Some(0.1),
-                use_: None,
-                time_min: None,
-                addition_order: None,
-            })
+            .update(
+                &created.id,
+                UpdateHopAdditionInput {
+                    amount_kg: Some(0.1),
+                    use_: None,
+                    time_min: None,
+                    addition_order: None,
+                },
+            )
             .await
             .unwrap();
         assert_eq!(updated.amount_kg, 0.1);

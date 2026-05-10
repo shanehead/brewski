@@ -1,15 +1,17 @@
-use tauri::State;
-use crate::AppState;
 use crate::error::AppError;
 use crate::models::{Fermentable, Hop, Misc, Style, Water, Yeast};
 use crate::repositories::library::LibraryRepository;
+use crate::AppState;
+use tauri::State;
 
 #[tauri::command]
 pub async fn list_styles(state: State<'_, AppState>) -> Result<Vec<Style>, AppError> {
     LibraryRepository::new(&state.db).list_styles().await
 }
 #[tauri::command]
-pub async fn list_fermentable_library(state: State<'_, AppState>) -> Result<Vec<Fermentable>, AppError> {
+pub async fn list_fermentable_library(
+    state: State<'_, AppState>,
+) -> Result<Vec<Fermentable>, AppError> {
     LibraryRepository::new(&state.db).list_fermentables().await
 }
 #[tauri::command]

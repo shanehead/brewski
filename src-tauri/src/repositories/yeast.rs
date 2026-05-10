@@ -1,6 +1,4 @@
-use sea_orm::{
-    ActiveModelTrait, ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter, Set,
-};
+use sea_orm::{ActiveModelTrait, ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter, Set};
 
 use crate::entities::recipe_addition_yeasts;
 use crate::error::AppError;
@@ -112,7 +110,10 @@ mod tests {
 
     async fn make_recipe(db: &DatabaseConnection) -> String {
         RecipeRepository::new(db)
-            .create(CreateRecipeInput { name: "Test".into(), ..Default::default() })
+            .create(CreateRecipeInput {
+                name: "Test".into(),
+                ..Default::default()
+            })
             .await
             .unwrap()
             .id
@@ -166,13 +167,16 @@ mod tests {
         let repo = YeastRepository::new(&db);
         let created = repo.create(&recipe_id, input()).await.unwrap();
         let updated = repo
-            .update(&created.id, UpdateYeastAdditionInput {
-                attenuation_pct: Some(80.0),
-                amount: None,
-                amount_is_weight: None,
-                add_to_secondary: None,
-                times_cultured: None,
-            })
+            .update(
+                &created.id,
+                UpdateYeastAdditionInput {
+                    attenuation_pct: Some(80.0),
+                    amount: None,
+                    amount_is_weight: None,
+                    add_to_secondary: None,
+                    times_cultured: None,
+                },
+            )
             .await
             .unwrap();
         assert_eq!(updated.attenuation_pct, Some(80.0));

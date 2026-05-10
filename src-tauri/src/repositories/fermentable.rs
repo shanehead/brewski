@@ -112,7 +112,10 @@ mod tests {
 
     async fn make_recipe(db: &DatabaseConnection) -> String {
         RecipeRepository::new(db)
-            .create(CreateRecipeInput { name: "Test".into(), ..Default::default() })
+            .create(CreateRecipeInput {
+                name: "Test".into(),
+                ..Default::default()
+            })
             .await
             .unwrap()
             .id
@@ -163,11 +166,14 @@ mod tests {
         let repo = FermentableRepository::new(&db);
         let created = repo.create(&recipe_id, input()).await.unwrap();
         let updated = repo
-            .update(&created.id, UpdateFermentableAdditionInput {
-                amount_kg: Some(5.0),
-                add_after_boil: None,
-                addition_order: None,
-            })
+            .update(
+                &created.id,
+                UpdateFermentableAdditionInput {
+                    amount_kg: Some(5.0),
+                    add_after_boil: None,
+                    addition_order: None,
+                },
+            )
             .await
             .unwrap();
         assert_eq!(updated.amount_kg, 5.0);
