@@ -82,7 +82,6 @@
     } else {
       onadd({ type: 'yeast', item: selected as Yeast, amount });
     }
-    onclose();
   }
 
   function handleBackdropClick(e: MouseEvent) {
@@ -354,7 +353,10 @@
         <div style="border-top: 1px solid var(--color-border); padding: 12px 16px; display: flex; gap: 10px; align-items: flex-end; background: var(--color-bg-surface); flex-shrink: 0;">
           <div>
             <div style="font-size: 10px; color: var(--color-text-muted); margin-bottom: 4px;">Packages</div>
-            <input type="number" step="1" bind:value={amount} min="1"
+            <input type="number" step="1"
+              value={amount}
+              oninput={(e) => { const v = parseInt((e.target as HTMLInputElement).value, 10); if (!isNaN(v) && v > 0) amount = v; }}
+              min="1"
               style="width: 60px; background: var(--color-bg-elevated); border: 1px solid var(--color-border); border-radius: 5px; padding: 5px 8px; color: var(--color-text-primary); font-size: 13px;" />
           </div>
           <button onclick={handleAdd} disabled={!canAdd}
