@@ -54,12 +54,12 @@
   {#if recipe.hops.length > 0}
     <table class="w-full text-sm">
       <thead>
-        <tr style="color: var(--color-text-muted);">
-          <th class="text-left py-1 font-medium text-xs">Name</th>
-          <th class="text-right py-1 font-medium text-xs">AA%</th>
-          <th class="text-right py-1 font-medium text-xs">{hopWeightLabel(units)}</th>
-          <th class="text-right py-1 font-medium text-xs">Use</th>
-          <th class="text-right py-1 font-medium text-xs">Time</th>
+        <tr style="color: var(--color-text-secondary);">
+          <th class="text-left py-1 font-medium text-sm">Name</th>
+          <th class="text-right py-1 font-medium text-sm">AA%</th>
+          <th class="text-right py-1 font-medium text-sm">{hopWeightLabel(units)}</th>
+          <th class="text-right py-1 font-medium text-sm">Use</th>
+          <th class="text-right py-1 font-medium text-sm">Time</th>
           <th class="w-6"></th>
         </tr>
       </thead>

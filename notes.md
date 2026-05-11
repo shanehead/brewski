@@ -23,14 +23,14 @@ Have a good way to tie a versioned recipe to its batches
 - [x] OSS License
 - [x] Update Git commits to shane.head@gmail.com
 - [x] Test coverage
+- [x] Microsoft Rust best practices checks
+- [x] Icons next to additions (or any other UI element)
+- [x] Unit testing for Frontend & Tauri IPC layer
 - [ ] Schema first development, split up OpenAPI file
 - [ ] Versioned API
 - [ ] C4 Diagrams of architecture
-- [ ] Microsoft Rust best practices checks
 - [ ] Separate release bundles using SemVer for each OS
 - [ ] Allow media attachments to recipes and batches
-- [ ] Icons next to additions (or any other UI element)
-- [ ] Unit testing for Frontend & Tauri IPC layer
 - [ ] Recipe versions
 - [ ] Hop types (cryo, quantum, etc..)
 - [ ] SQLite Database location in release
@@ -39,11 +39,14 @@ Have a good way to tie a versioned recipe to its batches
 - [ ] SQLite FKs and check constraints
 - [ ] SeaORM Migrations seem complex (multiple touch points to make a change)
 - [ ] Tools tab to expose calculations
+- [ ] Give credit to BeerMaverick for data
+- [ ] Custom SVG icons for UI (hops, grains, yeast, equipment, etc..)
 
 # Data
-- [ ] Hop database (abstrax, yakima valley, etc..)
-- [ ] Fermentables database (import from online db)
-- [ ] Yeast database (import from online db)
+- [x] Hop database (abstrax, yakima valley, etc..)
+- [x] Fermentables database (import from online db)
+- [x] Yeast database (import from online db)
+- [ ] Beer Style database (import from online db, probably BJCP)
 - [ ] Recipe Database (import from online dbs, then allow people to share eventually)
 - [ ] Equipment Database (import from online dbs, major brands and types of equipment, plus common types like BIAB)
 

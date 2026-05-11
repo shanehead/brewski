@@ -61,10 +61,10 @@
   {#if recipe.fermentables.length > 0}
     <table class="w-full text-sm">
       <thead>
-        <tr style="color: var(--color-text-muted);">
-          <th class="text-left py-1 font-medium text-xs">Name</th>
-          <th class="text-right py-1 font-medium text-xs">Lovibond</th>
-          <th class="text-right py-1 font-medium text-xs">{weightLabel(units)}</th>
+        <tr style="color: var(--color-text-secondary);">
+          <th class="text-left py-1 font-medium text-sm">Name</th>
+          <th class="text-right py-1 font-medium text-sm">Lovibond</th>
+          <th class="text-right py-1 font-medium text-sm">{weightLabel(units)}</th>
           <th class="w-6"></th>
         </tr>
       </thead>

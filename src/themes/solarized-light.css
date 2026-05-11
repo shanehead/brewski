@@ -1,0 +1,12 @@
+:root[data-theme="solarized-light"] {
+  color-scheme: light;
+  --color-bg-base:        #fdf6e3;
+  --color-bg-surface:     #eee8d5;
+  --color-bg-elevated:    #e5dfc9;
+  --color-border:         #d3cbb8;
+  --color-accent:         #268bd2;
+  --color-accent-hover:   #1a6fad;
+  --color-text-primary:   #657b83;
+  --color-text-secondary: #839496;
+  --color-text-muted:     #93a1a1;
+}

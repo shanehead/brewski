@@ -3,20 +3,22 @@ import { render } from "@testing-library/svelte";
 import BrewingIcon from "$lib/components/BrewingIcon.svelte";
 
 describe("BrewingIcon", () => {
-  it("renders the hop emoji for name='hop'", () => {
+  it("renders an svg for name='hop'", () => {
     const { container } = render(BrewingIcon, { name: "hop" });
-    expect(container.textContent).toBe("🍃");
+    const svg = container.querySelector("svg");
+    expect(svg).not.toBeNull();
+    expect(svg?.getAttribute("data-icon")).toBe("hop");
   });
 
-  it("renders the fermentable emoji for name='fermentable'", () => {
+  it("renders path markup for name='fermentable'", () => {
     const { container } = render(BrewingIcon, { name: "fermentable" });
-    expect(container.textContent).toBe("🌾");
+    expect(container.querySelectorAll("path").length).toBeGreaterThan(0);
   });
 
-  it("renders a span with aria-hidden", () => {
+  it("renders an svg with aria-hidden", () => {
     const { container } = render(BrewingIcon, { name: "yeast" });
-    const span = container.querySelector("span");
-    expect(span).not.toBeNull();
-    expect(span?.getAttribute("aria-hidden")).toBe("true");
+    const svg = container.querySelector("svg");
+    expect(svg).not.toBeNull();
+    expect(svg?.getAttribute("aria-hidden")).toBe("true");
   });
 });

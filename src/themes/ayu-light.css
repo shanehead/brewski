@@ -1,0 +1,12 @@
+:root[data-theme="ayu-light"] {
+  color-scheme: light;
+  --color-bg-base:        #fafafa;
+  --color-bg-surface:     #f3f4f5;
+  --color-bg-elevated:    #e7e8e9;
+  --color-border:         #d9dbe0;
+  --color-accent:         #ff9940;
+  --color-accent-hover:   #e8852a;
+  --color-text-primary:   #5c6166;
+  --color-text-secondary: #8a9199;
+  --color-text-muted:     #abb0b6;
+}

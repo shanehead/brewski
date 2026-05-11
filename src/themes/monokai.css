@@ -1,0 +1,12 @@
+:root[data-theme="monokai"] {
+  color-scheme: dark;
+  --color-bg-base:        #272822;
+  --color-bg-surface:     #1e1f1c;
+  --color-bg-elevated:    #3e3d32;
+  --color-border:         #3e3d32;
+  --color-accent:         #a6e22e;
+  --color-accent-hover:   #b8f54a;
+  --color-text-primary:   #f8f8f2;
+  --color-text-secondary: #75715e;
+  --color-text-muted:     #49483e;
+}

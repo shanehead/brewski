@@ -57,6 +57,15 @@
                 class="px-2 py-1.5 rounded text-sm"
                 style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);">
           <option value="midnight">Midnight</option>
+          <option value="dracula">Dracula</option>
+          <option value="tokyo-night">Tokyo Night</option>
+          <option value="catppuccin">Catppuccin</option>
+          <option value="nord">Nord</option>
+          <option value="monokai">Monokai</option>
+          <option value="catppuccin-latte">Catppuccin Latte</option>
+          <option value="solarized-light">Solarized Light</option>
+          <option value="ayu-light">Ayu Light</option>
+          <option value="github-light">GitHub Light</option>
         </select>
       </div>
     </section>

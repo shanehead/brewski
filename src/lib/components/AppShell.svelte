@@ -14,10 +14,10 @@
 
 <div class="flex h-screen overflow-hidden" style="background: var(--color-bg-base); color: var(--color-text-primary);">
   <!-- Icon rail -->
-  <nav class="flex flex-col items-center w-12 py-3 gap-2 border-r flex-shrink-0"
+  <nav class="flex flex-col items-center w-14 py-3 gap-2 border-r flex-shrink-0"
        style="background: var(--color-bg-surface); border-color: var(--color-border);">
     <!-- Recipes icon -->
-    <a href="/" class="w-8 h-8 flex items-center justify-center rounded transition-colors"
+    <a href="/" class="w-9 h-9 flex items-center justify-center rounded transition-colors"
        aria-label="Recipes"
        style={isRecipes ? "background: var(--color-accent); color: #fff;" : "color: var(--color-text-secondary);"}>
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -30,18 +30,18 @@
     </a>
 
     <!-- Tools icon -->
-    <a href="/tools" class="w-8 h-8 flex items-center justify-center rounded transition-colors"
+    <a href="/tools" class="w-9 h-9 flex items-center justify-center rounded transition-colors"
        aria-label="Tools"
        style={isTools ? "background: var(--color-accent); color: #fff;" : "color: var(--color-text-secondary);"}>
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M14.7 6.3a4 4 0 0 0 3 6.8l-7.4 7.4a2 2 0 0 1-2.8-2.8l7.4-7.4a4 4 0 0 1-5-5l2.3 2.3 2.8-2.8-2.3-2.5Z"/>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M14.7 6.3a4 4 0 0 0-4.7 4.7L3 18a2 2 0 0 0 2.8 2.8l7-7a4 4 0 0 0 4.7-4.7l-2.1 2.1-1.4-1.4z"/>
       </svg>
     </a>
 
     <div class="flex-1"></div>
 
     <!-- Settings icon -->
-    <a href="/settings" class="w-8 h-8 flex items-center justify-center rounded transition-colors"
+    <a href="/settings" class="w-9 h-9 flex items-center justify-center rounded transition-colors"
        aria-label="Settings"
        style={$page.url.pathname.startsWith('/settings') ? "background: var(--color-accent); color: #fff;" : "color: var(--color-text-secondary);"}>
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

@@ -1,0 +1,12 @@
+:root[data-theme="dracula"] {
+  color-scheme: dark;
+  --color-bg-base:        #282a36;
+  --color-bg-surface:     #1e1f29;
+  --color-bg-elevated:    #44475a;
+  --color-border:         #44475a;
+  --color-accent:         #bd93f9;
+  --color-accent-hover:   #caa5ff;
+  --color-text-primary:   #f8f8f2;
+  --color-text-secondary: #6272a4;
+  --color-text-muted:     #44475a;
+}
