@@ -1,0 +1,28 @@
+post:
+  operationId: updateRecipeWater
+  summary: Update a water addition
+  tags:
+    - Water
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - id
+            - input
+          properties:
+            id:
+              type: string
+            input:
+              $ref: "../../components/schemas/UpdateWaterAdditionInput.yaml"
+  responses:
+    "200":
+      description: Updated water addition
+      content:
+        application/json:
+          schema:
+            $ref: "../../components/schemas/RecipeAdditionWater.yaml"
+    "500":
+      $ref: "../../components/responses/Error.yaml"

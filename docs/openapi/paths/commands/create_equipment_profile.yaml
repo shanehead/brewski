@@ -1,0 +1,25 @@
+post:
+  operationId: createEquipmentProfile
+  summary: Create an equipment profile
+  tags:
+    - Equipment
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - input
+          properties:
+            input:
+              $ref: "../../components/schemas/CreateEquipmentProfileInput.yaml"
+  responses:
+    "200":
+      description: Created equipment profile
+      content:
+        application/json:
+          schema:
+            $ref: "../../components/schemas/EquipmentProfile.yaml"
+    "500":
+      $ref: "../../components/responses/Error.yaml"

@@ -1,0 +1,28 @@
+post:
+  operationId: createRecipesFromBeerxml
+  summary: Import one or more recipes from a BeerXML string
+  tags:
+    - Import/Export
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - xml
+          properties:
+            xml:
+              type: string
+              description: BeerXML-formatted XML document
+  responses:
+    "200":
+      description: Array of created recipe summaries
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "../../components/schemas/RecipeSummary.yaml"
+    "500":
+      $ref: "../../components/responses/Error.yaml"

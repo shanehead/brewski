@@ -1,0 +1,16 @@
+post:
+  operationId: listHopLibrary
+  summary: List all hops in the ingredient library
+  tags:
+    - Library
+  responses:
+    "200":
+      description: Array of hops
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "../../components/schemas/Hop.yaml"
+    "500":
+      $ref: "../../components/responses/Error.yaml"

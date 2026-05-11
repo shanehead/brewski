@@ -1,0 +1,62 @@
+type: object
+required:
+  - id
+  - name
+  - type_
+  - yield_pct
+  - color_lovibond
+  - add_after_boil
+properties:
+  id:
+    type: string
+  name:
+    type: string
+  type_:
+    type: string
+    description: Grain, Sugar, Extract, Dry Extract, Adjunct
+  yield_pct:
+    type: number
+  color_lovibond:
+    type: number
+  origin:
+    type:
+      - string
+      - "null"
+  supplier:
+    type:
+      - string
+      - "null"
+  notes:
+    type:
+      - string
+      - "null"
+  add_after_boil:
+    type: boolean
+  coarse_fine_diff_pct:
+    type:
+      - number
+      - "null"
+  moisture_pct:
+    type:
+      - number
+      - "null"
+  diastatic_power_lintner:
+    type:
+      - number
+      - "null"
+  protein_pct:
+    type:
+      - number
+      - "null"
+  max_in_batch_pct:
+    type:
+      - number
+      - "null"
+  recommend_mash:
+    type:
+      - boolean
+      - "null"
+  ibu_gal_per_lb:
+    type:
+      - number
+      - "null"

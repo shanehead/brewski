@@ -1,0 +1,20 @@
+type: object
+required:
+  - name
+  - step_temp_c
+  - step_time_min
+properties:
+  name:
+    type: string
+  type_:
+    type: string
+  infuse_amount_l:
+    type: number
+  step_temp_c:
+    type: number
+  step_time_min:
+    type: integer
+  ramp_time_min:
+    type: integer
+  end_temp_c:
+    type: number

@@ -1,0 +1,4 @@
+type: object
+properties:
+  amount_l:
+    type: number

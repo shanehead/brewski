@@ -1,0 +1,71 @@
+type: object
+required:
+  - id
+  - name
+  - boil_size_l
+  - batch_size_l
+  - calc_boil_volume
+  - lauter_deadspace_l
+  - top_up_kettle_l
+  - trub_chiller_loss_l
+  - evap_rate_pct_hr
+  - boil_time_min
+  - top_up_water_l
+  - fermenter_loss_l
+  - hop_utilization_pct
+  - efficiency_pct
+  - created_at
+  - updated_at
+properties:
+  id:
+    type: string
+  name:
+    type: string
+  notes:
+    type:
+      - string
+      - "null"
+  boil_size_l:
+    type: number
+  batch_size_l:
+    type: number
+  calc_boil_volume:
+    type: boolean
+  tun_volume_l:
+    type:
+      - number
+      - "null"
+  tun_weight_kg:
+    type:
+      - number
+      - "null"
+  tun_specific_heat:
+    type:
+      - number
+      - "null"
+  lauter_deadspace_l:
+    type: number
+  top_up_kettle_l:
+    type: number
+  trub_chiller_loss_l:
+    type: number
+    description: Volume lost to trub and chiller in litres
+  evap_rate_pct_hr:
+    type: number
+    description: Boil evaporation rate as a percentage per hour
+  boil_time_min:
+    type: number
+  top_up_water_l:
+    type: number
+  fermenter_loss_l:
+    type: number
+  hop_utilization_pct:
+    type: number
+  efficiency_pct:
+    type: number
+  created_at:
+    type: integer
+    format: int64
+  updated_at:
+    type: integer
+    format: int64

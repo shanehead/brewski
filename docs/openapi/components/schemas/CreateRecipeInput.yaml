@@ -1,0 +1,19 @@
+type: object
+required:
+  - name
+properties:
+  name:
+    type: string
+  type_:
+    type: string
+  batch_size_l:
+    type: number
+  boil_size_l:
+    type: number
+  boil_time_min:
+    type: number
+  equipment_profile_id:
+    type: string
+  source_id:
+    type: string
+    description: ID of a recipe to copy ingredients from

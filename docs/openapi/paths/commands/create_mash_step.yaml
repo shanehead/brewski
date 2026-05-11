@@ -1,0 +1,28 @@
+post:
+  operationId: createMashStep
+  summary: Add a step to a mash schedule
+  tags:
+    - Mash
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - mashId
+            - input
+          properties:
+            mashId:
+              type: string
+            input:
+              $ref: "../../components/schemas/CreateMashStepInput.yaml"
+  responses:
+    "200":
+      description: Created mash step
+      content:
+        application/json:
+          schema:
+            $ref: "../../components/schemas/MashStep.yaml"
+    "500":
+      $ref: "../../components/responses/Error.yaml"

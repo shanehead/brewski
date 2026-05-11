@@ -1,0 +1,8 @@
+type: object
+properties:
+  amount_kg:
+    type: number
+  add_after_boil:
+    type: boolean
+  addition_order:
+    type: integer

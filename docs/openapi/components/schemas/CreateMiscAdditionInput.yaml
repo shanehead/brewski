@@ -1,0 +1,22 @@
+type: object
+required:
+  - name
+  - type_
+  - use_
+  - amount
+  - time_min
+properties:
+  misc_id:
+    type: string
+  name:
+    type: string
+  type_:
+    type: string
+  use_:
+    type: string
+  amount:
+    type: number
+  amount_is_weight:
+    type: boolean
+  time_min:
+    type: number

@@ -1,0 +1,28 @@
+post:
+  operationId: createRecipeFermentable
+  summary: Add a fermentable to a recipe
+  tags:
+    - Fermentables
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - recipeId
+            - input
+          properties:
+            recipeId:
+              type: string
+            input:
+              $ref: "../../components/schemas/CreateFermentableAdditionInput.yaml"
+  responses:
+    "200":
+      description: Created fermentable addition
+      content:
+        application/json:
+          schema:
+            $ref: "../../components/schemas/RecipeAdditionFermentable.yaml"
+    "500":
+      $ref: "../../components/responses/Error.yaml"

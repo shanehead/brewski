@@ -1,0 +1,16 @@
+post:
+  operationId: listMiscLibrary
+  summary: List all miscellaneous ingredients in the ingredient library
+  tags:
+    - Library
+  responses:
+    "200":
+      description: Array of misc ingredients
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "../../components/schemas/Misc.yaml"
+    "500":
+      $ref: "../../components/responses/Error.yaml"

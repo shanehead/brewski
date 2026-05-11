@@ -1,0 +1,28 @@
+post:
+  operationId: updateRecipeYeast
+  summary: Update a yeast addition
+  tags:
+    - Yeasts
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - id
+            - input
+          properties:
+            id:
+              type: string
+            input:
+              $ref: "../../components/schemas/UpdateYeastAdditionInput.yaml"
+  responses:
+    "200":
+      description: Updated yeast addition
+      content:
+        application/json:
+          schema:
+            $ref: "../../components/schemas/RecipeAdditionYeast.yaml"
+    "500":
+      $ref: "../../components/responses/Error.yaml"

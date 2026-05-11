@@ -1,0 +1,28 @@
+post:
+  operationId: createRecipeMisc
+  summary: Add a miscellaneous ingredient to a recipe
+  tags:
+    - Misc
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - recipeId
+            - input
+          properties:
+            recipeId:
+              type: string
+            input:
+              $ref: "../../components/schemas/CreateMiscAdditionInput.yaml"
+  responses:
+    "200":
+      description: Created misc addition
+      content:
+        application/json:
+          schema:
+            $ref: "../../components/schemas/RecipeAdditionMisc.yaml"
+    "500":
+      $ref: "../../components/responses/Error.yaml"

@@ -1,0 +1,16 @@
+post:
+  operationId: listStyles
+  summary: List all beer styles
+  tags:
+    - Library
+  responses:
+    "200":
+      description: Array of beer styles
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "../../components/schemas/Style.yaml"
+    "500":
+      $ref: "../../components/responses/Error.yaml"

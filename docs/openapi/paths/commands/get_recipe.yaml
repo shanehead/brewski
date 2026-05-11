@@ -1,0 +1,26 @@
+post:
+  operationId: getRecipe
+  summary: Get a full recipe by ID
+  tags:
+    - Recipes
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              description: Recipe UUID
+  responses:
+    "200":
+      description: Full recipe with all ingredients and mash
+      content:
+        application/json:
+          schema:
+            $ref: "../../components/schemas/Recipe.yaml"
+    "500":
+      $ref: "../../components/responses/Error.yaml"

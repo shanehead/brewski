@@ -226,7 +226,7 @@
             </div>
           </div>
           <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;">
-            {#each [['Alpha', hop.alpha_pct + '%'], ['Beta', fmt(hop.beta_pct) + '%'], ['Cohumulone', fmt(hop.cohumulone_pct) + '%'], ['Myrcene', fmt(hop.myrcene_pct) + '%'], ['Humulene', fmt(hop.humulene_pct) + '%'], ['Caryophyllene', fmt(hop.caryophyllene_pct) + '%']] as [label, value]}
+            {#each [['Alpha', hop.alpha_pct + '%'], ['Beta', fmt(hop.beta_pct ?? null) + '%'], ['Cohumulone', fmt(hop.cohumulone_pct ?? null) + '%'], ['Myrcene', fmt(hop.myrcene_pct ?? null) + '%'], ['Humulene', fmt(hop.humulene_pct ?? null) + '%'], ['Caryophyllene', fmt(hop.caryophyllene_pct ?? null) + '%']] as [label, value]}
               <div style="background: var(--color-bg-elevated); border-radius: 5px; padding: 6px 8px;">
                 <div style="font-size: 11px; color: var(--color-text-secondary);">{label}</div>
                 <div style="font-size: 13px; font-weight: 600;">{value}</div>

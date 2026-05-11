@@ -1,0 +1,25 @@
+post:
+  operationId: getMash
+  summary: Get the mash schedule for a recipe
+  tags:
+    - Mash
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - recipeId
+          properties:
+            recipeId:
+              type: string
+  responses:
+    "200":
+      description: Mash schedule with steps
+      content:
+        application/json:
+          schema:
+            $ref: "../../components/schemas/Mash.yaml"
+    "500":
+      $ref: "../../components/responses/Error.yaml"

@@ -1,0 +1,28 @@
+post:
+  operationId: createRecipeYeast
+  summary: Add a yeast to a recipe
+  tags:
+    - Yeasts
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - recipeId
+            - input
+          properties:
+            recipeId:
+              type: string
+            input:
+              $ref: "../../components/schemas/CreateYeastAdditionInput.yaml"
+  responses:
+    "200":
+      description: Created yeast addition
+      content:
+        application/json:
+          schema:
+            $ref: "../../components/schemas/RecipeAdditionYeast.yaml"
+    "500":
+      $ref: "../../components/responses/Error.yaml"

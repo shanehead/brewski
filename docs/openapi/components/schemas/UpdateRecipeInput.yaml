@@ -1,0 +1,60 @@
+type: object
+properties:
+  name:
+    type: string
+  type_:
+    type: string
+  brewer:
+    type: string
+  asst_brewer:
+    type: string
+  batch_size_l:
+    type: number
+  boil_size_l:
+    type: number
+  boil_time_min:
+    type: number
+  efficiency_pct:
+    type: number
+  style_id:
+    type: string
+  equipment_profile_id:
+    type: string
+  notes:
+    type: string
+  taste_notes:
+    type: string
+  taste_rating:
+    type: number
+  fermentation_stages:
+    type: integer
+  primary_age_days:
+    type: number
+  primary_temp_c:
+    type: number
+  secondary_age_days:
+    type: number
+  secondary_temp_c:
+    type: number
+  tertiary_age_days:
+    type: number
+  tertiary_temp_c:
+    type: number
+  age_days:
+    type: number
+  age_temp_c:
+    type: number
+  carbonation_vols:
+    type: number
+  forced_carbonation:
+    type: boolean
+  priming_sugar_name:
+    type: string
+  carbonation_temp_c:
+    type: number
+  priming_sugar_equiv:
+    type: number
+  keg_priming_factor:
+    type: number
+  date:
+    type: string

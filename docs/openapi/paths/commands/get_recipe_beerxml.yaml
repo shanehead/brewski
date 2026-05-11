@@ -1,0 +1,26 @@
+post:
+  operationId: getRecipeBeerxml
+  summary: Export a recipe as BeerXML
+  tags:
+    - Import/Export
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - recipeId
+          properties:
+            recipeId:
+              type: string
+  responses:
+    "200":
+      description: BeerXML string
+      content:
+        application/json:
+          schema:
+            type: string
+            description: BeerXML-formatted XML document
+    "500":
+      $ref: "../../components/responses/Error.yaml"

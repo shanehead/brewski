@@ -1,0 +1,28 @@
+post:
+  operationId: updateRecipeMisc
+  summary: Update a miscellaneous ingredient addition
+  tags:
+    - Misc
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - id
+            - input
+          properties:
+            id:
+              type: string
+            input:
+              $ref: "../../components/schemas/UpdateMiscAdditionInput.yaml"
+  responses:
+    "200":
+      description: Updated misc addition
+      content:
+        application/json:
+          schema:
+            $ref: "../../components/schemas/RecipeAdditionMisc.yaml"
+    "500":
+      $ref: "../../components/responses/Error.yaml"

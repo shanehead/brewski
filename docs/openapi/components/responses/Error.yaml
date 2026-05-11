@@ -1,0 +1,6 @@
+description: Command error
+content:
+  application/json:
+    schema:
+      type: string
+      description: Human-readable error message from the Rust backend

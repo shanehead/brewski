@@ -1,0 +1,38 @@
+type: object
+required:
+  - name
+  - type_
+  - form
+properties:
+  yeast_id:
+    oneOf:
+      - type: string
+      - type: "null"
+  name:
+    type: string
+  type_:
+    type: string
+  form:
+    type: string
+  laboratory:
+    oneOf:
+      - type: string
+      - type: "null"
+  product_id:
+    oneOf:
+      - type: string
+      - type: "null"
+  attenuation_pct:
+    oneOf:
+      - type: number
+      - type: "null"
+  amount:
+    oneOf:
+      - type: number
+      - type: "null"
+  amount_is_weight:
+    type: boolean
+  add_to_secondary:
+    type: boolean
+  times_cultured:
+    type: integer

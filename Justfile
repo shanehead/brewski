@@ -36,7 +36,20 @@ lint-openapi:
 
 # Preview the OpenAPI docs in a browser
 preview-docs:
-    bunx redocly build-docs docs/openapi.yaml --output docs/openapi.html && open docs/openapi.html
+    bunx redocly build-docs docs/openapi/openapi.yaml --output docs/openapi.html && open docs/openapi.html
+
+# Regenerate TypeScript and Rust types from the OpenAPI spec
+gen: gen-ts gen-rust
+
+gen-ts:
+    bunx redocly bundle docs/openapi/openapi.yaml -o /tmp/brewski-bundled.yaml
+    bunx openapi-typescript /tmp/brewski-bundled.yaml -o src/lib/api.gen.ts
+
+gen-rust:
+    bunx redocly bundle docs/openapi/openapi.yaml -o /tmp/brewski-bundled.yaml
+    bun scripts/extract-schemas.mjs /tmp/brewski-bundled.yaml /tmp/brewski-schemas.json
+    cargo typify /tmp/brewski-schemas.json -o src-tauri/src/models.gen.rs
+    cargo fmt --manifest-path src-tauri/Cargo.toml
 
 # ── Test & Coverage ───────────────────────────────────────────────────────────
 

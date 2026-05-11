@@ -1,0 +1,35 @@
+type: object
+required:
+  - id
+  - name
+  - calcium_ppm
+  - bicarbonate_ppm
+  - sulfate_ppm
+  - chloride_ppm
+  - sodium_ppm
+  - magnesium_ppm
+properties:
+  id:
+    type: string
+  name:
+    type: string
+  calcium_ppm:
+    type: number
+  bicarbonate_ppm:
+    type: number
+  sulfate_ppm:
+    type: number
+  chloride_ppm:
+    type: number
+  sodium_ppm:
+    type: number
+  magnesium_ppm:
+    type: number
+  ph:
+    type:
+      - number
+      - "null"
+  notes:
+    type:
+      - string
+      - "null"

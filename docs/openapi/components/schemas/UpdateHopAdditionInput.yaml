@@ -1,0 +1,10 @@
+type: object
+properties:
+  amount_kg:
+    type: number
+  use_:
+    type: string
+  time_min:
+    type: number
+  addition_order:
+    type: integer

@@ -1,0 +1,80 @@
+type: object
+required:
+  - id
+  - name
+  - category
+  - category_number
+  - style_letter
+  - style_guide
+  - type_
+  - og_min
+  - og_max
+  - fg_min
+  - fg_max
+  - ibu_min
+  - ibu_max
+  - color_min_srm
+  - color_max_srm
+properties:
+  id:
+    type: string
+  name:
+    type: string
+  category:
+    type: string
+  category_number:
+    type: string
+  style_letter:
+    type: string
+  style_guide:
+    type: string
+  type_:
+    type: string
+  og_min:
+    type: number
+  og_max:
+    type: number
+  fg_min:
+    type: number
+  fg_max:
+    type: number
+  ibu_min:
+    type: number
+  ibu_max:
+    type: number
+  color_min_srm:
+    type: number
+  color_max_srm:
+    type: number
+  carb_min_vols:
+    type:
+      - number
+      - "null"
+  carb_max_vols:
+    type:
+      - number
+      - "null"
+  abv_min_pct:
+    type:
+      - number
+      - "null"
+  abv_max_pct:
+    type:
+      - number
+      - "null"
+  notes:
+    type:
+      - string
+      - "null"
+  profile:
+    type:
+      - string
+      - "null"
+  ingredients:
+    type:
+      - string
+      - "null"
+  examples:
+    type:
+      - string
+      - "null"

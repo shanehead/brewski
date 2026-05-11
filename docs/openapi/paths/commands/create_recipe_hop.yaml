@@ -1,0 +1,28 @@
+post:
+  operationId: createRecipeHop
+  summary: Add a hop to a recipe
+  tags:
+    - Hops
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - recipeId
+            - input
+          properties:
+            recipeId:
+              type: string
+            input:
+              $ref: "../../components/schemas/CreateHopAdditionInput.yaml"
+  responses:
+    "200":
+      description: Created hop addition
+      content:
+        application/json:
+          schema:
+            $ref: "../../components/schemas/RecipeAdditionHop.yaml"
+    "500":
+      $ref: "../../components/responses/Error.yaml"

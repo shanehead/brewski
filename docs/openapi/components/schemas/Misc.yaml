@@ -1,0 +1,31 @@
+type: object
+required:
+  - id
+  - name
+  - type_
+  - use_
+  - time_min
+  - amount_is_weight
+properties:
+  id:
+    type: string
+  name:
+    type: string
+  type_:
+    type: string
+    description: Spice, Fining, Water Agent, Herb, Flavor, Other
+  use_:
+    type: string
+    description: Boil, Mash, Primary, Secondary, Bottling
+  time_min:
+    type: number
+  notes:
+    type:
+      - string
+      - "null"
+  use_for:
+    type:
+      - string
+      - "null"
+  amount_is_weight:
+    type: boolean

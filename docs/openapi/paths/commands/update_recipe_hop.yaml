@@ -1,0 +1,28 @@
+post:
+  operationId: updateRecipeHop
+  summary: Update a hop addition
+  tags:
+    - Hops
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - id
+            - input
+          properties:
+            id:
+              type: string
+            input:
+              $ref: "../../components/schemas/UpdateHopAdditionInput.yaml"
+  responses:
+    "200":
+      description: Updated hop addition
+      content:
+        application/json:
+          schema:
+            $ref: "../../components/schemas/RecipeAdditionHop.yaml"
+    "500":
+      $ref: "../../components/responses/Error.yaml"

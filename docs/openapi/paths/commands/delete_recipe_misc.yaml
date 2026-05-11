@@ -1,0 +1,21 @@
+post:
+  operationId: deleteRecipeMisc
+  summary: Remove a miscellaneous ingredient from a recipe
+  tags:
+    - Misc
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+  responses:
+    "200":
+      description: Misc addition deleted
+    "500":
+      $ref: "../../components/responses/Error.yaml"

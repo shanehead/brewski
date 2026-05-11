@@ -1,0 +1,21 @@
+post:
+  operationId: deleteMashStep
+  summary: Remove a step from a mash schedule
+  tags:
+    - Mash
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+  responses:
+    "200":
+      description: Mash step deleted
+    "500":
+      $ref: "../../components/responses/Error.yaml"

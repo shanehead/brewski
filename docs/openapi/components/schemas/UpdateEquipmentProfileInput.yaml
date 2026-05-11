@@ -1,0 +1,20 @@
+type: object
+properties:
+  name:
+    type: string
+  notes:
+    type: string
+  boil_size_l:
+    type: number
+  batch_size_l:
+    type: number
+  boil_time_min:
+    type: number
+  evap_rate_pct_hr:
+    type: number
+  trub_chiller_loss_l:
+    type: number
+  fermenter_loss_l:
+    type: number
+  efficiency_pct:
+    type: number

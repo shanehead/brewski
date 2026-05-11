@@ -1,0 +1,174 @@
+type: object
+required:
+  - id
+  - name
+  - type_
+  - batch_size_l
+  - boil_size_l
+  - boil_time_min
+  - forced_carbonation
+  - fermentation_stages
+  - created_at
+  - updated_at
+  - fermentables
+  - hops
+  - yeasts
+  - miscs
+  - waters
+properties:
+  id:
+    type: string
+  name:
+    type: string
+  type_:
+    type: string
+    description: Recipe type (e.g. All Grain, Extract, Partial Mash)
+  brewer:
+    type:
+      - string
+      - "null"
+  asst_brewer:
+    type:
+      - string
+      - "null"
+  batch_size_l:
+    type: number
+  boil_size_l:
+    type: number
+  boil_time_min:
+    type: number
+  efficiency_pct:
+    type:
+      - number
+      - "null"
+  style_id:
+    type:
+      - string
+      - "null"
+  equipment_profile_id:
+    type:
+      - string
+      - "null"
+  notes:
+    type:
+      - string
+      - "null"
+  taste_notes:
+    type:
+      - string
+      - "null"
+  taste_rating:
+    type:
+      - number
+      - "null"
+  og:
+    type:
+      - number
+      - "null"
+    description: Measured original gravity
+  fg:
+    type:
+      - number
+      - "null"
+    description: Measured final gravity
+  fermentation_stages:
+    type: integer
+  primary_age_days:
+    type:
+      - number
+      - "null"
+  primary_temp_c:
+    type:
+      - number
+      - "null"
+  secondary_age_days:
+    type:
+      - number
+      - "null"
+  secondary_temp_c:
+    type:
+      - number
+      - "null"
+  tertiary_age_days:
+    type:
+      - number
+      - "null"
+  tertiary_temp_c:
+    type:
+      - number
+      - "null"
+  age_days:
+    type:
+      - number
+      - "null"
+    description: Conditioning/bottle age in days
+  age_temp_c:
+    type:
+      - number
+      - "null"
+  carbonation_vols:
+    type:
+      - number
+      - "null"
+    description: Target carbonation in volumes of CO2
+  forced_carbonation:
+    type: boolean
+  priming_sugar_name:
+    type:
+      - string
+      - "null"
+  carbonation_temp_c:
+    type:
+      - number
+      - "null"
+  priming_sugar_equiv:
+    type:
+      - number
+      - "null"
+  keg_priming_factor:
+    type:
+      - number
+      - "null"
+  date:
+    type:
+      - string
+      - "null"
+    description: Brew date (free-form string)
+  created_at:
+    type: integer
+    format: int64
+  updated_at:
+    type: integer
+    format: int64
+  equipment_profile:
+    oneOf:
+      - $ref: "./EquipmentProfile.yaml"
+      - type: "null"
+  style:
+    oneOf:
+      - $ref: "./Style.yaml"
+      - type: "null"
+  fermentables:
+    type: array
+    items:
+      $ref: "./RecipeAdditionFermentable.yaml"
+  hops:
+    type: array
+    items:
+      $ref: "./RecipeAdditionHop.yaml"
+  yeasts:
+    type: array
+    items:
+      $ref: "./RecipeAdditionYeast.yaml"
+  miscs:
+    type: array
+    items:
+      $ref: "./RecipeAdditionMisc.yaml"
+  waters:
+    type: array
+    items:
+      $ref: "./RecipeAdditionWater.yaml"
+  mash:
+    oneOf:
+      - $ref: "./Mash.yaml"
+      - type: "null"

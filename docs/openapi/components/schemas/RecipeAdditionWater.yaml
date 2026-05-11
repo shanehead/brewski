@@ -1,0 +1,19 @@
+type: object
+required:
+  - id
+  - recipe_id
+  - name
+  - amount_l
+properties:
+  id:
+    type: string
+  recipe_id:
+    type: string
+  water_id:
+    type:
+      - string
+      - "null"
+  name:
+    type: string
+  amount_l:
+    type: number

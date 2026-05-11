@@ -1,0 +1,35 @@
+type: object
+required:
+  - id
+  - recipe_id
+  - name
+  - alpha_pct
+  - form
+  - amount_kg
+  - use_
+  - time_min
+  - addition_order
+properties:
+  id:
+    type: string
+  recipe_id:
+    type: string
+  hop_id:
+    type:
+      - string
+      - "null"
+  name:
+    type: string
+  alpha_pct:
+    type: number
+  form:
+    type: string
+  amount_kg:
+    type: number
+  use_:
+    type: string
+    description: Boil, Dry Hop, Mash, First Wort, Aroma
+  time_min:
+    type: number
+  addition_order:
+    type: integer

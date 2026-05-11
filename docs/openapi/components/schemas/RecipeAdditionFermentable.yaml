@@ -1,0 +1,35 @@
+type: object
+required:
+  - id
+  - recipe_id
+  - name
+  - type_
+  - yield_pct
+  - color_lovibond
+  - amount_kg
+  - add_after_boil
+  - addition_order
+properties:
+  id:
+    type: string
+  recipe_id:
+    type: string
+  fermentable_id:
+    type:
+      - string
+      - "null"
+    description: Source library ingredient ID (null if manually entered)
+  name:
+    type: string
+  type_:
+    type: string
+  yield_pct:
+    type: number
+  color_lovibond:
+    type: number
+  amount_kg:
+    type: number
+  add_after_boil:
+    type: boolean
+  addition_order:
+    type: integer

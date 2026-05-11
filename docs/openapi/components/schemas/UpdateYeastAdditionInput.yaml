@@ -1,0 +1,12 @@
+type: object
+properties:
+  attenuation_pct:
+    type: number
+  amount:
+    type: number
+  amount_is_weight:
+    type: boolean
+  add_to_secondary:
+    type: boolean
+  times_cultured:
+    type: integer

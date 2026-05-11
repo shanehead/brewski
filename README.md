@@ -52,13 +52,13 @@ just build       # release build for current platform
 
 ```bash
 just check          # TypeScript check + OpenAPI lint
-just lint-openapi   # validate docs/openapi.yaml
+just lint-openapi   # validate docs/openapi/openapi.yaml
 just preview-docs   # render API docs in a browser
 ```
 
 ## API
 
-The full Tauri IPC interface is documented as an OpenAPI 3.1 spec at [`docs/openapi.yaml`](docs/openapi.yaml).
+The full Tauri IPC interface is documented as an OpenAPI 3.1 spec at [`docs/openapi/openapi.yaml`](docs/openapi/openapi.yaml).
 
 ## License
 

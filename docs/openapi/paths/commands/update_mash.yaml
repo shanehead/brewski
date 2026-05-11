@@ -1,0 +1,28 @@
+post:
+  operationId: updateMash
+  summary: Update the mash schedule for a recipe
+  tags:
+    - Mash
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - recipeId
+            - input
+          properties:
+            recipeId:
+              type: string
+            input:
+              $ref: "../../components/schemas/UpdateMashInput.yaml"
+  responses:
+    "200":
+      description: Updated mash schedule
+      content:
+        application/json:
+          schema:
+            $ref: "../../components/schemas/Mash.yaml"
+    "500":
+      $ref: "../../components/responses/Error.yaml"

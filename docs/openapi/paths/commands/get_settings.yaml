@@ -1,0 +1,16 @@
+post:
+  operationId: getSettings
+  summary: Get all application settings as key/value pairs
+  tags:
+    - Settings
+  responses:
+    "200":
+      description: Settings map
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties:
+              type: string
+    "500":
+      $ref: "../../components/responses/Error.yaml"

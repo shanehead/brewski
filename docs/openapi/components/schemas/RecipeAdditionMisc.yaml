@@ -1,0 +1,34 @@
+type: object
+required:
+  - id
+  - recipe_id
+  - name
+  - type_
+  - use_
+  - amount
+  - amount_is_weight
+  - time_min
+  - addition_order
+properties:
+  id:
+    type: string
+  recipe_id:
+    type: string
+  misc_id:
+    type:
+      - string
+      - "null"
+  name:
+    type: string
+  type_:
+    type: string
+  use_:
+    type: string
+  amount:
+    type: number
+  amount_is_weight:
+    type: boolean
+  time_min:
+    type: number
+  addition_order:
+    type: integer

@@ -1,0 +1,102 @@
+type: object
+required:
+  - id
+  - name
+  - type_
+  - form
+  - add_to_secondary
+properties:
+  id:
+    type: string
+  name:
+    type: string
+  type_:
+    type: string
+    description: Ale, Lager, Wheat, Wine, Champagne
+  form:
+    type: string
+    description: Liquid, Dry, Slant, Culture
+  laboratory:
+    type:
+      - string
+      - "null"
+  product_id:
+    type:
+      - string
+      - "null"
+  min_temperature_c:
+    type:
+      - number
+      - "null"
+  max_temperature_c:
+    type:
+      - number
+      - "null"
+  flocculation:
+    type:
+      - string
+      - "null"
+    description: Low, Medium, High, Very High
+  attenuation_pct:
+    type:
+      - number
+      - "null"
+    description: BeerXML single attenuation value; see min/max fields for range
+  notes:
+    type:
+      - string
+      - "null"
+  best_for:
+    type:
+      - string
+      - "null"
+  max_reuse:
+    type:
+      - integer
+      - "null"
+  add_to_secondary:
+    type: boolean
+  min_attenuation_pct:
+    type:
+      - number
+      - "null"
+    description: BeerMaverick attenuation range lower bound
+  max_attenuation_pct:
+    type:
+      - number
+      - "null"
+    description: BeerMaverick attenuation range upper bound
+  alcohol_tolerance:
+    type:
+      - string
+      - "null"
+    description: low, medium, high, very_high
+  flavor_profile:
+    type:
+      - string
+      - "null"
+  styles:
+    type:
+      - string
+      - "null"
+    description: Suitable beer styles, comma-separated
+  substitutes:
+    type:
+      - string
+      - "null"
+    description: Substitute yeast strains, comma-separated
+  species:
+    type:
+      - string
+      - "null"
+    description: e.g. Saccharomyces cerevisiae
+  pof_positive:
+    type:
+      - boolean
+      - "null"
+    description: Phenolic Off-Flavor gene present
+  sta1_positive:
+    type:
+      - boolean
+      - "null"
+    description: STA-1 dextrin-fermenting gene present

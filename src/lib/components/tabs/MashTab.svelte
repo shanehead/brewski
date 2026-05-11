@@ -38,7 +38,7 @@
       type_: stepType,
       step_temp_c: stepTemp,
       step_time_min: stepTime,
-      infuse_amount_l: stepInfuse,
+      infuse_amount_l: stepInfuse ?? undefined,
     }));
     addingStep = false;
     onchange();

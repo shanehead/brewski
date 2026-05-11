@@ -1,0 +1,16 @@
+post:
+  operationId: listYeastLibrary
+  summary: List all yeasts in the ingredient library
+  tags:
+    - Library
+  responses:
+    "200":
+      description: Array of yeasts
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "../../components/schemas/Yeast.yaml"
+    "500":
+      $ref: "../../components/responses/Error.yaml"

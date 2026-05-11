@@ -1,0 +1,21 @@
+post:
+  operationId: deleteEquipmentProfile
+  summary: Delete an equipment profile
+  tags:
+    - Equipment
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+  responses:
+    "200":
+      description: Equipment profile deleted
+    "500":
+      $ref: "../../components/responses/Error.yaml"

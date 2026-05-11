@@ -31,6 +31,8 @@
     "@testing-library/user-event": "^14.6.1",
     "@types/node": "^25.6.0",
     "happy-dom": "^20.9.0",
+    "js-yaml": "^4.1.1",
+    "openapi-typescript": "^7.13.0",
     "svelte": "^5.0.0",
     "svelte-check": "^4.0.0",
     "typescript": "~5.6.2",

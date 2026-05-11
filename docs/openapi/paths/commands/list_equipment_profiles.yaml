@@ -1,0 +1,16 @@
+post:
+  operationId: listEquipmentProfiles
+  summary: List all equipment profiles
+  tags:
+    - Equipment
+  responses:
+    "200":
+      description: Array of equipment profiles
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "../../components/schemas/EquipmentProfile.yaml"
+    "500":
+      $ref: "../../components/responses/Error.yaml"

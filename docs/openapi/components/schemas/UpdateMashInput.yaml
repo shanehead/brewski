@@ -1,0 +1,17 @@
+type: object
+properties:
+  name:
+    type: string
+  grain_temp_c:
+    type: number
+  tun_temp_c:
+    type: number
+  sparge_temp_c:
+    type: number
+  ph:
+    type: number
+  notes:
+    type: string
+  ratio_l_per_kg:
+    type: number
+    description: Water-to-grain ratio in litres per kilogram

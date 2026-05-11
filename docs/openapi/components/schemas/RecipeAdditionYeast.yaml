@@ -1,0 +1,47 @@
+type: object
+required:
+  - id
+  - recipe_id
+  - name
+  - type_
+  - form
+  - amount_is_weight
+  - add_to_secondary
+  - times_cultured
+properties:
+  id:
+    type: string
+  recipe_id:
+    type: string
+  yeast_id:
+    type:
+      - string
+      - "null"
+  name:
+    type: string
+  type_:
+    type: string
+  form:
+    type: string
+  laboratory:
+    type:
+      - string
+      - "null"
+  product_id:
+    type:
+      - string
+      - "null"
+  attenuation_pct:
+    type:
+      - number
+      - "null"
+  amount:
+    type:
+      - number
+      - "null"
+  amount_is_weight:
+    type: boolean
+  add_to_secondary:
+    type: boolean
+  times_cultured:
+    type: integer

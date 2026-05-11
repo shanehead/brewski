@@ -1,0 +1,24 @@
+post:
+  operationId: updateSetting
+  summary: Set a single application setting
+  tags:
+    - Settings
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - key
+            - value
+          properties:
+            key:
+              type: string
+            value:
+              type: string
+  responses:
+    "200":
+      description: Setting updated
+    "500":
+      $ref: "../../components/responses/Error.yaml"

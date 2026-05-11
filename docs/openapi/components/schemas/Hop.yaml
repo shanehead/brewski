@@ -1,0 +1,61 @@
+type: object
+required:
+  - id
+  - name
+  - alpha_pct
+  - form
+properties:
+  id:
+    type: string
+  name:
+    type: string
+  alpha_pct:
+    type: number
+  beta_pct:
+    type:
+      - number
+      - "null"
+  form:
+    type: string
+    description: Pellet, Plug, Leaf
+  type_:
+    type:
+      - string
+      - "null"
+    description: Bittering, Aroma, Both
+  origin:
+    type:
+      - string
+      - "null"
+  year:
+    type:
+      - string
+      - "null"
+  notes:
+    type:
+      - string
+      - "null"
+  substitutes:
+    type:
+      - string
+      - "null"
+  hsi_pct:
+    type:
+      - number
+      - "null"
+  humulene_pct:
+    type:
+      - number
+      - "null"
+  caryophyllene_pct:
+    type:
+      - number
+      - "null"
+  cohumulone_pct:
+    type:
+      - number
+      - "null"
+  myrcene_pct:
+    type:
+      - number
+      - "null"

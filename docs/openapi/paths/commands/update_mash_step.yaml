@@ -1,0 +1,28 @@
+post:
+  operationId: updateMashStep
+  summary: Update a mash step
+  tags:
+    - Mash
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - id
+            - input
+          properties:
+            id:
+              type: string
+            input:
+              $ref: "../../components/schemas/UpdateMashStepInput.yaml"
+  responses:
+    "200":
+      description: Updated mash step
+      content:
+        application/json:
+          schema:
+            $ref: "../../components/schemas/MashStep.yaml"
+    "500":
+      $ref: "../../components/responses/Error.yaml"

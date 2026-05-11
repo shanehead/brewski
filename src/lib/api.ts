@@ -1,465 +1,40 @@
 import { invoke } from "@tauri-apps/api/core";
+import type { components } from "./api.gen";
 
-export interface RecipeSummary {
-  id: string;
-  name: string;
-  style_name: string | null;
-  type_: string;
-  batch_size_l: number;
-  created_at: number;
-  updated_at: number;
-}
-
-export interface EquipmentProfile {
-  id: string;
-  name: string;
-  notes: string | null;
-  boil_size_l: number;
-  batch_size_l: number;
-  calc_boil_volume: boolean;
-  tun_volume_l: number | null;
-  tun_weight_kg: number | null;
-  tun_specific_heat: number | null;
-  lauter_deadspace_l: number;
-  top_up_kettle_l: number;
-  trub_chiller_loss_l: number;
-  evap_rate_pct_hr: number;
-  boil_time_min: number;
-  top_up_water_l: number;
-  fermenter_loss_l: number;
-  hop_utilization_pct: number;
-  efficiency_pct: number;
-  created_at: number;
-  updated_at: number;
-}
-
-export interface Style {
-  id: string;
-  name: string;
-  category: string;
-  category_number: string;
-  style_letter: string;
-  style_guide: string;
-  type_: string;
-  og_min: number;
-  og_max: number;
-  fg_min: number;
-  fg_max: number;
-  ibu_min: number;
-  ibu_max: number;
-  color_min_srm: number;
-  color_max_srm: number;
-  carb_min_vols: number | null;
-  carb_max_vols: number | null;
-  abv_min_pct: number | null;
-  abv_max_pct: number | null;
-  notes: string | null;
-  profile: string | null;
-  ingredients: string | null;
-  examples: string | null;
-}
-
-export interface RecipeAdditionFermentable {
-  id: string;
-  recipe_id: string;
-  fermentable_id: string | null;
-  name: string;
-  type_: string;
-  yield_pct: number;
-  color_lovibond: number;
-  amount_kg: number;
-  add_after_boil: boolean;
-  addition_order: number;
-}
-
-export interface RecipeAdditionHop {
-  id: string;
-  recipe_id: string;
-  hop_id: string | null;
-  name: string;
-  alpha_pct: number;
-  form: string;
-  amount_kg: number;
-  use_: string;
-  time_min: number;
-  addition_order: number;
-}
-
-export interface RecipeAdditionYeast {
-  id: string;
-  recipe_id: string;
-  yeast_id: string | null;
-  name: string;
-  type_: string;
-  form: string;
-  laboratory: string | null;
-  product_id: string | null;
-  attenuation_pct: number | null;
-  amount: number | null;
-  amount_is_weight: boolean;
-  add_to_secondary: boolean;
-  times_cultured: number;
-}
-
-export interface RecipeAdditionMisc {
-  id: string;
-  recipe_id: string;
-  misc_id: string | null;
-  name: string;
-  type_: string;
-  use_: string;
-  amount: number;
-  amount_is_weight: boolean;
-  time_min: number;
-  addition_order: number;
-}
-
-export interface RecipeAdditionWater {
-  id: string;
-  recipe_id: string;
-  water_id: string | null;
-  name: string;
-  amount_l: number;
-}
-
-export interface MashStep {
-  id: string;
-  mash_id: string;
-  name: string;
-  type_: string;
-  infuse_amount_l: number | null;
-  step_temp_c: number;
-  step_time_min: number;
-  ramp_time_min: number | null;
-  end_temp_c: number | null;
-  step_order: number;
-}
-
-export interface Mash {
-  id: string;
-  recipe_id: string;
-  name: string;
-  grain_temp_c: number;
-  tun_temp_c: number | null;
-  sparge_temp_c: number | null;
-  ph: number | null;
-  tun_weight_kg: number | null;
-  tun_specific_heat: number | null;
-  equip_adjust: boolean;
-  ratio_l_per_kg: number | null;
-  notes: string | null;
-  steps: MashStep[];
-}
-
-export interface Recipe {
-  id: string;
-  name: string;
-  type_: string;
-  brewer: string | null;
-  asst_brewer: string | null;
-  batch_size_l: number;
-  boil_size_l: number;
-  boil_time_min: number;
-  efficiency_pct: number | null;
-  style_id: string | null;
-  equipment_profile_id: string | null;
-  notes: string | null;
-  taste_notes: string | null;
-  taste_rating: number | null;
-  og: number | null;
-  fg: number | null;
-  fermentation_stages: number;
-  primary_age_days: number | null;
-  primary_temp_c: number | null;
-  secondary_age_days: number | null;
-  secondary_temp_c: number | null;
-  tertiary_age_days: number | null;
-  tertiary_temp_c: number | null;
-  age_days: number | null;
-  age_temp_c: number | null;
-  carbonation_vols: number | null;
-  forced_carbonation: boolean;
-  priming_sugar_name: string | null;
-  carbonation_temp_c: number | null;
-  priming_sugar_equiv: number | null;
-  keg_priming_factor: number | null;
-  date: string | null;
-  created_at: number;
-  updated_at: number;
-  equipment_profile: EquipmentProfile | null;
-  style: Style | null;
-  fermentables: RecipeAdditionFermentable[];
-  hops: RecipeAdditionHop[];
-  yeasts: RecipeAdditionYeast[];
-  miscs: RecipeAdditionMisc[];
-  waters: RecipeAdditionWater[];
-  mash: Mash | null;
-}
-
-export interface RecipeStats {
-  og: number;
-  fg: number;
-  abv_pct: number;
-  ibu: number;
-  srm: number;
-  calories_per_355ml: number;
-  bu_gu_ratio: number;
-  pre_boil_gravity: number;
-  pre_boil_volume_l: number;
-  post_boil_volume_l: number;
-  strike_temp_c: number | null;
-}
-
-export interface Fermentable {
-  id: string;
-  name: string;
-  type_: string;
-  yield_pct: number;
-  color_lovibond: number;
-  origin: string | null;
-  supplier: string | null;
-  notes: string | null;
-  add_after_boil: boolean;
-  coarse_fine_diff_pct: number | null;
-  moisture_pct: number | null;
-  diastatic_power_lintner: number | null;
-  protein_pct: number | null;
-  max_in_batch_pct: number | null;
-  recommend_mash: boolean | null;
-  ibu_gal_per_lb: number | null;
-}
-
-export interface Hop {
-  id: string;
-  name: string;
-  alpha_pct: number;
-  beta_pct: number | null;
-  form: string;
-  type_: string | null;
-  origin: string | null;
-  year: string | null;
-  notes: string | null;
-  substitutes: string | null;
-  hsi_pct: number | null;
-  humulene_pct: number | null;
-  caryophyllene_pct: number | null;
-  cohumulone_pct: number | null;
-  myrcene_pct: number | null;
-}
-
-export interface Yeast {
-  // BeerXML fields
-  id: string;
-  name: string;
-  type_: string;
-  form: string;
-  laboratory: string | null;
-  product_id: string | null;
-  min_temperature_c: number | null;
-  max_temperature_c: number | null;
-  flocculation: string | null;
-  /** BeerXML single attenuation value; see min/max fields for range */
-  attenuation_pct: number | null;
-  notes: string | null;
-  best_for: string | null;
-  max_reuse: number | null;
-  add_to_secondary: boolean;
-  // BeerMaverick extended fields
-  min_attenuation_pct: number | null;
-  max_attenuation_pct: number | null;
-  alcohol_tolerance: string | null;
-  flavor_profile: string | null;
-  styles: string | null;
-  substitutes: string | null;
-  species: string | null;
-  pof_positive: boolean | null;
-  sta1_positive: boolean | null;
-}
-
-// --- Input types ---
-
-export interface CreateFermentableAdditionInput {
-  fermentable_id?: string;
-  name: string;
-  type_: string;
-  yield_pct: number;
-  color_lovibond: number;
-  amount_kg: number;
-  add_after_boil?: boolean;
-}
-
-export interface CreateHopAdditionInput {
-  hop_id?: string;
-  name: string;
-  alpha_pct: number;
-  form?: string;
-  amount_kg: number;
-  use_: string;
-  time_min: number;
-}
-
-export interface CreateYeastAdditionInput {
-  yeast_id?: string | null;
-  name: string;
-  type_: string;
-  form: string;
-  laboratory?: string | null;
-  product_id?: string | null;
-  attenuation_pct?: number | null;
-  amount?: number | null;
-  amount_is_weight?: boolean;
-  add_to_secondary?: boolean;
-  times_cultured?: number;
-}
-
-export interface CreateMiscAdditionInput {
-  misc_id?: string;
-  name: string;
-  type_: string;
-  use_: string;
-  amount: number;
-  amount_is_weight?: boolean;
-  time_min: number;
-}
-
-export interface CreateWaterAdditionInput {
-  water_id?: string;
-  name: string;
-  amount_l: number;
-}
-
-export interface CreateMashStepInput {
-  name: string;
-  type_?: string;
-  infuse_amount_l?: number | null;
-  step_temp_c: number;
-  step_time_min: number;
-  ramp_time_min?: number;
-  end_temp_c?: number;
-}
-
-export interface UpdateMashStepInput {
-  name?: string;
-  type_?: string;
-  infuse_amount_l?: number | null;
-  step_temp_c?: number;
-  step_time_min?: number;
-  ramp_time_min?: number;
-  end_temp_c?: number;
-}
-
-export interface CreateEquipmentProfileInput {
-  name: string;
-  notes?: string;
-  boil_size_l: number;
-  batch_size_l: number;
-  boil_time_min?: number;
-  evap_rate_pct_hr?: number;
-  trub_chiller_loss_l?: number;
-  fermenter_loss_l?: number;
-  efficiency_pct: number;
-}
-
-export interface UpdateEquipmentProfileInput {
-  name?: string;
-  notes?: string;
-  boil_size_l?: number;
-  batch_size_l?: number;
-  boil_time_min?: number;
-  evap_rate_pct_hr?: number;
-  trub_chiller_loss_l?: number;
-  fermenter_loss_l?: number;
-  efficiency_pct?: number;
-}
-
-export interface UpdateRecipeInput {
-  name?: string;
-  type_?: string;
-  brewer?: string;
-  asst_brewer?: string;
-  batch_size_l?: number;
-  boil_size_l?: number;
-  boil_time_min?: number;
-  efficiency_pct?: number;
-  style_id?: string;
-  equipment_profile_id?: string;
-  notes?: string;
-  taste_notes?: string;
-  taste_rating?: number;
-  fermentation_stages?: number;
-  primary_age_days?: number;
-  primary_temp_c?: number;
-  secondary_age_days?: number;
-  secondary_temp_c?: number;
-  tertiary_age_days?: number;
-  tertiary_temp_c?: number;
-  age_days?: number;
-  age_temp_c?: number;
-  carbonation_vols?: number;
-  forced_carbonation?: boolean;
-  priming_sugar_name?: string;
-  carbonation_temp_c?: number;
-  priming_sugar_equiv?: number;
-  keg_priming_factor?: number;
-  date?: string;
-}
-
-export interface UpdateFermentableAdditionInput {
-  amount_kg?: number;
-  add_after_boil?: boolean;
-  addition_order?: number;
-}
-
-export interface UpdateHopAdditionInput {
-  amount_kg?: number;
-  use_?: string;
-  time_min?: number;
-  addition_order?: number;
-}
-
-export interface UpdateYeastAdditionInput {
-  attenuation_pct?: number;
-  amount?: number;
-  amount_is_weight?: boolean;
-  add_to_secondary?: boolean;
-  times_cultured?: number;
-}
-
-export interface UpdateMiscAdditionInput {
-  amount?: number;
-  amount_is_weight?: boolean;
-  use_?: string;
-  time_min?: number;
-  addition_order?: number;
-}
-
-export interface UpdateWaterAdditionInput {
-  amount_l?: number;
-}
-
-export interface Misc {
-  id: string;
-  name: string;
-  type_: string;
-  use_: string;
-  time_min: number;
-  notes: string | null;
-  use_for: string | null;
-  amount_is_weight: boolean;
-}
-
-export interface Water {
-  id: string;
-  name: string;
-  calcium_ppm: number;
-  bicarbonate_ppm: number;
-  sulfate_ppm: number;
-  chloride_ppm: number;
-  sodium_ppm: number;
-  magnesium_ppm: number;
-  ph: number | null;
-  notes: string | null;
-}
+export type RecipeSummary = components["schemas"]["RecipeSummary"];
+export type EquipmentProfile = components["schemas"]["EquipmentProfile"];
+export type Style = components["schemas"]["Style"];
+export type RecipeAdditionFermentable = components["schemas"]["RecipeAdditionFermentable"];
+export type RecipeAdditionHop = components["schemas"]["RecipeAdditionHop"];
+export type RecipeAdditionYeast = components["schemas"]["RecipeAdditionYeast"];
+export type RecipeAdditionMisc = components["schemas"]["RecipeAdditionMisc"];
+export type RecipeAdditionWater = components["schemas"]["RecipeAdditionWater"];
+export type MashStep = components["schemas"]["MashStep"];
+export type Mash = components["schemas"]["Mash"];
+export type Recipe = components["schemas"]["Recipe"];
+export type RecipeStats = components["schemas"]["RecipeStats"];
+export type Fermentable = components["schemas"]["Fermentable"];
+export type Hop = components["schemas"]["Hop"];
+export type Yeast = components["schemas"]["Yeast"];
+export type CreateFermentableAdditionInput = components["schemas"]["CreateFermentableAdditionInput"];
+export type CreateHopAdditionInput = components["schemas"]["CreateHopAdditionInput"];
+export type CreateYeastAdditionInput = components["schemas"]["CreateYeastAdditionInput"];
+export type CreateMiscAdditionInput = components["schemas"]["CreateMiscAdditionInput"];
+export type CreateWaterAdditionInput = components["schemas"]["CreateWaterAdditionInput"];
+export type CreateMashStepInput = components["schemas"]["CreateMashStepInput"];
+export type UpdateMashStepInput = components["schemas"]["UpdateMashStepInput"];
+export type CreateEquipmentProfileInput = components["schemas"]["CreateEquipmentProfileInput"];
+export type UpdateEquipmentProfileInput = components["schemas"]["UpdateEquipmentProfileInput"];
+export type CreateRecipeInput = components["schemas"]["CreateRecipeInput"];
+export type UpdateRecipeInput = components["schemas"]["UpdateRecipeInput"];
+export type UpdateFermentableAdditionInput = components["schemas"]["UpdateFermentableAdditionInput"];
+export type UpdateHopAdditionInput = components["schemas"]["UpdateHopAdditionInput"];
+export type UpdateYeastAdditionInput = components["schemas"]["UpdateYeastAdditionInput"];
+export type UpdateMiscAdditionInput = components["schemas"]["UpdateMiscAdditionInput"];
+export type UpdateWaterAdditionInput = components["schemas"]["UpdateWaterAdditionInput"];
+export type Misc = components["schemas"]["Misc"];
+export type Water = components["schemas"]["Water"];
+export type UpdateMashInput = components["schemas"]["UpdateMashInput"];
 
 export type SugarType = "table_sugar" | "corn_sugar" | "dry_malt_extract";
 export type GravityUnit = "sg" | "plato" | "brix";
@@ -499,15 +74,7 @@ export interface ColorConversionResult {
 // --- Recipes ---
 export const listRecipes = () => invoke<RecipeSummary[]>("list_recipes");
 export const getRecipe = (id: string) => invoke<Recipe>("get_recipe", { id });
-export const createRecipe = (input: {
-  name: string;
-  type_?: string;
-  batch_size_l?: number;
-  boil_size_l?: number;
-  boil_time_min?: number;
-  equipment_profile_id?: string;
-  source_id?: string;
-}) => invoke<Recipe>("create_recipe", { input });
+export const createRecipe = (input: CreateRecipeInput) => invoke<Recipe>("create_recipe", { input });
 export const updateRecipe = (id: string, input: UpdateRecipeInput) =>
   invoke<Recipe>("update_recipe", { id, input });
 export const deleteRecipe = (id: string) => invoke<void>("delete_recipe", { id });
@@ -547,17 +114,6 @@ export const updateRecipeWater = (id: string, input: UpdateWaterAdditionInput) =
 export const deleteRecipeWater = (id: string) => invoke<void>("delete_recipe_water", { id });
 
 // --- Mash ---
-
-export interface UpdateMashInput {
-  name?: string;
-  grain_temp_c?: number;
-  tun_temp_c?: number;
-  sparge_temp_c?: number;
-  ph?: number;
-  notes?: string;
-  ratio_l_per_kg?: number;
-}
-
 export const getMash = (recipeId: string) => invoke<Mash>("get_mash", { recipeId });
 export const updateMash = (recipeId: string, input: UpdateMashInput) =>
   invoke<Mash>("update_mash", { recipeId, input });

@@ -1,0 +1,22 @@
+type: object
+required:
+  - name
+  - type_
+  - yield_pct
+  - color_lovibond
+  - amount_kg
+properties:
+  fermentable_id:
+    type: string
+  name:
+    type: string
+  type_:
+    type: string
+  yield_pct:
+    type: number
+  color_lovibond:
+    type: number
+  amount_kg:
+    type: number
+  add_after_boil:
+    type: boolean

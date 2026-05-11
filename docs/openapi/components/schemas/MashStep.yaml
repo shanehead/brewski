@@ -1,0 +1,37 @@
+type: object
+required:
+  - id
+  - mash_id
+  - name
+  - type_
+  - step_temp_c
+  - step_time_min
+  - step_order
+properties:
+  id:
+    type: string
+  mash_id:
+    type: string
+  name:
+    type: string
+  type_:
+    type: string
+    description: Infusion, Temperature, Decoction
+  infuse_amount_l:
+    type:
+      - number
+      - "null"
+  step_temp_c:
+    type: number
+  step_time_min:
+    type: integer
+  ramp_time_min:
+    type:
+      - integer
+      - "null"
+  end_temp_c:
+    type:
+      - number
+      - "null"
+  step_order:
+    type: integer

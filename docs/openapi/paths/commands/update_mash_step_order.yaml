@@ -1,0 +1,24 @@
+post:
+  operationId: updateMashStepOrder
+  summary: Reorder mash steps by providing IDs in the desired order
+  tags:
+    - Mash
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - orderedIds
+          properties:
+            orderedIds:
+              type: array
+              items:
+                type: string
+              description: Step IDs in the desired display order
+  responses:
+    "200":
+      description: Step order updated
+    "500":
+      $ref: "../../components/responses/Error.yaml"

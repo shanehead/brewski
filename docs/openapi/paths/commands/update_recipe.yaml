@@ -1,0 +1,28 @@
+post:
+  operationId: updateRecipe
+  summary: Update a recipe
+  tags:
+    - Recipes
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - id
+            - input
+          properties:
+            id:
+              type: string
+            input:
+              $ref: "../../components/schemas/UpdateRecipeInput.yaml"
+  responses:
+    "200":
+      description: Updated recipe
+      content:
+        application/json:
+          schema:
+            $ref: "../../components/schemas/Recipe.yaml"
+    "500":
+      $ref: "../../components/responses/Error.yaml"

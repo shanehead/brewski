@@ -1,0 +1,21 @@
+post:
+  operationId: deleteRecipeYeast
+  summary: Remove a yeast from a recipe
+  tags:
+    - Yeasts
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+  responses:
+    "200":
+      description: Yeast addition deleted
+    "500":
+      $ref: "../../components/responses/Error.yaml"

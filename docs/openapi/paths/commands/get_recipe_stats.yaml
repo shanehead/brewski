@@ -1,0 +1,25 @@
+post:
+  operationId: getRecipeStats
+  summary: Calculate stats for a recipe (OG, FG, ABV, IBU, SRM, etc.)
+  tags:
+    - Recipes
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - recipeId
+          properties:
+            recipeId:
+              type: string
+  responses:
+    "200":
+      description: Calculated recipe statistics
+      content:
+        application/json:
+          schema:
+            $ref: "../../components/schemas/RecipeStats.yaml"
+    "500":
+      $ref: "../../components/responses/Error.yaml"

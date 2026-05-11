@@ -1,6 +1,8 @@
 apis:
   brewski@v1:
-    root: docs/openapi.yaml
+    root: docs/openapi/openapi.yaml
+    x-openapi-ts:
+      output: src/lib/api.gen.ts
 
 rules:
   # Not applicable — this is a Tauri IPC interface, not an authenticated HTTP API

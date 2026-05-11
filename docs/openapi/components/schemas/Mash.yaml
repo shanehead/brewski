@@ -1,0 +1,52 @@
+type: object
+required:
+  - id
+  - recipe_id
+  - name
+  - grain_temp_c
+  - equip_adjust
+  - steps
+properties:
+  id:
+    type: string
+  recipe_id:
+    type: string
+  name:
+    type: string
+  grain_temp_c:
+    type: number
+  tun_temp_c:
+    type:
+      - number
+      - "null"
+  sparge_temp_c:
+    type:
+      - number
+      - "null"
+  ph:
+    type:
+      - number
+      - "null"
+  tun_weight_kg:
+    type:
+      - number
+      - "null"
+  tun_specific_heat:
+    type:
+      - number
+      - "null"
+  equip_adjust:
+    type: boolean
+  ratio_l_per_kg:
+    type:
+      - number
+      - "null"
+    description: Water-to-grain ratio in litres per kilogram
+  notes:
+    type:
+      - string
+      - "null"
+  steps:
+    type: array
+    items:
+      $ref: "./MashStep.yaml"

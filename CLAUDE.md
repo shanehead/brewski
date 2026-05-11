@@ -25,13 +25,13 @@ just dev           # Tauri dev server (frontend + backend)
 just dev-web       # frontend only
 just build         # release build
 just check         # TypeScript + OpenAPI lint
-just lint-openapi  # Redocly lint of docs/openapi.yaml
+just lint-openapi  # Redocly lint of docs/openapi/openapi.yaml
 just preview-docs  # render API docs in browser
 ```
 
 ## API spec
 
-The Tauri IPC interface is documented as an OpenAPI 3.1 spec at `docs/openapi.yaml`.
+The Tauri IPC interface is documented as an OpenAPI 3.1 spec at `docs/openapi/openapi.yaml`.
 Lint it with `just lint-openapi` before committing changes to it.
 
 ## Style guide

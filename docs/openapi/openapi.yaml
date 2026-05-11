@@ -1,0 +1,202 @@
+openapi: 3.1.0
+info:
+  title: Brewski
+  description: |
+    Tauri IPC interface for the Brewski homebrewing recipe manager.
+
+    All operations are invoked via Tauri's `invoke()` IPC mechanism rather than
+    HTTP. This spec models each command as a POST to `/commands/{commandName}`,
+    with the request body carrying the command's named parameters and the
+    response body carrying the return value.
+
+    **Usage in frontend:**
+    ```typescript
+    import { invoke } from "@tauri-apps/api/core";
+    const recipes = await invoke("list_recipes");
+    ```
+
+    **Error handling:** All commands return a `Result<T, String>` in Rust. On
+    error, Tauri rejects the invoke promise with the error string.
+  version: 1.0.0
+servers:
+  - url: tauri://localhost
+    description: Tauri IPC (desktop app)
+tags:
+  - name: Recipes
+    description: Create, read, update, and delete brewing recipes
+  - name: Fermentables
+    description: Fermentable grain/sugar additions on a recipe
+  - name: Hops
+    description: Hop additions on a recipe
+  - name: Yeasts
+    description: Yeast additions on a recipe
+  - name: Misc
+    description: Miscellaneous ingredient additions on a recipe
+  - name: Water
+    description: Water profile additions on a recipe
+  - name: Mash
+    description: Mash schedule and steps for a recipe
+  - name: Equipment
+    description: Equipment profiles used for volume and efficiency calculations
+  - name: Library
+    description: Read-only reference data (styles, ingredients)
+  - name: Settings
+    description: User-level application settings
+  - name: Import/Export
+    description: BeerXML import and export
+paths:
+  /commands/list_recipes:
+    $ref: ./paths/commands/list_recipes.yaml
+  /commands/get_recipe:
+    $ref: ./paths/commands/get_recipe.yaml
+  /commands/create_recipe:
+    $ref: ./paths/commands/create_recipe.yaml
+  /commands/update_recipe:
+    $ref: ./paths/commands/update_recipe.yaml
+  /commands/delete_recipe:
+    $ref: ./paths/commands/delete_recipe.yaml
+  /commands/get_recipe_stats:
+    $ref: ./paths/commands/get_recipe_stats.yaml
+  /commands/create_recipe_fermentable:
+    $ref: ./paths/commands/create_recipe_fermentable.yaml
+  /commands/update_recipe_fermentable:
+    $ref: ./paths/commands/update_recipe_fermentable.yaml
+  /commands/delete_recipe_fermentable:
+    $ref: ./paths/commands/delete_recipe_fermentable.yaml
+  /commands/create_recipe_hop:
+    $ref: ./paths/commands/create_recipe_hop.yaml
+  /commands/update_recipe_hop:
+    $ref: ./paths/commands/update_recipe_hop.yaml
+  /commands/delete_recipe_hop:
+    $ref: ./paths/commands/delete_recipe_hop.yaml
+  /commands/create_recipe_yeast:
+    $ref: ./paths/commands/create_recipe_yeast.yaml
+  /commands/update_recipe_yeast:
+    $ref: ./paths/commands/update_recipe_yeast.yaml
+  /commands/delete_recipe_yeast:
+    $ref: ./paths/commands/delete_recipe_yeast.yaml
+  /commands/create_recipe_misc:
+    $ref: ./paths/commands/create_recipe_misc.yaml
+  /commands/update_recipe_misc:
+    $ref: ./paths/commands/update_recipe_misc.yaml
+  /commands/delete_recipe_misc:
+    $ref: ./paths/commands/delete_recipe_misc.yaml
+  /commands/create_recipe_water:
+    $ref: ./paths/commands/create_recipe_water.yaml
+  /commands/update_recipe_water:
+    $ref: ./paths/commands/update_recipe_water.yaml
+  /commands/delete_recipe_water:
+    $ref: ./paths/commands/delete_recipe_water.yaml
+  /commands/get_mash:
+    $ref: ./paths/commands/get_mash.yaml
+  /commands/update_mash:
+    $ref: ./paths/commands/update_mash.yaml
+  /commands/create_mash_step:
+    $ref: ./paths/commands/create_mash_step.yaml
+  /commands/update_mash_step:
+    $ref: ./paths/commands/update_mash_step.yaml
+  /commands/delete_mash_step:
+    $ref: ./paths/commands/delete_mash_step.yaml
+  /commands/update_mash_step_order:
+    $ref: ./paths/commands/update_mash_step_order.yaml
+  /commands/list_equipment_profiles:
+    $ref: ./paths/commands/list_equipment_profiles.yaml
+  /commands/create_equipment_profile:
+    $ref: ./paths/commands/create_equipment_profile.yaml
+  /commands/update_equipment_profile:
+    $ref: ./paths/commands/update_equipment_profile.yaml
+  /commands/delete_equipment_profile:
+    $ref: ./paths/commands/delete_equipment_profile.yaml
+  /commands/list_styles:
+    $ref: ./paths/commands/list_styles.yaml
+  /commands/list_fermentable_library:
+    $ref: ./paths/commands/list_fermentable_library.yaml
+  /commands/list_hop_library:
+    $ref: ./paths/commands/list_hop_library.yaml
+  /commands/list_yeast_library:
+    $ref: ./paths/commands/list_yeast_library.yaml
+  /commands/list_misc_library:
+    $ref: ./paths/commands/list_misc_library.yaml
+  /commands/list_water_library:
+    $ref: ./paths/commands/list_water_library.yaml
+  /commands/get_settings:
+    $ref: ./paths/commands/get_settings.yaml
+  /commands/update_setting:
+    $ref: ./paths/commands/update_setting.yaml
+  /commands/get_recipe_beerxml:
+    $ref: ./paths/commands/get_recipe_beerxml.yaml
+  /commands/create_recipes_from_beerxml:
+    $ref: ./paths/commands/create_recipes_from_beerxml.yaml
+components:
+  schemas:
+    RecipeSummary:
+      $ref: ./components/schemas/RecipeSummary.yaml
+    Recipe:
+      $ref: ./components/schemas/Recipe.yaml
+    RecipeStats:
+      $ref: ./components/schemas/RecipeStats.yaml
+    Style:
+      $ref: ./components/schemas/Style.yaml
+    EquipmentProfile:
+      $ref: ./components/schemas/EquipmentProfile.yaml
+    Fermentable:
+      $ref: ./components/schemas/Fermentable.yaml
+    Hop:
+      $ref: ./components/schemas/Hop.yaml
+    Yeast:
+      $ref: ./components/schemas/Yeast.yaml
+    Misc:
+      $ref: ./components/schemas/Misc.yaml
+    Water:
+      $ref: ./components/schemas/Water.yaml
+    RecipeAdditionFermentable:
+      $ref: ./components/schemas/RecipeAdditionFermentable.yaml
+    RecipeAdditionHop:
+      $ref: ./components/schemas/RecipeAdditionHop.yaml
+    RecipeAdditionYeast:
+      $ref: ./components/schemas/RecipeAdditionYeast.yaml
+    RecipeAdditionMisc:
+      $ref: ./components/schemas/RecipeAdditionMisc.yaml
+    RecipeAdditionWater:
+      $ref: ./components/schemas/RecipeAdditionWater.yaml
+    Mash:
+      $ref: ./components/schemas/Mash.yaml
+    MashStep:
+      $ref: ./components/schemas/MashStep.yaml
+    CreateRecipeInput:
+      $ref: ./components/schemas/CreateRecipeInput.yaml
+    UpdateRecipeInput:
+      $ref: ./components/schemas/UpdateRecipeInput.yaml
+    CreateFermentableAdditionInput:
+      $ref: ./components/schemas/CreateFermentableAdditionInput.yaml
+    UpdateFermentableAdditionInput:
+      $ref: ./components/schemas/UpdateFermentableAdditionInput.yaml
+    CreateHopAdditionInput:
+      $ref: ./components/schemas/CreateHopAdditionInput.yaml
+    UpdateHopAdditionInput:
+      $ref: ./components/schemas/UpdateHopAdditionInput.yaml
+    CreateYeastAdditionInput:
+      $ref: ./components/schemas/CreateYeastAdditionInput.yaml
+    UpdateYeastAdditionInput:
+      $ref: ./components/schemas/UpdateYeastAdditionInput.yaml
+    CreateMiscAdditionInput:
+      $ref: ./components/schemas/CreateMiscAdditionInput.yaml
+    UpdateMiscAdditionInput:
+      $ref: ./components/schemas/UpdateMiscAdditionInput.yaml
+    CreateWaterAdditionInput:
+      $ref: ./components/schemas/CreateWaterAdditionInput.yaml
+    UpdateWaterAdditionInput:
+      $ref: ./components/schemas/UpdateWaterAdditionInput.yaml
+    UpdateMashInput:
+      $ref: ./components/schemas/UpdateMashInput.yaml
+    CreateMashStepInput:
+      $ref: ./components/schemas/CreateMashStepInput.yaml
+    UpdateMashStepInput:
+      $ref: ./components/schemas/UpdateMashStepInput.yaml
+    CreateEquipmentProfileInput:
+      $ref: ./components/schemas/CreateEquipmentProfileInput.yaml
+    UpdateEquipmentProfileInput:
+      $ref: ./components/schemas/UpdateEquipmentProfileInput.yaml
+  responses:
+    Error:
+      $ref: ./components/responses/Error.yaml

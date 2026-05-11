@@ -1,0 +1,12 @@
+type: object
+properties:
+  amount:
+    type: number
+  amount_is_weight:
+    type: boolean
+  use_:
+    type: string
+  time_min:
+    type: number
+  addition_order:
+    type: integer

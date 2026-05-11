@@ -1,0 +1,28 @@
+post:
+  operationId: createRecipeWater
+  summary: Add a water profile to a recipe
+  tags:
+    - Water
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - recipeId
+            - input
+          properties:
+            recipeId:
+              type: string
+            input:
+              $ref: "../../components/schemas/CreateWaterAdditionInput.yaml"
+  responses:
+    "200":
+      description: Created water addition
+      content:
+        application/json:
+          schema:
+            $ref: "../../components/schemas/RecipeAdditionWater.yaml"
+    "500":
+      $ref: "../../components/responses/Error.yaml"

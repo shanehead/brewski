@@ -1,0 +1,22 @@
+type: object
+required:
+  - name
+  - alpha_pct
+  - amount_kg
+  - use_
+  - time_min
+properties:
+  hop_id:
+    type: string
+  name:
+    type: string
+  alpha_pct:
+    type: number
+  form:
+    type: string
+  amount_kg:
+    type: number
+  use_:
+    type: string
+  time_min:
+    type: number

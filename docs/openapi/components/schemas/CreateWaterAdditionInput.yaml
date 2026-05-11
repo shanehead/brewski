@@ -1,0 +1,11 @@
+type: object
+required:
+  - name
+  - amount_l
+properties:
+  water_id:
+    type: string
+  name:
+    type: string
+  amount_l:
+    type: number

@@ -1,0 +1,31 @@
+type: object
+required:
+  - id
+  - name
+  - type_
+  - batch_size_l
+  - created_at
+  - updated_at
+properties:
+  id:
+    type: string
+  name:
+    type: string
+  style_name:
+    type:
+      - string
+      - "null"
+  type_:
+    type: string
+    description: Recipe type (e.g. All Grain, Extract, Partial Mash)
+  batch_size_l:
+    type: number
+    description: Target batch volume in litres
+  created_at:
+    type: integer
+    format: int64
+    description: Unix timestamp (milliseconds)
+  updated_at:
+    type: integer
+    format: int64
+    description: Unix timestamp (milliseconds)

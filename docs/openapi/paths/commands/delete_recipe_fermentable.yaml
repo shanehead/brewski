@@ -1,0 +1,21 @@
+post:
+  operationId: deleteRecipeFermentable
+  summary: Remove a fermentable from a recipe
+  tags:
+    - Fermentables
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+  responses:
+    "200":
+      description: Fermentable addition deleted
+    "500":
+      $ref: "../../components/responses/Error.yaml"

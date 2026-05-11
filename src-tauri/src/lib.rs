@@ -4,6 +4,8 @@ pub mod entities;
 mod error;
 pub mod migration;
 pub mod models;
+#[path = "models.gen.rs"]
+pub mod models_gen;
 pub mod repositories;
 
 #[cfg(test)]
