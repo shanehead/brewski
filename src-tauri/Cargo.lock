@@ -456,6 +456,7 @@ dependencies = [
 name = "brewski"
 version = "0.1.0"
 dependencies = [
+ "libsqlite3-sys",
  "quick-xml 0.36.2",
  "sea-orm",
  "sea-orm-migration",

@@ -26,21 +26,21 @@ Have a good way to tie a versioned recipe to its batches
 - [x] Microsoft Rust best practices checks
 - [x] Icons next to additions (or any other UI element)
 - [x] Unit testing for Frontend & Tauri IPC layer
-- [ ] Schema first development, split up OpenAPI file
-- [ ] Versioned API
+- [x] Schema first development, split up OpenAPI file
+- [x] Bundle SQLite for one single deployable bundle
+- [x] Versioned API
+- [x] SQLite Database location in release
+- [x] Custom SVG icons for UI (hops, grains, yeast, equipment, etc..)
+- [x] Give credit to BeerMaverick for data
+- [x] Tools tab to expose calculations
 - [ ] C4 Diagrams of architecture
 - [ ] Separate release bundles using SemVer for each OS
 - [ ] Allow media attachments to recipes and batches
 - [ ] Recipe versions
 - [ ] Hop types (cryo, quantum, etc..)
-- [ ] SQLite Database location in release
-- [ ] Bundle SQLite for one single deployable bundle
 - [ ] Cloud syncing (Google Drive? Dropbox? iCloud? S3?)
 - [ ] SQLite FKs and check constraints
 - [ ] SeaORM Migrations seem complex (multiple touch points to make a change)
-- [ ] Tools tab to expose calculations
-- [ ] Give credit to BeerMaverick for data
-- [ ] Custom SVG icons for UI (hops, grains, yeast, equipment, etc..)
 
 # Data
 - [x] Hop database (abstrax, yakima valley, etc..)

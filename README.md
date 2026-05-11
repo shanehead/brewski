@@ -14,7 +14,7 @@ Built with Tauri 2, SvelteKit, and Rust. Runs on macOS, Windows, and Linux.
   <img src="docs/architecture.svg" alt="Architecture diagram" width="580"/>
 </p>
 
-The frontend is a SvelteKit app running inside Tauri's WebView. All backend access goes through Tauri's IPC bridge via `tauri.invoke()` — typed wrappers live in [`src/lib/api.ts`](src/lib/api.ts). The Rust side handles commands, delegates to a repository layer, and persists everything to an embedded SQLite database via SeaORM and sqlx.
+The frontend is a SvelteKit app running inside Tauri's WebView. All backend access goes through Tauri's IPC bridge via `tauri.invoke()` — typed wrappers live in [`src/lib/api.gen.ts`](src/lib/api.gen.ts). The Rust side handles commands, delegates to a repository layer, and persists everything to an embedded SQLite database via SeaORM and sqlx.
 
 ## Tech Stack
 
@@ -56,9 +56,27 @@ just lint-openapi   # validate docs/openapi/openapi.yaml
 just preview-docs   # render API docs in a browser
 ```
 
+## Database location
+
+Brewski stores its SQLite database in the OS app data directory:
+
+| Platform | Path |
+|---|---|
+| macOS | `~/Library/Application Support/brewski/brewski.db` |
+| Windows | `%APPDATA%\brewski\brewski.db` |
+| Linux | `~/.local/share/brewski/brewski.db` |
+
 ## API
 
 The full Tauri IPC interface is documented as an OpenAPI 3.1 spec at [`docs/openapi/openapi.yaml`](docs/openapi/openapi.yaml).
+
+## Contributing
+
+Commits follow [Conventional Commits](https://www.conventionalcommits.org/) style: `type(scope): description` (e.g. `feat(recipes): add clone command`, `fix(ibu): correct rager formula`).
+
+## Data
+
+Hop, fermentable, and yeast library data sourced from [BeerMaverick](https://beermaverick.com).
 
 ## License
 
