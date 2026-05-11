@@ -28,10 +28,7 @@
     goto(`/recipe/${recipe.id}`);
   }
 
-  async function handleDelete(e: MouseEvent, id: string) {
-    e.stopPropagation();
-    e.preventDefault();
-    if (!confirm("Delete this recipe?")) return;
+  async function handleDelete(id: string) {
     await ipc(deleteRecipe(id));
     await ipc(refreshRecipeList());
     if (selectedId === id) goto("/");
@@ -61,10 +58,10 @@
   <!-- Recipe list -->
   <ul class="flex-1 overflow-y-auto py-1">
     {#each filtered as recipe (recipe.id)}
-      <li>
+      <li class="group relative">
         <a
           href="/recipe/{recipe.id}"
-          class="group flex flex-col px-3 py-2 cursor-pointer transition-colors"
+          class="flex flex-col px-3 py-2 pr-7 cursor-pointer transition-colors"
           style={selectedId === recipe.id
             ? "background: var(--color-bg-elevated);"
             : "color: var(--color-text-primary);"}
@@ -74,6 +71,12 @@
             {recipe.style_name ?? recipe.type_} · {(units === "imperial" ? lToGal(recipe.batch_size_l) : recipe.batch_size_l).toFixed(1)}{volumeLabel(units)}
           </span>
         </a>
+        <button
+          onclick={() => handleDelete(recipe.id)}
+          aria-label="Delete recipe"
+          class="absolute right-2 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity text-sm leading-none"
+          style="color: var(--color-text-muted);"
+        >×</button>
       </li>
     {:else}
       <li class="px-3 py-6 text-center text-sm" style="color: var(--color-text-muted);">
