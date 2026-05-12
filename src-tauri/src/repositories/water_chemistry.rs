@@ -154,7 +154,8 @@ impl<'a> WaterChemistryRepository<'a> {
             if let Some(ratio) = mash.ratio_l_per_kg {
                 ratio * total_grain_kg
             } else {
-                0.0
+                // Fall back to summing explicit infuse amounts from mash steps
+                mash.steps.iter().filter_map(|s| s.infuse_amount_l).sum()
             }
         } else {
             0.0
@@ -173,6 +174,19 @@ impl<'a> WaterChemistryRepository<'a> {
             .filter(recipe_water_adjustments::Column::RecipeId.eq(recipe_id))
             .all(self.db)
             .await?;
+
+        // When mash volume is unknown, apply all adjustments to the full estimated water volume.
+        // This covers recipes without a mash ratio or fermentables configured.
+        if mash_volume_l <= 0.0 {
+            let total_water_l = sparge_volume_l;
+            let combined =
+                self.apply_adjustments_all_targets(&mash_water, &adjustments, total_water_l);
+            return Ok(CalculatedWaterProfile {
+                mash: combined.clone(),
+                sparge: combined.clone(),
+                combined,
+            });
+        }
 
         // Calculate adjusted profiles
         let mash_profile = self.apply_adjustments(&mash_water, &adjustments, "mash", mash_volume_l);
@@ -270,6 +284,47 @@ impl<'a> WaterChemistryRepository<'a> {
 
                 let ppm_increase = (ion_contrib.bicarbonate_ppm * amount_f64) / volume_l;
                 profile.bicarbonate_ppm += ppm_increase;
+            }
+        }
+
+        profile.cl_so4_ratio = if profile.sulfate_ppm > 0.0 {
+            profile.chloride_ppm / profile.sulfate_ppm
+        } else {
+            0.0
+        };
+
+        profile
+    }
+
+    fn apply_adjustments_all_targets(
+        &self,
+        base_water: &waters::Model,
+        adjustments: &[recipe_water_adjustments::Model],
+        volume_l: f64,
+    ) -> WaterProfile {
+        let mut profile = WaterProfile {
+            calcium_ppm: base_water.calcium_ppm,
+            magnesium_ppm: base_water.magnesium_ppm,
+            sodium_ppm: base_water.sodium_ppm,
+            chloride_ppm: base_water.chloride_ppm,
+            sulfate_ppm: base_water.sulfate_ppm,
+            bicarbonate_ppm: base_water.bicarbonate_ppm,
+            cl_so4_ratio: 0.0,
+        };
+
+        if volume_l <= 0.0 {
+            return profile;
+        }
+
+        for adjustment in adjustments {
+            if let Some(ion_contrib) = IonContribution::for_addition(&adjustment.addition) {
+                let amount_f64 = adjustment.amount;
+                profile.calcium_ppm += (ion_contrib.calcium_ppm * amount_f64) / volume_l;
+                profile.magnesium_ppm += (ion_contrib.magnesium_ppm * amount_f64) / volume_l;
+                profile.sodium_ppm += (ion_contrib.sodium_ppm * amount_f64) / volume_l;
+                profile.chloride_ppm += (ion_contrib.chloride_ppm * amount_f64) / volume_l;
+                profile.sulfate_ppm += (ion_contrib.sulfate_ppm * amount_f64) / volume_l;
+                profile.bicarbonate_ppm += (ion_contrib.bicarbonate_ppm * amount_f64) / volume_l;
             }
         }
 

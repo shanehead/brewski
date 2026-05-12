@@ -65,6 +65,7 @@
     if (adj) {
       adjustments = [...adjustments, adj];
       await refreshProfile();
+      onchange();
     }
   }
 
@@ -73,6 +74,7 @@
     if (adj) {
       adjustments = adjustments.map(a => a.id === id ? adj : a);
       await refreshProfile();
+      onchange();
     }
   }
 
@@ -80,6 +82,7 @@
     await ipc(deleteWaterAdjustment(id));
     adjustments = adjustments.filter(a => a.id !== id);
     await refreshProfile();
+    onchange();
   }
 
   function getAdditionLabel(addition: string): string {
@@ -145,7 +148,7 @@
               <div class="flex items-center gap-2">
                 <span class="text-xs flex-1" style="color: var(--color-text-secondary);">{getAdditionLabel(adj.addition)}</span>
                 <input type="number" step="0.1" min="0" value={adj.amount}
-                       onblur={(e) => handleUpdateAddition(adj.id, parseFloat((e.target as HTMLInputElement).value) || 0)}
+                       onchange={(e) => handleUpdateAddition(adj.id, parseFloat((e.target as HTMLInputElement).value) || 0)}
                        class="w-20 px-2 py-1 rounded text-xs"
                        style="background: var(--color-bg-surface); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
                 <span class="text-xs" style="color: var(--color-text-muted); width: 30px;">g</span>
