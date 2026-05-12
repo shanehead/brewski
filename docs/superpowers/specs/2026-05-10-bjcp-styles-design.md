@@ -9,13 +9,13 @@ Populate the `styles` table with all BJCP 2021 style guide entries, overwriting 
 
 ## Data Source
 
-Use `bjcp-2021-styles.json` — a local copy of the canonical BJCP 2021 machine-readable JSON (from `christinedraper/bjcp-guidelines` on GitHub), committed to the repo root alongside the existing ingredient data files (`fermentables.json`, `hops.json`, `yeasts.json`).
+Use `data/bjcp-2021-styles.json` — a local copy of the canonical BJCP 2021 machine-readable JSON (from `christinedraper/bjcp-guidelines` on GitHub), committed to the `data/` directory alongside the existing ingredient data files (`data/fermentables.json`, `data/hops.json`, `data/yeasts.json`).
 
 ## Transform Script
 
 A one-off bun script at `scripts/seed-styles.mjs`:
 
-1. Reads `bjcp-2021-styles.json` from the repo root
+1. Reads `data/bjcp-2021-styles.json`
 2. Maps each sub-style entry to the `styles` table schema (see field mapping below)
 3. Writes a `INSERT INTO styles (...)` block into `src-tauri/src/migration/sql/001_initial.sql`, replacing any existing styles INSERT block
 

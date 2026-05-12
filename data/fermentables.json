@@ -1,0 +1,502 @@
+[
+  {
+    "fermentable": "2-Row Pale Malt",
+    "url": "https://beermaverick.com/fermentable/2-row-pale-malt/",
+    "type": "Grain",
+    "subcategory": "Base Malt",
+    "srm": "1.5-3.5",
+    "batch_max": "100%",
+    "diastatic_power": "50-150",
+    "sg": "1.037"
+  },
+  {
+    "fermentable": "6-Row Pale Malt",
+    "url": "https://beermaverick.com/fermentable/6-row-pale-malt/",
+    "type": "Grain",
+    "subcategory": "Base Malt",
+    "srm": "2",
+    "batch_max": "100%",
+    "diastatic_power": "160",
+    "sg": "1.035"
+  },
+  {
+    "fermentable": "Acidulated Malt",
+    "url": "https://beermaverick.com/fermentable/acidulated-malt/",
+    "type": "Grain",
+    "subcategory": "Base Malt",
+    "srm": "1.5-3",
+    "batch_max": "10%",
+    "diastatic_power": "0",
+    "sg": "1.027"
+  },
+  {
+    "fermentable": "Amber Malt",
+    "url": "https://beermaverick.com/fermentable/amber-malt/",
+    "type": "Grain",
+    "subcategory": "Caramel Malt",
+    "srm": "22-30",
+    "batch_max": "20%",
+    "diastatic_power": "0",
+    "sg": "1.032"
+  },
+  {
+    "fermentable": "Aromatic Malt",
+    "url": "https://beermaverick.com/fermentable/aromatic-malt/",
+    "type": "Grain",
+    "subcategory": "Roasted Malt",
+    "srm": "20-30",
+    "batch_max": "10%",
+    "diastatic_power": "20",
+    "sg": "1.035"
+  },
+  {
+    "fermentable": "Biscuit Malt",
+    "url": "https://beermaverick.com/fermentable/biscuit-malt/",
+    "type": "Grain",
+    "subcategory": "Roasted Malt",
+    "srm": "28-30",
+    "batch_max": "10%",
+    "diastatic_power": "0",
+    "sg": "1.035"
+  },
+  {
+    "fermentable": "Black (Patent) Malt",
+    "url": "https://beermaverick.com/fermentable/black-malt/",
+    "type": "Grain",
+    "subcategory": "Roasted Malt",
+    "srm": "400-500",
+    "batch_max": "10%",
+    "diastatic_power": "0",
+    "sg": "1.027"
+  },
+  {
+    "fermentable": "Black Barley",
+    "url": "https://beermaverick.com/fermentable/black-barley/",
+    "type": "Grain",
+    "subcategory": "Roasted Malt",
+    "srm": "400-530",
+    "batch_max": "10%",
+    "diastatic_power": "0",
+    "sg": "1.027"
+  },
+  {
+    "fermentable": "Brown Malt",
+    "url": "https://beermaverick.com/fermentable/brown-malt/",
+    "type": "Grain",
+    "subcategory": "Roasted Malt",
+    "srm": "65",
+    "batch_max": "10%",
+    "diastatic_power": "0",
+    "sg": "1.034"
+  },
+  {
+    "fermentable": "Cara Ruby",
+    "url": "https://beermaverick.com/fermentable/cara-ruby-grain/",
+    "type": "Grain",
+    "subcategory": "Caramel Malt",
+    "srm": "17-22",
+    "batch_max": "25%",
+    "diastatic_power": "-",
+    "sg": "1.033"
+  },
+  {
+    "fermentable": "Carafoam",
+    "url": "https://beermaverick.com/fermentable/carafoam/",
+    "type": "Grain",
+    "subcategory": "Caramel Malt",
+    "srm": "1-2",
+    "batch_max": "40%",
+    "diastatic_power": "15-48",
+    "sg": "1.035"
+  },
+  {
+    "fermentable": "Caramel/Crystal Malt",
+    "url": "https://beermaverick.com/fermentable/caramelcrystal-malt/",
+    "type": "Grain",
+    "subcategory": "Caramel Malt",
+    "srm": "10-110",
+    "batch_max": "15%",
+    "diastatic_power": "0",
+    "sg": "1.035"
+  },
+  {
+    "fermentable": "Carapils (Dextrin)",
+    "url": "https://beermaverick.com/fermentable/carapils-dextrine/",
+    "type": "Grain",
+    "subcategory": "Caramel Malt",
+    "srm": "1-2",
+    "batch_max": "5%",
+    "diastatic_power": "0",
+    "sg": "1.033"
+  },
+  {
+    "fermentable": "Chit Malt",
+    "url": "https://beermaverick.com/fermentable/chit-malt/",
+    "type": "Grain",
+    "subcategory": "Raw Malt",
+    "srm": "1-2",
+    "batch_max": "15%",
+    "diastatic_power": "75",
+    "sg": "1.030"
+  },
+  {
+    "fermentable": "Chocolate Malt",
+    "url": "https://beermaverick.com/fermentable/chocolate-malt/",
+    "type": "Grain",
+    "subcategory": "Roasted Malt",
+    "srm": "350",
+    "batch_max": "10%",
+    "diastatic_power": "0",
+    "sg": "1.025"
+  },
+  {
+    "fermentable": "Dextrose (Corn Sugar)",
+    "url": "https://beermaverick.com/fermentable/dextrose-corn-sugar/",
+    "type": "Adjunct",
+    "subcategory": "Sugar",
+    "srm": "0",
+    "batch_max": "5%",
+    "diastatic_power": "0",
+    "sg": "1.041"
+  },
+  {
+    "fermentable": "Dry Malt Extract (DME)",
+    "url": "https://beermaverick.com/fermentable/dry-malt-extract-dme/",
+    "type": "Grain",
+    "subcategory": "Extract",
+    "srm": "3-18",
+    "batch_max": "100%",
+    "diastatic_power": "0",
+    "sg": "1.044"
+  },
+  {
+    "fermentable": "Flaked Barley",
+    "url": "https://beermaverick.com/fermentable/flaked-barley/",
+    "type": "Grain",
+    "subcategory": "Raw Malt",
+    "srm": "2",
+    "batch_max": "20%",
+    "diastatic_power": "0",
+    "sg": "1.032"
+  },
+  {
+    "fermentable": "Flaked Corn (Maize)",
+    "url": "https://beermaverick.com/fermentable/flaked-corn-maize/",
+    "type": "Grain",
+    "subcategory": "Raw Malt",
+    "srm": "1",
+    "batch_max": "10%",
+    "diastatic_power": "0",
+    "sg": "1.040"
+  },
+  {
+    "fermentable": "Flaked Oats",
+    "url": "https://beermaverick.com/fermentable/flaked-oats/",
+    "type": "Grain",
+    "subcategory": "Raw Malt",
+    "srm": "1",
+    "batch_max": "30%",
+    "diastatic_power": "0",
+    "sg": "1.033"
+  },
+  {
+    "fermentable": "Flaked Rice",
+    "url": "https://beermaverick.com/fermentable/flaked-rice/",
+    "type": "Grain",
+    "subcategory": "Raw Malt",
+    "srm": "1",
+    "batch_max": "40%",
+    "diastatic_power": "0",
+    "sg": "1.040"
+  },
+  {
+    "fermentable": "Flaked Rye",
+    "url": "https://beermaverick.com/fermentable/flaked-rye/",
+    "type": "Grain",
+    "subcategory": "Raw Malt",
+    "srm": "2",
+    "batch_max": "10%",
+    "diastatic_power": "0",
+    "sg": "1.036"
+  },
+  {
+    "fermentable": "Flaked Spelt",
+    "url": "https://beermaverick.com/fermentable/flaked-spelt/",
+    "type": "Grain",
+    "subcategory": "Raw Malt",
+    "srm": "1-2",
+    "batch_max": "60%",
+    "diastatic_power": "0",
+    "sg": "1.032"
+  },
+  {
+    "fermentable": "Flaked Wheat",
+    "url": "https://beermaverick.com/fermentable/flaked-wheat/",
+    "type": "Grain",
+    "subcategory": "Raw Malt",
+    "srm": "2",
+    "batch_max": "40%",
+    "diastatic_power": "0",
+    "sg": "1.034"
+  },
+  {
+    "fermentable": "Golden Promise",
+    "url": "https://beermaverick.com/fermentable/golden-promise/",
+    "type": "Grain",
+    "subcategory": "Base Malt",
+    "srm": "2-3",
+    "batch_max": "100%",
+    "diastatic_power": "75",
+    "sg": "1.037"
+  },
+  {
+    "fermentable": "Grits",
+    "url": "https://beermaverick.com/fermentable/grits/",
+    "type": "Grain",
+    "subcategory": "Raw Malt",
+    "srm": "1",
+    "batch_max": "10%",
+    "diastatic_power": "0",
+    "sg": "1.037"
+  },
+  {
+    "fermentable": "Honey",
+    "url": "https://beermaverick.com/fermentable/honey/",
+    "type": "Adjunct",
+    "subcategory": "Sugar",
+    "srm": "1",
+    "batch_max": "100%",
+    "diastatic_power": "0",
+    "sg": "1.035"
+  },
+  {
+    "fermentable": "Honey Malt",
+    "url": "https://beermaverick.com/fermentable/honey-malt/",
+    "type": "Grain",
+    "subcategory": "Caramel Malt",
+    "srm": "25",
+    "batch_max": "0%",
+    "diastatic_power": "0",
+    "sg": "1.035"
+  },
+  {
+    "fermentable": "Lactose (Milk Sugar)",
+    "url": "https://beermaverick.com/fermentable/lactose-milk-sugar/",
+    "type": "Adjunct",
+    "subcategory": "Sugar",
+    "srm": "0",
+    "batch_max": "10%",
+    "diastatic_power": "0",
+    "sg": "1.041"
+  },
+  {
+    "fermentable": "Liquid Malt Extract (LME)",
+    "url": "https://beermaverick.com/fermentable/liquid-malt-extract-lme/",
+    "type": "Grain",
+    "subcategory": "Extract",
+    "srm": "3-18",
+    "batch_max": "100%",
+    "diastatic_power": "0",
+    "sg": "1.037"
+  },
+  {
+    "fermentable": "Malted Oats",
+    "url": "https://beermaverick.com/fermentable/malted-oats/",
+    "type": "Grain",
+    "subcategory": "Roasted Malt",
+    "srm": "2-2.5",
+    "batch_max": "10%",
+    "diastatic_power": "0",
+    "sg": "1.030"
+  },
+  {
+    "fermentable": "Maltodextrin",
+    "url": "https://beermaverick.com/fermentable/maltodextrin/",
+    "type": "Adjunct",
+    "subcategory": "Sugar",
+    "srm": "0",
+    "batch_max": "5%",
+    "diastatic_power": "0",
+    "sg": "1.040"
+  },
+  {
+    "fermentable": "Maple Syrup",
+    "url": "https://beermaverick.com/fermentable/maple-syrup/",
+    "type": "Adjunct",
+    "subcategory": "Sugar",
+    "srm": "35",
+    "batch_max": "10%",
+    "diastatic_power": "0",
+    "sg": "1.030"
+  },
+  {
+    "fermentable": "Maris Otter",
+    "url": "https://beermaverick.com/fermentable/maris-otter/",
+    "type": "Grain",
+    "subcategory": "Base Malt",
+    "srm": "2.5",
+    "batch_max": "100%",
+    "diastatic_power": "75",
+    "sg": "1.038"
+  },
+  {
+    "fermentable": "Mild Malt",
+    "url": "https://beermaverick.com/fermentable/mild-malt/",
+    "type": "Grain",
+    "subcategory": "Base Malt",
+    "srm": "4",
+    "batch_max": "100%",
+    "diastatic_power": "50-65",
+    "sg": "1.037"
+  },
+  {
+    "fermentable": "Molasses",
+    "url": "https://beermaverick.com/fermentable/molasses/",
+    "type": "Adjunct",
+    "subcategory": "Sugar",
+    "srm": "80",
+    "batch_max": "5%",
+    "diastatic_power": "0",
+    "sg": "1.036"
+  },
+  {
+    "fermentable": "Munich Malt",
+    "url": "https://beermaverick.com/fermentable/munich-malt/",
+    "type": "Grain",
+    "subcategory": "Base Malt",
+    "srm": "10-20",
+    "batch_max": "80%",
+    "diastatic_power": "25-70",
+    "sg": "1.038"
+  },
+  {
+    "fermentable": "Peat Smoked Malt",
+    "url": "https://beermaverick.com/fermentable/peat-smoked-malt/",
+    "type": "Grain",
+    "subcategory": "Base Malt",
+    "srm": "3",
+    "batch_max": "10%",
+    "diastatic_power": "120",
+    "sg": "1.038"
+  },
+  {
+    "fermentable": "Pilsner Malt",
+    "url": "https://beermaverick.com/fermentable/pilsner-malt/",
+    "type": "Grain",
+    "subcategory": "Base Malt",
+    "srm": "1.5-2",
+    "batch_max": "100%",
+    "diastatic_power": "75-140",
+    "sg": "1.037"
+  },
+  {
+    "fermentable": "Rice Hulls",
+    "url": "https://beermaverick.com/fermentable/rice-hulls/",
+    "type": "Grain",
+    "subcategory": "Raw Malt",
+    "srm": "0",
+    "batch_max": "5%",
+    "diastatic_power": "0",
+    "sg": "0"
+  },
+  {
+    "fermentable": "Roasted Barley",
+    "url": "https://beermaverick.com/fermentable/roasted-barley/",
+    "type": "Grain",
+    "subcategory": "Roasted Malt",
+    "srm": "300-500",
+    "batch_max": "10%",
+    "diastatic_power": "0",
+    "sg": "1.030"
+  },
+  {
+    "fermentable": "Roasted Wheat",
+    "url": "https://beermaverick.com/fermentable/roasted-wheat/",
+    "type": "Grain",
+    "subcategory": "Roasted Malt",
+    "srm": "425",
+    "batch_max": "10%",
+    "diastatic_power": "120",
+    "sg": "1.034"
+  },
+  {
+    "fermentable": "Rye Malt",
+    "url": "https://beermaverick.com/fermentable/rye-malt/",
+    "type": "Grain",
+    "subcategory": "Base Malt",
+    "srm": "3-5",
+    "batch_max": "15%",
+    "diastatic_power": "105",
+    "sg": "1.038"
+  },
+  {
+    "fermentable": "Smoked Malt",
+    "url": "https://beermaverick.com/fermentable/smoked-malt/",
+    "type": "Grain",
+    "subcategory": "Base Malt",
+    "srm": "5",
+    "batch_max": "100%",
+    "diastatic_power": "90-140",
+    "sg": "1.037"
+  },
+  {
+    "fermentable": "Special Roast",
+    "url": "https://beermaverick.com/fermentable/special-roast/",
+    "type": "Grain",
+    "subcategory": "Roasted Malt",
+    "srm": "40-50",
+    "batch_max": "10%",
+    "diastatic_power": "0",
+    "sg": "1.033"
+  },
+  {
+    "fermentable": "Table Sugar (Sucrose)",
+    "url": "https://beermaverick.com/fermentable/table-sugar-sucrose/",
+    "type": "Adjunct",
+    "subcategory": "Sugar",
+    "srm": "1",
+    "batch_max": "10%",
+    "diastatic_power": "0",
+    "sg": "1.046"
+  },
+  {
+    "fermentable": "Torrified Wheat",
+    "url": "https://beermaverick.com/fermentable/torrified-wheat/",
+    "type": "Grain",
+    "subcategory": "Raw Malt",
+    "srm": "2",
+    "batch_max": "40%",
+    "diastatic_power": "0",
+    "sg": "1.037"
+  },
+  {
+    "fermentable": "Turbinado",
+    "url": "https://beermaverick.com/fermentable/turbinado/",
+    "type": "Adjunct",
+    "subcategory": "Sugar",
+    "srm": "10",
+    "batch_max": "10%",
+    "diastatic_power": "0",
+    "sg": "1.044"
+  },
+  {
+    "fermentable": "Vienna Malt",
+    "url": "https://beermaverick.com/fermentable/vienna-malt/",
+    "type": "Grain",
+    "subcategory": "Base Malt",
+    "srm": "4",
+    "batch_max": "90%",
+    "diastatic_power": "50-80",
+    "sg": "1.037"
+  },
+  {
+    "fermentable": "Wheat Malt",
+    "url": "https://beermaverick.com/fermentable/wheat-malt/",
+    "type": "Grain",
+    "subcategory": "Base Malt",
+    "srm": "2-8",
+    "batch_max": "50%",
+    "diastatic_power": "60-170",
+    "sg": "1.039"
+  }
+]

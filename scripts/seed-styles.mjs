@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const bjcpPath = path.join(repoRoot, 'bjcp-2021-styles.json');
+const bjcpPath = path.join(repoRoot, 'data/bjcp-2021-styles.json');
 const sqlPath = path.join(repoRoot, 'src-tauri/src/migration/sql/001_initial.sql');
 
 const raw = JSON.parse(readFileSync(bjcpPath, 'utf8'));
