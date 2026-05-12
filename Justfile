@@ -76,6 +76,10 @@ coverage:
 migrate:
     cargo run --manifest-path src-tauri/Cargo.toml --bin migrate -- sqlite://./dev.db?mode=rwc
 
+seed-styles:
+    bun scripts/seed-styles.mjs
+    just migrate
+
 # Regenerate SeaORM entities from the dev database (runs migrate first)
 gen-entities: migrate
     sea-orm-cli generate entity \
