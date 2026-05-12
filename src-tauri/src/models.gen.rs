@@ -29,6 +29,43 @@ pub mod error {
         }
     }
 }
+#[doc = "`CalculatedWaterProfile`"]
+#[doc = r""]
+#[doc = r" <details><summary>JSON schema</summary>"]
+#[doc = r""]
+#[doc = r" ```json"]
+#[doc = "{"]
+#[doc = "  \"type\": \"object\","]
+#[doc = "  \"required\": ["]
+#[doc = "    \"combined\","]
+#[doc = "    \"mash\","]
+#[doc = "    \"sparge\""]
+#[doc = "  ],"]
+#[doc = "  \"properties\": {"]
+#[doc = "    \"combined\": {"]
+#[doc = "      \"$ref\": \"#/components/schemas/WaterProfile\""]
+#[doc = "    },"]
+#[doc = "    \"mash\": {"]
+#[doc = "      \"$ref\": \"#/components/schemas/WaterProfile\""]
+#[doc = "    },"]
+#[doc = "    \"sparge\": {"]
+#[doc = "      \"$ref\": \"#/components/schemas/WaterProfile\""]
+#[doc = "    }"]
+#[doc = "  }"]
+#[doc = "}"]
+#[doc = r" ```"]
+#[doc = r" </details>"]
+#[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+pub struct CalculatedWaterProfile {
+    pub combined: WaterProfile,
+    pub mash: WaterProfile,
+    pub sparge: WaterProfile,
+}
+impl CalculatedWaterProfile {
+    pub fn builder() -> builder::CalculatedWaterProfile {
+        Default::default()
+    }
+}
 #[doc = "`CreateEquipmentProfileInput`"]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
@@ -354,6 +391,9 @@ impl CreateMiscAdditionInput {
 #[doc = "      \"description\": \"ID of a recipe to copy ingredients from\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
+#[doc = "    \"style_id\": {"]
+#[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
 #[doc = "    \"type_\": {"]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    }"]
@@ -375,6 +415,8 @@ pub struct CreateRecipeInput {
     #[doc = "ID of a recipe to copy ingredients from"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub source_id: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub style_id: ::std::option::Option<::std::string::String>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub type_: ::std::option::Option<::std::string::String>,
 }
@@ -418,6 +460,233 @@ pub struct CreateWaterAdditionInput {
 impl CreateWaterAdditionInput {
     pub fn builder() -> builder::CreateWaterAdditionInput {
         Default::default()
+    }
+}
+#[doc = "`CreateWaterAdjustmentInput`"]
+#[doc = r""]
+#[doc = r" <details><summary>JSON schema</summary>"]
+#[doc = r""]
+#[doc = r" ```json"]
+#[doc = "{"]
+#[doc = "  \"type\": \"object\","]
+#[doc = "  \"required\": ["]
+#[doc = "    \"addition\","]
+#[doc = "    \"amount\","]
+#[doc = "    \"target\""]
+#[doc = "  ],"]
+#[doc = "  \"properties\": {"]
+#[doc = "    \"addition\": {"]
+#[doc = "      \"type\": \"string\","]
+#[doc = "      \"enum\": ["]
+#[doc = "        \"gypsum\","]
+#[doc = "        \"calcium_chloride\","]
+#[doc = "        \"epsom_salt\","]
+#[doc = "        \"table_salt\","]
+#[doc = "        \"baking_soda\","]
+#[doc = "        \"chalk\","]
+#[doc = "        \"lactic_acid\","]
+#[doc = "        \"phosphoric_acid\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"amount\": {"]
+#[doc = "      \"description\": \"Amount in grams for salts, ml for acids\","]
+#[doc = "      \"type\": \"number\""]
+#[doc = "    },"]
+#[doc = "    \"target\": {"]
+#[doc = "      \"type\": \"string\","]
+#[doc = "      \"enum\": ["]
+#[doc = "        \"mash\","]
+#[doc = "        \"sparge\""]
+#[doc = "      ]"]
+#[doc = "    }"]
+#[doc = "  }"]
+#[doc = "}"]
+#[doc = r" ```"]
+#[doc = r" </details>"]
+#[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+pub struct CreateWaterAdjustmentInput {
+    pub addition: CreateWaterAdjustmentInputAddition,
+    #[doc = "Amount in grams for salts, ml for acids"]
+    pub amount: f64,
+    pub target: CreateWaterAdjustmentInputTarget,
+}
+impl CreateWaterAdjustmentInput {
+    pub fn builder() -> builder::CreateWaterAdjustmentInput {
+        Default::default()
+    }
+}
+#[doc = "`CreateWaterAdjustmentInputAddition`"]
+#[doc = r""]
+#[doc = r" <details><summary>JSON schema</summary>"]
+#[doc = r""]
+#[doc = r" ```json"]
+#[doc = "{"]
+#[doc = "  \"type\": \"string\","]
+#[doc = "  \"enum\": ["]
+#[doc = "    \"gypsum\","]
+#[doc = "    \"calcium_chloride\","]
+#[doc = "    \"epsom_salt\","]
+#[doc = "    \"table_salt\","]
+#[doc = "    \"baking_soda\","]
+#[doc = "    \"chalk\","]
+#[doc = "    \"lactic_acid\","]
+#[doc = "    \"phosphoric_acid\""]
+#[doc = "  ]"]
+#[doc = "}"]
+#[doc = r" ```"]
+#[doc = r" </details>"]
+#[derive(
+    :: serde :: Deserialize,
+    :: serde :: Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+)]
+pub enum CreateWaterAdjustmentInputAddition {
+    #[serde(rename = "gypsum")]
+    Gypsum,
+    #[serde(rename = "calcium_chloride")]
+    CalciumChloride,
+    #[serde(rename = "epsom_salt")]
+    EpsomSalt,
+    #[serde(rename = "table_salt")]
+    TableSalt,
+    #[serde(rename = "baking_soda")]
+    BakingSoda,
+    #[serde(rename = "chalk")]
+    Chalk,
+    #[serde(rename = "lactic_acid")]
+    LacticAcid,
+    #[serde(rename = "phosphoric_acid")]
+    PhosphoricAcid,
+}
+impl ::std::fmt::Display for CreateWaterAdjustmentInputAddition {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Gypsum => f.write_str("gypsum"),
+            Self::CalciumChloride => f.write_str("calcium_chloride"),
+            Self::EpsomSalt => f.write_str("epsom_salt"),
+            Self::TableSalt => f.write_str("table_salt"),
+            Self::BakingSoda => f.write_str("baking_soda"),
+            Self::Chalk => f.write_str("chalk"),
+            Self::LacticAcid => f.write_str("lactic_acid"),
+            Self::PhosphoricAcid => f.write_str("phosphoric_acid"),
+        }
+    }
+}
+impl ::std::str::FromStr for CreateWaterAdjustmentInputAddition {
+    type Err = self::error::ConversionError;
+    fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "gypsum" => Ok(Self::Gypsum),
+            "calcium_chloride" => Ok(Self::CalciumChloride),
+            "epsom_salt" => Ok(Self::EpsomSalt),
+            "table_salt" => Ok(Self::TableSalt),
+            "baking_soda" => Ok(Self::BakingSoda),
+            "chalk" => Ok(Self::Chalk),
+            "lactic_acid" => Ok(Self::LacticAcid),
+            "phosphoric_acid" => Ok(Self::PhosphoricAcid),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for CreateWaterAdjustmentInputAddition {
+    type Error = self::error::ConversionError;
+    fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for CreateWaterAdjustmentInputAddition {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for CreateWaterAdjustmentInputAddition {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+#[doc = "`CreateWaterAdjustmentInputTarget`"]
+#[doc = r""]
+#[doc = r" <details><summary>JSON schema</summary>"]
+#[doc = r""]
+#[doc = r" ```json"]
+#[doc = "{"]
+#[doc = "  \"type\": \"string\","]
+#[doc = "  \"enum\": ["]
+#[doc = "    \"mash\","]
+#[doc = "    \"sparge\""]
+#[doc = "  ]"]
+#[doc = "}"]
+#[doc = r" ```"]
+#[doc = r" </details>"]
+#[derive(
+    :: serde :: Deserialize,
+    :: serde :: Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+)]
+pub enum CreateWaterAdjustmentInputTarget {
+    #[serde(rename = "mash")]
+    Mash,
+    #[serde(rename = "sparge")]
+    Sparge,
+}
+impl ::std::fmt::Display for CreateWaterAdjustmentInputTarget {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Mash => f.write_str("mash"),
+            Self::Sparge => f.write_str("sparge"),
+        }
+    }
+}
+impl ::std::str::FromStr for CreateWaterAdjustmentInputTarget {
+    type Err = self::error::ConversionError;
+    fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "mash" => Ok(Self::Mash),
+            "sparge" => Ok(Self::Sparge),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for CreateWaterAdjustmentInputTarget {
+    type Error = self::error::ConversionError;
+    fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for CreateWaterAdjustmentInputTarget {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for CreateWaterAdjustmentInputTarget {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
     }
 }
 #[doc = "`CreateYeastAdditionInput`"]
@@ -1357,6 +1626,13 @@ impl Misc {
 #[doc = "        }"]
 #[doc = "      ]"]
 #[doc = "    },"]
+#[doc = "    \"mash_water_id\": {"]
+#[doc = "      \"description\": \"ID of the mash water profile\","]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
 #[doc = "    \"miscs\": {"]
 #[doc = "      \"type\": \"array\","]
 #[doc = "      \"items\": {"]
@@ -1415,6 +1691,13 @@ impl Misc {
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
+#[doc = "    \"sparge_water_id\": {"]
+#[doc = "      \"description\": \"ID of the sparge water profile (null means use mash water)\","]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
 #[doc = "    \"style\": {"]
 #[doc = "      \"oneOf\": ["]
 #[doc = "        {"]
@@ -1462,6 +1745,12 @@ impl Misc {
 #[doc = "    \"updated_at\": {"]
 #[doc = "      \"type\": \"integer\","]
 #[doc = "      \"format\": \"int64\""]
+#[doc = "    },"]
+#[doc = "    \"water_adjustments\": {"]
+#[doc = "      \"type\": \"array\","]
+#[doc = "      \"items\": {"]
+#[doc = "        \"$ref\": \"#/components/schemas/RecipeWaterAdjustment\""]
+#[doc = "      }"]
 #[doc = "    },"]
 #[doc = "    \"waters\": {"]
 #[doc = "      \"type\": \"array\","]
@@ -1520,6 +1809,9 @@ pub struct Recipe {
     pub keg_priming_factor: ::std::option::Option<f64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub mash: ::std::option::Option<Mash>,
+    #[doc = "ID of the mash water profile"]
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub mash_water_id: ::std::option::Option<::std::string::String>,
     pub miscs: ::std::vec::Vec<RecipeAdditionMisc>,
     pub name: ::std::string::String,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -1539,6 +1831,9 @@ pub struct Recipe {
     pub secondary_age_days: ::std::option::Option<f64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub secondary_temp_c: ::std::option::Option<f64>,
+    #[doc = "ID of the sparge water profile (null means use mash water)"]
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub sparge_water_id: ::std::option::Option<::std::string::String>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub style: ::std::option::Option<Style>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -1554,6 +1849,8 @@ pub struct Recipe {
     #[doc = "Recipe type (e.g. All Grain, Extract, Partial Mash)"]
     pub type_: ::std::string::String,
     pub updated_at: i64,
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub water_adjustments: ::std::vec::Vec<RecipeWaterAdjustment>,
     pub waters: ::std::vec::Vec<RecipeAdditionWater>,
     pub yeasts: ::std::vec::Vec<RecipeAdditionYeast>,
 }
@@ -2113,6 +2410,243 @@ pub struct RecipeSummary {
 impl RecipeSummary {
     pub fn builder() -> builder::RecipeSummary {
         Default::default()
+    }
+}
+#[doc = "`RecipeWaterAdjustment`"]
+#[doc = r""]
+#[doc = r" <details><summary>JSON schema</summary>"]
+#[doc = r""]
+#[doc = r" ```json"]
+#[doc = "{"]
+#[doc = "  \"type\": \"object\","]
+#[doc = "  \"required\": ["]
+#[doc = "    \"addition\","]
+#[doc = "    \"amount\","]
+#[doc = "    \"id\","]
+#[doc = "    \"recipe_id\","]
+#[doc = "    \"target\""]
+#[doc = "  ],"]
+#[doc = "  \"properties\": {"]
+#[doc = "    \"addition\": {"]
+#[doc = "      \"type\": \"string\","]
+#[doc = "      \"enum\": ["]
+#[doc = "        \"gypsum\","]
+#[doc = "        \"calcium_chloride\","]
+#[doc = "        \"epsom_salt\","]
+#[doc = "        \"table_salt\","]
+#[doc = "        \"baking_soda\","]
+#[doc = "        \"chalk\","]
+#[doc = "        \"lactic_acid\","]
+#[doc = "        \"phosphoric_acid\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"amount\": {"]
+#[doc = "      \"description\": \"Amount in grams for salts, ml for acids\","]
+#[doc = "      \"type\": \"number\""]
+#[doc = "    },"]
+#[doc = "    \"id\": {"]
+#[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
+#[doc = "    \"recipe_id\": {"]
+#[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
+#[doc = "    \"target\": {"]
+#[doc = "      \"type\": \"string\","]
+#[doc = "      \"enum\": ["]
+#[doc = "        \"mash\","]
+#[doc = "        \"sparge\""]
+#[doc = "      ]"]
+#[doc = "    }"]
+#[doc = "  }"]
+#[doc = "}"]
+#[doc = r" ```"]
+#[doc = r" </details>"]
+#[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+pub struct RecipeWaterAdjustment {
+    pub addition: RecipeWaterAdjustmentAddition,
+    #[doc = "Amount in grams for salts, ml for acids"]
+    pub amount: f64,
+    pub id: ::std::string::String,
+    pub recipe_id: ::std::string::String,
+    pub target: RecipeWaterAdjustmentTarget,
+}
+impl RecipeWaterAdjustment {
+    pub fn builder() -> builder::RecipeWaterAdjustment {
+        Default::default()
+    }
+}
+#[doc = "`RecipeWaterAdjustmentAddition`"]
+#[doc = r""]
+#[doc = r" <details><summary>JSON schema</summary>"]
+#[doc = r""]
+#[doc = r" ```json"]
+#[doc = "{"]
+#[doc = "  \"type\": \"string\","]
+#[doc = "  \"enum\": ["]
+#[doc = "    \"gypsum\","]
+#[doc = "    \"calcium_chloride\","]
+#[doc = "    \"epsom_salt\","]
+#[doc = "    \"table_salt\","]
+#[doc = "    \"baking_soda\","]
+#[doc = "    \"chalk\","]
+#[doc = "    \"lactic_acid\","]
+#[doc = "    \"phosphoric_acid\""]
+#[doc = "  ]"]
+#[doc = "}"]
+#[doc = r" ```"]
+#[doc = r" </details>"]
+#[derive(
+    :: serde :: Deserialize,
+    :: serde :: Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+)]
+pub enum RecipeWaterAdjustmentAddition {
+    #[serde(rename = "gypsum")]
+    Gypsum,
+    #[serde(rename = "calcium_chloride")]
+    CalciumChloride,
+    #[serde(rename = "epsom_salt")]
+    EpsomSalt,
+    #[serde(rename = "table_salt")]
+    TableSalt,
+    #[serde(rename = "baking_soda")]
+    BakingSoda,
+    #[serde(rename = "chalk")]
+    Chalk,
+    #[serde(rename = "lactic_acid")]
+    LacticAcid,
+    #[serde(rename = "phosphoric_acid")]
+    PhosphoricAcid,
+}
+impl ::std::fmt::Display for RecipeWaterAdjustmentAddition {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Gypsum => f.write_str("gypsum"),
+            Self::CalciumChloride => f.write_str("calcium_chloride"),
+            Self::EpsomSalt => f.write_str("epsom_salt"),
+            Self::TableSalt => f.write_str("table_salt"),
+            Self::BakingSoda => f.write_str("baking_soda"),
+            Self::Chalk => f.write_str("chalk"),
+            Self::LacticAcid => f.write_str("lactic_acid"),
+            Self::PhosphoricAcid => f.write_str("phosphoric_acid"),
+        }
+    }
+}
+impl ::std::str::FromStr for RecipeWaterAdjustmentAddition {
+    type Err = self::error::ConversionError;
+    fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "gypsum" => Ok(Self::Gypsum),
+            "calcium_chloride" => Ok(Self::CalciumChloride),
+            "epsom_salt" => Ok(Self::EpsomSalt),
+            "table_salt" => Ok(Self::TableSalt),
+            "baking_soda" => Ok(Self::BakingSoda),
+            "chalk" => Ok(Self::Chalk),
+            "lactic_acid" => Ok(Self::LacticAcid),
+            "phosphoric_acid" => Ok(Self::PhosphoricAcid),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for RecipeWaterAdjustmentAddition {
+    type Error = self::error::ConversionError;
+    fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for RecipeWaterAdjustmentAddition {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for RecipeWaterAdjustmentAddition {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+#[doc = "`RecipeWaterAdjustmentTarget`"]
+#[doc = r""]
+#[doc = r" <details><summary>JSON schema</summary>"]
+#[doc = r""]
+#[doc = r" ```json"]
+#[doc = "{"]
+#[doc = "  \"type\": \"string\","]
+#[doc = "  \"enum\": ["]
+#[doc = "    \"mash\","]
+#[doc = "    \"sparge\""]
+#[doc = "  ]"]
+#[doc = "}"]
+#[doc = r" ```"]
+#[doc = r" </details>"]
+#[derive(
+    :: serde :: Deserialize,
+    :: serde :: Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+)]
+pub enum RecipeWaterAdjustmentTarget {
+    #[serde(rename = "mash")]
+    Mash,
+    #[serde(rename = "sparge")]
+    Sparge,
+}
+impl ::std::fmt::Display for RecipeWaterAdjustmentTarget {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Mash => f.write_str("mash"),
+            Self::Sparge => f.write_str("sparge"),
+        }
+    }
+}
+impl ::std::str::FromStr for RecipeWaterAdjustmentTarget {
+    type Err = self::error::ConversionError;
+    fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "mash" => Ok(Self::Mash),
+            "sparge" => Ok(Self::Sparge),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for RecipeWaterAdjustmentTarget {
+    type Error = self::error::ConversionError;
+    fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for RecipeWaterAdjustmentTarget {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for RecipeWaterAdjustmentTarget {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
     }
 }
 #[doc = "`Style`"]
@@ -2876,6 +3410,240 @@ impl UpdateWaterAdditionInput {
         Default::default()
     }
 }
+#[doc = "`UpdateWaterAdjustmentInput`"]
+#[doc = r""]
+#[doc = r" <details><summary>JSON schema</summary>"]
+#[doc = r""]
+#[doc = r" ```json"]
+#[doc = "{"]
+#[doc = "  \"type\": \"object\","]
+#[doc = "  \"properties\": {"]
+#[doc = "    \"addition\": {"]
+#[doc = "      \"type\": \"string\","]
+#[doc = "      \"enum\": ["]
+#[doc = "        \"gypsum\","]
+#[doc = "        \"calcium_chloride\","]
+#[doc = "        \"epsom_salt\","]
+#[doc = "        \"table_salt\","]
+#[doc = "        \"baking_soda\","]
+#[doc = "        \"chalk\","]
+#[doc = "        \"lactic_acid\","]
+#[doc = "        \"phosphoric_acid\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"amount\": {"]
+#[doc = "      \"description\": \"Amount in grams for salts, ml for acids\","]
+#[doc = "      \"type\": \"number\""]
+#[doc = "    },"]
+#[doc = "    \"target\": {"]
+#[doc = "      \"type\": \"string\","]
+#[doc = "      \"enum\": ["]
+#[doc = "        \"mash\","]
+#[doc = "        \"sparge\""]
+#[doc = "      ]"]
+#[doc = "    }"]
+#[doc = "  }"]
+#[doc = "}"]
+#[doc = r" ```"]
+#[doc = r" </details>"]
+#[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+pub struct UpdateWaterAdjustmentInput {
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub addition: ::std::option::Option<UpdateWaterAdjustmentInputAddition>,
+    #[doc = "Amount in grams for salts, ml for acids"]
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub amount: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub target: ::std::option::Option<UpdateWaterAdjustmentInputTarget>,
+}
+impl ::std::default::Default for UpdateWaterAdjustmentInput {
+    fn default() -> Self {
+        Self {
+            addition: Default::default(),
+            amount: Default::default(),
+            target: Default::default(),
+        }
+    }
+}
+impl UpdateWaterAdjustmentInput {
+    pub fn builder() -> builder::UpdateWaterAdjustmentInput {
+        Default::default()
+    }
+}
+#[doc = "`UpdateWaterAdjustmentInputAddition`"]
+#[doc = r""]
+#[doc = r" <details><summary>JSON schema</summary>"]
+#[doc = r""]
+#[doc = r" ```json"]
+#[doc = "{"]
+#[doc = "  \"type\": \"string\","]
+#[doc = "  \"enum\": ["]
+#[doc = "    \"gypsum\","]
+#[doc = "    \"calcium_chloride\","]
+#[doc = "    \"epsom_salt\","]
+#[doc = "    \"table_salt\","]
+#[doc = "    \"baking_soda\","]
+#[doc = "    \"chalk\","]
+#[doc = "    \"lactic_acid\","]
+#[doc = "    \"phosphoric_acid\""]
+#[doc = "  ]"]
+#[doc = "}"]
+#[doc = r" ```"]
+#[doc = r" </details>"]
+#[derive(
+    :: serde :: Deserialize,
+    :: serde :: Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+)]
+pub enum UpdateWaterAdjustmentInputAddition {
+    #[serde(rename = "gypsum")]
+    Gypsum,
+    #[serde(rename = "calcium_chloride")]
+    CalciumChloride,
+    #[serde(rename = "epsom_salt")]
+    EpsomSalt,
+    #[serde(rename = "table_salt")]
+    TableSalt,
+    #[serde(rename = "baking_soda")]
+    BakingSoda,
+    #[serde(rename = "chalk")]
+    Chalk,
+    #[serde(rename = "lactic_acid")]
+    LacticAcid,
+    #[serde(rename = "phosphoric_acid")]
+    PhosphoricAcid,
+}
+impl ::std::fmt::Display for UpdateWaterAdjustmentInputAddition {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Gypsum => f.write_str("gypsum"),
+            Self::CalciumChloride => f.write_str("calcium_chloride"),
+            Self::EpsomSalt => f.write_str("epsom_salt"),
+            Self::TableSalt => f.write_str("table_salt"),
+            Self::BakingSoda => f.write_str("baking_soda"),
+            Self::Chalk => f.write_str("chalk"),
+            Self::LacticAcid => f.write_str("lactic_acid"),
+            Self::PhosphoricAcid => f.write_str("phosphoric_acid"),
+        }
+    }
+}
+impl ::std::str::FromStr for UpdateWaterAdjustmentInputAddition {
+    type Err = self::error::ConversionError;
+    fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "gypsum" => Ok(Self::Gypsum),
+            "calcium_chloride" => Ok(Self::CalciumChloride),
+            "epsom_salt" => Ok(Self::EpsomSalt),
+            "table_salt" => Ok(Self::TableSalt),
+            "baking_soda" => Ok(Self::BakingSoda),
+            "chalk" => Ok(Self::Chalk),
+            "lactic_acid" => Ok(Self::LacticAcid),
+            "phosphoric_acid" => Ok(Self::PhosphoricAcid),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for UpdateWaterAdjustmentInputAddition {
+    type Error = self::error::ConversionError;
+    fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for UpdateWaterAdjustmentInputAddition {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for UpdateWaterAdjustmentInputAddition {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+#[doc = "`UpdateWaterAdjustmentInputTarget`"]
+#[doc = r""]
+#[doc = r" <details><summary>JSON schema</summary>"]
+#[doc = r""]
+#[doc = r" ```json"]
+#[doc = "{"]
+#[doc = "  \"type\": \"string\","]
+#[doc = "  \"enum\": ["]
+#[doc = "    \"mash\","]
+#[doc = "    \"sparge\""]
+#[doc = "  ]"]
+#[doc = "}"]
+#[doc = r" ```"]
+#[doc = r" </details>"]
+#[derive(
+    :: serde :: Deserialize,
+    :: serde :: Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+)]
+pub enum UpdateWaterAdjustmentInputTarget {
+    #[serde(rename = "mash")]
+    Mash,
+    #[serde(rename = "sparge")]
+    Sparge,
+}
+impl ::std::fmt::Display for UpdateWaterAdjustmentInputTarget {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Mash => f.write_str("mash"),
+            Self::Sparge => f.write_str("sparge"),
+        }
+    }
+}
+impl ::std::str::FromStr for UpdateWaterAdjustmentInputTarget {
+    type Err = self::error::ConversionError;
+    fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "mash" => Ok(Self::Mash),
+            "sparge" => Ok(Self::Sparge),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for UpdateWaterAdjustmentInputTarget {
+    type Error = self::error::ConversionError;
+    fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for UpdateWaterAdjustmentInputTarget {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for UpdateWaterAdjustmentInputTarget {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
 #[doc = "`UpdateYeastAdditionInput`"]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
@@ -3007,6 +3775,63 @@ pub struct Water {
 }
 impl Water {
     pub fn builder() -> builder::Water {
+        Default::default()
+    }
+}
+#[doc = "`WaterProfile`"]
+#[doc = r""]
+#[doc = r" <details><summary>JSON schema</summary>"]
+#[doc = r""]
+#[doc = r" ```json"]
+#[doc = "{"]
+#[doc = "  \"type\": \"object\","]
+#[doc = "  \"required\": ["]
+#[doc = "    \"bicarbonate_ppm\","]
+#[doc = "    \"calcium_ppm\","]
+#[doc = "    \"chloride_ppm\","]
+#[doc = "    \"cl_so4_ratio\","]
+#[doc = "    \"magnesium_ppm\","]
+#[doc = "    \"sodium_ppm\","]
+#[doc = "    \"sulfate_ppm\""]
+#[doc = "  ],"]
+#[doc = "  \"properties\": {"]
+#[doc = "    \"bicarbonate_ppm\": {"]
+#[doc = "      \"type\": \"number\""]
+#[doc = "    },"]
+#[doc = "    \"calcium_ppm\": {"]
+#[doc = "      \"type\": \"number\""]
+#[doc = "    },"]
+#[doc = "    \"chloride_ppm\": {"]
+#[doc = "      \"type\": \"number\""]
+#[doc = "    },"]
+#[doc = "    \"cl_so4_ratio\": {"]
+#[doc = "      \"type\": \"number\""]
+#[doc = "    },"]
+#[doc = "    \"magnesium_ppm\": {"]
+#[doc = "      \"type\": \"number\""]
+#[doc = "    },"]
+#[doc = "    \"sodium_ppm\": {"]
+#[doc = "      \"type\": \"number\""]
+#[doc = "    },"]
+#[doc = "    \"sulfate_ppm\": {"]
+#[doc = "      \"type\": \"number\""]
+#[doc = "    }"]
+#[doc = "  }"]
+#[doc = "}"]
+#[doc = r" ```"]
+#[doc = r" </details>"]
+#[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+pub struct WaterProfile {
+    pub bicarbonate_ppm: f64,
+    pub calcium_ppm: f64,
+    pub chloride_ppm: f64,
+    pub cl_so4_ratio: f64,
+    pub magnesium_ppm: f64,
+    pub sodium_ppm: f64,
+    pub sulfate_ppm: f64,
+}
+impl WaterProfile {
+    pub fn builder() -> builder::WaterProfile {
         Default::default()
     }
 }
@@ -3227,6 +4052,74 @@ impl Yeast {
 }
 #[doc = r" Types for composing complex structures."]
 pub mod builder {
+    #[derive(Clone, Debug)]
+    pub struct CalculatedWaterProfile {
+        combined: ::std::result::Result<super::WaterProfile, ::std::string::String>,
+        mash: ::std::result::Result<super::WaterProfile, ::std::string::String>,
+        sparge: ::std::result::Result<super::WaterProfile, ::std::string::String>,
+    }
+    impl ::std::default::Default for CalculatedWaterProfile {
+        fn default() -> Self {
+            Self {
+                combined: Err("no value supplied for combined".to_string()),
+                mash: Err("no value supplied for mash".to_string()),
+                sparge: Err("no value supplied for sparge".to_string()),
+            }
+        }
+    }
+    impl CalculatedWaterProfile {
+        pub fn combined<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<super::WaterProfile>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.combined = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for combined: {e}"));
+            self
+        }
+        pub fn mash<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<super::WaterProfile>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.mash = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for mash: {e}"));
+            self
+        }
+        pub fn sparge<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<super::WaterProfile>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.sparge = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for sparge: {e}"));
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<CalculatedWaterProfile> for super::CalculatedWaterProfile {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: CalculatedWaterProfile,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self {
+                combined: value.combined?,
+                mash: value.mash?,
+                sparge: value.sparge?,
+            })
+        }
+    }
+    impl ::std::convert::From<super::CalculatedWaterProfile> for CalculatedWaterProfile {
+        fn from(value: super::CalculatedWaterProfile) -> Self {
+            Self {
+                combined: Ok(value.combined),
+                mash: Ok(value.mash),
+                sparge: Ok(value.sparge),
+            }
+        }
+    }
     #[derive(Clone, Debug)]
     pub struct CreateEquipmentProfileInput {
         batch_size_l: ::std::result::Result<f64, ::std::string::String>,
@@ -3912,6 +4805,10 @@ pub mod builder {
             ::std::option::Option<::std::string::String>,
             ::std::string::String,
         >,
+        style_id: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
         type_: ::std::result::Result<
             ::std::option::Option<::std::string::String>,
             ::std::string::String,
@@ -3926,6 +4823,7 @@ pub mod builder {
                 equipment_profile_id: Ok(Default::default()),
                 name: Err("no value supplied for name".to_string()),
                 source_id: Ok(Default::default()),
+                style_id: Ok(Default::default()),
                 type_: Ok(Default::default()),
             }
         }
@@ -3991,6 +4889,16 @@ pub mod builder {
                 .map_err(|e| format!("error converting supplied value for source_id: {e}"));
             self
         }
+        pub fn style_id<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.style_id = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for style_id: {e}"));
+            self
+        }
         pub fn type_<T>(mut self, value: T) -> Self
         where
             T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
@@ -4014,6 +4922,7 @@ pub mod builder {
                 equipment_profile_id: value.equipment_profile_id?,
                 name: value.name?,
                 source_id: value.source_id?,
+                style_id: value.style_id?,
                 type_: value.type_?,
             })
         }
@@ -4027,6 +4936,7 @@ pub mod builder {
                 equipment_profile_id: Ok(value.equipment_profile_id),
                 name: Ok(value.name),
                 source_id: Ok(value.source_id),
+                style_id: Ok(value.style_id),
                 type_: Ok(value.type_),
             }
         }
@@ -4099,6 +5009,76 @@ pub mod builder {
                 amount_l: Ok(value.amount_l),
                 name: Ok(value.name),
                 water_id: Ok(value.water_id),
+            }
+        }
+    }
+    #[derive(Clone, Debug)]
+    pub struct CreateWaterAdjustmentInput {
+        addition:
+            ::std::result::Result<super::CreateWaterAdjustmentInputAddition, ::std::string::String>,
+        amount: ::std::result::Result<f64, ::std::string::String>,
+        target:
+            ::std::result::Result<super::CreateWaterAdjustmentInputTarget, ::std::string::String>,
+    }
+    impl ::std::default::Default for CreateWaterAdjustmentInput {
+        fn default() -> Self {
+            Self {
+                addition: Err("no value supplied for addition".to_string()),
+                amount: Err("no value supplied for amount".to_string()),
+                target: Err("no value supplied for target".to_string()),
+            }
+        }
+    }
+    impl CreateWaterAdjustmentInput {
+        pub fn addition<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<super::CreateWaterAdjustmentInputAddition>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.addition = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for addition: {e}"));
+            self
+        }
+        pub fn amount<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<f64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.amount = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for amount: {e}"));
+            self
+        }
+        pub fn target<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<super::CreateWaterAdjustmentInputTarget>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.target = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for target: {e}"));
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<CreateWaterAdjustmentInput> for super::CreateWaterAdjustmentInput {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: CreateWaterAdjustmentInput,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self {
+                addition: value.addition?,
+                amount: value.amount?,
+                target: value.target?,
+            })
+        }
+    }
+    impl ::std::convert::From<super::CreateWaterAdjustmentInput> for CreateWaterAdjustmentInput {
+        fn from(value: super::CreateWaterAdjustmentInput) -> Self {
+            Self {
+                addition: Ok(value.addition),
+                amount: Ok(value.amount),
+                target: Ok(value.target),
             }
         }
     }
@@ -5670,6 +6650,10 @@ pub mod builder {
         keg_priming_factor:
             ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         mash: ::std::result::Result<::std::option::Option<super::Mash>, ::std::string::String>,
+        mash_water_id: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
         miscs: ::std::result::Result<
             ::std::vec::Vec<super::RecipeAdditionMisc>,
             ::std::string::String,
@@ -5691,6 +6675,10 @@ pub mod builder {
         secondary_age_days:
             ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         secondary_temp_c: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        sparge_water_id: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
         style: ::std::result::Result<::std::option::Option<super::Style>, ::std::string::String>,
         style_id: ::std::result::Result<
             ::std::option::Option<::std::string::String>,
@@ -5705,6 +6693,10 @@ pub mod builder {
         tertiary_temp_c: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         type_: ::std::result::Result<::std::string::String, ::std::string::String>,
         updated_at: ::std::result::Result<i64, ::std::string::String>,
+        water_adjustments: ::std::result::Result<
+            ::std::vec::Vec<super::RecipeWaterAdjustment>,
+            ::std::string::String,
+        >,
         waters: ::std::result::Result<
             ::std::vec::Vec<super::RecipeAdditionWater>,
             ::std::string::String,
@@ -5739,6 +6731,7 @@ pub mod builder {
                 id: Err("no value supplied for id".to_string()),
                 keg_priming_factor: Ok(Default::default()),
                 mash: Ok(Default::default()),
+                mash_water_id: Ok(Default::default()),
                 miscs: Err("no value supplied for miscs".to_string()),
                 name: Err("no value supplied for name".to_string()),
                 notes: Ok(Default::default()),
@@ -5749,6 +6742,7 @@ pub mod builder {
                 priming_sugar_name: Ok(Default::default()),
                 secondary_age_days: Ok(Default::default()),
                 secondary_temp_c: Ok(Default::default()),
+                sparge_water_id: Ok(Default::default()),
                 style: Ok(Default::default()),
                 style_id: Ok(Default::default()),
                 taste_notes: Ok(Default::default()),
@@ -5757,6 +6751,7 @@ pub mod builder {
                 tertiary_temp_c: Ok(Default::default()),
                 type_: Err("no value supplied for type_".to_string()),
                 updated_at: Err("no value supplied for updated_at".to_string()),
+                water_adjustments: Ok(Default::default()),
                 waters: Err("no value supplied for waters".to_string()),
                 yeasts: Err("no value supplied for yeasts".to_string()),
             }
@@ -5983,6 +6978,16 @@ pub mod builder {
                 .map_err(|e| format!("error converting supplied value for mash: {e}"));
             self
         }
+        pub fn mash_water_id<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.mash_water_id = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for mash_water_id: {e}"));
+            self
+        }
         pub fn miscs<T>(mut self, value: T) -> Self
         where
             T: ::std::convert::TryInto<::std::vec::Vec<super::RecipeAdditionMisc>>,
@@ -6083,6 +7088,16 @@ pub mod builder {
                 .map_err(|e| format!("error converting supplied value for secondary_temp_c: {e}"));
             self
         }
+        pub fn sparge_water_id<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.sparge_water_id = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for sparge_water_id: {e}"));
+            self
+        }
         pub fn style<T>(mut self, value: T) -> Self
         where
             T: ::std::convert::TryInto<::std::option::Option<super::Style>>,
@@ -6163,6 +7178,16 @@ pub mod builder {
                 .map_err(|e| format!("error converting supplied value for updated_at: {e}"));
             self
         }
+        pub fn water_adjustments<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::vec::Vec<super::RecipeWaterAdjustment>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.water_adjustments = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for water_adjustments: {e}"));
+            self
+        }
         pub fn waters<T>(mut self, value: T) -> Self
         where
             T: ::std::convert::TryInto<::std::vec::Vec<super::RecipeAdditionWater>>,
@@ -6210,6 +7235,7 @@ pub mod builder {
                 id: value.id?,
                 keg_priming_factor: value.keg_priming_factor?,
                 mash: value.mash?,
+                mash_water_id: value.mash_water_id?,
                 miscs: value.miscs?,
                 name: value.name?,
                 notes: value.notes?,
@@ -6220,6 +7246,7 @@ pub mod builder {
                 priming_sugar_name: value.priming_sugar_name?,
                 secondary_age_days: value.secondary_age_days?,
                 secondary_temp_c: value.secondary_temp_c?,
+                sparge_water_id: value.sparge_water_id?,
                 style: value.style?,
                 style_id: value.style_id?,
                 taste_notes: value.taste_notes?,
@@ -6228,6 +7255,7 @@ pub mod builder {
                 tertiary_temp_c: value.tertiary_temp_c?,
                 type_: value.type_?,
                 updated_at: value.updated_at?,
+                water_adjustments: value.water_adjustments?,
                 waters: value.waters?,
                 yeasts: value.yeasts?,
             })
@@ -6258,6 +7286,7 @@ pub mod builder {
                 id: Ok(value.id),
                 keg_priming_factor: Ok(value.keg_priming_factor),
                 mash: Ok(value.mash),
+                mash_water_id: Ok(value.mash_water_id),
                 miscs: Ok(value.miscs),
                 name: Ok(value.name),
                 notes: Ok(value.notes),
@@ -6268,6 +7297,7 @@ pub mod builder {
                 priming_sugar_name: Ok(value.priming_sugar_name),
                 secondary_age_days: Ok(value.secondary_age_days),
                 secondary_temp_c: Ok(value.secondary_temp_c),
+                sparge_water_id: Ok(value.sparge_water_id),
                 style: Ok(value.style),
                 style_id: Ok(value.style_id),
                 taste_notes: Ok(value.taste_notes),
@@ -6276,6 +7306,7 @@ pub mod builder {
                 tertiary_temp_c: Ok(value.tertiary_temp_c),
                 type_: Ok(value.type_),
                 updated_at: Ok(value.updated_at),
+                water_adjustments: Ok(value.water_adjustments),
                 waters: Ok(value.waters),
                 yeasts: Ok(value.yeasts),
             }
@@ -7408,6 +8439,103 @@ pub mod builder {
                 style_name: Ok(value.style_name),
                 type_: Ok(value.type_),
                 updated_at: Ok(value.updated_at),
+            }
+        }
+    }
+    #[derive(Clone, Debug)]
+    pub struct RecipeWaterAdjustment {
+        addition:
+            ::std::result::Result<super::RecipeWaterAdjustmentAddition, ::std::string::String>,
+        amount: ::std::result::Result<f64, ::std::string::String>,
+        id: ::std::result::Result<::std::string::String, ::std::string::String>,
+        recipe_id: ::std::result::Result<::std::string::String, ::std::string::String>,
+        target: ::std::result::Result<super::RecipeWaterAdjustmentTarget, ::std::string::String>,
+    }
+    impl ::std::default::Default for RecipeWaterAdjustment {
+        fn default() -> Self {
+            Self {
+                addition: Err("no value supplied for addition".to_string()),
+                amount: Err("no value supplied for amount".to_string()),
+                id: Err("no value supplied for id".to_string()),
+                recipe_id: Err("no value supplied for recipe_id".to_string()),
+                target: Err("no value supplied for target".to_string()),
+            }
+        }
+    }
+    impl RecipeWaterAdjustment {
+        pub fn addition<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<super::RecipeWaterAdjustmentAddition>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.addition = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for addition: {e}"));
+            self
+        }
+        pub fn amount<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<f64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.amount = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for amount: {e}"));
+            self
+        }
+        pub fn id<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::string::String>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.id = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for id: {e}"));
+            self
+        }
+        pub fn recipe_id<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::string::String>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.recipe_id = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for recipe_id: {e}"));
+            self
+        }
+        pub fn target<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<super::RecipeWaterAdjustmentTarget>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.target = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for target: {e}"));
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<RecipeWaterAdjustment> for super::RecipeWaterAdjustment {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: RecipeWaterAdjustment,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self {
+                addition: value.addition?,
+                amount: value.amount?,
+                id: value.id?,
+                recipe_id: value.recipe_id?,
+                target: value.target?,
+            })
+        }
+    }
+    impl ::std::convert::From<super::RecipeWaterAdjustment> for RecipeWaterAdjustment {
+        fn from(value: super::RecipeWaterAdjustment) -> Self {
+            Self {
+                addition: Ok(value.addition),
+                amount: Ok(value.amount),
+                id: Ok(value.id),
+                recipe_id: Ok(value.recipe_id),
+                target: Ok(value.target),
             }
         }
     }
@@ -8953,6 +10081,84 @@ pub mod builder {
         }
     }
     #[derive(Clone, Debug)]
+    pub struct UpdateWaterAdjustmentInput {
+        addition: ::std::result::Result<
+            ::std::option::Option<super::UpdateWaterAdjustmentInputAddition>,
+            ::std::string::String,
+        >,
+        amount: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        target: ::std::result::Result<
+            ::std::option::Option<super::UpdateWaterAdjustmentInputTarget>,
+            ::std::string::String,
+        >,
+    }
+    impl ::std::default::Default for UpdateWaterAdjustmentInput {
+        fn default() -> Self {
+            Self {
+                addition: Ok(Default::default()),
+                amount: Ok(Default::default()),
+                target: Ok(Default::default()),
+            }
+        }
+    }
+    impl UpdateWaterAdjustmentInput {
+        pub fn addition<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<
+                ::std::option::Option<super::UpdateWaterAdjustmentInputAddition>,
+            >,
+            T::Error: ::std::fmt::Display,
+        {
+            self.addition = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for addition: {e}"));
+            self
+        }
+        pub fn amount<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.amount = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for amount: {e}"));
+            self
+        }
+        pub fn target<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<
+                ::std::option::Option<super::UpdateWaterAdjustmentInputTarget>,
+            >,
+            T::Error: ::std::fmt::Display,
+        {
+            self.target = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for target: {e}"));
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<UpdateWaterAdjustmentInput> for super::UpdateWaterAdjustmentInput {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: UpdateWaterAdjustmentInput,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self {
+                addition: value.addition?,
+                amount: value.amount?,
+                target: value.target?,
+            })
+        }
+    }
+    impl ::std::convert::From<super::UpdateWaterAdjustmentInput> for UpdateWaterAdjustmentInput {
+        fn from(value: super::UpdateWaterAdjustmentInput) -> Self {
+            Self {
+                addition: Ok(value.addition),
+                amount: Ok(value.amount),
+                target: Ok(value.target),
+            }
+        }
+    }
+    #[derive(Clone, Debug)]
     pub struct UpdateYeastAdditionInput {
         add_to_secondary: ::std::result::Result<::std::option::Option<bool>, ::std::string::String>,
         amount: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
@@ -9210,6 +10416,130 @@ pub mod builder {
                 name: Ok(value.name),
                 notes: Ok(value.notes),
                 ph: Ok(value.ph),
+                sodium_ppm: Ok(value.sodium_ppm),
+                sulfate_ppm: Ok(value.sulfate_ppm),
+            }
+        }
+    }
+    #[derive(Clone, Debug)]
+    pub struct WaterProfile {
+        bicarbonate_ppm: ::std::result::Result<f64, ::std::string::String>,
+        calcium_ppm: ::std::result::Result<f64, ::std::string::String>,
+        chloride_ppm: ::std::result::Result<f64, ::std::string::String>,
+        cl_so4_ratio: ::std::result::Result<f64, ::std::string::String>,
+        magnesium_ppm: ::std::result::Result<f64, ::std::string::String>,
+        sodium_ppm: ::std::result::Result<f64, ::std::string::String>,
+        sulfate_ppm: ::std::result::Result<f64, ::std::string::String>,
+    }
+    impl ::std::default::Default for WaterProfile {
+        fn default() -> Self {
+            Self {
+                bicarbonate_ppm: Err("no value supplied for bicarbonate_ppm".to_string()),
+                calcium_ppm: Err("no value supplied for calcium_ppm".to_string()),
+                chloride_ppm: Err("no value supplied for chloride_ppm".to_string()),
+                cl_so4_ratio: Err("no value supplied for cl_so4_ratio".to_string()),
+                magnesium_ppm: Err("no value supplied for magnesium_ppm".to_string()),
+                sodium_ppm: Err("no value supplied for sodium_ppm".to_string()),
+                sulfate_ppm: Err("no value supplied for sulfate_ppm".to_string()),
+            }
+        }
+    }
+    impl WaterProfile {
+        pub fn bicarbonate_ppm<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<f64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.bicarbonate_ppm = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for bicarbonate_ppm: {e}"));
+            self
+        }
+        pub fn calcium_ppm<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<f64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.calcium_ppm = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for calcium_ppm: {e}"));
+            self
+        }
+        pub fn chloride_ppm<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<f64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.chloride_ppm = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for chloride_ppm: {e}"));
+            self
+        }
+        pub fn cl_so4_ratio<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<f64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.cl_so4_ratio = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for cl_so4_ratio: {e}"));
+            self
+        }
+        pub fn magnesium_ppm<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<f64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.magnesium_ppm = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for magnesium_ppm: {e}"));
+            self
+        }
+        pub fn sodium_ppm<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<f64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.sodium_ppm = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for sodium_ppm: {e}"));
+            self
+        }
+        pub fn sulfate_ppm<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<f64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.sulfate_ppm = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for sulfate_ppm: {e}"));
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<WaterProfile> for super::WaterProfile {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: WaterProfile,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self {
+                bicarbonate_ppm: value.bicarbonate_ppm?,
+                calcium_ppm: value.calcium_ppm?,
+                chloride_ppm: value.chloride_ppm?,
+                cl_so4_ratio: value.cl_so4_ratio?,
+                magnesium_ppm: value.magnesium_ppm?,
+                sodium_ppm: value.sodium_ppm?,
+                sulfate_ppm: value.sulfate_ppm?,
+            })
+        }
+    }
+    impl ::std::convert::From<super::WaterProfile> for WaterProfile {
+        fn from(value: super::WaterProfile) -> Self {
+            Self {
+                bicarbonate_ppm: Ok(value.bicarbonate_ppm),
+                calcium_ppm: Ok(value.calcium_ppm),
+                chloride_ppm: Ok(value.chloride_ppm),
+                cl_so4_ratio: Ok(value.cl_so4_ratio),
+                magnesium_ppm: Ok(value.magnesium_ppm),
                 sodium_ppm: Ok(value.sodium_ppm),
                 sulfate_ppm: Ok(value.sulfate_ppm),
             }

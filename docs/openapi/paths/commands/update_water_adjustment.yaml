@@ -1,0 +1,27 @@
+post:
+  operationId: updateWaterAdjustment
+  summary: Update a water adjustment
+  tags:
+    - Water Chemistry
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+            input:
+              $ref: "../../components/schemas/UpdateWaterAdjustmentInput.yaml"
+  responses:
+    "200":
+      description: Updated water adjustment
+      content:
+        application/json:
+          schema:
+            $ref: "../../components/schemas/RecipeWaterAdjustment.yaml"
+    "500":
+      $ref: "../../components/responses/Error.yaml"

@@ -4,8 +4,8 @@ use crate::entities::{recipes, styles};
 use crate::error::AppError;
 use crate::models::{
     CreateFermentableAdditionInput, CreateHopAdditionInput, CreateMiscAdditionInput,
-    CreateRecipeInput, CreateWaterAdditionInput, CreateYeastAdditionInput, Recipe, RecipeSummary,
-    UpdateRecipeInput,
+    CreateRecipeInput, CreateWaterAdditionInput, CreateWaterAdjustmentInput,
+    CreateYeastAdditionInput, Recipe, RecipeSummary, UpdateRecipeInput,
 };
 
 use super::equipment::EquipmentRepository;
@@ -15,6 +15,7 @@ use super::library::LibraryRepository;
 use super::mash::MashRepository;
 use super::misc::MiscRepository;
 use super::water::WaterRepository;
+use super::water_chemistry::WaterChemistryRepository;
 use super::yeast::YeastRepository;
 use super::{new_id, now_secs};
 
@@ -61,6 +62,9 @@ impl<'a> RecipeRepository<'a> {
         let yeasts = YeastRepository::new(self.db).list(id).await?;
         let miscs = MiscRepository::new(self.db).list(id).await?;
         let waters = WaterRepository::new(self.db).list(id).await?;
+        let water_adjustments = WaterChemistryRepository::new(self.db)
+            .list_adjustments(id)
+            .await?;
 
         let mash = match MashRepository::new(self.db).get_for_recipe(id).await {
             Ok(mash) => Some(mash),
@@ -122,6 +126,9 @@ impl<'a> RecipeRepository<'a> {
             yeasts,
             miscs,
             waters,
+            water_adjustments,
+            mash_water_id: recipe_row.mash_water_id,
+            sparge_water_id: recipe_row.sparge_water_id,
             mash,
         })
     }
@@ -130,22 +137,27 @@ impl<'a> RecipeRepository<'a> {
         let id = new_id();
         let now = now_secs() as i32;
 
-        let (batch_size, boil_size, boil_time, ep_id) = if let Some(ref src_id) = input.source_id {
-            let src = self.get(src_id).await?;
-            (
-                src.batch_size_l,
-                src.boil_size_l,
-                src.boil_time_min,
-                src.equipment_profile_id,
-            )
-        } else {
-            (
-                input.batch_size_l.unwrap_or(23.0),
-                input.boil_size_l.unwrap_or(27.0),
-                input.boil_time_min.unwrap_or(60.0),
-                input.equipment_profile_id,
-            )
-        };
+        let (batch_size, boil_size, boil_time, ep_id, mash_water_id, sparge_water_id) =
+            if let Some(ref src_id) = input.source_id {
+                let src = self.get(src_id).await?;
+                (
+                    src.batch_size_l,
+                    src.boil_size_l,
+                    src.boil_time_min,
+                    src.equipment_profile_id,
+                    src.mash_water_id,
+                    src.sparge_water_id,
+                )
+            } else {
+                (
+                    input.batch_size_l.unwrap_or(23.0),
+                    input.boil_size_l.unwrap_or(27.0),
+                    input.boil_time_min.unwrap_or(60.0),
+                    input.equipment_profile_id,
+                    None,
+                    None,
+                )
+            };
 
         recipes::ActiveModel {
             id: Set(id.clone()),
@@ -155,6 +167,8 @@ impl<'a> RecipeRepository<'a> {
             boil_size_l: Set(boil_size),
             boil_time_min: Set(boil_time),
             equipment_profile_id: Set(ep_id),
+            mash_water_id: Set(mash_water_id),
+            sparge_water_id: Set(sparge_water_id),
             created_at: Set(now),
             updated_at: Set(now),
             ..Default::default()
@@ -258,6 +272,28 @@ impl<'a> RecipeRepository<'a> {
                         water_id: w.water_id,
                         name: w.name,
                         amount_l: w.amount_l,
+                    },
+                )
+                .await?;
+        }
+
+        let water_chem_repo = WaterChemistryRepository::new(self.db);
+        for a in water_chem_repo.list_adjustments(src_id).await? {
+            water_chem_repo
+                .create_water_adjustment(
+                    dst_id,
+                    CreateWaterAdjustmentInput {
+                        addition: a
+                            .addition
+                            .to_string()
+                            .parse()
+                            .map_err(|e| AppError::Internal(format!("{}", e)))?,
+                        target: a
+                            .target
+                            .to_string()
+                            .parse()
+                            .map_err(|e| AppError::Internal(format!("{}", e)))?,
+                        amount: a.amount,
                     },
                 )
                 .await?;
@@ -389,8 +425,7 @@ mod tests {
             batch_size_l: Some(23.0),
             boil_size_l: Some(27.0),
             boil_time_min: Some(60.0),
-            equipment_profile_id: None,
-            source_id: None,
+            ..Default::default()
         }
     }
 

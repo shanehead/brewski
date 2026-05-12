@@ -6,3 +6,4 @@ pub mod mash;
 pub mod recipes;
 pub mod settings;
 pub mod tools;
+pub mod water_chemistry;

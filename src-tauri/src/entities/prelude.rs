@@ -11,6 +11,7 @@ pub use super::recipe_addition_hops::Entity as RecipeAdditionHops;
 pub use super::recipe_addition_miscs::Entity as RecipeAdditionMiscs;
 pub use super::recipe_addition_waters::Entity as RecipeAdditionWaters;
 pub use super::recipe_addition_yeasts::Entity as RecipeAdditionYeasts;
+pub use super::recipe_water_adjustments::Entity as RecipeWaterAdjustments;
 pub use super::recipes::Entity as Recipes;
 pub use super::settings::Entity as Settings;
 pub use super::styles::Entity as Styles;

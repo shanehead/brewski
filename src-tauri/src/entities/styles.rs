@@ -32,13 +32,13 @@ pub struct Model {
     pub carb_max_vols: Option<f64>,
     pub abv_min_pct: Option<f64>,
     pub abv_max_pct: Option<f64>,
-    #[sea_orm(column_type = "Text", nullable)]
+    #[sea_orm(column_type = "Text")]
     pub notes: Option<String>,
-    #[sea_orm(column_type = "Text", nullable)]
+    #[sea_orm(column_type = "Text")]
     pub profile: Option<String>,
-    #[sea_orm(column_type = "Text", nullable)]
+    #[sea_orm(column_type = "Text")]
     pub ingredients: Option<String>,
-    #[sea_orm(column_type = "Text", nullable)]
+    #[sea_orm(column_type = "Text")]
     pub examples: Option<String>,
 }
 

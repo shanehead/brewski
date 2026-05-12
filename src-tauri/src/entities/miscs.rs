@@ -15,9 +15,9 @@ pub struct Model {
     #[sea_orm(column_type = "Text")]
     pub r#use: String,
     pub time_min: f64,
-    #[sea_orm(column_type = "Text", nullable)]
+    #[sea_orm(column_type = "Text")]
     pub notes: Option<String>,
-    #[sea_orm(column_type = "Text", nullable)]
+    #[sea_orm(column_type = "Text")]
     pub use_for: Option<String>,
     pub amount_is_weight: Option<i32>,
 }

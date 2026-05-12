@@ -14,11 +14,11 @@ pub struct Model {
     pub r#type: String,
     pub yield_pct: f64,
     pub color_lovibond: f64,
-    #[sea_orm(column_type = "Text", nullable)]
+    #[sea_orm(column_type = "Text")]
     pub origin: Option<String>,
-    #[sea_orm(column_type = "Text", nullable)]
+    #[sea_orm(column_type = "Text")]
     pub supplier: Option<String>,
-    #[sea_orm(column_type = "Text", nullable)]
+    #[sea_orm(column_type = "Text")]
     pub notes: Option<String>,
     pub add_after_boil: Option<i32>,
     pub coarse_fine_diff_pct: Option<f64>,

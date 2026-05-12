@@ -261,6 +261,39 @@ impl TryFrom<entities::recipe_addition_waters::Model> for RecipeAdditionWater {
     }
 }
 
+impl TryFrom<entities::recipe_water_adjustments::Model> for RecipeWaterAdjustment {
+    type Error = AppError;
+    fn try_from(m: entities::recipe_water_adjustments::Model) -> Result<Self, AppError> {
+        Ok(Self {
+            id: m.id,
+            recipe_id: m.recipe_id,
+            addition: m
+                .addition
+                .parse()
+                .map_err(|e| AppError::Internal(format!("{}", e)))?,
+            target: m
+                .target
+                .parse()
+                .map_err(|e| AppError::Internal(format!("{}", e)))?,
+            amount: m.amount,
+        })
+    }
+}
+
+impl Default for WaterProfile {
+    fn default() -> Self {
+        Self {
+            calcium_ppm: 0.0,
+            magnesium_ppm: 0.0,
+            sodium_ppm: 0.0,
+            chloride_ppm: 0.0,
+            sulfate_ppm: 0.0,
+            bicarbonate_ppm: 0.0,
+            cl_so4_ratio: 0.0,
+        }
+    }
+}
+
 impl TryFrom<entities::mash_steps::Model> for MashStep {
     type Error = AppError;
     fn try_from(m: entities::mash_steps::Model) -> Result<Self, AppError> {
@@ -276,5 +309,20 @@ impl TryFrom<entities::mash_steps::Model> for MashStep {
             end_temp_c: m.end_temp_c,
             step_order: m.step_order as i64,
         })
+    }
+}
+
+impl Default for CreateRecipeInput {
+    fn default() -> Self {
+        Self {
+            name: "".to_string(),
+            batch_size_l: None,
+            boil_size_l: None,
+            boil_time_min: None,
+            equipment_profile_id: None,
+            source_id: None,
+            style_id: None,
+            type_: None,
+        }
     }
 }

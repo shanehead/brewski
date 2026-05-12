@@ -17,3 +17,5 @@ properties:
   source_id:
     type: string
     description: ID of a recipe to copy ingredients from
+  style_id:
+    type: string

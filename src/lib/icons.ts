@@ -5,6 +5,7 @@ export type BrewingIconName =
   | "overview"
   | "ingredients"
   | "mash"
+  | "water"
   | "fermentation"
   | "notes";
 
@@ -49,6 +50,9 @@ export const ICONS: Record<BrewingIconName, string> = {
   `,
   mash: `
     <path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z" />
+  `,
+  water: `
+    <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
   `,
   fermentation: `
     <path d="M17 11h1a3 3 0 0 1 0 6h-1" />

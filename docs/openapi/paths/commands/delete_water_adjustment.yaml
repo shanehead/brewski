@@ -1,0 +1,25 @@
+post:
+  operationId: deleteWaterAdjustment
+  summary: Delete a water adjustment
+  tags:
+    - Water Chemistry
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+  responses:
+    "200":
+      description: Adjustment deleted
+      content:
+        application/json:
+          schema:
+            type: "null"
+    "500":
+      $ref: "../../components/responses/Error.yaml"

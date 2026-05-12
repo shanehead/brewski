@@ -10,6 +10,7 @@ pub mod refractometer;
 pub mod srm;
 pub mod strike;
 pub mod volumes;
+pub mod water;
 
 use crate::models::{Recipe, RecipeStats};
 
@@ -163,6 +164,9 @@ mod tests {
             yeasts: vec![],
             miscs: vec![],
             waters: vec![],
+            water_adjustments: vec![],
+            mash_water_id: None,
+            sparge_water_id: None,
             mash: None,
         }
     }

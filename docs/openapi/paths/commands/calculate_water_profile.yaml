@@ -1,0 +1,25 @@
+post:
+  operationId: calculateWaterProfile
+  summary: Calculate adjusted water profile for a recipe
+  tags:
+    - Water Chemistry
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - recipeId
+          properties:
+            recipeId:
+              type: string
+  responses:
+    "200":
+      description: Calculated water profile with adjustments
+      content:
+        application/json:
+          schema:
+            $ref: "../../components/schemas/CalculatedWaterProfile.yaml"
+    "500":
+      $ref: "../../components/responses/Error.yaml"

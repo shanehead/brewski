@@ -11,6 +11,7 @@
   import OverviewTab from "$lib/components/tabs/OverviewTab.svelte";
   import IngredientsTab from "$lib/components/tabs/IngredientsTab.svelte";
   import MashTab from "$lib/components/tabs/MashTab.svelte";
+  import WaterTab from "$lib/components/tabs/WaterTab.svelte";
   import FermentationTab from "$lib/components/tabs/FermentationTab.svelte";
   import NotesTab from "$lib/components/tabs/NotesTab.svelte";
   import type { BrewingIconName } from "$lib/icons";
@@ -19,13 +20,14 @@
 
   let recipe = $state<Recipe | null>(null);
   let stats = $state<RecipeStats | null>(null);
-  let activeTab = $state<"overview" | "ingredients" | "mash" | "fermentation" | "notes">("overview");
+  let activeTab = $state<"overview" | "ingredients" | "mash" | "water" | "fermentation" | "notes">("overview");
   let saving = $state(false);
 
-  const TABS: { key: "overview" | "ingredients" | "mash" | "fermentation" | "notes"; label: string; icon: BrewingIconName }[] = [
+  const TABS: { key: "overview" | "ingredients" | "mash" | "water" | "fermentation" | "notes"; label: string; icon: BrewingIconName }[] = [
     { key: "overview", label: "Overview", icon: "overview" },
     { key: "ingredients", label: "Ingredients", icon: "ingredients" },
     { key: "mash", label: "Mash", icon: "mash" },
+    { key: "water", label: "Water", icon: "water" },
     { key: "fermentation", label: "Fermentation", icon: "fermentation" },
     { key: "notes", label: "Notes", icon: "notes" },
   ] as const;
@@ -102,6 +104,8 @@
           <IngredientsTab {recipe} onchange={refreshRecipe} />
         {:else if activeTab === "mash"}
           <MashTab {recipe} {stats} onchange={refreshRecipe} />
+        {:else if activeTab === "water"}
+          <WaterTab {recipe} onchange={refreshRecipe} />
         {:else if activeTab === "fermentation"}
           <FermentationTab {recipe} onchange={refreshRecipe} />
         {:else if activeTab === "notes"}

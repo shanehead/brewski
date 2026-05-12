@@ -1,0 +1,12 @@
+type: object
+required:
+  - mash
+  - sparge
+  - combined
+properties:
+  mash:
+    $ref: "./WaterProfile.yaml"
+  sparge:
+    $ref: "./WaterProfile.yaml"
+  combined:
+    $ref: "./WaterProfile.yaml"

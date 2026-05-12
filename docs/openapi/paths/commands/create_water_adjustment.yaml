@@ -1,0 +1,28 @@
+post:
+  operationId: createWaterAdjustment
+  summary: Add a water adjustment to a recipe
+  tags:
+    - Water Chemistry
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - recipeId
+            - input
+          properties:
+            recipeId:
+              type: string
+            input:
+              $ref: "../../components/schemas/CreateWaterAdjustmentInput.yaml"
+  responses:
+    "200":
+      description: Created water adjustment
+      content:
+        application/json:
+          schema:
+            $ref: "../../components/schemas/RecipeWaterAdjustment.yaml"
+    "500":
+      $ref: "../../components/responses/Error.yaml"

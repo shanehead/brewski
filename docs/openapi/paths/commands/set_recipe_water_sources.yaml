@@ -1,0 +1,33 @@
+post:
+  operationId: setRecipeWaterSources
+  summary: Set mash and sparge water sources for a recipe
+  tags:
+    - Water Chemistry
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - recipeId
+          properties:
+            recipeId:
+              type: string
+            mashWaterId:
+              type:
+                - string
+                - "null"
+            spargeWaterId:
+              type:
+                - string
+                - "null"
+  responses:
+    "200":
+      description: Updated recipe
+      content:
+        application/json:
+          schema:
+            $ref: "../../components/schemas/Recipe.yaml"
+    "500":
+      $ref: "../../components/responses/Error.yaml"

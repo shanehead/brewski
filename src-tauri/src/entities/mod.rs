@@ -13,6 +13,7 @@ pub mod recipe_addition_hops;
 pub mod recipe_addition_miscs;
 pub mod recipe_addition_waters;
 pub mod recipe_addition_yeasts;
+pub mod recipe_water_adjustments;
 pub mod recipes;
 pub mod settings;
 pub mod styles;

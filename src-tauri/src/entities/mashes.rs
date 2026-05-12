@@ -19,9 +19,9 @@ pub struct Model {
     pub tun_weight_kg: Option<f64>,
     pub tun_specific_heat: Option<f64>,
     pub equip_adjust: Option<i32>,
-    pub ratio_l_per_kg: Option<f64>,
-    #[sea_orm(column_type = "Text", nullable)]
+    #[sea_orm(column_type = "Text")]
     pub notes: Option<String>,
+    pub ratio_l_per_kg: Option<f64>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]

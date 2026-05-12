@@ -7,6 +7,7 @@ pub mod misc;
 pub mod recipe;
 pub mod settings;
 pub mod water;
+pub mod water_chemistry;
 pub mod yeast;
 
 pub(crate) fn now_secs() -> i64 {

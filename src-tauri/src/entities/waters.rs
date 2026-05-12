@@ -17,7 +17,7 @@ pub struct Model {
     pub sodium_ppm: f64,
     pub magnesium_ppm: f64,
     pub ph: Option<f64>,
-    #[sea_orm(column_type = "Text", nullable)]
+    #[sea_orm(column_type = "Text")]
     pub notes: Option<String>,
 }
 

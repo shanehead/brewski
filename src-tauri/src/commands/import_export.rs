@@ -391,8 +391,7 @@ pub async fn create_recipes_from_beerxml(
                 batch_size_l: Some(p.batch_size_l),
                 boil_size_l: Some(p.boil_size_l),
                 boil_time_min: Some(p.boil_time_min),
-                equipment_profile_id: None,
-                source_id: None,
+                ..Default::default()
             })
             .await
             .map_err(|e| e.to_string())?;

@@ -34,6 +34,8 @@ tags:
     description: Miscellaneous ingredient additions on a recipe
   - name: Water
     description: Water profile additions on a recipe
+  - name: Water Chemistry
+    description: Water source selection and mineral adjustments
   - name: Mash
     description: Mash schedule and steps for a recipe
   - name: Equipment
@@ -87,6 +89,16 @@ paths:
     $ref: ./paths/commands/update_recipe_water.yaml
   /commands/delete_recipe_water:
     $ref: ./paths/commands/delete_recipe_water.yaml
+  /commands/set_recipe_water_sources:
+    $ref: ./paths/commands/set_recipe_water_sources.yaml
+  /commands/calculate_water_profile:
+    $ref: ./paths/commands/calculate_water_profile.yaml
+  /commands/create_water_adjustment:
+    $ref: ./paths/commands/create_water_adjustment.yaml
+  /commands/update_water_adjustment:
+    $ref: ./paths/commands/update_water_adjustment.yaml
+  /commands/delete_water_adjustment:
+    $ref: ./paths/commands/delete_water_adjustment.yaml
   /commands/get_mash:
     $ref: ./paths/commands/get_mash.yaml
   /commands/update_mash:
@@ -159,6 +171,16 @@ components:
       $ref: ./components/schemas/RecipeAdditionMisc.yaml
     RecipeAdditionWater:
       $ref: ./components/schemas/RecipeAdditionWater.yaml
+    WaterProfile:
+      $ref: ./components/schemas/WaterProfile.yaml
+    CalculatedWaterProfile:
+      $ref: ./components/schemas/CalculatedWaterProfile.yaml
+    RecipeWaterAdjustment:
+      $ref: ./components/schemas/RecipeWaterAdjustment.yaml
+    CreateWaterAdjustmentInput:
+      $ref: ./components/schemas/CreateWaterAdjustmentInput.yaml
+    UpdateWaterAdjustmentInput:
+      $ref: ./components/schemas/UpdateWaterAdjustmentInput.yaml
     Mash:
       $ref: ./components/schemas/Mash.yaml
     MashStep:

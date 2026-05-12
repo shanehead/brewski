@@ -361,6 +361,91 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/commands/set_recipe_water_sources": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Set mash and sparge water sources for a recipe */
+        post: operations["setRecipeWaterSources"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/commands/calculate_water_profile": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Calculate adjusted water profile for a recipe */
+        post: operations["calculateWaterProfile"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/commands/create_water_adjustment": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Add a water adjustment to a recipe */
+        post: operations["createWaterAdjustment"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/commands/update_water_adjustment": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Update a water adjustment */
+        post: operations["updateWaterAdjustment"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/commands/delete_water_adjustment": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Delete a water adjustment */
+        post: operations["deleteWaterAdjustment"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/commands/get_mash": {
         parameters: {
             query?: never;
@@ -774,6 +859,11 @@ export interface components {
             yeasts: components["schemas"]["RecipeAdditionYeast"][];
             miscs: components["schemas"]["RecipeAdditionMisc"][];
             waters: components["schemas"]["RecipeAdditionWater"][];
+            water_adjustments?: components["schemas"]["RecipeWaterAdjustment"][];
+            /** @description ID of the mash water profile */
+            mash_water_id?: string | null;
+            /** @description ID of the sparge water profile (null means use mash water) */
+            sparge_water_id?: string | null;
             mash?: components["schemas"]["Mash"] | null;
         };
         RecipeStats: {
@@ -1010,6 +1100,46 @@ export interface components {
             name: string;
             amount_l: number;
         };
+        WaterProfile: {
+            calcium_ppm: number;
+            magnesium_ppm: number;
+            sodium_ppm: number;
+            chloride_ppm: number;
+            sulfate_ppm: number;
+            bicarbonate_ppm: number;
+            cl_so4_ratio: number;
+        };
+        CalculatedWaterProfile: {
+            mash: components["schemas"]["WaterProfile"];
+            sparge: components["schemas"]["WaterProfile"];
+            combined: components["schemas"]["WaterProfile"];
+        };
+        RecipeWaterAdjustment: {
+            id: string;
+            recipe_id: string;
+            /** @enum {string} */
+            addition: "gypsum" | "calcium_chloride" | "epsom_salt" | "table_salt" | "baking_soda" | "chalk" | "lactic_acid" | "phosphoric_acid";
+            /** @enum {string} */
+            target: "mash" | "sparge";
+            /** @description Amount in grams for salts, ml for acids */
+            amount: number;
+        };
+        CreateWaterAdjustmentInput: {
+            /** @enum {string} */
+            addition: "gypsum" | "calcium_chloride" | "epsom_salt" | "table_salt" | "baking_soda" | "chalk" | "lactic_acid" | "phosphoric_acid";
+            /** @enum {string} */
+            target: "mash" | "sparge";
+            /** @description Amount in grams for salts, ml for acids */
+            amount: number;
+        };
+        UpdateWaterAdjustmentInput: {
+            /** @enum {string} */
+            addition?: "gypsum" | "calcium_chloride" | "epsom_salt" | "table_salt" | "baking_soda" | "chalk" | "lactic_acid" | "phosphoric_acid";
+            /** @enum {string} */
+            target?: "mash" | "sparge";
+            /** @description Amount in grams for salts, ml for acids */
+            amount?: number;
+        };
         Mash: {
             id: string;
             recipe_id: string;
@@ -1048,6 +1178,7 @@ export interface components {
             equipment_profile_id?: string;
             /** @description ID of a recipe to copy ingredients from */
             source_id?: string;
+            style_id?: string;
         };
         UpdateRecipeInput: {
             name?: string;
@@ -1779,6 +1910,145 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+            500: components["responses"]["Error"];
+        };
+    };
+    setRecipeWaterSources: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    recipeId: string;
+                    mashWaterId?: string | null;
+                    spargeWaterId?: string | null;
+                };
+            };
+        };
+        responses: {
+            /** @description Updated recipe */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Recipe"];
+                };
+            };
+            500: components["responses"]["Error"];
+        };
+    };
+    calculateWaterProfile: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    recipeId: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Calculated water profile with adjustments */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CalculatedWaterProfile"];
+                };
+            };
+            500: components["responses"]["Error"];
+        };
+    };
+    createWaterAdjustment: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    recipeId: string;
+                    input: components["schemas"]["CreateWaterAdjustmentInput"];
+                };
+            };
+        };
+        responses: {
+            /** @description Created water adjustment */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RecipeWaterAdjustment"];
+                };
+            };
+            500: components["responses"]["Error"];
+        };
+    };
+    updateWaterAdjustment: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    id: string;
+                    input?: components["schemas"]["UpdateWaterAdjustmentInput"];
+                };
+            };
+        };
+        responses: {
+            /** @description Updated water adjustment */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RecipeWaterAdjustment"];
+                };
+            };
+            500: components["responses"]["Error"];
+        };
+    };
+    deleteWaterAdjustment: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    id: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Adjustment deleted */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": null;
+                };
             };
             500: components["responses"]["Error"];
         };

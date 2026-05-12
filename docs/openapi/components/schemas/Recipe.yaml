@@ -168,6 +168,20 @@ properties:
     type: array
     items:
       $ref: "./RecipeAdditionWater.yaml"
+  water_adjustments:
+    type: array
+    items:
+      $ref: "./RecipeWaterAdjustment.yaml"
+  mash_water_id:
+    type:
+      - string
+      - "null"
+    description: ID of the mash water profile
+  sparge_water_id:
+    type:
+      - string
+      - "null"
+    description: ID of the sparge water profile (null means use mash water)
   mash:
     oneOf:
       - $ref: "./Mash.yaml"

@@ -237,8 +237,7 @@ mod tests {
                 batch_size_l: Some(23.0),
                 boil_size_l: Some(27.0),
                 boil_time_min: Some(60.0),
-                equipment_profile_id: None,
-                source_id: None,
+                ..Default::default()
             })
             .await
             .unwrap()

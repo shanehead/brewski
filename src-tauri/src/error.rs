@@ -6,6 +6,8 @@ pub enum AppError {
     Conversion(String),
     #[error("not found")]
     NotFound,
+    #[error("internal error: {0}")]
+    Internal(String),
 }
 
 impl serde::Serialize for AppError {

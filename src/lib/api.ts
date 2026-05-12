@@ -34,6 +34,11 @@ export type UpdateMiscAdditionInput = components["schemas"]["UpdateMiscAdditionI
 export type UpdateWaterAdditionInput = components["schemas"]["UpdateWaterAdditionInput"];
 export type Misc = components["schemas"]["Misc"];
 export type Water = components["schemas"]["Water"];
+export type WaterProfile = components["schemas"]["WaterProfile"];
+export type CalculatedWaterProfile = components["schemas"]["CalculatedWaterProfile"];
+export type RecipeWaterAdjustment = components["schemas"]["RecipeWaterAdjustment"];
+export type CreateWaterAdjustmentInput = components["schemas"]["CreateWaterAdjustmentInput"];
+export type UpdateWaterAdjustmentInput = components["schemas"]["UpdateWaterAdjustmentInput"];
 export type UpdateMashInput = components["schemas"]["UpdateMashInput"];
 
 export type SugarType = "table_sugar" | "corn_sugar" | "dry_malt_extract";
@@ -200,3 +205,15 @@ export const getRecipeBeerxml = (recipeId: string) =>
   invoke<string>("get_recipe_beerxml", { recipeId });
 export const createRecipesFromBeerxml = (xml: string) =>
   invoke<RecipeSummary[]>("create_recipes_from_beerxml", { xml });
+
+// --- Water Chemistry ---
+export const setRecipeWaterSources = (recipeId: string, mashWaterId: string | null, spargeWaterId: string | null) =>
+  invoke<Recipe>("set_recipe_water_sources", { recipeId, mashWaterId, spargeWaterId });
+export const calculateWaterProfile = (recipeId: string) =>
+  invoke<CalculatedWaterProfile>("calculate_water_profile", { recipeId });
+export const createWaterAdjustment = (recipeId: string, input: CreateWaterAdjustmentInput) =>
+  invoke<RecipeWaterAdjustment>("create_water_adjustment", { recipeId, input });
+export const updateWaterAdjustment = (id: string, input: UpdateWaterAdjustmentInput) =>
+  invoke<RecipeWaterAdjustment>("update_water_adjustment", { id, input });
+export const deleteWaterAdjustment = (id: string) =>
+  invoke<void>("delete_water_adjustment", { id });

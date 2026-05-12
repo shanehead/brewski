@@ -1,0 +1,24 @@
+type: object
+required:
+  - calcium_ppm
+  - magnesium_ppm
+  - sodium_ppm
+  - chloride_ppm
+  - sulfate_ppm
+  - bicarbonate_ppm
+  - cl_so4_ratio
+properties:
+  calcium_ppm:
+    type: number
+  magnesium_ppm:
+    type: number
+  sodium_ppm:
+    type: number
+  chloride_ppm:
+    type: number
+  sulfate_ppm:
+    type: number
+  bicarbonate_ppm:
+    type: number
+  cl_so4_ratio:
+    type: number

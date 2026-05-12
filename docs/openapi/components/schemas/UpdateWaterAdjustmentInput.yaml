@@ -1,0 +1,21 @@
+type: object
+properties:
+  addition:
+    type: string
+    enum:
+      - gypsum
+      - calcium_chloride
+      - epsom_salt
+      - table_salt
+      - baking_soda
+      - chalk
+      - lactic_acid
+      - phosphoric_acid
+  target:
+    type: string
+    enum:
+      - mash
+      - sparge
+  amount:
+    type: number
+    description: Amount in grams for salts, ml for acids
