@@ -1,3 +1,13 @@
+/// Malowicki & Shellhammer (2005) isomerization rate model.
+/// Returns the boil-equivalent minutes for actual_min at temp_c.
+/// k1(T) = 7.9e11 * exp(-11858 / T), T in Kelvin.
+pub fn malowicki_effective_time(actual_min: f64, temp_c: f64) -> f64 {
+    let t = temp_c + 273.15;
+    let k1_t = 7.9e11_f64 * f64::exp(-11858.0 / t);
+    let k1_boil = 7.9e11_f64 * f64::exp(-11858.0 / 373.15);
+    actual_min * (k1_t / k1_boil)
+}
+
 pub fn tinseth_ibu(
     hops: &[(&f64, &f64, &f64, bool)], // (alpha_pct, amount_kg, time_min, is_dry_hop)
     og: f64,
@@ -48,5 +58,25 @@ mod tests {
     fn test_ibu_zero_with_no_hops() {
         let ibu = tinseth_ibu(&[], 1.047, 23.0);
         assert_eq!(ibu, 0.0);
+    }
+
+    #[test]
+    fn test_malowicki_at_boiling_returns_actual_time() {
+        // At 100°C, k1 ratio = 1.0 so effective time equals actual time
+        let effective = malowicki_effective_time(20.0, 100.0);
+        assert!((effective - 20.0).abs() < 0.01, "got {effective}");
+    }
+
+    #[test]
+    fn test_malowicki_at_80c_reduces_time() {
+        // At 80°C the rate is ~16.6% of boiling, so 20 min → ~3.3 effective min
+        let effective = malowicki_effective_time(20.0, 80.0);
+        assert!(effective > 2.0 && effective < 5.0, "got {effective}");
+    }
+
+    #[test]
+    fn test_malowicki_at_0c_is_near_zero() {
+        let effective = malowicki_effective_time(60.0, 0.0);
+        assert!(effective < 0.001, "got {effective}");
     }
 }
