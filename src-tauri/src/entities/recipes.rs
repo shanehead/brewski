@@ -55,6 +55,7 @@ pub struct Model {
     pub mash_water_id: Option<String>,
     #[sea_orm(column_type = "Text")]
     pub sparge_water_id: Option<String>,
+    pub whirlpool_temp_c: Option<f64>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
