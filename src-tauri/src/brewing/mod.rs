@@ -439,10 +439,8 @@ mod tests {
     fn test_stats_nectaron_hazy_dipa() {
         let (recipe, expected) = load_fixture("nectaron_hazy_dipa.xml");
         let stats = calculate_stats(&recipe);
-        // For this fixture we assert boil-only IBU (hopstand excluded) per spec
         assert_within("OG", stats.og, expected.og, 0.003);
         assert_within("FG", stats.fg, expected.fg, 0.005);
-        // expected.ibu for this fixture should be the boil-only contribution
         assert_within("IBU", stats.ibu, expected.ibu, 5.0);
         assert_within("SRM", stats.srm, expected.srm, 1.5);
     }

@@ -7,7 +7,7 @@
     <EFFICIENCY>68</EFFICIENCY>
     <EST_OG>1.084</EST_OG>
     <EST_FG>1.018</EST_FG>
-    <IBU>69.091</IBU>
+    <IBU>48.693</IBU>
     <EST_COLOR>5.6</EST_COLOR>
     <FERMENTABLES>
       <FERMENTABLE>
@@ -55,7 +55,7 @@
         <NAME>Nectaron</NAME>
         <ALPHA>10.1</ALPHA>
         <AMOUNT>0.05670</AMOUNT>
-        <USE>Aroma</USE>
+        <USE>Hopstand</USE>
         <TIME>20</TIME>
       </HOP>
       <HOP>
