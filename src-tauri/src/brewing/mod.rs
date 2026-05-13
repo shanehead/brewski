@@ -57,13 +57,20 @@ pub fn calculate_stats(recipe: &Recipe) -> RecipeStats {
     let pre_boil_gravity =
         volumes::calculate_pre_boil_gravity(og, post_boil_volume_l, pre_boil_volume_l);
 
-    let hop_inputs: Vec<(&f64, &f64, &f64, bool)> = recipe
+    let whirlpool_default = recipe.whirlpool_temp_c.unwrap_or(80.0);
+    let hop_inputs: Vec<ibu::HopIbuInput> = recipe
         .hops
         .iter()
-        .map(|h| (&h.alpha_pct, &h.amount_kg, &h.time_min, h.use_ == "dry hop"))
+        .map(|h| ibu::HopIbuInput {
+            alpha_pct: &h.alpha_pct,
+            amount_kg: &h.amount_kg,
+            time_min: &h.time_min,
+            use_type: &h.use_,
+            whirlpool_temp_c: h.whirlpool_temp_c.unwrap_or(whirlpool_default),
+        })
         .collect();
 
-    let ibu = ibu::tinseth_ibu(&hop_inputs, og, post_boil_volume_l);
+    let ibu = ibu::tinseth_ibu(&hop_inputs, og, post_boil_volume_l, recipe.boil_time_min);
 
     let srm_inputs: Vec<(&f64, &f64)> = recipe
         .fermentables
