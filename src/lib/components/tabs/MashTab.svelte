@@ -256,13 +256,13 @@ onDestroy(() => {
                     <input type="text" value={step.name}
                            onclick={(e) => e.stopPropagation()}
                            onblur={(e) => handleUpdateStepField(step.id, 'name', (e.target as HTMLInputElement).value)}
-                           class="flex-1 min-w-24 px-2 py-1.5 rounded text-sm"
+                           class="flex-1 min-w-24 px-2 py-1.5 h-10 rounded text-sm"
                            style="background: var(--color-bg-base); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
                   </div>
                   <div class="flex flex-col w-28">
                     <label class="text-xs" style="color: var(--color-text-secondary);">Type</label>
                     <select value={step.type_} onclick={(e) => e.stopPropagation()} onblur={(e) => handleUpdateStepField(step.id, 'type_', (e.target as HTMLSelectElement).value)}
-                            class="w-28 px-2 py-1.5 rounded text-sm"
+                            class="w-28 px-2 py-1.5 h-10 rounded text-sm"
                             style="background: var(--color-bg-base); color: var(--color-text-primary); border: 1px solid var(--color-border);">
                       {#each STEP_TYPES as t}
                         <option value={t}>{t}</option>
@@ -275,7 +275,7 @@ onDestroy(() => {
                            value={(units === "imperial" ? cToF(step.step_temp_c) : step.step_temp_c).toFixed(1)}
                            onclick={(e) => e.stopPropagation()}
                            onblur={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); handleUpdateStepField(step.id, 'step_temp_c', units === 'imperial' ? fToC(v) : v); }}
-                           class="w-20 px-2 py-1.5 rounded text-sm"
+                           class="w-20 px-2 py-1.5 h-10 rounded text-sm"
                            style="background: var(--color-bg-base); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
                   </div>
                   <div class="flex flex-col w-20">
@@ -283,7 +283,7 @@ onDestroy(() => {
                     <input type="number" step="5" value={step.step_time_min}
                            onclick={(e) => e.stopPropagation()}
                            onblur={(e) => handleUpdateStepField(step.id, 'step_time_min', parseFloat((e.target as HTMLInputElement).value))}
-                           class="w-20 px-2 py-1.5 rounded text-sm"
+                           class="w-20 px-2 py-1.5 h-10 rounded text-sm"
                            style="background: var(--color-bg-base); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
                   </div>
                   {#if step.type_ === 'infusion'}
@@ -293,7 +293,7 @@ onDestroy(() => {
                              value={step.infuse_amount_l != null ? (units === 'imperial' ? lToGal(step.infuse_amount_l) : step.infuse_amount_l).toFixed(1) : ''}
                              onclick={(e) => e.stopPropagation()}
                              onblur={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); handleUpdateStepField(step.id, 'infuse_amount_l', units === 'imperial' ? galToL(v) : v); }}
-                             class="w-24 px-2 py-1.5 rounded text-sm"
+                             class="w-24 px-2 py-1.5 h-10 rounded text-sm"
                              style="background: var(--color-bg-base); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
                     </div>
                   {/if}
