@@ -105,7 +105,7 @@
     <div style="color: var(--color-text-secondary);">Loading water data…</div>
   {:else}
     <!-- Source Water Section -->
-    <div class="flex flex-col gap-3 p-4 rounded" style="background: var(--color-bg-surface); border: 1px solid var(--color-border);">
+    <div class="flex flex-col gap-3">
       <h3 class="text-sm font-semibold" style="color: var(--color-text-primary);">Source Water</h3>
       
       <div class="flex flex-col gap-2">
@@ -136,7 +136,7 @@
     </div>
 
     <!-- Additions Section -->
-    <div class="flex flex-col gap-3 p-4 rounded" style="background: var(--color-bg-surface); border: 1px solid var(--color-border);">
+    <div class="flex flex-col gap-3">
       <h3 class="text-sm font-semibold" style="color: var(--color-text-primary);">Mineral Adjustments</h3>
       
       {#each ["mash", "sparge"] as target}
@@ -178,7 +178,7 @@
 
     <!-- Profile Summary -->
     {#if profile}
-      <div class="flex flex-col gap-3 p-4 rounded" style="background: var(--color-bg-surface); border: 1px solid var(--color-border);">
+      <div class="flex flex-col gap-3">
         <h3 class="text-sm font-semibold" style="color: var(--color-text-primary);">Adjusted Profile</h3>
         
         <div class="grid grid-cols-3 gap-4">
