@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RECIPES>
+  <RECIPE>
+    <NAME>Nectaron Single Hop Hazy DIPA</NAME>
+    <BATCH_SIZE>20.82</BATCH_SIZE>
+    <BOIL_TIME>60</BOIL_TIME>
+    <EFFICIENCY>68</EFFICIENCY>
+    <EST_OG>1.084</EST_OG>
+    <EST_FG>1.018</EST_FG>
+    <IBU>69.091</IBU>
+    <EST_COLOR>5.6</EST_COLOR>
+    <FERMENTABLES>
+      <FERMENTABLE>
+        <NAME>Pale Ale Golden Promise (Simpsons)</NAME>
+        <AMOUNT>6.804</AMOUNT>
+        <YIELD>0.80</YIELD>
+        <COLOR>2.4</COLOR>
+      </FERMENTABLE>
+      <FERMENTABLE>
+        <NAME>Oats, Flaked (Briess)</NAME>
+        <AMOUNT>0.907</AMOUNT>
+        <YIELD>0.70</YIELD>
+        <COLOR>1.6</COLOR>
+      </FERMENTABLE>
+      <FERMENTABLE>
+        <NAME>Dextrose (Briess)</NAME>
+        <AMOUNT>0.454</AMOUNT>
+        <YIELD>1.00</YIELD>
+        <COLOR>1.3</COLOR>
+      </FERMENTABLE>
+    </FERMENTABLES>
+    <HOPS>
+      <HOP>
+        <NAME>Nectaron</NAME>
+        <ALPHA>10.1</ALPHA>
+        <AMOUNT>0.02835</AMOUNT>
+        <USE>Boil</USE>
+        <TIME>60</TIME>
+      </HOP>
+      <HOP>
+        <NAME>Nectaron</NAME>
+        <ALPHA>10.1</ALPHA>
+        <AMOUNT>0.02835</AMOUNT>
+        <USE>Boil</USE>
+        <TIME>20</TIME>
+      </HOP>
+      <HOP>
+        <NAME>Nectaron</NAME>
+        <ALPHA>10.1</ALPHA>
+        <AMOUNT>0.02835</AMOUNT>
+        <USE>Boil</USE>
+        <TIME>10</TIME>
+      </HOP>
+      <HOP>
+        <NAME>Nectaron</NAME>
+        <ALPHA>10.1</ALPHA>
+        <AMOUNT>0.05670</AMOUNT>
+        <USE>Aroma</USE>
+        <TIME>20</TIME>
+      </HOP>
+      <HOP>
+        <NAME>Nectaron</NAME>
+        <ALPHA>10.1</ALPHA>
+        <AMOUNT>0.14175</AMOUNT>
+        <USE>Dry Hop</USE>
+        <TIME>0</TIME>
+      </HOP>
+    </HOPS>
+    <YEASTS>
+      <YEAST>
+        <NAME>Imperial A04 Barbarian</NAME>
+        <ATTENUATION>74</ATTENUATION>
+      </YEAST>
+    </YEASTS>
+  </RECIPE>
+</RECIPES>
