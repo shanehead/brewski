@@ -236,6 +236,7 @@ fn parse_hop(reader: &mut Reader<&[u8]>) -> Result<CreateHopAdditionInput, Strin
         amount_kg,
         use_,
         time_min,
+        whirlpool_temp_c: None,
     })
 }
 

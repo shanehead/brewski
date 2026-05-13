@@ -51,6 +51,7 @@ impl<'a> HopRepository<'a> {
             r#use: Set(input.use_),
             time_min: Set(input.time_min),
             addition_order: Set(order),
+            whirlpool_temp_c: Set(input.whirlpool_temp_c),
         }
         .insert(self.db)
         .await?;
@@ -85,6 +86,9 @@ impl<'a> HopRepository<'a> {
         }
         if let Some(v) = input.addition_order {
             active.addition_order = Set(v as i32);
+        }
+        if let Some(v) = input.whirlpool_temp_c {
+            active.whirlpool_temp_c = Set(Some(v));
         }
 
         active.update(self.db).await?;
@@ -131,6 +135,7 @@ mod tests {
             amount_kg: 0.05,
             use_: "Boil".into(),
             time_min: 60.0,
+            whirlpool_temp_c: None,
         }
     }
 
@@ -161,6 +166,7 @@ mod tests {
                     use_: None,
                     time_min: None,
                     addition_order: None,
+                    whirlpool_temp_c: None,
                 },
             )
             .await

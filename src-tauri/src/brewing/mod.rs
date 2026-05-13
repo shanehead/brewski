@@ -115,8 +115,12 @@ pub fn calculate_stats(recipe: &Recipe) -> RecipeStats {
 }
 
 #[cfg(test)]
+mod beerxml_fixture;
+
+#[cfg(test)]
 mod tests {
     use super::*;
+    use crate::brewing::beerxml_fixture::load_fixture;
     use crate::models::{
         EquipmentProfile, Recipe, RecipeAdditionFermentable, RecipeAdditionHop, RecipeAdditionYeast,
     };
@@ -167,6 +171,7 @@ mod tests {
             water_adjustments: vec![],
             mash_water_id: None,
             sparge_water_id: None,
+            whirlpool_temp_c: None,
             mash: None,
         }
     }
@@ -222,6 +227,7 @@ mod tests {
             use_: "Boil".into(),
             time_min: 60.0,
             addition_order: 0,
+            whirlpool_temp_c: None,
         }];
         let stats = calculate_stats(&recipe);
         assert!(stats.ibu > 0.0);
@@ -380,5 +386,57 @@ mod tests {
         let stats_explicit = calculate_stats(&recipe);
 
         assert!((stats_with_equipment.og - stats_explicit.og).abs() < 0.001);
+    }
+
+    // --- fixture-based stats tests ---
+
+    fn assert_within(label: &str, actual: f64, expected: f64, tol: f64) {
+        assert!(
+            (actual - expected).abs() <= tol,
+            "{} expected ~{expected:.3}, got {actual:.3}",
+            label
+        );
+    }
+
+    #[test]
+    fn test_stats_punk_ipa_2007() {
+        let (recipe, expected) = load_fixture("punk_ipa_2007.xml");
+        let stats = calculate_stats(&recipe);
+        assert_within("OG", stats.og, expected.og, 0.003);
+        assert_within("FG", stats.fg, expected.fg, 0.005);
+        assert_within("IBU", stats.ibu, expected.ibu, 5.0);
+        assert_within("SRM", stats.srm, expected.srm, 1.5);
+    }
+
+    #[test]
+    fn test_stats_alpha_dog() {
+        let (recipe, expected) = load_fixture("alpha_dog.xml");
+        let stats = calculate_stats(&recipe);
+        assert_within("OG", stats.og, expected.og, 0.003);
+        assert_within("FG", stats.fg, expected.fg, 0.005);
+        assert_within("IBU", stats.ibu, expected.ibu, 5.0);
+        assert_within("SRM", stats.srm, expected.srm, 1.5);
+    }
+
+    #[test]
+    fn test_stats_jet_black_heart() {
+        let (recipe, expected) = load_fixture("jet_black_heart.xml");
+        let stats = calculate_stats(&recipe);
+        assert_within("OG", stats.og, expected.og, 0.003);
+        assert_within("FG", stats.fg, expected.fg, 0.005);
+        assert_within("IBU", stats.ibu, expected.ibu, 5.0);
+        assert_within("SRM", stats.srm, expected.srm, 1.5);
+    }
+
+    #[test]
+    fn test_stats_nectaron_hazy_dipa() {
+        let (recipe, expected) = load_fixture("nectaron_hazy_dipa.xml");
+        let stats = calculate_stats(&recipe);
+        // For this fixture we assert boil-only IBU (hopstand excluded) per spec
+        assert_within("OG", stats.og, expected.og, 0.003);
+        assert_within("FG", stats.fg, expected.fg, 0.005);
+        // expected.ibu for this fixture should be the boil-only contribution
+        assert_within("IBU", stats.ibu, expected.ibu, 5.0);
+        assert_within("SRM", stats.srm, expected.srm, 1.5);
     }
 }
