@@ -11,11 +11,11 @@
   } from '$lib/units';
   import type { BrewingIconName } from "$lib/icons";
   export type AddPayload =
-    | { type: 'hop'; item: Hop; amount_kg: number; use_: string; time_min: number }
+    | { type: 'hop'; item: Hop; amount_kg: number; use_: string; time_min: number; hopstand_temp_c: number | null }
     | { type: 'fermentable'; item: Fermentable; amount_kg: number }
     | { type: 'yeast'; item: Yeast; amount: number };
 
-  const HOP_USES = ['boil', 'aroma', 'dry hop', 'first wort', 'whirlpool'] as const;
+  const HOP_USES = ['boil', 'aroma', 'dry hop', 'first wort', 'hopstand'] as const;
 
   let {
     type,
@@ -38,6 +38,7 @@
   let amount = $state(0);
   let use_ = $state('boil');
   let time = $state(60);
+  let hopstand_temp_c = $state(80);
 
   const units = $derived<Units>($settings.units === 'imperial' ? 'imperial' : 'metric');
 
@@ -65,7 +66,7 @@
 
   $effect(() => {
     if (!selected) return;
-    if (type === 'hop') { amount = 0.028; use_ = 'boil'; time = 60; }
+    if (type === 'hop') { amount = 0.028; use_ = 'boil'; time = 60; hopstand_temp_c = 80; }
     else if (type === 'fermentable') { amount = 1.0; }
     else { amount = 1; }
   });
@@ -83,7 +84,7 @@
   function handleAdd() {
     if (!selected || amount <= 0) return;
     if (type === 'hop') {
-      onadd({ type: 'hop', item: selected as Hop, amount_kg: amount, use_, time_min: time });
+      onadd({ type: 'hop', item: selected as Hop, amount_kg: amount, use_, time_min: time, hopstand_temp_c: use_ === 'hopstand' ? hopstand_temp_c : null });
     } else if (type === 'fermentable') {
       onadd({ type: 'fermentable', item: selected as Fermentable, amount_kg: amount });
     } else {
@@ -262,6 +263,13 @@
             <input type="number" step="5" bind:value={time} min="0"
               style="width: 60px; background: var(--color-bg-elevated); border: 1px solid var(--color-border); border-radius: 5px; padding: 5px 8px; color: var(--color-text-primary); font-size: 13px;" />
           </div>
+          {#if use_ === 'hopstand'}
+          <div>
+            <div style="font-size: 11px; color: var(--color-text-secondary); margin-bottom: 4px;">Temp (°C)</div>
+            <input type="number" step="1" bind:value={hopstand_temp_c} min="0" max="100"
+              style="width: 60px; background: var(--color-bg-elevated); border: 1px solid var(--color-border); border-radius: 5px; padding: 5px 8px; color: var(--color-text-primary); font-size: 13px;" />
+          </div>
+          {/if}
           <button onclick={handleAdd} disabled={!canAdd}
             style="margin-left: auto; background: {canAdd ? 'var(--color-accent)' : 'var(--color-bg-elevated)'}; color: {canAdd ? '#fff' : 'var(--color-text-muted)'}; border: none; border-radius: 6px; padding: 8px 18px; font-size: 13px; font-weight: 600; cursor: {canAdd ? 'pointer' : 'default'};">
             Add to Recipe

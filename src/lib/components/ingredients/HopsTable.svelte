@@ -22,6 +22,7 @@
       amount_kg: payload.amount_kg,
       use_: payload.use_,
       time_min: payload.time_min,
+      hopstand_temp_c: payload.hopstand_temp_c ?? undefined,
     }));
     if (result === undefined) return;
     adding = false;
