@@ -3,26 +3,25 @@
 use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, DeriveEntityModel, Serialize, Deserialize)]
 #[sea_orm(table_name = "recipe_addition_hops")]
 pub struct Model {
-    #[sea_orm(primary_key, auto_increment = false, column_type = "Text", nullable)]
-    pub id: Option<String>,
+    #[sea_orm(primary_key, auto_increment = false, column_type = "Text")]
+    pub id: String,
     #[sea_orm(column_type = "Text")]
     pub recipe_id: String,
-    #[sea_orm(column_type = "Text", nullable)]
+    #[sea_orm(column_type = "Text")]
     pub hop_id: Option<String>,
     #[sea_orm(column_type = "Text")]
     pub name: String,
-    pub alpha_pct: Decimal,
+    pub alpha_pct: f64,
     #[sea_orm(column_type = "Text")]
     pub form: String,
-    pub amount_kg: Decimal,
+    pub amount_kg: f64,
     #[sea_orm(column_type = "Text")]
     pub r#use: String,
-    pub time_min: Decimal,
+    pub time_min: f64,
     pub addition_order: i32,
-    pub whirlpool_temp_c: Option<Decimal>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]

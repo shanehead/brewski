@@ -3,59 +3,58 @@
 use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, DeriveEntityModel, Serialize, Deserialize)]
 #[sea_orm(table_name = "recipes")]
 pub struct Model {
-    #[sea_orm(primary_key, auto_increment = false, column_type = "Text", nullable)]
-    pub id: Option<String>,
+    #[sea_orm(primary_key, auto_increment = false, column_type = "Text")]
+    pub id: String,
     #[sea_orm(column_type = "Text")]
     pub name: String,
     #[sea_orm(column_type = "Text")]
     pub r#type: String,
-    #[sea_orm(column_type = "Text", nullable)]
+    #[sea_orm(column_type = "Text")]
     pub brewer: Option<String>,
-    #[sea_orm(column_type = "Text", nullable)]
+    #[sea_orm(column_type = "Text")]
     pub asst_brewer: Option<String>,
-    pub batch_size_l: Decimal,
-    pub boil_size_l: Decimal,
-    pub boil_time_min: Decimal,
-    pub efficiency_pct: Option<Decimal>,
-    #[sea_orm(column_type = "Text", nullable)]
+    pub batch_size_l: f64,
+    pub boil_size_l: f64,
+    pub boil_time_min: f64,
+    pub efficiency_pct: Option<f64>,
+    #[sea_orm(column_type = "Text")]
     pub equipment_profile_id: Option<String>,
-    #[sea_orm(column_type = "Text", nullable)]
+    #[sea_orm(column_type = "Text")]
     pub style_id: Option<String>,
-    #[sea_orm(column_type = "Text", nullable)]
+    #[sea_orm(column_type = "Text")]
     pub notes: Option<String>,
-    #[sea_orm(column_type = "Text", nullable)]
+    #[sea_orm(column_type = "Text")]
     pub taste_notes: Option<String>,
-    pub taste_rating: Option<Decimal>,
-    pub og: Option<Decimal>,
-    pub fg: Option<Decimal>,
+    pub taste_rating: Option<f64>,
+    pub og: Option<f64>,
+    pub fg: Option<f64>,
     pub fermentation_stages: Option<i32>,
-    pub primary_age_days: Option<Decimal>,
-    pub primary_temp_c: Option<Decimal>,
-    pub secondary_age_days: Option<Decimal>,
-    pub secondary_temp_c: Option<Decimal>,
-    pub tertiary_age_days: Option<Decimal>,
-    pub tertiary_temp_c: Option<Decimal>,
-    pub age_days: Option<Decimal>,
-    pub age_temp_c: Option<Decimal>,
-    pub carbonation_vols: Option<Decimal>,
+    pub primary_age_days: Option<f64>,
+    pub primary_temp_c: Option<f64>,
+    pub secondary_age_days: Option<f64>,
+    pub secondary_temp_c: Option<f64>,
+    pub tertiary_age_days: Option<f64>,
+    pub tertiary_temp_c: Option<f64>,
+    pub age_days: Option<f64>,
+    pub age_temp_c: Option<f64>,
+    pub carbonation_vols: Option<f64>,
     pub forced_carbonation: Option<i32>,
-    #[sea_orm(column_type = "Text", nullable)]
+    #[sea_orm(column_type = "Text")]
     pub priming_sugar_name: Option<String>,
-    pub carbonation_temp_c: Option<Decimal>,
-    pub priming_sugar_equiv: Option<Decimal>,
-    pub keg_priming_factor: Option<Decimal>,
-    #[sea_orm(column_type = "Text", nullable)]
+    pub carbonation_temp_c: Option<f64>,
+    pub priming_sugar_equiv: Option<f64>,
+    pub keg_priming_factor: Option<f64>,
+    #[sea_orm(column_type = "Text")]
     pub date: Option<String>,
     pub created_at: i32,
     pub updated_at: i32,
-    #[sea_orm(column_type = "Text", nullable)]
+    #[sea_orm(column_type = "Text")]
     pub mash_water_id: Option<String>,
-    #[sea_orm(column_type = "Text", nullable)]
+    #[sea_orm(column_type = "Text")]
     pub sparge_water_id: Option<String>,
-    pub whirlpool_temp_c: Option<Decimal>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]

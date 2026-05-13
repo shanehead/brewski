@@ -3,30 +3,30 @@
 use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, DeriveEntityModel, Serialize, Deserialize)]
 #[sea_orm(table_name = "equipment_profiles")]
 pub struct Model {
-    #[sea_orm(primary_key, auto_increment = false, column_type = "Text", nullable)]
-    pub id: Option<String>,
+    #[sea_orm(primary_key, auto_increment = false, column_type = "Text")]
+    pub id: String,
     #[sea_orm(column_type = "Text")]
     pub name: String,
-    #[sea_orm(column_type = "Text", nullable)]
+    #[sea_orm(column_type = "Text")]
     pub notes: Option<String>,
-    pub boil_size_l: Decimal,
-    pub batch_size_l: Decimal,
+    pub boil_size_l: f64,
+    pub batch_size_l: f64,
     pub calc_boil_volume: i32,
-    pub tun_volume_l: Option<Decimal>,
-    pub tun_weight_kg: Option<Decimal>,
-    pub tun_specific_heat: Option<Decimal>,
-    pub lauter_deadspace_l: Option<Decimal>,
-    pub top_up_kettle_l: Option<Decimal>,
-    pub trub_chiller_loss_l: Option<Decimal>,
-    pub evap_rate_pct_hr: Option<Decimal>,
-    pub boil_time_min: Decimal,
-    pub top_up_water_l: Option<Decimal>,
-    pub fermenter_loss_l: Option<Decimal>,
-    pub hop_utilization_pct: Option<Decimal>,
-    pub efficiency_pct: Decimal,
+    pub tun_volume_l: Option<f64>,
+    pub tun_weight_kg: Option<f64>,
+    pub tun_specific_heat: Option<f64>,
+    pub lauter_deadspace_l: Option<f64>,
+    pub top_up_kettle_l: Option<f64>,
+    pub trub_chiller_loss_l: Option<f64>,
+    pub evap_rate_pct_hr: Option<f64>,
+    pub boil_time_min: f64,
+    pub top_up_water_l: Option<f64>,
+    pub fermenter_loss_l: Option<f64>,
+    pub hop_utilization_pct: Option<f64>,
+    pub efficiency_pct: f64,
     pub created_at: i32,
     pub updated_at: i32,
 }

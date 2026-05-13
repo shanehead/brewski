@@ -3,31 +3,31 @@
 use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, DeriveEntityModel, Serialize, Deserialize)]
 #[sea_orm(table_name = "fermentables")]
 pub struct Model {
-    #[sea_orm(primary_key, auto_increment = false, column_type = "Text", nullable)]
-    pub id: Option<String>,
+    #[sea_orm(primary_key, auto_increment = false, column_type = "Text")]
+    pub id: String,
     #[sea_orm(column_type = "Text")]
     pub name: String,
     #[sea_orm(column_type = "Text")]
     pub r#type: String,
-    pub yield_pct: Decimal,
-    pub color_lovibond: Decimal,
-    #[sea_orm(column_type = "Text", nullable)]
+    pub yield_pct: f64,
+    pub color_lovibond: f64,
+    #[sea_orm(column_type = "Text")]
     pub origin: Option<String>,
-    #[sea_orm(column_type = "Text", nullable)]
+    #[sea_orm(column_type = "Text")]
     pub supplier: Option<String>,
-    #[sea_orm(column_type = "Text", nullable)]
+    #[sea_orm(column_type = "Text")]
     pub notes: Option<String>,
     pub add_after_boil: Option<i32>,
-    pub coarse_fine_diff_pct: Option<Decimal>,
-    pub moisture_pct: Option<Decimal>,
-    pub diastatic_power_lintner: Option<Decimal>,
-    pub protein_pct: Option<Decimal>,
-    pub max_in_batch_pct: Option<Decimal>,
+    pub coarse_fine_diff_pct: Option<f64>,
+    pub moisture_pct: Option<f64>,
+    pub diastatic_power_lintner: Option<f64>,
+    pub protein_pct: Option<f64>,
+    pub max_in_batch_pct: Option<f64>,
     pub recommend_mash: Option<i32>,
-    pub ibu_gal_per_lb: Option<Decimal>,
+    pub ibu_gal_per_lb: Option<f64>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]

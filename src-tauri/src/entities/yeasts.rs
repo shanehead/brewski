@@ -3,43 +3,43 @@
 use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, DeriveEntityModel, Serialize, Deserialize)]
 #[sea_orm(table_name = "yeasts")]
 pub struct Model {
-    #[sea_orm(primary_key, auto_increment = false, column_type = "Text", nullable)]
-    pub id: Option<String>,
+    #[sea_orm(primary_key, auto_increment = false, column_type = "Text")]
+    pub id: String,
     #[sea_orm(column_type = "Text")]
     pub name: String,
     #[sea_orm(column_type = "Text")]
     pub r#type: String,
     #[sea_orm(column_type = "Text")]
     pub form: String,
-    #[sea_orm(column_type = "Text", nullable)]
+    #[sea_orm(column_type = "Text")]
     pub laboratory: Option<String>,
-    #[sea_orm(column_type = "Text", nullable)]
+    #[sea_orm(column_type = "Text")]
     pub product_id: Option<String>,
-    pub min_temperature_c: Option<Decimal>,
-    pub max_temperature_c: Option<Decimal>,
-    #[sea_orm(column_type = "Text", nullable)]
+    pub min_temperature_c: Option<f64>,
+    pub max_temperature_c: Option<f64>,
+    #[sea_orm(column_type = "Text")]
     pub flocculation: Option<String>,
-    pub attenuation_pct: Option<Decimal>,
-    pub min_attenuation_pct: Option<Decimal>,
-    pub max_attenuation_pct: Option<Decimal>,
-    #[sea_orm(column_type = "Text", nullable)]
+    pub attenuation_pct: Option<f64>,
+    pub min_attenuation_pct: Option<f64>,
+    pub max_attenuation_pct: Option<f64>,
+    #[sea_orm(column_type = "Text")]
     pub alcohol_tolerance: Option<String>,
-    #[sea_orm(column_type = "Text", nullable)]
+    #[sea_orm(column_type = "Text")]
     pub flavor_profile: Option<String>,
-    #[sea_orm(column_type = "Text", nullable)]
+    #[sea_orm(column_type = "Text")]
     pub styles: Option<String>,
-    #[sea_orm(column_type = "Text", nullable)]
+    #[sea_orm(column_type = "Text")]
     pub substitutes: Option<String>,
-    #[sea_orm(column_type = "Text", nullable)]
+    #[sea_orm(column_type = "Text")]
     pub species: Option<String>,
     pub pof_positive: Option<i32>,
     pub sta1_positive: Option<i32>,
-    #[sea_orm(column_type = "Text", nullable)]
+    #[sea_orm(column_type = "Text")]
     pub notes: Option<String>,
-    #[sea_orm(column_type = "Text", nullable)]
+    #[sea_orm(column_type = "Text")]
     pub best_for: Option<String>,
     pub max_reuse: Option<i32>,
     pub add_to_secondary: Option<i32>,

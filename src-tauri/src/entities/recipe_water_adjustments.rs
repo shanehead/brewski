@@ -3,18 +3,18 @@
 use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, DeriveEntityModel, Serialize, Deserialize)]
 #[sea_orm(table_name = "recipe_water_adjustments")]
 pub struct Model {
-    #[sea_orm(primary_key, auto_increment = false, column_type = "Text", nullable)]
-    pub id: Option<String>,
+    #[sea_orm(primary_key, auto_increment = false, column_type = "Text")]
+    pub id: String,
     #[sea_orm(column_type = "Text")]
     pub recipe_id: String,
     #[sea_orm(column_type = "Text")]
     pub addition: String,
     #[sea_orm(column_type = "Text")]
     pub target: String,
-    pub amount: Decimal,
+    pub amount: f64,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]

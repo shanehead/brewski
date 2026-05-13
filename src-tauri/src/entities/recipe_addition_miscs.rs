@@ -3,14 +3,14 @@
 use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, DeriveEntityModel, Serialize, Deserialize)]
 #[sea_orm(table_name = "recipe_addition_miscs")]
 pub struct Model {
-    #[sea_orm(primary_key, auto_increment = false, column_type = "Text", nullable)]
-    pub id: Option<String>,
+    #[sea_orm(primary_key, auto_increment = false, column_type = "Text")]
+    pub id: String,
     #[sea_orm(column_type = "Text")]
     pub recipe_id: String,
-    #[sea_orm(column_type = "Text", nullable)]
+    #[sea_orm(column_type = "Text")]
     pub misc_id: Option<String>,
     #[sea_orm(column_type = "Text")]
     pub name: String,
@@ -18,9 +18,9 @@ pub struct Model {
     pub r#type: String,
     #[sea_orm(column_type = "Text")]
     pub r#use: String,
-    pub amount: Decimal,
+    pub amount: f64,
     pub amount_is_weight: Option<i32>,
-    pub time_min: Decimal,
+    pub time_min: f64,
     pub addition_order: i32,
 }
 

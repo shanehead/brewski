@@ -3,21 +3,21 @@
 use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, DeriveEntityModel, Serialize, Deserialize)]
 #[sea_orm(table_name = "waters")]
 pub struct Model {
-    #[sea_orm(primary_key, auto_increment = false, column_type = "Text", nullable)]
-    pub id: Option<String>,
+    #[sea_orm(primary_key, auto_increment = false, column_type = "Text")]
+    pub id: String,
     #[sea_orm(column_type = "Text")]
     pub name: String,
-    pub calcium_ppm: Decimal,
-    pub bicarbonate_ppm: Decimal,
-    pub sulfate_ppm: Decimal,
-    pub chloride_ppm: Decimal,
-    pub sodium_ppm: Decimal,
-    pub magnesium_ppm: Decimal,
-    pub ph: Option<Decimal>,
-    #[sea_orm(column_type = "Text", nullable)]
+    pub calcium_ppm: f64,
+    pub bicarbonate_ppm: f64,
+    pub sulfate_ppm: f64,
+    pub chloride_ppm: f64,
+    pub sodium_ppm: f64,
+    pub magnesium_ppm: f64,
+    pub ph: Option<f64>,
+    #[sea_orm(column_type = "Text")]
     pub notes: Option<String>,
 }
 

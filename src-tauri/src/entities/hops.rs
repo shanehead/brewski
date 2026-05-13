@@ -3,32 +3,32 @@
 use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, DeriveEntityModel, Serialize, Deserialize)]
 #[sea_orm(table_name = "hops")]
 pub struct Model {
-    #[sea_orm(primary_key, auto_increment = false, column_type = "Text", nullable)]
-    pub id: Option<String>,
+    #[sea_orm(primary_key, auto_increment = false, column_type = "Text")]
+    pub id: String,
     #[sea_orm(column_type = "Text")]
     pub name: String,
-    pub alpha_pct: Decimal,
-    pub beta_pct: Option<Decimal>,
+    pub alpha_pct: f64,
+    pub beta_pct: Option<f64>,
     #[sea_orm(column_type = "Text")]
     pub form: String,
-    #[sea_orm(column_type = "Text", nullable)]
+    #[sea_orm(column_type = "Text")]
     pub r#type: Option<String>,
-    #[sea_orm(column_type = "Text", nullable)]
+    #[sea_orm(column_type = "Text")]
     pub origin: Option<String>,
-    #[sea_orm(column_type = "Text", nullable)]
+    #[sea_orm(column_type = "Text")]
     pub year: Option<String>,
-    #[sea_orm(column_type = "Text", nullable)]
+    #[sea_orm(column_type = "Text")]
     pub notes: Option<String>,
-    #[sea_orm(column_type = "Text", nullable)]
+    #[sea_orm(column_type = "Text")]
     pub substitutes: Option<String>,
-    pub hsi_pct: Option<Decimal>,
-    pub humulene_pct: Option<Decimal>,
-    pub caryophyllene_pct: Option<Decimal>,
-    pub cohumulone_pct: Option<Decimal>,
-    pub myrcene_pct: Option<Decimal>,
+    pub hsi_pct: Option<f64>,
+    pub humulene_pct: Option<f64>,
+    pub caryophyllene_pct: Option<f64>,
+    pub cohumulone_pct: Option<f64>,
+    pub myrcene_pct: Option<f64>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
