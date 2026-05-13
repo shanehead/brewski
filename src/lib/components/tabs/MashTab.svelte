@@ -58,7 +58,7 @@
   const STEP_TYPES = ["infusion", "temperature", "decoction"] as const;
   const units = $derived<Units>($settings.units === "imperial" ? "imperial" : "metric");
 
-import { onDestroy } from 'svelte';
+import { onDestroy, tick } from 'svelte';
 let editingStepId = $state<string | null>(null);
 let hoveredStepId = $state<string | null>(null);
 let _docClickHandler: ((e: MouseEvent) => void) | null = null;
@@ -98,13 +98,16 @@ function _detachDocClick() {
   }
 }
 
-function toggleEditStep(id: string) {
+async function toggleEditStep(id: string) {
   if (editingStepId === id) {
     closeEdit();
     return;
   }
   editingStepId = id;
   _attachDocClick(id);
+  await tick();
+  const el = document.getElementById(`step-${id}-name`) as HTMLInputElement | null;
+  if (el) el.focus();
 }
   
 function closeEdit() {
@@ -252,16 +255,16 @@ onDestroy(() => {
               {#if editingStepId === step.id}
                 <div class="flex flex-wrap gap-2 p-2 rounded" style="background: var(--color-bg-elevated);">
                   <div class="flex flex-col min-w-24">
-                    <label class="text-xs" style="color: var(--color-text-secondary);">Name</label>
-                    <input type="text" value={step.name}
+                    <label for={"step-" + step.id + "-name"} class="text-xs" style="color: var(--color-text-secondary);">Name</label>
+                    <input id={"step-" + step.id + "-name"} type="text" value={step.name}
                            onclick={(e) => e.stopPropagation()}
                            onblur={(e) => handleUpdateStepField(step.id, 'name', (e.target as HTMLInputElement).value)}
                            class="flex-1 min-w-24 px-2 py-1.5 h-10 rounded text-sm"
                            style="background: var(--color-bg-base); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
                   </div>
                   <div class="flex flex-col w-28">
-                    <label class="text-xs" style="color: var(--color-text-secondary);">Type</label>
-                    <select value={step.type_} onclick={(e) => e.stopPropagation()} onblur={(e) => handleUpdateStepField(step.id, 'type_', (e.target as HTMLSelectElement).value)}
+                    <label for={"step-" + step.id + "-type"} class="text-xs" style="color: var(--color-text-secondary);">Type</label>
+                    <select id={"step-" + step.id + "-type"} value={step.type_} onclick={(e) => e.stopPropagation()} onblur={(e) => handleUpdateStepField(step.id, 'type_', (e.target as HTMLSelectElement).value)}
                             class="w-28 px-2 py-1.5 h-10 rounded text-sm"
                             style="background: var(--color-bg-base); color: var(--color-text-primary); border: 1px solid var(--color-border);">
                       {#each STEP_TYPES as t}
@@ -270,8 +273,8 @@ onDestroy(() => {
                     </select>
                   </div>
                   <div class="flex flex-col w-20">
-                    <label class="text-xs" style="color: var(--color-text-secondary);">Temp ({tempLabel(units)})</label>
-                    <input type="number" step={units === "imperial" ? 1 : 0.5}
+                    <label for={"step-" + step.id + "-temp"} class="text-xs" style="color: var(--color-text-secondary);">Temp ({tempLabel(units)})</label>
+                    <input id={"step-" + step.id + "-temp"} type="number" step={units === "imperial" ? 1 : 0.5}
                            value={(units === "imperial" ? cToF(step.step_temp_c) : step.step_temp_c).toFixed(1)}
                            onclick={(e) => e.stopPropagation()}
                            onblur={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); handleUpdateStepField(step.id, 'step_temp_c', units === 'imperial' ? fToC(v) : v); }}
@@ -279,8 +282,8 @@ onDestroy(() => {
                            style="background: var(--color-bg-base); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
                   </div>
                   <div class="flex flex-col w-20">
-                    <label class="text-xs" style="color: var(--color-text-secondary);">Time (min)</label>
-                    <input type="number" step="5" value={step.step_time_min}
+                    <label for={"step-" + step.id + "-time"} class="text-xs" style="color: var(--color-text-secondary);">Time (min)</label>
+                    <input id={"step-" + step.id + "-time"} type="number" step="5" value={step.step_time_min}
                            onclick={(e) => e.stopPropagation()}
                            onblur={(e) => handleUpdateStepField(step.id, 'step_time_min', parseFloat((e.target as HTMLInputElement).value))}
                            class="w-20 px-2 py-1.5 h-10 rounded text-sm"
@@ -288,8 +291,8 @@ onDestroy(() => {
                   </div>
                   {#if step.type_ === 'infusion'}
                     <div class="flex flex-col w-24">
-                      <label class="text-xs" style="color: var(--color-text-secondary);">Infuse ({volumeLabel(units)})</label>
-                      <input type="number" step="0.1"
+                      <label for={"step-" + step.id + "-infuse"} class="text-xs" style="color: var(--color-text-secondary);">Infuse ({volumeLabel(units)})</label>
+                      <input id={"step-" + step.id + "-infuse"} type="number" step="0.1"
                              value={step.infuse_amount_l != null ? (units === 'imperial' ? lToGal(step.infuse_amount_l) : step.infuse_amount_l).toFixed(1) : ''}
                              onclick={(e) => e.stopPropagation()}
                              onblur={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); handleUpdateStepField(step.id, 'infuse_amount_l', units === 'imperial' ? galToL(v) : v); }}
@@ -306,7 +309,7 @@ onDestroy(() => {
                 </p>
               {/if}
             </div>
-            <button onclick={(e) => { e.stopPropagation(); handleDeleteStep(step.id); }} class="text-xs opacity-40 hover:opacity-100"
+            <button onclick={(e) => { e.stopPropagation(); handleDeleteStep(step.id); }} aria-label="Delete mash step" class="text-xs opacity-40 hover:opacity-100"
                     style="color: var(--color-text-secondary);">×</button>
           </div>
         {/each}
