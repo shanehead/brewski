@@ -201,6 +201,7 @@ function onEditKeydown(e: KeyboardEvent) {
         {#each mash.steps as step (step.id)}
           <div class="flex items-center gap-3 py-2 border-t" 
                style="border-color: var(--color-border); background: {hoveredStepId === step.id ? 'var(--color-bg-elevated)' : 'transparent'};"
+               role="button"
                onclick={() => toggleEditStep(step.id)}
                onmouseenter={() => hoveredStepId = step.id}
                onmouseleave={() => hoveredStepId = null}
