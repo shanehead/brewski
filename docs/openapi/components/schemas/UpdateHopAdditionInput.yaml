@@ -8,6 +8,6 @@ properties:
     type: number
   addition_order:
     type: integer
-  whirlpool_temp_c:
+  hopstand_temp_c:
     type: number
-    description: Whirlpool temperature override for this addition in °C
+    description: Hopstand temperature override for this addition in °C

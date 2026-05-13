@@ -58,6 +58,6 @@ properties:
     type: number
   date:
     type: string
-  whirlpool_temp_c:
+  hopstand_temp_c:
     type: number
-    description: Default whirlpool/hopstand temperature in °C
+    description: Default hopstand temperature in °C
