@@ -5,19 +5,46 @@
 
 ## Overview
 
-Add integration tests that validate `calculate_stats` against known recipe data from BrewDog's published DIY Dog BeerXML files. Tests parse real recipe fixtures, run our brewing calculations, and assert the output falls within tolerance of the expected values embedded in the XML.
+Add integration tests that validate `calculate_stats` against known recipe data. Three fixtures come from BrewDog's published DIY Dog BeerXML files; one is a hand-crafted BeerXML file built from a known Brewfather recipe (Nectaron Single Hop Hazy DIPA). Tests parse the fixtures, run our brewing calculations, and assert the output falls within tolerance of the expected values.
 
 ## Fixtures
 
-Three XML files downloaded from https://github.com/stuartraetaylor/diydog-beerxml and stored in `src-tauri/tests/fixtures/`:
+Four XML files stored in `src-tauri/tests/fixtures/`:
 
-| File | Recipe | Why |
-|------|--------|-----|
-| `punk_ipa_2007.xml` | Punk IPA 2007–2010 | Simple single-malt grain bill; good baseline for OG/IBU |
-| `alpha_dog.xml` | Alpha Dog | Multi-grain; exercises color calculation |
-| `jet_black_heart.xml` | Jet Black Heart | Dark stout; pushes high-SRM Morey formula |
+| File | Recipe | Source | Why |
+|------|--------|--------|-----|
+| `punk_ipa_2007.xml` | Punk IPA 2007–2010 | diydog-beerxml repo | Simple single-malt grain bill; good baseline for OG/IBU |
+| `alpha_dog.xml` | Alpha Dog | diydog-beerxml repo | Multi-grain; exercises color calculation |
+| `jet_black_heart.xml` | Jet Black Heart | diydog-beerxml repo | Dark stout; pushes high-SRM Morey formula |
+| `nectaron_hazy_dipa.xml` | Nectaron Single Hop Hazy DIPA | Hand-crafted from Brewfather screenshot | Real homebrewer recipe; includes hopstand addition |
 
-Expected values present in each XML: `EST_OG`, `EST_FG`, `IBU`, `EST_COLOR`.
+The three diydog files are downloaded directly from https://github.com/stuartraetaylor/diydog-beerxml. Expected values come from the embedded `EST_OG`, `EST_FG`, `IBU`, `EST_COLOR` fields.
+
+The Nectaron DIPA file is hand-crafted BeerXML from Brewfather data extracted from screenshots. Its ingredient data and expected stats are:
+
+**Fermentables** (batch 5.5 gal / 20.82 L, 68% efficiency):
+
+| Name | Amount | Yield | Color |
+|------|--------|-------|-------|
+| Pale Ale Golden Promise (Simpsons) | 6.804 kg | 80% | 2.4 °L |
+| Oats, Flaked (Briess) | 0.907 kg | 70% | 1.6 °L |
+| Dextrose (Briess) | 0.454 kg | 100% | 1.3 °L |
+
+**Hops** (all Nectaron 10.1%):
+
+| Amount | Use | Time |
+|--------|-----|------|
+| 28.35 g | Boil | 60 min |
+| 28.35 g | Boil | 20 min |
+| 28.35 g | Boil | 10 min |
+| 56.70 g | Aroma (hopstand @ 82°C / 180°F) | 20 min |
+| 141.75 g | Dry Hop | — |
+
+**Yeast:** Imperial Yeast A04 Barbarian, 74% attenuation
+
+**Expected stats (from Brewfather):** OG 1.084 · FG 1.018 · IBU 67 · SRM 5.6 · ABV 8.7%
+
+**IBU note:** Brewfather's 67 IBU includes ~7.9 IBU from the hopstand addition. Our current `tinseth_ibu` has no hopstand temperature model (that is a separate spec). The boil-only additions (60 + 20 + 10 min) contribute ~59 IBU. The fixture test for this recipe therefore asserts against **59 IBU** (boil-only) with a comment explaining the discrepancy. The hopstand and dry-hop additions are passed with `use_ = "aroma"` / `use_ = "dry hop"` and contribute 0 IBU in the current model.
 
 ## Test-Only Parser
 
@@ -50,7 +77,7 @@ The parser is separate from `parse_beerxml` in `import_export.rs` — that one t
 
 ## Tests
 
-Three `#[test]` functions added to the existing `#[cfg(test)]` block in `src-tauri/src/brewing/mod.rs`:
+Four `#[test]` functions added to the existing `#[cfg(test)]` block in `src-tauri/src/brewing/mod.rs`:
 
 ```rust
 #[test]
@@ -61,6 +88,9 @@ fn test_stats_alpha_dog() { ... }
 
 #[test]
 fn test_stats_jet_black_heart() { ... }
+
+#[test]
+fn test_stats_nectaron_hazy_dipa() { ... }
 ```
 
 Each test:
@@ -81,8 +111,9 @@ Assertion messages include the actual and expected values for easy diagnosis.
 
 | File | Change |
 |------|--------|
-| `src-tauri/tests/fixtures/punk_ipa_2007.xml` | New — downloaded fixture |
-| `src-tauri/tests/fixtures/alpha_dog.xml` | New — downloaded fixture |
-| `src-tauri/tests/fixtures/jet_black_heart.xml` | New — downloaded fixture |
+| `src-tauri/tests/fixtures/punk_ipa_2007.xml` | New — downloaded from diydog-beerxml |
+| `src-tauri/tests/fixtures/alpha_dog.xml` | New — downloaded from diydog-beerxml |
+| `src-tauri/tests/fixtures/jet_black_heart.xml` | New — downloaded from diydog-beerxml |
+| `src-tauri/tests/fixtures/nectaron_hazy_dipa.xml` | New — hand-crafted from Brewfather data |
 | `src-tauri/src/brewing/beerxml_fixture.rs` | New — test-only parser |
-| `src-tauri/src/brewing/mod.rs` | Add three fixture-based tests; add `mod beerxml_fixture` under `#[cfg(test)]` |
+| `src-tauri/src/brewing/mod.rs` | Add four fixture-based tests; add `mod beerxml_fixture` under `#[cfg(test)]` |
