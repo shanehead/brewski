@@ -20,3 +20,6 @@ properties:
     type: string
   time_min:
     type: number
+  whirlpool_temp_c:
+    type: number
+    description: Whirlpool temperature override for this addition in °C

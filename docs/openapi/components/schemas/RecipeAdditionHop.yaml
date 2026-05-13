@@ -28,8 +28,13 @@ properties:
     type: number
   use_:
     type: string
-    description: Boil, Dry Hop, Mash, First Wort, Aroma
+    description: "Boil, Dry Hop, Mash, First Wort, Aroma, Hopstand"
   time_min:
     type: number
   addition_order:
     type: integer
+  whirlpool_temp_c:
+    type:
+      - number
+      - "null"
+    description: Whirlpool/hopstand temperature in °C for this addition (overrides recipe-level setting)

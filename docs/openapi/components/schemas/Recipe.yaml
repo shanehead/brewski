@@ -182,6 +182,11 @@ properties:
       - string
       - "null"
     description: ID of the sparge water profile (null means use mash water)
+  whirlpool_temp_c:
+    type:
+      - number
+      - "null"
+    description: Default whirlpool/hopstand temperature in °C for this recipe
   mash:
     oneOf:
       - $ref: "./Mash.yaml"

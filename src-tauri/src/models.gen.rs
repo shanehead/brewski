@@ -225,6 +225,10 @@ impl CreateFermentableAdditionInput {
 #[doc = "    },"]
 #[doc = "    \"use_\": {"]
 #[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
+#[doc = "    \"whirlpool_temp_c\": {"]
+#[doc = "      \"description\": \"Whirlpool temperature override for this addition in °C\","]
+#[doc = "      \"type\": \"number\""]
 #[doc = "    }"]
 #[doc = "  }"]
 #[doc = "}"]
@@ -241,6 +245,9 @@ pub struct CreateHopAdditionInput {
     pub name: ::std::string::String,
     pub time_min: f64,
     pub use_: ::std::string::String,
+    #[doc = "Whirlpool temperature override for this addition in °C"]
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub whirlpool_temp_c: ::std::option::Option<f64>,
 }
 impl CreateHopAdditionInput {
     pub fn builder() -> builder::CreateHopAdditionInput {
@@ -396,6 +403,10 @@ impl CreateMiscAdditionInput {
 #[doc = "    },"]
 #[doc = "    \"type_\": {"]
 #[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
+#[doc = "    \"whirlpool_temp_c\": {"]
+#[doc = "      \"description\": \"Default whirlpool/hopstand temperature in °C\","]
+#[doc = "      \"type\": \"number\""]
 #[doc = "    }"]
 #[doc = "  }"]
 #[doc = "}"]
@@ -419,6 +430,9 @@ pub struct CreateRecipeInput {
     pub style_id: ::std::option::Option<::std::string::String>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub type_: ::std::option::Option<::std::string::String>,
+    #[doc = "Default whirlpool/hopstand temperature in °C"]
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub whirlpool_temp_c: ::std::option::Option<f64>,
 }
 impl CreateRecipeInput {
     pub fn builder() -> builder::CreateRecipeInput {
@@ -1758,6 +1772,13 @@ impl Misc {
 #[doc = "        \"$ref\": \"#/components/schemas/RecipeAdditionWater\""]
 #[doc = "      }"]
 #[doc = "    },"]
+#[doc = "    \"whirlpool_temp_c\": {"]
+#[doc = "      \"description\": \"Default whirlpool/hopstand temperature in °C for this recipe\","]
+#[doc = "      \"type\": ["]
+#[doc = "        \"number\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
 #[doc = "    \"yeasts\": {"]
 #[doc = "      \"type\": \"array\","]
 #[doc = "      \"items\": {"]
@@ -1852,6 +1873,9 @@ pub struct Recipe {
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub water_adjustments: ::std::vec::Vec<RecipeWaterAdjustment>,
     pub waters: ::std::vec::Vec<RecipeAdditionWater>,
+    #[doc = "Default whirlpool/hopstand temperature in °C for this recipe"]
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub whirlpool_temp_c: ::std::option::Option<f64>,
     pub yeasts: ::std::vec::Vec<RecipeAdditionYeast>,
 }
 impl Recipe {
@@ -1986,8 +2010,15 @@ impl RecipeAdditionFermentable {
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"use_\": {"]
-#[doc = "      \"description\": \"Boil, Dry Hop, Mash, First Wort, Aroma\","]
+#[doc = "      \"description\": \"Boil, Dry Hop, Mash, First Wort, Aroma, Hopstand\","]
 #[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
+#[doc = "    \"whirlpool_temp_c\": {"]
+#[doc = "      \"description\": \"Whirlpool/hopstand temperature in °C for this addition (overrides recipe-level setting)\","]
+#[doc = "      \"type\": ["]
+#[doc = "        \"number\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
 #[doc = "    }"]
 #[doc = "  }"]
 #[doc = "}"]
@@ -2005,8 +2036,11 @@ pub struct RecipeAdditionHop {
     pub name: ::std::string::String,
     pub recipe_id: ::std::string::String,
     pub time_min: f64,
-    #[doc = "Boil, Dry Hop, Mash, First Wort, Aroma"]
+    #[doc = "Boil, Dry Hop, Mash, First Wort, Aroma, Hopstand"]
     pub use_: ::std::string::String,
+    #[doc = "Whirlpool/hopstand temperature in °C for this addition (overrides recipe-level setting)"]
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub whirlpool_temp_c: ::std::option::Option<f64>,
 }
 impl RecipeAdditionHop {
     pub fn builder() -> builder::RecipeAdditionHop {
@@ -2953,6 +2987,10 @@ impl UpdateFermentableAdditionInput {
 #[doc = "    },"]
 #[doc = "    \"use_\": {"]
 #[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
+#[doc = "    \"whirlpool_temp_c\": {"]
+#[doc = "      \"description\": \"Whirlpool temperature override for this addition in °C\","]
+#[doc = "      \"type\": \"number\""]
 #[doc = "    }"]
 #[doc = "  }"]
 #[doc = "}"]
@@ -2968,6 +3006,9 @@ pub struct UpdateHopAdditionInput {
     pub time_min: ::std::option::Option<f64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub use_: ::std::option::Option<::std::string::String>,
+    #[doc = "Whirlpool temperature override for this addition in °C"]
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub whirlpool_temp_c: ::std::option::Option<f64>,
 }
 impl ::std::default::Default for UpdateHopAdditionInput {
     fn default() -> Self {
@@ -2976,6 +3017,7 @@ impl ::std::default::Default for UpdateHopAdditionInput {
             amount_kg: Default::default(),
             time_min: Default::default(),
             use_: Default::default(),
+            whirlpool_temp_c: Default::default(),
         }
     }
 }
@@ -3272,6 +3314,10 @@ impl UpdateMiscAdditionInput {
 #[doc = "    },"]
 #[doc = "    \"type_\": {"]
 #[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
+#[doc = "    \"whirlpool_temp_c\": {"]
+#[doc = "      \"description\": \"Default whirlpool/hopstand temperature in °C\","]
+#[doc = "      \"type\": \"number\""]
 #[doc = "    }"]
 #[doc = "  }"]
 #[doc = "}"]
@@ -3337,6 +3383,9 @@ pub struct UpdateRecipeInput {
     pub tertiary_temp_c: ::std::option::Option<f64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub type_: ::std::option::Option<::std::string::String>,
+    #[doc = "Default whirlpool/hopstand temperature in °C"]
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub whirlpool_temp_c: ::std::option::Option<f64>,
 }
 impl ::std::default::Default for UpdateRecipeInput {
     fn default() -> Self {
@@ -3370,6 +3419,7 @@ impl ::std::default::Default for UpdateRecipeInput {
             tertiary_age_days: Default::default(),
             tertiary_temp_c: Default::default(),
             type_: Default::default(),
+            whirlpool_temp_c: Default::default(),
         }
     }
 }
@@ -4422,6 +4472,7 @@ pub mod builder {
         name: ::std::result::Result<::std::string::String, ::std::string::String>,
         time_min: ::std::result::Result<f64, ::std::string::String>,
         use_: ::std::result::Result<::std::string::String, ::std::string::String>,
+        whirlpool_temp_c: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
     }
     impl ::std::default::Default for CreateHopAdditionInput {
         fn default() -> Self {
@@ -4433,6 +4484,7 @@ pub mod builder {
                 name: Err("no value supplied for name".to_string()),
                 time_min: Err("no value supplied for time_min".to_string()),
                 use_: Err("no value supplied for use_".to_string()),
+                whirlpool_temp_c: Ok(Default::default()),
             }
         }
     }
@@ -4507,6 +4559,16 @@ pub mod builder {
                 .map_err(|e| format!("error converting supplied value for use_: {e}"));
             self
         }
+        pub fn whirlpool_temp_c<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.whirlpool_temp_c = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for whirlpool_temp_c: {e}"));
+            self
+        }
     }
     impl ::std::convert::TryFrom<CreateHopAdditionInput> for super::CreateHopAdditionInput {
         type Error = super::error::ConversionError;
@@ -4521,6 +4583,7 @@ pub mod builder {
                 name: value.name?,
                 time_min: value.time_min?,
                 use_: value.use_?,
+                whirlpool_temp_c: value.whirlpool_temp_c?,
             })
         }
     }
@@ -4534,6 +4597,7 @@ pub mod builder {
                 name: Ok(value.name),
                 time_min: Ok(value.time_min),
                 use_: Ok(value.use_),
+                whirlpool_temp_c: Ok(value.whirlpool_temp_c),
             }
         }
     }
@@ -4813,6 +4877,7 @@ pub mod builder {
             ::std::option::Option<::std::string::String>,
             ::std::string::String,
         >,
+        whirlpool_temp_c: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
     }
     impl ::std::default::Default for CreateRecipeInput {
         fn default() -> Self {
@@ -4825,6 +4890,7 @@ pub mod builder {
                 source_id: Ok(Default::default()),
                 style_id: Ok(Default::default()),
                 type_: Ok(Default::default()),
+                whirlpool_temp_c: Ok(Default::default()),
             }
         }
     }
@@ -4909,6 +4975,16 @@ pub mod builder {
                 .map_err(|e| format!("error converting supplied value for type_: {e}"));
             self
         }
+        pub fn whirlpool_temp_c<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.whirlpool_temp_c = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for whirlpool_temp_c: {e}"));
+            self
+        }
     }
     impl ::std::convert::TryFrom<CreateRecipeInput> for super::CreateRecipeInput {
         type Error = super::error::ConversionError;
@@ -4924,6 +5000,7 @@ pub mod builder {
                 source_id: value.source_id?,
                 style_id: value.style_id?,
                 type_: value.type_?,
+                whirlpool_temp_c: value.whirlpool_temp_c?,
             })
         }
     }
@@ -4938,6 +5015,7 @@ pub mod builder {
                 source_id: Ok(value.source_id),
                 style_id: Ok(value.style_id),
                 type_: Ok(value.type_),
+                whirlpool_temp_c: Ok(value.whirlpool_temp_c),
             }
         }
     }
@@ -6701,6 +6779,7 @@ pub mod builder {
             ::std::vec::Vec<super::RecipeAdditionWater>,
             ::std::string::String,
         >,
+        whirlpool_temp_c: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         yeasts: ::std::result::Result<
             ::std::vec::Vec<super::RecipeAdditionYeast>,
             ::std::string::String,
@@ -6753,6 +6832,7 @@ pub mod builder {
                 updated_at: Err("no value supplied for updated_at".to_string()),
                 water_adjustments: Ok(Default::default()),
                 waters: Err("no value supplied for waters".to_string()),
+                whirlpool_temp_c: Ok(Default::default()),
                 yeasts: Err("no value supplied for yeasts".to_string()),
             }
         }
@@ -7198,6 +7278,16 @@ pub mod builder {
                 .map_err(|e| format!("error converting supplied value for waters: {e}"));
             self
         }
+        pub fn whirlpool_temp_c<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.whirlpool_temp_c = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for whirlpool_temp_c: {e}"));
+            self
+        }
         pub fn yeasts<T>(mut self, value: T) -> Self
         where
             T: ::std::convert::TryInto<::std::vec::Vec<super::RecipeAdditionYeast>>,
@@ -7257,6 +7347,7 @@ pub mod builder {
                 updated_at: value.updated_at?,
                 water_adjustments: value.water_adjustments?,
                 waters: value.waters?,
+                whirlpool_temp_c: value.whirlpool_temp_c?,
                 yeasts: value.yeasts?,
             })
         }
@@ -7308,6 +7399,7 @@ pub mod builder {
                 updated_at: Ok(value.updated_at),
                 water_adjustments: Ok(value.water_adjustments),
                 waters: Ok(value.waters),
+                whirlpool_temp_c: Ok(value.whirlpool_temp_c),
                 yeasts: Ok(value.yeasts),
             }
         }
@@ -7496,6 +7588,7 @@ pub mod builder {
         recipe_id: ::std::result::Result<::std::string::String, ::std::string::String>,
         time_min: ::std::result::Result<f64, ::std::string::String>,
         use_: ::std::result::Result<::std::string::String, ::std::string::String>,
+        whirlpool_temp_c: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
     }
     impl ::std::default::Default for RecipeAdditionHop {
         fn default() -> Self {
@@ -7510,6 +7603,7 @@ pub mod builder {
                 recipe_id: Err("no value supplied for recipe_id".to_string()),
                 time_min: Err("no value supplied for time_min".to_string()),
                 use_: Err("no value supplied for use_".to_string()),
+                whirlpool_temp_c: Ok(Default::default()),
             }
         }
     }
@@ -7614,6 +7708,16 @@ pub mod builder {
                 .map_err(|e| format!("error converting supplied value for use_: {e}"));
             self
         }
+        pub fn whirlpool_temp_c<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.whirlpool_temp_c = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for whirlpool_temp_c: {e}"));
+            self
+        }
     }
     impl ::std::convert::TryFrom<RecipeAdditionHop> for super::RecipeAdditionHop {
         type Error = super::error::ConversionError;
@@ -7631,6 +7735,7 @@ pub mod builder {
                 recipe_id: value.recipe_id?,
                 time_min: value.time_min?,
                 use_: value.use_?,
+                whirlpool_temp_c: value.whirlpool_temp_c?,
             })
         }
     }
@@ -7647,6 +7752,7 @@ pub mod builder {
                 recipe_id: Ok(value.recipe_id),
                 time_min: Ok(value.time_min),
                 use_: Ok(value.use_),
+                whirlpool_temp_c: Ok(value.whirlpool_temp_c),
             }
         }
     }
@@ -9137,6 +9243,7 @@ pub mod builder {
             ::std::option::Option<::std::string::String>,
             ::std::string::String,
         >,
+        whirlpool_temp_c: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
     }
     impl ::std::default::Default for UpdateHopAdditionInput {
         fn default() -> Self {
@@ -9145,6 +9252,7 @@ pub mod builder {
                 amount_kg: Ok(Default::default()),
                 time_min: Ok(Default::default()),
                 use_: Ok(Default::default()),
+                whirlpool_temp_c: Ok(Default::default()),
             }
         }
     }
@@ -9189,6 +9297,16 @@ pub mod builder {
                 .map_err(|e| format!("error converting supplied value for use_: {e}"));
             self
         }
+        pub fn whirlpool_temp_c<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.whirlpool_temp_c = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for whirlpool_temp_c: {e}"));
+            self
+        }
     }
     impl ::std::convert::TryFrom<UpdateHopAdditionInput> for super::UpdateHopAdditionInput {
         type Error = super::error::ConversionError;
@@ -9200,6 +9318,7 @@ pub mod builder {
                 amount_kg: value.amount_kg?,
                 time_min: value.time_min?,
                 use_: value.use_?,
+                whirlpool_temp_c: value.whirlpool_temp_c?,
             })
         }
     }
@@ -9210,6 +9329,7 @@ pub mod builder {
                 amount_kg: Ok(value.amount_kg),
                 time_min: Ok(value.time_min),
                 use_: Ok(value.use_),
+                whirlpool_temp_c: Ok(value.whirlpool_temp_c),
             }
         }
     }
@@ -9639,6 +9759,7 @@ pub mod builder {
             ::std::option::Option<::std::string::String>,
             ::std::string::String,
         >,
+        whirlpool_temp_c: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
     }
     impl ::std::default::Default for UpdateRecipeInput {
         fn default() -> Self {
@@ -9672,6 +9793,7 @@ pub mod builder {
                 tertiary_age_days: Ok(Default::default()),
                 tertiary_temp_c: Ok(Default::default()),
                 type_: Ok(Default::default()),
+                whirlpool_temp_c: Ok(Default::default()),
             }
         }
     }
@@ -9966,6 +10088,16 @@ pub mod builder {
                 .map_err(|e| format!("error converting supplied value for type_: {e}"));
             self
         }
+        pub fn whirlpool_temp_c<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.whirlpool_temp_c = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for whirlpool_temp_c: {e}"));
+            self
+        }
     }
     impl ::std::convert::TryFrom<UpdateRecipeInput> for super::UpdateRecipeInput {
         type Error = super::error::ConversionError;
@@ -10002,6 +10134,7 @@ pub mod builder {
                 tertiary_age_days: value.tertiary_age_days?,
                 tertiary_temp_c: value.tertiary_temp_c?,
                 type_: value.type_?,
+                whirlpool_temp_c: value.whirlpool_temp_c?,
             })
         }
     }
@@ -10037,6 +10170,7 @@ pub mod builder {
                 tertiary_age_days: Ok(value.tertiary_age_days),
                 tertiary_temp_c: Ok(value.tertiary_temp_c),
                 type_: Ok(value.type_),
+                whirlpool_temp_c: Ok(value.whirlpool_temp_c),
             }
         }
     }

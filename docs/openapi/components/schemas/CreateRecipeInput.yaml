@@ -19,3 +19,6 @@ properties:
     description: ID of a recipe to copy ingredients from
   style_id:
     type: string
+  whirlpool_temp_c:
+    type: number
+    description: Default whirlpool/hopstand temperature in °C

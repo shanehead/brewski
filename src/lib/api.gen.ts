@@ -864,6 +864,8 @@ export interface components {
             mash_water_id?: string | null;
             /** @description ID of the sparge water profile (null means use mash water) */
             sparge_water_id?: string | null;
+            /** @description Default whirlpool/hopstand temperature in °C for this recipe */
+            whirlpool_temp_c?: number | null;
             mash?: components["schemas"]["Mash"] | null;
         };
         RecipeStats: {
@@ -1061,10 +1063,12 @@ export interface components {
             alpha_pct: number;
             form: string;
             amount_kg: number;
-            /** @description Boil, Dry Hop, Mash, First Wort, Aroma */
+            /** @description Boil, Dry Hop, Mash, First Wort, Aroma, Hopstand */
             use_: string;
             time_min: number;
             addition_order: number;
+            /** @description Whirlpool/hopstand temperature in °C for this addition (overrides recipe-level setting) */
+            whirlpool_temp_c?: number | null;
         };
         RecipeAdditionYeast: {
             id: string;
@@ -1179,6 +1183,8 @@ export interface components {
             /** @description ID of a recipe to copy ingredients from */
             source_id?: string;
             style_id?: string;
+            /** @description Default whirlpool/hopstand temperature in °C */
+            whirlpool_temp_c?: number;
         };
         UpdateRecipeInput: {
             name?: string;
@@ -1210,6 +1216,8 @@ export interface components {
             priming_sugar_equiv?: number;
             keg_priming_factor?: number;
             date?: string;
+            /** @description Default whirlpool/hopstand temperature in °C */
+            whirlpool_temp_c?: number;
         };
         CreateFermentableAdditionInput: {
             fermentable_id?: string;
@@ -1233,12 +1241,16 @@ export interface components {
             amount_kg: number;
             use_: string;
             time_min: number;
+            /** @description Whirlpool temperature override for this addition in °C */
+            whirlpool_temp_c?: number;
         };
         UpdateHopAdditionInput: {
             amount_kg?: number;
             use_?: string;
             time_min?: number;
             addition_order?: number;
+            /** @description Whirlpool temperature override for this addition in °C */
+            whirlpool_temp_c?: number;
         };
         CreateYeastAdditionInput: {
             yeast_id?: string | null;
