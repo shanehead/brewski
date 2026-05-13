@@ -127,14 +127,14 @@ onDestroy(() => {
   <!-- Mash profile settings -->
   <div class="grid grid-cols-2 gap-3">
     <div class="flex flex-col gap-1">
-      <label for="mash-name" class="text-xs font-medium" style="color: var(--color-text-secondary);">Profile Name</label>
+      <label for="mash-name" class="text-sm font-medium" style="color: var(--color-text-secondary);">Profile Name</label>
       <input id="mash-name" type="text" value={mash?.name ?? "Single Infusion"}
              onblur={(e) => handleMashField({ name: (e.target as HTMLInputElement).value })}
              class="px-2 py-1.5 rounded text-sm"
              style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
     </div>
     <div class="flex flex-col gap-1">
-      <label for="mash-grain-temp" class="text-xs font-medium" style="color: var(--color-text-secondary);">Grain Temp ({tempLabel(units)})</label>
+      <label for="mash-grain-temp" class="text-sm font-medium" style="color: var(--color-text-secondary);">Grain Temp ({tempLabel(units)})</label>
       <input id="mash-grain-temp" type="number" step={units === "imperial" ? 1 : 0.5}
              value={(units === "imperial" ? cToF(mash?.grain_temp_c ?? 21) : mash?.grain_temp_c ?? 21).toFixed(1)}
              onblur={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); handleMashField({ grain_temp_c: units === "imperial" ? fToC(v) : v }); }}
@@ -142,7 +142,7 @@ onDestroy(() => {
              style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
     </div>
     <div class="flex flex-col gap-1">
-      <label for="mash-sparge-temp" class="text-xs font-medium" style="color: var(--color-text-secondary);">Sparge Temp ({tempLabel(units)})</label>
+      <label for="mash-sparge-temp" class="text-sm font-medium" style="color: var(--color-text-secondary);">Sparge Temp ({tempLabel(units)})</label>
       <input id="mash-sparge-temp" type="number" step={units === "imperial" ? 1 : 0.5}
              value={mash?.sparge_temp_c != null ? (units === "imperial" ? cToF(mash.sparge_temp_c) : mash.sparge_temp_c).toFixed(1) : ""}
              placeholder={units === "imperial" ? "167" : "75"}
@@ -154,7 +154,7 @@ onDestroy(() => {
              style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
     </div>
     <div class="flex flex-col gap-1">
-      <label for="mash-ph" class="text-xs font-medium" style="color: var(--color-text-secondary);">Mash pH</label>
+      <label for="mash-ph" class="text-sm font-medium" style="color: var(--color-text-secondary);">Mash pH</label>
       <input id="mash-ph" type="number" step="0.1" value={mash?.ph ?? ""}
              placeholder="5.4"
              onblur={(e) => {
@@ -167,7 +167,7 @@ onDestroy(() => {
 
     {#if stats?.strike_temp_c != null}
       <div class="flex flex-col gap-1">
-        <span class="text-xs font-medium" style="color: var(--color-text-secondary);">Strike Temp ({tempLabel(units)})</span>
+        <span class="text-sm font-medium" style="color: var(--color-text-secondary);">Strike Temp ({tempLabel(units)})</span>
         <span class="px-2 py-1.5 text-sm" style="color: var(--color-text-primary);">
           {(units === "imperial" ? cToF(stats.strike_temp_c) : stats.strike_temp_c).toFixed(1)}{tempLabel(units)}
         </span>
@@ -176,7 +176,7 @@ onDestroy(() => {
 
     {#if mash && !canAutoDerive}
       <div class="flex flex-col gap-1">
-        <label for="mash-ratio" class="text-xs font-medium" style="color: var(--color-text-secondary);">Water:Grain Ratio ({ratioLabel(units)})</label>
+        <label for="mash-ratio" class="text-sm font-medium" style="color: var(--color-text-secondary);">Water:Grain Ratio ({ratioLabel(units)})</label>
         <input id="mash-ratio" type="number" step="0.1"
                value={mash.ratio_l_per_kg != null
                  ? (units === "imperial" ? lPerKgToQtPerLb(mash.ratio_l_per_kg) : mash.ratio_l_per_kg).toFixed(2)
@@ -299,7 +299,7 @@ onDestroy(() => {
                   {/if}
                 </div>
               {:else}
-              <p class="text-lg font-medium" style="color: var(--color-text-primary);">{step.name}</p>
+              <p class="text-sm" style="color: var(--color-text-primary);">{step.name}</p>
               <p class="text-sm" style="color: var(--color-text-secondary);">
                   {(units === "imperial" ? cToF(step.step_temp_c) : step.step_temp_c).toFixed(1)}{tempLabel(units)} · {step.step_time_min} min · {step.type_}
                   {#if step.infuse_amount_l} · {(units === "imperial" ? lToGal(step.infuse_amount_l) : step.infuse_amount_l).toFixed(1)}{volumeLabel(units)}{/if}
