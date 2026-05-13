@@ -13,7 +13,7 @@
 
 <div class="flex flex-col gap-4 max-w-2xl">
   <div class="flex flex-col gap-1">
-    <label for="notes-recipe" class="text-xs font-medium" style="color: var(--color-text-secondary);">Recipe Notes</label>
+    <label for="notes-recipe" class="text-sm font-medium" style="color: var(--color-text-secondary);">Recipe Notes</label>
     <textarea id="notes-recipe" value={recipe.notes ?? ""}
               onblur={(e) => save("notes", (e.target as HTMLTextAreaElement).value || null)}
               rows="8"
@@ -23,7 +23,7 @@
   </div>
 
   <div class="flex flex-col gap-1">
-    <label for="notes-taste" class="text-xs font-medium" style="color: var(--color-text-secondary);">Taste Notes</label>
+    <label for="notes-taste" class="text-sm font-medium" style="color: var(--color-text-secondary);">Taste Notes</label>
     <textarea id="notes-taste" value={recipe.taste_notes ?? ""}
               onblur={(e) => save("taste_notes", (e.target as HTMLTextAreaElement).value || null)}
               rows="4"
@@ -33,7 +33,7 @@
   </div>
 
   <div class="flex flex-col gap-1">
-    <label for="notes-rating" class="text-xs font-medium" style="color: var(--color-text-secondary);">Taste Rating (0–50)</label>
+    <label for="notes-rating" class="text-sm font-medium" style="color: var(--color-text-secondary);">Taste Rating (0–50)</label>
     <input id="notes-rating" type="number" step="1" min="0" max="50"
            value={recipe.taste_rating ?? ""}
            onblur={(e) => {

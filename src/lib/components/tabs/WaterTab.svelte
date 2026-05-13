@@ -109,7 +109,7 @@
       <h3 class="text-sm font-semibold" style="color: var(--color-text-primary);">Source Water</h3>
       
       <div class="flex flex-col gap-2">
-        <label for="mash-water" class="text-xs font-medium" style="color: var(--color-text-secondary);">Mash Water</label>
+        <label for="mash-water" class="text-sm font-medium" style="color: var(--color-text-secondary);">Mash Water</label>
         <select id="mash-water" value={recipe.mash_water_id ?? ""} onchange={handleMashWaterChange}
                 class="px-2 py-1.5 rounded text-sm"
                 style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);">
@@ -121,7 +121,7 @@
       </div>
 
       <div class="flex flex-col gap-2">
-        <label for="sparge-water" class="text-xs font-medium" style="color: var(--color-text-secondary);">Sparge Water</label>
+        <label for="sparge-water" class="text-sm font-medium" style="color: var(--color-text-secondary);">Sparge Water</label>
         <div class="flex gap-2 items-center">
           <select id="sparge-water" value={recipe.sparge_water_id ?? ""} onchange={handleSpargeWaterChange}
                   class="flex-1 px-2 py-1.5 rounded text-sm"
@@ -141,17 +141,17 @@
       
       {#each ["mash", "sparge"] as target}
         <div class="flex flex-col gap-2">
-          <h4 class="text-xs font-medium capitalize" style="color: var(--color-text-secondary);">{target} Additions</h4>
+          <h4 class="text-sm font-medium capitalize" style="color: var(--color-text-secondary);">{target} Additions</h4>
           
           <div class="flex flex-col gap-1">
             {#each adjustments.filter(a => a.target === target) as adj}
               <div class="flex items-center gap-2">
-                <span class="text-xs flex-1" style="color: var(--color-text-secondary);">{getAdditionLabel(adj.addition)}</span>
+                <span class="text-sm flex-1" style="color: var(--color-text-secondary);">{getAdditionLabel(adj.addition)}</span>
                 <input type="number" step="0.1" min="0" value={adj.amount}
                        onchange={(e) => handleUpdateAddition(adj.id, parseFloat((e.target as HTMLInputElement).value) || 0)}
-                       class="w-20 px-2 py-1 rounded text-xs"
+                       class="w-20 px-2 py-1 rounded text-sm"
                        style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
-                <span class="text-xs" style="color: var(--color-text-muted); width: 30px;">g</span>
+                <span class="text-sm" style="color: var(--color-text-muted); width: 30px;">g</span>
                 <button onclick={() => handleDeleteAddition(adj.id)}
                         class="px-2 py-1 rounded text-xs"
                         style="background: var(--color-bg-elevated); color: var(--color-text-secondary); border: 1px solid var(--color-border);">
@@ -191,7 +191,7 @@
             { label: "Bicarbonate", key: "bicarbonate_ppm" }
           ] as item}
             <div class="flex flex-col gap-1">
-              <span class="text-xs font-medium" style="color: var(--color-text-secondary);">{item.label}</span>
+              <span class="text-sm font-medium" style="color: var(--color-text-secondary);">{item.label}</span>
               <span class="text-sm font-semibold" style="color: var(--color-text-primary);">
                 {profile.combined[item.key as keyof typeof profile.combined].toFixed(1)} ppm
               </span>
@@ -200,12 +200,12 @@
         </div>
 
         <div class="flex flex-col gap-1 pt-2 border-t" style="border-color: var(--color-border);">
-          <span class="text-xs font-medium" style="color: var(--color-text-secondary);">Cl:SO₄ Ratio</span>
+          <span class="text-sm font-medium" style="color: var(--color-text-secondary);">Cl:SO₄ Ratio</span>
           <div class="flex items-center gap-2">
             <span class="text-sm font-semibold" style="color: var(--color-text-primary);">
               {profile.combined.cl_so4_ratio.toFixed(2)}
             </span>
-            <span class="text-xs px-2 py-1 rounded" 
+            <span class="text-sm px-2 py-1 rounded" 
                   style="background: var(--color-bg-elevated); color: var(--color-text-secondary);">
               {getRatioLabel(profile.combined.cl_so4_ratio)}
             </span>
