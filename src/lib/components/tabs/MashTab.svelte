@@ -211,10 +211,11 @@ function onEditKeydown(e: KeyboardEvent) {
               {#if editingStepId === step.id}
                 <div class="flex flex-wrap gap-2 p-2 rounded" style="background: var(--color-bg-elevated);">
                   <input type="text" value={step.name}
+                         onclick={(e) => e.stopPropagation()}
                          onblur={(e) => handleUpdateStepField(step.id, 'name', (e.target as HTMLInputElement).value)}
                          class="flex-1 min-w-24 px-2 py-1.5 rounded text-sm"
                          style="background: var(--color-bg-base); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
-                  <select value={step.type_} onblur={(e) => handleUpdateStepField(step.id, 'type_', (e.target as HTMLSelectElement).value)}
+                  <select value={step.type_} onclick={(e) => e.stopPropagation()} onblur={(e) => handleUpdateStepField(step.id, 'type_', (e.target as HTMLSelectElement).value)}
                           class="w-28 px-2 py-1.5 rounded text-sm"
                           style="background: var(--color-bg-base); color: var(--color-text-primary); border: 1px solid var(--color-border);">
                     {#each STEP_TYPES as t}
@@ -223,16 +224,19 @@ function onEditKeydown(e: KeyboardEvent) {
                   </select>
                   <input type="number" step={units === "imperial" ? 1 : 0.5}
                          value={(units === "imperial" ? cToF(step.step_temp_c) : step.step_temp_c).toFixed(1)}
+                         onclick={(e) => e.stopPropagation()}
                          onblur={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); handleUpdateStepField(step.id, 'step_temp_c', units === 'imperial' ? fToC(v) : v); }}
                          class="w-20 px-2 py-1.5 rounded text-sm"
                          style="background: var(--color-bg-base); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
                   <input type="number" step="5" value={step.step_time_min}
+                         onclick={(e) => e.stopPropagation()}
                          onblur={(e) => handleUpdateStepField(step.id, 'step_time_min', parseFloat((e.target as HTMLInputElement).value))}
                          class="w-20 px-2 py-1.5 rounded text-sm"
                          style="background: var(--color-bg-base); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
                   {#if step.type_ === 'infusion'}
                     <input type="number" step="0.1"
                            value={step.infuse_amount_l != null ? (units === 'imperial' ? lToGal(step.infuse_amount_l) : step.infuse_amount_l).toFixed(1) : ''}
+                           onclick={(e) => e.stopPropagation()}
                            onblur={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); handleUpdateStepField(step.id, 'infuse_amount_l', units === 'imperial' ? galToL(v) : v); }}
                            class="w-24 px-2 py-1.5 rounded text-sm"
                            style="background: var(--color-bg-base); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
