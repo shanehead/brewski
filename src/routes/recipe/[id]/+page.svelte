@@ -32,9 +32,25 @@
     { key: "notes", label: "Notes", icon: "notes" },
   ] as const;
 
+  async function loadRecipeById(id: string) {
+    recipe = await ipc(getRecipe(id)) ?? null;
+    if (recipe) {
+      stats = await ipc(getRecipeStats(recipe.id)) ?? null;
+    } else {
+      stats = null;
+    }
+  }
+
   onMount(async () => {
-    recipe = await ipc(getRecipe(data.id)) ?? null;
-    await refreshStats();
+    await loadRecipeById(data.id);
+  });
+
+  $effect(() => {
+    if (data?.id) {
+      (async () => {
+        await loadRecipeById(data.id);
+      })();
+    }
   });
 
   async function refreshStats() {
@@ -43,8 +59,7 @@
   }
 
   async function refreshRecipe() {
-    recipe = await ipc(getRecipe(data.id)) ?? null;
-    await refreshStats();
+    await loadRecipeById(data.id);
   }
 
   async function handleNameBlur(e: FocusEvent) {
