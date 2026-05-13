@@ -80,6 +80,10 @@ seed-styles:
     bun scripts/seed-styles.mjs
     just migrate
 
+seed-equipment:
+    bun scripts/seed-equipment.mjs
+    just migrate
+
 # Regenerate SeaORM entities from the dev database (runs migrate first)
 gen-entities: migrate
     sea-orm-cli generate entity \

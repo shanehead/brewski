@@ -620,7 +620,26 @@ Flavor: Varies.', NULL, 'None');
 
 -- Default equipment profile
 INSERT OR IGNORE INTO equipment_profiles (id, name, boil_size_l, batch_size_l, boil_time_min, evap_rate_pct_hr, trub_chiller_loss_l, fermenter_loss_l, hop_utilization_pct, efficiency_pct, created_at, updated_at) VALUES
-('eq-default', 'Standard 5 Gallon', 27.0, 23.0, 60.0, 10.0, 1.5, 1.0, 100.0, 72.0, 0, 0);
+('eq-anvil-foundry-6', 'Anvil Foundry 6.5 Gal', 24.6, 19, 60, 9.5, 1, 1, 100, 80, 0, 0),
+('eq-anvil-foundry-10', 'Anvil Foundry 10.5 Gal', 38, 30, 60, 9.5, 1.5, 1, 100, 80, 0, 0),
+('eq-biab-generic', 'Generic BIAB', 26.5, 19, 60, 10, 0.5, 1, 100, 80, 0, 0),
+('eq-blichmann-breweasy', 'Blichmann BrewEasy', 26.5, 19, 60, 10, 1.5, 1, 100, 72, 0, 0),
+('eq-braumeister-20', 'Speidel Braumeister 20L', 20, 15, 60, 8, 1, 0.5, 100, 78, 0, 0),
+('eq-braumeister-50', 'Speidel Braumeister 50L', 50, 38, 60, 7.5, 2, 1.5, 100, 78, 0, 0),
+('eq-brewtools-b40', 'Brewtools B40 Pro', 36, 30, 60, 8, 1.5, 1, 100, 75, 0, 0),
+('eq-brewtools-b80', 'Brewtools B80 Pro', 76, 65, 60, 7.5, 2.5, 2, 100, 75, 0, 0),
+('eq-brewzilla-35', 'Brewzilla 35L', 30, 23, 60, 10, 1.5, 1, 100, 72, 0, 0),
+('eq-brewzilla-65', 'Brewzilla 65L', 57, 50, 60, 10, 2.5, 2, 100, 72, 0, 0),
+('eq-clawhammer-biab', 'Clawhammer BIAB', 26.5, 19, 60, 10, 0.5, 1, 100, 80, 0, 0),
+('eq-default', 'Standard 5 Gallon', 23, 19, 60, 10, 1.5, 1, 100, 72, 0, 0),
+('eq-grainfather-g30', 'Grainfather G30', 27, 23, 60, 8.5, 2, 1, 100, 72, 0, 0),
+('eq-grainfather-g70', 'Grainfather G70', 65, 57, 60, 7, 3.5, 2, 100, 72, 0, 0),
+('eq-spike-solo', 'Spike Solo', 26.5, 19, 60, 10, 1.5, 1, 100, 72, 0, 0),
+('eq-spike-trio-10', 'Spike Trio 10 Gal', 26.5, 19, 60, 10, 1.5, 1, 100, 72, 0, 0),
+('eq-ss-svbs', 'SS Brewtech SVBS', 26.5, 19, 60, 10, 1.5, 1, 100, 72, 0, 0),
+('eq-unibrau', 'Unibrau', 30, 23, 60, 9, 1.5, 1, 100, 75, 0, 0);
+
+
 
 -- ── Hops ──────────────────────────────────────────────────────────────────────
 
