@@ -205,7 +205,7 @@ impl TryFrom<entities::recipe_addition_hops::Model> for RecipeAdditionHop {
             use_: m.r#use,
             time_min: m.time_min,
             addition_order: m.addition_order as i64,
-            whirlpool_temp_c: m.whirlpool_temp_c,
+            hopstand_temp_c: m.hopstand_temp_c,
         })
     }
 }
@@ -324,7 +324,7 @@ impl Default for CreateRecipeInput {
             source_id: None,
             style_id: None,
             type_: None,
-            whirlpool_temp_c: None,
+            hopstand_temp_c: None,
         }
     }
 }

@@ -71,7 +71,7 @@ pub fn load_fixture(filename: &str) -> (Recipe, ExpectedStats) {
                             use_: "Boil".into(),
                             time_min: 0.0,
                             addition_order: 0,
-                            whirlpool_temp_c: None,
+                            hopstand_temp_c: None,
                         });
                     }
                     "FERMENTABLE" => {
@@ -278,7 +278,7 @@ pub fn load_fixture(filename: &str) -> (Recipe, ExpectedStats) {
         water_adjustments: vec![],
         mash_water_id: None,
         sparge_water_id: None,
-        whirlpool_temp_c: None,
+        hopstand_temp_c: None,
         mash: Some(Mash {
             id: "m1".into(),
             recipe_id: "fixture".into(),

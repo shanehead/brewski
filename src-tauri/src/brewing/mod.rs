@@ -57,7 +57,7 @@ pub fn calculate_stats(recipe: &Recipe) -> RecipeStats {
     let pre_boil_gravity =
         volumes::calculate_pre_boil_gravity(og, post_boil_volume_l, pre_boil_volume_l);
 
-    let whirlpool_default = recipe.whirlpool_temp_c.unwrap_or(80.0);
+    let hopstand_default = recipe.hopstand_temp_c.unwrap_or(80.0);
     let hop_inputs: Vec<ibu::HopIbuInput> = recipe
         .hops
         .iter()
@@ -66,7 +66,7 @@ pub fn calculate_stats(recipe: &Recipe) -> RecipeStats {
             amount_kg: &h.amount_kg,
             time_min: &h.time_min,
             use_type: &h.use_,
-            whirlpool_temp_c: h.whirlpool_temp_c.unwrap_or(whirlpool_default),
+            hopstand_temp_c: h.hopstand_temp_c.unwrap_or(hopstand_default),
         })
         .collect();
 
@@ -178,7 +178,7 @@ mod tests {
             water_adjustments: vec![],
             mash_water_id: None,
             sparge_water_id: None,
-            whirlpool_temp_c: None,
+            hopstand_temp_c: None,
             mash: None,
         }
     }
@@ -234,7 +234,7 @@ mod tests {
             use_: "Boil".into(),
             time_min: 60.0,
             addition_order: 0,
-            whirlpool_temp_c: None,
+            hopstand_temp_c: None,
         }];
         let stats = calculate_stats(&recipe);
         assert!(stats.ibu > 0.0);

@@ -129,7 +129,7 @@ impl<'a> RecipeRepository<'a> {
             water_adjustments,
             mash_water_id: recipe_row.mash_water_id,
             sparge_water_id: recipe_row.sparge_water_id,
-            whirlpool_temp_c: recipe_row.whirlpool_temp_c,
+            hopstand_temp_c: recipe_row.hopstand_temp_c,
             mash,
         })
     }
@@ -170,7 +170,7 @@ impl<'a> RecipeRepository<'a> {
             equipment_profile_id: Set(ep_id),
             mash_water_id: Set(mash_water_id),
             sparge_water_id: Set(sparge_water_id),
-            whirlpool_temp_c: Set(input.whirlpool_temp_c),
+            hopstand_temp_c: Set(input.hopstand_temp_c),
             created_at: Set(now),
             updated_at: Set(now),
             ..Default::default()
@@ -220,7 +220,7 @@ impl<'a> RecipeRepository<'a> {
                         amount_kg: h.amount_kg,
                         use_: h.use_,
                         time_min: h.time_min,
-                        whirlpool_temp_c: h.whirlpool_temp_c,
+                        hopstand_temp_c: h.hopstand_temp_c,
                     },
                 )
                 .await?;
@@ -400,8 +400,8 @@ impl<'a> RecipeRepository<'a> {
         if let Some(v) = input.date {
             active.date = Set(Some(v));
         }
-        if let Some(v) = input.whirlpool_temp_c {
-            active.whirlpool_temp_c = Set(Some(v));
+        if let Some(v) = input.hopstand_temp_c {
+            active.hopstand_temp_c = Set(Some(v));
         }
 
         active.updated_at = Set(now_secs() as i32);
@@ -587,7 +587,7 @@ mod tests {
                     amount_kg: 0.05,
                     use_: "Boil".into(),
                     time_min: 60.0,
-                    whirlpool_temp_c: None,
+                    hopstand_temp_c: None,
                 },
             )
             .await
