@@ -58,29 +58,66 @@
   const STEP_TYPES = ["infusion", "temperature", "decoction"] as const;
   const units = $derived<Units>($settings.units === "imperial" ? "imperial" : "metric");
 
+import { onDestroy } from 'svelte';
 let editingStepId = $state<string | null>(null);
 let hoveredStepId = $state<string | null>(null);
-
+let _docClickHandler: ((e: MouseEvent) => void) | null = null;
+  
 async function handleUpdateStepField(id: string, field: string, value: any) {
   const payload: any = {};
   payload[field] = value;
   await ipc(updateMashStep(id, payload));
   onchange();
 }
+  
+function _attachDocClick(id: string) {
+  // detach any existing
+  if (_docClickHandler) {
+    document.removeEventListener('click', _docClickHandler);
+    _docClickHandler = null;
+  }
+  const currentId = id;
+  _docClickHandler = (e: MouseEvent) => {
+    const target = e.target as HTMLElement | null;
+    if (!target) return;
+    // if click is outside the editing row, close the editor
+    if (!target.closest(`[data-step-id="${currentId}"]`)) {
+      closeEdit();
+    }
+  };
+  document.addEventListener('click', _docClickHandler);
+}
+
+function _detachDocClick() {
+  if (_docClickHandler) {
+    document.removeEventListener('click', _docClickHandler);
+    _docClickHandler = null;
+  }
+}
 
 function toggleEditStep(id: string) {
-  editingStepId = editingStepId === id ? null : id;
+  if (editingStepId === id) {
+    closeEdit();
+    return;
+  }
+  editingStepId = id;
+  _attachDocClick(id);
 }
-
+  
 function closeEdit() {
   editingStepId = null;
+  _detachDocClick();
 }
-
+  
 function onEditKeydown(e: KeyboardEvent) {
   if (e.key === 'Escape') {
     closeEdit();
   }
 }
+
+onDestroy(() => {
+  _detachDocClick();
+});
 </script>
 
 <div class="flex flex-col gap-4 max-w-xl">
@@ -201,6 +238,7 @@ function onEditKeydown(e: KeyboardEvent) {
         {#each mash.steps as step (step.id)}
           <div class="flex items-center gap-3 py-2 border-t" 
                style="border-color: var(--color-border); background: {hoveredStepId === step.id ? 'var(--color-bg-elevated)' : 'transparent'};"
+               data-step-id={step.id}
                role="button"
                onclick={() => toggleEditStep(step.id)}
                onmouseenter={() => hoveredStepId = step.id}
