@@ -85,7 +85,10 @@ function _attachDocClick(id: string) {
       closeEdit();
     }
   };
-  document.addEventListener('click', _docClickHandler);
+  // attach handler on next tick so the opening click doesn't immediately trigger it
+  setTimeout(() => {
+    document.addEventListener('click', _docClickHandler as EventListener);
+  }, 0);
 }
 
 function _detachDocClick() {
