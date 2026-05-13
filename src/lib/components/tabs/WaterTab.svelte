@@ -105,14 +105,14 @@
     <div style="color: var(--color-text-secondary);">Loading water data…</div>
   {:else}
     <!-- Source Water Section -->
-    <div class="flex flex-col gap-3 p-4 rounded" style="background: var(--color-bg-elevated); border: 1px solid var(--color-border);">
+    <div class="flex flex-col gap-3 p-4 rounded" style="background: var(--color-bg-surface); border: 1px solid var(--color-border);">
       <h3 class="text-sm font-semibold" style="color: var(--color-text-primary);">Source Water</h3>
       
       <div class="flex flex-col gap-2">
         <label for="mash-water" class="text-xs font-medium" style="color: var(--color-text-secondary);">Mash Water</label>
         <select id="mash-water" value={recipe.mash_water_id ?? ""} onchange={handleMashWaterChange}
                 class="px-2 py-1.5 rounded text-sm"
-                style="background: var(--color-bg-surface); color: var(--color-text-primary); border: 1px solid var(--color-border);">
+                style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);">
           <option value="">— Select water profile —</option>
           {#each waters as water}
             <option value={water.id}>{water.name}</option>
@@ -125,7 +125,7 @@
         <div class="flex gap-2 items-center">
           <select id="sparge-water" value={recipe.sparge_water_id ?? ""} onchange={handleSpargeWaterChange}
                   class="flex-1 px-2 py-1.5 rounded text-sm"
-                  style="background: var(--color-bg-surface); color: var(--color-text-primary); border: 1px solid var(--color-border);">
+                  style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);">
             <option value="">— Same as mash —</option>
             {#each waters as water}
               <option value={water.id}>{water.name}</option>
@@ -136,7 +136,7 @@
     </div>
 
     <!-- Additions Section -->
-    <div class="flex flex-col gap-3 p-4 rounded" style="background: var(--color-bg-elevated); border: 1px solid var(--color-border);">
+    <div class="flex flex-col gap-3 p-4 rounded" style="background: var(--color-bg-surface); border: 1px solid var(--color-border);">
       <h3 class="text-sm font-semibold" style="color: var(--color-text-primary);">Mineral Adjustments</h3>
       
       {#each ["mash", "sparge"] as target}
@@ -150,11 +150,11 @@
                 <input type="number" step="0.1" min="0" value={adj.amount}
                        onchange={(e) => handleUpdateAddition(adj.id, parseFloat((e.target as HTMLInputElement).value) || 0)}
                        class="w-20 px-2 py-1 rounded text-xs"
-                       style="background: var(--color-bg-surface); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
+                       style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
                 <span class="text-xs" style="color: var(--color-text-muted); width: 30px;">g</span>
                 <button onclick={() => handleDeleteAddition(adj.id)}
                         class="px-2 py-1 rounded text-xs"
-                        style="background: var(--color-bg-surface); color: var(--color-text-secondary); border: 1px solid var(--color-border);">
+                        style="background: var(--color-bg-elevated); color: var(--color-text-secondary); border: 1px solid var(--color-border);">
                   ✕
                 </button>
               </div>
@@ -166,7 +166,7 @@
               {#if !adjustments.some(a => a.target === target && a.addition === addition.value)}
                 <button onclick={() => handleAddAddition(target as any, addition.value)}
                         class="px-2 py-1 rounded text-xs"
-                        style="background: var(--color-bg-surface); color: var(--color-text-secondary); border: 1px solid var(--color-border);">
+                        style="background: var(--color-bg-elevated); color: var(--color-text-secondary); border: 1px solid var(--color-border);">
                   + {addition.label}
                 </button>
               {/if}
@@ -178,7 +178,7 @@
 
     <!-- Profile Summary -->
     {#if profile}
-      <div class="flex flex-col gap-3 p-4 rounded" style="background: var(--color-bg-elevated); border: 1px solid var(--color-border);">
+      <div class="flex flex-col gap-3 p-4 rounded" style="background: var(--color-bg-surface); border: 1px solid var(--color-border);">
         <h3 class="text-sm font-semibold" style="color: var(--color-text-primary);">Adjusted Profile</h3>
         
         <div class="grid grid-cols-3 gap-4">
@@ -206,7 +206,7 @@
               {profile.combined.cl_so4_ratio.toFixed(2)}
             </span>
             <span class="text-xs px-2 py-1 rounded" 
-                  style="background: var(--color-bg-surface); color: var(--color-text-secondary);">
+                  style="background: var(--color-bg-elevated); color: var(--color-text-secondary);">
               {getRatioLabel(profile.combined.cl_so4_ratio)}
             </span>
           </div>
