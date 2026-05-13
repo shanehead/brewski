@@ -299,8 +299,8 @@ onDestroy(() => {
                   {/if}
                 </div>
               {:else}
-                <p class="text-sm" style="color: var(--color-text-primary);">{step.name}</p>
-                <p class="text-xs" style="color: var(--color-text-secondary);">
+              <p class="text-lg font-medium" style="color: var(--color-text-primary);">{step.name}</p>
+              <p class="text-sm" style="color: var(--color-text-secondary);">
                   {(units === "imperial" ? cToF(step.step_temp_c) : step.step_temp_c).toFixed(1)}{tempLabel(units)} · {step.step_time_min} min · {step.type_}
                   {#if step.infuse_amount_l} · {(units === "imperial" ? lToGal(step.infuse_amount_l) : step.infuse_amount_l).toFixed(1)}{volumeLabel(units)}{/if}
                 </p>
