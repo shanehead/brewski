@@ -3,11 +3,11 @@
 use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Debug, PartialEq, DeriveEntityModel, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq, Serialize, Deserialize)]
 #[sea_orm(table_name = "styles")]
 pub struct Model {
-    #[sea_orm(primary_key, auto_increment = false, column_type = "Text")]
-    pub id: String,
+    #[sea_orm(primary_key, auto_increment = false, column_type = "Text", nullable)]
+    pub id: Option<String>,
     #[sea_orm(column_type = "Text")]
     pub name: String,
     #[sea_orm(column_type = "Text")]
@@ -20,25 +20,25 @@ pub struct Model {
     pub style_guide: String,
     #[sea_orm(column_type = "Text")]
     pub r#type: String,
-    pub og_min: f64,
-    pub og_max: f64,
-    pub fg_min: f64,
-    pub fg_max: f64,
-    pub ibu_min: f64,
-    pub ibu_max: f64,
-    pub color_min_srm: f64,
-    pub color_max_srm: f64,
-    pub carb_min_vols: Option<f64>,
-    pub carb_max_vols: Option<f64>,
-    pub abv_min_pct: Option<f64>,
-    pub abv_max_pct: Option<f64>,
-    #[sea_orm(column_type = "Text")]
+    pub og_min: Decimal,
+    pub og_max: Decimal,
+    pub fg_min: Decimal,
+    pub fg_max: Decimal,
+    pub ibu_min: Decimal,
+    pub ibu_max: Decimal,
+    pub color_min_srm: Decimal,
+    pub color_max_srm: Decimal,
+    pub carb_min_vols: Option<Decimal>,
+    pub carb_max_vols: Option<Decimal>,
+    pub abv_min_pct: Option<Decimal>,
+    pub abv_max_pct: Option<Decimal>,
+    #[sea_orm(column_type = "Text", nullable)]
     pub notes: Option<String>,
-    #[sea_orm(column_type = "Text")]
+    #[sea_orm(column_type = "Text", nullable)]
     pub profile: Option<String>,
-    #[sea_orm(column_type = "Text")]
+    #[sea_orm(column_type = "Text", nullable)]
     pub ingredients: Option<String>,
-    #[sea_orm(column_type = "Text")]
+    #[sea_orm(column_type = "Text", nullable)]
     pub examples: Option<String>,
 }
 

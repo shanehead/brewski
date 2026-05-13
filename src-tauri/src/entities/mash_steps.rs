@@ -3,22 +3,22 @@
 use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Debug, PartialEq, DeriveEntityModel, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq, Serialize, Deserialize)]
 #[sea_orm(table_name = "mash_steps")]
 pub struct Model {
-    #[sea_orm(primary_key, auto_increment = false, column_type = "Text")]
-    pub id: String,
+    #[sea_orm(primary_key, auto_increment = false, column_type = "Text", nullable)]
+    pub id: Option<String>,
     #[sea_orm(column_type = "Text")]
     pub mash_id: String,
     #[sea_orm(column_type = "Text")]
     pub name: String,
     #[sea_orm(column_type = "Text")]
     pub r#type: String,
-    pub infuse_amount_l: Option<f64>,
-    pub step_temp_c: f64,
+    pub infuse_amount_l: Option<Decimal>,
+    pub step_temp_c: Decimal,
     pub step_time_min: i32,
     pub ramp_time_min: Option<i32>,
-    pub end_temp_c: Option<f64>,
+    pub end_temp_c: Option<Decimal>,
     pub step_order: i32,
 }
 

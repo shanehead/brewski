@@ -3,14 +3,14 @@
 use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Debug, PartialEq, DeriveEntityModel, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq, Serialize, Deserialize)]
 #[sea_orm(table_name = "recipe_addition_yeasts")]
 pub struct Model {
-    #[sea_orm(primary_key, auto_increment = false, column_type = "Text")]
-    pub id: String,
+    #[sea_orm(primary_key, auto_increment = false, column_type = "Text", nullable)]
+    pub id: Option<String>,
     #[sea_orm(column_type = "Text")]
     pub recipe_id: String,
-    #[sea_orm(column_type = "Text")]
+    #[sea_orm(column_type = "Text", nullable)]
     pub yeast_id: Option<String>,
     #[sea_orm(column_type = "Text")]
     pub name: String,
@@ -18,12 +18,12 @@ pub struct Model {
     pub r#type: String,
     #[sea_orm(column_type = "Text")]
     pub form: String,
-    #[sea_orm(column_type = "Text")]
+    #[sea_orm(column_type = "Text", nullable)]
     pub laboratory: Option<String>,
-    #[sea_orm(column_type = "Text")]
+    #[sea_orm(column_type = "Text", nullable)]
     pub product_id: Option<String>,
-    pub attenuation_pct: Option<f64>,
-    pub amount: Option<f64>,
+    pub attenuation_pct: Option<Decimal>,
+    pub amount: Option<Decimal>,
     pub amount_is_weight: Option<i32>,
     pub add_to_secondary: Option<i32>,
     pub times_cultured: Option<i32>,
