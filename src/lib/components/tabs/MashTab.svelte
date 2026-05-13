@@ -123,7 +123,7 @@ onDestroy(() => {
 });
 </script>
 
-<div class="flex flex-col gap-4 max-w-xl">
+<div class="flex flex-col gap-4 w-full">
   <!-- Mash profile settings -->
   <div class="grid grid-cols-2 gap-3">
     <div class="flex flex-col gap-1">
