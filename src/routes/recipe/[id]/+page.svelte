@@ -45,6 +45,10 @@
   let saveVersionName = $state("");
   let savingVersion = $state(false);
 
+  // Delete confirmation modal state
+  let showDeleteModal = $state(false);
+  let deleteCandidate = $state<RecipeVersionSummary | null>(null);
+
   const TABS: { key: "overview" | "ingredients" | "mash" | "water" | "fermentation" | "notes" | "batches"; label: string; icon: BrewingIconName }[] = [
     { key: "overview", label: "Overview", icon: "overview" },
     { key: "ingredients", label: "Ingredients", icon: "ingredients" },
@@ -121,20 +125,24 @@
   }
 
   async function handleDeleteVersion(version: RecipeVersionSummary) {
-    console.log('handleDeleteVersion called', version.id);
-    if (!recipe) {
-      console.warn('no recipe loaded');
-      return;
-    }
-    const namePart = version.name ? ` \"${version.name}\"` : "";
-    const confirmed = confirm(
-      `Delete v${version.version_number}${namePart}? This cannot be undone.`
-    );
-    console.log('delete confirm result', confirmed);
-    if (!confirmed) return;
-    const result = await ipc(deleteRecipeVersion(version.id));
+    // Open in-app modal instead of native confirm to ensure it's visible
+    deleteCandidate = version;
+    showDeleteModal = true;
+  }
+
+  async function confirmDelete() {
+    if (!deleteCandidate || !recipe) return;
+    showDeleteModal = false;
+    console.log('confirmDelete invoking ipc for', deleteCandidate.id);
+    const result = await ipc(deleteRecipeVersion(deleteCandidate.id));
     console.log('deleteRecipeVersion result', result);
+    deleteCandidate = null;
     await refreshRecipe();
+  }
+
+  function cancelDelete() {
+    deleteCandidate = null;
+    showDeleteModal = false;
   }
 
   async function handleSaveVersion() {
@@ -304,6 +312,19 @@
         />
       {/if}
     </div>
+    {#if showDeleteModal && deleteCandidate}
+      <div class="fixed inset-0 flex items-center justify-center" style="z-index: 1000;">
+        <div class="absolute inset-0" style="background: rgba(0,0,0,0.4);"></div>
+        <div class="bg-var p-4 rounded" style="background: var(--color-bg-elevated); border: 1px solid var(--color-border); z-index: 1001; min-width: 320px;">
+          <div class="text-sm mb-3" style="color: var(--color-text-primary);">Delete v{deleteCandidate.version_number}{deleteCandidate.name ? ` \"${deleteCandidate.name}\"` : ""}?</div>
+          <div class="flex justify-end gap-2">
+            <button onclick={cancelDelete} class="px-3 py-1 rounded" style="background: var(--color-bg-surface); color: var(--color-text-primary); border: 1px solid var(--color-border);">Cancel</button>
+            <button onclick={confirmDelete} class="px-3 py-1 rounded" style="background: var(--color-accent); color: #fff;">Delete</button>
+          </div>
+        </div>
+      </div>
+    {/if}
+
   </div>
 {:else}
   <div class="flex-1 flex items-center justify-center">
