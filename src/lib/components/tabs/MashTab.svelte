@@ -207,34 +207,47 @@ onDestroy(() => {
     </div>
 
     {#if addingStep}
-      <div class="flex flex-wrap gap-2 p-2 rounded" style="background: var(--color-bg-elevated);">
-        <input type="text" bind:value={stepName} placeholder="Step name"
-               class="flex-1 min-w-24 px-2 py-1.5 rounded text-sm"
-               style="background: var(--color-bg-base); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
-        <select bind:value={stepType} class="w-28 px-2 py-1.5 rounded text-sm"
-                style="background: var(--color-bg-base); color: var(--color-text-primary); border: 1px solid var(--color-border);">
-          {#each STEP_TYPES as t}
-            <option value={t}>{t}</option>
-          {/each}
-        </select>
-        <input type="number" step={units === "imperial" ? 1 : 0.5}
-               value={(units === "imperial" ? cToF(stepTemp) : stepTemp).toFixed(1)}
-               oninput={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); if (!isNaN(v)) stepTemp = units === "imperial" ? fToC(v) : v; }}
-               placeholder="Temp {tempLabel(units)}"
-               class="w-20 px-2 py-1.5 rounded text-sm"
-               style="background: var(--color-bg-base); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
-        <input type="number" bind:value={stepTime} step="5" placeholder="Time min"
-               class="w-20 px-2 py-1.5 rounded text-sm"
-               style="background: var(--color-bg-base); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
-        {#if stepType === "infusion"}
-          <input type="number" step="0.1"
-                 value={stepInfuse != null ? (units === "imperial" ? lToGal(stepInfuse) : stepInfuse).toFixed(1) : ""}
-                 oninput={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); stepInfuse = isNaN(v) ? null : (units === "imperial" ? galToL(v) : v); }}
-                 placeholder="Infuse {volumeLabel(units)}"
-                 class="w-24 px-2 py-1.5 rounded text-sm"
+      <div class="flex flex-wrap items-end gap-2 p-2 rounded" style="background: var(--color-bg-elevated);">
+        <div class="flex flex-col flex-1 min-w-24">
+          <label class="text-xs mb-1" style="color: var(--color-text-secondary);">Name</label>
+          <input type="text" bind:value={stepName} placeholder="Step name"
+                 class="h-9 px-2 rounded text-sm"
                  style="background: var(--color-bg-base); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
+        </div>
+        <div class="flex flex-col w-28">
+          <label class="text-xs mb-1" style="color: var(--color-text-secondary);">Type</label>
+          <select bind:value={stepType} class="h-9 px-2 rounded text-sm"
+                  style="background: var(--color-bg-base); color: var(--color-text-primary); border: 1px solid var(--color-border);">
+            {#each STEP_TYPES as t}
+              <option value={t}>{t}</option>
+            {/each}
+          </select>
+        </div>
+        <div class="flex flex-col w-20">
+          <label class="text-xs mb-1" style="color: var(--color-text-secondary);">Temp ({tempLabel(units)})</label>
+          <input type="number" step={units === "imperial" ? 1 : 0.5}
+                 value={(units === "imperial" ? cToF(stepTemp) : stepTemp).toFixed(1)}
+                 oninput={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); if (!isNaN(v)) stepTemp = units === "imperial" ? fToC(v) : v; }}
+                 class="h-9 px-2 rounded text-sm"
+                 style="background: var(--color-bg-base); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
+        </div>
+        <div class="flex flex-col w-20">
+          <label class="text-xs mb-1" style="color: var(--color-text-secondary);">Time (min)</label>
+          <input type="number" bind:value={stepTime} step="5"
+                 class="h-9 px-2 rounded text-sm"
+                 style="background: var(--color-bg-base); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
+        </div>
+        {#if stepType === "infusion"}
+          <div class="flex flex-col w-24">
+            <label class="text-xs mb-1" style="color: var(--color-text-secondary);">Infuse ({volumeLabel(units)})</label>
+            <input type="number" step="0.1"
+                   value={stepInfuse != null ? (units === "imperial" ? lToGal(stepInfuse) : stepInfuse).toFixed(1) : ""}
+                   oninput={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); stepInfuse = isNaN(v) ? null : (units === "imperial" ? galToL(v) : v); }}
+                   class="h-9 px-2 rounded text-sm"
+                   style="background: var(--color-bg-base); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
+          </div>
         {/if}
-        <button onclick={handleAddStep} class="text-xs px-3 py-1.5 rounded"
+        <button onclick={handleAddStep} class="text-xs px-3 py-1.5 rounded self-end"
                 style="background: var(--color-accent); color: #fff;">Add</button>
       </div>
     {/if}

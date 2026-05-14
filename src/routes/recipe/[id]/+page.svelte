@@ -10,6 +10,7 @@
     getRecipeVersion,
     saveRecipeVersion,
     branchFromVersion,
+    deleteRecipeVersion,
   } from "$lib/api";
   import type { Recipe, RecipeStats, RecipeVersionSummary } from "$lib/api";
   import { ipc } from "$lib/stores/error";
@@ -116,6 +117,17 @@
     );
     if (!confirmed) return;
     await ipc(branchFromVersion(recipe.id, version.id));
+    await refreshRecipe();
+  }
+
+  async function handleDeleteVersion(version: RecipeVersionSummary) {
+    if (!recipe) return;
+    const namePart = version.name ? ` \"${version.name}\"` : "";
+    const confirmed = confirm(
+      `Delete v${version.version_number}${namePart}? This cannot be undone.`
+    );
+    if (!confirmed) return;
+    await ipc(deleteRecipeVersion(version.id));
     await refreshRecipe();
   }
 
@@ -281,6 +293,7 @@
           viewingVersionId={viewingVersion?.id ?? null}
           onview={handleViewVersion}
           onbranch={handleBranchFromVersion}
+          ondelete={handleDeleteVersion}
           onclose={() => showVersionPanel = false}
         />
       {/if}

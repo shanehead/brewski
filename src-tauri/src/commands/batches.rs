@@ -106,3 +106,8 @@ pub async fn branch_from_version(
         .branch_from(&recipe_id, &version_id)
         .await
 }
+
+#[tauri::command]
+pub async fn delete_recipe_version(state: State<'_, AppState>, id: String) -> Result<(), AppError> {
+    RecipeVersionRepository::new(&state.db).delete(&id).await
+}

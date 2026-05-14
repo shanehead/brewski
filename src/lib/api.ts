@@ -259,3 +259,6 @@ export const saveRecipeVersion = (input: SaveRecipeVersionInput) =>
 
 export const branchFromVersion = (recipeId: string, versionId: string) =>
   invoke<void>("branch_from_version", { recipeId, versionId });
+
+export const deleteRecipeVersion = (id: string) =>
+  invoke<void>("delete_recipe_version", { id });

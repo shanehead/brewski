@@ -1,10 +1,11 @@
 use sea_orm::{
-    ActiveModelTrait, ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter, QueryOrder, Set,
+    ActiveModelTrait, ColumnTrait, DatabaseConnection, EntityTrait, PaginatorTrait, QueryFilter,
+    QueryOrder, Set,
 };
 
 use crate::entities::{
-    equipment_profiles, mash_steps, mashes, recipe_addition_fermentables, recipe_addition_hops,
-    recipe_addition_miscs, recipe_addition_waters, recipe_addition_yeasts,
+    batches, equipment_profiles, mash_steps, mashes, recipe_addition_fermentables,
+    recipe_addition_hops, recipe_addition_miscs, recipe_addition_waters, recipe_addition_yeasts,
     recipe_version_fermentables, recipe_version_hops, recipe_version_mash,
     recipe_version_mash_steps, recipe_version_miscs, recipe_version_water_adjustments,
     recipe_version_waters, recipe_version_yeasts, recipe_versions, recipe_water_adjustments,
@@ -1024,6 +1025,52 @@ impl<'a> RecipeVersionRepository<'a> {
             water_adjustments,
             mash,
         })
+    }
+
+    pub async fn delete(&self, version_id: &str) -> Result<(), AppError> {
+        // 1. Confirm version exists
+        let version = recipe_versions::Entity::find_by_id(version_id)
+            .one(self.db)
+            .await?
+            .ok_or(AppError::NotFound)?;
+
+        // 2. Block if any batch references this version
+        let batch_count = batches::Entity::find()
+            .filter(batches::Column::RecipeVersionId.eq(version_id))
+            .count(self.db)
+            .await?;
+        if batch_count > 0 {
+            return Err(AppError::Conflict(
+                "version is referenced by a batch".to_string(),
+            ));
+        }
+
+        // 3. Re-parent child versions
+        recipe_versions::Entity::update_many()
+            .col_expr(
+                recipe_versions::Column::ParentVersionId,
+                sea_orm::sea_query::Expr::value(version.parent_version_id.clone()),
+            )
+            .filter(recipe_versions::Column::ParentVersionId.eq(version_id))
+            .exec(self.db)
+            .await?;
+
+        // 4. Nullify recipes.branch_parent_id if it points here
+        recipes::Entity::update_many()
+            .col_expr(
+                recipes::Column::BranchParentId,
+                sea_orm::sea_query::Expr::value::<Option<String>>(None),
+            )
+            .filter(recipes::Column::BranchParentId.eq(version_id))
+            .exec(self.db)
+            .await?;
+
+        // 5. Delete the version (cascades clean up all recipe_version_* tables)
+        recipe_versions::Entity::delete_by_id(version_id)
+            .exec(self.db)
+            .await?;
+
+        Ok(())
     }
 }
 

@@ -91,6 +91,7 @@ pub fn run() {
             commands::batches::get_recipe_version,
             commands::batches::save_recipe_version,
             commands::batches::branch_from_version,
+            commands::batches::delete_recipe_version,
             commands::settings::get_settings,
             commands::settings::update_setting,
             commands::import_export::get_recipe_beerxml,

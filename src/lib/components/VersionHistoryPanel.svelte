@@ -6,12 +6,14 @@
     viewingVersionId,
     onview,
     onbranch,
+    ondelete,
     onclose,
   }: {
     versions: RecipeVersionSummary[];
     viewingVersionId: string | null;
     onview: (version: RecipeVersionSummary) => void;
     onbranch: (version: RecipeVersionSummary) => void;
+    ondelete: (version: RecipeVersionSummary) => void;
     onclose: () => void;
   } = $props();
 
@@ -90,13 +92,22 @@
           {formatDate(version.created_at)}
         </div>
         {#if viewingVersionId === version.id}
-          <button
-            onclick={() => onbranch(version)}
-            class="mt-1 text-xs px-2 py-0.5 rounded"
-            style="background: var(--color-accent); color: #fff;"
-          >
-            Branch from here
-          </button>
+          <div class="mt-1 flex gap-1">
+            <button
+              onclick={() => onbranch(version)}
+              class="text-xs px-2 py-0.5 rounded"
+              style="background: var(--color-accent); color: #fff;"
+            >
+              Branch from here
+            </button>
+            <button
+              onclick={(e) => { e.stopPropagation(); ondelete(version); }}
+              class="text-xs px-2 py-0.5 rounded"
+              style="background: var(--color-bg-elevated); color: var(--color-text-muted); border: 1px solid var(--color-border);"
+            >
+              Delete
+            </button>
+          </div>
         {/if}
       </div>
     {/each}

@@ -8,6 +8,8 @@ pub enum AppError {
     NotFound,
     #[error("internal error: {0}")]
     Internal(String),
+    #[error("conflict: {0}")]
+    Conflict(String),
 }
 
 impl serde::Serialize for AppError {
@@ -29,6 +31,17 @@ mod tests {
         assert_eq!(
             serde_json::to_string(&AppError::Conversion("bad value".into())).unwrap(),
             "\"conversion error: bad value\""
+        );
+    }
+
+    #[test]
+    fn test_serialize_conflict() {
+        assert_eq!(
+            serde_json::to_string(&AppError::Conflict(
+                "version is referenced by a batch".into()
+            ))
+            .unwrap(),
+            "\"conflict: version is referenced by a batch\""
         );
     }
 }
