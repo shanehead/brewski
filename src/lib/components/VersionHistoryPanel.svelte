@@ -47,7 +47,7 @@
       VERSION HISTORY
     </span>
     <button
-      onclick={onclose}
+      on:click={onclose}
       class="text-xs px-1"
       style="color: var(--color-text-muted);"
     >✕</button>
@@ -57,8 +57,8 @@
     {#each versions as version}
       {@const indent = Math.min(indentLevel(version), 3)}
       <div
-        onclick={() => onview(version)}
-        onkeydown={(e) => {
+        on:click={() => onview(version)}
+        on:keydown={(e) => {
           if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
             onview(version);
@@ -94,16 +94,16 @@
         {#if viewingVersionId === version.id}
           <div class="mt-1 flex gap-1">
             <button
-              onclick={() => onbranch(version)}
+              on:click={() => onbranch(version)}
               class="text-xs px-2 py-0.5 rounded"
               style="background: var(--color-accent); color: #fff;"
             >
               Branch from here
             </button>
             <button
-              onclick={(e) => { e.stopPropagation(); ondelete(version); }}
+              on:click|stopPropagation={() => ondelete(version)}
               class="text-xs px-2 py-0.5 rounded"
-              style="background: var(--color-bg-elevated); color: var(--color-text-muted); border: 1px solid var(--color-border);"
+              style="background: var(--color-bg-elevated); color: var(--color-text-muted); border: 1px solid var(--color-border); cursor: pointer;"
             >
               Delete
             </button>
