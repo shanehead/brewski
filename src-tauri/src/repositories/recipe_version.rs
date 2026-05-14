@@ -104,6 +104,7 @@ impl<'a> RecipeVersionRepository<'a> {
                 || a.color_lovibond != b.color_lovibond
                 || a.amount_kg != b.amount_kg
                 || a.fermentable_id != b.fermentable_id
+                || a.add_after_boil.unwrap_or(0) != b.add_after_boil as i32
             {
                 return Ok(false);
             }
@@ -138,8 +139,36 @@ impl<'a> RecipeVersionRepository<'a> {
         if vy.len() != recipe.yeasts.len() {
             return Ok(false);
         }
-        for (a, b) in vy.iter().zip(recipe.yeasts.iter()) {
-            if a.name != b.name || a.r#type != b.type_ || a.form != b.form {
+        let mut vy_sorted = vy;
+        vy_sorted.sort_by(|a, b| {
+            a.name.cmp(&b.name).then(
+                a.laboratory
+                    .as_deref()
+                    .unwrap_or("")
+                    .cmp(b.laboratory.as_deref().unwrap_or("")),
+            )
+        });
+        let mut recipe_yeasts_sorted = recipe.yeasts.clone();
+        recipe_yeasts_sorted.sort_by(|a, b| {
+            a.name.cmp(&b.name).then(
+                a.laboratory
+                    .as_deref()
+                    .unwrap_or("")
+                    .cmp(b.laboratory.as_deref().unwrap_or("")),
+            )
+        });
+        for (a, b) in vy_sorted.iter().zip(recipe_yeasts_sorted.iter()) {
+            if a.name != b.name
+                || a.r#type != b.type_
+                || a.form != b.form
+                || a.laboratory != b.laboratory
+                || a.product_id != b.product_id
+                || a.attenuation_pct != b.attenuation_pct
+                || a.amount != b.amount
+                || a.amount_is_weight.unwrap_or(0) != b.amount_is_weight as i32
+                || a.add_to_secondary.unwrap_or(0) != b.add_to_secondary as i32
+                || a.times_cultured.unwrap_or(0) != b.times_cultured as i32
+            {
                 return Ok(false);
             }
         }
@@ -154,7 +183,12 @@ impl<'a> RecipeVersionRepository<'a> {
             return Ok(false);
         }
         for (a, b) in vm.iter().zip(recipe.miscs.iter()) {
-            if a.name != b.name || a.amount != b.amount || a.time_min != b.time_min {
+            if a.name != b.name
+                || a.amount != b.amount
+                || a.time_min != b.time_min
+                || a.r#type != b.type_
+                || a.r#use != b.use_
+            {
                 return Ok(false);
             }
         }
@@ -202,6 +236,10 @@ impl<'a> RecipeVersionRepository<'a> {
                 if vm.name != rm.name
                     || vm.grain_temp_c != rm.grain_temp_c
                     || vm.ratio_l_per_kg != rm.ratio_l_per_kg
+                    || vm.tun_temp_c != rm.tun_temp_c
+                    || vm.sparge_temp_c != rm.sparge_temp_c
+                    || vm.ph != rm.ph
+                    || vm.notes != rm.notes
                 {
                     return Ok(false);
                 }
@@ -214,7 +252,14 @@ impl<'a> RecipeVersionRepository<'a> {
                     return Ok(false);
                 }
                 for (a, b) in vsteps.iter().zip(rm.steps.iter()) {
-                    if a.step_temp_c != b.step_temp_c || a.step_time_min != b.step_time_min as i32 {
+                    if a.step_temp_c != b.step_temp_c
+                        || a.step_time_min != b.step_time_min as i32
+                        || a.name != b.name
+                        || a.r#type != b.type_
+                        || a.infuse_amount_l != b.infuse_amount_l
+                        || a.ramp_time_min != b.ramp_time_min.map(|v| v as i32)
+                        || a.end_temp_c != b.end_temp_c
+                    {
                         return Ok(false);
                     }
                 }
