@@ -42,9 +42,39 @@ impl<'a> RecipeVersionRepository<'a> {
     pub async fn create_or_reuse(&self, recipe_id: &str) -> Result<RecipeVersionSummary, AppError> {
         let recipe = RecipeRepository::new(self.db).get(recipe_id).await?;
 
+        let recipe_row = recipes::Entity::find_by_id(recipe_id)
+            .one(self.db)
+            .await?
+            .ok_or(AppError::NotFound)?;
+
+        let branch_parent_id = recipe_row.branch_parent_id.clone();
+
+        // If a branch parent is set, always create a new snapshot branching from it
+        if let Some(bp_id) = branch_parent_id {
+            recipes::ActiveModel {
+                id: Set(recipe_id.to_string()),
+                branch_parent_id: Set(None),
+                ..Default::default()
+            }
+            .update(self.db)
+            .await?;
+
+            let next_number = recipe_versions::Entity::find()
+                .filter(recipe_versions::Column::RecipeId.eq(recipe_id))
+                .order_by_desc(recipe_versions::Column::VersionNumber)
+                .one(self.db)
+                .await?
+                .map(|v| v.version_number + 1)
+                .unwrap_or(1);
+
+            return self
+                .snapshot(recipe_id, &recipe, next_number, None, Some(bp_id))
+                .await;
+        }
+
         let last = recipe_versions::Entity::find()
             .filter(recipe_versions::Column::RecipeId.eq(recipe_id))
-            .order_by_desc(recipe_versions::Column::VersionNumber)
+            .order_by_desc(recipe_versions::Column::CreatedAt)
             .one(self.db)
             .await?;
 
@@ -53,7 +83,8 @@ impl<'a> RecipeVersionRepository<'a> {
                 return RecipeVersionSummary::try_from(last_version);
             }
             let next_number = last_version.version_number + 1;
-            self.snapshot(recipe_id, &recipe, next_number, None, None)
+            let parent_id = Some(last_version.id.clone());
+            self.snapshot(recipe_id, &recipe, next_number, None, parent_id)
                 .await
         } else {
             self.snapshot(recipe_id, &recipe, 1, None, None).await
@@ -864,6 +895,55 @@ mod tests {
         assert_eq!(v2.version_number, 2);
         assert_eq!(v2.name.as_deref(), Some("My checkpoint"));
         assert_eq!(v2.parent_version_id.as_deref(), Some(v1.id.as_str()));
+    }
+
+    #[tokio::test]
+    async fn test_create_or_reuse_respects_branch_parent() {
+        let db = setup_test_db().await;
+        let recipe_id = make_recipe(&db).await;
+        let repo = RecipeVersionRepository::new(&db);
+
+        let v1 = repo.create_or_reuse(&recipe_id).await.unwrap();
+
+        // Simulate branch_from_version having been called: set branch_parent_id = v1.id
+        crate::entities::recipes::ActiveModel {
+            id: Set(recipe_id.clone()),
+            branch_parent_id: Set(Some(v1.id.clone())),
+            ..Default::default()
+        }
+        .update(&db)
+        .await
+        .unwrap();
+
+        // Add a fermentable so recipe is "changed" from v1 baseline
+        FermentableRepository::new(&db)
+            .create(
+                &recipe_id,
+                CreateFermentableAdditionInput {
+                    fermentable_id: None,
+                    name: "Crystal 60".into(),
+                    type_: "grain".into(),
+                    yield_pct: 70.0,
+                    color_lovibond: 60.0,
+                    amount_kg: 0.5,
+                    add_after_boil: None,
+                },
+            )
+            .await
+            .unwrap();
+
+        let v2 = repo.create_or_reuse(&recipe_id).await.unwrap();
+
+        assert_ne!(v1.id, v2.id);
+        assert_eq!(v2.parent_version_id.as_deref(), Some(v1.id.as_str()));
+
+        // branch_parent_id should be cleared on the recipe
+        let recipe_row = crate::entities::recipes::Entity::find_by_id(&recipe_id)
+            .one(&db)
+            .await
+            .unwrap()
+            .unwrap();
+        assert!(recipe_row.branch_parent_id.is_none());
     }
 
     #[tokio::test]
