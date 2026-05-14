@@ -33,6 +33,19 @@
     if (!parent) return 1;
     return indentLevel(parent, visited) + 1;
   }
+
+  function handleDeleteClick(version: RecipeVersionSummary, e: MouseEvent) {
+    e.stopPropagation();
+    if (typeof ondelete === 'function') {
+      try {
+        ondelete(version);
+      } catch (err) {
+        console.warn('delete handler threw', err);
+      }
+    } else {
+      console.warn('ondelete handler not provided');
+    }
+  }
 </script>
 
 <div
@@ -47,7 +60,7 @@
       VERSION HISTORY
     </span>
     <button
-      on:click={onclose}
+      onclick={onclose}
       class="text-xs px-1"
       style="color: var(--color-text-muted);"
     >✕</button>
@@ -57,8 +70,8 @@
     {#each versions as version}
       {@const indent = Math.min(indentLevel(version), 3)}
       <div
-        on:click={() => onview(version)}
-        on:keydown={(e) => {
+        onclick={() => onview(version)}
+        onkeydown={(e) => {
           if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
             onview(version);
@@ -94,14 +107,14 @@
         {#if viewingVersionId === version.id}
           <div class="mt-1 flex gap-1">
             <button
-              on:click={() => onbranch(version)}
+              onclick={() => onbranch(version)}
               class="text-xs px-2 py-0.5 rounded"
               style="background: var(--color-accent); color: #fff;"
             >
               Branch from here
             </button>
             <button
-              on:click|stopPropagation={() => ondelete(version)}
+              onclick={(e) => handleDeleteClick(version, e)}
               class="text-xs px-2 py-0.5 rounded"
               style="background: var(--color-bg-elevated); color: var(--color-text-muted); border: 1px solid var(--color-border); cursor: pointer;"
             >
