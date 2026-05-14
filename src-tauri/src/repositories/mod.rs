@@ -1,3 +1,4 @@
+pub mod batches;
 pub mod equipment;
 pub mod fermentable;
 pub mod hop;
