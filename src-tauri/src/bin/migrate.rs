@@ -1,14 +1,20 @@
-use sea_orm_migration::migrator::MigratorTrait;
+use sqlx::sqlite::SqliteConnectOptions;
+use sqlx::SqlitePool;
+use std::str::FromStr;
 
 #[tokio::main]
 async fn main() {
     let url = std::env::args()
         .nth(1)
-        .unwrap_or_else(|| "sqlite://./dev.db?mode=rwc".to_string());
-    let db = sea_orm::Database::connect(&url)
+        .unwrap_or_else(|| "sqlite://./dev.db".to_string());
+    let opts = SqliteConnectOptions::from_str(&url)
+        .expect("invalid DB URL")
+        .create_if_missing(true);
+    let pool = SqlitePool::connect_with(opts)
         .await
         .expect("DB connect failed");
-    brewski_lib::migration::Migrator::up(&db, None)
+    sqlx::migrate!("./migrations")
+        .run(&pool)
         .await
         .expect("migration failed");
     println!("Migrations applied to {url}");
