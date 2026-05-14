@@ -426,46 +426,6 @@ mod tests {
         );
     }
 
-    #[test]
-    fn test_stats_punk_ipa_2007() {
-        let (recipe, expected) = load_fixture("punk_ipa_2007.xml");
-        let stats = calculate_stats(&recipe);
-        assert_within("OG", stats.og, expected.og, OG_TOL);
-        assert_within("FG", stats.fg, expected.fg, FG_TOL);
-        assert_within("IBU", stats.ibu, expected.ibu, IBU_TOL);
-        assert_within("SRM", stats.srm, expected.srm, SRM_TOL);
-    }
-
-    #[test]
-    fn test_stats_alpha_dog() {
-        let (recipe, expected) = load_fixture("alpha_dog.xml");
-        let stats = calculate_stats(&recipe);
-        assert_within("OG", stats.og, expected.og, OG_TOL);
-        assert_within("FG", stats.fg, expected.fg, FG_TOL);
-        assert_within("IBU", stats.ibu, expected.ibu, IBU_TOL);
-        assert_within("SRM", stats.srm, expected.srm, SRM_TOL);
-    }
-
-    #[test]
-    fn test_stats_jet_black_heart() {
-        let (recipe, expected) = load_fixture("jet_black_heart.xml");
-        let stats = calculate_stats(&recipe);
-        assert_within("OG", stats.og, expected.og, OG_TOL);
-        assert_within("FG", stats.fg, expected.fg, FG_TOL);
-        assert_within("IBU", stats.ibu, expected.ibu, IBU_TOL);
-        assert_within("SRM", stats.srm, expected.srm, SRM_TOL);
-    }
-
-    #[test]
-    fn test_stats_nectaron_hazy_dipa() {
-        let (recipe, expected) = load_fixture("nectaron_hazy_dipa.xml");
-        let stats = calculate_stats(&recipe);
-        assert_within("OG", stats.og, expected.og, OG_TOL);
-        assert_within("FG", stats.fg, expected.fg, FG_TOL);
-        assert_within("IBU", stats.ibu, expected.ibu, IBU_TOL);
-        assert_within("SRM", stats.srm, expected.srm, SRM_TOL);
-    }
-
     macro_rules! fixture_test {
         ($fn:ident, $file:literal) => {
             #[test]
@@ -480,6 +440,10 @@ mod tests {
         };
     }
 
+    fixture_test!(test_stats_punk_ipa_2007, "punk_ipa_2007.xml");
+    fixture_test!(test_stats_alpha_dog, "alpha_dog.xml");
+    fixture_test!(test_stats_jet_black_heart, "jet_black_heart.xml");
+    fixture_test!(test_stats_nectaron_hazy_dipa, "nectaron_hazy_dipa.xml");
     fixture_test!(test_stats_american_pale_ale, "american_pale_ale.xml");
     fixture_test!(test_stats_english_bitter, "english_bitter.xml");
     fixture_test!(test_stats_oatmeal_stout, "oatmeal_stout.xml");
