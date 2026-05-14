@@ -7,6 +7,7 @@
   import {
     kgToHopDisplay, hopDisplayToKg, hopWeightLabel,
     kgToLb, lbToKg, weightLabel,
+    cToF, fToC, tempLabel,
     type Units,
   } from '$lib/units';
   import type { BrewingIconName } from "$lib/icons";
@@ -265,8 +266,11 @@
           </div>
           {#if use_ === 'hopstand'}
           <div>
-            <div style="font-size: 11px; color: var(--color-text-secondary); margin-bottom: 4px;">Temp (°C)</div>
-            <input type="number" step="1" bind:value={hopstand_temp_c} min="0" max="100"
+            <div style="font-size: 11px; color: var(--color-text-secondary); margin-bottom: 4px;">Temp ({tempLabel(units)})</div>
+            <input type="number" step="1"
+              value={units === 'imperial' ? cToF(hopstand_temp_c).toFixed(0) : hopstand_temp_c}
+              oninput={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); if (!isNaN(v)) hopstand_temp_c = units === 'imperial' ? fToC(v) : v; }}
+              min="0"
               style="width: 60px; background: var(--color-bg-elevated); border: 1px solid var(--color-border); border-radius: 5px; padding: 5px 8px; color: var(--color-text-primary); font-size: 13px;" />
           </div>
           {/if}

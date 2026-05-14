@@ -3,7 +3,7 @@
   import { createRecipeHop, deleteRecipeHop } from "$lib/api";
   import { ipc } from "$lib/stores/error";
   import { settings } from "$lib/stores/settings";
-  import { type Units, kgToHopDisplay, hopWeightLabel } from "$lib/units";
+  import { type Units, kgToHopDisplay, hopWeightLabel, cToF, tempLabel } from "$lib/units";
   import BrewingIcon from "$lib/components/BrewingIcon.svelte";
   import IngredientPicker, { type AddPayload } from "./IngredientPicker.svelte";
 
@@ -70,7 +70,13 @@
             <td class="py-1.5" style="color: var(--color-text-primary);">{h.name}</td>
             <td class="text-right py-1.5" style="color: var(--color-text-secondary);">{h.alpha_pct}%</td>
             <td class="text-right py-1.5" style="color: var(--color-text-secondary);">{kgToHopDisplay(h.amount_kg, units).toFixed(units === "imperial" ? 2 : 0)}{hopWeightLabel(units)}</td>
-            <td class="text-right py-1.5" style="color: var(--color-text-secondary);">{h.use_}</td>
+            <td class="text-right py-1.5" style="color: var(--color-text-secondary);">
+              {#if h.use_ === 'hopstand' && h.hopstand_temp_c != null}
+                {h.use_} ({units === 'imperial' ? cToF(h.hopstand_temp_c).toFixed(0) : h.hopstand_temp_c.toFixed(0)}{tempLabel(units)})
+              {:else}
+                {h.use_}
+              {/if}
+            </td>
             <td class="text-right py-1.5" style="color: var(--color-text-secondary);">{h.time_min}min</td>
             <td class="pl-1">
               <button onclick={() => handleDelete(h.id)} class="text-xs opacity-40 hover:opacity-100"
