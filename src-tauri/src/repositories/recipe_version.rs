@@ -53,9 +53,10 @@ impl<'a> RecipeVersionRepository<'a> {
                 return RecipeVersionSummary::try_from(last_version);
             }
             let next_number = last_version.version_number + 1;
-            self.snapshot(recipe_id, &recipe, next_number).await
+            self.snapshot(recipe_id, &recipe, next_number, None, None)
+                .await
         } else {
-            self.snapshot(recipe_id, &recipe, 1).await
+            self.snapshot(recipe_id, &recipe, 1, None, None).await
         }
     }
 
@@ -277,6 +278,8 @@ impl<'a> RecipeVersionRepository<'a> {
         recipe_id: &str,
         recipe: &crate::models::Recipe,
         version_number: i32,
+        name: Option<String>,
+        parent_version_id: Option<String>,
     ) -> Result<RecipeVersionSummary, AppError> {
         let version_id = new_id();
         let now = now_secs() as i32;
@@ -285,7 +288,7 @@ impl<'a> RecipeVersionRepository<'a> {
             id: Set(version_id.clone()),
             recipe_id: Set(recipe_id.to_string()),
             version_number: Set(version_number),
-            name: Set(None),
+            name: Set(name),
             r#type: Set(recipe.type_.clone()),
             brewer: Set(recipe.brewer.clone()),
             asst_brewer: Set(recipe.asst_brewer.clone()),
@@ -316,7 +319,7 @@ impl<'a> RecipeVersionRepository<'a> {
             priming_sugar_equiv: Set(recipe.priming_sugar_equiv),
             keg_priming_factor: Set(recipe.keg_priming_factor),
             created_at: Set(now),
-            parent_version_id: Set(None),
+            parent_version_id: Set(parent_version_id),
         }
         .insert(self.db)
         .await?;
@@ -465,6 +468,56 @@ impl<'a> RecipeVersionRepository<'a> {
             .await?
             .ok_or(AppError::NotFound)
             .and_then(RecipeVersionSummary::try_from)
+    }
+
+    pub async fn save_named(
+        &self,
+        recipe_id: &str,
+        name: &str,
+    ) -> Result<RecipeVersionSummary, AppError> {
+        let recipe = RecipeRepository::new(self.db).get(recipe_id).await?;
+
+        let recipe_row = recipes::Entity::find_by_id(recipe_id)
+            .one(self.db)
+            .await?
+            .ok_or(AppError::NotFound)?;
+
+        let branch_parent_id = recipe_row.branch_parent_id.clone();
+
+        let parent_id = if let Some(bp) = branch_parent_id {
+            // Clear branch_parent_id now that we're consuming it
+            recipes::ActiveModel {
+                id: Set(recipe_id.to_string()),
+                branch_parent_id: Set(None),
+                ..Default::default()
+            }
+            .update(self.db)
+            .await?;
+            Some(bp)
+        } else {
+            recipe_versions::Entity::find()
+                .filter(recipe_versions::Column::RecipeId.eq(recipe_id))
+                .order_by_desc(recipe_versions::Column::CreatedAt)
+                .one(self.db)
+                .await?
+                .map(|v| v.id)
+        };
+
+        let next_number = recipe_versions::Entity::find()
+            .filter(recipe_versions::Column::RecipeId.eq(recipe_id))
+            .all(self.db)
+            .await?
+            .len() as i32
+            + 1;
+
+        self.snapshot(
+            recipe_id,
+            &recipe,
+            next_number,
+            Some(name.to_string()),
+            parent_id,
+        )
+        .await
     }
 
     pub async fn get_full(&self, version_id: &str) -> Result<Recipe, AppError> {
@@ -793,6 +846,24 @@ mod tests {
         repo.create_or_reuse(&recipe_id).await.unwrap();
         let versions = repo.list_for_recipe(&recipe_id).await.unwrap();
         assert_eq!(versions.len(), 1);
+    }
+
+    #[tokio::test]
+    async fn test_save_named_always_creates_new_version() {
+        let db = setup_test_db().await;
+        let recipe_id = make_recipe(&db).await;
+        let repo = RecipeVersionRepository::new(&db);
+
+        // First brew creates v1
+        let v1 = repo.create_or_reuse(&recipe_id).await.unwrap();
+
+        // Manual save with same unchanged recipe still creates v2
+        let v2 = repo.save_named(&recipe_id, "My checkpoint").await.unwrap();
+
+        assert_ne!(v1.id, v2.id);
+        assert_eq!(v2.version_number, 2);
+        assert_eq!(v2.name.as_deref(), Some("My checkpoint"));
+        assert_eq!(v2.parent_version_id.as_deref(), Some(v1.id.as_str()));
     }
 
     #[tokio::test]
