@@ -3,12 +3,15 @@ use sea_orm::{
 };
 
 use crate::entities::{
-    recipe_version_fermentables, recipe_version_hops, recipe_version_mash,
+    equipment_profiles, recipe_version_fermentables, recipe_version_hops, recipe_version_mash,
     recipe_version_mash_steps, recipe_version_miscs, recipe_version_water_adjustments,
-    recipe_version_waters, recipe_version_yeasts, recipe_versions,
+    recipe_version_waters, recipe_version_yeasts, recipe_versions, recipes, styles,
 };
 use crate::error::AppError;
-use crate::models::RecipeVersionSummary;
+use crate::models::{
+    Mash, MashStep, Recipe, RecipeAdditionFermentable, RecipeAdditionHop, RecipeAdditionMisc,
+    RecipeAdditionWater, RecipeAdditionYeast, RecipeVersionSummary, RecipeWaterAdjustment,
+};
 use crate::repositories::recipe::RecipeRepository;
 
 use super::{new_id, now_secs};
@@ -463,6 +466,251 @@ impl<'a> RecipeVersionRepository<'a> {
             .ok_or(AppError::NotFound)
             .and_then(RecipeVersionSummary::try_from)
     }
+
+    pub async fn get_full(&self, version_id: &str) -> Result<Recipe, AppError> {
+        let v = recipe_versions::Entity::find_by_id(version_id)
+            .one(self.db)
+            .await?
+            .ok_or(AppError::NotFound)?;
+
+        let recipe_row = recipes::Entity::find_by_id(&v.recipe_id)
+            .one(self.db)
+            .await?
+            .ok_or(AppError::NotFound)?;
+
+        let style = if let Some(sid) = &v.style_id {
+            use crate::models::Style;
+            styles::Entity::find_by_id(sid)
+                .one(self.db)
+                .await?
+                .map(Style::try_from)
+                .transpose()?
+        } else {
+            None
+        };
+
+        let equipment_profile = if let Some(eid) = &v.equipment_profile_id {
+            use crate::models::EquipmentProfile;
+            equipment_profiles::Entity::find_by_id(eid)
+                .one(self.db)
+                .await?
+                .map(EquipmentProfile::try_from)
+                .transpose()?
+        } else {
+            None
+        };
+
+        let fermentables = recipe_version_fermentables::Entity::find()
+            .filter(recipe_version_fermentables::Column::RecipeVersionId.eq(version_id))
+            .order_by_asc(recipe_version_fermentables::Column::AdditionOrder)
+            .all(self.db)
+            .await?
+            .into_iter()
+            .map(|m| RecipeAdditionFermentable {
+                id: m.id,
+                recipe_id: v.recipe_id.clone(),
+                fermentable_id: m.fermentable_id,
+                name: m.name,
+                type_: m.r#type,
+                yield_pct: m.yield_pct,
+                color_lovibond: m.color_lovibond,
+                amount_kg: m.amount_kg,
+                add_after_boil: m.add_after_boil.unwrap_or(0) != 0,
+                addition_order: m.addition_order as i64,
+            })
+            .collect();
+
+        let hops = recipe_version_hops::Entity::find()
+            .filter(recipe_version_hops::Column::RecipeVersionId.eq(version_id))
+            .order_by_asc(recipe_version_hops::Column::AdditionOrder)
+            .all(self.db)
+            .await?
+            .into_iter()
+            .map(|m| RecipeAdditionHop {
+                id: m.id,
+                recipe_id: v.recipe_id.clone(),
+                hop_id: m.hop_id,
+                name: m.name,
+                alpha_pct: m.alpha_pct,
+                form: m.form,
+                amount_kg: m.amount_kg,
+                use_: m.r#use,
+                time_min: m.time_min,
+                addition_order: m.addition_order as i64,
+                hopstand_temp_c: None, // not captured in version snapshot
+            })
+            .collect();
+
+        let yeasts = recipe_version_yeasts::Entity::find()
+            .filter(recipe_version_yeasts::Column::RecipeVersionId.eq(version_id))
+            .all(self.db)
+            .await?
+            .into_iter()
+            .map(|m| RecipeAdditionYeast {
+                id: m.id,
+                recipe_id: v.recipe_id.clone(),
+                yeast_id: m.yeast_id,
+                name: m.name,
+                type_: m.r#type,
+                form: m.form,
+                laboratory: m.laboratory,
+                product_id: m.product_id,
+                attenuation_pct: m.attenuation_pct,
+                amount: m.amount,
+                amount_is_weight: m.amount_is_weight.unwrap_or(0) != 0,
+                add_to_secondary: m.add_to_secondary.unwrap_or(0) != 0,
+                times_cultured: m.times_cultured.unwrap_or(0) as i64,
+            })
+            .collect();
+
+        let miscs = recipe_version_miscs::Entity::find()
+            .filter(recipe_version_miscs::Column::RecipeVersionId.eq(version_id))
+            .order_by_asc(recipe_version_miscs::Column::AdditionOrder)
+            .all(self.db)
+            .await?
+            .into_iter()
+            .map(|m| RecipeAdditionMisc {
+                id: m.id,
+                recipe_id: v.recipe_id.clone(),
+                misc_id: m.misc_id,
+                name: m.name,
+                type_: m.r#type,
+                use_: m.r#use,
+                amount: m.amount,
+                amount_is_weight: m.amount_is_weight.unwrap_or(0) != 0,
+                time_min: m.time_min,
+                addition_order: m.addition_order as i64,
+            })
+            .collect();
+
+        let waters = recipe_version_waters::Entity::find()
+            .filter(recipe_version_waters::Column::RecipeVersionId.eq(version_id))
+            .all(self.db)
+            .await?
+            .into_iter()
+            .map(|m| RecipeAdditionWater {
+                id: m.id,
+                recipe_id: v.recipe_id.clone(),
+                water_id: m.water_id,
+                name: m.name,
+                amount_l: m.amount_l,
+            })
+            .collect();
+
+        let water_adjustments = recipe_version_water_adjustments::Entity::find()
+            .filter(recipe_version_water_adjustments::Column::RecipeVersionId.eq(version_id))
+            .all(self.db)
+            .await?
+            .into_iter()
+            .map(|m| -> Result<RecipeWaterAdjustment, AppError> {
+                Ok(RecipeWaterAdjustment {
+                    id: m.id,
+                    recipe_id: v.recipe_id.clone(),
+                    addition: m
+                        .addition
+                        .parse()
+                        .map_err(|e| AppError::Internal(format!("{e}")))?,
+                    target: m
+                        .target
+                        .parse()
+                        .map_err(|e| AppError::Internal(format!("{e}")))?,
+                    amount: m.amount,
+                })
+            })
+            .collect::<Result<Vec<_>, _>>()?;
+
+        let mash = if let Some(vm) = recipe_version_mash::Entity::find()
+            .filter(recipe_version_mash::Column::RecipeVersionId.eq(version_id))
+            .one(self.db)
+            .await?
+        {
+            let steps = recipe_version_mash_steps::Entity::find()
+                .filter(recipe_version_mash_steps::Column::RecipeVersionMashId.eq(&vm.id))
+                .order_by_asc(recipe_version_mash_steps::Column::StepOrder)
+                .all(self.db)
+                .await?
+                .into_iter()
+                .map(|s| MashStep {
+                    id: s.id,
+                    mash_id: vm.id.clone(),
+                    name: s.name,
+                    type_: s.r#type,
+                    infuse_amount_l: s.infuse_amount_l,
+                    step_temp_c: s.step_temp_c,
+                    step_time_min: s.step_time_min as i64,
+                    ramp_time_min: s.ramp_time_min.map(|v| v as i64),
+                    end_temp_c: s.end_temp_c,
+                    step_order: s.step_order as i64,
+                })
+                .collect();
+            Some(Mash {
+                id: vm.id,
+                recipe_id: v.recipe_id.clone(),
+                name: vm.name,
+                grain_temp_c: vm.grain_temp_c,
+                tun_temp_c: vm.tun_temp_c,
+                sparge_temp_c: vm.sparge_temp_c,
+                ph: vm.ph,
+                notes: vm.notes,
+                ratio_l_per_kg: vm.ratio_l_per_kg,
+                tun_weight_kg: vm.tun_weight_kg,
+                tun_specific_heat: vm.tun_specific_heat,
+                equip_adjust: vm.equip_adjust.unwrap_or(0) != 0,
+                steps,
+            })
+        } else {
+            None
+        };
+
+        Ok(Recipe {
+            id: v.recipe_id.clone(),
+            name: recipe_row.name,
+            type_: v.r#type,
+            brewer: v.brewer,
+            asst_brewer: v.asst_brewer,
+            batch_size_l: v.batch_size_l,
+            boil_size_l: v.boil_size_l,
+            boil_time_min: v.boil_time_min,
+            efficiency_pct: v.efficiency_pct,
+            style_id: v.style_id,
+            equipment_profile_id: v.equipment_profile_id,
+            notes: v.notes,
+            taste_notes: None,
+            taste_rating: None,
+            og: v.og,
+            fg: v.fg,
+            fermentation_stages: v.fermentation_stages.unwrap_or(1) as i64,
+            primary_age_days: v.primary_age_days,
+            primary_temp_c: v.primary_temp_c,
+            secondary_age_days: v.secondary_age_days,
+            secondary_temp_c: v.secondary_temp_c,
+            tertiary_age_days: v.tertiary_age_days,
+            tertiary_temp_c: v.tertiary_temp_c,
+            age_days: v.age_days,
+            age_temp_c: v.age_temp_c,
+            carbonation_vols: v.carbonation_vols,
+            forced_carbonation: v.forced_carbonation.unwrap_or(0) != 0,
+            priming_sugar_name: v.priming_sugar_name,
+            carbonation_temp_c: v.carbonation_temp_c,
+            priming_sugar_equiv: v.priming_sugar_equiv,
+            keg_priming_factor: v.keg_priming_factor,
+            date: None,
+            mash_water_id: v.mash_water_id,
+            sparge_water_id: v.sparge_water_id,
+            hopstand_temp_c: None,
+            created_at: v.created_at as i64,
+            updated_at: v.created_at as i64,
+            style,
+            equipment_profile,
+            fermentables,
+            hops,
+            yeasts,
+            miscs,
+            waters,
+            water_adjustments,
+            mash,
+        })
+    }
 }
 
 #[cfg(test)]
@@ -545,5 +793,36 @@ mod tests {
         repo.create_or_reuse(&recipe_id).await.unwrap();
         let versions = repo.list_for_recipe(&recipe_id).await.unwrap();
         assert_eq!(versions.len(), 1);
+    }
+
+    #[tokio::test]
+    async fn test_get_full_returns_recipe_shaped_data() {
+        let db = setup_test_db().await;
+        let recipe_id = make_recipe(&db).await;
+
+        // Add a fermentable so there's something to round-trip
+        FermentableRepository::new(&db)
+            .create(
+                &recipe_id,
+                CreateFermentableAdditionInput {
+                    fermentable_id: None,
+                    name: "Pale Malt".into(),
+                    type_: "grain".into(),
+                    yield_pct: 78.0,
+                    color_lovibond: 1.8,
+                    amount_kg: 4.5,
+                    add_after_boil: None,
+                },
+            )
+            .await
+            .unwrap();
+
+        let repo = RecipeVersionRepository::new(&db);
+        let v = repo.create_or_reuse(&recipe_id).await.unwrap();
+        let full = repo.get_full(&v.id).await.unwrap();
+
+        assert_eq!(full.fermentables.len(), 1);
+        assert_eq!(full.fermentables[0].name, "Pale Malt");
+        assert_eq!(full.fermentables[0].amount_kg, 4.5);
     }
 }
