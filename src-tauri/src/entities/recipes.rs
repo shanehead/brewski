@@ -56,6 +56,8 @@ pub struct Model {
     #[sea_orm(column_type = "Text", nullable)]
     pub sparge_water_id: Option<String>,
     pub hopstand_temp_c: Option<f64>,
+    #[sea_orm(column_type = "Text", nullable)]
+    pub branch_parent_id: Option<String>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
@@ -82,7 +84,13 @@ pub enum Relation {
     RecipeAdditionWaters,
     #[sea_orm(has_many = "super::recipe_addition_yeasts::Entity")]
     RecipeAdditionYeasts,
-    #[sea_orm(has_many = "super::recipe_versions::Entity")]
+    #[sea_orm(
+        belongs_to = "super::recipe_versions::Entity",
+        from = "Column::BranchParentId",
+        to = "super::recipe_versions::Column::Id",
+        on_update = "NoAction",
+        on_delete = "NoAction"
+    )]
     RecipeVersions,
     #[sea_orm(has_many = "super::recipe_water_adjustments::Entity")]
     RecipeWaterAdjustments,

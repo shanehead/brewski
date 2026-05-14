@@ -313,6 +313,7 @@ impl<'a> RecipeVersionRepository<'a> {
             priming_sugar_equiv: Set(recipe.priming_sugar_equiv),
             keg_priming_factor: Set(recipe.keg_priming_factor),
             created_at: Set(now),
+            parent_version_id: Set(None),
         }
         .insert(self.db)
         .await?;

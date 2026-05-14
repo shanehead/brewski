@@ -52,6 +52,8 @@ pub struct Model {
     pub equipment_profile_id: Option<String>,
     pub carbonation_vols: Option<f64>,
     pub created_at: i32,
+    #[sea_orm(column_type = "Text", nullable)]
+    pub parent_version_id: Option<String>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
@@ -72,6 +74,14 @@ pub enum Relation {
     RecipeVersionWaters,
     #[sea_orm(has_many = "super::recipe_version_yeasts::Entity")]
     RecipeVersionYeasts,
+    #[sea_orm(
+        belongs_to = "Entity",
+        from = "Column::ParentVersionId",
+        to = "Column::Id",
+        on_update = "NoAction",
+        on_delete = "NoAction"
+    )]
+    SelfRef,
     #[sea_orm(
         belongs_to = "super::recipes::Entity",
         from = "Column::RecipeId",
