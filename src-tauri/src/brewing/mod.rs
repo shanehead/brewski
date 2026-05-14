@@ -14,11 +14,19 @@ pub mod water;
 
 use crate::models::{Recipe, RecipeStats};
 
+const DEFAULT_EFFICIENCY_PCT: f64 = 72.0;
+const DEFAULT_ATTENUATION_PCT: f64 = 75.0;
+const DEFAULT_HOPSTAND_TEMP_C: f64 = 80.0;
+const DEFAULT_EVAP_RATE_PCT_HR: f64 = 10.0;
+const DEFAULT_TRUB_CHILLER_LOSS_L: f64 = 1.0;
+const DEFAULT_FERMENTER_LOSS_L: f64 = 1.0;
+const DEFAULT_TOP_UP_WATER_L: f64 = 0.0;
+
 pub fn calculate_stats(recipe: &Recipe) -> RecipeStats {
     let efficiency = recipe
         .efficiency_pct
         .or_else(|| recipe.equipment_profile.as_ref().map(|e| e.efficiency_pct))
-        .unwrap_or(72.0);
+        .unwrap_or(DEFAULT_EFFICIENCY_PCT);
 
     let fermentable_inputs: Vec<(&f64, &f64, bool)> = recipe
         .fermentables
@@ -34,16 +42,24 @@ pub fn calculate_stats(recipe: &Recipe) -> RecipeStats {
         .filter_map(|y| y.attenuation_pct)
         .next()
         .map(|attenuation| abv::calculate_fg(og, attenuation))
-        .unwrap_or_else(|| abv::calculate_fg(og, 75.0));
+        .unwrap_or_else(|| abv::calculate_fg(og, DEFAULT_ATTENUATION_PCT));
 
     let abv_pct = abv::calculate_abv(og, fg);
     let calories = abv::calculate_calories_per_355ml(og, fg);
 
     let equipment = recipe.equipment_profile.as_ref();
-    let evaporation_rate = equipment.map(|e| e.evap_rate_pct_hr).unwrap_or(10.0);
-    let trub_chiller_loss = equipment.map(|e| e.trub_chiller_loss_l).unwrap_or(1.0);
-    let fermenter_loss = equipment.map(|e| e.fermenter_loss_l).unwrap_or(1.0);
-    let top_up_water = equipment.map(|e| e.top_up_water_l).unwrap_or(0.0);
+    let evaporation_rate = equipment
+        .map(|e| e.evap_rate_pct_hr)
+        .unwrap_or(DEFAULT_EVAP_RATE_PCT_HR);
+    let trub_chiller_loss = equipment
+        .map(|e| e.trub_chiller_loss_l)
+        .unwrap_or(DEFAULT_TRUB_CHILLER_LOSS_L);
+    let fermenter_loss = equipment
+        .map(|e| e.fermenter_loss_l)
+        .unwrap_or(DEFAULT_FERMENTER_LOSS_L);
+    let top_up_water = equipment
+        .map(|e| e.top_up_water_l)
+        .unwrap_or(DEFAULT_TOP_UP_WATER_L);
 
     let (pre_boil_volume_l, post_boil_volume_l) = volumes::calculate_boil_volumes(
         recipe.batch_size_l,
@@ -57,7 +73,7 @@ pub fn calculate_stats(recipe: &Recipe) -> RecipeStats {
     let pre_boil_gravity =
         volumes::calculate_pre_boil_gravity(og, post_boil_volume_l, pre_boil_volume_l);
 
-    let hopstand_default = recipe.hopstand_temp_c.unwrap_or(80.0);
+    let hopstand_default = recipe.hopstand_temp_c.unwrap_or(DEFAULT_HOPSTAND_TEMP_C);
     let hop_inputs: Vec<ibu::HopIbuInput> = recipe
         .hops
         .iter()
