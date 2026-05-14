@@ -121,13 +121,19 @@
   }
 
   async function handleDeleteVersion(version: RecipeVersionSummary) {
-    if (!recipe) return;
+    console.log('handleDeleteVersion called', version.id);
+    if (!recipe) {
+      console.warn('no recipe loaded');
+      return;
+    }
     const namePart = version.name ? ` \"${version.name}\"` : "";
     const confirmed = confirm(
       `Delete v${version.version_number}${namePart}? This cannot be undone.`
     );
+    console.log('delete confirm result', confirmed);
     if (!confirmed) return;
-    await ipc(deleteRecipeVersion(version.id));
+    const result = await ipc(deleteRecipeVersion(version.id));
+    console.log('deleteRecipeVersion result', result);
     await refreshRecipe();
   }
 
