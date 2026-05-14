@@ -5,6 +5,7 @@ pub mod library;
 pub mod mash;
 pub mod misc;
 pub mod recipe;
+pub mod recipe_version;
 pub mod settings;
 pub mod water;
 pub mod water_chemistry;
