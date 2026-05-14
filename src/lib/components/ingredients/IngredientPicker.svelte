@@ -67,8 +67,8 @@
 
   $effect(() => {
     if (!selected) return;
-    if (type === 'hop') { amount = 0.028; use_ = 'boil'; time = 60; hopstand_temp_c = 80; }
-    else if (type === 'fermentable') { amount = 1.0; }
+    if (type === 'hop') { amount = hopDisplayToKg(units === 'imperial' ? 1 : 28, units); use_ = 'boil'; time = 60; hopstand_temp_c = 80; }
+    else if (type === 'fermentable') { amount = units === 'imperial' ? lbToKg(2) : 1.0; }
     else { amount = 1; }
   });
 
@@ -317,7 +317,7 @@
         <div style="border-top: 1px solid var(--color-border); padding: 12px 16px; display: flex; gap: 10px; align-items: flex-end; background: var(--color-bg-surface); flex-shrink: 0;">
           <div>
             <div style="font-size: 11px; color: var(--color-text-secondary); margin-bottom: 4px;">Amount ({weightLabel(units)})</div>
-            <input type="number" step={units === 'imperial' ? 0.1 : 0.05}
+            <input type="number" step="0.1"
               value={(units === 'imperial' ? kgToLb(amount) : amount).toFixed(2)}
               oninput={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); if (!isNaN(v)) amount = units === 'imperial' ? lbToKg(v) : v; }}
               min="0.01"
