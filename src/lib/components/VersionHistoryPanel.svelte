@@ -36,6 +36,7 @@
 
   function handleDeleteClick(version: RecipeVersionSummary, e: MouseEvent) {
     e.stopPropagation();
+    console.log('VersionHistoryPanel: delete clicked', version.id);
     if (typeof ondelete === 'function') {
       try {
         ondelete(version);
@@ -50,7 +51,7 @@
 
 <div
   class="flex flex-col h-full border-l overflow-hidden"
-  style="background: var(--color-bg-surface); border-color: var(--color-border); min-width: 220px; max-width: 260px;"
+  style="background: var(--color-bg-surface); border-color: var(--color-border); min-width: 220px; max-width: 260px; position: relative; z-index: 50; pointer-events: auto;"
 >
   <div
     class="flex items-center justify-between px-3 py-2 border-b flex-shrink-0"
