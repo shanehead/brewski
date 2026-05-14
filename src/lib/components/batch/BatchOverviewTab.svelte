@@ -1,10 +1,23 @@
 <!-- src/lib/components/batch/BatchOverviewTab.svelte -->
 <script lang="ts">
-  import type { Batch, UpdateBatchInput } from "$lib/api";
+  import { onMount } from "svelte";
+  import { goto } from "$app/navigation";
+  import type { Batch, UpdateBatchInput, RecipeVersionSummary } from "$lib/api";
+  import { listRecipeVersions } from "$lib/api";
+  import { ipc } from "$lib/stores/error";
 
   let { batch, onUpdate }: { batch: Batch; onUpdate: (input: UpdateBatchInput) => void } = $props();
 
   const STATUSES = ["planned", "brewing", "fermenting", "packaged", "complete"] as const;
+
+  let batchVersion = $state<RecipeVersionSummary | null>(null);
+
+  onMount(async () => {
+    const versions = await ipc(listRecipeVersions(batch.recipe_id));
+    if (versions) {
+      batchVersion = versions.find((v) => v.id === batch.recipe_version_id) ?? null;
+    }
+  });
 
   function toDateInput(ts: number | null | undefined): string {
     if (!ts) return "";
@@ -18,9 +31,22 @@
 </script>
 
 <div class="p-4 flex flex-col gap-6 overflow-y-auto">
+  {#if batchVersion}
+    <div class="text-xs" style="color: var(--color-text-muted);">
+      Brewed with
+      <button
+        onclick={() => goto(`/recipe/${batch.recipe_id}`)}
+        class="underline"
+        style="color: var(--color-accent);"
+      >
+        Recipe v{batchVersion.version_number}{batchVersion.name ? ` · ${batchVersion.name}` : ""}
+      </button>
+    </div>
+  {/if}
+
   <!-- Status -->
   <div>
-    <div class="text-xs mb-2" style="color: var(--color-text-muted);">STATUS</div>
+    <div class="text-xs mb-2" style="color: var(--color-text-secondary);">STATUS</div>
     <div class="flex gap-2 flex-wrap">
       {#each STATUSES as s}
         <button
@@ -44,7 +70,7 @@
       { label: "Packaging Date", field: "packaging_date", value: batch.packaging_date },
     ] as item}
       <div>
-        <label class="text-xs block mb-1" style="color: var(--color-text-muted);">{item.label}</label>
+        <label class="text-xs block mb-1" style="color: var(--color-text-secondary);">{item.label}</label>
         <input
           type="date"
           value={toDateInput(item.value)}
@@ -58,7 +84,7 @@
 
   <!-- Actual vs Target -->
   <div>
-    <div class="text-xs mb-2" style="color: var(--color-text-muted);">MEASUREMENTS</div>
+    <div class="text-xs mb-2" style="color: var(--color-text-secondary);">MEASUREMENTS</div>
     <div class="grid grid-cols-2 gap-3">
       {#each [
         { label: "Pre-Boil Gravity", field: "actual_pre_boil_gravity", value: batch.actual_pre_boil_gravity, prominent: batch.status === "brewing" },
@@ -72,7 +98,7 @@
           class="p-3 rounded"
           style="background: var(--color-bg-elevated); {row.prominent ? 'border: 1px solid var(--color-accent);' : ''}"
         >
-          <label class="text-xs block mb-1" style="color: var(--color-text-muted);">{row.label}</label>
+          <label class="text-xs block mb-1" style="color: var(--color-text-secondary);">{row.label}</label>
           <input
             type="number"
             step="0.001"

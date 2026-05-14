@@ -248,3 +248,14 @@ export const deleteGravityReading = (id: string) =>
 // --- Recipe Versions ---
 export const listRecipeVersions = (recipeId: string) =>
   invoke<RecipeVersionSummary[]>("list_recipe_versions", { recipeId });
+
+export type SaveRecipeVersionInput = components["schemas"]["SaveRecipeVersionInput"];
+
+export const getRecipeVersion = (id: string) =>
+  invoke<Recipe>("get_recipe_version", { id });
+
+export const saveRecipeVersion = (input: SaveRecipeVersionInput) =>
+  invoke<RecipeVersionSummary>("save_recipe_version", { input });
+
+export const branchFromVersion = (recipeId: string, versionId: string) =>
+  invoke<void>("branch_from_version", { recipeId, versionId });
