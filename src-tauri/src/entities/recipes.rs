@@ -12,21 +12,21 @@ pub struct Model {
     pub name: String,
     #[sea_orm(column_type = "Text")]
     pub r#type: String,
-    #[sea_orm(column_type = "Text")]
+    #[sea_orm(column_type = "Text", nullable)]
     pub brewer: Option<String>,
-    #[sea_orm(column_type = "Text")]
+    #[sea_orm(column_type = "Text", nullable)]
     pub asst_brewer: Option<String>,
     pub batch_size_l: f64,
     pub boil_size_l: f64,
     pub boil_time_min: f64,
     pub efficiency_pct: Option<f64>,
-    #[sea_orm(column_type = "Text")]
+    #[sea_orm(column_type = "Text", nullable)]
     pub equipment_profile_id: Option<String>,
-    #[sea_orm(column_type = "Text")]
+    #[sea_orm(column_type = "Text", nullable)]
     pub style_id: Option<String>,
-    #[sea_orm(column_type = "Text")]
+    #[sea_orm(column_type = "Text", nullable)]
     pub notes: Option<String>,
-    #[sea_orm(column_type = "Text")]
+    #[sea_orm(column_type = "Text", nullable)]
     pub taste_notes: Option<String>,
     pub taste_rating: Option<f64>,
     pub og: Option<f64>,
@@ -42,24 +42,26 @@ pub struct Model {
     pub age_temp_c: Option<f64>,
     pub carbonation_vols: Option<f64>,
     pub forced_carbonation: Option<i32>,
-    #[sea_orm(column_type = "Text")]
+    #[sea_orm(column_type = "Text", nullable)]
     pub priming_sugar_name: Option<String>,
     pub carbonation_temp_c: Option<f64>,
     pub priming_sugar_equiv: Option<f64>,
     pub keg_priming_factor: Option<f64>,
-    #[sea_orm(column_type = "Text")]
+    #[sea_orm(column_type = "Text", nullable)]
     pub date: Option<String>,
     pub created_at: i32,
     pub updated_at: i32,
-    #[sea_orm(column_type = "Text")]
+    #[sea_orm(column_type = "Text", nullable)]
     pub mash_water_id: Option<String>,
-    #[sea_orm(column_type = "Text")]
+    #[sea_orm(column_type = "Text", nullable)]
     pub sparge_water_id: Option<String>,
     pub hopstand_temp_c: Option<f64>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
 pub enum Relation {
+    #[sea_orm(has_many = "super::batches::Entity")]
+    Batches,
     #[sea_orm(
         belongs_to = "super::equipment_profiles::Entity",
         from = "Column::EquipmentProfileId",
@@ -80,6 +82,8 @@ pub enum Relation {
     RecipeAdditionWaters,
     #[sea_orm(has_many = "super::recipe_addition_yeasts::Entity")]
     RecipeAdditionYeasts,
+    #[sea_orm(has_many = "super::recipe_versions::Entity")]
+    RecipeVersions,
     #[sea_orm(has_many = "super::recipe_water_adjustments::Entity")]
     RecipeWaterAdjustments,
     #[sea_orm(
@@ -106,6 +110,12 @@ pub enum Relation {
         on_delete = "NoAction"
     )]
     Waters1,
+}
+
+impl Related<super::batches::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::Batches.def()
+    }
 }
 
 impl Related<super::equipment_profiles::Entity> for Entity {
@@ -147,6 +157,12 @@ impl Related<super::recipe_addition_waters::Entity> for Entity {
 impl Related<super::recipe_addition_yeasts::Entity> for Entity {
     fn to() -> RelationDef {
         Relation::RecipeAdditionYeasts.def()
+    }
+}
+
+impl Related<super::recipe_versions::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::RecipeVersions.def()
     }
 }
 

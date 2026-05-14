@@ -4,12 +4,12 @@ use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, PartialEq, DeriveEntityModel, Serialize, Deserialize)]
-#[sea_orm(table_name = "recipe_addition_waters")]
+#[sea_orm(table_name = "recipe_version_waters")]
 pub struct Model {
     #[sea_orm(primary_key, auto_increment = false, column_type = "Text")]
     pub id: String,
     #[sea_orm(column_type = "Text")]
-    pub recipe_id: String,
+    pub recipe_version_id: String,
     #[sea_orm(column_type = "Text", nullable)]
     pub water_id: Option<String>,
     #[sea_orm(column_type = "Text")]
@@ -20,13 +20,13 @@ pub struct Model {
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
 pub enum Relation {
     #[sea_orm(
-        belongs_to = "super::recipes::Entity",
-        from = "Column::RecipeId",
-        to = "super::recipes::Column::Id",
+        belongs_to = "super::recipe_versions::Entity",
+        from = "Column::RecipeVersionId",
+        to = "super::recipe_versions::Column::Id",
         on_update = "NoAction",
         on_delete = "Cascade"
     )]
-    Recipes,
+    RecipeVersions,
     #[sea_orm(
         belongs_to = "super::waters::Entity",
         from = "Column::WaterId",
@@ -37,9 +37,9 @@ pub enum Relation {
     Waters,
 }
 
-impl Related<super::recipes::Entity> for Entity {
+impl Related<super::recipe_versions::Entity> for Entity {
     fn to() -> RelationDef {
-        Relation::Recipes.def()
+        Relation::RecipeVersions.def()
     }
 }
 

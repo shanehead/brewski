@@ -91,3 +91,4 @@ gen-entities: migrate
       --output-dir src-tauri/src/entities \
       --with-serde both \
       --serde-skip-hidden-column
+    bash scripts/fix-entities.sh src-tauri/src/entities

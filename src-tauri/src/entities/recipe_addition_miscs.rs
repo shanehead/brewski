@@ -10,7 +10,7 @@ pub struct Model {
     pub id: String,
     #[sea_orm(column_type = "Text")]
     pub recipe_id: String,
-    #[sea_orm(column_type = "Text")]
+    #[sea_orm(column_type = "Text", nullable)]
     pub misc_id: Option<String>,
     #[sea_orm(column_type = "Text")]
     pub name: String,

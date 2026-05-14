@@ -14,32 +14,32 @@ pub struct Model {
     pub r#type: String,
     #[sea_orm(column_type = "Text")]
     pub form: String,
-    #[sea_orm(column_type = "Text")]
+    #[sea_orm(column_type = "Text", nullable)]
     pub laboratory: Option<String>,
-    #[sea_orm(column_type = "Text")]
+    #[sea_orm(column_type = "Text", nullable)]
     pub product_id: Option<String>,
     pub min_temperature_c: Option<f64>,
     pub max_temperature_c: Option<f64>,
-    #[sea_orm(column_type = "Text")]
+    #[sea_orm(column_type = "Text", nullable)]
     pub flocculation: Option<String>,
     pub attenuation_pct: Option<f64>,
     pub min_attenuation_pct: Option<f64>,
     pub max_attenuation_pct: Option<f64>,
-    #[sea_orm(column_type = "Text")]
+    #[sea_orm(column_type = "Text", nullable)]
     pub alcohol_tolerance: Option<String>,
-    #[sea_orm(column_type = "Text")]
+    #[sea_orm(column_type = "Text", nullable)]
     pub flavor_profile: Option<String>,
-    #[sea_orm(column_type = "Text")]
+    #[sea_orm(column_type = "Text", nullable)]
     pub styles: Option<String>,
-    #[sea_orm(column_type = "Text")]
+    #[sea_orm(column_type = "Text", nullable)]
     pub substitutes: Option<String>,
-    #[sea_orm(column_type = "Text")]
+    #[sea_orm(column_type = "Text", nullable)]
     pub species: Option<String>,
     pub pof_positive: Option<i32>,
     pub sta1_positive: Option<i32>,
-    #[sea_orm(column_type = "Text")]
+    #[sea_orm(column_type = "Text", nullable)]
     pub notes: Option<String>,
-    #[sea_orm(column_type = "Text")]
+    #[sea_orm(column_type = "Text", nullable)]
     pub best_for: Option<String>,
     pub max_reuse: Option<i32>,
     pub add_to_secondary: Option<i32>,
@@ -49,11 +49,19 @@ pub struct Model {
 pub enum Relation {
     #[sea_orm(has_many = "super::recipe_addition_yeasts::Entity")]
     RecipeAdditionYeasts,
+    #[sea_orm(has_many = "super::recipe_version_yeasts::Entity")]
+    RecipeVersionYeasts,
 }
 
 impl Related<super::recipe_addition_yeasts::Entity> for Entity {
     fn to() -> RelationDef {
         Relation::RecipeAdditionYeasts.def()
+    }
+}
+
+impl Related<super::recipe_version_yeasts::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::RecipeVersionYeasts.def()
     }
 }
 

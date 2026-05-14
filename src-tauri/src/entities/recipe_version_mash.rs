@@ -4,49 +4,49 @@ use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, PartialEq, DeriveEntityModel, Serialize, Deserialize)]
-#[sea_orm(table_name = "mashes")]
+#[sea_orm(table_name = "recipe_version_mash")]
 pub struct Model {
     #[sea_orm(primary_key, auto_increment = false, column_type = "Text")]
     pub id: String,
     #[sea_orm(column_type = "Text", unique)]
-    pub recipe_id: String,
+    pub recipe_version_id: String,
     #[sea_orm(column_type = "Text")]
     pub name: String,
     pub grain_temp_c: f64,
     pub tun_temp_c: Option<f64>,
     pub sparge_temp_c: Option<f64>,
     pub ph: Option<f64>,
-    pub tun_weight_kg: Option<f64>,
-    pub tun_specific_heat: Option<f64>,
-    pub equip_adjust: Option<i32>,
     #[sea_orm(column_type = "Text", nullable)]
     pub notes: Option<String>,
     pub ratio_l_per_kg: Option<f64>,
+    pub tun_weight_kg: Option<f64>,
+    pub tun_specific_heat: Option<f64>,
+    pub equip_adjust: Option<i32>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
 pub enum Relation {
-    #[sea_orm(has_many = "super::mash_steps::Entity")]
-    MashSteps,
+    #[sea_orm(has_many = "super::recipe_version_mash_steps::Entity")]
+    RecipeVersionMashSteps,
     #[sea_orm(
-        belongs_to = "super::recipes::Entity",
-        from = "Column::RecipeId",
-        to = "super::recipes::Column::Id",
+        belongs_to = "super::recipe_versions::Entity",
+        from = "Column::RecipeVersionId",
+        to = "super::recipe_versions::Column::Id",
         on_update = "NoAction",
         on_delete = "Cascade"
     )]
-    Recipes,
+    RecipeVersions,
 }
 
-impl Related<super::mash_steps::Entity> for Entity {
+impl Related<super::recipe_version_mash_steps::Entity> for Entity {
     fn to() -> RelationDef {
-        Relation::MashSteps.def()
+        Relation::RecipeVersionMashSteps.def()
     }
 }
 
-impl Related<super::recipes::Entity> for Entity {
+impl Related<super::recipe_versions::Entity> for Entity {
     fn to() -> RelationDef {
-        Relation::Recipes.def()
+        Relation::RecipeVersions.def()
     }
 }
 

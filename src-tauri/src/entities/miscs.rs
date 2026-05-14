@@ -15,9 +15,9 @@ pub struct Model {
     #[sea_orm(column_type = "Text")]
     pub r#use: String,
     pub time_min: f64,
-    #[sea_orm(column_type = "Text")]
+    #[sea_orm(column_type = "Text", nullable)]
     pub notes: Option<String>,
-    #[sea_orm(column_type = "Text")]
+    #[sea_orm(column_type = "Text", nullable)]
     pub use_for: Option<String>,
     pub amount_is_weight: Option<i32>,
 }
@@ -26,11 +26,19 @@ pub struct Model {
 pub enum Relation {
     #[sea_orm(has_many = "super::recipe_addition_miscs::Entity")]
     RecipeAdditionMiscs,
+    #[sea_orm(has_many = "super::recipe_version_miscs::Entity")]
+    RecipeVersionMiscs,
 }
 
 impl Related<super::recipe_addition_miscs::Entity> for Entity {
     fn to() -> RelationDef {
         Relation::RecipeAdditionMiscs.def()
+    }
+}
+
+impl Related<super::recipe_version_miscs::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::RecipeVersionMiscs.def()
     }
 }
 

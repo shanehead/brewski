@@ -2,6 +2,8 @@
 
 pub mod prelude;
 
+pub mod batch_gravity_readings;
+pub mod batches;
 pub mod equipment_profiles;
 pub mod fermentables;
 pub mod hops;
@@ -13,6 +15,15 @@ pub mod recipe_addition_hops;
 pub mod recipe_addition_miscs;
 pub mod recipe_addition_waters;
 pub mod recipe_addition_yeasts;
+pub mod recipe_version_fermentables;
+pub mod recipe_version_hops;
+pub mod recipe_version_mash;
+pub mod recipe_version_mash_steps;
+pub mod recipe_version_miscs;
+pub mod recipe_version_water_adjustments;
+pub mod recipe_version_waters;
+pub mod recipe_version_yeasts;
+pub mod recipe_versions;
 pub mod recipe_water_adjustments;
 pub mod recipes;
 pub mod settings;

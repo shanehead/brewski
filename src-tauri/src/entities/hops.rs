@@ -14,15 +14,15 @@ pub struct Model {
     pub beta_pct: Option<f64>,
     #[sea_orm(column_type = "Text")]
     pub form: String,
-    #[sea_orm(column_type = "Text")]
+    #[sea_orm(column_type = "Text", nullable)]
     pub r#type: Option<String>,
-    #[sea_orm(column_type = "Text")]
+    #[sea_orm(column_type = "Text", nullable)]
     pub origin: Option<String>,
-    #[sea_orm(column_type = "Text")]
+    #[sea_orm(column_type = "Text", nullable)]
     pub year: Option<String>,
-    #[sea_orm(column_type = "Text")]
+    #[sea_orm(column_type = "Text", nullable)]
     pub notes: Option<String>,
-    #[sea_orm(column_type = "Text")]
+    #[sea_orm(column_type = "Text", nullable)]
     pub substitutes: Option<String>,
     pub hsi_pct: Option<f64>,
     pub humulene_pct: Option<f64>,
@@ -35,11 +35,19 @@ pub struct Model {
 pub enum Relation {
     #[sea_orm(has_many = "super::recipe_addition_hops::Entity")]
     RecipeAdditionHops,
+    #[sea_orm(has_many = "super::recipe_version_hops::Entity")]
+    RecipeVersionHops,
 }
 
 impl Related<super::recipe_addition_hops::Entity> for Entity {
     fn to() -> RelationDef {
         Relation::RecipeAdditionHops.def()
+    }
+}
+
+impl Related<super::recipe_version_hops::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::RecipeVersionHops.def()
     }
 }
 

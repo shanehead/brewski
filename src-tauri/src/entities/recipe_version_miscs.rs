@@ -4,54 +4,55 @@ use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, PartialEq, DeriveEntityModel, Serialize, Deserialize)]
-#[sea_orm(table_name = "recipe_addition_fermentables")]
+#[sea_orm(table_name = "recipe_version_miscs")]
 pub struct Model {
     #[sea_orm(primary_key, auto_increment = false, column_type = "Text")]
     pub id: String,
     #[sea_orm(column_type = "Text")]
-    pub recipe_id: String,
+    pub recipe_version_id: String,
     #[sea_orm(column_type = "Text", nullable)]
-    pub fermentable_id: Option<String>,
+    pub misc_id: Option<String>,
     #[sea_orm(column_type = "Text")]
     pub name: String,
     #[sea_orm(column_type = "Text")]
     pub r#type: String,
-    pub yield_pct: f64,
-    pub color_lovibond: f64,
-    pub amount_kg: f64,
-    pub add_after_boil: Option<i32>,
+    #[sea_orm(column_type = "Text")]
+    pub r#use: String,
+    pub amount: f64,
+    pub amount_is_weight: Option<i32>,
+    pub time_min: f64,
     pub addition_order: i32,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
 pub enum Relation {
     #[sea_orm(
-        belongs_to = "super::fermentables::Entity",
-        from = "Column::FermentableId",
-        to = "super::fermentables::Column::Id",
+        belongs_to = "super::miscs::Entity",
+        from = "Column::MiscId",
+        to = "super::miscs::Column::Id",
         on_update = "NoAction",
         on_delete = "NoAction"
     )]
-    Fermentables,
+    Miscs,
     #[sea_orm(
-        belongs_to = "super::recipes::Entity",
-        from = "Column::RecipeId",
-        to = "super::recipes::Column::Id",
+        belongs_to = "super::recipe_versions::Entity",
+        from = "Column::RecipeVersionId",
+        to = "super::recipe_versions::Column::Id",
         on_update = "NoAction",
         on_delete = "Cascade"
     )]
-    Recipes,
+    RecipeVersions,
 }
 
-impl Related<super::fermentables::Entity> for Entity {
+impl Related<super::miscs::Entity> for Entity {
     fn to() -> RelationDef {
-        Relation::Fermentables.def()
+        Relation::Miscs.def()
     }
 }
 
-impl Related<super::recipes::Entity> for Entity {
+impl Related<super::recipe_versions::Entity> for Entity {
     fn to() -> RelationDef {
-        Relation::Recipes.def()
+        Relation::RecipeVersions.def()
     }
 }
 

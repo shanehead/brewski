@@ -17,7 +17,7 @@ pub struct Model {
     pub sodium_ppm: f64,
     pub magnesium_ppm: f64,
     pub ph: Option<f64>,
-    #[sea_orm(column_type = "Text")]
+    #[sea_orm(column_type = "Text", nullable)]
     pub notes: Option<String>,
 }
 
@@ -25,11 +25,19 @@ pub struct Model {
 pub enum Relation {
     #[sea_orm(has_many = "super::recipe_addition_waters::Entity")]
     RecipeAdditionWaters,
+    #[sea_orm(has_many = "super::recipe_version_waters::Entity")]
+    RecipeVersionWaters,
 }
 
 impl Related<super::recipe_addition_waters::Entity> for Entity {
     fn to() -> RelationDef {
         Relation::RecipeAdditionWaters.def()
+    }
+}
+
+impl Related<super::recipe_version_waters::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::RecipeVersionWaters.def()
     }
 }
 

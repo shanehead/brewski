@@ -4,54 +4,55 @@ use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, PartialEq, DeriveEntityModel, Serialize, Deserialize)]
-#[sea_orm(table_name = "recipe_addition_fermentables")]
+#[sea_orm(table_name = "recipe_version_hops")]
 pub struct Model {
     #[sea_orm(primary_key, auto_increment = false, column_type = "Text")]
     pub id: String,
     #[sea_orm(column_type = "Text")]
-    pub recipe_id: String,
+    pub recipe_version_id: String,
     #[sea_orm(column_type = "Text", nullable)]
-    pub fermentable_id: Option<String>,
+    pub hop_id: Option<String>,
     #[sea_orm(column_type = "Text")]
     pub name: String,
+    pub alpha_pct: f64,
     #[sea_orm(column_type = "Text")]
-    pub r#type: String,
-    pub yield_pct: f64,
-    pub color_lovibond: f64,
+    pub form: String,
     pub amount_kg: f64,
-    pub add_after_boil: Option<i32>,
+    #[sea_orm(column_type = "Text")]
+    pub r#use: String,
+    pub time_min: f64,
     pub addition_order: i32,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
 pub enum Relation {
     #[sea_orm(
-        belongs_to = "super::fermentables::Entity",
-        from = "Column::FermentableId",
-        to = "super::fermentables::Column::Id",
+        belongs_to = "super::hops::Entity",
+        from = "Column::HopId",
+        to = "super::hops::Column::Id",
         on_update = "NoAction",
         on_delete = "NoAction"
     )]
-    Fermentables,
+    Hops,
     #[sea_orm(
-        belongs_to = "super::recipes::Entity",
-        from = "Column::RecipeId",
-        to = "super::recipes::Column::Id",
+        belongs_to = "super::recipe_versions::Entity",
+        from = "Column::RecipeVersionId",
+        to = "super::recipe_versions::Column::Id",
         on_update = "NoAction",
         on_delete = "Cascade"
     )]
-    Recipes,
+    RecipeVersions,
 }
 
-impl Related<super::fermentables::Entity> for Entity {
+impl Related<super::hops::Entity> for Entity {
     fn to() -> RelationDef {
-        Relation::Fermentables.def()
+        Relation::Hops.def()
     }
 }
 
-impl Related<super::recipes::Entity> for Entity {
+impl Related<super::recipe_versions::Entity> for Entity {
     fn to() -> RelationDef {
-        Relation::Recipes.def()
+        Relation::RecipeVersions.def()
     }
 }
 

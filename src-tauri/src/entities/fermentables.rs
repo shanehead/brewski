@@ -14,11 +14,11 @@ pub struct Model {
     pub r#type: String,
     pub yield_pct: f64,
     pub color_lovibond: f64,
-    #[sea_orm(column_type = "Text")]
+    #[sea_orm(column_type = "Text", nullable)]
     pub origin: Option<String>,
-    #[sea_orm(column_type = "Text")]
+    #[sea_orm(column_type = "Text", nullable)]
     pub supplier: Option<String>,
-    #[sea_orm(column_type = "Text")]
+    #[sea_orm(column_type = "Text", nullable)]
     pub notes: Option<String>,
     pub add_after_boil: Option<i32>,
     pub coarse_fine_diff_pct: Option<f64>,
@@ -34,11 +34,19 @@ pub struct Model {
 pub enum Relation {
     #[sea_orm(has_many = "super::recipe_addition_fermentables::Entity")]
     RecipeAdditionFermentables,
+    #[sea_orm(has_many = "super::recipe_version_fermentables::Entity")]
+    RecipeVersionFermentables,
 }
 
 impl Related<super::recipe_addition_fermentables::Entity> for Entity {
     fn to() -> RelationDef {
         Relation::RecipeAdditionFermentables.def()
+    }
+}
+
+impl Related<super::recipe_version_fermentables::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::RecipeVersionFermentables.def()
     }
 }
 
