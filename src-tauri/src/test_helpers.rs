@@ -1,11 +1,14 @@
-use crate::migration::Migrator;
-use sea_orm::{Database, DatabaseConnection};
-use sea_orm_migration::MigratorTrait;
+use sea_orm::DatabaseConnection;
+use sea_orm::SqlxSqliteConnector;
+use sqlx::SqlitePool;
 
 pub async fn setup_test_db() -> DatabaseConnection {
-    let db = Database::connect("sqlite::memory:")
+    let pool = SqlitePool::connect("sqlite::memory:")
         .await
         .expect("in-memory DB failed");
-    Migrator::up(&db, None).await.expect("migration failed");
-    db
+    sqlx::migrate!("./migrations")
+        .run(&pool)
+        .await
+        .expect("migration failed");
+    SqlxSqliteConnector::from_sqlx_sqlite_pool(pool)
 }
