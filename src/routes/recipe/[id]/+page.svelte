@@ -30,8 +30,8 @@
     { key: "mash", label: "Mash", icon: "mash" },
     { key: "water", label: "Water", icon: "water" },
     { key: "fermentation", label: "Fermentation", icon: "fermentation" },
-    { key: "notes", label: "Notes", icon: "notes" },
     { key: "batches", label: "Batches", icon: "batches" },
+    { key: "notes", label: "Notes", icon: "notes" },
   ] as const;
 
   async function loadRecipeById(id: string) {
