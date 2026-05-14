@@ -161,6 +161,10 @@ paths:
     $ref: ./paths/commands/list_recipe_versions.yaml
   /commands/get_recipe_version:
     $ref: ./paths/commands/get_recipe_version.yaml
+  /commands/save_recipe_version:
+    $ref: ./paths/commands/save_recipe_version.yaml
+  /commands/branch_from_version:
+    $ref: ./paths/commands/branch_from_version.yaml
 components:
   schemas:
     RecipeSummary:
@@ -243,6 +247,8 @@ components:
       $ref: ./components/schemas/UpdateEquipmentProfileInput.yaml
     RecipeVersionSummary:
       $ref: ./components/schemas/RecipeVersionSummary.yaml
+    SaveRecipeVersionInput:
+      $ref: ./components/schemas/SaveRecipeVersionInput.yaml
     GravityReading:
       $ref: ./components/schemas/GravityReading.yaml
     BatchSummary:

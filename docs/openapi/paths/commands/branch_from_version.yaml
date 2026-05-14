@@ -1,0 +1,23 @@
+post:
+  operationId: branchFromVersion
+  summary: Restore a past version's data to the live recipe and set it as the branch parent
+  tags: [Batches]
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - recipe_id
+            - version_id
+          properties:
+            recipe_id:
+              type: string
+            version_id:
+              type: string
+  responses:
+    "200":
+      description: Success (no body)
+    "500":
+      $ref: "../../components/responses/Error.yaml"

@@ -351,6 +351,7 @@ impl TryFrom<entities::recipe_versions::Model> for RecipeVersionSummary {
             recipe_id: m.recipe_id,
             version_number: m.version_number as i64,
             name: m.name,
+            parent_version_id: m.parent_version_id,
             created_at: m.created_at as i64,
         })
     }

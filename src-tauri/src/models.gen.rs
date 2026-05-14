@@ -2901,6 +2901,12 @@ impl RecipeSummary {
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
+#[doc = "    \"parent_version_id\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
 #[doc = "    \"recipe_id\": {"]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
@@ -2917,6 +2923,8 @@ pub struct RecipeVersionSummary {
     pub id: ::std::string::String,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub name: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub parent_version_id: ::std::option::Option<::std::string::String>,
     pub recipe_id: ::std::string::String,
     pub version_number: i64,
 }
@@ -3160,6 +3168,38 @@ impl ::std::convert::TryFrom<::std::string::String> for RecipeWaterAdjustmentTar
         value: ::std::string::String,
     ) -> ::std::result::Result<Self, self::error::ConversionError> {
         value.parse()
+    }
+}
+#[doc = "`SaveRecipeVersionInput`"]
+#[doc = r""]
+#[doc = r" <details><summary>JSON schema</summary>"]
+#[doc = r""]
+#[doc = r" ```json"]
+#[doc = "{"]
+#[doc = "  \"type\": \"object\","]
+#[doc = "  \"required\": ["]
+#[doc = "    \"name\","]
+#[doc = "    \"recipe_id\""]
+#[doc = "  ],"]
+#[doc = "  \"properties\": {"]
+#[doc = "    \"name\": {"]
+#[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
+#[doc = "    \"recipe_id\": {"]
+#[doc = "      \"type\": \"string\""]
+#[doc = "    }"]
+#[doc = "  }"]
+#[doc = "}"]
+#[doc = r" ```"]
+#[doc = r" </details>"]
+#[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+pub struct SaveRecipeVersionInput {
+    pub name: ::std::string::String,
+    pub recipe_id: ::std::string::String,
+}
+impl SaveRecipeVersionInput {
+    pub fn builder() -> builder::SaveRecipeVersionInput {
+        Default::default()
     }
 }
 #[doc = "`Style`"]
@@ -9997,6 +10037,10 @@ pub mod builder {
             ::std::option::Option<::std::string::String>,
             ::std::string::String,
         >,
+        parent_version_id: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
         recipe_id: ::std::result::Result<::std::string::String, ::std::string::String>,
         version_number: ::std::result::Result<i64, ::std::string::String>,
     }
@@ -10006,6 +10050,7 @@ pub mod builder {
                 created_at: Err("no value supplied for created_at".to_string()),
                 id: Err("no value supplied for id".to_string()),
                 name: Ok(Default::default()),
+                parent_version_id: Ok(Default::default()),
                 recipe_id: Err("no value supplied for recipe_id".to_string()),
                 version_number: Err("no value supplied for version_number".to_string()),
             }
@@ -10042,6 +10087,16 @@ pub mod builder {
                 .map_err(|e| format!("error converting supplied value for name: {e}"));
             self
         }
+        pub fn parent_version_id<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.parent_version_id = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for parent_version_id: {e}"));
+            self
+        }
         pub fn recipe_id<T>(mut self, value: T) -> Self
         where
             T: ::std::convert::TryInto<::std::string::String>,
@@ -10072,6 +10127,7 @@ pub mod builder {
                 created_at: value.created_at?,
                 id: value.id?,
                 name: value.name?,
+                parent_version_id: value.parent_version_id?,
                 recipe_id: value.recipe_id?,
                 version_number: value.version_number?,
             })
@@ -10083,6 +10139,7 @@ pub mod builder {
                 created_at: Ok(value.created_at),
                 id: Ok(value.id),
                 name: Ok(value.name),
+                parent_version_id: Ok(value.parent_version_id),
                 recipe_id: Ok(value.recipe_id),
                 version_number: Ok(value.version_number),
             }
@@ -10182,6 +10239,60 @@ pub mod builder {
                 id: Ok(value.id),
                 recipe_id: Ok(value.recipe_id),
                 target: Ok(value.target),
+            }
+        }
+    }
+    #[derive(Clone, Debug)]
+    pub struct SaveRecipeVersionInput {
+        name: ::std::result::Result<::std::string::String, ::std::string::String>,
+        recipe_id: ::std::result::Result<::std::string::String, ::std::string::String>,
+    }
+    impl ::std::default::Default for SaveRecipeVersionInput {
+        fn default() -> Self {
+            Self {
+                name: Err("no value supplied for name".to_string()),
+                recipe_id: Err("no value supplied for recipe_id".to_string()),
+            }
+        }
+    }
+    impl SaveRecipeVersionInput {
+        pub fn name<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::string::String>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.name = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for name: {e}"));
+            self
+        }
+        pub fn recipe_id<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::string::String>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.recipe_id = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for recipe_id: {e}"));
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<SaveRecipeVersionInput> for super::SaveRecipeVersionInput {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: SaveRecipeVersionInput,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self {
+                name: value.name?,
+                recipe_id: value.recipe_id?,
+            })
+        }
+    }
+    impl ::std::convert::From<super::SaveRecipeVersionInput> for SaveRecipeVersionInput {
+        fn from(value: super::SaveRecipeVersionInput) -> Self {
+            Self {
+                name: Ok(value.name),
+                recipe_id: Ok(value.recipe_id),
             }
         }
     }

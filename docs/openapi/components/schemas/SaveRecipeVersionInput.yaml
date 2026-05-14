@@ -1,0 +1,9 @@
+type: object
+required:
+  - recipe_id
+  - name
+properties:
+  recipe_id:
+    type: string
+  name:
+    type: string

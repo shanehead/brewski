@@ -956,6 +956,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/commands/save_recipe_version": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Manually save a named version snapshot of a recipe */
+        post: operations["saveRecipeVersion"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/commands/branch_from_version": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Restore a past version's data to the live recipe and set it as the branch parent */
+        post: operations["branchFromVersion"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -1521,8 +1555,13 @@ export interface components {
             recipe_id: string;
             version_number: number;
             name?: string | null;
+            parent_version_id?: string | null;
             /** Format: int64 */
             created_at: number;
+        };
+        SaveRecipeVersionInput: {
+            recipe_id: string;
+            name: string;
         };
         GravityReading: {
             id: string;
@@ -3078,6 +3117,57 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["Recipe"];
                 };
+            };
+            500: components["responses"]["Error"];
+        };
+    };
+    saveRecipeVersion: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SaveRecipeVersionInput"];
+            };
+        };
+        responses: {
+            /** @description The newly created version summary */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RecipeVersionSummary"];
+                };
+            };
+            500: components["responses"]["Error"];
+        };
+    };
+    branchFromVersion: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    recipe_id: string;
+                    version_id: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Success (no body) */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
             500: components["responses"]["Error"];
         };

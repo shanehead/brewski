@@ -1,0 +1,19 @@
+post:
+  operationId: saveRecipeVersion
+  summary: Manually save a named version snapshot of a recipe
+  tags: [Batches]
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../../components/schemas/SaveRecipeVersionInput.yaml"
+  responses:
+    "200":
+      description: The newly created version summary
+      content:
+        application/json:
+          schema:
+            $ref: "../../components/schemas/RecipeVersionSummary.yaml"
+    "500":
+      $ref: "../../components/responses/Error.yaml"

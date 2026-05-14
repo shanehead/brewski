@@ -13,6 +13,8 @@ properties:
     type: integer
   name:
     type: [string, "null"]
+  parent_version_id:
+    type: [string, "null"]
   created_at:
     type: integer
     format: int64
