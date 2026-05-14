@@ -3,9 +3,12 @@ use sea_orm::{
 };
 
 use crate::entities::{
-    equipment_profiles, recipe_version_fermentables, recipe_version_hops, recipe_version_mash,
+    equipment_profiles, mash_steps, mashes, recipe_addition_fermentables, recipe_addition_hops,
+    recipe_addition_miscs, recipe_addition_waters, recipe_addition_yeasts,
+    recipe_version_fermentables, recipe_version_hops, recipe_version_mash,
     recipe_version_mash_steps, recipe_version_miscs, recipe_version_water_adjustments,
-    recipe_version_waters, recipe_version_yeasts, recipe_versions, recipes, styles,
+    recipe_version_waters, recipe_version_yeasts, recipe_versions, recipe_water_adjustments,
+    recipes, styles,
 };
 use crate::error::AppError;
 use crate::models::{
@@ -501,6 +504,233 @@ impl<'a> RecipeVersionRepository<'a> {
             .and_then(RecipeVersionSummary::try_from)
     }
 
+    pub async fn branch_from(&self, recipe_id: &str, version_id: &str) -> Result<(), AppError> {
+        let full = self.get_full(version_id).await?;
+
+        // Delete all existing additions on the live recipe
+        recipe_addition_fermentables::Entity::delete_many()
+            .filter(recipe_addition_fermentables::Column::RecipeId.eq(recipe_id))
+            .exec(self.db)
+            .await?;
+        recipe_addition_hops::Entity::delete_many()
+            .filter(recipe_addition_hops::Column::RecipeId.eq(recipe_id))
+            .exec(self.db)
+            .await?;
+        recipe_addition_yeasts::Entity::delete_many()
+            .filter(recipe_addition_yeasts::Column::RecipeId.eq(recipe_id))
+            .exec(self.db)
+            .await?;
+        recipe_addition_miscs::Entity::delete_many()
+            .filter(recipe_addition_miscs::Column::RecipeId.eq(recipe_id))
+            .exec(self.db)
+            .await?;
+        recipe_addition_waters::Entity::delete_many()
+            .filter(recipe_addition_waters::Column::RecipeId.eq(recipe_id))
+            .exec(self.db)
+            .await?;
+        recipe_water_adjustments::Entity::delete_many()
+            .filter(recipe_water_adjustments::Column::RecipeId.eq(recipe_id))
+            .exec(self.db)
+            .await?;
+
+        // Delete mash steps then mash
+        if let Some(mash_row) = mashes::Entity::find()
+            .filter(mashes::Column::RecipeId.eq(recipe_id))
+            .one(self.db)
+            .await?
+        {
+            mash_steps::Entity::delete_many()
+                .filter(mash_steps::Column::MashId.eq(&mash_row.id))
+                .exec(self.db)
+                .await?;
+            mashes::Entity::delete_by_id(&mash_row.id)
+                .exec(self.db)
+                .await?;
+        }
+
+        // Re-insert fermentables from version snapshot
+        for f in &full.fermentables {
+            recipe_addition_fermentables::ActiveModel {
+                id: Set(new_id()),
+                recipe_id: Set(recipe_id.to_string()),
+                fermentable_id: Set(f.fermentable_id.clone()),
+                name: Set(f.name.clone()),
+                r#type: Set(f.type_.clone()),
+                yield_pct: Set(f.yield_pct),
+                color_lovibond: Set(f.color_lovibond),
+                amount_kg: Set(f.amount_kg),
+                add_after_boil: Set(Some(f.add_after_boil as i32)),
+                addition_order: Set(f.addition_order as i32),
+            }
+            .insert(self.db)
+            .await?;
+        }
+
+        // Re-insert hops
+        for h in &full.hops {
+            recipe_addition_hops::ActiveModel {
+                id: Set(new_id()),
+                recipe_id: Set(recipe_id.to_string()),
+                hop_id: Set(h.hop_id.clone()),
+                name: Set(h.name.clone()),
+                alpha_pct: Set(h.alpha_pct),
+                form: Set(h.form.clone()),
+                amount_kg: Set(h.amount_kg),
+                r#use: Set(h.use_.clone()),
+                time_min: Set(h.time_min),
+                addition_order: Set(h.addition_order as i32),
+                hopstand_temp_c: Set(h.hopstand_temp_c),
+            }
+            .insert(self.db)
+            .await?;
+        }
+
+        // Re-insert yeasts
+        for y in &full.yeasts {
+            recipe_addition_yeasts::ActiveModel {
+                id: Set(new_id()),
+                recipe_id: Set(recipe_id.to_string()),
+                yeast_id: Set(y.yeast_id.clone()),
+                name: Set(y.name.clone()),
+                r#type: Set(y.type_.clone()),
+                form: Set(y.form.clone()),
+                laboratory: Set(y.laboratory.clone()),
+                product_id: Set(y.product_id.clone()),
+                attenuation_pct: Set(y.attenuation_pct),
+                amount: Set(y.amount),
+                amount_is_weight: Set(Some(y.amount_is_weight as i32)),
+                add_to_secondary: Set(Some(y.add_to_secondary as i32)),
+                times_cultured: Set(Some(y.times_cultured as i32)),
+            }
+            .insert(self.db)
+            .await?;
+        }
+
+        // Re-insert miscs
+        for m in &full.miscs {
+            recipe_addition_miscs::ActiveModel {
+                id: Set(new_id()),
+                recipe_id: Set(recipe_id.to_string()),
+                misc_id: Set(m.misc_id.clone()),
+                name: Set(m.name.clone()),
+                r#type: Set(m.type_.clone()),
+                r#use: Set(m.use_.clone()),
+                amount: Set(m.amount),
+                amount_is_weight: Set(Some(m.amount_is_weight as i32)),
+                time_min: Set(m.time_min),
+                addition_order: Set(m.addition_order as i32),
+            }
+            .insert(self.db)
+            .await?;
+        }
+
+        // Re-insert waters
+        for w in &full.waters {
+            recipe_addition_waters::ActiveModel {
+                id: Set(new_id()),
+                recipe_id: Set(recipe_id.to_string()),
+                water_id: Set(w.water_id.clone()),
+                name: Set(w.name.clone()),
+                amount_l: Set(w.amount_l),
+            }
+            .insert(self.db)
+            .await?;
+        }
+
+        // Re-insert water adjustments
+        for a in &full.water_adjustments {
+            recipe_water_adjustments::ActiveModel {
+                id: Set(new_id()),
+                recipe_id: Set(recipe_id.to_string()),
+                addition: Set(a.addition.to_string()),
+                target: Set(a.target.to_string()),
+                amount: Set(a.amount),
+            }
+            .insert(self.db)
+            .await?;
+        }
+
+        // Re-insert mash if present
+        if let Some(mash) = &full.mash {
+            let mash_id = new_id();
+            mashes::ActiveModel {
+                id: Set(mash_id.clone()),
+                recipe_id: Set(recipe_id.to_string()),
+                name: Set(mash.name.clone()),
+                grain_temp_c: Set(mash.grain_temp_c),
+                tun_temp_c: Set(mash.tun_temp_c),
+                sparge_temp_c: Set(mash.sparge_temp_c),
+                ph: Set(mash.ph),
+                notes: Set(mash.notes.clone()),
+                ratio_l_per_kg: Set(mash.ratio_l_per_kg),
+                tun_weight_kg: Set(mash.tun_weight_kg),
+                tun_specific_heat: Set(mash.tun_specific_heat),
+                equip_adjust: Set(Some(mash.equip_adjust as i32)),
+            }
+            .insert(self.db)
+            .await?;
+
+            for (i, step) in mash.steps.iter().enumerate() {
+                mash_steps::ActiveModel {
+                    id: Set(new_id()),
+                    mash_id: Set(mash_id.clone()),
+                    name: Set(step.name.clone()),
+                    r#type: Set(step.type_.clone()),
+                    infuse_amount_l: Set(step.infuse_amount_l),
+                    step_temp_c: Set(step.step_temp_c),
+                    step_time_min: Set(step.step_time_min as i32),
+                    ramp_time_min: Set(step.ramp_time_min.map(|v| v as i32)),
+                    end_temp_c: Set(step.end_temp_c),
+                    step_order: Set(i as i32),
+                }
+                .insert(self.db)
+                .await?;
+            }
+        }
+
+        // Update recipe scalars and set branch_parent_id
+        let now = now_secs() as i32;
+        recipes::ActiveModel {
+            id: Set(recipe_id.to_string()),
+            r#type: Set(full.type_.clone()),
+            brewer: Set(full.brewer.clone()),
+            asst_brewer: Set(full.asst_brewer.clone()),
+            batch_size_l: Set(full.batch_size_l),
+            boil_size_l: Set(full.boil_size_l),
+            boil_time_min: Set(full.boil_time_min),
+            efficiency_pct: Set(full.efficiency_pct),
+            style_id: Set(full.style_id.clone()),
+            equipment_profile_id: Set(full.equipment_profile_id.clone()),
+            notes: Set(full.notes.clone()),
+            og: Set(full.og),
+            fg: Set(full.fg),
+            fermentation_stages: Set(Some(full.fermentation_stages as i32)),
+            primary_age_days: Set(full.primary_age_days),
+            primary_temp_c: Set(full.primary_temp_c),
+            secondary_age_days: Set(full.secondary_age_days),
+            secondary_temp_c: Set(full.secondary_temp_c),
+            tertiary_age_days: Set(full.tertiary_age_days),
+            tertiary_temp_c: Set(full.tertiary_temp_c),
+            age_days: Set(full.age_days),
+            age_temp_c: Set(full.age_temp_c),
+            carbonation_vols: Set(full.carbonation_vols),
+            forced_carbonation: Set(Some(full.forced_carbonation as i32)),
+            priming_sugar_name: Set(full.priming_sugar_name.clone()),
+            carbonation_temp_c: Set(full.carbonation_temp_c),
+            priming_sugar_equiv: Set(full.priming_sugar_equiv),
+            keg_priming_factor: Set(full.keg_priming_factor),
+            mash_water_id: Set(full.mash_water_id.clone()),
+            sparge_water_id: Set(full.sparge_water_id.clone()),
+            branch_parent_id: Set(Some(version_id.to_string())),
+            updated_at: Set(now),
+            ..Default::default()
+        }
+        .update(self.db)
+        .await?;
+
+        Ok(())
+    }
+
     pub async fn save_named(
         &self,
         recipe_id: &str,
@@ -975,5 +1205,75 @@ mod tests {
         assert_eq!(full.fermentables.len(), 1);
         assert_eq!(full.fermentables[0].name, "Pale Malt");
         assert_eq!(full.fermentables[0].amount_kg, 4.5);
+    }
+
+    #[tokio::test]
+    async fn test_branch_from_restores_version_data() {
+        let db = setup_test_db().await;
+        let recipe_id = make_recipe(&db).await;
+
+        // Add a fermentable to create v1
+        FermentableRepository::new(&db)
+            .create(
+                &recipe_id,
+                CreateFermentableAdditionInput {
+                    fermentable_id: None,
+                    name: "Pale Malt".into(),
+                    type_: "grain".into(),
+                    yield_pct: 78.0,
+                    color_lovibond: 1.8,
+                    amount_kg: 4.5,
+                    add_after_boil: None,
+                },
+            )
+            .await
+            .unwrap();
+
+        let repo = RecipeVersionRepository::new(&db);
+        let v1 = repo.create_or_reuse(&recipe_id).await.unwrap();
+
+        // Now change the live recipe (delete the fermentable, add different one)
+        let fermentables = FermentableRepository::new(&db)
+            .list(&recipe_id)
+            .await
+            .unwrap();
+        FermentableRepository::new(&db)
+            .delete(&fermentables[0].id)
+            .await
+            .unwrap();
+        FermentableRepository::new(&db)
+            .create(
+                &recipe_id,
+                CreateFermentableAdditionInput {
+                    fermentable_id: None,
+                    name: "Munich".into(),
+                    type_: "grain".into(),
+                    yield_pct: 80.0,
+                    color_lovibond: 8.0,
+                    amount_kg: 2.0,
+                    add_after_boil: None,
+                },
+            )
+            .await
+            .unwrap();
+
+        // Branch back to v1
+        repo.branch_from(&recipe_id, &v1.id).await.unwrap();
+
+        // Live recipe should now have Pale Malt again
+        let live_fermentables = FermentableRepository::new(&db)
+            .list(&recipe_id)
+            .await
+            .unwrap();
+        assert_eq!(live_fermentables.len(), 1);
+        assert_eq!(live_fermentables[0].name, "Pale Malt");
+
+        // branch_parent_id should be set on the recipe
+        let recipe_row = crate::entities::recipes::Entity::find_by_id(&recipe_id)
+            .one(&db)
+            .await
+            .unwrap()
+            .unwrap();
+        assert_eq!(recipe_row.branch_parent_id.as_deref(), Some(v1.id.as_str()));
     }
 }
