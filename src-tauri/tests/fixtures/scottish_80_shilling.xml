@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RECIPES>
+  <RECIPE>
+    <NAME>Scottish 80 Shilling</NAME>
+    <BATCH_SIZE>23.0</BATCH_SIZE>
+    <BOIL_TIME>60</BOIL_TIME>
+    <EFFICIENCY>75</EFFICIENCY>
+    <EST_OG>1.0488</EST_OG>
+    <EST_FG>1.0132</EST_FG>
+    <IBU>12.6</IBU>
+    <EST_COLOR>10.67</EST_COLOR>
+    <FERMENTABLES>
+      <FERMENTABLE>
+        <NAME>Golden Promise</NAME>
+        <AMOUNT>4.5</AMOUNT>
+        <YIELD>0.82</YIELD>
+        <COLOR>3.0</COLOR>
+      </FERMENTABLE>
+      <FERMENTABLE>
+        <NAME>Crystal 80</NAME>
+        <AMOUNT>0.25</AMOUNT>
+        <YIELD>0.72</YIELD>
+        <COLOR>80.0</COLOR>
+      </FERMENTABLE>
+      <FERMENTABLE>
+        <NAME>Roasted Barley</NAME>
+        <AMOUNT>0.05</AMOUNT>
+        <YIELD>0.55</YIELD>
+        <COLOR>300.0</COLOR>
+      </FERMENTABLE>
+    </FERMENTABLES>
+    <HOPS>
+      <HOP>
+        <NAME>Fuggle</NAME>
+        <ALPHA>4.5</ALPHA>
+        <AMOUNT>0.030</AMOUNT>
+        <USE>Boil</USE>
+        <TIME>60</TIME>
+      </HOP>
+    </HOPS>
+    <YEASTS>
+      <YEAST>
+        <NAME>Scottish Ale</NAME>
+        <ATTENUATION>73</ATTENUATION>
+      </YEAST>
+    </YEASTS>
+  </RECIPE>
+</RECIPES>

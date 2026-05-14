@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RECIPES>
+  <RECIPE>
+    <NAME>Session IPA</NAME>
+    <BATCH_SIZE>23.0</BATCH_SIZE>
+    <BOIL_TIME>60</BOIL_TIME>
+    <EFFICIENCY>75</EFFICIENCY>
+    <EST_OG>1.0373</EST_OG>
+    <EST_FG>1.0086</EST_FG>
+    <IBU>34.4</IBU>
+    <EST_COLOR>2.99</EST_COLOR>
+    <FERMENTABLES>
+      <FERMENTABLE>
+        <NAME>Pale Malt</NAME>
+        <AMOUNT>3.5</AMOUNT>
+        <YIELD>0.78</YIELD>
+        <COLOR>2.0</COLOR>
+      </FERMENTABLE>
+      <FERMENTABLE>
+        <NAME>Wheat Malt</NAME>
+        <AMOUNT>0.3</AMOUNT>
+        <YIELD>0.82</YIELD>
+        <COLOR>2.0</COLOR>
+      </FERMENTABLE>
+    </FERMENTABLES>
+    <HOPS>
+      <HOP>
+        <NAME>Columbus</NAME>
+        <ALPHA>15.0</ALPHA>
+        <AMOUNT>0.020</AMOUNT>
+        <USE>Boil</USE>
+        <TIME>60</TIME>
+      </HOP>
+      <HOP>
+        <NAME>Cascade</NAME>
+        <ALPHA>5.5</ALPHA>
+        <AMOUNT>0.030</AMOUNT>
+        <USE>Boil</USE>
+        <TIME>5</TIME>
+      </HOP>
+    </HOPS>
+    <YEASTS>
+      <YEAST>
+        <NAME>US-05</NAME>
+        <ATTENUATION>77</ATTENUATION>
+      </YEAST>
+    </YEASTS>
+  </RECIPE>
+</RECIPES>

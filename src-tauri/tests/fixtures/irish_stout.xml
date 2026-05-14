@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RECIPES>
+  <RECIPE>
+    <NAME>Irish Dry Stout</NAME>
+    <BATCH_SIZE>23.0</BATCH_SIZE>
+    <BOIL_TIME>60</BOIL_TIME>
+    <EFFICIENCY>72</EFFICIENCY>
+    <EST_OG>1.0453</EST_OG>
+    <EST_FG>1.0131</EST_FG>
+    <IBU>43.3</IBU>
+    <EST_COLOR>22.5</EST_COLOR>
+    <FERMENTABLES>
+      <FERMENTABLE>
+        <NAME>Pale Malt</NAME>
+        <AMOUNT>4.2</AMOUNT>
+        <YIELD>0.78</YIELD>
+        <COLOR>2.0</COLOR>
+      </FERMENTABLE>
+      <FERMENTABLE>
+        <NAME>Flaked Barley</NAME>
+        <AMOUNT>0.35</AMOUNT>
+        <YIELD>0.70</YIELD>
+        <COLOR>1.5</COLOR>
+      </FERMENTABLE>
+      <FERMENTABLE>
+        <NAME>Roasted Barley</NAME>
+        <AMOUNT>0.45</AMOUNT>
+        <YIELD>0.55</YIELD>
+        <COLOR>300.0</COLOR>
+      </FERMENTABLE>
+    </FERMENTABLES>
+    <HOPS>
+      <HOP>
+        <NAME>Northern Brewer</NAME>
+        <ALPHA>9.0</ALPHA>
+        <AMOUNT>0.050</AMOUNT>
+        <USE>Boil</USE>
+        <TIME>60</TIME>
+      </HOP>
+    </HOPS>
+    <YEASTS>
+      <YEAST>
+        <NAME>Irish Ale</NAME>
+        <ATTENUATION>71</ATTENUATION>
+      </YEAST>
+    </YEASTS>
+  </RECIPE>
+</RECIPES>

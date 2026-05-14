@@ -465,4 +465,41 @@ mod tests {
         assert_within("IBU", stats.ibu, expected.ibu, IBU_TOL);
         assert_within("SRM", stats.srm, expected.srm, SRM_TOL);
     }
+
+    macro_rules! fixture_test {
+        ($fn:ident, $file:literal) => {
+            #[test]
+            fn $fn() {
+                let (recipe, expected) = load_fixture($file);
+                let stats = calculate_stats(&recipe);
+                assert_within("OG", stats.og, expected.og, OG_TOL);
+                assert_within("FG", stats.fg, expected.fg, FG_TOL);
+                assert_within("IBU", stats.ibu, expected.ibu, IBU_TOL);
+                assert_within("SRM", stats.srm, expected.srm, SRM_TOL);
+            }
+        };
+    }
+
+    fixture_test!(test_stats_american_pale_ale, "american_pale_ale.xml");
+    fixture_test!(test_stats_english_bitter, "english_bitter.xml");
+    fixture_test!(test_stats_oatmeal_stout, "oatmeal_stout.xml");
+    fixture_test!(test_stats_german_hefeweizen, "german_hefeweizen.xml");
+    fixture_test!(test_stats_belgian_tripel, "belgian_tripel.xml");
+    fixture_test!(test_stats_american_amber_ale, "american_amber_ale.xml");
+    fixture_test!(test_stats_irish_stout, "irish_stout.xml");
+    fixture_test!(test_stats_american_barleywine, "american_barleywine.xml");
+    fixture_test!(test_stats_session_ipa, "session_ipa.xml");
+    fixture_test!(test_stats_english_porter, "english_porter.xml");
+    fixture_test!(test_stats_czech_pilsner, "czech_pilsner.xml");
+    fixture_test!(test_stats_scottish_80_shilling, "scottish_80_shilling.xml");
+    fixture_test!(test_stats_saison, "saison.xml");
+    fixture_test!(test_stats_dunkelweizen, "dunkelweizen.xml");
+    fixture_test!(test_stats_neipa, "neipa.xml");
+    fixture_test!(test_stats_marzen_oktoberfest, "marzen_oktoberfest.xml");
+    fixture_test!(test_stats_belgian_witbier, "belgian_witbier.xml");
+    fixture_test!(test_stats_double_ipa, "double_ipa.xml");
+    fixture_test!(test_stats_american_brown_ale, "american_brown_ale.xml");
+    fixture_test!(test_stats_imperial_stout, "imperial_stout.xml");
+    fixture_test!(test_stats_american_wheat, "american_wheat.xml");
+    fixture_test!(test_stats_blonde_ale, "blonde_ale.xml");
 }

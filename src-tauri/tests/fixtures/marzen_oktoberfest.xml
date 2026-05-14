@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RECIPES>
+  <RECIPE>
+    <NAME>Marzen Oktoberfest</NAME>
+    <BATCH_SIZE>23.0</BATCH_SIZE>
+    <BOIL_TIME>60</BOIL_TIME>
+    <EFFICIENCY>75</EFFICIENCY>
+    <EST_OG>1.0581</EST_OG>
+    <EST_FG>1.0157</EST_FG>
+    <IBU>14.2</IBU>
+    <EST_COLOR>7.57</EST_COLOR>
+    <FERMENTABLES>
+      <FERMENTABLE>
+        <NAME>Munich Malt</NAME>
+        <AMOUNT>2.5</AMOUNT>
+        <YIELD>0.75</YIELD>
+        <COLOR>8.0</COLOR>
+      </FERMENTABLE>
+      <FERMENTABLE>
+        <NAME>Vienna Malt</NAME>
+        <AMOUNT>2.0</AMOUNT>
+        <YIELD>0.77</YIELD>
+        <COLOR>3.5</COLOR>
+      </FERMENTABLE>
+      <FERMENTABLE>
+        <NAME>Pilsner Malt</NAME>
+        <AMOUNT>1.5</AMOUNT>
+        <YIELD>0.82</YIELD>
+        <COLOR>1.6</COLOR>
+      </FERMENTABLE>
+    </FERMENTABLES>
+    <HOPS>
+      <HOP>
+        <NAME>Hallertau</NAME>
+        <ALPHA>4.0</ALPHA>
+        <AMOUNT>0.030</AMOUNT>
+        <USE>Boil</USE>
+        <TIME>60</TIME>
+      </HOP>
+      <HOP>
+        <NAME>Hallertau</NAME>
+        <ALPHA>4.0</ALPHA>
+        <AMOUNT>0.015</AMOUNT>
+        <USE>Boil</USE>
+        <TIME>30</TIME>
+      </HOP>
+    </HOPS>
+    <YEASTS>
+      <YEAST>
+        <NAME>Munich Lager</NAME>
+        <ATTENUATION>73</ATTENUATION>
+      </YEAST>
+    </YEASTS>
+  </RECIPE>
+</RECIPES>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RECIPES>
+  <RECIPE>
+    <NAME>American Brown Ale</NAME>
+    <BATCH_SIZE>23.0</BATCH_SIZE>
+    <BOIL_TIME>60</BOIL_TIME>
+    <EFFICIENCY>72</EFFICIENCY>
+    <EST_OG>1.0439</EST_OG>
+    <EST_FG>1.0105</EST_FG>
+    <IBU>22.7</IBU>
+    <EST_COLOR>15.93</EST_COLOR>
+    <FERMENTABLES>
+      <FERMENTABLE>
+        <NAME>Pale Malt</NAME>
+        <AMOUNT>4.0</AMOUNT>
+        <YIELD>0.78</YIELD>
+        <COLOR>2.0</COLOR>
+      </FERMENTABLE>
+      <FERMENTABLE>
+        <NAME>Brown Malt</NAME>
+        <AMOUNT>0.4</AMOUNT>
+        <YIELD>0.65</YIELD>
+        <COLOR>65.0</COLOR>
+      </FERMENTABLE>
+      <FERMENTABLE>
+        <NAME>Crystal 60</NAME>
+        <AMOUNT>0.3</AMOUNT>
+        <YIELD>0.72</YIELD>
+        <COLOR>60.0</COLOR>
+      </FERMENTABLE>
+      <FERMENTABLE>
+        <NAME>Chocolate Malt</NAME>
+        <AMOUNT>0.1</AMOUNT>
+        <YIELD>0.60</YIELD>
+        <COLOR>350.0</COLOR>
+      </FERMENTABLE>
+    </FERMENTABLES>
+    <HOPS>
+      <HOP>
+        <NAME>Willamette</NAME>
+        <ALPHA>5.5</ALPHA>
+        <AMOUNT>0.035</AMOUNT>
+        <USE>Boil</USE>
+        <TIME>60</TIME>
+      </HOP>
+      <HOP>
+        <NAME>Cascade</NAME>
+        <ALPHA>5.5</ALPHA>
+        <AMOUNT>0.015</AMOUNT>
+        <USE>Boil</USE>
+        <TIME>15</TIME>
+      </HOP>
+    </HOPS>
+    <YEASTS>
+      <YEAST>
+        <NAME>American Ale</NAME>
+        <ATTENUATION>76</ATTENUATION>
+      </YEAST>
+    </YEASTS>
+  </RECIPE>
+</RECIPES>
