@@ -786,6 +786,159 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/commands/create_batch": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create a new batch from a recipe (auto-snapshots version) */
+        post: operations["createBatch"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/commands/list_batches": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** List all batches sorted by brew date descending */
+        post: operations["listBatches"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/commands/list_batches_for_recipe": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** List batches for a specific recipe */
+        post: operations["listBatchesForRecipe"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/commands/get_batch": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Get a batch with its gravity readings */
+        post: operations["getBatch"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/commands/update_batch": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Update batch fields */
+        post: operations["updateBatch"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/commands/delete_batch": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Delete a batch and its gravity readings */
+        post: operations["deleteBatch"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/commands/add_gravity_reading": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Add a gravity reading to a batch */
+        post: operations["addGravityReading"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/commands/delete_gravity_reading": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Delete a gravity reading */
+        post: operations["deleteGravityReading"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/commands/list_recipe_versions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** List version history for a recipe */
+        post: operations["listRecipeVersions"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -1345,6 +1498,88 @@ export interface components {
             trub_chiller_loss_l?: number;
             fermenter_loss_l?: number;
             efficiency_pct?: number;
+        };
+        RecipeVersionSummary: {
+            id: string;
+            recipe_id: string;
+            version_number: number;
+            name?: string | null;
+            created_at: number;
+        };
+        GravityReading: {
+            id: string;
+            batch_id: string;
+            recorded_at: number;
+            gravity: number;
+            temp_c?: number | null;
+            notes?: string | null;
+        };
+        BatchSummary: {
+            id: string;
+            recipe_id: string;
+            recipe_name: string;
+            recipe_version_id: string;
+            name?: string | null;
+            /** @description planned | brewing | fermenting | packaged | complete */
+            status: string;
+            brew_date?: number | null;
+            actual_og?: number | null;
+            actual_fg?: number | null;
+            rating?: number | null;
+            created_at: number;
+            updated_at: number;
+        };
+        Batch: {
+            id: string;
+            recipe_id: string;
+            recipe_name: string;
+            recipe_version_id: string;
+            name?: string | null;
+            /** @description planned | brewing | fermenting | packaged | complete */
+            status: string;
+            brew_date?: number | null;
+            fermenter_date?: number | null;
+            packaging_date?: number | null;
+            actual_pre_boil_volume_l?: number | null;
+            actual_post_boil_volume_l?: number | null;
+            actual_batch_size_l?: number | null;
+            actual_pre_boil_gravity?: number | null;
+            actual_og?: number | null;
+            actual_fg?: number | null;
+            brew_day_notes?: string | null;
+            fermentation_notes?: string | null;
+            tasting_notes?: string | null;
+            rating?: number | null;
+            gravity_readings: components["schemas"]["GravityReading"][];
+            created_at: number;
+            updated_at: number;
+        };
+        CreateBatchInput: {
+            recipe_id: string;
+            name?: string | null;
+        };
+        UpdateBatchInput: {
+            name?: string | null;
+            status?: string | null;
+            brew_date?: number | null;
+            fermenter_date?: number | null;
+            packaging_date?: number | null;
+            actual_pre_boil_volume_l?: number | null;
+            actual_post_boil_volume_l?: number | null;
+            actual_batch_size_l?: number | null;
+            actual_pre_boil_gravity?: number | null;
+            actual_og?: number | null;
+            actual_fg?: number | null;
+            brew_day_notes?: string | null;
+            fermentation_notes?: string | null;
+            tasting_notes?: string | null;
+            rating?: number | null;
+        };
+        CreateGravityReadingInput: {
+            recorded_at: number;
+            gravity: number;
+            temp_c?: number | null;
+            notes?: string | null;
         };
     };
     responses: {
@@ -2553,6 +2788,241 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["RecipeSummary"][];
+                };
+            };
+            500: components["responses"]["Error"];
+        };
+    };
+    createBatch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    input: components["schemas"]["CreateBatchInput"];
+                };
+            };
+        };
+        responses: {
+            /** @description Created batch */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Batch"];
+                };
+            };
+            500: components["responses"]["Error"];
+        };
+    };
+    listBatches: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description All batches */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BatchSummary"][];
+                };
+            };
+            500: components["responses"]["Error"];
+        };
+    };
+    listBatchesForRecipe: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    recipeId: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Batches for this recipe */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BatchSummary"][];
+                };
+            };
+            500: components["responses"]["Error"];
+        };
+    };
+    getBatch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    id: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Batch */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Batch"];
+                };
+            };
+            500: components["responses"]["Error"];
+        };
+    };
+    updateBatch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    id: string;
+                    input: components["schemas"]["UpdateBatchInput"];
+                };
+            };
+        };
+        responses: {
+            /** @description Updated batch */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Batch"];
+                };
+            };
+            500: components["responses"]["Error"];
+        };
+    };
+    deleteBatch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    id: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Deleted */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            500: components["responses"]["Error"];
+        };
+    };
+    addGravityReading: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    batchId: string;
+                    input: components["schemas"]["CreateGravityReadingInput"];
+                };
+            };
+        };
+        responses: {
+            /** @description Created reading */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GravityReading"];
+                };
+            };
+            500: components["responses"]["Error"];
+        };
+    };
+    deleteGravityReading: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    id: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Deleted */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            500: components["responses"]["Error"];
+        };
+    };
+    listRecipeVersions: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    recipeId: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Version list */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RecipeVersionSummary"][];
                 };
             };
             500: components["responses"]["Error"];

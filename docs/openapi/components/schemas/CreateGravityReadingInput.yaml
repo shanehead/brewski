@@ -1,0 +1,13 @@
+type: object
+required:
+  - recorded_at
+  - gravity
+properties:
+  recorded_at:
+    type: integer
+  gravity:
+    type: number
+  temp_c:
+    type: [number, "null"]
+  notes:
+    type: [string, "null"]

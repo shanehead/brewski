@@ -1,0 +1,23 @@
+post:
+  operationId: getBatch
+  summary: Get a batch with its gravity readings
+  tags: [Batches]
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required: [id]
+          properties:
+            id:
+              type: string
+  responses:
+    "200":
+      description: Batch
+      content:
+        application/json:
+          schema:
+            $ref: "../../components/schemas/Batch.yaml"
+    "500":
+      $ref: "../../components/responses/Error.yaml"

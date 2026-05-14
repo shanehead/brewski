@@ -46,6 +46,8 @@ tags:
     description: User-level application settings
   - name: Import/Export
     description: BeerXML import and export
+  - name: Batches
+    description: Brew session tracking
 paths:
   /commands/list_recipes:
     $ref: ./paths/commands/list_recipes.yaml
@@ -139,6 +141,24 @@ paths:
     $ref: ./paths/commands/get_recipe_beerxml.yaml
   /commands/create_recipes_from_beerxml:
     $ref: ./paths/commands/create_recipes_from_beerxml.yaml
+  /commands/create_batch:
+    $ref: ./paths/commands/create_batch.yaml
+  /commands/list_batches:
+    $ref: ./paths/commands/list_batches.yaml
+  /commands/list_batches_for_recipe:
+    $ref: ./paths/commands/list_batches_for_recipe.yaml
+  /commands/get_batch:
+    $ref: ./paths/commands/get_batch.yaml
+  /commands/update_batch:
+    $ref: ./paths/commands/update_batch.yaml
+  /commands/delete_batch:
+    $ref: ./paths/commands/delete_batch.yaml
+  /commands/add_gravity_reading:
+    $ref: ./paths/commands/add_gravity_reading.yaml
+  /commands/delete_gravity_reading:
+    $ref: ./paths/commands/delete_gravity_reading.yaml
+  /commands/list_recipe_versions:
+    $ref: ./paths/commands/list_recipe_versions.yaml
 components:
   schemas:
     RecipeSummary:
@@ -219,6 +239,20 @@ components:
       $ref: ./components/schemas/CreateEquipmentProfileInput.yaml
     UpdateEquipmentProfileInput:
       $ref: ./components/schemas/UpdateEquipmentProfileInput.yaml
+    RecipeVersionSummary:
+      $ref: ./components/schemas/RecipeVersionSummary.yaml
+    GravityReading:
+      $ref: ./components/schemas/GravityReading.yaml
+    BatchSummary:
+      $ref: ./components/schemas/BatchSummary.yaml
+    Batch:
+      $ref: ./components/schemas/Batch.yaml
+    CreateBatchInput:
+      $ref: ./components/schemas/CreateBatchInput.yaml
+    UpdateBatchInput:
+      $ref: ./components/schemas/UpdateBatchInput.yaml
+    CreateGravityReadingInput:
+      $ref: ./components/schemas/CreateGravityReadingInput.yaml
   responses:
     Error:
       $ref: ./components/responses/Error.yaml

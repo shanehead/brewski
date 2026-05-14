@@ -1,0 +1,19 @@
+post:
+  operationId: deleteGravityReading
+  summary: Delete a gravity reading
+  tags: [Batches]
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required: [id]
+          properties:
+            id:
+              type: string
+  responses:
+    "200":
+      description: Deleted
+    "500":
+      $ref: "../../components/responses/Error.yaml"

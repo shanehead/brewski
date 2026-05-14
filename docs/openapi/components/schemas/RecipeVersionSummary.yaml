@@ -1,0 +1,17 @@
+type: object
+required:
+  - id
+  - recipe_id
+  - version_number
+  - created_at
+properties:
+  id:
+    type: string
+  recipe_id:
+    type: string
+  version_number:
+    type: integer
+  name:
+    type: [string, "null"]
+  created_at:
+    type: integer

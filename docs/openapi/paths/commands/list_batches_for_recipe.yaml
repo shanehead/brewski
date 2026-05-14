@@ -1,0 +1,25 @@
+post:
+  operationId: listBatchesForRecipe
+  summary: List batches for a specific recipe
+  tags: [Batches]
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required: [recipeId]
+          properties:
+            recipeId:
+              type: string
+  responses:
+    "200":
+      description: Batches for this recipe
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "../../components/schemas/BatchSummary.yaml"
+    "500":
+      $ref: "../../components/responses/Error.yaml"

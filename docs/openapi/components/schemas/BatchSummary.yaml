@@ -1,0 +1,35 @@
+type: object
+required:
+  - id
+  - recipe_id
+  - recipe_name
+  - recipe_version_id
+  - status
+  - created_at
+  - updated_at
+properties:
+  id:
+    type: string
+  recipe_id:
+    type: string
+  recipe_name:
+    type: string
+  recipe_version_id:
+    type: string
+  name:
+    type: [string, "null"]
+  status:
+    type: string
+    description: "planned | brewing | fermenting | packaged | complete"
+  brew_date:
+    type: [integer, "null"]
+  actual_og:
+    type: [number, "null"]
+  actual_fg:
+    type: [number, "null"]
+  rating:
+    type: [integer, "null"]
+  created_at:
+    type: integer
+  updated_at:
+    type: integer

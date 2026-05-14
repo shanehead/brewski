@@ -1,0 +1,58 @@
+type: object
+required:
+  - id
+  - recipe_id
+  - recipe_name
+  - recipe_version_id
+  - status
+  - gravity_readings
+  - created_at
+  - updated_at
+properties:
+  id:
+    type: string
+  recipe_id:
+    type: string
+  recipe_name:
+    type: string
+  recipe_version_id:
+    type: string
+  name:
+    type: [string, "null"]
+  status:
+    type: string
+    description: "planned | brewing | fermenting | packaged | complete"
+  brew_date:
+    type: [integer, "null"]
+  fermenter_date:
+    type: [integer, "null"]
+  packaging_date:
+    type: [integer, "null"]
+  actual_pre_boil_volume_l:
+    type: [number, "null"]
+  actual_post_boil_volume_l:
+    type: [number, "null"]
+  actual_batch_size_l:
+    type: [number, "null"]
+  actual_pre_boil_gravity:
+    type: [number, "null"]
+  actual_og:
+    type: [number, "null"]
+  actual_fg:
+    type: [number, "null"]
+  brew_day_notes:
+    type: [string, "null"]
+  fermentation_notes:
+    type: [string, "null"]
+  tasting_notes:
+    type: [string, "null"]
+  rating:
+    type: [integer, "null"]
+  gravity_readings:
+    type: array
+    items:
+      $ref: "./GravityReading.yaml"
+  created_at:
+    type: integer
+  updated_at:
+    type: integer

@@ -1,0 +1,25 @@
+post:
+  operationId: listRecipeVersions
+  summary: List version history for a recipe
+  tags: [Batches]
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required: [recipeId]
+          properties:
+            recipeId:
+              type: string
+  responses:
+    "200":
+      description: Version list
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "../../components/schemas/RecipeVersionSummary.yaml"
+    "500":
+      $ref: "../../components/responses/Error.yaml"

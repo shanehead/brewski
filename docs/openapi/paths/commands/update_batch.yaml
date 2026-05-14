@@ -1,0 +1,25 @@
+post:
+  operationId: updateBatch
+  summary: Update batch fields
+  tags: [Batches]
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required: [id, input]
+          properties:
+            id:
+              type: string
+            input:
+              $ref: "../../components/schemas/UpdateBatchInput.yaml"
+  responses:
+    "200":
+      description: Updated batch
+      content:
+        application/json:
+          schema:
+            $ref: "../../components/schemas/Batch.yaml"
+    "500":
+      $ref: "../../components/responses/Error.yaml"

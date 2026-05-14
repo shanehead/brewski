@@ -1,0 +1,25 @@
+post:
+  operationId: addGravityReading
+  summary: Add a gravity reading to a batch
+  tags: [Batches]
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required: [batchId, input]
+          properties:
+            batchId:
+              type: string
+            input:
+              $ref: "../../components/schemas/CreateGravityReadingInput.yaml"
+  responses:
+    "200":
+      description: Created reading
+      content:
+        application/json:
+          schema:
+            $ref: "../../components/schemas/GravityReading.yaml"
+    "500":
+      $ref: "../../components/responses/Error.yaml"

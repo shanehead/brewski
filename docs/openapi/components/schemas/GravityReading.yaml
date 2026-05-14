@@ -1,0 +1,19 @@
+type: object
+required:
+  - id
+  - batch_id
+  - recorded_at
+  - gravity
+properties:
+  id:
+    type: string
+  batch_id:
+    type: string
+  recorded_at:
+    type: integer
+  gravity:
+    type: number
+  temp_c:
+    type: [number, "null"]
+  notes:
+    type: [string, "null"]
