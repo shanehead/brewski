@@ -1,14 +1,16 @@
 post:
   operationId: createBatch
   summary: Create a new batch from a recipe (auto-snapshots version)
-  tags: [Batches]
+  tags:
+    - Batches
   requestBody:
     required: true
     content:
       application/json:
         schema:
           type: object
-          required: [input]
+          required:
+            - input
           properties:
             input:
               $ref: "../../components/schemas/CreateBatchInput.yaml"

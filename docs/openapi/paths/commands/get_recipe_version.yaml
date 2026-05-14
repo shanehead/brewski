@@ -1,14 +1,16 @@
 post:
   operationId: getRecipeVersion
   summary: Get a full recipe version snapshot with all ingredients and mash steps
-  tags: [Batches]
+  tags:
+    - Batches
   requestBody:
     required: true
     content:
       application/json:
         schema:
           type: object
-          required: [id]
+          required:
+            - id
           properties:
             id:
               type: string

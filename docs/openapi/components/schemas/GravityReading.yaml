@@ -11,6 +11,7 @@ properties:
     type: string
   recorded_at:
     type: integer
+    format: int64
   gravity:
     type: number
   temp_c:

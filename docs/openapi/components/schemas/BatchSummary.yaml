@@ -23,6 +23,7 @@ properties:
     description: "planned | brewing | fermenting | packaged | complete"
   brew_date:
     type: [integer, "null"]
+    format: int64
   actual_og:
     type: [number, "null"]
   actual_fg:
@@ -31,5 +32,7 @@ properties:
     type: [integer, "null"]
   created_at:
     type: integer
+    format: int64
   updated_at:
     type: integer
+    format: int64

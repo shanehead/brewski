@@ -24,10 +24,13 @@ properties:
     description: "planned | brewing | fermenting | packaged | complete"
   brew_date:
     type: [integer, "null"]
+    format: int64
   fermenter_date:
     type: [integer, "null"]
+    format: int64
   packaging_date:
     type: [integer, "null"]
+    format: int64
   actual_pre_boil_volume_l:
     type: [number, "null"]
   actual_post_boil_volume_l:
@@ -54,5 +57,7 @@ properties:
       $ref: "./GravityReading.yaml"
   created_at:
     type: integer
+    format: int64
   updated_at:
     type: integer
+    format: int64

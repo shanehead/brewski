@@ -1,14 +1,16 @@
 post:
   operationId: deleteGravityReading
   summary: Delete a gravity reading
-  tags: [Batches]
+  tags:
+    - Batches
   requestBody:
     required: true
     content:
       application/json:
         schema:
           type: object
-          required: [id]
+          required:
+            - id
           properties:
             id:
               type: string

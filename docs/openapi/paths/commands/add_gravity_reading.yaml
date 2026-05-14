@@ -1,14 +1,17 @@
 post:
   operationId: addGravityReading
   summary: Add a gravity reading to a batch
-  tags: [Batches]
+  tags:
+    - Batches
   requestBody:
     required: true
     content:
       application/json:
         schema:
           type: object
-          required: [batchId, input]
+          required:
+            - batchId
+            - input
           properties:
             batchId:
               type: string

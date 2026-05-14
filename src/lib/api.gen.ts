@@ -1521,11 +1521,13 @@ export interface components {
             recipe_id: string;
             version_number: number;
             name?: string | null;
+            /** Format: int64 */
             created_at: number;
         };
         GravityReading: {
             id: string;
             batch_id: string;
+            /** Format: int64 */
             recorded_at: number;
             gravity: number;
             temp_c?: number | null;
@@ -1539,11 +1541,14 @@ export interface components {
             name?: string | null;
             /** @description planned | brewing | fermenting | packaged | complete */
             status: string;
+            /** Format: int64 */
             brew_date?: number | null;
             actual_og?: number | null;
             actual_fg?: number | null;
             rating?: number | null;
+            /** Format: int64 */
             created_at: number;
+            /** Format: int64 */
             updated_at: number;
         };
         Batch: {
@@ -1554,8 +1559,11 @@ export interface components {
             name?: string | null;
             /** @description planned | brewing | fermenting | packaged | complete */
             status: string;
+            /** Format: int64 */
             brew_date?: number | null;
+            /** Format: int64 */
             fermenter_date?: number | null;
+            /** Format: int64 */
             packaging_date?: number | null;
             actual_pre_boil_volume_l?: number | null;
             actual_post_boil_volume_l?: number | null;
@@ -1568,7 +1576,9 @@ export interface components {
             tasting_notes?: string | null;
             rating?: number | null;
             gravity_readings: components["schemas"]["GravityReading"][];
+            /** Format: int64 */
             created_at: number;
+            /** Format: int64 */
             updated_at: number;
         };
         CreateBatchInput: {
