@@ -60,7 +60,7 @@ impl<'a> BatchRepository<'a> {
     pub async fn list(&self) -> Result<Vec<BatchSummary>, AppError> {
         let rows = batches::Entity::find()
             .find_also_related(recipes::Entity)
-            .order_by_asc(batches::Column::BrewDate)
+            .order_by_desc(batches::Column::BrewDate)
             .all(self.db)
             .await?;
 
@@ -73,7 +73,7 @@ impl<'a> BatchRepository<'a> {
         let rows = batches::Entity::find()
             .filter(batches::Column::RecipeId.eq(recipe_id))
             .find_also_related(recipes::Entity)
-            .order_by_asc(batches::Column::BrewDate)
+            .order_by_desc(batches::Column::BrewDate)
             .all(self.db)
             .await?;
 
