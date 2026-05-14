@@ -159,6 +159,8 @@ paths:
     $ref: ./paths/commands/delete_gravity_reading.yaml
   /commands/list_recipe_versions:
     $ref: ./paths/commands/list_recipe_versions.yaml
+  /commands/get_recipe_version:
+    $ref: ./paths/commands/get_recipe_version.yaml
 components:
   schemas:
     RecipeSummary:

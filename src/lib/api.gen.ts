@@ -939,6 +939,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/commands/get_recipe_version": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Get a full recipe version snapshot with all ingredients and mash steps */
+        post: operations["getRecipeVersion"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -3023,6 +3040,33 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["RecipeVersionSummary"][];
+                };
+            };
+            500: components["responses"]["Error"];
+        };
+    };
+    getRecipeVersion: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    id: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Full recipe version snapshot */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Recipe"];
                 };
             };
             500: components["responses"]["Error"];
