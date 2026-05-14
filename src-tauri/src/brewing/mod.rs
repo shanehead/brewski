@@ -413,6 +413,11 @@ mod tests {
 
     // --- fixture-based stats tests ---
 
+    const OG_TOL: f64 = 0.003;
+    const FG_TOL: f64 = 0.005;
+    const IBU_TOL: f64 = 5.0;
+    const SRM_TOL: f64 = 1.5;
+
     fn assert_within(label: &str, actual: f64, expected: f64, tol: f64) {
         assert!(
             (actual - expected).abs() <= tol,
@@ -425,39 +430,39 @@ mod tests {
     fn test_stats_punk_ipa_2007() {
         let (recipe, expected) = load_fixture("punk_ipa_2007.xml");
         let stats = calculate_stats(&recipe);
-        assert_within("OG", stats.og, expected.og, 0.003);
-        assert_within("FG", stats.fg, expected.fg, 0.005);
-        assert_within("IBU", stats.ibu, expected.ibu, 5.0);
-        assert_within("SRM", stats.srm, expected.srm, 1.5);
+        assert_within("OG", stats.og, expected.og, OG_TOL);
+        assert_within("FG", stats.fg, expected.fg, FG_TOL);
+        assert_within("IBU", stats.ibu, expected.ibu, IBU_TOL);
+        assert_within("SRM", stats.srm, expected.srm, SRM_TOL);
     }
 
     #[test]
     fn test_stats_alpha_dog() {
         let (recipe, expected) = load_fixture("alpha_dog.xml");
         let stats = calculate_stats(&recipe);
-        assert_within("OG", stats.og, expected.og, 0.003);
-        assert_within("FG", stats.fg, expected.fg, 0.005);
-        assert_within("IBU", stats.ibu, expected.ibu, 5.0);
-        assert_within("SRM", stats.srm, expected.srm, 1.5);
+        assert_within("OG", stats.og, expected.og, OG_TOL);
+        assert_within("FG", stats.fg, expected.fg, FG_TOL);
+        assert_within("IBU", stats.ibu, expected.ibu, IBU_TOL);
+        assert_within("SRM", stats.srm, expected.srm, SRM_TOL);
     }
 
     #[test]
     fn test_stats_jet_black_heart() {
         let (recipe, expected) = load_fixture("jet_black_heart.xml");
         let stats = calculate_stats(&recipe);
-        assert_within("OG", stats.og, expected.og, 0.003);
-        assert_within("FG", stats.fg, expected.fg, 0.005);
-        assert_within("IBU", stats.ibu, expected.ibu, 5.0);
-        assert_within("SRM", stats.srm, expected.srm, 1.5);
+        assert_within("OG", stats.og, expected.og, OG_TOL);
+        assert_within("FG", stats.fg, expected.fg, FG_TOL);
+        assert_within("IBU", stats.ibu, expected.ibu, IBU_TOL);
+        assert_within("SRM", stats.srm, expected.srm, SRM_TOL);
     }
 
     #[test]
     fn test_stats_nectaron_hazy_dipa() {
         let (recipe, expected) = load_fixture("nectaron_hazy_dipa.xml");
         let stats = calculate_stats(&recipe);
-        assert_within("OG", stats.og, expected.og, 0.003);
-        assert_within("FG", stats.fg, expected.fg, 0.005);
-        assert_within("IBU", stats.ibu, expected.ibu, 5.0);
-        assert_within("SRM", stats.srm, expected.srm, 1.5);
+        assert_within("OG", stats.og, expected.og, OG_TOL);
+        assert_within("FG", stats.fg, expected.fg, FG_TOL);
+        assert_within("IBU", stats.ibu, expected.ibu, IBU_TOL);
+        assert_within("SRM", stats.srm, expected.srm, SRM_TOL);
     }
 }
