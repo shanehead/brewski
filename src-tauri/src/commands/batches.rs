@@ -77,3 +77,32 @@ pub async fn list_recipe_versions(
         .list_for_recipe(&recipe_id)
         .await
 }
+
+#[tauri::command]
+pub async fn get_recipe_version(
+    state: State<'_, AppState>,
+    id: String,
+) -> Result<Recipe, AppError> {
+    RecipeVersionRepository::new(&state.db).get_full(&id).await
+}
+
+#[tauri::command]
+pub async fn save_recipe_version(
+    state: State<'_, AppState>,
+    input: SaveRecipeVersionInput,
+) -> Result<RecipeVersionSummary, AppError> {
+    RecipeVersionRepository::new(&state.db)
+        .save_named(&input.recipe_id, &input.name)
+        .await
+}
+
+#[tauri::command]
+pub async fn branch_from_version(
+    state: State<'_, AppState>,
+    recipe_id: String,
+    version_id: String,
+) -> Result<(), AppError> {
+    RecipeVersionRepository::new(&state.db)
+        .branch_from(&recipe_id, &version_id)
+        .await
+}
