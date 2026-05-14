@@ -9,6 +9,7 @@
   onMount(() => { loadSettings(); });
 
   const isRecipes = $derived($page.url.pathname === "/" || $page.url.pathname.startsWith("/recipe"));
+  const isBatches = $derived($page.url.pathname.startsWith("/batches"));
   const isTools = $derived($page.url.pathname.startsWith("/tools"));
 </script>
 
@@ -26,6 +27,16 @@
         <line x1="16" y1="13" x2="8" y2="13"/>
         <line x1="16" y1="17" x2="8" y2="17"/>
         <polyline points="10 9 9 9 8 9"/>
+      </svg>
+    </a>
+
+    <!-- Batches icon -->
+    <a href="/batches"
+       class="w-9 h-9 flex items-center justify-center rounded transition-colors"
+       aria-label="Batches"
+       style={isBatches ? "background: var(--color-accent); color: #fff;" : "color: var(--color-text-secondary);"}>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2v-4M9 21H5a2 2 0 0 1-2-2v-4m0 0h18"/>
       </svg>
     </a>
 

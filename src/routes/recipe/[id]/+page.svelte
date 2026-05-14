@@ -14,22 +14,24 @@
   import WaterTab from "$lib/components/tabs/WaterTab.svelte";
   import FermentationTab from "$lib/components/tabs/FermentationTab.svelte";
   import NotesTab from "$lib/components/tabs/NotesTab.svelte";
+  import BatchesTab from "$lib/components/tabs/BatchesTab.svelte";
   import type { BrewingIconName } from "$lib/icons";
 
   let { data }: { data: PageData } = $props();
 
   let recipe = $state<Recipe | null>(null);
   let stats = $state<RecipeStats | null>(null);
-  let activeTab = $state<"overview" | "ingredients" | "mash" | "water" | "fermentation" | "notes">("overview");
+  let activeTab = $state<"overview" | "ingredients" | "mash" | "water" | "fermentation" | "notes" | "batches">("overview");
   let saving = $state(false);
 
-  const TABS: { key: "overview" | "ingredients" | "mash" | "water" | "fermentation" | "notes"; label: string; icon: BrewingIconName }[] = [
+  const TABS: { key: "overview" | "ingredients" | "mash" | "water" | "fermentation" | "notes" | "batches"; label: string; icon: BrewingIconName }[] = [
     { key: "overview", label: "Overview", icon: "overview" },
     { key: "ingredients", label: "Ingredients", icon: "ingredients" },
     { key: "mash", label: "Mash", icon: "mash" },
     { key: "water", label: "Water", icon: "water" },
     { key: "fermentation", label: "Fermentation", icon: "fermentation" },
     { key: "notes", label: "Notes", icon: "notes" },
+    { key: "batches", label: "Batches", icon: "batches" },
   ] as const;
 
   async function loadRecipeById(id: string) {
@@ -125,6 +127,8 @@
           <FermentationTab {recipe} onchange={refreshRecipe} />
         {:else if activeTab === "notes"}
           <NotesTab {recipe} onchange={refreshRecipe} />
+        {:else if activeTab === "batches"}
+          <BatchesTab recipeId={recipe.id} />
         {/if}
       </div>
       <StatsSidebar {stats} />
