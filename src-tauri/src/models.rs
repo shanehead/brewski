@@ -328,3 +328,30 @@ impl Default for CreateRecipeInput {
         }
     }
 }
+
+impl TryFrom<entities::batch_gravity_readings::Model> for GravityReading {
+    type Error = AppError;
+    fn try_from(m: entities::batch_gravity_readings::Model) -> Result<Self, AppError> {
+        Ok(Self {
+            id: m.id,
+            batch_id: m.batch_id,
+            recorded_at: m.recorded_at as i64,
+            gravity: m.gravity,
+            temp_c: m.temp_c,
+            notes: m.notes,
+        })
+    }
+}
+
+impl TryFrom<entities::recipe_versions::Model> for RecipeVersionSummary {
+    type Error = AppError;
+    fn try_from(m: entities::recipe_versions::Model) -> Result<Self, AppError> {
+        Ok(Self {
+            id: m.id,
+            recipe_id: m.recipe_id,
+            version_number: m.version_number as i64,
+            name: m.name,
+            created_at: m.created_at as i64,
+        })
+    }
+}
