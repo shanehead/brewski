@@ -133,9 +133,7 @@
   async function confirmDelete() {
     if (!deleteCandidate || !recipe) return;
     showDeleteModal = false;
-    console.log('confirmDelete invoking ipc for', deleteCandidate.id);
     const result = await ipc(deleteRecipeVersion(deleteCandidate.id));
-    console.log('deleteRecipeVersion result', result);
     deleteCandidate = null;
     await refreshRecipe();
   }

@@ -36,7 +36,6 @@
 
   function handleDeleteClick(version: RecipeVersionSummary, e: MouseEvent) {
     e.stopPropagation();
-    console.log('VersionHistoryPanel: delete clicked', version.id);
     if (typeof ondelete === 'function') {
       try {
         ondelete(version);
