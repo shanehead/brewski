@@ -40,6 +40,13 @@ export type RecipeWaterAdjustment = components["schemas"]["RecipeWaterAdjustment
 export type CreateWaterAdjustmentInput = components["schemas"]["CreateWaterAdjustmentInput"];
 export type UpdateWaterAdjustmentInput = components["schemas"]["UpdateWaterAdjustmentInput"];
 export type UpdateMashInput = components["schemas"]["UpdateMashInput"];
+export type BatchSummary = components["schemas"]["BatchSummary"];
+export type Batch = components["schemas"]["Batch"];
+export type GravityReading = components["schemas"]["GravityReading"];
+export type RecipeVersionSummary = components["schemas"]["RecipeVersionSummary"];
+export type CreateBatchInput = components["schemas"]["CreateBatchInput"];
+export type UpdateBatchInput = components["schemas"]["UpdateBatchInput"];
+export type CreateGravityReadingInput = components["schemas"]["CreateGravityReadingInput"];
 
 export type SugarType = "table_sugar" | "corn_sugar" | "dry_malt_extract";
 export type GravityUnit = "sg" | "plato" | "brix";
@@ -217,3 +224,27 @@ export const updateWaterAdjustment = (id: string, input: UpdateWaterAdjustmentIn
   invoke<RecipeWaterAdjustment>("update_water_adjustment", { id, input });
 export const deleteWaterAdjustment = (id: string) =>
   invoke<void>("delete_water_adjustment", { id });
+
+// --- Batches ---
+export const createBatch = (input: CreateBatchInput) =>
+  invoke<Batch>("create_batch", { input });
+export const listBatches = () =>
+  invoke<BatchSummary[]>("list_batches");
+export const listBatchesForRecipe = (recipeId: string) =>
+  invoke<BatchSummary[]>("list_batches_for_recipe", { recipeId });
+export const getBatch = (id: string) =>
+  invoke<Batch>("get_batch", { id });
+export const updateBatch = (id: string, input: UpdateBatchInput) =>
+  invoke<Batch>("update_batch", { id, input });
+export const deleteBatch = (id: string) =>
+  invoke<void>("delete_batch", { id });
+
+// --- Gravity Readings ---
+export const addGravityReading = (batchId: string, input: CreateGravityReadingInput) =>
+  invoke<GravityReading>("add_gravity_reading", { batchId, input });
+export const deleteGravityReading = (id: string) =>
+  invoke<void>("delete_gravity_reading", { id });
+
+// --- Recipe Versions ---
+export const listRecipeVersions = (recipeId: string) =>
+  invoke<RecipeVersionSummary[]>("list_recipe_versions", { recipeId });
