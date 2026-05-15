@@ -4,9 +4,12 @@
   import { listEquipmentProfiles, createEquipmentProfile, deleteEquipmentProfile } from "$lib/api";
   import type { EquipmentProfile } from "$lib/api";
   import { ipc } from "$lib/stores/error";
+  import ConfirmModal from "$lib/components/ConfirmModal.svelte";
 
   let profiles = $state<EquipmentProfile[]>([]);
   let newProfileName = $state("");
+  let showDeleteModal = $state(false);
+  let deleteCandidate = $state<EquipmentProfile | null>(null);
 
   onMount(async () => {
     await ipc(loadSettings());
@@ -29,12 +32,34 @@
     newProfileName = "";
   }
 
-  async function handleDeleteProfile(id: string) {
-    if (!confirm("Delete this equipment profile?")) return;
-    await ipc(deleteEquipmentProfile(id));
+  async function handleDeleteProfile(profile: EquipmentProfile) {
+    deleteCandidate = profile;
+    showDeleteModal = true;
+  }
+
+  async function confirmDelete() {
+    if (!deleteCandidate) return;
+    showDeleteModal = false;
+    await ipc(deleteEquipmentProfile(deleteCandidate.id));
     profiles = await ipc(listEquipmentProfiles()) ?? profiles;
+    deleteCandidate = null;
+  }
+
+  function cancelDelete() {
+    showDeleteModal = false;
+    deleteCandidate = null;
   }
 </script>
+
+{#if showDeleteModal && deleteCandidate}
+  <ConfirmModal
+    message="Delete this equipment profile? This cannot be undone."
+    confirmLabel="Delete"
+    dangerous={true}
+    onconfirm={confirmDelete}
+    oncancel={cancelDelete}
+  />
+{/if}
 
 <div class="flex-1 overflow-y-auto p-6" style="background: var(--color-bg-base);">
   <h1 class="text-lg font-semibold mb-6" style="color: var(--color-text-primary);">Equipment</h1>
@@ -63,7 +88,7 @@
               {p.batch_size_l}L batch · {p.efficiency_pct}% efficiency
             </p>
           </div>
-          <button onclick={() => handleDeleteProfile(p.id)} class="text-xs px-2 py-1 rounded"
+          <button onclick={() => handleDeleteProfile(p)} class="text-xs px-2 py-1 rounded"
                   style="color: var(--color-text-secondary); background: var(--color-bg-elevated);">Delete</button>
         </div>
       {/each}
