@@ -241,6 +241,7 @@ onDestroy(() => {
           <div class="flex flex-col w-24">
             <label class="text-xs mb-1" style="color: var(--color-text-secondary);">Infuse ({volumeLabel(units)})</label>
             <input type="number" step="0.1"
+                   placeholder={"Infuse " + volumeLabel(units)}
                    value={stepInfuse != null ? (units === "imperial" ? lToGal(stepInfuse) : stepInfuse).toFixed(1) : ""}
                    oninput={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); stepInfuse = isNaN(v) ? null : (units === "imperial" ? galToL(v) : v); }}
                    class="h-9 px-2 rounded text-sm"
