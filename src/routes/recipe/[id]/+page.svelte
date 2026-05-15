@@ -13,7 +13,7 @@
     deleteRecipeVersion,
   } from "$lib/api";
   import type { Recipe, RecipeStats, RecipeVersionSummary } from "$lib/api";
-  import { ipc } from "$lib/stores/error";
+  import { ipc, lastError } from "$lib/stores/error";
   import RecipeList from "$lib/components/RecipeList.svelte";
   import StatsSidebar from "$lib/components/StatsSidebar.svelte";
   import BrewingIcon from "$lib/components/BrewingIcon.svelte";
@@ -25,6 +25,7 @@
   import NotesTab from "$lib/components/tabs/NotesTab.svelte";
   import BatchesTab from "$lib/components/tabs/BatchesTab.svelte";
   import VersionHistoryPanel from "$lib/components/VersionHistoryPanel.svelte";
+  import ConfirmModal from "$lib/components/ConfirmModal.svelte";
   import type { BrewingIconName } from "$lib/icons";
 
   let { data }: { data: PageData } = $props();
@@ -48,6 +49,10 @@
   // Delete confirmation modal state
   let showDeleteModal = $state(false);
   let deleteCandidate = $state<RecipeVersionSummary | null>(null);
+
+  // Branch confirmation modal state
+  let showBranchModal = $state(false);
+  let branchCandidate = $state<RecipeVersionSummary | null>(null);
 
   const TABS: { key: "overview" | "ingredients" | "mash" | "water" | "fermentation" | "notes" | "batches"; label: string; icon: BrewingIconName }[] = [
     { key: "overview", label: "Overview", icon: "overview" },
@@ -114,14 +119,23 @@
     viewingRecipe = await ipc(getRecipeVersion(version.id)) ?? null;
   }
 
-  async function handleBranchFromVersion(version: RecipeVersionSummary) {
-    if (!recipe) return;
-    const confirmed = confirm(
-      `This will replace your current recipe with v${version.version_number}'s data. Continue?`
-    );
-    if (!confirmed) return;
-    await ipc(branchFromVersion(recipe.id, version.id));
+  function handleBranchFromVersion(version: RecipeVersionSummary) {
+    branchCandidate = version;
+    showBranchModal = true;
+  }
+
+  async function confirmBranch() {
+    if (!branchCandidate || !recipe) return;
+    showBranchModal = false;
+    const candidate = branchCandidate;
+    branchCandidate = null;
+    await ipc(branchFromVersion(recipe.id, candidate.id));
     await refreshRecipe();
+  }
+
+  function cancelBranch() {
+    branchCandidate = null;
+    showBranchModal = false;
   }
 
   async function handleDeleteVersion(version: RecipeVersionSummary) {
@@ -133,9 +147,14 @@
   async function confirmDelete() {
     if (!deleteCandidate || !recipe) return;
     showDeleteModal = false;
-    const result = await ipc(deleteRecipeVersion(deleteCandidate.id));
+    const candidate = deleteCandidate;
     deleteCandidate = null;
-    await refreshRecipe();
+    try {
+      await deleteRecipeVersion(candidate.id);
+      await refreshRecipe();
+    } catch (e) {
+      lastError.set(String(e));
+    }
   }
 
   function cancelDelete() {
@@ -311,16 +330,21 @@
       {/if}
     </div>
     {#if showDeleteModal && deleteCandidate}
-      <div class="fixed inset-0 flex items-center justify-center" style="z-index: 1000;">
-        <div class="absolute inset-0" style="background: rgba(0,0,0,0.4);"></div>
-        <div class="bg-var p-4 rounded" style="background: var(--color-bg-elevated); border: 1px solid var(--color-border); z-index: 1001; min-width: 320px;">
-          <div class="text-sm mb-3" style="color: var(--color-text-primary);">Delete v{deleteCandidate.version_number}{deleteCandidate.name ? ` \"${deleteCandidate.name}\"` : ""}?</div>
-          <div class="flex justify-end gap-2">
-            <button onclick={cancelDelete} class="px-3 py-1 rounded" style="background: var(--color-bg-surface); color: var(--color-text-primary); border: 1px solid var(--color-border);">Cancel</button>
-            <button onclick={confirmDelete} class="px-3 py-1 rounded" style="background: var(--color-accent); color: #fff;">Delete</button>
-          </div>
-        </div>
-      </div>
+      <ConfirmModal
+        message="Delete v{deleteCandidate.version_number}{deleteCandidate.name ? ` \"${deleteCandidate.name}\"` : ''}? This cannot be undone."
+        confirmLabel="Delete"
+        dangerous={true}
+        onconfirm={confirmDelete}
+        oncancel={cancelDelete}
+      />
+    {/if}
+    {#if showBranchModal && branchCandidate}
+      <ConfirmModal
+        message="Replace your current recipe with v{branchCandidate.version_number}'s data? This cannot be undone."
+        confirmLabel="Branch from here"
+        onconfirm={confirmBranch}
+        oncancel={cancelBranch}
+      />
     {/if}
 
   </div>

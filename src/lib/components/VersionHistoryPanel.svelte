@@ -36,21 +36,13 @@
 
   function handleDeleteClick(version: RecipeVersionSummary, e: MouseEvent) {
     e.stopPropagation();
-    if (typeof ondelete === 'function') {
-      try {
-        ondelete(version);
-      } catch (err) {
-        console.warn('delete handler threw', err);
-      }
-    } else {
-      console.warn('ondelete handler not provided');
-    }
+    ondelete(version);
   }
 </script>
 
 <div
   class="flex flex-col h-full border-l overflow-hidden"
-  style="background: var(--color-bg-surface); border-color: var(--color-border); min-width: 220px; max-width: 260px; position: relative; z-index: 50; pointer-events: auto;"
+  style="background: var(--color-bg-surface); border-color: var(--color-border); min-width: 220px; max-width: 260px;"
 >
   <div
     class="flex items-center justify-between px-3 py-2 border-b flex-shrink-0"
@@ -107,7 +99,7 @@
         {#if viewingVersionId === version.id}
           <div class="mt-1 flex gap-1">
             <button
-              onclick={() => onbranch(version)}
+              onclick={(e) => { e.stopPropagation(); onbranch(version); }}
               class="text-xs px-2 py-0.5 rounded"
               style="background: var(--color-accent); color: #fff;"
             >
