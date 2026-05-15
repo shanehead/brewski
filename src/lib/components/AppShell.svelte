@@ -54,7 +54,7 @@
     <a href="/equipment" class="w-9 h-9 flex items-center justify-center rounded transition-colors"
        aria-label="Equipment"
        style={isEquipment ? "background: var(--color-accent); color: #fff;" : "color: var(--color-text-secondary);"}>
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M3 6h18"/>
         <path d="M4 6v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6"/>
         <path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2"/>
