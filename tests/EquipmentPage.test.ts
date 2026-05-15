@@ -1,5 +1,6 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { render } from "@testing-library/svelte";
+import { tick } from "svelte";
 import EquipmentPage from "../src/routes/equipment/+page.svelte";
 
 vi.mock("$lib/api", () => ({
@@ -23,21 +24,31 @@ vi.mock("$lib/stores/error", () => ({
 describe("EquipmentPage", () => {
   it("renders the page heading", async () => {
     const { getByText } = render(EquipmentPage);
-    expect(getByText("Equipment")).toBeTruthy();
+    expect(getByText("Equipment")).toBeInTheDocument();
   });
 
   it("renders the Default Profile label", async () => {
     const { getByText } = render(EquipmentPage);
-    expect(getByText("Default Profile")).toBeTruthy();
+    expect(getByText("Default Profile")).toBeInTheDocument();
   });
 
   it("renders the new profile name input", async () => {
     const { getByPlaceholderText } = render(EquipmentPage);
-    expect(getByPlaceholderText("New profile name")).toBeTruthy();
+    expect(getByPlaceholderText("New profile name")).toBeInTheDocument();
   });
 
   it("renders the Add button", async () => {
     const { getByText } = render(EquipmentPage);
-    expect(getByText("Add")).toBeTruthy();
+    expect(getByText("Add")).toBeInTheDocument();
+  });
+
+  it("renders loaded profile name and details after onMount", async () => {
+    const { getByText } = render(EquipmentPage);
+    // Wait for onMount to complete and state to update
+    await new Promise((r) => setTimeout(r, 10));
+    await tick();
+    await tick();
+    // Check that the profile details are rendered (not just in dropdown)
+    expect(getByText(/23L batch · 72% efficiency/)).toBeInTheDocument();
   });
 });
