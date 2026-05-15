@@ -11,6 +11,7 @@
   const isRecipes = $derived($page.url.pathname === "/" || $page.url.pathname.startsWith("/recipe"));
   const isBatches = $derived($page.url.pathname.startsWith("/batches"));
   const isTools = $derived($page.url.pathname.startsWith("/tools"));
+  const isEquipment = $derived($page.url.pathname.startsWith("/equipment"));
 </script>
 
 <div class="flex h-screen overflow-hidden" style="background: var(--color-bg-base); color: var(--color-text-primary);">
@@ -46,6 +47,18 @@
        style={isTools ? "background: var(--color-accent); color: #fff;" : "color: var(--color-text-secondary);"}>
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M14.7 6.3a4 4 0 0 0-4.7 4.7L3 18a2 2 0 0 0 2.8 2.8l7-7a4 4 0 0 0 4.7-4.7l-2.1 2.1-1.4-1.4z"/>
+      </svg>
+    </a>
+
+    <!-- Equipment icon -->
+    <a href="/equipment" class="w-9 h-9 flex items-center justify-center rounded transition-colors"
+       aria-label="Equipment"
+       style={isEquipment ? "background: var(--color-accent); color: #fff;" : "color: var(--color-text-secondary);"}>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M3 6h18"/>
+        <path d="M4 6v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6"/>
+        <path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2"/>
+        <path d="M10 11h4"/>
       </svg>
     </a>
 
