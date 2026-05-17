@@ -28,31 +28,13 @@ const DEFAULT_COOLING_SHRINKAGE_PCT: f64 = 4.0;
 const DEFAULT_AROMA_HOP_UTILIZATION_PCT: f64 = 23.0;
 
 pub fn calculate_stats(recipe: &Recipe) -> RecipeStats {
+    let equipment = recipe.equipment_profile.as_ref();
+
     let efficiency = recipe
         .efficiency_pct
-        .or_else(|| recipe.equipment_profile.as_ref().map(|e| e.efficiency_pct))
+        .or_else(|| equipment.map(|e| e.efficiency_pct))
         .unwrap_or(DEFAULT_EFFICIENCY_PCT);
 
-    let fermentable_inputs: Vec<(&f64, &f64, bool)> = recipe
-        .fermentables
-        .iter()
-        .map(|f| (&f.yield_pct, &f.amount_kg, f.add_after_boil))
-        .collect();
-
-    let og = og::calculate_og(&fermentable_inputs, recipe.batch_size_l, efficiency);
-
-    let fg = recipe
-        .yeasts
-        .iter()
-        .filter_map(|y| y.attenuation_pct)
-        .next()
-        .map(|attenuation| abv::calculate_fg(og, attenuation))
-        .unwrap_or_else(|| abv::calculate_fg(og, DEFAULT_ATTENUATION_PCT));
-
-    let abv_pct = abv::calculate_abv(og, fg);
-    let calories = abv::calculate_calories_per_355ml(og, fg);
-
-    let equipment = recipe.equipment_profile.as_ref();
     let evaporation_rate = equipment
         .map(|e| e.evap_rate_pct_hr)
         .unwrap_or(DEFAULT_EVAP_RATE_PCT_HR);
@@ -82,17 +64,54 @@ pub fn calculate_stats(recipe: &Recipe) -> RecipeStats {
         }
     });
     let whirlpool_time = equipment.and_then(|e| e.whirlpool_time_min).unwrap_or(0.0);
+    let batch_volume_target = equipment
+        .map(|e| e.batch_volume_target.as_str())
+        .unwrap_or("fermenter");
 
-    let (pre_boil_volume_l, post_boil_volume_l, _total_water_l) = volumes::calculate_boil_volumes(
-        recipe.batch_size_l,
-        recipe.boil_time_min,
-        evaporation_rate,
-        trub_chiller_loss,
-        fermenter_loss,
-        top_up_water,
-        mash_tun_loss,
-        hlt_deadspace,
-    );
+    // When batch_volume_target = "kettle", batch_size_l is the post-boil kettle volume.
+    // Fermenter volume is derived by subtracting losses from the kettle.
+    // When "fermenter" (default), batch_size_l is the fermenter target and volumes derive normally.
+    let (pre_boil_volume_l, post_boil_volume_l, fermenter_volume_l) = if batch_volume_target
+        == "kettle"
+    {
+        let post_boil = recipe.batch_size_l;
+        let boil_hours = recipe.boil_time_min / 60.0;
+        let evap_fraction = evaporation_rate / 100.0 * boil_hours;
+        let pre_boil = post_boil / (1.0 - evap_fraction) + mash_tun_loss;
+        let fermenter = (post_boil - trub_chiller_loss - fermenter_loss + top_up_water).max(0.0);
+        (pre_boil, post_boil, fermenter)
+    } else {
+        let (pre, post, _total) = volumes::calculate_boil_volumes(
+            recipe.batch_size_l,
+            recipe.boil_time_min,
+            evaporation_rate,
+            trub_chiller_loss,
+            fermenter_loss,
+            top_up_water,
+            mash_tun_loss,
+            hlt_deadspace,
+        );
+        (pre, post, recipe.batch_size_l)
+    };
+
+    let fermentable_inputs: Vec<(&f64, &f64, bool)> = recipe
+        .fermentables
+        .iter()
+        .map(|f| (&f.yield_pct, &f.amount_kg, f.add_after_boil))
+        .collect();
+
+    let og = og::calculate_og(&fermentable_inputs, fermenter_volume_l, efficiency);
+
+    let fg = recipe
+        .yeasts
+        .iter()
+        .filter_map(|y| y.attenuation_pct)
+        .next()
+        .map(|attenuation| abv::calculate_fg(og, attenuation))
+        .unwrap_or_else(|| abv::calculate_fg(og, DEFAULT_ATTENUATION_PCT));
+
+    let abv_pct = abv::calculate_abv(og, fg);
+    let calories = abv::calculate_calories_per_355ml(og, fg);
 
     let pre_boil_gravity =
         volumes::calculate_pre_boil_gravity(og, post_boil_volume_l, pre_boil_volume_l);
@@ -120,7 +139,7 @@ pub fn calculate_stats(recipe: &Recipe) -> RecipeStats {
         .map(|f| (&f.color_lovibond, &f.amount_kg))
         .collect();
 
-    let srm = srm::morey_srm(&srm_inputs, recipe.batch_size_l);
+    let srm = srm::morey_srm(&srm_inputs, fermenter_volume_l);
 
     let gravity_units = (og - 1.0) * 1000.0;
     let bu_gu_ratio = if gravity_units > 0.0 {
@@ -452,6 +471,104 @@ mod tests {
         let stats_explicit = calculate_stats(&recipe);
 
         assert!((stats_with_equipment.og - stats_explicit.og).abs() < 0.001);
+    }
+
+    fn equipment_profile_base() -> EquipmentProfile {
+        EquipmentProfile {
+            id: "eq1".into(),
+            name: "Test".into(),
+            notes: None,
+            boil_size_l: 27.0,
+            batch_size_l: 23.0,
+            calc_boil_volume: true,
+            tun_volume_l: None,
+            tun_weight_kg: None,
+            tun_specific_heat: None,
+            lauter_deadspace_l: 0.0,
+            top_up_kettle_l: 0.0,
+            trub_chiller_loss_l: 1.0,
+            evap_rate_pct_hr: 10.0,
+            boil_time_min: 60.0,
+            top_up_water_l: 0.0,
+            fermenter_loss_l: 1.0,
+            hop_utilization_pct: 100.0,
+            efficiency_pct: 72.0,
+            batch_volume_target: "fermenter".into(),
+            mash_tun_loss_l: 0.0,
+            hlt_deadspace_l: None,
+            cooling_shrinkage_pct: 4.0,
+            calc_mash_efficiency: true,
+            mash_efficiency_pct: None,
+            calc_aroma_hop_utilization: true,
+            aroma_hop_utilization_pct: 23.0,
+            whirlpool_time_min: None,
+            altitude_adjustment: false,
+            boil_temp_f: None,
+            sparge_method: "no_sparge".into(),
+            mash_volume_min_l: None,
+            mash_volume_max_l: None,
+            sparge_volume_min_l: None,
+            sparge_volume_max_l: None,
+            calc_strike_water_temp: false,
+            created_at: 0,
+            updated_at: 0,
+        }
+    }
+
+    #[test]
+    fn test_kettle_mode_og_matches_fermenter_mode_at_fermenter_volume() {
+        // Kettle mode: batch_size_l=23 is post-boil kettle; fermenter gets 23-1(trub)-1(fermenter_loss)=21L
+        // Fermenter mode: batch_size_l=21 targets the fermenter directly
+        // Both should yield the same OG for the same grain bill.
+        let mut recipe = minimal_recipe();
+        recipe.fermentables = vec![pale_malt()];
+        recipe.efficiency_pct = None;
+
+        let mut eq_kettle = equipment_profile_base();
+        eq_kettle.batch_volume_target = "kettle".into();
+        eq_kettle.batch_size_l = 23.0; // post-boil kettle target
+        recipe.batch_size_l = 23.0;
+        recipe.equipment_profile = Some(eq_kettle);
+        let stats_kettle = calculate_stats(&recipe);
+
+        let mut eq_fermenter = equipment_profile_base();
+        eq_fermenter.batch_volume_target = "fermenter".into();
+        eq_fermenter.batch_size_l = 21.0; // 23 - 1 trub - 1 fermenter_loss = 21
+        recipe.batch_size_l = 21.0;
+        recipe.equipment_profile = Some(eq_fermenter);
+        let stats_fermenter = calculate_stats(&recipe);
+
+        assert!(
+            (stats_kettle.og - stats_fermenter.og).abs() < 0.001,
+            "kettle mode OG should match fermenter mode at fermenter volume: kettle={:.4}, fermenter={:.4}",
+            stats_kettle.og,
+            stats_fermenter.og
+        );
+    }
+
+    #[test]
+    fn test_kettle_mode_post_boil_equals_batch_size() {
+        let mut recipe = minimal_recipe();
+        recipe.fermentables = vec![pale_malt()];
+        recipe.efficiency_pct = None;
+
+        let mut eq = equipment_profile_base();
+        eq.batch_volume_target = "kettle".into();
+        eq.batch_size_l = 23.0;
+        recipe.batch_size_l = 23.0;
+        recipe.equipment_profile = Some(eq);
+        let stats = calculate_stats(&recipe);
+
+        assert!(
+            (stats.post_boil_volume_l - 23.0).abs() < 0.01,
+            "kettle mode: post_boil should equal batch_size_l=23, got {:.2}",
+            stats.post_boil_volume_l
+        );
+        assert!(
+            stats.pre_boil_volume_l > 23.0,
+            "kettle mode: pre_boil should exceed batch_size_l due to evaporation, got {:.2}",
+            stats.pre_boil_volume_l
+        );
     }
 
     // --- fixture-based stats tests ---
