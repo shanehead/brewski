@@ -18,3 +18,37 @@ properties:
     type: number
   efficiency_pct:
     type: number
+  batch_volume_target:
+    type: string
+  mash_tun_loss_l:
+    type: number
+  hlt_deadspace_l:
+    type: number
+  cooling_shrinkage_pct:
+    type: number
+  calc_mash_efficiency:
+    type: boolean
+  mash_efficiency_pct:
+    type: number
+  calc_aroma_hop_utilization:
+    type: boolean
+  aroma_hop_utilization_pct:
+    type: number
+  whirlpool_time_min:
+    type: number
+  altitude_adjustment:
+    type: boolean
+  boil_temp_f:
+    type: number
+  sparge_method:
+    type: string
+  mash_volume_min_l:
+    type: number
+  mash_volume_max_l:
+    type: number
+  sparge_volume_min_l:
+    type: number
+  sparge_volume_max_l:
+    type: number
+  calc_strike_water_temp:
+    type: boolean

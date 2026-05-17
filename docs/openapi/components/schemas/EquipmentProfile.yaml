@@ -16,6 +16,15 @@ required:
   - efficiency_pct
   - created_at
   - updated_at
+  - batch_volume_target
+  - mash_tun_loss_l
+  - cooling_shrinkage_pct
+  - calc_mash_efficiency
+  - calc_aroma_hop_utilization
+  - aroma_hop_utilization_pct
+  - altitude_adjustment
+  - sparge_method
+  - calc_strike_water_temp
 properties:
   id:
     type: string
@@ -69,3 +78,70 @@ properties:
   updated_at:
     type: integer
     format: int64
+  batch_volume_target:
+    type: string
+    description: "Whether batch_size_l targets the fermenter or the kettle. Enum: 'fermenter' | 'kettle'"
+  mash_tun_loss_l:
+    type: number
+    description: Volume left in the mash tun after lautering, in litres
+  hlt_deadspace_l:
+    type:
+      - number
+      - "null"
+    description: Volume that remains in the HLT and cannot be transferred, in litres
+  cooling_shrinkage_pct:
+    type: number
+    description: Wort volume reduction from boiling temperature to room temperature, as a percentage
+  calc_mash_efficiency:
+    type: boolean
+    description: When true, mash efficiency is calculated from brewhouse efficiency and losses
+  mash_efficiency_pct:
+    type:
+      - number
+      - "null"
+    description: Manual mash efficiency percentage, used when calc_mash_efficiency is false
+  calc_aroma_hop_utilization:
+    type: boolean
+    description: When true, aroma hop utilization is calculated using the temperature model
+  aroma_hop_utilization_pct:
+    type: number
+    description: Utilization percentage for whirlpool/aroma hop additions
+  whirlpool_time_min:
+    type:
+      - number
+      - "null"
+    description: Time wort sits in the whirlpool before chilling, in minutes
+  altitude_adjustment:
+    type: boolean
+    description: When true, boil temperature is calculated from altitude
+  boil_temp_f:
+    type:
+      - number
+      - "null"
+    description: Manual boil temperature in Fahrenheit, used when altitude_adjustment is false
+  sparge_method:
+    type: string
+    description: "Mash/sparge water calculation method. Enum: 'no_sparge' | 'batch_sparge' | 'fly_sparge'"
+  mash_volume_min_l:
+    type:
+      - number
+      - "null"
+    description: Minimum mash tun volume in litres
+  mash_volume_max_l:
+    type:
+      - number
+      - "null"
+    description: Maximum mash tun volume in litres
+  sparge_volume_min_l:
+    type:
+      - number
+      - "null"
+    description: Minimum sparge water volume in litres
+  sparge_volume_max_l:
+    type:
+      - number
+      - "null"
+    description: Maximum sparge water volume in litres
+  calc_strike_water_temp:
+    type: boolean
+    description: When true, strike water temperature is calculated from tun thermal mass (calculation deferred)

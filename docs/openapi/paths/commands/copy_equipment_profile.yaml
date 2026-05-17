@@ -1,0 +1,21 @@
+post:
+  operationId: copy_equipment_profile
+  summary: Duplicate an equipment profile
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+  responses:
+    "200":
+      description: The newly created copy
+      content:
+        application/json:
+          schema:
+            $ref: "../../components/schemas/EquipmentProfile.yaml"

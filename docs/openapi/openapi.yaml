@@ -165,6 +165,8 @@ paths:
     $ref: ./paths/commands/save_recipe_version.yaml
   /commands/branch_from_version:
     $ref: ./paths/commands/branch_from_version.yaml
+  /commands/copy_equipment_profile:
+    $ref: ./paths/commands/copy_equipment_profile.yaml
 components:
   schemas:
     RecipeSummary:
