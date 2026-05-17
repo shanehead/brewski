@@ -26,6 +26,14 @@ pub async fn update_equipment_profile(
     EquipmentRepository::new(&state.db).update(&id, input).await
 }
 #[tauri::command]
+pub async fn copy_equipment_profile(
+    state: State<'_, AppState>,
+    id: String,
+) -> Result<EquipmentProfile, AppError> {
+    EquipmentRepository::new(&state.db).copy(&id).await
+}
+
+#[tauri::command]
 pub async fn delete_equipment_profile(
     state: State<'_, AppState>,
     id: String,

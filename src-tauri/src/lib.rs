@@ -50,6 +50,7 @@ pub fn run() {
             commands::equipment::create_equipment_profile,
             commands::equipment::update_equipment_profile,
             commands::equipment::delete_equipment_profile,
+            commands::equipment::copy_equipment_profile,
             commands::library::list_styles,
             commands::library::list_fermentable_library,
             commands::library::list_hop_library,
