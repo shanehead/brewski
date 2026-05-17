@@ -133,6 +133,44 @@ The following fields are wired into recipe calculations in this pass:
 
 ---
 
+## Default Values Reference
+
+### New fields (this migration)
+
+| Field | Default | Rationale |
+|---|---|---|
+| `batch_volume_target` | `'fermenter'` | Most homebrewers think in terms of what ends up in the fermenter, not the kettle. Matches Brewfather's default. |
+| `mash_tun_loss_l` | `0` | Conservative — many setups (especially BIAB) have negligible tun loss beyond deadspace, which is already captured separately. |
+| `hlt_deadspace_l` | NULL | Optional; only relevant for three-vessel systems. BIAB and single-vessel setups have no HLT. |
+| `cooling_shrinkage_pct` | `4.0` | Industry-standard wort shrinkage from boiling temperature (~100°C) to room temperature. Used by Brewfather and most recipe calculators. |
+| `calc_mash_efficiency` | `1` (on) | Most users want the app to derive this from brewhouse efficiency and losses rather than entering it manually. |
+| `mash_efficiency_pct` | NULL | Only meaningful when `calc_mash_efficiency` is off; no universal sensible default since it's equipment-specific. |
+| `calc_aroma_hop_utilization` | `1` (on) | Same reasoning as mash efficiency — let the app calculate it. |
+| `aroma_hop_utilization_pct` | `23` | Brewfather's default, based on typical alpha-acid isomerization during a whirlpool rest at ~170–180°F. Represents a reasonable baseline for most hopstand practices. |
+| `whirlpool_time_min` | NULL | Optional; not all brewers do a whirlpool rest or no-chill. Leave blank to exclude from IBU calculation. |
+| `altitude_adjustment` | `0` (off) | The vast majority of homebrewers are at or near sea level. Altitude adjustment is a special case that should be opt-in. |
+| `boil_temp_f` | NULL | When altitude adjustment is off, the calculation layer defaults to 212°F. NULL means "use the standard value" rather than storing a redundant constant. |
+| `sparge_method` | `'no_sparge'` | BIAB (no sparge) is the most common homebrewing approach and matches the pattern implied by existing seed data profiles. Batch and fly sparge users can opt in. |
+| `mash_volume_min_l` | NULL | Optional limit; not all brewers track tun minimums. |
+| `mash_volume_max_l` | NULL | Optional limit; not all brewers track tun maximums. |
+| `sparge_volume_min_l` | NULL | Optional limit. |
+| `sparge_volume_max_l` | NULL | Optional limit. |
+| `calc_strike_water_temp` | `0` (off) | Deferred feature. Defaulting off avoids broken calculations when `tun_weight_kg` and `tun_specific_heat` are not set (they're optional on existing profiles). |
+
+### Existing fields (for reference)
+
+| Field | Default | Rationale |
+|---|---|---|
+| `boil_time_min` | `60` | Standard homebrew boil duration; sufficient to drive off DMS and achieve reasonable hop utilization. |
+| `calc_boil_volume` | `1` (on) | Pre-boil volume is almost always derived from batch size + losses; manual override is the exception. |
+| `evap_rate_pct_hr` | `10` | ~10% per hour is a well-established homebrewing rule of thumb for outdoor propane burners. Indoor electric systems typically run lower (6–8%), but 10% is a safe conservative default. |
+| `hop_utilization_pct` | `100` | No adjustment by default; 100% means the IBU formula is applied as-is. Users with high-gravity systems or specific equipment can dial this down. |
+| `lauter_deadspace_l` | `0` | Defaults to zero so the calculation doesn't inflate water volumes for setups that have none. |
+| `trub_chiller_loss_l` | `1` | Approximately 1 litre (~0.25 gal) is lost to trub and chiller in a typical homebrew setup. |
+| `fermenter_loss_l` | `1` | Approximately 1 litre is commonly lost during transfer to the fermenter (yeast cake, hop trub). |
+
+---
+
 ## Out of Scope
 
 - Hopstand Temperature — captured on individual hop additions instead
