@@ -63,12 +63,12 @@ Tauri command: `move_database(target_path: String) -> Result<(), AppError>`
 Steps:
 1. Resolve `target_path` to an absolute `PathBuf`
 2. Create the target directory if it does not exist (`std::fs::create_dir_all`)
-3. Drop the current `SqlitePool` (close all connections)
-4. Copy `brewski.db` to `target_path/brewski.db` via `std::fs::copy`
-5. If the copy fails, return an error — the original file is untouched and config is not written
-6. Write the new path to `config.json`
-7. Re-open the pool from the new path and swap it into `AppState` via its `Mutex<SqlitePool>` (Tauri does not allow re-calling `app.manage()` after startup, so `AppState` must hold the pool behind a `Mutex` to allow in-place replacement)
-8. Return `Ok(())`
+3. Copy `brewski.db` to `target_path/brewski.db` via `std::fs::copy`
+4. If the copy fails, return an error — the original file is untouched and config is not written
+5. Write the new path to `config.json`
+6. Restart the app via `tauri-plugin-process` (`app_handle.restart()`)
+
+On next startup, `lib.rs` reads `config.json` and opens the pool from the new path. No changes to `AppState` or any command handler are required.
 
 The original database file is **not deleted** after a successful move. The user is informed of this in the confirmation message so they can clean it up manually if desired.
 
@@ -106,7 +106,7 @@ The section is shown unconditionally (not just on first launch) so users can cha
 - Assert `Brewski/` subdirectory is appended to each result
 
 ### Rust Integration Tests (`move_database`)
-- Happy path: copy succeeds, config updated, pool re-opens from new path
+- Happy path: copy succeeds, config updated (restart is not triggered in tests)
 - Failure path: unwritable target → original file untouched, config unchanged
 - Same-path no-op
 
