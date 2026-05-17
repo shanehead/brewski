@@ -2,6 +2,7 @@
   import { onMount } from "svelte";
   import { settings, loadSettings, saveSetting } from "$lib/stores/settings";
   import { ipc } from "$lib/stores/error";
+  import DatabaseLocation from "$lib/components/DatabaseLocation.svelte";
 
   onMount(async () => {
     await ipc(loadSettings());
@@ -55,5 +56,7 @@
         </select>
       </div>
     </section>
+
+    <DatabaseLocation />
   </div>
 </div>

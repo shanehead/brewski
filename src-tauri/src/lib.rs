@@ -6,6 +6,7 @@ pub mod models;
 #[path = "models.gen.rs"]
 pub mod models_gen;
 pub mod repositories;
+pub mod sync_config;
 
 #[cfg(test)]
 mod test_helpers;
@@ -17,23 +18,31 @@ use tauri::Manager;
 
 pub struct AppState {
     pub db: sea_orm::DatabaseConnection,
+    pub db_path: std::path::PathBuf,
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
+        .plugin(tauri_plugin_process::init())
         .setup(|app| {
             let app_dir = app.path().app_data_dir()?;
             std::fs::create_dir_all(&app_dir)?;
-            let db_path = app_dir.join("brewski.db");
+
+            let config = crate::sync_config::SyncConfig::load(&app_dir);
+            let db_path = config
+                .database_path
+                .map(std::path::PathBuf::from)
+                .unwrap_or_else(|| app_dir.join("brewski.db"));
+
             let opts = SqliteConnectOptions::new()
                 .filename(&db_path)
                 .create_if_missing(true);
             let pool = tauri::async_runtime::block_on(SqlitePool::connect_with(opts))?;
             tauri::async_runtime::block_on(sqlx::migrate!("./migrations").run(&pool))?;
             let db = SqlxSqliteConnector::from_sqlx_sqlite_pool(pool);
-            app.manage(AppState { db });
+            app.manage(AppState { db, db_path });
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
@@ -105,6 +114,9 @@ pub fn run() {
             commands::tools::convert_gravity,
             commands::tools::calculate_pitch_rate,
             commands::tools::convert_color,
+            commands::sync::detect_sync_folders,
+            commands::sync::move_database,
+            commands::sync::get_db_path,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

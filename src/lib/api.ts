@@ -262,3 +262,16 @@ export const branchFromVersion = (recipeId: string, versionId: string) =>
 
 export const deleteRecipeVersion = (id: string) =>
   invoke<void>("delete_recipe_version", { id });
+
+// --- Sync / Database location ---
+
+export type SyncFolder = { name: string; path: string };
+
+export const detectSyncFolders = (): Promise<SyncFolder[]> =>
+  invoke<SyncFolder[]>("detect_sync_folders");
+
+export const moveDatabase = (targetPath: string): Promise<void> =>
+  invoke<void>("move_database", { targetPath });
+
+export const getDbPath = (): Promise<string> =>
+  invoke<string>("get_db_path");
