@@ -145,6 +145,8 @@ export const updateEquipmentProfile = (id: string, input: UpdateEquipmentProfile
   invoke<EquipmentProfile>("update_equipment_profile", { id, input });
 export const deleteEquipmentProfile = (id: string) =>
   invoke<void>("delete_equipment_profile", { id });
+export const copyEquipmentProfile = (id: string, name: string) =>
+  invoke<EquipmentProfile>("copy_equipment_profile", { id, input: { name } });
 
 export const listStyles = () => invoke<Style[]>("list_styles");
 export const listFermentableLibrary = () => invoke<Fermentable[]>("list_fermentable_library");

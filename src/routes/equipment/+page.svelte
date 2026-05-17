@@ -1,10 +1,14 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { settings, loadSettings, saveSetting } from "$lib/stores/settings";
-  import { listEquipmentProfiles, createEquipmentProfile, deleteEquipmentProfile } from "$lib/api";
+  import { listEquipmentProfiles, createEquipmentProfile, deleteEquipmentProfile, copyEquipmentProfile } from "$lib/api";
   import type { EquipmentProfile } from "$lib/api";
   import { ipc } from "$lib/stores/error";
   import ConfirmModal from "$lib/components/ConfirmModal.svelte";
+import EquipmentProfileModal from "./EquipmentProfileModal.svelte";
+
+let showCopyModal = $state(false);
+let copyCandidate: EquipmentProfile | null = $state(null);
 
   let profiles = $state<EquipmentProfile[]>([]);
   let newProfileName = $state("");
@@ -61,6 +65,21 @@
   />
 {/if}
 
+{#if showCopyModal && copyCandidate}
+  <EquipmentProfileModal
+    profile={copyCandidate}
+    on:confirm={async (e) => {
+      showCopyModal = false;
+      const newName = e.detail as string;
+      const candidate = copyCandidate!;
+      await ipc(copyEquipmentProfile(candidate.id, newName));
+      profiles = await ipc(listEquipmentProfiles()) ?? profiles;
+      copyCandidate = null;
+    }}
+    on:cancel={() => { showCopyModal = false; copyCandidate = null; }}
+  />
+{/if}
+
 <div class="flex-1 overflow-y-auto p-6" style="background: var(--color-bg-base);">
   <h1 class="text-lg font-semibold mb-6" style="color: var(--color-text-primary);">Equipment</h1>
 
@@ -88,8 +107,12 @@
               {p.batch_size_l}L batch · {p.efficiency_pct}% efficiency
             </p>
           </div>
-          <button onclick={() => handleDeleteProfile(p)} class="text-xs px-2 py-1 rounded"
-                  style="color: var(--color-text-secondary); background: var(--color-bg-elevated);">Delete</button>
+          <div class="flex gap-2">
+            <button onclick={() => { copyCandidate = p; showCopyModal = true; }} class="text-xs px-2 py-1 rounded"
+                    style="color: var(--color-text-secondary); background: var(--color-bg-elevated);">Copy</button>
+            <button onclick={() => handleDeleteProfile(p)} class="text-xs px-2 py-1 rounded"
+                    style="color: var(--color-text-secondary); background: var(--color-bg-elevated);">Delete</button>
+          </div>
         </div>
       {/each}
 
