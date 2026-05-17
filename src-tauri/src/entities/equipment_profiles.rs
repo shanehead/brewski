@@ -29,6 +29,25 @@ pub struct Model {
     pub efficiency_pct: f64,
     pub created_at: i32,
     pub updated_at: i32,
+    #[sea_orm(column_type = "Text")]
+    pub batch_volume_target: String,
+    pub mash_tun_loss_l: f64,
+    pub hlt_deadspace_l: Option<f64>,
+    pub cooling_shrinkage_pct: f64,
+    pub calc_mash_efficiency: i32,
+    pub mash_efficiency_pct: Option<f64>,
+    pub calc_aroma_hop_utilization: i32,
+    pub aroma_hop_utilization_pct: f64,
+    pub whirlpool_time_min: Option<f64>,
+    pub altitude_adjustment: i32,
+    pub boil_temp_f: Option<f64>,
+    #[sea_orm(column_type = "Text")]
+    pub sparge_method: String,
+    pub mash_volume_min_l: Option<f64>,
+    pub mash_volume_max_l: Option<f64>,
+    pub sparge_volume_min_l: Option<f64>,
+    pub sparge_volume_max_l: Option<f64>,
+    pub calc_strike_water_temp: i32,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
