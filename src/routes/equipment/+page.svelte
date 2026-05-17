@@ -5,20 +5,25 @@
   import type { EquipmentProfile } from "$lib/api";
   import { ipc } from "$lib/stores/error";
   import ConfirmModal from "$lib/components/ConfirmModal.svelte";
-import EquipmentProfileModal from "./EquipmentProfileModal.svelte";
-
-let showCopyModal = $state(false);
-let copyCandidate: EquipmentProfile | null = $state(null);
+  import EquipmentProfileModal from "$lib/components/EquipmentProfileModal.svelte";
+  import CopyNameModal from "./EquipmentProfileModal.svelte";
 
   let profiles = $state<EquipmentProfile[]>([]);
   let newProfileName = $state("");
   let showDeleteModal = $state(false);
   let deleteCandidate = $state<EquipmentProfile | null>(null);
+  let editingProfile = $state<EquipmentProfile | null>(null);
+  let showCopyModal = $state(false);
+  let copyCandidate = $state<EquipmentProfile | null>(null);
 
   onMount(async () => {
     await ipc(loadSettings());
     profiles = await ipc(listEquipmentProfiles()) ?? [];
   });
+
+  async function refreshProfiles() {
+    profiles = await ipc(listEquipmentProfiles()) ?? profiles;
+  }
 
   async function handleDefaultEquipChange(e: Event) {
     await ipc(saveSetting("default_equipment_profile_id", (e.target as HTMLSelectElement).value));
@@ -32,11 +37,15 @@ let copyCandidate: EquipmentProfile | null = $state(null);
       batch_size_l: 23.0,
       efficiency_pct: 72.0,
     }));
-    profiles = await ipc(listEquipmentProfiles()) ?? profiles;
+    await refreshProfiles();
     newProfileName = "";
   }
 
-  async function handleDeleteProfile(profile: EquipmentProfile) {
+  function handleEditProfile(profile: EquipmentProfile) {
+    editingProfile = profile;
+  }
+
+  function handleDeleteProfile(profile: EquipmentProfile) {
     deleteCandidate = profile;
     showDeleteModal = true;
   }
@@ -45,13 +54,22 @@ let copyCandidate: EquipmentProfile | null = $state(null);
     if (!deleteCandidate) return;
     showDeleteModal = false;
     await ipc(deleteEquipmentProfile(deleteCandidate.id));
-    profiles = await ipc(listEquipmentProfiles()) ?? profiles;
+    await refreshProfiles();
     deleteCandidate = null;
   }
 
   function cancelDelete() {
     showDeleteModal = false;
     deleteCandidate = null;
+  }
+
+  async function handleModalSave(saved: EquipmentProfile) {
+    editingProfile = null;
+    await refreshProfiles();
+  }
+
+  function handleModalCancel() {
+    editingProfile = null;
   }
 </script>
 
@@ -65,15 +83,23 @@ let copyCandidate: EquipmentProfile | null = $state(null);
   />
 {/if}
 
-{#if showCopyModal && copyCandidate}
+{#if editingProfile}
   <EquipmentProfileModal
+    profile={editingProfile}
+    onsave={handleModalSave}
+    oncancel={handleModalCancel}
+  />
+{/if}
+
+{#if showCopyModal && copyCandidate}
+  <CopyNameModal
     profile={copyCandidate}
     on:confirm={async (e) => {
       showCopyModal = false;
       const newName = e.detail as string;
       const candidate = copyCandidate!;
       await ipc(copyEquipmentProfile(candidate.id, newName));
-      profiles = await ipc(listEquipmentProfiles()) ?? profiles;
+      await refreshProfiles();
       copyCandidate = null;
     }}
     on:cancel={() => { showCopyModal = false; copyCandidate = null; }}
@@ -108,6 +134,8 @@ let copyCandidate: EquipmentProfile | null = $state(null);
             </p>
           </div>
           <div class="flex gap-2">
+            <button onclick={() => handleEditProfile(p)} class="text-xs px-2 py-1 rounded"
+                    style="color: var(--color-text-secondary); background: var(--color-bg-elevated);">Edit</button>
             <button onclick={() => { copyCandidate = p; showCopyModal = true; }} class="text-xs px-2 py-1 rounded"
                     style="color: var(--color-text-secondary); background: var(--color-bg-elevated);">Copy</button>
             <button onclick={() => handleDeleteProfile(p)} class="text-xs px-2 py-1 rounded"
