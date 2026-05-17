@@ -50,7 +50,32 @@ impl<'a> EquipmentRepository<'a> {
             trub_chiller_loss_l: Set(input.trub_chiller_loss_l),
             fermenter_loss_l: Set(input.fermenter_loss_l),
             efficiency_pct: Set(input.efficiency_pct),
-            calc_boil_volume: Set(0),
+            calc_boil_volume: Set(1),
+            batch_volume_target: Set(input
+                .batch_volume_target
+                .unwrap_or_else(|| "fermenter".into())),
+            mash_tun_loss_l: Set(input.mash_tun_loss_l.unwrap_or(0.0)),
+            hlt_deadspace_l: Set(input.hlt_deadspace_l),
+            cooling_shrinkage_pct: Set(input.cooling_shrinkage_pct.unwrap_or(4.0)),
+            calc_mash_efficiency: Set(input.calc_mash_efficiency.map(|b| b as i32).unwrap_or(1)),
+            mash_efficiency_pct: Set(input.mash_efficiency_pct),
+            calc_aroma_hop_utilization: Set(input
+                .calc_aroma_hop_utilization
+                .map(|b| b as i32)
+                .unwrap_or(1)),
+            aroma_hop_utilization_pct: Set(input.aroma_hop_utilization_pct.unwrap_or(23.0)),
+            whirlpool_time_min: Set(input.whirlpool_time_min),
+            altitude_adjustment: Set(input.altitude_adjustment.map(|b| b as i32).unwrap_or(0)),
+            boil_temp_f: Set(input.boil_temp_f),
+            sparge_method: Set(input.sparge_method.unwrap_or_else(|| "no_sparge".into())),
+            mash_volume_min_l: Set(input.mash_volume_min_l),
+            mash_volume_max_l: Set(input.mash_volume_max_l),
+            sparge_volume_min_l: Set(input.sparge_volume_min_l),
+            sparge_volume_max_l: Set(input.sparge_volume_max_l),
+            calc_strike_water_temp: Set(input
+                .calc_strike_water_temp
+                .map(|b| b as i32)
+                .unwrap_or(0)),
             created_at: Set(now),
             updated_at: Set(now),
             ..Default::default()
@@ -97,9 +122,63 @@ impl<'a> EquipmentRepository<'a> {
         if let Some(v) = input.efficiency_pct {
             active.efficiency_pct = Set(v);
         }
+        if let Some(v) = input.batch_volume_target {
+            active.batch_volume_target = Set(v);
+        }
+        if let Some(v) = input.mash_tun_loss_l {
+            active.mash_tun_loss_l = Set(v);
+        }
+        active.hlt_deadspace_l = Set(input.hlt_deadspace_l);
+        if let Some(v) = input.cooling_shrinkage_pct {
+            active.cooling_shrinkage_pct = Set(v);
+        }
+        if let Some(v) = input.calc_mash_efficiency {
+            active.calc_mash_efficiency = Set(v as i32);
+        }
+        active.mash_efficiency_pct = Set(input.mash_efficiency_pct);
+        if let Some(v) = input.calc_aroma_hop_utilization {
+            active.calc_aroma_hop_utilization = Set(v as i32);
+        }
+        if let Some(v) = input.aroma_hop_utilization_pct {
+            active.aroma_hop_utilization_pct = Set(v);
+        }
+        active.whirlpool_time_min = Set(input.whirlpool_time_min);
+        if let Some(v) = input.altitude_adjustment {
+            active.altitude_adjustment = Set(v as i32);
+        }
+        active.boil_temp_f = Set(input.boil_temp_f);
+        if let Some(v) = input.sparge_method {
+            active.sparge_method = Set(v);
+        }
+        active.mash_volume_min_l = Set(input.mash_volume_min_l);
+        active.mash_volume_max_l = Set(input.mash_volume_max_l);
+        active.sparge_volume_min_l = Set(input.sparge_volume_min_l);
+        active.sparge_volume_max_l = Set(input.sparge_volume_max_l);
+        if let Some(v) = input.calc_strike_water_temp {
+            active.calc_strike_water_temp = Set(v as i32);
+        }
         active.updated_at = Set(now_secs() as i32);
         active.update(self.db).await?;
         self.get(id).await
+    }
+
+    pub async fn copy(&self, id: &str) -> Result<EquipmentProfile, AppError> {
+        let source = equipment_profiles::Entity::find_by_id(id)
+            .one(self.db)
+            .await?
+            .ok_or(AppError::NotFound)?;
+        let new_id = new_id();
+        let now = now_secs() as i32;
+        let mut active: equipment_profiles::ActiveModel = source.into();
+        active.id = Set(new_id.clone());
+        active.name = Set({
+            let current = active.name.take().unwrap_or_default();
+            format!("{current} (copy)")
+        });
+        active.created_at = Set(now);
+        active.updated_at = Set(now);
+        active.insert(self.db).await?;
+        self.get(&new_id).await
     }
 
     pub async fn delete(&self, id: &str) -> Result<(), AppError> {
@@ -119,15 +198,32 @@ mod tests {
 
     fn input() -> CreateEquipmentProfileInput {
         CreateEquipmentProfileInput {
+            altitude_adjustment: None,
+            aroma_hop_utilization_pct: None,
+            batch_size_l: 23.0,
+            batch_volume_target: None,
+            boil_size_l: 30.0,
+            boil_temp_f: None,
+            boil_time_min: Some(60.0),
+            calc_aroma_hop_utilization: None,
+            calc_mash_efficiency: None,
+            calc_strike_water_temp: None,
+            cooling_shrinkage_pct: None,
+            efficiency_pct: 72.0,
+            evap_rate_pct_hr: Some(10.0),
+            fermenter_loss_l: Some(1.0),
+            hlt_deadspace_l: None,
+            mash_efficiency_pct: None,
+            mash_tun_loss_l: None,
+            mash_volume_max_l: None,
+            mash_volume_min_l: None,
             name: "10 Gallon Kettle".into(),
             notes: None,
-            boil_size_l: 30.0,
-            batch_size_l: 23.0,
-            boil_time_min: Some(60.0),
-            evap_rate_pct_hr: Some(10.0),
+            sparge_method: None,
+            sparge_volume_max_l: None,
+            sparge_volume_min_l: None,
             trub_chiller_loss_l: Some(1.5),
-            fermenter_loss_l: Some(1.0),
-            efficiency_pct: 72.0,
+            whirlpool_time_min: None,
         }
     }
 
