@@ -990,6 +990,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/commands/copy_equipment_profile": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Duplicate an equipment profile */
+        post: operations["copy_equipment_profile"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -1146,6 +1163,40 @@ export interface components {
             created_at: number;
             /** Format: int64 */
             updated_at: number;
+            /** @description Whether batch_size_l targets the fermenter or the kettle. Enum: 'fermenter' | 'kettle' */
+            batch_volume_target: string;
+            /** @description Volume left in the mash tun after lautering, in litres */
+            mash_tun_loss_l: number;
+            /** @description Volume that remains in the HLT and cannot be transferred, in litres */
+            hlt_deadspace_l?: number | null;
+            /** @description Wort volume reduction from boiling temperature to room temperature, as a percentage */
+            cooling_shrinkage_pct: number;
+            /** @description When true, mash efficiency is calculated from brewhouse efficiency and losses */
+            calc_mash_efficiency: boolean;
+            /** @description Manual mash efficiency percentage, used when calc_mash_efficiency is false */
+            mash_efficiency_pct?: number | null;
+            /** @description When true, aroma hop utilization is calculated using the temperature model */
+            calc_aroma_hop_utilization: boolean;
+            /** @description Utilization percentage for whirlpool/aroma hop additions */
+            aroma_hop_utilization_pct: number;
+            /** @description Time wort sits in the whirlpool before chilling, in minutes */
+            whirlpool_time_min?: number | null;
+            /** @description When true, boil temperature is calculated from altitude */
+            altitude_adjustment: boolean;
+            /** @description Manual boil temperature in Fahrenheit, used when altitude_adjustment is false */
+            boil_temp_f?: number | null;
+            /** @description Mash/sparge water calculation method. Enum: 'no_sparge' | 'batch_sparge' | 'fly_sparge' */
+            sparge_method: string;
+            /** @description Minimum mash tun volume in litres */
+            mash_volume_min_l?: number | null;
+            /** @description Maximum mash tun volume in litres */
+            mash_volume_max_l?: number | null;
+            /** @description Minimum sparge water volume in litres */
+            sparge_volume_min_l?: number | null;
+            /** @description Maximum sparge water volume in litres */
+            sparge_volume_max_l?: number | null;
+            /** @description When true, strike water temperature is calculated from tun thermal mass (calculation deferred) */
+            calc_strike_water_temp: boolean;
         };
         Fermentable: {
             id: string;
@@ -1538,6 +1589,23 @@ export interface components {
             trub_chiller_loss_l?: number;
             fermenter_loss_l?: number;
             efficiency_pct: number;
+            batch_volume_target?: string;
+            mash_tun_loss_l?: number;
+            hlt_deadspace_l?: number;
+            cooling_shrinkage_pct?: number;
+            calc_mash_efficiency?: boolean;
+            mash_efficiency_pct?: number;
+            calc_aroma_hop_utilization?: boolean;
+            aroma_hop_utilization_pct?: number;
+            whirlpool_time_min?: number;
+            altitude_adjustment?: boolean;
+            boil_temp_f?: number;
+            sparge_method?: string;
+            mash_volume_min_l?: number;
+            mash_volume_max_l?: number;
+            sparge_volume_min_l?: number;
+            sparge_volume_max_l?: number;
+            calc_strike_water_temp?: boolean;
         };
         UpdateEquipmentProfileInput: {
             name?: string;
@@ -1549,6 +1617,23 @@ export interface components {
             trub_chiller_loss_l?: number;
             fermenter_loss_l?: number;
             efficiency_pct?: number;
+            batch_volume_target?: string;
+            mash_tun_loss_l?: number;
+            hlt_deadspace_l?: number;
+            cooling_shrinkage_pct?: number;
+            calc_mash_efficiency?: boolean;
+            mash_efficiency_pct?: number;
+            calc_aroma_hop_utilization?: boolean;
+            aroma_hop_utilization_pct?: number;
+            whirlpool_time_min?: number;
+            altitude_adjustment?: boolean;
+            boil_temp_f?: number;
+            sparge_method?: string;
+            mash_volume_min_l?: number;
+            mash_volume_max_l?: number;
+            sparge_volume_min_l?: number;
+            sparge_volume_max_l?: number;
+            calc_strike_water_temp?: boolean;
         };
         RecipeVersionSummary: {
             id: string;
@@ -3170,6 +3255,32 @@ export interface operations {
                 content?: never;
             };
             500: components["responses"]["Error"];
+        };
+    };
+    copy_equipment_profile: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    id: string;
+                };
+            };
+        };
+        responses: {
+            /** @description The newly created copy */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EquipmentProfile"];
+                };
+            };
         };
     };
 }

@@ -52,12 +52,14 @@
   <rect x="385" y="242" width="58" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
   <text x="414" y="257" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">settings</text>
   <!-- chips row 2 -->
-  <rect x="56"  y="270" width="42" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
-  <text x="77"  y="285" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">tools</text>
-  <rect x="106" y="270" width="100" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
-  <text x="156" y="285" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">water_chemistry</text>
-  <rect x="214" y="270" width="84" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
-  <text x="256" y="285" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">import_export</text>
+  <rect x="56"  y="270" width="54" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
+  <text x="83"  y="285" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">batches</text>
+  <rect x="118" y="270" width="42" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
+  <text x="139" y="285" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">tools</text>
+  <rect x="168" y="270" width="100" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
+  <text x="218" y="285" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">water_chemistry</text>
+  <rect x="276" y="270" width="84" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
+  <text x="318" y="285" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">import_export</text>
 
   <!-- ─── Arrow 2 ─── -->
   <line x1="290" y1="299" x2="290" y2="322" stroke="#444" stroke-width="1.5"/>
@@ -135,7 +137,7 @@
   <text x="56"  y="623" font-family="system-ui, -apple-system, sans-serif" fill="#f0f0f5" font-size="13" font-weight="600">SQLite</text>
   <text x="110" y="623" font-family="system-ui, -apple-system, sans-serif" fill="#555"   font-size="11"> · embedded · single file</text>
   <line x1="56" y1="631" x2="524" y2="631" stroke="#1e1e2e" stroke-width="1"/>
-  <text x="56"  y="645" font-family="'SFMono-Regular', Consolas, monospace" fill="#555" font-size="10">src-tauri/src/migration/</text>
+  <text x="56"  y="645" font-family="'SFMono-Regular', Consolas, monospace" fill="#555" font-size="10">src-tauri/migrations/</text>
   <!-- chips -->
   <rect x="56"  y="653" width="70" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
   <text x="91"  y="668" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">Styles (BJCP)</text>

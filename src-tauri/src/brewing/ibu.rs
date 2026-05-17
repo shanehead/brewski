@@ -5,6 +5,10 @@ pub struct HopIbuInput<'a> {
     pub use_type: &'a str,
     /// Pre-resolved: per-hop override → recipe default → 80.0
     pub hopstand_temp_c: f64,
+    /// Extra whirlpool time added to hopstand additions, in minutes
+    pub whirlpool_time_min: f64,
+    /// When Some, use this flat utilization fraction instead of the Malowicki model
+    pub aroma_utilization_override: Option<f64>,
 }
 
 /// Malowicki & Shellhammer (2005) isomerization rate model.
@@ -34,7 +38,15 @@ pub fn tinseth_ibu(
             let effective_time = match use_lower.as_str() {
                 "mash" | "dry hop" => return 0.0,
                 "first wort" => boil_time_min,
-                "hopstand" => malowicki_effective_time(*h.time_min, h.hopstand_temp_c),
+                "hopstand" => {
+                    if let Some(flat_util) = h.aroma_utilization_override {
+                        let ounces = *h.amount_kg * 35.274;
+                        let alpha_fraction = *h.alpha_pct / 100.0;
+                        let volume_gallons = post_boil_volume_l * 0.264172;
+                        return (flat_util * alpha_fraction * ounces * 7490.0) / volume_gallons;
+                    }
+                    malowicki_effective_time(*h.time_min + h.whirlpool_time_min, h.hopstand_temp_c)
+                }
                 _ => *h.time_min,
             };
             if effective_time <= 0.0 {
@@ -84,6 +96,8 @@ mod tests {
             time_min: &60.0f64,
             use_type: "Boil",
             hopstand_temp_c: 80.0,
+            whirlpool_time_min: 0.0,
+            aroma_utilization_override: None,
         }];
         let ibu = tinseth_ibu(&hops, 1.047, 23.0, 60.0);
         assert!((ibu - 29.0).abs() < 3.0, "IBU was {ibu:.1}, expected ~29");
@@ -97,6 +111,8 @@ mod tests {
             time_min: &0.0f64,
             use_type: "Dry Hop",
             hopstand_temp_c: 80.0,
+            whirlpool_time_min: 0.0,
+            aroma_utilization_override: None,
         }];
         let ibu = tinseth_ibu(&hops, 1.047, 23.0, 60.0);
         assert_eq!(ibu, 0.0);
@@ -116,6 +132,8 @@ mod tests {
             time_min: &60.0f64,
             use_type: "Mash",
             hopstand_temp_c: 80.0,
+            whirlpool_time_min: 0.0,
+            aroma_utilization_override: None,
         }];
         let ibu = tinseth_ibu(&hops, 1.047, 23.0, 60.0);
         assert_eq!(ibu, 0.0);
@@ -129,6 +147,8 @@ mod tests {
             time_min: &20.0f64,
             use_type: "Boil",
             hopstand_temp_c: 80.0,
+            whirlpool_time_min: 0.0,
+            aroma_utilization_override: None,
         }];
         let hopstand_hops = vec![HopIbuInput {
             alpha_pct: &10.0f64,
@@ -136,6 +156,8 @@ mod tests {
             time_min: &20.0f64,
             use_type: "Hopstand",
             hopstand_temp_c: 80.0,
+            whirlpool_time_min: 0.0,
+            aroma_utilization_override: None,
         }];
         let boil_ibu = tinseth_ibu(&boil_hops, 1.047, 23.0, 60.0);
         let hopstand_ibu = tinseth_ibu(&hopstand_hops, 1.047, 23.0, 60.0);
@@ -154,6 +176,8 @@ mod tests {
             time_min: &20.0f64,
             use_type: "Boil",
             hopstand_temp_c: 100.0,
+            whirlpool_time_min: 0.0,
+            aroma_utilization_override: None,
         }];
         let hopstand_hops = vec![HopIbuInput {
             alpha_pct: &10.0f64,
@@ -161,6 +185,8 @@ mod tests {
             time_min: &20.0f64,
             use_type: "Hopstand",
             hopstand_temp_c: 100.0,
+            whirlpool_time_min: 0.0,
+            aroma_utilization_override: None,
         }];
         let boil_ibu = tinseth_ibu(&boil_hops, 1.047, 23.0, 60.0);
         let hopstand_ibu = tinseth_ibu(&hopstand_hops, 1.047, 23.0, 60.0);
@@ -178,6 +204,8 @@ mod tests {
             time_min: &0.0f64,
             use_type: "First Wort",
             hopstand_temp_c: 80.0,
+            whirlpool_time_min: 0.0,
+            aroma_utilization_override: None,
         }];
         let boil_60 = vec![HopIbuInput {
             alpha_pct: &10.0f64,
@@ -185,6 +213,8 @@ mod tests {
             time_min: &60.0f64,
             use_type: "Boil",
             hopstand_temp_c: 80.0,
+            whirlpool_time_min: 0.0,
+            aroma_utilization_override: None,
         }];
         let fw_ibu = tinseth_ibu(&first_wort, 1.047, 23.0, 60.0);
         let boil_ibu = tinseth_ibu(&boil_60, 1.047, 23.0, 60.0);

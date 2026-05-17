@@ -16,6 +16,8 @@ Built with Tauri 2, SvelteKit, and Rust. Runs on macOS, Windows, and Linux.
 
 The frontend is a SvelteKit app running inside Tauri's WebView. All backend access goes through Tauri's IPC bridge via `tauri.invoke()` — typed wrappers live in [`src/lib/api.gen.ts`](src/lib/api.gen.ts). The Rust side handles commands, delegates to a repository layer, and persists everything to an embedded SQLite database via SeaORM and sqlx.
 
+C4 diagrams (System Context, Container, and Component levels) are in [`docs/c4.md`](docs/c4.md).
+
 ## Tech Stack
 
 | Layer | Technology |

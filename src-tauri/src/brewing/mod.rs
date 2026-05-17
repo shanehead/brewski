@@ -22,6 +22,11 @@ const DEFAULT_TRUB_CHILLER_LOSS_L: f64 = 1.0;
 const DEFAULT_FERMENTER_LOSS_L: f64 = 1.0;
 const DEFAULT_TOP_UP_WATER_L: f64 = 0.0;
 
+const DEFAULT_MASH_TUN_LOSS_L: f64 = 0.0;
+const DEFAULT_HLT_DEADSPACE_L: f64 = 0.0;
+const DEFAULT_COOLING_SHRINKAGE_PCT: f64 = 4.0;
+const DEFAULT_AROMA_HOP_UTILIZATION_PCT: f64 = 23.0;
+
 pub fn calculate_stats(recipe: &Recipe) -> RecipeStats {
     let efficiency = recipe
         .efficiency_pct
@@ -60,14 +65,33 @@ pub fn calculate_stats(recipe: &Recipe) -> RecipeStats {
     let top_up_water = equipment
         .map(|e| e.top_up_water_l)
         .unwrap_or(DEFAULT_TOP_UP_WATER_L);
+    let mash_tun_loss = equipment
+        .map(|e| e.mash_tun_loss_l)
+        .unwrap_or(DEFAULT_MASH_TUN_LOSS_L);
+    let hlt_deadspace = equipment
+        .and_then(|e| e.hlt_deadspace_l)
+        .unwrap_or(DEFAULT_HLT_DEADSPACE_L);
+    let cooling_shrinkage = equipment
+        .map(|e| e.cooling_shrinkage_pct)
+        .unwrap_or(DEFAULT_COOLING_SHRINKAGE_PCT);
+    let aroma_hop_utilization_override: Option<f64> = equipment.and_then(|e| {
+        if e.calc_aroma_hop_utilization {
+            None
+        } else {
+            Some(e.aroma_hop_utilization_pct / 100.0)
+        }
+    });
+    let whirlpool_time = equipment.and_then(|e| e.whirlpool_time_min).unwrap_or(0.0);
 
-    let (pre_boil_volume_l, post_boil_volume_l) = volumes::calculate_boil_volumes(
+    let (pre_boil_volume_l, post_boil_volume_l, _total_water_l) = volumes::calculate_boil_volumes(
         recipe.batch_size_l,
         recipe.boil_time_min,
         evaporation_rate,
         trub_chiller_loss,
         fermenter_loss,
         top_up_water,
+        mash_tun_loss,
+        hlt_deadspace,
     );
 
     let pre_boil_gravity =
@@ -83,6 +107,8 @@ pub fn calculate_stats(recipe: &Recipe) -> RecipeStats {
             time_min: &h.time_min,
             use_type: &h.use_,
             hopstand_temp_c: h.hopstand_temp_c.unwrap_or(hopstand_default),
+            whirlpool_time_min: whirlpool_time,
+            aroma_utilization_override: aroma_hop_utilization_override,
         })
         .collect();
 
@@ -399,6 +425,23 @@ mod tests {
             fermenter_loss_l: 1.0,
             hop_utilization_pct: 100.0,
             efficiency_pct: 80.0,
+            batch_volume_target: "fermenter".into(),
+            mash_tun_loss_l: 0.0,
+            hlt_deadspace_l: None,
+            cooling_shrinkage_pct: 4.0,
+            calc_mash_efficiency: true,
+            mash_efficiency_pct: None,
+            calc_aroma_hop_utilization: true,
+            aroma_hop_utilization_pct: 23.0,
+            whirlpool_time_min: None,
+            altitude_adjustment: false,
+            boil_temp_f: None,
+            sparge_method: "no_sparge".into(),
+            mash_volume_min_l: None,
+            mash_volume_max_l: None,
+            sparge_volume_min_l: None,
+            sparge_volume_max_l: None,
+            calc_strike_water_temp: false,
             created_at: 0,
             updated_at: 0,
         });
