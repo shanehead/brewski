@@ -7,6 +7,7 @@
   import { ipc } from "$lib/stores/error";
   import { batchList, refreshBatchList } from "$lib/stores/batches";
   import BatchList from "$lib/components/BatchList.svelte";
+  import TabBar from "$lib/components/TabBar.svelte";
   import BatchOverviewTab from "$lib/components/batch/BatchOverviewTab.svelte";
   import BatchGravityTab from "$lib/components/batch/BatchGravityTab.svelte";
   import BatchNotesTab from "$lib/components/batch/BatchNotesTab.svelte";
@@ -66,17 +67,7 @@
         {batch.name ?? "Batch"} · v{batch.recipe_version_id.slice(0, 6)}
       </div>
       <!-- Tab bar -->
-      <div class="flex gap-1">
-        {#each TABS as tab}
-          <button
-            onclick={() => activeTab = tab.key}
-            class="px-3 py-1.5 text-sm rounded-t transition-colors"
-            style={activeTab === tab.key
-              ? "background: var(--color-bg-base); color: var(--color-text-primary);"
-              : "color: var(--color-text-muted);"}
-          >{tab.label}</button>
-        {/each}
-      </div>
+      <TabBar tabs={TABS} active={activeTab} onchange={(key) => activeTab = key as typeof activeTab} flush />
     </div>
 
     <!-- Tab content -->

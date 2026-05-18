@@ -39,13 +39,18 @@
        style="background: var(--color-bg-surface); border-color: var(--color-border);">
   <!-- Search + New -->
   <div class="p-2 flex flex-col gap-1.5 border-b" style="border-color: var(--color-border);">
-    <input
-      type="search"
-      placeholder="Search recipes…"
-      bind:value={search}
-      class="w-full px-2.5 py-1.5 rounded text-sm outline-none"
-      style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);"
-    />
+    <div class="relative">
+      <svg class="absolute left-2 top-1/2 -translate-y-1/2 pointer-events-none" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-text-muted);">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <input
+        type="search"
+        placeholder="Search recipes…"
+        bind:value={search}
+        class="w-full pl-7 pr-2.5 py-1.5 rounded text-sm outline-none"
+        style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);"
+      />
+    </div>
     <button
       onclick={handleNew}
       class="w-full py-1.5 rounded text-sm font-medium transition-colors"

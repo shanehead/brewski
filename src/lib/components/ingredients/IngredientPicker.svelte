@@ -170,16 +170,21 @@
           {headerTitle}
         </h2>
       </div>
-      <input
-        bind:this={searchInput}
-        bind:value={query}
-        placeholder="Search {type === 'hop' ? 'hops' : type === 'fermentable' ? 'fermentables' : 'yeasts'}…"
-        style="
-          background: var(--color-bg-elevated); border: 1px solid var(--color-border);
-          border-radius: 6px; padding: 7px 10px; font-size: 13px;
-          color: var(--color-text-primary); outline: none; width: 100%; box-sizing: border-box;
-        "
-      />
+      <div style="position: relative;">
+        <svg style="position: absolute; left: 8px; top: 50%; transform: translateY(-50%); pointer-events: none; color: var(--color-text-muted);" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input
+          bind:this={searchInput}
+          bind:value={query}
+          placeholder="Search {type === 'hop' ? 'hops' : type === 'fermentable' ? 'fermentables' : 'yeasts'}…"
+          style="
+            background: var(--color-bg-elevated); border: 1px solid var(--color-border);
+            border-radius: 6px; padding: 7px 10px 7px 28px; font-size: 13px;
+            color: var(--color-text-primary); outline: none; width: 100%; box-sizing: border-box;
+          "
+        />
+      </div>
       <div style="flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 2px;">
         {#if filtered.length === 0}
           <p style="color: var(--color-text-muted); font-size: 12px; text-align: center; margin-top: 24px;">

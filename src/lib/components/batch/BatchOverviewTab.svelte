@@ -2,6 +2,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { goto } from "$app/navigation";
+  import TabBar from "$lib/components/TabBar.svelte";
   import type { Batch, UpdateBatchInput, RecipeVersionSummary } from "$lib/api";
   import { listRecipeVersions } from "$lib/api";
   import { ipc } from "$lib/stores/error";
@@ -47,19 +48,11 @@
   <!-- Status -->
   <div>
     <div class="text-xs mb-2" style="color: var(--color-text-secondary);">STATUS</div>
-    <div class="flex gap-2 flex-wrap">
-      {#each STATUSES as s}
-        <button
-          onclick={() => onUpdate({ status: s })}
-          class="px-3 py-1 rounded text-sm transition-colors"
-          style={batch.status === s
-            ? "background: var(--color-accent); color: #fff;"
-            : "background: var(--color-bg-elevated); color: var(--color-text-secondary);"}
-        >
-          {s.charAt(0).toUpperCase() + s.slice(1)}
-        </button>
-      {/each}
-    </div>
+    <TabBar
+      tabs={STATUSES.map(s => ({ key: s, label: s.charAt(0).toUpperCase() + s.slice(1) }))}
+      active={batch.status}
+      onchange={(key) => onUpdate({ status: key as typeof batch.status })}
+    />
   </div>
 
   <!-- Dates -->
