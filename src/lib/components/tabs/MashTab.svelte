@@ -138,7 +138,7 @@ onDestroy(() => {
     </div>
     <div class="flex flex-col gap-1">
       <label for="mash-grain-temp" class="text-sm font-medium" style="color: var(--color-text-secondary);">Grain Temp ({tempLabel(units)})</label>
-      <input id="mash-grain-temp" type="number" step={units === "imperial" ? 1 : 0.5}
+      <input id="mash-grain-temp" type="number" inputmode="decimal" step={units === "imperial" ? 1 : 0.5}
              value={(units === "imperial" ? cToF(mash?.grain_temp_c ?? 21) : mash?.grain_temp_c ?? 21).toFixed(1)}
              onblur={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); handleMashField({ grain_temp_c: units === "imperial" ? fToC(v) : v }); }}
              class="px-2 py-1.5 rounded text-sm"
@@ -146,7 +146,7 @@ onDestroy(() => {
     </div>
     <div class="flex flex-col gap-1">
       <label for="mash-sparge-temp" class="text-sm font-medium" style="color: var(--color-text-secondary);">Sparge Temp ({tempLabel(units)})</label>
-      <input id="mash-sparge-temp" type="number" step={units === "imperial" ? 1 : 0.5}
+      <input id="mash-sparge-temp" type="number" inputmode="decimal" step={units === "imperial" ? 1 : 0.5}
              value={mash?.sparge_temp_c != null ? (units === "imperial" ? cToF(mash.sparge_temp_c) : mash.sparge_temp_c).toFixed(1) : ""}
              placeholder={units === "imperial" ? "167" : "75"}
              onblur={(e) => {
@@ -158,7 +158,7 @@ onDestroy(() => {
     </div>
     <div class="flex flex-col gap-1">
       <label for="mash-ph" class="text-sm font-medium" style="color: var(--color-text-secondary);">Mash pH</label>
-      <input id="mash-ph" type="number" step="0.1" value={mash?.ph ?? ""}
+      <input id="mash-ph" type="number" inputmode="decimal" step="0.1" value={mash?.ph ?? ""}
              placeholder="5.4"
              onblur={(e) => {
                const v = (e.target as HTMLInputElement).value;
@@ -180,7 +180,7 @@ onDestroy(() => {
     {#if mash && !canAutoDerive}
       <div class="flex flex-col gap-1">
         <label for="mash-ratio" class="text-sm font-medium" style="color: var(--color-text-secondary);">Water:Grain Ratio ({ratioLabel(units)})</label>
-        <input id="mash-ratio" type="number" step="0.1"
+        <input id="mash-ratio" type="number" inputmode="decimal" step="0.1"
                value={mash.ratio_l_per_kg != null
                  ? (units === "imperial" ? lPerKgToQtPerLb(mash.ratio_l_per_kg) : mash.ratio_l_per_kg).toFixed(2)
                  : ""}
@@ -225,7 +225,7 @@ onDestroy(() => {
         </div>
         <div class="flex flex-col w-20">
           <label for="mash-step-temp" class="text-xs mb-1" style="color: var(--color-text-secondary);">Temp ({tempLabel(units)})</label>
-          <input id="mash-step-temp" type="number" step={units === "imperial" ? 1 : 0.5}
+          <input id="mash-step-temp" type="number" inputmode="decimal" step={units === "imperial" ? 1 : 0.5}
                  value={(units === "imperial" ? cToF(stepTemp) : stepTemp).toFixed(1)}
                  onblur={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); if (!isNaN(v)) stepTemp = units === "imperial" ? fToC(v) : v; }}
                  class="h-9 px-2 rounded text-sm"
@@ -233,14 +233,14 @@ onDestroy(() => {
         </div>
         <div class="flex flex-col w-20">
           <label for="mash-step-time" class="text-xs mb-1" style="color: var(--color-text-secondary);">Time (min)</label>
-          <input id="mash-step-time" type="number" bind:value={stepTime} step="5"
+          <input id="mash-step-time" type="number" inputmode="decimal" bind:value={stepTime} step="5"
                  class="h-9 px-2 rounded text-sm"
                  style="background: var(--color-bg-base); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
         </div>
         {#if stepType === "infusion"}
           <div class="flex flex-col w-24">
             <label for="mash-step-infuse" class="text-xs mb-1" style="color: var(--color-text-secondary);">Infuse ({volumeLabel(units)})</label>
-            <input id="mash-step-infuse" type="number" step="0.1"
+            <input id="mash-step-infuse" type="number" inputmode="decimal" step="0.1"
                    placeholder={"Infuse " + volumeLabel(units)}
                    value={stepInfuse != null ? (units === "imperial" ? lToGal(stepInfuse) : stepInfuse).toFixed(1) : ""}
                    onblur={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); stepInfuse = isNaN(v) ? null : (units === "imperial" ? galToL(v) : v); }}
@@ -288,7 +288,7 @@ onDestroy(() => {
                   </div>
                   <div class="flex flex-col w-20">
                     <label for={"step-" + step.id + "-temp"} class="text-xs" style="color: var(--color-text-secondary);">Temp ({tempLabel(units)})</label>
-                    <input id={"step-" + step.id + "-temp"} type="number" step={units === "imperial" ? 1 : 0.5}
+                    <input id={"step-" + step.id + "-temp"} type="number" inputmode="decimal" step={units === "imperial" ? 1 : 0.5}
                            value={(units === "imperial" ? cToF(step.step_temp_c) : step.step_temp_c).toFixed(1)}
                            onclick={(e) => e.stopPropagation()}
                            onblur={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); handleUpdateStepField(step.id, 'step_temp_c', units === 'imperial' ? fToC(v) : v); }}
@@ -297,7 +297,7 @@ onDestroy(() => {
                   </div>
                   <div class="flex flex-col w-20">
                     <label for={"step-" + step.id + "-time"} class="text-xs" style="color: var(--color-text-secondary);">Time (min)</label>
-                    <input id={"step-" + step.id + "-time"} type="number" step="5" value={step.step_time_min}
+                    <input id={"step-" + step.id + "-time"} type="number" inputmode="decimal" step="5" value={step.step_time_min}
                            onclick={(e) => e.stopPropagation()}
                            onblur={(e) => handleUpdateStepField(step.id, 'step_time_min', parseFloat((e.target as HTMLInputElement).value))}
                            class="w-20 px-2 py-1.5 h-10 rounded text-sm"
@@ -306,7 +306,7 @@ onDestroy(() => {
                   {#if step.type_ === 'infusion'}
                     <div class="flex flex-col w-24">
                       <label for={"step-" + step.id + "-infuse"} class="text-xs" style="color: var(--color-text-secondary);">Infuse ({volumeLabel(units)})</label>
-                      <input id={"step-" + step.id + "-infuse"} type="number" step="0.1"
+                      <input id={"step-" + step.id + "-infuse"} type="number" inputmode="decimal" step="0.1"
                              value={step.infuse_amount_l != null ? (units === 'imperial' ? lToGal(step.infuse_amount_l) : step.infuse_amount_l).toFixed(1) : ''}
                              onclick={(e) => e.stopPropagation()}
                              onblur={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); handleUpdateStepField(step.id, 'infuse_amount_l', units === 'imperial' ? galToL(v) : v); }}

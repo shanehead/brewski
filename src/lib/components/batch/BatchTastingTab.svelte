@@ -13,7 +13,7 @@
     <label for="batch-rating" class="text-xs" style="color: var(--color-text-muted);">RATING (1–10)</label>
     <input
       id="batch-rating"
-      type="number"
+      type="number" inputmode="decimal"
       min="1"
       max="10"
       step="1"

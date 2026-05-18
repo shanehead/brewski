@@ -155,7 +155,7 @@
         </div>
         <div class="flex flex-col gap-1">
           <label for="eq-boil-time" class="text-xs" style="color: var(--color-text-secondary);">Boil Time <span style="color: var(--color-text-tertiary);">min</span></label>
-          <input id="eq-boil-time" type="number" value={boilTimeMin} oninput={(e) => boilTimeMin = numInput(e)} class="eq-field-input" />
+          <input id="eq-boil-time" type="number" inputmode="decimal" value={boilTimeMin} oninput={(e) => boilTimeMin = numInput(e)} class="eq-field-input" />
         </div>
         <div class="col-span-2 flex flex-col gap-1">
           <label for="eq-notes" class="text-xs" style="color: var(--color-text-secondary);">Description</label>
@@ -176,7 +176,7 @@
           </div>
           <div class="flex flex-col gap-1">
             <label for="eq-batch-size" class="text-xs" style="color: var(--color-text-secondary);">{batchLabel} <span style="color: var(--color-text-tertiary);">L</span></label>
-            <input id="eq-batch-size" type="number" step="0.1" value={batchSizeL} oninput={(e) => batchSizeL = numInput(e)} class="eq-field-input" />
+            <input id="eq-batch-size" type="number" inputmode="decimal" step="0.1" value={batchSizeL} oninput={(e) => batchSizeL = numInput(e)} class="eq-field-input" />
           </div>
 
           <div class="flex items-center gap-2">
@@ -188,46 +188,46 @@
             {#if calcBoilVolume}
               <div id="eq-boil-size" class="eq-field-display">{preBoilHotL.toFixed(2)} <span style="color: var(--color-text-tertiary);">(hot)</span></div>
             {:else}
-              <input id="eq-boil-size" type="number" step="0.1" value={boilSizeL} oninput={(e) => boilSizeL = numInput(e)} class="eq-field-input" />
+              <input id="eq-boil-size" type="number" inputmode="decimal" step="0.1" value={boilSizeL} oninput={(e) => boilSizeL = numInput(e)} class="eq-field-input" />
             {/if}
           </div>
 
           <div class="flex flex-col gap-1">
             <label for="eq-evap-rate" class="text-xs" style="color: var(--color-text-secondary);">Boil Off <span style="color: var(--color-text-tertiary);">({evapPct.toFixed(1)}%) L/hr</span></label>
-            <input id="eq-evap-rate" type="number" step="0.1" value={evapRatePctHr} oninput={(e) => evapRatePctHr = numInput(e)} class="eq-field-input" />
+            <input id="eq-evap-rate" type="number" inputmode="decimal" step="0.1" value={evapRatePctHr} oninput={(e) => evapRatePctHr = numInput(e)} class="eq-field-input" />
           </div>
           <div class="flex flex-col gap-1">
             <label for="eq-trub-loss" class="text-xs" style="color: var(--color-text-secondary);">Trub/Chiller Loss <span style="color: var(--color-text-tertiary);">L</span></label>
-            <input id="eq-trub-loss" type="number" step="0.01" value={trubChillerLossL} oninput={(e) => trubChillerLossL = numInput(e)} class="eq-field-input" />
+            <input id="eq-trub-loss" type="number" inputmode="decimal" step="0.01" value={trubChillerLossL} oninput={(e) => trubChillerLossL = numInput(e)} class="eq-field-input" />
           </div>
 
           <div class="flex flex-col gap-1">
             <label for="eq-lauter-dead" class="text-xs" style="color: var(--color-text-secondary);">Mash-Tun Deadspace <span style="color: var(--color-text-tertiary);">L</span></label>
-            <input id="eq-lauter-dead" type="number" step="0.01" value={lauterDeadspaceL} oninput={(e) => lauterDeadspaceL = numInput(e)} class="eq-field-input" />
+            <input id="eq-lauter-dead" type="number" inputmode="decimal" step="0.01" value={lauterDeadspaceL} oninput={(e) => lauterDeadspaceL = numInput(e)} class="eq-field-input" />
           </div>
           <div class="flex flex-col gap-1">
             <label for="eq-mash-loss" class="text-xs" style="color: var(--color-text-secondary);">Mash-Tun Loss <span style="color: var(--color-text-tertiary);">L</span></label>
-            <input id="eq-mash-loss" type="number" step="0.01" value={mashTunLossL} oninput={(e) => mashTunLossL = numInput(e)} class="eq-field-input" />
+            <input id="eq-mash-loss" type="number" inputmode="decimal" step="0.01" value={mashTunLossL} oninput={(e) => mashTunLossL = numInput(e)} class="eq-field-input" />
           </div>
 
           <div class="flex flex-col gap-1">
             <label for="eq-hlt-dead" class="text-xs" style="color: var(--color-text-secondary);">HLT Deadspace <span style="color: var(--color-text-tertiary);">L</span></label>
-            <input id="eq-hlt-dead" type="number" step="0.01" placeholder="optional"
+            <input id="eq-hlt-dead" type="number" inputmode="decimal" step="0.01" placeholder="optional"
                    value={hltDeadspaceL ?? ""} oninput={(e) => hltDeadspaceL = nullableNumInput(e)} class="eq-field-input" />
           </div>
           <div class="flex flex-col gap-1">
             <label for="eq-ferm-loss" class="text-xs" style="color: var(--color-text-secondary);">Fermenter Loss <span style="color: var(--color-text-tertiary);">L</span></label>
-            <input id="eq-ferm-loss" type="number" step="0.01" value={fermenterLossL} oninput={(e) => fermenterLossL = numInput(e)} class="eq-field-input" />
+            <input id="eq-ferm-loss" type="number" inputmode="decimal" step="0.01" value={fermenterLossL} oninput={(e) => fermenterLossL = numInput(e)} class="eq-field-input" />
           </div>
 
           <div class="flex flex-col gap-1">
             <label for="eq-topup" class="text-xs" style="color: var(--color-text-secondary);">Fermenter Top-Up <span style="color: var(--color-text-tertiary);">L</span></label>
-            <input id="eq-topup" type="number" step="0.01" placeholder="optional"
+            <input id="eq-topup" type="number" inputmode="decimal" step="0.01" placeholder="optional"
                    value={topUpWaterL || ""} oninput={(e) => topUpWaterL = numInput(e)} class="eq-field-input" />
           </div>
           <div class="flex flex-col gap-1">
             <label for="eq-cooling" class="text-xs" style="color: var(--color-text-secondary);">Cooling Shrinkage <span style="color: var(--color-text-tertiary);">%</span></label>
-            <input id="eq-cooling" type="number" step="0.1" value={coolingShrinkagePct} oninput={(e) => coolingShrinkagePct = numInput(e)} class="eq-field-input" />
+            <input id="eq-cooling" type="number" inputmode="decimal" step="0.1" value={coolingShrinkagePct} oninput={(e) => coolingShrinkagePct = numInput(e)} class="eq-field-input" />
           </div>
         </div>
         <p class="text-xs mt-2 text-right" style="color: var(--color-text-tertiary);">
@@ -241,14 +241,14 @@
         <div class="grid grid-cols-2 gap-4">
           <div class="flex flex-col gap-1">
             <label for="eq-efficiency" class="text-xs" style="color: var(--color-text-secondary);">Brewhouse Efficiency <span style="color: var(--color-text-tertiary);">%</span></label>
-            <input id="eq-efficiency" type="number" step="0.1" value={efficiencyPct} oninput={(e) => efficiencyPct = numInput(e)} class="eq-field-input" />
+            <input id="eq-efficiency" type="number" inputmode="decimal" step="0.1" value={efficiencyPct} oninput={(e) => efficiencyPct = numInput(e)} class="eq-field-input" />
           </div>
           <div class="flex flex-col gap-1">
             <label for="eq-mash-eff" class="text-xs" style="color: var(--color-text-secondary);">Mash Efficiency <span style="color: var(--color-text-tertiary);">%</span></label>
             {#if calcMashEfficiency}
               <div id="eq-mash-eff" class="eq-field-display" style="color: var(--color-text-tertiary);">calculated</div>
             {:else}
-              <input id="eq-mash-eff" type="number" step="0.1" placeholder="optional"
+              <input id="eq-mash-eff" type="number" inputmode="decimal" step="0.1" placeholder="optional"
                      value={mashEfficiencyPct ?? ""} oninput={(e) => mashEfficiencyPct = nullableNumInput(e)} class="eq-field-input" />
             {/if}
           </div>
@@ -265,14 +265,14 @@
         <div class="grid grid-cols-2 gap-4">
           <div class="flex flex-col gap-1">
             <label for="eq-hop-util" class="text-xs" style="color: var(--color-text-secondary);">Hop Utilization Multiplier <span style="color: var(--color-text-tertiary);">%</span></label>
-            <input id="eq-hop-util" type="number" step="1" value={hopUtilizationPct} oninput={(e) => hopUtilizationPct = numInput(e)} class="eq-field-input" />
+            <input id="eq-hop-util" type="number" inputmode="decimal" step="1" value={hopUtilizationPct} oninput={(e) => hopUtilizationPct = numInput(e)} class="eq-field-input" />
           </div>
           <div class="flex flex-col gap-1">
             <label for="eq-aroma-util" class="text-xs" style="color: var(--color-text-secondary);">Aroma Hop Utilization <span style="color: var(--color-text-tertiary);">%</span></label>
             {#if calcAromaHopUtilization}
               <div id="eq-aroma-util" class="eq-field-display" style="color: var(--color-text-tertiary);">calculated</div>
             {:else}
-              <input id="eq-aroma-util" type="number" step="0.1" value={aromaHopUtilizationPct} oninput={(e) => aromaHopUtilizationPct = numInput(e)} class="eq-field-input" />
+              <input id="eq-aroma-util" type="number" inputmode="decimal" step="0.1" value={aromaHopUtilizationPct} oninput={(e) => aromaHopUtilizationPct = numInput(e)} class="eq-field-input" />
             {/if}
           </div>
           <div class="flex items-center gap-2 col-span-2">
@@ -281,7 +281,7 @@
           </div>
           <div class="flex flex-col gap-1">
             <label for="eq-whirlpool" class="text-xs" style="color: var(--color-text-secondary);">Whirlpool / No-Chill Time <span style="color: var(--color-text-tertiary);">min</span></label>
-            <input id="eq-whirlpool" type="number" step="1" placeholder="optional"
+            <input id="eq-whirlpool" type="number" inputmode="decimal" step="1" placeholder="optional"
                    value={whirlpoolTimeMin ?? ""} oninput={(e) => whirlpoolTimeMin = nullableNumInput(e)} class="eq-field-input" />
           </div>
         </div>
@@ -300,7 +300,7 @@
             {#if altitudeAdjustment}
               <div id="eq-boil-temp" class="eq-field-display" style="color: var(--color-text-tertiary);">calculated from altitude</div>
             {:else}
-              <input id="eq-boil-temp" type="number" step="1" placeholder="212"
+              <input id="eq-boil-temp" type="number" inputmode="decimal" step="1" placeholder="212"
                      value={boilTempF ?? ""} oninput={(e) => boilTempF = nullableNumInput(e)} class="eq-field-input" />
             {/if}
           </div>
@@ -313,12 +313,12 @@
         <div class="grid grid-cols-2 gap-4">
           <div class="flex flex-col gap-1">
             <label for="eq-tun-vol" class="text-xs" style="color: var(--color-text-secondary);">Tun Volume <span style="color: var(--color-text-tertiary);">L</span></label>
-            <input id="eq-tun-vol" type="number" step="0.1" placeholder="optional"
+            <input id="eq-tun-vol" type="number" inputmode="decimal" step="0.1" placeholder="optional"
                    value={tunVolumeL ?? ""} oninput={(e) => tunVolumeL = nullableNumInput(e)} class="eq-field-input" />
           </div>
           <div class="flex flex-col gap-1">
             <label for="eq-tun-weight" class="text-xs" style="color: var(--color-text-secondary);">Tun Weight <span style="color: var(--color-text-tertiary);">kg</span></label>
-            <input id="eq-tun-weight" type="number" step="0.1" placeholder="optional"
+            <input id="eq-tun-weight" type="number" inputmode="decimal" step="0.1" placeholder="optional"
                    value={tunWeightKg ?? ""} oninput={(e) => tunWeightKg = nullableNumInput(e)} class="eq-field-input" />
           </div>
           <div class="col-span-2 flex flex-col gap-1">
@@ -333,24 +333,24 @@
           <div class="col-span-2 text-xs font-medium mt-1" style="color: var(--color-text-secondary);">Mash Volume Limits</div>
           <div class="flex flex-col gap-1">
             <label for="eq-mash-vol-min" class="text-xs" style="color: var(--color-text-secondary);">Min <span style="color: var(--color-text-tertiary);">L</span></label>
-            <input id="eq-mash-vol-min" type="number" step="0.1" placeholder="optional"
+            <input id="eq-mash-vol-min" type="number" inputmode="decimal" step="0.1" placeholder="optional"
                    value={mashVolumeMinL ?? ""} oninput={(e) => mashVolumeMinL = nullableNumInput(e)} class="eq-field-input" />
           </div>
           <div class="flex flex-col gap-1">
             <label for="eq-mash-vol-max" class="text-xs" style="color: var(--color-text-secondary);">Max <span style="color: var(--color-text-tertiary);">L</span></label>
-            <input id="eq-mash-vol-max" type="number" step="0.1" placeholder="optional"
+            <input id="eq-mash-vol-max" type="number" inputmode="decimal" step="0.1" placeholder="optional"
                    value={mashVolumeMaxL ?? ""} oninput={(e) => mashVolumeMaxL = nullableNumInput(e)} class="eq-field-input" />
           </div>
 
           <div class="col-span-2 text-xs font-medium mt-1" style="color: var(--color-text-secondary);">Sparge Volume Limits</div>
           <div class="flex flex-col gap-1">
             <label for="eq-sparge-vol-min" class="text-xs" style="color: var(--color-text-secondary);">Min <span style="color: var(--color-text-tertiary);">L</span></label>
-            <input id="eq-sparge-vol-min" type="number" step="0.1" placeholder="optional"
+            <input id="eq-sparge-vol-min" type="number" inputmode="decimal" step="0.1" placeholder="optional"
                    value={spargeVolumeMinL ?? ""} oninput={(e) => spargeVolumeMinL = nullableNumInput(e)} class="eq-field-input" />
           </div>
           <div class="flex flex-col gap-1">
             <label for="eq-sparge-vol-max" class="text-xs" style="color: var(--color-text-secondary);">Max <span style="color: var(--color-text-tertiary);">L</span></label>
-            <input id="eq-sparge-vol-max" type="number" step="0.1" placeholder="optional"
+            <input id="eq-sparge-vol-max" type="number" inputmode="decimal" step="0.1" placeholder="optional"
                    value={spargeVolumeMaxL ?? ""} oninput={(e) => spargeVolumeMaxL = nullableNumInput(e)} class="eq-field-input" />
           </div>
 

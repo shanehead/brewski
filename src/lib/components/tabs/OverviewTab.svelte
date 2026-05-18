@@ -49,7 +49,7 @@
 
   <div class="flex flex-col gap-1">
     <label for="overview-batch-size" class="text-sm font-medium" style="color: var(--color-text-secondary);">Batch Size ({volumeLabel(units)})</label>
-    <input id="overview-batch-size" type="number" step="0.1"
+    <input id="overview-batch-size" type="number" inputmode="decimal" step="0.1"
            value={(units === "imperial" ? lToGal(recipe.batch_size_l) : recipe.batch_size_l).toFixed(1)}
            onblur={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); save("batch_size_l", units === "imperial" ? galToL(v) : v); }}
            class="w-full px-2 py-1.5 rounded text-sm"
@@ -58,7 +58,7 @@
 
   <div class="flex flex-col gap-1">
     <label for="overview-boil-size" class="text-sm font-medium" style="color: var(--color-text-secondary);">Boil Size ({volumeLabel(units)})</label>
-    <input id="overview-boil-size" type="number" step="0.1"
+    <input id="overview-boil-size" type="number" inputmode="decimal" step="0.1"
            value={(units === "imperial" ? lToGal(recipe.boil_size_l) : recipe.boil_size_l).toFixed(1)}
            onblur={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); save("boil_size_l", units === "imperial" ? galToL(v) : v); }}
            class="w-full px-2 py-1.5 rounded text-sm"
@@ -67,7 +67,7 @@
 
   <div class="flex flex-col gap-1">
     <label for="overview-boil-time" class="text-sm font-medium" style="color: var(--color-text-secondary);">Boil Time (min)</label>
-    <input id="overview-boil-time" type="number" step="5" value={recipe.boil_time_min}
+    <input id="overview-boil-time" type="number" inputmode="decimal" step="5" value={recipe.boil_time_min}
            onblur={(e) => save("boil_time_min", parseFloat((e.target as HTMLInputElement).value))}
            class="w-full px-2 py-1.5 rounded text-sm"
            style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
@@ -75,7 +75,7 @@
 
   <div class="flex flex-col gap-1">
     <label for="overview-efficiency" class="text-sm font-medium" style="color: var(--color-text-secondary);">Efficiency (%)</label>
-    <input id="overview-efficiency" type="number" step="1" value={recipe.efficiency_pct ?? ""}
+    <input id="overview-efficiency" type="number" inputmode="decimal" step="1" value={recipe.efficiency_pct ?? ""}
            placeholder="From equipment profile"
            onblur={(e) => {
              const v = (e.target as HTMLInputElement).value;

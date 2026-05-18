@@ -139,8 +139,8 @@
   bind:this={dialog}
   onclick={handleBackdropClick}
   onclose={onclose}
+  class="ingredient-picker-dialog"
   style="
-    width: 80vw; max-width: 960px; min-width: 560px; height: 75vh;
     background: var(--color-bg-surface); border: 1px solid var(--color-border);
     border-radius: 10px; padding: 0; color: var(--color-text-primary); overflow: hidden;
     position: relative;
@@ -252,7 +252,7 @@
         <div style="border-top: 1px solid var(--color-border); padding: 12px 16px; display: flex; gap: 10px; align-items: flex-end; background: var(--color-bg-surface); flex-shrink: 0;">
           <div>
             <div style="font-size: 11px; color: var(--color-text-secondary); margin-bottom: 4px;">Amount ({hopWeightLabel(units)})</div>
-            <input type="number" step={units === 'imperial' ? 0.1 : 1}
+            <input type="number" inputmode="decimal" step={units === 'imperial' ? 0.1 : 1}
               value={kgToHopDisplay(amount, units).toFixed(units === 'imperial' ? 2 : 0)}
               onblur={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); if (!isNaN(v)) amount = hopDisplayToKg(v, units); }}
               min="0.001"
@@ -266,13 +266,13 @@
           </div>
           <div>
             <div style="font-size: 11px; color: var(--color-text-secondary); margin-bottom: 4px;">Time (min)</div>
-            <input type="number" step="5" bind:value={time} min="0"
+            <input type="number" inputmode="decimal" step="5" bind:value={time} min="0"
               style="width: 60px; background: var(--color-bg-elevated); border: 1px solid var(--color-border); border-radius: 5px; padding: 5px 8px; color: var(--color-text-primary); font-size: 13px;" />
           </div>
           {#if use_ === 'hopstand'}
           <div>
             <div style="font-size: 11px; color: var(--color-text-secondary); margin-bottom: 4px;">Temp ({tempLabel(units)})</div>
-            <input type="number" step="1"
+            <input type="number" inputmode="decimal" step="1"
               value={units === 'imperial' ? cToF(hopstand_temp_c).toFixed(0) : hopstand_temp_c}
               onblur={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); if (!isNaN(v)) hopstand_temp_c = units === 'imperial' ? fToC(v) : v; }}
               min="0"
@@ -322,7 +322,7 @@
         <div style="border-top: 1px solid var(--color-border); padding: 12px 16px; display: flex; gap: 10px; align-items: flex-end; background: var(--color-bg-surface); flex-shrink: 0;">
           <div>
             <div style="font-size: 11px; color: var(--color-text-secondary); margin-bottom: 4px;">Amount ({weightLabel(units)})</div>
-            <input type="number" step="0.1"
+            <input type="number" inputmode="decimal" step="0.1"
               value={(units === 'imperial' ? kgToLb(amount) : amount).toFixed(2)}
               onblur={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); if (!isNaN(v)) amount = units === 'imperial' ? lbToKg(v) : v; }}
               min="0.01"
@@ -406,7 +406,7 @@
         <div style="border-top: 1px solid var(--color-border); padding: 12px 16px; display: flex; gap: 10px; align-items: flex-end; background: var(--color-bg-surface); flex-shrink: 0;">
           <div>
             <div style="font-size: 11px; color: var(--color-text-secondary); margin-bottom: 4px;">Packages</div>
-            <input type="number" step="1"
+            <input type="number" inputmode="decimal" step="1"
               value={amount}
               oninput={(e) => { const v = parseInt((e.target as HTMLInputElement).value, 10); if (!isNaN(v) && v > 0) amount = v; }}
               min="1"

@@ -74,7 +74,7 @@
             <td class="py-1.5" style="color: var(--color-text-primary);">{f.name}</td>
             <td class="text-right py-1.5" style="color: var(--color-text-secondary);">{f.color_lovibond}°L</td>
             <td class="text-right py-1.5">
-              <input type="number" step={units === "imperial" ? 0.1 : 0.05}
+              <input type="number" inputmode="decimal" step={units === "imperial" ? 0.1 : 0.05}
                      value={(units === "imperial" ? kgToLb(f.amount_kg) : f.amount_kg).toFixed(2)}
                      onblur={(e) => handleAmountChange(f, (e.target as HTMLInputElement).value)}
                      class="w-16 text-right px-1 rounded text-xs"

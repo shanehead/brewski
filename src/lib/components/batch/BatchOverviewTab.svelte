@@ -95,7 +95,7 @@
           <label for="batch-{row.field}" class="text-xs block mb-1" style="color: var(--color-text-secondary);">{row.label}</label>
           <input
             id="batch-{row.field}"
-            type="number"
+            type="number" inputmode="decimal"
             step="0.001"
             value={row.value ?? ""}
             onblur={(e) => {

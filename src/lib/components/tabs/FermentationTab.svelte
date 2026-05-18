@@ -26,7 +26,7 @@
   ] as row}
     <div class="flex flex-col gap-1">
       <label for="ferm-{row.field}" class="text-sm font-medium" style="color: var(--color-text-secondary);">{row.label}</label>
-      <input id="ferm-{row.field}" type="number" step="1"
+      <input id="ferm-{row.field}" type="number" inputmode="decimal" step="1"
              value={(recipe as any)[row.field] ?? ""}
              onblur={(e) => {
                const v = (e.target as HTMLInputElement).value;
@@ -43,7 +43,7 @@
 
   <div class="flex flex-col gap-1">
     <label for="ferm-carb-vols" class="text-sm font-medium" style="color: var(--color-text-secondary);">CO₂ Volumes</label>
-    <input id="ferm-carb-vols" type="number" step="0.1" value={recipe.carbonation_vols ?? ""}
+    <input id="ferm-carb-vols" type="number" inputmode="decimal" step="0.1" value={recipe.carbonation_vols ?? ""}
            onblur={(e) => {
              const v = (e.target as HTMLInputElement).value;
              save("carbonation_vols", v ? parseFloat(v) : null);

@@ -34,7 +34,7 @@
 
   <div class="flex flex-col gap-1">
     <label for="notes-rating" class="text-sm font-medium" style="color: var(--color-text-secondary);">Taste Rating (0–50)</label>
-    <input id="notes-rating" type="number" step="1" min="0" max="50"
+    <input id="notes-rating" type="number" inputmode="decimal" step="1" min="0" max="50"
            value={recipe.taste_rating ?? ""}
            onblur={(e) => {
              const v = (e.target as HTMLInputElement).value;

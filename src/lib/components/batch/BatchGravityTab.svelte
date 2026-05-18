@@ -76,10 +76,10 @@
       <input type="date" bind:value={newDate}
         class="px-2 py-1.5 rounded text-sm outline-none"
         style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
-      <input type="number" step="0.001" placeholder="Gravity (e.g. 1.058)" bind:value={newGravity}
+      <input type="number" inputmode="decimal" step="0.001" placeholder="Gravity (e.g. 1.058)" bind:value={newGravity}
         class="px-2 py-1.5 rounded text-sm outline-none w-40"
         style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
-      <input type="number" step="0.1" placeholder="Temp °C" bind:value={newTemp}
+      <input type="number" inputmode="decimal" step="0.1" placeholder="Temp °C" bind:value={newTemp}
         class="px-2 py-1.5 rounded text-sm outline-none w-24"
         style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
       <input type="text" placeholder="Notes" bind:value={newNotes}

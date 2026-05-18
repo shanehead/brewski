@@ -147,7 +147,7 @@
             {#each adjustments.filter(a => a.target === target) as adj}
               <div class="flex items-center gap-2">
                 <span class="text-sm flex-1" style="color: var(--color-text-secondary);">{getAdditionLabel(adj.addition)}</span>
-                <input type="number" step="0.1" min="0" value={adj.amount}
+                <input type="number" inputmode="decimal" step="0.1" min="0" value={adj.amount}
                        onchange={(e) => handleUpdateAddition(adj.id, parseFloat((e.target as HTMLInputElement).value) || 0)}
                        class="w-20 px-2 py-1 rounded text-sm"
                        style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
