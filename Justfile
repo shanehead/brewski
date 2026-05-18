@@ -11,6 +11,12 @@ install-hooks:
 dev:
     bun run tauri dev
 
+# Start the Tauri Android dev server
+dev-android:
+    ANDROID_HOME=~/Library/Android/sdk \
+    NDK_HOME=~/Library/Android/sdk/ndk/30.0.14904198 \
+    bun run tauri android dev
+
 # Start the frontend dev server only (no Tauri)
 dev-web:
     bun run dev
