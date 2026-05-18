@@ -14,7 +14,7 @@
     onchange,
     flush = false,
   }: {
-    tabs: Tab[];
+    tabs: readonly Tab[];
     active: string;
     onchange: (key: string) => void;
     flush?: boolean;
