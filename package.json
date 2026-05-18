@@ -15,29 +15,29 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@tailwindcss/vite": "^4.2.4",
+    "@tailwindcss/vite": "^4.3.0",
     "@tauri-apps/api": "^2",
     "@tauri-apps/plugin-opener": "^2",
-    "tailwindcss": "^4.2.4"
+    "tailwindcss": "^4.3.0"
   },
   "devDependencies": {
-    "@redocly/cli": "^2.30.3",
-    "@sveltejs/adapter-static": "^3.0.6",
-    "@sveltejs/kit": "^2.9.0",
+    "@redocly/cli": "^2.30.6",
+    "@sveltejs/adapter-static": "^3.0.10",
+    "@sveltejs/kit": "^2.60.1",
     "@sveltejs/vite-plugin-svelte": "^5.0.0",
     "@tauri-apps/cli": "^2",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/svelte": "^5.3.1",
     "@testing-library/user-event": "^14.6.1",
-    "@types/node": "^25.6.0",
+    "@types/node": "^25.8.0",
     "happy-dom": "^20.9.0",
     "js-yaml": "^4.1.1",
     "openapi-typescript": "^7.13.0",
-    "svelte": "^5.0.0",
-    "svelte-check": "^4.0.0",
+    "svelte": "^5.55.7",
+    "svelte-check": "^4.4.8",
     "typescript": "~5.6.2",
     "vite": "^6.0.3",
-    "vitest": "^4.1.5",
-    "yaml": "^2.8.4"
+    "vitest": "^4.1.6",
+    "yaml": "^2.9.0"
   }
 }
