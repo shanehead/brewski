@@ -11,7 +11,7 @@
   import "../themes/ayu-light.css";
   import "../themes/github-light.css";
   import { settings } from "$lib/stores/settings";
-  import AppShell from "$lib/components/AppShell.svelte";
+  import AppShell from "$platform/AppShell.svelte";
 
   let { children } = $props();
 

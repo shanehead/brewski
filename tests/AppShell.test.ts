@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import { render } from "@testing-library/svelte";
-import AppShell from "../src/lib/components/AppShell.svelte";
+import AppShell from "../src/lib/desktop/AppShell.svelte";
 
 vi.mock("$app/stores", () => ({
   page: {
