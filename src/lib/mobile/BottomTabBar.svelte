@@ -12,7 +12,7 @@
       label: "Batches",
       href: "/batches",
       activeWhen: (p: string) => p.startsWith("/batches"),
-      icon: `<path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2v-4M9 21H5a2 2 0 0 1-2-2v-4m0 0h18"/>`,
+      icon: `<path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2v-4M9 21H5a2 2 0 0 1-2-2v-4m0 0h18"/>`,
     },
     {
       label: "Tools",
@@ -37,10 +37,11 @@
     {@const active = tab.activeWhen($page.url.pathname)}
     <a
       href={tab.href}
+      aria-current={active ? "page" : undefined}
       class="flex flex-col items-center justify-center flex-1 py-2 gap-1 text-xs transition-colors"
       style={active ? "color: var(--color-accent);" : "color: var(--color-text-secondary);"}
     >
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
         {@html tab.icon}
       </svg>
       {tab.label}
