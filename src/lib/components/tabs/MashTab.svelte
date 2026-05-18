@@ -227,7 +227,7 @@ onDestroy(() => {
           <label for="mash-step-temp" class="text-xs mb-1" style="color: var(--color-text-secondary);">Temp ({tempLabel(units)})</label>
           <input id="mash-step-temp" type="number" step={units === "imperial" ? 1 : 0.5}
                  value={(units === "imperial" ? cToF(stepTemp) : stepTemp).toFixed(1)}
-                 oninput={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); if (!isNaN(v)) stepTemp = units === "imperial" ? fToC(v) : v; }}
+                 onblur={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); if (!isNaN(v)) stepTemp = units === "imperial" ? fToC(v) : v; }}
                  class="h-9 px-2 rounded text-sm"
                  style="background: var(--color-bg-base); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
         </div>
@@ -243,7 +243,7 @@ onDestroy(() => {
             <input id="mash-step-infuse" type="number" step="0.1"
                    placeholder={"Infuse " + volumeLabel(units)}
                    value={stepInfuse != null ? (units === "imperial" ? lToGal(stepInfuse) : stepInfuse).toFixed(1) : ""}
-                   oninput={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); stepInfuse = isNaN(v) ? null : (units === "imperial" ? galToL(v) : v); }}
+                   onblur={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); stepInfuse = isNaN(v) ? null : (units === "imperial" ? galToL(v) : v); }}
                    class="h-9 px-2 rounded text-sm"
                    style="background: var(--color-bg-base); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
           </div>

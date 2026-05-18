@@ -249,7 +249,7 @@
             <div style="font-size: 11px; color: var(--color-text-secondary); margin-bottom: 4px;">Amount ({hopWeightLabel(units)})</div>
             <input type="number" step={units === 'imperial' ? 0.1 : 1}
               value={kgToHopDisplay(amount, units).toFixed(units === 'imperial' ? 2 : 0)}
-              oninput={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); if (!isNaN(v)) amount = hopDisplayToKg(v, units); }}
+              onblur={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); if (!isNaN(v)) amount = hopDisplayToKg(v, units); }}
               min="0.001"
               style="width: 70px; background: var(--color-bg-elevated); border: 1px solid var(--color-border); border-radius: 5px; padding: 5px 8px; color: var(--color-text-primary); font-size: 13px;" />
           </div>
@@ -269,7 +269,7 @@
             <div style="font-size: 11px; color: var(--color-text-secondary); margin-bottom: 4px;">Temp ({tempLabel(units)})</div>
             <input type="number" step="1"
               value={units === 'imperial' ? cToF(hopstand_temp_c).toFixed(0) : hopstand_temp_c}
-              oninput={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); if (!isNaN(v)) hopstand_temp_c = units === 'imperial' ? fToC(v) : v; }}
+              onblur={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); if (!isNaN(v)) hopstand_temp_c = units === 'imperial' ? fToC(v) : v; }}
               min="0"
               style="width: 60px; background: var(--color-bg-elevated); border: 1px solid var(--color-border); border-radius: 5px; padding: 5px 8px; color: var(--color-text-primary); font-size: 13px;" />
           </div>
@@ -319,7 +319,7 @@
             <div style="font-size: 11px; color: var(--color-text-secondary); margin-bottom: 4px;">Amount ({weightLabel(units)})</div>
             <input type="number" step="0.1"
               value={(units === 'imperial' ? kgToLb(amount) : amount).toFixed(2)}
-              oninput={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); if (!isNaN(v)) amount = units === 'imperial' ? lbToKg(v) : v; }}
+              onblur={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); if (!isNaN(v)) amount = units === 'imperial' ? lbToKg(v) : v; }}
               min="0.01"
               style="width: 80px; background: var(--color-bg-elevated); border: 1px solid var(--color-border); border-radius: 5px; padding: 5px 8px; color: var(--color-text-primary); font-size: 13px;" />
           </div>
