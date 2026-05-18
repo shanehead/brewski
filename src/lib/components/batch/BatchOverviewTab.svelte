@@ -70,8 +70,9 @@
       { label: "Packaging Date", field: "packaging_date", value: batch.packaging_date },
     ] as item}
       <div>
-        <label class="text-xs block mb-1" style="color: var(--color-text-secondary);">{item.label}</label>
+        <label for="batch-{item.field}" class="text-xs block mb-1" style="color: var(--color-text-secondary);">{item.label}</label>
         <input
+          id="batch-{item.field}"
           type="date"
           value={toDateInput(item.value)}
           onchange={(e) => onUpdate({ [item.field]: fromDateInput(e.currentTarget.value) })}
@@ -98,8 +99,9 @@
           class="p-3 rounded"
           style="background: var(--color-bg-elevated); {row.prominent ? 'border: 1px solid var(--color-accent);' : ''}"
         >
-          <label class="text-xs block mb-1" style="color: var(--color-text-secondary);">{row.label}</label>
+          <label for="batch-{row.field}" class="text-xs block mb-1" style="color: var(--color-text-secondary);">{row.label}</label>
           <input
+            id="batch-{row.field}"
             type="number"
             step="0.001"
             value={row.value ?? ""}

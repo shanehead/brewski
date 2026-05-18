@@ -1,16 +1,18 @@
 <!-- src/lib/components/batch/BatchTastingTab.svelte -->
 <script lang="ts">
+  import { untrack } from "svelte";
   import type { Batch, UpdateBatchInput } from "$lib/api";
 
   let { batch, onUpdate }: { batch: Batch; onUpdate: (input: UpdateBatchInput) => void } = $props();
 
-  let ratingInput = $state(batch.rating?.toString() ?? "");
+  let ratingInput = $state(untrack(() => batch.rating?.toString() ?? ""));
 </script>
 
 <div class="p-4 flex flex-col gap-4 overflow-y-auto">
   <div class="flex flex-col gap-1">
-    <label class="text-xs" style="color: var(--color-text-muted);">RATING (1–10)</label>
+    <label for="batch-rating" class="text-xs" style="color: var(--color-text-muted);">RATING (1–10)</label>
     <input
+      id="batch-rating"
       type="number"
       min="1"
       max="10"
@@ -26,8 +28,8 @@
     />
   </div>
   <div class="flex flex-col gap-1 flex-1">
-    <label class="text-xs" style="color: var(--color-text-muted);">TASTING NOTES</label>
-    <textarea
+    <label for="batch-tasting-notes" class="text-xs" style="color: var(--color-text-muted);">TASTING NOTES</label>
+    <textarea id="batch-tasting-notes"
       value={batch.tasting_notes ?? ""}
       onblur={(e) => onUpdate({ tasting_notes: e.currentTarget.value || null })}
       placeholder="Appearance, aroma, flavor, mouthfeel…"
