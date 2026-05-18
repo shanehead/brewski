@@ -48,11 +48,25 @@
   <!-- Status -->
   <div>
     <div class="text-xs mb-2" style="color: var(--color-text-secondary);">STATUS</div>
-    <TabBar
-      tabs={STATUSES.map(s => ({ key: s, label: s.charAt(0).toUpperCase() + s.slice(1) }))}
-      active={batch.status}
-      onchange={(key) => onUpdate({ status: key as typeof batch.status })}
-    />
+    <!-- Mobile: native select -->
+    <select
+      class="md:hidden w-full px-3 py-2 rounded text-sm outline-none"
+      style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);"
+      value={batch.status}
+      onchange={(e) => onUpdate({ status: e.currentTarget.value as typeof batch.status })}
+    >
+      {#each STATUSES as s}
+        <option value={s}>{s.charAt(0).toUpperCase() + s.slice(1)}</option>
+      {/each}
+    </select>
+    <!-- Desktop: tab bar -->
+    <div class="hidden md:block">
+      <TabBar
+        tabs={STATUSES.map(s => ({ key: s, label: s.charAt(0).toUpperCase() + s.slice(1) }))}
+        active={batch.status}
+        onchange={(key) => onUpdate({ status: key as typeof batch.status })}
+      />
+    </div>
   </div>
 
   <!-- Dates -->

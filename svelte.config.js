@@ -5,6 +5,9 @@
 import adapter from "@sveltejs/adapter-static";
 import { vitePreprocess } from "@sveltejs/vite-plugin-svelte";
 
+const platform = process.env.TAURI_ENV_PLATFORM ?? "desktop";
+const isMobile = platform === "ios" || platform === "android";
+
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
   preprocess: vitePreprocess(),
@@ -13,7 +16,7 @@ const config = {
       fallback: "index.html",
     }),
     alias: {
-      $platform: "src/lib/desktop",
+      $platform: isMobile ? "src/lib/mobile" : "src/lib/desktop",
     },
   },
 };

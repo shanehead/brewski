@@ -11,6 +11,10 @@ install-hooks:
 dev:
     bun run tauri dev
 
+# Start the Tauri iOS dev server
+dev-ios:
+    PATH="/opt/homebrew/bin:$PATH" bun run tauri ios dev
+
 # Start the Tauri Android dev server
 dev-android:
     ANDROID_HOME=~/Library/Android/sdk \

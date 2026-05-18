@@ -18,7 +18,7 @@
     padding-top: env(safe-area-inset-top, 0px);
   "
 >
-  <div class="flex flex-1 overflow-hidden">
+  <div class="flex-1 flex flex-col overflow-hidden min-h-0">
     {@render children()}
   </div>
   <BottomTabBar />
