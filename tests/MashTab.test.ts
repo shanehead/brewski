@@ -4,6 +4,10 @@ import { tick } from "svelte";
 import userEvent from "@testing-library/user-event";
 import type { Recipe, Mash, MashStep, RecipeStats, RecipeAdditionFermentable } from "$lib/api";
 import MashTab from "$lib/components/tabs/MashTab.svelte";
+// FORM_RESET_HANDLER is not re-exported from svelte/internal/client — import directly.
+// happy-dom hides symbol properties from Object.getOwnPropertySymbols, so we must
+// hold the exact Symbol instance that Svelte used when it attached the reset handler.
+import { FORM_RESET_HANDLER } from "../node_modules/svelte/src/internal/client/constants.js";
 
 vi.mock("@tauri-apps/api/core", () => ({ invoke: vi.fn() }));
 
@@ -136,10 +140,14 @@ describe("MashTab: infuse amount input in Add Step form", () => {
     // Trigger Svelte's binding reset handler directly.
     // happy-dom doesn't implement :checked for <option>, so Svelte's normal change-event
     // path can't detect the new value. The reset path uses [selected] attribute instead.
-    // __on_r is a private Svelte internal — assert it exists so a rename fails loudly.
+    // Svelte stores this handler as element[FORM_RESET_HANDLER] where FORM_RESET_HANDLER is
+    // Symbol('form reset') from svelte/src/internal/client/constants.js. We must import the
+    // exact Symbol instance — happy-dom hides symbol keys from Object.getOwnPropertySymbols
+    // so searching by description doesn't work. Assert the handler exists so a Svelte
+    // refactor fails loudly.
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const resetHandler = (select as any).__on_r;
-    expect(resetHandler, "__on_r handler missing — Svelte internal API may have changed").toBeDefined();
+    const resetHandler = (select as any)[FORM_RESET_HANDLER];
+    expect(resetHandler, "FORM_RESET_HANDLER handler missing — Svelte internal API may have changed").toBeDefined();
     resetHandler();
     await tick();
 
