@@ -5,164 +5,180 @@
 
 ## Goals
 
-Make Brewski run natively on iOS and Android via Tauri 2's mobile support. The layout adapts per device class: phones get a simplified single-scroll experience with bottom tab navigation; tablets retain the existing sidebar layout.
+Make Brewski run natively on iOS and Android via Tauri 2's mobile support. Each platform gets a clean, purpose-built implementation with no branching conditionals in shared code.
 
-## Device Classes
+## Platform Classes
 
-| Class | Platform | Navigation |
-|-------|----------|------------|
-| Phone | `ios`, `android` | Bottom tab bar, full-screen panels |
-| Desktop/Tablet | `macos`, `windows`, `linux` | Existing icon rail + sidebars |
-
-Platform is detected once at startup via `@tauri-apps/plugin-os`. A narrow desktop window does not trigger the mobile layout.
+| Class | `TAURI_ENV_PLATFORM` | Navigation |
+|-------|----------------------|------------|
+| Mobile | `ios`, `android` | Bottom tab bar, full-screen panels, single-scroll views |
+| Desktop | `macos`, `windows`, `linux` | Existing icon rail + sidebars + tabbed views |
 
 ---
 
-## Phase 1 — Tauri Mobile Setup + Navigation Shell
+## Core Architecture: Vite Platform Alias
+
+Platform separation is resolved at **build time** via a Vite module alias. No runtime detection, no branching `{#if}` blocks, no dead code shipped.
+
+```ts
+// vite.config.ts
+const mobile = process.env.TAURI_ENV_PLATFORM === "ios"
+            || process.env.TAURI_ENV_PLATFORM === "android";
+
+resolve: {
+  alias: {
+    "$platform": path.resolve(`./src/lib/${mobile ? "mobile" : "desktop"}`)
+  }
+}
+```
+
+Route files import from `$platform` — they stay thin and platform-agnostic:
+
+```svelte
+<!-- src/routes/recipe/[id]/+page.svelte -->
+import RecipeView from "$platform/RecipeView.svelte";
+```
+
+When building for iOS/Android, Vite resolves `$platform` to `src/lib/mobile/`. For desktop it resolves to `src/lib/desktop/`. The unused platform's components are tree-shaken out entirely.
+
+### File structure
+
+```
+src/lib/
+  mobile/
+    AppShell.svelte       ← bottom tab bar, safe area insets, full-screen panels
+    RecipeView.svelte     ← single-scroll recipe editor
+    BatchView.svelte      ← single-scroll batch tracker
+    BottomTabBar.svelte   ← tab bar component (Recipes, Batches, Tools, More)
+  desktop/
+    AppShell.svelte       ← existing icon rail + sidebars (moved from AppShell.svelte)
+    RecipeView.svelte     ← existing tabbed 3-panel view (extracted from route page)
+    BatchView.svelte      ← existing tabbed view (extracted from route page)
+```
+
+Route pages become thin shells that import from `$platform` and pass data through. All layout logic lives in the platform-specific files.
+
+---
+
+## Phase 1 — Tauri Mobile Setup + Build Config
 
 ### Tauri mobile init
 
 - Run `cargo tauri ios init` and `cargo tauri android init` to scaffold the mobile projects.
-- Add `tauri-plugin-os` to `Cargo.toml` and register it in `src-tauri/src/main.rs`. Add `@tauri-apps/plugin-os` as a JS dependency.
-- Add file storage permissions to `Info.plist` / `AndroidManifest.xml` as needed (database file access).
-- The SQLite DB path uses Tauri's `app_data_dir()` which already resolves correctly on mobile.
+- Add file storage permissions to `Info.plist` / `AndroidManifest.xml` as needed for SQLite database access.
+- The SQLite DB path uses Tauri's `app_data_dir()` which already resolves correctly on mobile — no Rust changes needed.
 
-### New: `src/lib/stores/platform.ts`
+### Vite config update
 
-Calls `platform()` from `@tauri-apps/plugin-os` once at app startup and exposes the result:
+Add the `$platform` alias to `vite.config.ts` as described above. Works transparently in dev: without `TAURI_ENV_PLATFORM` set, defaults to desktop (the existing behaviour).
 
-```ts
-import { platform } from "@tauri-apps/plugin-os";
+### Move existing AppShell
 
-export const isMobile: Readable<boolean>  // true on "ios" | "android"
+Rename `src/lib/components/AppShell.svelte` → `src/lib/desktop/AppShell.svelte`. Update the import in `src/routes/+layout.svelte` to use `$platform/AppShell.svelte`.
+
+### New: `src/lib/mobile/AppShell.svelte`
+
+```
+flex-col, h-screen
+  <div class="flex-1 overflow-hidden">
+    {@render children()}
+  </div>
+  <BottomTabBar />
 ```
 
-Initialised in `AppShell.svelte` via `onMount`. Defaults to `false` until resolved (desktop is the safe default — the desktop layout is shown during the brief startup moment).
+- Top padding: `env(safe-area-inset-top)` for iOS status bar.
+- No icon rail.
 
-### New: `src/lib/components/BottomTabBar.svelte`
+### New: `src/lib/mobile/BottomTabBar.svelte`
 
 Four tabs: **Recipes** (`/`), **Batches** (`/batches`), **Tools** (`/tools`), **More** (`/settings`).
 
-- Uses the same SVG icons already in `AppShell.svelte`.
+- Reuses the SVG icons from the existing desktop AppShell.
 - Active tab derived from `$page.url.pathname`.
-- Bottom padding accounts for iOS safe area: `padding-bottom: env(safe-area-inset-bottom, 0px)`.
-
-### Updated: `src/lib/components/AppShell.svelte`
-
-```
-if isMobile:
-  flex-col layout
-    {@render children()}  ← full height, scrollable
-    <BottomTabBar />      ← fixed at bottom
-else:
-  flex-row layout (unchanged)
-    <nav icon rail />
-    {@render children()}
-```
-
-The icon rail is hidden on mobile. The `h-screen overflow-hidden` root div gains a safe-area top padding for the iOS status bar.
+- Bottom padding: `env(safe-area-inset-bottom, 0px)` for iOS home indicator.
 
 ---
 
-## Phase 2 — Recipe Page (Phone)
+## Phase 2 — Recipe Page
 
-### Navigation flow
+### Route change
 
-- `/` and `/recipe/[id]` both include `RecipeList` as a sidebar today.
-- On phone: `RecipeList` renders full-screen when there is no selected recipe. Tapping a recipe navigates to `/recipe/[id]`, which renders `RecipeMobileView` full-screen with a `‹ Recipes` back button.
-- On tablet/desktop: unchanged.
-
-### New: `src/lib/components/RecipeMobileView.svelte`
-
-Single scrollable column with all recipe sections in order. Each section has a small uppercase label header. Sections:
-
-1. **Stats card** — OG, FG, ABV, IBU, SRM as a compact card. Scrolls away with the page.
-2. **Overview** — style, batch size, efficiency, boil time, description.
-3. **Fermentables** — list rows + "+ Add fermentable" button.
-4. **Hops** — list rows + "+ Add hop" button.
-5. **Yeast** — list rows + "+ Add yeast" button.
-6. **Mash** — mash profile + steps.
-7. **Water** — mineral targets.
-8. **Fermentation** — schedule and temperature steps.
-9. **Notes** — textarea.
-
-Each section reuses the existing tab components (`IngredientsTab`, `MashTab`, etc.) where possible, extracting only the content portions without tab chrome.
-
-### Updated: `src/routes/recipe/[id]/+page.svelte`
+`src/routes/recipe/[id]/+page.svelte` becomes a thin data-loading shell:
 
 ```svelte
-{#if $isMobile}
-  <!-- full-screen detail, back button in header -->
-  <RecipeMobileView {recipe} {stats} onchange={refreshRecipe} />
-{:else}
-  <!-- existing 3-panel layout unchanged -->
-{/if}
+import RecipeView from "$platform/RecipeView.svelte";
+// ... existing load/save logic unchanged ...
+<RecipeView {recipe} {stats} onchange={refreshRecipe} />
 ```
 
-The `RecipeList` aside is conditionally hidden on mobile when a recipe is selected.
+### New: `src/lib/mobile/RecipeView.svelte`
 
-### Tablet: stats sidebar
+Full-screen view with a `‹ Recipes` back button in the header. Single scrollable column with sections in order:
 
-On tablet the `StatsSidebar` is hidden and stats appear as an inline card at the top of the Overview tab content. This reduces the 3-panel layout to 2 panels on tablet, giving more room for the content area.
+1. **Stats card** — OG, FG, ABV, IBU, SRM. Scrolls away with the page.
+2. **Overview** — style, batch size, efficiency, boil time, description.
+3. **Fermentables** — list + "+ Add fermentable".
+4. **Hops** — list + "+ Add hop".
+5. **Yeast** — list + "+ Add yeast".
+6. **Mash** — profile + steps.
+7. **Water** — mineral targets.
+8. **Fermentation** — schedule and temperature.
+9. **Notes** — textarea.
+
+Each section has a small uppercase label header. Reuses existing leaf components (ingredient rows, pickers, etc.) — only the surrounding tab/panel chrome is replaced.
+
+On mobile, `RecipeList` is the full-screen home for the Recipes tab (`/`). At `/recipe/[id]` the list is not rendered — the detail view fills the screen.
+
+### New: `src/lib/desktop/RecipeView.svelte`
+
+The existing 3-panel layout (RecipeList aside + tabbed content + StatsSidebar) extracted from the current route page verbatim. No behaviour change.
 
 ---
 
-## Phase 3 — Batch Page (Phone)
+## Phase 3 — Batch Page
 
 Same pattern as Phase 2.
 
-### Navigation flow
+`src/routes/batches/[id]/+page.svelte` → thin shell importing `$platform/BatchView.svelte`.
 
-- `/batches` → full-screen `BatchList` on phone.
-- `/batches/[id]` → full-screen `BatchMobileView` with `‹ Batches` back button.
+### New: `src/lib/mobile/BatchView.svelte`
 
-### New: `src/lib/components/BatchMobileView.svelte`
+Full-screen view with `‹ Batches` back button. Single scrollable column:
 
-Single scrollable column with all batch sections in order:
-
-1. **Status** — existing `TabBar` with planned/brewing/fermenting/packaged/complete.
+1. **Status** — TabBar with planned/brewing/fermenting/packaged/complete.
 2. **Dates** — brew date, into fermenter, packaging date.
 3. **Measurements** — gravity and volume fields.
 4. **Gravity Log** — entries list + add entry.
 5. **Notes** — textarea.
 6. **Tasting** — tasting notes and rating.
 
-Reuses existing `BatchOverviewTab`, `BatchGravityTab`, `BatchNotesTab`, `BatchTastingTab` content, stripped of tab chrome.
+### New: `src/lib/desktop/BatchView.svelte`
 
-### Updated: `src/routes/batches/[id]/+page.svelte`
-
-```svelte
-{#if $isMobile}
-  <BatchMobileView {batch} onUpdate={handleUpdate} />
-{:else}
-  <!-- existing tabbed layout unchanged -->
-{/if}
-```
+Existing tabbed layout extracted from the current route page verbatim.
 
 ---
 
 ## Phase 4 — Touch Polish
 
-- **Tap targets:** All interactive elements (buttons, list rows, inputs) get a minimum height of 44px on mobile.
-- **Number inputs:** On mobile, `type="number"` inputs show a numeric keyboard. Step spinners (↑↓) are hidden via CSS on mobile; values are edited by tapping the field.
-- **`IngredientPicker`:** On mobile, the picker renders as a full-screen modal (100vw × 100vh) instead of the current fixed-size popover. Close button in the header.
-- **`ConfirmModal`:** Already uses a fixed overlay; no changes needed.
-- **Date inputs:** Native date pickers (`type="date"`) work out-of-the-box on iOS/Android. No changes needed.
+- **Tap targets:** Buttons and list rows get `min-height: 44px` in mobile-specific CSS.
+- **Number inputs:** Step spinners hidden on mobile via CSS; numeric keyboard via `inputmode="decimal"`.
+- **`IngredientPicker`:** Full-screen on mobile (`position: fixed; inset: 0`) instead of the current fixed-size popover.
+- **Date inputs:** Native date pickers work out-of-the-box on iOS/Android.
 
 ---
 
 ## What Stays the Same
 
-- All Rust backend code — no changes. SQLite, commands, migrations are all platform-agnostic.
-- All desktop layouts — mobile changes are additive, gated by `$isMobile`.
-- Routing structure — same SvelteKit routes, mobile/desktop branching happens inside route components.
-- Theme — dark midnight theme works on mobile as-is.
+- All Rust backend code — no changes at all.
+- All existing desktop components — moved to `src/lib/desktop/`, behaviour unchanged.
+- SvelteKit routing structure — same routes, pages just become thinner.
+- Theme — midnight CSS variables work on mobile as-is.
 
 ---
 
 ## Out of Scope
 
 - Push notifications / background sync
-- Camera integration (e.g. barcode scanning for ingredients)
+- Camera integration (barcode scanning for ingredients)
 - Offline mode / conflict resolution
-- App store distribution setup (signing, provisioning profiles)
+- App store distribution (signing, provisioning profiles)
