@@ -1,0 +1,654 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0DD233EE5DC54479E3DDE863 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45265B9C6C3627D179CD555E /* QuartzCore.framework */; };
+		2F665DFC2538EB71ADDEC11A /* assets in Resources */ = {isa = PBXBuildFile; fileRef = ACCFB62CB4607C0604ABF11D /* assets */; };
+		4A689B92BB5ECF52DED241E4 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 940FA0BDE4EAB3EFC594EC00 /* Security.framework */; };
+		4A7642CAF626F3870A95FD9F /* libapp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F614C7C8392F6196D318AF2 /* libapp.a */; };
+		4B29E20E0391D7F2D79E70C4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 437A25894D528FB5003257AC /* UIKit.framework */; };
+		6ECB8BB8AD49E193012CA1D4 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3825ED1E566DBA0B1FAC7D60 /* CoreGraphics.framework */; };
+		91FA8DED926925783795D078 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D0955C57574145B6D423EB95 /* LaunchScreen.storyboard */; };
+		9B5CF652C112D5973568E7E3 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D680D50B752855A3BBD1BC71 /* Metal.framework */; };
+		B1972ACE5945515260CD18B5 /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D044F20531B51A52BF560998 /* MetalKit.framework */; };
+		BF0DCFCC182797E303F7C846 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = EA8A4CE5489653A3ED29E763 /* main.mm */; };
+		CA6B37E074E49EBA2D130B34 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D17303CEAE9E0BB436D023D0 /* Assets.xcassets */; };
+		EE160BAC6A7E0C640E848EE1 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8676F1F8C896443F59B3401F /* WebKit.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		04CFFFC56C4D7338D9380BE0 /* main.rs */ = {isa = PBXFileReference; path = main.rs; sourceTree = "<group>"; };
+		0E2512B31DF5D4E165F236C4 /* sync.rs */ = {isa = PBXFileReference; path = sync.rs; sourceTree = "<group>"; };
+		0F5D3768271D564E4BBC7A78 /* water.rs */ = {isa = PBXFileReference; path = water.rs; sourceTree = "<group>"; };
+		10E117AF726EF7DFBABF6FAD /* batch_gravity_readings.rs */ = {isa = PBXFileReference; path = batch_gravity_readings.rs; sourceTree = "<group>"; };
+		185567433DFB43CF49983E6C /* recipe_version.rs */ = {isa = PBXFileReference; path = recipe_version.rs; sourceTree = "<group>"; };
+		1A96D3F54F161828403DE4DE /* yeast.rs */ = {isa = PBXFileReference; path = yeast.rs; sourceTree = "<group>"; };
+		20408BDBC385F995C0B7244A /* mod.rs */ = {isa = PBXFileReference; path = mod.rs; sourceTree = "<group>"; };
+		21D78BF8A6E671FB26803EDD /* recipe_version_fermentables.rs */ = {isa = PBXFileReference; path = recipe_version_fermentables.rs; sourceTree = "<group>"; };
+		24C9D85560FD971F4C4B9220 /* import_export.rs */ = {isa = PBXFileReference; path = import_export.rs; sourceTree = "<group>"; };
+		2660980D9AB960472C88DA99 /* brewski_iOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = brewski_iOS.entitlements; sourceTree = "<group>"; };
+		272A94F1691D70FE48A12827 /* recipe_addition_hops.rs */ = {isa = PBXFileReference; path = recipe_addition_hops.rs; sourceTree = "<group>"; };
+		295338191138FEB9FF950FAC /* sync_config.rs */ = {isa = PBXFileReference; path = sync_config.rs; sourceTree = "<group>"; };
+		2BEE1CBD965DBC3C2A071763 /* settings.rs */ = {isa = PBXFileReference; path = settings.rs; sourceTree = "<group>"; };
+		2CB3ECCD02830C3BC0EF92D8 /* recipe_water_adjustments.rs */ = {isa = PBXFileReference; path = recipe_water_adjustments.rs; sourceTree = "<group>"; };
+		3825ED1E566DBA0B1FAC7D60 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		3BB473FDB8DF03ADA9C11134 /* recipes.rs */ = {isa = PBXFileReference; path = recipes.rs; sourceTree = "<group>"; };
+		3E8DC39F8E8B3C8B0CE0C336 /* batches.rs */ = {isa = PBXFileReference; path = batches.rs; sourceTree = "<group>"; };
+		3E97DCA2FA6C953C5C7482F2 /* test_helpers.rs */ = {isa = PBXFileReference; path = test_helpers.rs; sourceTree = "<group>"; };
+		41253226D25DD28E8604CF68 /* recipe_version_mash.rs */ = {isa = PBXFileReference; path = recipe_version_mash.rs; sourceTree = "<group>"; };
+		4132B9E86A3F7CA56614B701 /* volumes.rs */ = {isa = PBXFileReference; path = volumes.rs; sourceTree = "<group>"; };
+		423E081E0EF4285115423D22 /* mashes.rs */ = {isa = PBXFileReference; path = mashes.rs; sourceTree = "<group>"; };
+		437A25894D528FB5003257AC /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		45265B9C6C3627D179CD555E /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		45EA89D9FC2257A935AD94C4 /* settings.rs */ = {isa = PBXFileReference; path = settings.rs; sourceTree = "<group>"; };
+		46EF5FC6E281DA491F17C7B8 /* recipe_version_miscs.rs */ = {isa = PBXFileReference; path = recipe_version_miscs.rs; sourceTree = "<group>"; };
+		4A5FC54169153F94D6F2BF1B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		4B18E725741A39363370229E /* styles.rs */ = {isa = PBXFileReference; path = styles.rs; sourceTree = "<group>"; };
+		50D1D57F3C45A29DDE434978 /* carbonation.rs */ = {isa = PBXFileReference; path = carbonation.rs; sourceTree = "<group>"; };
+		536D336985879A3301C96D77 /* error.rs */ = {isa = PBXFileReference; path = error.rs; sourceTree = "<group>"; };
+		573D0D87E2BAEFE9E654B2B6 /* recipe_versions.rs */ = {isa = PBXFileReference; path = recipe_versions.rs; sourceTree = "<group>"; };
+		5FD113312A7906F1CDEDB237 /* pitch.rs */ = {isa = PBXFileReference; path = pitch.rs; sourceTree = "<group>"; };
+		615F56A21A814B47E078515E /* settings.rs */ = {isa = PBXFileReference; path = settings.rs; sourceTree = "<group>"; };
+		61C7166259CEA8030A413285 /* og.rs */ = {isa = PBXFileReference; path = og.rs; sourceTree = "<group>"; };
+		67D07D36EC277B2079CA461C /* mash.rs */ = {isa = PBXFileReference; path = mash.rs; sourceTree = "<group>"; };
+		6889260B94999B906254F143 /* refractometer.rs */ = {isa = PBXFileReference; path = refractometer.rs; sourceTree = "<group>"; };
+		705D9BE185EB4F823E9719B9 /* water_chemistry.rs */ = {isa = PBXFileReference; path = water_chemistry.rs; sourceTree = "<group>"; };
+		715FE7D68CDE3CAF03E072E9 /* mash_steps.rs */ = {isa = PBXFileReference; path = mash_steps.rs; sourceTree = "<group>"; };
+		71CFB22B85043FAC2500C339 /* recipe_version_hops.rs */ = {isa = PBXFileReference; path = recipe_version_hops.rs; sourceTree = "<group>"; };
+		72F9C2AC7AD7C0AAB6AE39F2 /* color.rs */ = {isa = PBXFileReference; path = color.rs; sourceTree = "<group>"; };
+		7444E6FD9449E00BAECEF84E /* fermentable.rs */ = {isa = PBXFileReference; path = fermentable.rs; sourceTree = "<group>"; };
+		759E8C11E8E42D982B35A45A /* mod.rs */ = {isa = PBXFileReference; path = mod.rs; sourceTree = "<group>"; };
+		787F857B35A21B97AA01814A /* recipe_addition_yeasts.rs */ = {isa = PBXFileReference; path = recipe_addition_yeasts.rs; sourceTree = "<group>"; };
+		7B77657751993FA5E6C738F3 /* additions.rs */ = {isa = PBXFileReference; path = additions.rs; sourceTree = "<group>"; };
+		7E65ECA1B42209D4DEE7F9EF /* recipe_addition_fermentables.rs */ = {isa = PBXFileReference; path = recipe_addition_fermentables.rs; sourceTree = "<group>"; };
+		7E70781375C90D68EA7FC7E7 /* recipe_version_yeasts.rs */ = {isa = PBXFileReference; path = recipe_version_yeasts.rs; sourceTree = "<group>"; };
+		7E7822DF2B777C745F898E1A /* library.rs */ = {isa = PBXFileReference; path = library.rs; sourceTree = "<group>"; };
+		7F614C7C8392F6196D318AF2 /* libapp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libapp.a; sourceTree = "<group>"; };
+		7F9ADE8C7D959B3E3417293C /* misc.rs */ = {isa = PBXFileReference; path = misc.rs; sourceTree = "<group>"; };
+		7FFE2390E18C0590DE3D73EE /* srm.rs */ = {isa = PBXFileReference; path = srm.rs; sourceTree = "<group>"; };
+		8360EF1FCDC44FCE71DB318F /* migrate.rs */ = {isa = PBXFileReference; path = migrate.rs; sourceTree = "<group>"; };
+		83BA8E18175E5EA8CD716059 /* batches.rs */ = {isa = PBXFileReference; path = batches.rs; sourceTree = "<group>"; };
+		8676F1F8C896443F59B3401F /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
+		8AED75B5552FA3A6D265ACF5 /* models.rs */ = {isa = PBXFileReference; path = models.rs; sourceTree = "<group>"; };
+		8D71A99EC6979E5D3AD01433 /* prelude.rs */ = {isa = PBXFileReference; path = prelude.rs; sourceTree = "<group>"; };
+		927672728946167765BEF572 /* batches.rs */ = {isa = PBXFileReference; path = batches.rs; sourceTree = "<group>"; };
+		940FA0BDE4EAB3EFC594EC00 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		98538553A9D7E5A7EADA546C /* mod.rs */ = {isa = PBXFileReference; path = mod.rs; sourceTree = "<group>"; };
+		9F26F6989AEDC58C2BB861BD /* equipment.rs */ = {isa = PBXFileReference; path = equipment.rs; sourceTree = "<group>"; };
+		A247A46DEBD1DEC057D7957E /* strike.rs */ = {isa = PBXFileReference; path = strike.rs; sourceTree = "<group>"; };
+		A2F405DEB7C8E4CF0F7F214D /* beerxml_fixture.rs */ = {isa = PBXFileReference; path = beerxml_fixture.rs; sourceTree = "<group>"; };
+		A6C065DBFA2D1F8F86B5C893 /* recipe_addition_waters.rs */ = {isa = PBXFileReference; path = recipe_addition_waters.rs; sourceTree = "<group>"; };
+		A7DA9FCDB79F82A5C8CE4433 /* lib.rs */ = {isa = PBXFileReference; path = lib.rs; sourceTree = "<group>"; };
+		ACCFB62CB4607C0604ABF11D /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = assets; sourceTree = SOURCE_ROOT; };
+		AD1D1F0BDDA5647DE17494C0 /* models.gen.rs */ = {isa = PBXFileReference; path = models.gen.rs; sourceTree = "<group>"; };
+		AD78A1035AEF0ADE47BE797B /* recipe_version_mash_steps.rs */ = {isa = PBXFileReference; path = recipe_version_mash_steps.rs; sourceTree = "<group>"; };
+		AFC3D2E6EFEC0FBFA4AFAA79 /* mash.rs */ = {isa = PBXFileReference; path = mash.rs; sourceTree = "<group>"; };
+		AFFC54722FFB6AC512FCA581 /* hops.rs */ = {isa = PBXFileReference; path = hops.rs; sourceTree = "<group>"; };
+		B2EDA75FC25B17B073CC6D90 /* yeasts.rs */ = {isa = PBXFileReference; path = yeasts.rs; sourceTree = "<group>"; };
+		B38F11C3DAE9148A168441AA /* water.rs */ = {isa = PBXFileReference; path = water.rs; sourceTree = "<group>"; };
+		B39EFAEA7F157FBAA3FA2806 /* hydro.rs */ = {isa = PBXFileReference; path = hydro.rs; sourceTree = "<group>"; };
+		B63507FCFEFD01B5BBBA4462 /* equipment_profiles.rs */ = {isa = PBXFileReference; path = equipment_profiles.rs; sourceTree = "<group>"; };
+		B70035D2314C3306AE196CB1 /* mod.rs */ = {isa = PBXFileReference; path = mod.rs; sourceTree = "<group>"; };
+		B9B782C0700AE39B2FEA3AE0 /* recipe_version_waters.rs */ = {isa = PBXFileReference; path = recipe_version_waters.rs; sourceTree = "<group>"; };
+		B9D33FF900F3C1D199491312 /* recipes.rs */ = {isa = PBXFileReference; path = recipes.rs; sourceTree = "<group>"; };
+		BC5BA1751C3F4A8546A40FA3 /* fermentables.rs */ = {isa = PBXFileReference; path = fermentables.rs; sourceTree = "<group>"; };
+		C338E57CB95A57B36E3823B1 /* recipe_addition_miscs.rs */ = {isa = PBXFileReference; path = recipe_addition_miscs.rs; sourceTree = "<group>"; };
+		C3DA83B33BCED25F5D8C14D3 /* equipment.rs */ = {isa = PBXFileReference; path = equipment.rs; sourceTree = "<group>"; };
+		CA684A1DA98A34853A298068 /* library.rs */ = {isa = PBXFileReference; path = library.rs; sourceTree = "<group>"; };
+		D044F20531B51A52BF560998 /* MetalKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MetalKit.framework; path = System/Library/Frameworks/MetalKit.framework; sourceTree = SDKROOT; };
+		D0955C57574145B6D423EB95 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		D17303CEAE9E0BB436D023D0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		D1CC7F252C215C5485635CC5 /* abv.rs */ = {isa = PBXFileReference; path = abv.rs; sourceTree = "<group>"; };
+		D2EBB581445B519A2C4800C5 /* miscs.rs */ = {isa = PBXFileReference; path = miscs.rs; sourceTree = "<group>"; };
+		D680D50B752855A3BBD1BC71 /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
+		DA9F2DBF110F7C3AB64D390E /* tools.rs */ = {isa = PBXFileReference; path = tools.rs; sourceTree = "<group>"; };
+		DE7DF0209362480ECB1A76FF /* waters.rs */ = {isa = PBXFileReference; path = waters.rs; sourceTree = "<group>"; };
+		E1BCD1D458CBDC2B4CD12DA5 /* hop.rs */ = {isa = PBXFileReference; path = hop.rs; sourceTree = "<group>"; };
+		E775577C6EA3F4AEFD25A7A5 /* water_chemistry.rs */ = {isa = PBXFileReference; path = water_chemistry.rs; sourceTree = "<group>"; };
+		EA8A4CE5489653A3ED29E763 /* main.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
+		F091963BF51C493165B56310 /* gravity.rs */ = {isa = PBXFileReference; path = gravity.rs; sourceTree = "<group>"; };
+		F1C6A3002B4CF6A10C7AC279 /* ibu.rs */ = {isa = PBXFileReference; path = ibu.rs; sourceTree = "<group>"; };
+		F2A45010A876DA1C8C7BD29D /* bindings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bindings.h; sourceTree = "<group>"; };
+		F3F653C93147847B1F8495C7 /* brewski_iOS.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = brewski_iOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FAE6D4803899080180A884DD /* recipe.rs */ = {isa = PBXFileReference; path = recipe.rs; sourceTree = "<group>"; };
+		FB8A7804FCF037FC38F672FE /* recipe_version_water_adjustments.rs */ = {isa = PBXFileReference; path = recipe_version_water_adjustments.rs; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		CCEC1A41EC0EE713C77C7C6B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4A7642CAF626F3870A95FD9F /* libapp.a in Frameworks */,
+				6ECB8BB8AD49E193012CA1D4 /* CoreGraphics.framework in Frameworks */,
+				9B5CF652C112D5973568E7E3 /* Metal.framework in Frameworks */,
+				B1972ACE5945515260CD18B5 /* MetalKit.framework in Frameworks */,
+				0DD233EE5DC54479E3DDE863 /* QuartzCore.framework in Frameworks */,
+				4A689B92BB5ECF52DED241E4 /* Security.framework in Frameworks */,
+				4B29E20E0391D7F2D79E70C4 /* UIKit.framework in Frameworks */,
+				EE160BAC6A7E0C640E848EE1 /* WebKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		13D5E3F7217CF7C125E32331 /* brewski */ = {
+			isa = PBXGroup;
+			children = (
+				EA8A4CE5489653A3ED29E763 /* main.mm */,
+				3F7B00C4D7F40047F9FCF4F7 /* bindings */,
+			);
+			path = brewski;
+			sourceTree = "<group>";
+		};
+		208BEB922B8AD6F6D0A010C1 /* Externals */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Externals;
+			sourceTree = "<group>";
+		};
+		323F2FB458A284D8D32E4DAB /* entities */ = {
+			isa = PBXGroup;
+			children = (
+				10E117AF726EF7DFBABF6FAD /* batch_gravity_readings.rs */,
+				83BA8E18175E5EA8CD716059 /* batches.rs */,
+				B63507FCFEFD01B5BBBA4462 /* equipment_profiles.rs */,
+				BC5BA1751C3F4A8546A40FA3 /* fermentables.rs */,
+				AFFC54722FFB6AC512FCA581 /* hops.rs */,
+				715FE7D68CDE3CAF03E072E9 /* mash_steps.rs */,
+				423E081E0EF4285115423D22 /* mashes.rs */,
+				D2EBB581445B519A2C4800C5 /* miscs.rs */,
+				B70035D2314C3306AE196CB1 /* mod.rs */,
+				8D71A99EC6979E5D3AD01433 /* prelude.rs */,
+				7E65ECA1B42209D4DEE7F9EF /* recipe_addition_fermentables.rs */,
+				272A94F1691D70FE48A12827 /* recipe_addition_hops.rs */,
+				C338E57CB95A57B36E3823B1 /* recipe_addition_miscs.rs */,
+				A6C065DBFA2D1F8F86B5C893 /* recipe_addition_waters.rs */,
+				787F857B35A21B97AA01814A /* recipe_addition_yeasts.rs */,
+				21D78BF8A6E671FB26803EDD /* recipe_version_fermentables.rs */,
+				71CFB22B85043FAC2500C339 /* recipe_version_hops.rs */,
+				AD78A1035AEF0ADE47BE797B /* recipe_version_mash_steps.rs */,
+				41253226D25DD28E8604CF68 /* recipe_version_mash.rs */,
+				46EF5FC6E281DA491F17C7B8 /* recipe_version_miscs.rs */,
+				FB8A7804FCF037FC38F672FE /* recipe_version_water_adjustments.rs */,
+				B9B782C0700AE39B2FEA3AE0 /* recipe_version_waters.rs */,
+				7E70781375C90D68EA7FC7E7 /* recipe_version_yeasts.rs */,
+				573D0D87E2BAEFE9E654B2B6 /* recipe_versions.rs */,
+				2CB3ECCD02830C3BC0EF92D8 /* recipe_water_adjustments.rs */,
+				3BB473FDB8DF03ADA9C11134 /* recipes.rs */,
+				615F56A21A814B47E078515E /* settings.rs */,
+				4B18E725741A39363370229E /* styles.rs */,
+				DE7DF0209362480ECB1A76FF /* waters.rs */,
+				B2EDA75FC25B17B073CC6D90 /* yeasts.rs */,
+			);
+			path = entities;
+			sourceTree = "<group>";
+		};
+		3F7B00C4D7F40047F9FCF4F7 /* bindings */ = {
+			isa = PBXGroup;
+			children = (
+				F2A45010A876DA1C8C7BD29D /* bindings.h */,
+			);
+			path = bindings;
+			sourceTree = "<group>";
+		};
+		42599BF5A8BEF740A397D272 = {
+			isa = PBXGroup;
+			children = (
+				ACCFB62CB4607C0604ABF11D /* assets */,
+				D17303CEAE9E0BB436D023D0 /* Assets.xcassets */,
+				D0955C57574145B6D423EB95 /* LaunchScreen.storyboard */,
+				5C5E86B33B9C77FA3E4BC3A1 /* brewski_iOS */,
+				208BEB922B8AD6F6D0A010C1 /* Externals */,
+				5E3980732A190D8AD2B2DB33 /* Sources */,
+				B0A04C825289C56EEE801A53 /* src */,
+				5FA90904695BD9EB8255014C /* Frameworks */,
+				66C30B438008BCF14DA62B88 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		4C4E687E6AEDA4EF8A3B1831 /* bin */ = {
+			isa = PBXGroup;
+			children = (
+				8360EF1FCDC44FCE71DB318F /* migrate.rs */,
+			);
+			path = bin;
+			sourceTree = "<group>";
+		};
+		5C5E86B33B9C77FA3E4BC3A1 /* brewski_iOS */ = {
+			isa = PBXGroup;
+			children = (
+				2660980D9AB960472C88DA99 /* brewski_iOS.entitlements */,
+				4A5FC54169153F94D6F2BF1B /* Info.plist */,
+			);
+			path = brewski_iOS;
+			sourceTree = "<group>";
+		};
+		5E3980732A190D8AD2B2DB33 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				13D5E3F7217CF7C125E32331 /* brewski */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		5FA90904695BD9EB8255014C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				3825ED1E566DBA0B1FAC7D60 /* CoreGraphics.framework */,
+				7F614C7C8392F6196D318AF2 /* libapp.a */,
+				D680D50B752855A3BBD1BC71 /* Metal.framework */,
+				D044F20531B51A52BF560998 /* MetalKit.framework */,
+				45265B9C6C3627D179CD555E /* QuartzCore.framework */,
+				940FA0BDE4EAB3EFC594EC00 /* Security.framework */,
+				437A25894D528FB5003257AC /* UIKit.framework */,
+				8676F1F8C896443F59B3401F /* WebKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		66C30B438008BCF14DA62B88 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F3F653C93147847B1F8495C7 /* brewski_iOS.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		6FB4FC5F746A57158BCF4319 /* brewing */ = {
+			isa = PBXGroup;
+			children = (
+				D1CC7F252C215C5485635CC5 /* abv.rs */,
+				A2F405DEB7C8E4CF0F7F214D /* beerxml_fixture.rs */,
+				50D1D57F3C45A29DDE434978 /* carbonation.rs */,
+				72F9C2AC7AD7C0AAB6AE39F2 /* color.rs */,
+				F091963BF51C493165B56310 /* gravity.rs */,
+				B39EFAEA7F157FBAA3FA2806 /* hydro.rs */,
+				F1C6A3002B4CF6A10C7AC279 /* ibu.rs */,
+				98538553A9D7E5A7EADA546C /* mod.rs */,
+				61C7166259CEA8030A413285 /* og.rs */,
+				5FD113312A7906F1CDEDB237 /* pitch.rs */,
+				6889260B94999B906254F143 /* refractometer.rs */,
+				7FFE2390E18C0590DE3D73EE /* srm.rs */,
+				A247A46DEBD1DEC057D7957E /* strike.rs */,
+				4132B9E86A3F7CA56614B701 /* volumes.rs */,
+				B38F11C3DAE9148A168441AA /* water.rs */,
+			);
+			path = brewing;
+			sourceTree = "<group>";
+		};
+		B0A04C825289C56EEE801A53 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				536D336985879A3301C96D77 /* error.rs */,
+				A7DA9FCDB79F82A5C8CE4433 /* lib.rs */,
+				04CFFFC56C4D7338D9380BE0 /* main.rs */,
+				AD1D1F0BDDA5647DE17494C0 /* models.gen.rs */,
+				8AED75B5552FA3A6D265ACF5 /* models.rs */,
+				295338191138FEB9FF950FAC /* sync_config.rs */,
+				3E97DCA2FA6C953C5C7482F2 /* test_helpers.rs */,
+				4C4E687E6AEDA4EF8A3B1831 /* bin */,
+				6FB4FC5F746A57158BCF4319 /* brewing */,
+				E516EBBCC92D9F2D7CA814DD /* commands */,
+				323F2FB458A284D8D32E4DAB /* entities */,
+				B82D57586B742A01C6929D59 /* repositories */,
+			);
+			name = src;
+			path = ../../src;
+			sourceTree = "<group>";
+		};
+		B82D57586B742A01C6929D59 /* repositories */ = {
+			isa = PBXGroup;
+			children = (
+				927672728946167765BEF572 /* batches.rs */,
+				C3DA83B33BCED25F5D8C14D3 /* equipment.rs */,
+				7444E6FD9449E00BAECEF84E /* fermentable.rs */,
+				E1BCD1D458CBDC2B4CD12DA5 /* hop.rs */,
+				CA684A1DA98A34853A298068 /* library.rs */,
+				67D07D36EC277B2079CA461C /* mash.rs */,
+				7F9ADE8C7D959B3E3417293C /* misc.rs */,
+				759E8C11E8E42D982B35A45A /* mod.rs */,
+				185567433DFB43CF49983E6C /* recipe_version.rs */,
+				FAE6D4803899080180A884DD /* recipe.rs */,
+				45EA89D9FC2257A935AD94C4 /* settings.rs */,
+				705D9BE185EB4F823E9719B9 /* water_chemistry.rs */,
+				0F5D3768271D564E4BBC7A78 /* water.rs */,
+				1A96D3F54F161828403DE4DE /* yeast.rs */,
+			);
+			path = repositories;
+			sourceTree = "<group>";
+		};
+		E516EBBCC92D9F2D7CA814DD /* commands */ = {
+			isa = PBXGroup;
+			children = (
+				7B77657751993FA5E6C738F3 /* additions.rs */,
+				3E8DC39F8E8B3C8B0CE0C336 /* batches.rs */,
+				9F26F6989AEDC58C2BB861BD /* equipment.rs */,
+				24C9D85560FD971F4C4B9220 /* import_export.rs */,
+				7E7822DF2B777C745F898E1A /* library.rs */,
+				AFC3D2E6EFEC0FBFA4AFAA79 /* mash.rs */,
+				20408BDBC385F995C0B7244A /* mod.rs */,
+				B9D33FF900F3C1D199491312 /* recipes.rs */,
+				2BEE1CBD965DBC3C2A071763 /* settings.rs */,
+				0E2512B31DF5D4E165F236C4 /* sync.rs */,
+				DA9F2DBF110F7C3AB64D390E /* tools.rs */,
+				E775577C6EA3F4AEFD25A7A5 /* water_chemistry.rs */,
+			);
+			path = commands;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		FE5FFBC0AD413F81D59EA2C6 /* brewski_iOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 01ED960499CD759698812CE6 /* Build configuration list for PBXNativeTarget "brewski_iOS" */;
+			buildPhases = (
+				90928915AA62F68EB9B77013 /* Build Rust Code */,
+				DC8F1163BCFC8DE488AFC4B8 /* Sources */,
+				9500F50E03B1A7C8B4A70423 /* Resources */,
+				CCEC1A41EC0EE713C77C7C6B /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = brewski_iOS;
+			packageProductDependencies = (
+			);
+			productName = brewski_iOS;
+			productReference = F3F653C93147847B1F8495C7 /* brewski_iOS.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		59ADE5DBDA5AB230F9F9F90E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+				};
+			};
+			buildConfigurationList = CF1885618C12A994E5D3D314 /* Build configuration list for PBXProject "brewski" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 42599BF5A8BEF740A397D272;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 66C30B438008BCF14DA62B88 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				FE5FFBC0AD413F81D59EA2C6 /* brewski_iOS */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		9500F50E03B1A7C8B4A70423 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CA6B37E074E49EBA2D130B34 /* Assets.xcassets in Resources */,
+				91FA8DED926925783795D078 /* LaunchScreen.storyboard in Resources */,
+				2F665DFC2538EB71ADDEC11A /* assets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		90928915AA62F68EB9B77013 /* Build Rust Code */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Build Rust Code";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(SRCROOT)/Externals/x86_64/${CONFIGURATION}/libapp.a",
+				"$(SRCROOT)/Externals/arm64/${CONFIGURATION}/libapp.a",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "bun tauri ios xcode-script -v --platform ${PLATFORM_DISPLAY_NAME:?} --sdk-root ${SDKROOT:?} --framework-search-paths \"${FRAMEWORK_SEARCH_PATHS:?}\" --header-search-paths \"${HEADER_SEARCH_PATHS:?}\" --gcc-preprocessor-definitions \"${GCC_PREPROCESSOR_DEFINITIONS:-}\" --configuration ${CONFIGURATION:?} ${FORCE_COLOR} ${ARCHS:?}";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		DC8F1163BCFC8DE488AFC4B8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BF0DCFCC182797E303F7C846 /* main.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		5D73B6B83610ABB3F1295C57 /* debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ARCHS = (
+					arm64,
+				);
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = brewski_iOS/brewski_iOS.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				ENABLE_BITCODE = NO;
+				"EXCLUDED_ARCHS[sdk=iphoneos*]" = x86_64;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\".\"",
+				);
+				INFOPLIST_FILE = brewski_iOS/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				"LIBRARY_SEARCH_PATHS[arch=arm64]" = "$(inherited) $(PROJECT_DIR)/Externals/arm64/$(CONFIGURATION) $(SDKROOT)/usr/lib/swift $(DEVELOPER_DIR)/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/$(PLATFORM_NAME) $(DEVELOPER_DIR)/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift-5.0/$(PLATFORM_NAME)";
+				"LIBRARY_SEARCH_PATHS[arch=x86_64]" = "$(inherited) $(PROJECT_DIR)/Externals/x86_64/$(CONFIGURATION) $(SDKROOT)/usr/lib/swift $(DEVELOPER_DIR)/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/$(PLATFORM_NAME) $(DEVELOPER_DIR)/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift-5.0/$(PLATFORM_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.brewski;
+				PRODUCT_NAME = brewski;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = arm64;
+			};
+			name = debug;
+		};
+		69BFB2B0A82BC3FA8263A46E /* release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ARCHS = (
+					arm64,
+				);
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = brewski_iOS/brewski_iOS.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				ENABLE_BITCODE = NO;
+				"EXCLUDED_ARCHS[sdk=iphoneos*]" = x86_64;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\".\"",
+				);
+				INFOPLIST_FILE = brewski_iOS/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				"LIBRARY_SEARCH_PATHS[arch=arm64]" = "$(inherited) $(PROJECT_DIR)/Externals/arm64/$(CONFIGURATION) $(SDKROOT)/usr/lib/swift $(DEVELOPER_DIR)/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/$(PLATFORM_NAME) $(DEVELOPER_DIR)/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift-5.0/$(PLATFORM_NAME)";
+				"LIBRARY_SEARCH_PATHS[arch=x86_64]" = "$(inherited) $(PROJECT_DIR)/Externals/x86_64/$(CONFIGURATION) $(SDKROOT)/usr/lib/swift $(DEVELOPER_DIR)/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/$(PLATFORM_NAME) $(DEVELOPER_DIR)/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift-5.0/$(PLATFORM_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.brewski;
+				PRODUCT_NAME = brewski;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = arm64;
+			};
+			name = release;
+		};
+		945990F1B44B492C6C265A97 /* release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = release;
+		};
+		EEC02C8A7A562365AFECCFD1 /* debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		01ED960499CD759698812CE6 /* Build configuration list for PBXNativeTarget "brewski_iOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5D73B6B83610ABB3F1295C57 /* debug */,
+				69BFB2B0A82BC3FA8263A46E /* release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = debug;
+		};
+		CF1885618C12A994E5D3D314 /* Build configuration list for PBXProject "brewski" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EEC02C8A7A562365AFECCFD1 /* debug */,
+				945990F1B44B492C6C265A97 /* release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 59ADE5DBDA5AB230F9F9F90E /* Project object */;
+}
