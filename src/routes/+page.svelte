@@ -1,9 +1,5 @@
 <script lang="ts">
-  import RecipeList from "$lib/components/RecipeList.svelte";
+  import RecipesHome from "$platform/RecipesHome.svelte";
 </script>
 
-<RecipeList />
-
-<div class="flex-1 flex items-center justify-center" style="color: var(--color-text-muted);">
-  <p class="text-sm">Select a recipe to edit</p>
-</div>
+<RecipesHome />
