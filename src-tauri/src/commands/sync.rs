@@ -1,6 +1,6 @@
 use crate::error::AppError;
 use serde::Serialize;
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 use tauri::Manager;
 
 #[derive(Debug, Serialize, Clone)]

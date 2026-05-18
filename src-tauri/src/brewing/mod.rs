@@ -25,7 +25,6 @@ const DEFAULT_TOP_UP_WATER_L: f64 = 0.0;
 const DEFAULT_MASH_TUN_LOSS_L: f64 = 0.0;
 const DEFAULT_HLT_DEADSPACE_L: f64 = 0.0;
 const DEFAULT_COOLING_SHRINKAGE_PCT: f64 = 4.0;
-const DEFAULT_AROMA_HOP_UTILIZATION_PCT: f64 = 23.0;
 
 pub fn calculate_stats(recipe: &Recipe) -> RecipeStats {
     let equipment = recipe.equipment_profile.as_ref();
@@ -53,7 +52,7 @@ pub fn calculate_stats(recipe: &Recipe) -> RecipeStats {
     let hlt_deadspace = equipment
         .and_then(|e| e.hlt_deadspace_l)
         .unwrap_or(DEFAULT_HLT_DEADSPACE_L);
-    let cooling_shrinkage = equipment
+    let _cooling_shrinkage = equipment
         .map(|e| e.cooling_shrinkage_pct)
         .unwrap_or(DEFAULT_COOLING_SHRINKAGE_PCT);
     let aroma_hop_utilization_override: Option<f64> = equipment.and_then(|e| {

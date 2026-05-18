@@ -209,14 +209,14 @@ onDestroy(() => {
     {#if addingStep}
       <div class="flex flex-wrap items-end gap-2 p-2 rounded" style="background: var(--color-bg-elevated);">
         <div class="flex flex-col flex-1 min-w-24">
-          <label class="text-xs mb-1" style="color: var(--color-text-secondary);">Name</label>
-          <input type="text" bind:value={stepName} placeholder="Step name"
+          <label for="mash-step-name" class="text-xs mb-1" style="color: var(--color-text-secondary);">Name</label>
+          <input id="mash-step-name" type="text" bind:value={stepName} placeholder="Step name"
                  class="h-9 px-2 rounded text-sm"
                  style="background: var(--color-bg-base); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
         </div>
         <div class="flex flex-col w-28">
-          <label class="text-xs mb-1" style="color: var(--color-text-secondary);">Type</label>
-          <select bind:value={stepType} class="h-9 px-2 rounded text-sm"
+          <label for="mash-step-type" class="text-xs mb-1" style="color: var(--color-text-secondary);">Type</label>
+          <select id="mash-step-type" bind:value={stepType} class="h-9 px-2 rounded text-sm"
                   style="background: var(--color-bg-base); color: var(--color-text-primary); border: 1px solid var(--color-border);">
             {#each STEP_TYPES as t}
               <option value={t}>{t}</option>
@@ -224,23 +224,23 @@ onDestroy(() => {
           </select>
         </div>
         <div class="flex flex-col w-20">
-          <label class="text-xs mb-1" style="color: var(--color-text-secondary);">Temp ({tempLabel(units)})</label>
-          <input type="number" step={units === "imperial" ? 1 : 0.5}
+          <label for="mash-step-temp" class="text-xs mb-1" style="color: var(--color-text-secondary);">Temp ({tempLabel(units)})</label>
+          <input id="mash-step-temp" type="number" step={units === "imperial" ? 1 : 0.5}
                  value={(units === "imperial" ? cToF(stepTemp) : stepTemp).toFixed(1)}
                  oninput={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); if (!isNaN(v)) stepTemp = units === "imperial" ? fToC(v) : v; }}
                  class="h-9 px-2 rounded text-sm"
                  style="background: var(--color-bg-base); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
         </div>
         <div class="flex flex-col w-20">
-          <label class="text-xs mb-1" style="color: var(--color-text-secondary);">Time (min)</label>
-          <input type="number" bind:value={stepTime} step="5"
+          <label for="mash-step-time" class="text-xs mb-1" style="color: var(--color-text-secondary);">Time (min)</label>
+          <input id="mash-step-time" type="number" bind:value={stepTime} step="5"
                  class="h-9 px-2 rounded text-sm"
                  style="background: var(--color-bg-base); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
         </div>
         {#if stepType === "infusion"}
           <div class="flex flex-col w-24">
-            <label class="text-xs mb-1" style="color: var(--color-text-secondary);">Infuse ({volumeLabel(units)})</label>
-            <input type="number" step="0.1"
+            <label for="mash-step-infuse" class="text-xs mb-1" style="color: var(--color-text-secondary);">Infuse ({volumeLabel(units)})</label>
+            <input id="mash-step-infuse" type="number" step="0.1"
                    placeholder={"Infuse " + volumeLabel(units)}
                    value={stepInfuse != null ? (units === "imperial" ? lToGal(stepInfuse) : stepInfuse).toFixed(1) : ""}
                    oninput={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); stepInfuse = isNaN(v) ? null : (units === "imperial" ? galToL(v) : v); }}

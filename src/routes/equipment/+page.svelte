@@ -94,15 +94,14 @@
 {#if showCopyModal && copyCandidate}
   <CopyNameModal
     profile={copyCandidate}
-    on:confirm={async (e) => {
+    onconfirm={async (newName) => {
       showCopyModal = false;
-      const newName = e.detail as string;
       const candidate = copyCandidate!;
       await ipc(copyEquipmentProfile(candidate.id, newName));
       await refreshProfiles();
       copyCandidate = null;
     }}
-    on:cancel={() => { showCopyModal = false; copyCandidate = null; }}
+    oncancel={() => { showCopyModal = false; copyCandidate = null; }}
   />
 {/if}
 
