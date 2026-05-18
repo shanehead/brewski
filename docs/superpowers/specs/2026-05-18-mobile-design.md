@@ -7,14 +7,14 @@
 
 Make Brewski run natively on iOS and Android via Tauri 2's mobile support. The layout adapts per device class: phones get a simplified single-scroll experience with bottom tab navigation; tablets retain the existing sidebar layout.
 
-## Device Breakpoints
+## Device Classes
 
-| Class | Width | Navigation |
-|-------|-------|------------|
-| Phone | < 640px | Bottom tab bar, full-screen panels |
-| Tablet | ≥ 640px | Existing icon rail + sidebars |
+| Class | Platform | Navigation |
+|-------|----------|------------|
+| Phone | `ios`, `android` | Bottom tab bar, full-screen panels |
+| Desktop/Tablet | `macos`, `windows`, `linux` | Existing icon rail + sidebars |
 
-Breakpoint is detected at runtime via a Svelte store watching `window.innerWidth`.
+Platform is detected once at startup via `@tauri-apps/plugin-os`. A narrow desktop window does not trigger the mobile layout.
 
 ---
 
@@ -23,19 +23,21 @@ Breakpoint is detected at runtime via a Svelte store watching `window.innerWidth
 ### Tauri mobile init
 
 - Run `cargo tauri ios init` and `cargo tauri android init` to scaffold the mobile projects.
+- Add `tauri-plugin-os` to `Cargo.toml` and register it in `src-tauri/src/main.rs`. Add `@tauri-apps/plugin-os` as a JS dependency.
 - Add file storage permissions to `Info.plist` / `AndroidManifest.xml` as needed (database file access).
 - The SQLite DB path uses Tauri's `app_data_dir()` which already resolves correctly on mobile.
 
-### New: `src/lib/stores/breakpoint.ts`
+### New: `src/lib/stores/platform.ts`
 
-Exports two derived booleans:
+Calls `platform()` from `@tauri-apps/plugin-os` once at app startup and exposes the result:
 
 ```ts
-export const isMobile: Readable<boolean>  // window.innerWidth < 640
-export const isTablet: Readable<boolean>  // window.innerWidth >= 640
+import { platform } from "@tauri-apps/plugin-os";
+
+export const isMobile: Readable<boolean>  // true on "ios" | "android"
 ```
 
-Updated on `window` resize via an event listener mounted once in AppShell.
+Initialised in `AppShell.svelte` via `onMount`. Defaults to `false` until resolved (desktop is the safe default — the desktop layout is shown during the brief startup moment).
 
 ### New: `src/lib/components/BottomTabBar.svelte`
 
