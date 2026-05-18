@@ -5,7 +5,6 @@
   import { getBatch, updateBatch } from "$lib/api";
   import { ipc } from "$lib/stores/error";
   import { refreshBatchList } from "$lib/stores/batches";
-  import TabBar from "$lib/components/TabBar.svelte";
   import BatchOverviewTab from "$lib/components/batch/BatchOverviewTab.svelte";
   import BatchGravityTab from "$lib/components/batch/BatchGravityTab.svelte";
   import BatchNotesTab from "$lib/components/batch/BatchNotesTab.svelte";
@@ -50,18 +49,7 @@
     <div class="flex-1 overflow-y-auto">
       <div class="p-4 flex flex-col gap-6">
 
-        <!-- Status -->
-        <section>
-          <div class="text-xs font-semibold uppercase tracking-wider mb-3"
-               style="color: var(--color-text-secondary);">Status</div>
-          <TabBar
-            tabs={["planned","brewing","fermenting","packaged","complete"].map(s => ({ key: s, label: s.charAt(0).toUpperCase() + s.slice(1) }))}
-            active={batch.status}
-            onchange={(key) => handleUpdate({ status: key as Batch["status"] })}
-          />
-        </section>
-
-        <!-- Overview (dates + measurements) -->
+        <!-- Overview (dates + measurements, includes status) -->
         <section>
           <BatchOverviewTab {batch} onUpdate={handleUpdate} />
         </section>
