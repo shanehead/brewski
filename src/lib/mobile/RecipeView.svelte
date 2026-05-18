@@ -5,7 +5,6 @@
   import type { Recipe, RecipeStats } from "$lib/api";
   import { ipc } from "$lib/stores/error";
   import { settings } from "$lib/stores/settings";
-  import { type Units, lToGal, volumeLabel } from "$lib/units";
   import OverviewTab from "$lib/components/tabs/OverviewTab.svelte";
   import IngredientsTab from "$lib/components/tabs/IngredientsTab.svelte";
   import MashTab from "$lib/components/tabs/MashTab.svelte";
@@ -17,8 +16,6 @@
 
   let recipe = $state<Recipe | null>(null);
   let stats = $state<RecipeStats | null>(null);
-
-  const units = $derived<Units>($settings.units === "imperial" ? "imperial" : "metric");
 
   async function load() {
     recipe = await ipc(getRecipe(id)) ?? null;
