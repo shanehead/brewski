@@ -143,6 +143,27 @@ If the user types a name that matches any existing ingredient in the same table,
 
 ---
 
+## Mobile
+
+The app uses platform-specific components resolved at build time via the `$platform` alias (`src/lib/desktop/` vs `src/lib/mobile/`). The data and Rust layers are platform-agnostic; only the UI components differ.
+
+### Library Manager navigation
+
+On **desktop**, a new rail icon is added to `src/lib/desktop/AppShell.svelte` linking to `/library`.
+
+On **mobile**, the Library is accessed via the existing **More** tab (alongside Equipment and Settings). No new tab is added — the bottom tab bar stays at 4 items. The `BottomTabBar.svelte` `activeWhen` for "More" is extended to include `/library`. The More/Settings screen gains a "Ingredient Library" navigation row alongside Equipment.
+
+### Ingredient picker on mobile
+
+The existing `IngredientPicker.svelte` dialog (`80vw × 75vh`, split list/detail) is desktop-only. On mobile it is replaced with a full-screen push-navigation flow implemented as `src/lib/mobile/IngredientPicker.svelte`:
+
+1. **List screen** — full-screen searchable list of ingredients for the selected type. Each row shows name + key stat. Tapping a row pushes to the detail screen.
+2. **Detail screen** — full-screen ingredient detail. Seeded rows show stats read-only with a "Duplicate & Edit" button. Custom rows show editable fields directly. Recipe inputs (amount, use, time) sit at the bottom. "Add to Recipe" button confirms and closes.
+
+The edit-in-place behaviour (Duplicate & Edit flow, name collision warning, Save/Cancel) is identical to desktop — only the layout changes.
+
+---
+
 ## Error Handling
 
 - Create/update/delete failures surface via the existing `ipc()` error toast — no special handling needed
