@@ -1,3 +1,5 @@
+set dotenv-load
+
 default:
     @just --list
 
@@ -12,14 +14,13 @@ dev:
     bun run tauri dev
 
 # Start the Tauri iOS dev server
-dev-ios:
-    PATH="/opt/homebrew/bin:$PATH" bun run tauri ios dev
+dev-ios device=env_var_or_default('IOS_SIMULATOR', 'iPhone 17'):
+    xcrun simctl boot "{{device}}" 2>/dev/null || true
+    $BUN run tauri ios dev "{{device}}"
 
 # Start the Tauri Android dev server
 dev-android:
-    ANDROID_HOME=~/Library/Android/sdk \
-    NDK_HOME=~/Library/Android/sdk/ndk/30.0.14904198 \
-    bun run tauri android dev
+    bun run tauri android dev 2>&1 
 
 # Start the frontend dev server only (no Tauri)
 dev-web:

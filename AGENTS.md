@@ -1,12 +1,13 @@
 # Brewski
 
-Homebrewing recipe manager — Tauri 2 desktop app with a SvelteKit frontend and SQLite backend.
+Homebrewing recipe manager — Tauri 2 app targeting **desktop, iOS, and Android**, with a SvelteKit frontend and SQLite backend.
 
 ## Tech stack
 
 - **Frontend:** SvelteKit + Svelte 5 + TypeScript + TailwindCSS 4
 - **Backend:** Rust (Tauri 2 command handlers), SQLite via SeaORM
 - **IPC:** Tauri `invoke()` — types in `src/lib/api.gen.ts` (generated — do not edit by hand)
+- **Platforms:** macOS/Windows/Linux (desktop), iOS, Android
 
 ## Package manager
 
@@ -16,6 +17,34 @@ Use **bun** — not npm or npx.
 bun install        # install deps
 bun run dev        # frontend only
 bunx some-cli      # run a package binary
+```
+
+## Platform support
+
+Brewski runs on **desktop (macOS/Windows/Linux), iOS, and Android**. Every feature must work on all three platforms.
+
+### Platform-specific UI
+
+The frontend uses a build-time `$platform` alias (resolved in `vite.config.ts` and `svelte.config.js` via `TAURI_ENV_PLATFORM`) to swap between platform-specific implementations:
+
+- `src/lib/desktop/` — desktop components (icon rail nav, multi-column layouts)
+- `src/lib/mobile/` — mobile components (bottom tab bar, single-column scroll)
+
+Route pages are thin wrappers that import from `$platform`. When adding a new page or major UI section, **create implementations in both `src/lib/desktop/` and `src/lib/mobile/`**.
+
+Mobile layout rules:
+- Use `height: 100dvh` (not `100vh`) to handle iOS URL bar resizing
+- Apply `env(safe-area-inset-top/bottom, 0px)` padding for notch/home-indicator clearance
+- Touch targets must be at least 44px tall
+- No horizontal overflow — layouts must fit in a single column
+
+### Dev commands
+
+```bash
+just dev            # desktop (Tauri)
+just dev-ios        # iOS simulator
+just dev-android    # Android emulator
+just dev-web        # frontend only (no Tauri)
 ```
 
 ## Common commands (via Justfile)
