@@ -34,6 +34,16 @@ export type UpdateMiscAdditionInput = components["schemas"]["UpdateMiscAdditionI
 export type UpdateWaterAdditionInput = components["schemas"]["UpdateWaterAdditionInput"];
 export type Misc = components["schemas"]["Misc"];
 export type Water = components["schemas"]["Water"];
+export type CreateHopInput = components["schemas"]["CreateHopInput"];
+export type UpdateHopInput = components["schemas"]["UpdateHopInput"];
+export type CreateFermentableInput = components["schemas"]["CreateFermentableInput"];
+export type UpdateFermentableInput = components["schemas"]["UpdateFermentableInput"];
+export type CreateYeastInput = components["schemas"]["CreateYeastInput"];
+export type UpdateYeastInput = components["schemas"]["UpdateYeastInput"];
+export type CreateMiscInput = components["schemas"]["CreateMiscInput"];
+export type UpdateMiscInput = components["schemas"]["UpdateMiscInput"];
+export type CreateWaterInput = components["schemas"]["CreateWaterInput"];
+export type UpdateWaterInput = components["schemas"]["UpdateWaterInput"];
 export type WaterProfile = components["schemas"]["WaterProfile"];
 export type CalculatedWaterProfile = components["schemas"]["CalculatedWaterProfile"];
 export type RecipeWaterAdjustment = components["schemas"]["RecipeWaterAdjustment"];
@@ -277,3 +287,39 @@ export const moveDatabase = (targetPath: string): Promise<void> =>
 
 export const getDbPath = (): Promise<string> =>
   invoke<string>("get_db_path");
+
+// --- Ingredients (user library CRUD) ---
+export const createHop = (input: CreateHopInput) =>
+  invoke<Hop>("create_hop", { input });
+export const updateHop = (id: string, input: UpdateHopInput) =>
+  invoke<Hop>("update_hop", { id, input });
+export const deleteHop = (id: string) =>
+  invoke<void>("delete_hop", { id });
+
+export const createFermentable = (input: CreateFermentableInput) =>
+  invoke<Fermentable>("create_fermentable", { input });
+export const updateFermentable = (id: string, input: UpdateFermentableInput) =>
+  invoke<Fermentable>("update_fermentable", { id, input });
+export const deleteFermentable = (id: string) =>
+  invoke<void>("delete_fermentable", { id });
+
+export const createYeast = (input: CreateYeastInput) =>
+  invoke<Yeast>("create_yeast", { input });
+export const updateYeast = (id: string, input: UpdateYeastInput) =>
+  invoke<Yeast>("update_yeast", { id, input });
+export const deleteYeast = (id: string) =>
+  invoke<void>("delete_yeast", { id });
+
+export const createMisc = (input: CreateMiscInput) =>
+  invoke<Misc>("create_misc", { input });
+export const updateMisc = (id: string, input: UpdateMiscInput) =>
+  invoke<Misc>("update_misc", { id, input });
+export const deleteMisc = (id: string) =>
+  invoke<void>("delete_misc", { id });
+
+export const createWater = (input: CreateWaterInput) =>
+  invoke<Water>("create_water", { input });
+export const updateWater = (id: string, input: UpdateWaterInput) =>
+  invoke<Water>("update_water", { id, input });
+export const deleteWater = (id: string) =>
+  invoke<void>("delete_water", { id });
