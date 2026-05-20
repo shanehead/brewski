@@ -357,7 +357,7 @@
             <label class="flex flex-col gap-1 text-xs" style="color: var(--color-text-secondary);">Form *
               <select bind:value={hopForm} class="px-2 py-1.5 rounded text-sm"
                       style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);">
-                <option>Pellet</option><option>Plug</option><option>Leaf</option>
+                <option>Pellet</option><option>Cryo</option><option>CO2 Extract</option><option>Plug</option><option>Leaf</option>
               </select>
             </label>
           </div>
