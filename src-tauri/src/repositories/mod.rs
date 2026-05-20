@@ -2,6 +2,7 @@ pub mod batches;
 pub mod equipment;
 pub mod fermentable;
 pub mod hop;
+pub mod ingredient;
 pub mod library;
 pub mod mash;
 pub mod misc;
