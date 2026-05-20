@@ -7,9 +7,12 @@
   let { children } = $props();
 
   onMount(async () => {
-    await loadSettings();
-    const { getCurrentWindow } = await import('@tauri-apps/api/window');
-    getCurrentWindow().show();
+    try {
+      await loadSettings();
+    } finally {
+      const { getCurrentWindow } = await import('@tauri-apps/api/window');
+      getCurrentWindow().show();
+    }
   });
 
   const isRecipes = $derived($page.url.pathname === "/" || $page.url.pathname.startsWith("/recipe"));
