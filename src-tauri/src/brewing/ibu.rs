@@ -53,7 +53,10 @@ pub fn tinseth_ibu(
             // CO2 extract: fully isomerized — full utilization regardless of boil time.
             // Bigness still applies (gravity suppresses utilization even for extracts).
             if form_lower == "co2 extract" {
-                return (bigness * alpha_fraction * ounces * 7490.0) / volume_gallons;
+                // Pre-isomerized: max Tinseth utilization regardless of boil time.
+                // Time factor saturates at 1/4.15; extract gets that ceiling unconditionally.
+                return (bigness * (1.0 / 4.15) * alpha_fraction * ounces * 7490.0)
+                    / volume_gallons;
             }
             let effective_time = match use_lower.as_str() {
                 "first wort" => boil_time_min,
@@ -447,7 +450,7 @@ mod tests {
         let pellet_ibu = tinseth_ibu(&pellet, 1.047, 23.0, 60.0);
         assert!(
             co2_ibu > pellet_ibu,
-            "CO2 extract (full utilization) {co2_ibu:.2} should exceed pellet 60min {pellet_ibu:.2}"
+            "CO2 extract (saturated utilization ~0.241) {co2_ibu:.2} should exceed pellet 60min time_factor ~0.219 {pellet_ibu:.2}"
         );
     }
 }
