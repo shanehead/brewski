@@ -142,6 +142,8 @@ mod tests {
             species: sea_orm::Set(None),
             pof_positive: sea_orm::Set(None),
             sta1_positive: sea_orm::Set(None),
+            source: sea_orm::Set("seeded".to_string()),
+            forked_from_id: sea_orm::Set(None),
         }
         .insert(&db)
         .await

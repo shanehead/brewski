@@ -98,6 +98,8 @@ impl TryFrom<entities::fermentables::Model> for Fermentable {
             max_in_batch_pct: m.max_in_batch_pct,
             recommend_mash: m.recommend_mash.map(|v| v != 0),
             ibu_gal_per_lb: m.ibu_gal_per_lb,
+            source: m.source,
+            forked_from_id: m.forked_from_id,
         })
     }
 }
@@ -121,6 +123,8 @@ impl TryFrom<entities::hops::Model> for Hop {
             caryophyllene_pct: m.caryophyllene_pct,
             cohumulone_pct: m.cohumulone_pct,
             myrcene_pct: m.myrcene_pct,
+            source: m.source,
+            forked_from_id: m.forked_from_id,
         })
     }
 }
@@ -152,6 +156,8 @@ impl TryFrom<entities::yeasts::Model> for Yeast {
             species: m.species,
             pof_positive: m.pof_positive.map(|v| v != 0),
             sta1_positive: m.sta1_positive.map(|v| v != 0),
+            source: m.source,
+            forked_from_id: m.forked_from_id,
         })
     }
 }
@@ -168,6 +174,8 @@ impl TryFrom<entities::miscs::Model> for Misc {
             notes: m.notes,
             use_for: m.use_for,
             amount_is_weight: m.amount_is_weight.unwrap_or(0) != 0,
+            source: m.source,
+            forked_from_id: m.forked_from_id,
         })
     }
 }
@@ -186,6 +194,8 @@ impl TryFrom<entities::waters::Model> for Water {
             magnesium_ppm: m.magnesium_ppm,
             ph: m.ph,
             notes: m.notes,
+            source: m.source,
+            forked_from_id: m.forked_from_id,
         })
     }
 }
