@@ -59,7 +59,12 @@ pub fn tinseth_ibu(
                 "first wort" => boil_time_min,
                 "hopstand" => {
                     if let Some(flat_util) = h.aroma_utilization_override {
-                        return (flat_util * alpha_fraction * ounces * 7490.0) / volume_gallons;
+                        return (flat_util
+                            * form_utilization(&form_lower)
+                            * alpha_fraction
+                            * ounces
+                            * 7490.0)
+                            / volume_gallons;
                     }
                     malowicki_effective_time(*h.time_min + h.whirlpool_time_min, h.hopstand_temp_c)
                 }
@@ -383,6 +388,37 @@ mod tests {
         }];
         let ibu = tinseth_ibu(&hops, 1.047, 23.0, 60.0);
         assert_eq!(ibu, 0.0);
+    }
+
+    #[test]
+    fn test_leaf_hopstand_with_utilization_override_reduces_ibu() {
+        let pellet = vec![HopIbuInput {
+            alpha_pct: &10.0f64,
+            amount_kg: &0.028f64,
+            time_min: &20.0f64,
+            use_type: "Hopstand",
+            form: "Pellet",
+            hopstand_temp_c: 80.0,
+            whirlpool_time_min: 0.0,
+            aroma_utilization_override: Some(0.23),
+        }];
+        let leaf = vec![HopIbuInput {
+            alpha_pct: &10.0f64,
+            amount_kg: &0.028f64,
+            time_min: &20.0f64,
+            use_type: "Hopstand",
+            form: "Leaf",
+            hopstand_temp_c: 80.0,
+            whirlpool_time_min: 0.0,
+            aroma_utilization_override: Some(0.23),
+        }];
+        let pellet_ibu = tinseth_ibu(&pellet, 1.047, 23.0, 60.0);
+        let leaf_ibu = tinseth_ibu(&leaf, 1.047, 23.0, 60.0);
+        let ratio = leaf_ibu / pellet_ibu;
+        assert!(
+            (ratio - 0.85).abs() < 0.01,
+            "leaf/pellet hopstand override ratio {ratio:.4}, expected 0.85"
+        );
     }
 
     #[test]
