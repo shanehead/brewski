@@ -6,7 +6,7 @@
   import { settings } from '$lib/stores/settings';
   import {
     kgToHopDisplay, hopDisplayToKg, hopWeightLabel,
-    lbToKg, weightLabel,
+    kgToLb, lbToKg, weightLabel,
     cToF, fToC, tempLabel,
     type Units,
   } from '$lib/units';
@@ -89,6 +89,7 @@
     } else {
       onadd({ type: 'yeast', item: selected as Yeast, amount });
     }
+    onclose();
   }
 
   function rowSubtext(item: Hop | Fermentable | Yeast): string {
@@ -156,7 +157,7 @@
       <!-- Detail screen -->
       <div class="flex items-center gap-3 px-4 py-3 flex-shrink-0"
            style="border-bottom: 1px solid var(--color-border); background: var(--color-bg-surface);">
-        <button onclick={() => { screen = 'list'; }}
+        <button onclick={() => { screen = 'list'; selected = null; }}
                 style="background: none; border: none; cursor: pointer; color: var(--color-accent); font-size: 14px; padding: 4px 0; display: flex; align-items: center; gap: 4px;">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
           Back
@@ -256,7 +257,7 @@
           <label class="flex flex-col gap-1 text-xs" style="color: var(--color-text-secondary);">
             Amount ({weightLabel(units)})
             <input type="number" inputmode="decimal" step="0.1" min="0"
-                   value={units === 'imperial' ? (amount / 0.453592).toFixed(2) : amount.toFixed(2)}
+                   value={units === 'imperial' ? kgToLb(amount).toFixed(2) : amount.toFixed(2)}
                    onblur={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); if (!isNaN(v)) amount = units === 'imperial' ? v * 0.453592 : v; }}
                    class="px-3 py-2 rounded-lg text-sm"
                    style="background: var(--color-bg-elevated); border: 1px solid var(--color-border); color: var(--color-text-primary); max-width: 150px;" />
