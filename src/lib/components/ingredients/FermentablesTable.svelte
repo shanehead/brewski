@@ -5,7 +5,7 @@
   import { settings } from "$lib/stores/settings";
   import { type Units, kgToLb, lbToKg, weightLabel } from "$lib/units";
   import BrewingIcon from "$lib/components/BrewingIcon.svelte";
-  import IngredientPicker, { type AddPayload } from "./IngredientPicker.svelte";
+  import IngredientPicker, { type AddPayload } from "$platform/IngredientPicker.svelte";
 
   let { recipe, onchange }: { recipe: Recipe; onchange: () => void } = $props();
 

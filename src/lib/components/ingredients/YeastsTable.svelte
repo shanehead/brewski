@@ -3,7 +3,7 @@
   import { createRecipeYeast, deleteRecipeYeast } from "$lib/api";
   import BrewingIcon from "$lib/components/BrewingIcon.svelte";
   import { ipc } from "$lib/stores/error";
-  import IngredientPicker, { type AddPayload } from "./IngredientPicker.svelte";
+  import IngredientPicker, { type AddPayload } from "$platform/IngredientPicker.svelte";
 
   let { recipe, onchange }: { recipe: Recipe; onchange: () => void } = $props();
 
