@@ -1,0 +1,2040 @@
+# Ingredient Editor — Backend Implementation Plan
+
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+
+**Goal:** Add `source`/`forked_from_id` columns to all 5 ingredient tables and expose full CRUD commands so the frontend can create, update, and delete custom ingredients.
+
+**Architecture:** Single migration adds two columns to existing tables (default `'seeded'`). New `repositories/ingredient.rs` handles CRUD with a source guard (only `source = 'user'` rows can be mutated). New `commands/ingredients.rs` exposes 15 Tauri commands. All types flow from the OpenAPI spec via `just gen`.
+
+**Tech Stack:** SQLite via SeaORM, Rust, Tauri IPC, OpenAPI → `cargo typify` → `models.gen.rs`, `openapi-typescript` → `api.gen.ts`
+
+**Spec:** `docs/superpowers/specs/2026-05-19-ingredient-editor-design.md`
+
+---
+
+### Task 1: Database Migration
+
+**Files:**
+- Create: `src-tauri/migrations/004_user_ingredients.sql`
+
+- [ ] **Write the migration**
+
+```sql
+-- src-tauri/migrations/004_user_ingredients.sql
+ALTER TABLE hops ADD COLUMN source TEXT NOT NULL DEFAULT 'seeded';
+ALTER TABLE hops ADD COLUMN forked_from_id TEXT REFERENCES hops(id);
+
+ALTER TABLE fermentables ADD COLUMN source TEXT NOT NULL DEFAULT 'seeded';
+ALTER TABLE fermentables ADD COLUMN forked_from_id TEXT REFERENCES fermentables(id);
+
+ALTER TABLE yeasts ADD COLUMN source TEXT NOT NULL DEFAULT 'seeded';
+ALTER TABLE yeasts ADD COLUMN forked_from_id TEXT REFERENCES yeasts(id);
+
+ALTER TABLE miscs ADD COLUMN source TEXT NOT NULL DEFAULT 'seeded';
+ALTER TABLE miscs ADD COLUMN forked_from_id TEXT REFERENCES miscs(id);
+
+ALTER TABLE waters ADD COLUMN source TEXT NOT NULL DEFAULT 'seeded';
+ALTER TABLE waters ADD COLUMN forked_from_id TEXT REFERENCES waters(id);
+```
+
+- [ ] **Apply to dev database**
+
+```bash
+just migrate
+```
+
+Expected: exits 0, no errors.
+
+- [ ] **Verify columns exist**
+
+```bash
+sqlite3 dev.db ".schema hops" | grep source
+```
+
+Expected: `source TEXT NOT NULL DEFAULT 'seeded'`
+
+- [ ] **Commit**
+
+```bash
+git add src-tauri/migrations/004_user_ingredients.sql
+git commit -m "feat: add source and forked_from_id columns to ingredient tables"
+```
+
+---
+
+### Task 2: Regenerate SeaORM Entities
+
+**Files:**
+- Modify: `src-tauri/src/entities/hops.rs`
+- Modify: `src-tauri/src/entities/fermentables.rs`
+- Modify: `src-tauri/src/entities/yeasts.rs`
+- Modify: `src-tauri/src/entities/miscs.rs`
+- Modify: `src-tauri/src/entities/waters.rs`
+
+- [ ] **Regenerate entities from the dev database**
+
+```bash
+just gen-entities
+```
+
+Expected: exits 0. The entity files in `src-tauri/src/entities/` are regenerated.
+
+- [ ] **Verify hops entity has new columns**
+
+```bash
+grep -n "source\|forked_from_id" src-tauri/src/entities/hops.rs
+```
+
+Expected: both fields appear in the `Model` struct.
+
+- [ ] **Verify the project still compiles (TryFrom impls will fail — expected)**
+
+```bash
+cd src-tauri && cargo check 2>&1 | grep "error\[" | head -20
+```
+
+Expected: errors about `source` and `forked_from_id` not existing on the model structs — these will be fixed in Task 4 after the OpenAPI gen runs.
+
+- [ ] **Commit**
+
+```bash
+git add src-tauri/src/entities/
+git commit -m "chore: regenerate SeaORM entities for source/forked_from_id columns"
+```
+
+---
+
+### Task 3: OpenAPI Schema Updates + Code Generation
+
+**Files:**
+- Modify: `docs/openapi/components/schemas/Hop.yaml`
+- Modify: `docs/openapi/components/schemas/Fermentable.yaml`
+- Modify: `docs/openapi/components/schemas/Yeast.yaml`
+- Modify: `docs/openapi/components/schemas/Misc.yaml`
+- Modify: `docs/openapi/components/schemas/Water.yaml`
+- Create: `docs/openapi/components/schemas/CreateHopInput.yaml`
+- Create: `docs/openapi/components/schemas/UpdateHopInput.yaml`
+- Create: `docs/openapi/components/schemas/CreateFermentableInput.yaml`
+- Create: `docs/openapi/components/schemas/UpdateFermentableInput.yaml`
+- Create: `docs/openapi/components/schemas/CreateYeastInput.yaml`
+- Create: `docs/openapi/components/schemas/UpdateYeastInput.yaml`
+- Create: `docs/openapi/components/schemas/CreateMiscInput.yaml`
+- Create: `docs/openapi/components/schemas/UpdateMiscInput.yaml`
+- Create: `docs/openapi/components/schemas/CreateWaterInput.yaml`
+- Create: `docs/openapi/components/schemas/UpdateWaterInput.yaml`
+- Create: `docs/openapi/paths/commands/create_hop.yaml` (+ update/delete variants)
+- Create: `docs/openapi/paths/commands/create_fermentable.yaml` (+ update/delete variants)
+- Create: `docs/openapi/paths/commands/create_yeast.yaml` (+ update/delete variants)
+- Create: `docs/openapi/paths/commands/create_misc.yaml` (+ update/delete variants)
+- Create: `docs/openapi/paths/commands/create_water.yaml` (+ update/delete variants)
+- Modify: `docs/openapi/openapi.yaml`
+- Modify: `src-tauri/src/models.gen.rs` (regenerated by `just gen`)
+- Modify: `src/lib/api.gen.ts` (regenerated by `just gen`)
+
+- [ ] **Add `source` and `forked_from_id` to Hop.yaml**
+
+Append to the end of `docs/openapi/components/schemas/Hop.yaml` (inside `properties`, after `myrcene_pct`) and add `source` to `required`:
+
+```yaml
+type: object
+required:
+  - id
+  - name
+  - alpha_pct
+  - form
+  - source
+properties:
+  id:
+    type: string
+  name:
+    type: string
+  alpha_pct:
+    type: number
+  beta_pct:
+    type:
+      - number
+      - "null"
+  form:
+    type: string
+    description: Pellet, Plug, Leaf
+  type_:
+    type:
+      - string
+      - "null"
+    description: Bittering, Aroma, Both
+  origin:
+    type:
+      - string
+      - "null"
+  year:
+    type:
+      - string
+      - "null"
+  notes:
+    type:
+      - string
+      - "null"
+  substitutes:
+    type:
+      - string
+      - "null"
+  hsi_pct:
+    type:
+      - number
+      - "null"
+  humulene_pct:
+    type:
+      - number
+      - "null"
+  caryophyllene_pct:
+    type:
+      - number
+      - "null"
+  cohumulone_pct:
+    type:
+      - number
+      - "null"
+  myrcene_pct:
+    type:
+      - number
+      - "null"
+  source:
+    type: string
+    description: "'seeded' | 'user'"
+  forked_from_id:
+    type:
+      - string
+      - "null"
+```
+
+- [ ] **Add `source` and `forked_from_id` to Fermentable.yaml**
+
+```yaml
+type: object
+required:
+  - id
+  - name
+  - type_
+  - yield_pct
+  - color_lovibond
+  - add_after_boil
+  - source
+properties:
+  id:
+    type: string
+  name:
+    type: string
+  type_:
+    type: string
+    description: Grain, Sugar, Extract, Dry Extract, Adjunct
+  yield_pct:
+    type: number
+  color_lovibond:
+    type: number
+  origin:
+    type:
+      - string
+      - "null"
+  supplier:
+    type:
+      - string
+      - "null"
+  notes:
+    type:
+      - string
+      - "null"
+  add_after_boil:
+    type: boolean
+  coarse_fine_diff_pct:
+    type:
+      - number
+      - "null"
+  moisture_pct:
+    type:
+      - number
+      - "null"
+  diastatic_power_lintner:
+    type:
+      - number
+      - "null"
+  protein_pct:
+    type:
+      - number
+      - "null"
+  max_in_batch_pct:
+    type:
+      - number
+      - "null"
+  recommend_mash:
+    type:
+      - boolean
+      - "null"
+  ibu_gal_per_lb:
+    type:
+      - number
+      - "null"
+  source:
+    type: string
+    description: "'seeded' | 'user'"
+  forked_from_id:
+    type:
+      - string
+      - "null"
+```
+
+- [ ] **Add `source` and `forked_from_id` to Yeast.yaml**
+
+Append to the existing `Yeast.yaml`. Add `source` to `required` and add both fields to `properties`:
+
+```yaml
+  source:
+    type: string
+    description: "'seeded' | 'user'"
+  forked_from_id:
+    type:
+      - string
+      - "null"
+```
+
+Add `source` to the `required` array.
+
+- [ ] **Add `source` and `forked_from_id` to Misc.yaml**
+
+Same pattern — append `source` (required) and `forked_from_id` (optional) to the existing schema.
+
+- [ ] **Add `source` and `forked_from_id` to Water.yaml**
+
+Same pattern.
+
+- [ ] **Create CreateHopInput.yaml**
+
+```yaml
+type: object
+required:
+  - name
+  - alpha_pct
+  - form
+properties:
+  name:
+    type: string
+  forked_from_id:
+    type:
+      - string
+      - "null"
+  alpha_pct:
+    type: number
+  beta_pct:
+    type:
+      - number
+      - "null"
+  form:
+    type: string
+  type_:
+    type:
+      - string
+      - "null"
+  origin:
+    type:
+      - string
+      - "null"
+  year:
+    type:
+      - string
+      - "null"
+  notes:
+    type:
+      - string
+      - "null"
+  substitutes:
+    type:
+      - string
+      - "null"
+  hsi_pct:
+    type:
+      - number
+      - "null"
+  humulene_pct:
+    type:
+      - number
+      - "null"
+  caryophyllene_pct:
+    type:
+      - number
+      - "null"
+  cohumulone_pct:
+    type:
+      - number
+      - "null"
+  myrcene_pct:
+    type:
+      - number
+      - "null"
+```
+
+- [ ] **Create UpdateHopInput.yaml** (all fields optional — partial update)
+
+```yaml
+type: object
+properties:
+  name:
+    type: string
+  alpha_pct:
+    type: number
+  beta_pct:
+    type:
+      - number
+      - "null"
+  form:
+    type: string
+  type_:
+    type:
+      - string
+      - "null"
+  origin:
+    type:
+      - string
+      - "null"
+  year:
+    type:
+      - string
+      - "null"
+  notes:
+    type:
+      - string
+      - "null"
+  substitutes:
+    type:
+      - string
+      - "null"
+  hsi_pct:
+    type:
+      - number
+      - "null"
+  humulene_pct:
+    type:
+      - number
+      - "null"
+  caryophyllene_pct:
+    type:
+      - number
+      - "null"
+  cohumulone_pct:
+    type:
+      - number
+      - "null"
+  myrcene_pct:
+    type:
+      - number
+      - "null"
+```
+
+- [ ] **Create CreateFermentableInput.yaml**
+
+```yaml
+type: object
+required:
+  - name
+  - type_
+  - yield_pct
+  - color_lovibond
+properties:
+  name:
+    type: string
+  forked_from_id:
+    type:
+      - string
+      - "null"
+  type_:
+    type: string
+    description: Grain, Sugar, Extract, Dry Extract, Adjunct
+  yield_pct:
+    type: number
+  color_lovibond:
+    type: number
+  origin:
+    type:
+      - string
+      - "null"
+  supplier:
+    type:
+      - string
+      - "null"
+  notes:
+    type:
+      - string
+      - "null"
+  add_after_boil:
+    type: boolean
+  coarse_fine_diff_pct:
+    type:
+      - number
+      - "null"
+  moisture_pct:
+    type:
+      - number
+      - "null"
+  diastatic_power_lintner:
+    type:
+      - number
+      - "null"
+  protein_pct:
+    type:
+      - number
+      - "null"
+  max_in_batch_pct:
+    type:
+      - number
+      - "null"
+  recommend_mash:
+    type:
+      - boolean
+      - "null"
+  ibu_gal_per_lb:
+    type:
+      - number
+      - "null"
+```
+
+- [ ] **Create UpdateFermentableInput.yaml** (all fields optional)
+
+```yaml
+type: object
+properties:
+  name:
+    type: string
+  type_:
+    type: string
+  yield_pct:
+    type: number
+  color_lovibond:
+    type: number
+  origin:
+    type:
+      - string
+      - "null"
+  supplier:
+    type:
+      - string
+      - "null"
+  notes:
+    type:
+      - string
+      - "null"
+  add_after_boil:
+    type: boolean
+  coarse_fine_diff_pct:
+    type:
+      - number
+      - "null"
+  moisture_pct:
+    type:
+      - number
+      - "null"
+  diastatic_power_lintner:
+    type:
+      - number
+      - "null"
+  protein_pct:
+    type:
+      - number
+      - "null"
+  max_in_batch_pct:
+    type:
+      - number
+      - "null"
+  recommend_mash:
+    type:
+      - boolean
+      - "null"
+  ibu_gal_per_lb:
+    type:
+      - number
+      - "null"
+```
+
+- [ ] **Create CreateYeastInput.yaml**
+
+```yaml
+type: object
+required:
+  - name
+  - type_
+  - form
+properties:
+  name:
+    type: string
+  forked_from_id:
+    type:
+      - string
+      - "null"
+  type_:
+    type: string
+    description: Ale, Lager, Wheat, Wine, Champagne
+  form:
+    type: string
+    description: Liquid, Dry, Slant, Culture
+  laboratory:
+    type:
+      - string
+      - "null"
+  product_id:
+    type:
+      - string
+      - "null"
+  min_temperature_c:
+    type:
+      - number
+      - "null"
+  max_temperature_c:
+    type:
+      - number
+      - "null"
+  flocculation:
+    type:
+      - string
+      - "null"
+  attenuation_pct:
+    type:
+      - number
+      - "null"
+  min_attenuation_pct:
+    type:
+      - number
+      - "null"
+  max_attenuation_pct:
+    type:
+      - number
+      - "null"
+  alcohol_tolerance:
+    type:
+      - string
+      - "null"
+  flavor_profile:
+    type:
+      - string
+      - "null"
+  styles:
+    type:
+      - string
+      - "null"
+  substitutes:
+    type:
+      - string
+      - "null"
+  species:
+    type:
+      - string
+      - "null"
+  pof_positive:
+    type:
+      - boolean
+      - "null"
+  sta1_positive:
+    type:
+      - boolean
+      - "null"
+  notes:
+    type:
+      - string
+      - "null"
+  best_for:
+    type:
+      - string
+      - "null"
+  max_reuse:
+    type:
+      - integer
+      - "null"
+  add_to_secondary:
+    type: boolean
+```
+
+- [ ] **Create UpdateYeastInput.yaml** (all fields optional)
+
+```yaml
+type: object
+properties:
+  name:
+    type: string
+  type_:
+    type: string
+  form:
+    type: string
+  laboratory:
+    type:
+      - string
+      - "null"
+  product_id:
+    type:
+      - string
+      - "null"
+  min_temperature_c:
+    type:
+      - number
+      - "null"
+  max_temperature_c:
+    type:
+      - number
+      - "null"
+  flocculation:
+    type:
+      - string
+      - "null"
+  attenuation_pct:
+    type:
+      - number
+      - "null"
+  min_attenuation_pct:
+    type:
+      - number
+      - "null"
+  max_attenuation_pct:
+    type:
+      - number
+      - "null"
+  alcohol_tolerance:
+    type:
+      - string
+      - "null"
+  flavor_profile:
+    type:
+      - string
+      - "null"
+  styles:
+    type:
+      - string
+      - "null"
+  substitutes:
+    type:
+      - string
+      - "null"
+  species:
+    type:
+      - string
+      - "null"
+  pof_positive:
+    type:
+      - boolean
+      - "null"
+  sta1_positive:
+    type:
+      - boolean
+      - "null"
+  notes:
+    type:
+      - string
+      - "null"
+  best_for:
+    type:
+      - string
+      - "null"
+  max_reuse:
+    type:
+      - integer
+      - "null"
+  add_to_secondary:
+    type: boolean
+```
+
+- [ ] **Create CreateMiscInput.yaml**
+
+```yaml
+type: object
+required:
+  - name
+  - type_
+  - use_
+  - time_min
+properties:
+  name:
+    type: string
+  forked_from_id:
+    type:
+      - string
+      - "null"
+  type_:
+    type: string
+    description: Spice, Fining, Water Agent, Herb, Flavor, Other
+  use_:
+    type: string
+    description: Boil, Mash, Primary, Secondary, Bottling
+  time_min:
+    type: number
+  notes:
+    type:
+      - string
+      - "null"
+  use_for:
+    type:
+      - string
+      - "null"
+  amount_is_weight:
+    type: boolean
+```
+
+- [ ] **Create UpdateMiscInput.yaml** (all fields optional)
+
+```yaml
+type: object
+properties:
+  name:
+    type: string
+  type_:
+    type: string
+  use_:
+    type: string
+  time_min:
+    type: number
+  notes:
+    type:
+      - string
+      - "null"
+  use_for:
+    type:
+      - string
+      - "null"
+  amount_is_weight:
+    type: boolean
+```
+
+- [ ] **Create CreateWaterInput.yaml**
+
+```yaml
+type: object
+required:
+  - name
+  - calcium_ppm
+  - bicarbonate_ppm
+  - sulfate_ppm
+  - chloride_ppm
+  - sodium_ppm
+  - magnesium_ppm
+properties:
+  name:
+    type: string
+  forked_from_id:
+    type:
+      - string
+      - "null"
+  calcium_ppm:
+    type: number
+  bicarbonate_ppm:
+    type: number
+  sulfate_ppm:
+    type: number
+  chloride_ppm:
+    type: number
+  sodium_ppm:
+    type: number
+  magnesium_ppm:
+    type: number
+  ph:
+    type:
+      - number
+      - "null"
+  notes:
+    type:
+      - string
+      - "null"
+```
+
+- [ ] **Create UpdateWaterInput.yaml** (all fields optional)
+
+```yaml
+type: object
+properties:
+  name:
+    type: string
+  calcium_ppm:
+    type: number
+  bicarbonate_ppm:
+    type: number
+  sulfate_ppm:
+    type: number
+  chloride_ppm:
+    type: number
+  sodium_ppm:
+    type: number
+  magnesium_ppm:
+    type: number
+  ph:
+    type:
+      - number
+      - "null"
+  notes:
+    type:
+      - string
+      - "null"
+```
+
+- [ ] **Create the 15 path files**
+
+`docs/openapi/paths/commands/create_hop.yaml`:
+```yaml
+post:
+  operationId: createHop
+  summary: Create a custom hop in the ingredient library
+  tags:
+    - Library
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - input
+          properties:
+            input:
+              $ref: "../../components/schemas/CreateHopInput.yaml"
+  responses:
+    "200":
+      description: Created hop
+      content:
+        application/json:
+          schema:
+            $ref: "../../components/schemas/Hop.yaml"
+    "500":
+      $ref: "../../components/responses/Error.yaml"
+```
+
+`docs/openapi/paths/commands/update_hop.yaml`:
+```yaml
+post:
+  operationId: updateHop
+  summary: Update a custom hop in the ingredient library
+  tags:
+    - Library
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - id
+            - input
+          properties:
+            id:
+              type: string
+            input:
+              $ref: "../../components/schemas/UpdateHopInput.yaml"
+  responses:
+    "200":
+      description: Updated hop
+      content:
+        application/json:
+          schema:
+            $ref: "../../components/schemas/Hop.yaml"
+    "500":
+      $ref: "../../components/responses/Error.yaml"
+```
+
+`docs/openapi/paths/commands/delete_hop.yaml`:
+```yaml
+post:
+  operationId: deleteHop
+  summary: Delete a custom hop from the ingredient library
+  tags:
+    - Library
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+  responses:
+    "200":
+      description: Deleted
+    "500":
+      $ref: "../../components/responses/Error.yaml"
+```
+
+Repeat this pattern for fermentable, yeast, misc, and water — creating 12 more path files (3 per type × 4 types). Substitute:
+- `hop` → `fermentable` / `yeast` / `misc` / `water`
+- `Hop` → `Fermentable` / `Yeast` / `Misc` / `Water`
+- `operationId`: `createFermentable`, `updateFermentable`, `deleteFermentable`, etc.
+
+- [ ] **Register all new paths and schemas in openapi.yaml**
+
+Add the following entries to the `paths:` section of `docs/openapi/openapi.yaml`:
+
+```yaml
+  /commands/create_hop:
+    $ref: ./paths/commands/create_hop.yaml
+  /commands/update_hop:
+    $ref: ./paths/commands/update_hop.yaml
+  /commands/delete_hop:
+    $ref: ./paths/commands/delete_hop.yaml
+  /commands/create_fermentable:
+    $ref: ./paths/commands/create_fermentable.yaml
+  /commands/update_fermentable:
+    $ref: ./paths/commands/update_fermentable.yaml
+  /commands/delete_fermentable:
+    $ref: ./paths/commands/delete_fermentable.yaml
+  /commands/create_yeast:
+    $ref: ./paths/commands/create_yeast.yaml
+  /commands/update_yeast:
+    $ref: ./paths/commands/update_yeast.yaml
+  /commands/delete_yeast:
+    $ref: ./paths/commands/delete_yeast.yaml
+  /commands/create_misc:
+    $ref: ./paths/commands/create_misc.yaml
+  /commands/update_misc:
+    $ref: ./paths/commands/update_misc.yaml
+  /commands/delete_misc:
+    $ref: ./paths/commands/delete_misc.yaml
+  /commands/create_water:
+    $ref: ./paths/commands/create_water.yaml
+  /commands/update_water:
+    $ref: ./paths/commands/update_water.yaml
+  /commands/delete_water:
+    $ref: ./paths/commands/delete_water.yaml
+```
+
+Add the following to the `components.schemas:` section:
+
+```yaml
+    CreateHopInput:
+      $ref: ./components/schemas/CreateHopInput.yaml
+    UpdateHopInput:
+      $ref: ./components/schemas/UpdateHopInput.yaml
+    CreateFermentableInput:
+      $ref: ./components/schemas/CreateFermentableInput.yaml
+    UpdateFermentableInput:
+      $ref: ./components/schemas/UpdateFermentableInput.yaml
+    CreateYeastInput:
+      $ref: ./components/schemas/CreateYeastInput.yaml
+    UpdateYeastInput:
+      $ref: ./components/schemas/UpdateYeastInput.yaml
+    CreateMiscInput:
+      $ref: ./components/schemas/CreateMiscInput.yaml
+    UpdateMiscInput:
+      $ref: ./components/schemas/UpdateMiscInput.yaml
+    CreateWaterInput:
+      $ref: ./components/schemas/CreateWaterInput.yaml
+    UpdateWaterInput:
+      $ref: ./components/schemas/UpdateWaterInput.yaml
+```
+
+- [ ] **Run the linter to verify the OpenAPI spec is valid**
+
+```bash
+just lint-openapi
+```
+
+Expected: 0 errors.
+
+- [ ] **Regenerate TypeScript and Rust types**
+
+```bash
+just gen
+```
+
+Expected: exits 0. `src-tauri/src/models.gen.rs` and `src/lib/api.gen.ts` are updated with new types including `source`, `forked_from_id`, `CreateHopInput`, `UpdateHopInput`, etc.
+
+- [ ] **Verify new types appear in models.gen.rs**
+
+```bash
+grep -n "CreateHopInput\|forked_from_id" src-tauri/src/models.gen.rs | head -10
+```
+
+Expected: both names present.
+
+- [ ] **Commit**
+
+```bash
+git add docs/openapi/ src-tauri/src/models.gen.rs src/lib/api.gen.ts
+git commit -m "feat: add ingredient CRUD types to OpenAPI spec and regenerate"
+```
+
+---
+
+### Task 4: Update models.rs TryFrom Implementations
+
+**Files:**
+- Modify: `src-tauri/src/models.rs`
+
+- [ ] **Add `source` and `forked_from_id` to the `Hop` TryFrom**
+
+In the `impl TryFrom<entities::hops::Model> for Hop` block (around line 105), add two fields:
+
+```rust
+impl TryFrom<entities::hops::Model> for Hop {
+    type Error = AppError;
+    fn try_from(m: entities::hops::Model) -> Result<Self, AppError> {
+        Ok(Self {
+            id: m.id,
+            name: m.name,
+            alpha_pct: m.alpha_pct,
+            beta_pct: m.beta_pct,
+            form: m.form,
+            type_: m.r#type,
+            origin: m.origin,
+            year: m.year,
+            notes: m.notes,
+            substitutes: m.substitutes,
+            hsi_pct: m.hsi_pct,
+            humulene_pct: m.humulene_pct,
+            caryophyllene_pct: m.caryophyllene_pct,
+            cohumulone_pct: m.cohumulone_pct,
+            myrcene_pct: m.myrcene_pct,
+            source: m.source,
+            forked_from_id: m.forked_from_id,
+        })
+    }
+}
+```
+
+- [ ] **Add `source` and `forked_from_id` to the `Fermentable` TryFrom**
+
+```rust
+impl TryFrom<entities::fermentables::Model> for Fermentable {
+    type Error = AppError;
+    fn try_from(m: entities::fermentables::Model) -> Result<Self, AppError> {
+        Ok(Self {
+            id: m.id,
+            name: m.name,
+            type_: m.r#type,
+            yield_pct: m.yield_pct,
+            color_lovibond: m.color_lovibond,
+            origin: m.origin,
+            supplier: m.supplier,
+            notes: m.notes,
+            add_after_boil: m.add_after_boil.unwrap_or(0) != 0,
+            coarse_fine_diff_pct: m.coarse_fine_diff_pct,
+            moisture_pct: m.moisture_pct,
+            diastatic_power_lintner: m.diastatic_power_lintner,
+            protein_pct: m.protein_pct,
+            max_in_batch_pct: m.max_in_batch_pct,
+            recommend_mash: m.recommend_mash.map(|v| v != 0),
+            ibu_gal_per_lb: m.ibu_gal_per_lb,
+            source: m.source,
+            forked_from_id: m.forked_from_id,
+        })
+    }
+}
+```
+
+- [ ] **Add `source` and `forked_from_id` to the `Yeast` TryFrom**
+
+```rust
+impl TryFrom<entities::yeasts::Model> for Yeast {
+    type Error = AppError;
+    fn try_from(m: entities::yeasts::Model) -> Result<Self, AppError> {
+        Ok(Self {
+            id: m.id,
+            name: m.name,
+            type_: m.r#type,
+            form: m.form,
+            laboratory: m.laboratory,
+            product_id: m.product_id,
+            min_temperature_c: m.min_temperature_c,
+            max_temperature_c: m.max_temperature_c,
+            flocculation: m.flocculation,
+            attenuation_pct: m.attenuation_pct,
+            notes: m.notes,
+            best_for: m.best_for,
+            max_reuse: m.max_reuse.map(|v| v as i64),
+            add_to_secondary: m.add_to_secondary.unwrap_or(0) != 0,
+            min_attenuation_pct: m.min_attenuation_pct,
+            max_attenuation_pct: m.max_attenuation_pct,
+            alcohol_tolerance: m.alcohol_tolerance,
+            flavor_profile: m.flavor_profile,
+            styles: m.styles,
+            substitutes: m.substitutes,
+            species: m.species,
+            pof_positive: m.pof_positive.map(|v| v != 0),
+            sta1_positive: m.sta1_positive.map(|v| v != 0),
+            source: m.source,
+            forked_from_id: m.forked_from_id,
+        })
+    }
+}
+```
+
+- [ ] **Add `source` and `forked_from_id` to the `Misc` TryFrom**
+
+```rust
+impl TryFrom<entities::miscs::Model> for Misc {
+    type Error = AppError;
+    fn try_from(m: entities::miscs::Model) -> Result<Self, AppError> {
+        Ok(Self {
+            id: m.id,
+            name: m.name,
+            type_: m.r#type,
+            use_: m.r#use,
+            time_min: m.time_min,
+            notes: m.notes,
+            use_for: m.use_for,
+            amount_is_weight: m.amount_is_weight.unwrap_or(0) != 0,
+            source: m.source,
+            forked_from_id: m.forked_from_id,
+        })
+    }
+}
+```
+
+- [ ] **Add `source` and `forked_from_id` to the `Water` TryFrom**
+
+```rust
+impl TryFrom<entities::waters::Model> for Water {
+    type Error = AppError;
+    fn try_from(m: entities::waters::Model) -> Result<Self, AppError> {
+        Ok(Self {
+            id: m.id,
+            name: m.name,
+            calcium_ppm: m.calcium_ppm,
+            bicarbonate_ppm: m.bicarbonate_ppm,
+            sulfate_ppm: m.sulfate_ppm,
+            chloride_ppm: m.chloride_ppm,
+            sodium_ppm: m.sodium_ppm,
+            magnesium_ppm: m.magnesium_ppm,
+            ph: m.ph,
+            notes: m.notes,
+            source: m.source,
+            forked_from_id: m.forked_from_id,
+        })
+    }
+}
+```
+
+- [ ] **Verify the project compiles**
+
+```bash
+cd src-tauri && cargo check
+```
+
+Expected: 0 errors. (The library tests that insert ingredients will need updating if they check returned fields — those are in repositories/library.rs tests and should still pass since existing seeded rows get `source = 'seeded'` from the DB default.)
+
+- [ ] **Run existing tests**
+
+```bash
+just test-rust
+```
+
+Expected: all pass.
+
+- [ ] **Commit**
+
+```bash
+git add src-tauri/src/models.rs
+git commit -m "feat: map source and forked_from_id fields in TryFrom implementations"
+```
+
+---
+
+### Task 5: Ingredient Repository
+
+**Files:**
+- Create: `src-tauri/src/repositories/ingredient.rs`
+- Modify: `src-tauri/src/repositories/mod.rs`
+
+- [ ] **Write the failing tests first**
+
+Create `src-tauri/src/repositories/ingredient.rs` with tests only:
+
+```rust
+use crate::entities::{fermentables, hops, miscs, waters, yeasts};
+use crate::error::AppError;
+use crate::models::{
+    CreateFermentableInput, CreateHopInput, CreateMiscInput, CreateWaterInput, CreateYeastInput,
+    Fermentable, Hop, Misc, UpdateFermentableInput, UpdateHopInput, UpdateMiscInput,
+    UpdateWaterInput, UpdateYeastInput, Water, Yeast,
+};
+use sea_orm::{
+    ActiveModelTrait, ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter, Set,
+};
+
+use super::new_id;
+
+pub struct IngredientRepository<'a> {
+    db: &'a DatabaseConnection,
+}
+
+impl<'a> IngredientRepository<'a> {
+    pub fn new(db: &'a DatabaseConnection) -> Self {
+        Self { db }
+    }
+
+    pub async fn create_hop(&self, input: CreateHopInput) -> Result<Hop, AppError> {
+        todo!()
+    }
+
+    pub async fn update_hop(&self, id: &str, input: UpdateHopInput) -> Result<Hop, AppError> {
+        todo!()
+    }
+
+    pub async fn delete_hop(&self, id: &str) -> Result<(), AppError> {
+        todo!()
+    }
+
+    pub async fn create_fermentable(&self, input: CreateFermentableInput) -> Result<Fermentable, AppError> {
+        todo!()
+    }
+
+    pub async fn update_fermentable(&self, id: &str, input: UpdateFermentableInput) -> Result<Fermentable, AppError> {
+        todo!()
+    }
+
+    pub async fn delete_fermentable(&self, id: &str) -> Result<(), AppError> {
+        todo!()
+    }
+
+    pub async fn create_yeast(&self, input: CreateYeastInput) -> Result<Yeast, AppError> {
+        todo!()
+    }
+
+    pub async fn update_yeast(&self, id: &str, input: UpdateYeastInput) -> Result<Yeast, AppError> {
+        todo!()
+    }
+
+    pub async fn delete_yeast(&self, id: &str) -> Result<(), AppError> {
+        todo!()
+    }
+
+    pub async fn create_misc(&self, input: CreateMiscInput) -> Result<Misc, AppError> {
+        todo!()
+    }
+
+    pub async fn update_misc(&self, id: &str, input: UpdateMiscInput) -> Result<Misc, AppError> {
+        todo!()
+    }
+
+    pub async fn delete_misc(&self, id: &str) -> Result<(), AppError> {
+        todo!()
+    }
+
+    pub async fn create_water(&self, input: CreateWaterInput) -> Result<Water, AppError> {
+        todo!()
+    }
+
+    pub async fn update_water(&self, id: &str, input: UpdateWaterInput) -> Result<Water, AppError> {
+        todo!()
+    }
+
+    pub async fn delete_water(&self, id: &str) -> Result<(), AppError> {
+        todo!()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::test_helpers::setup_test_db;
+
+    // ── Hop ──────────────────────────────────────────────────────────────────
+
+    #[tokio::test]
+    async fn test_hop_create_sets_source_user() {
+        let db = setup_test_db().await;
+        let repo = IngredientRepository::new(&db);
+        let hop = repo.create_hop(CreateHopInput {
+            name: "My Hop".into(),
+            alpha_pct: 10.0,
+            form: "pellet".into(),
+            forked_from_id: None,
+            beta_pct: None, type_: None, origin: None, year: None, notes: None,
+            substitutes: None, hsi_pct: None, humulene_pct: None,
+            caryophyllene_pct: None, cohumulone_pct: None, myrcene_pct: None,
+        }).await.unwrap();
+        assert_eq!(hop.source, "user");
+        assert_eq!(hop.name, "My Hop");
+        assert!(hop.forked_from_id.is_none());
+    }
+
+    #[tokio::test]
+    async fn test_hop_create_fork_sets_forked_from_id() {
+        let db = setup_test_db().await;
+        let repo = IngredientRepository::new(&db);
+        let hop = repo.create_hop(CreateHopInput {
+            name: "Citra (Custom)".into(),
+            alpha_pct: 12.0,
+            form: "pellet".into(),
+            forked_from_id: Some("bm-hop-citra".into()),
+            beta_pct: None, type_: None, origin: None, year: None, notes: None,
+            substitutes: None, hsi_pct: None, humulene_pct: None,
+            caryophyllene_pct: None, cohumulone_pct: None, myrcene_pct: None,
+        }).await.unwrap();
+        assert_eq!(hop.source, "user");
+        assert_eq!(hop.forked_from_id, Some("bm-hop-citra".into()));
+    }
+
+    #[tokio::test]
+    async fn test_hop_update_user_row() {
+        let db = setup_test_db().await;
+        let repo = IngredientRepository::new(&db);
+        let created = repo.create_hop(CreateHopInput {
+            name: "My Hop".into(),
+            alpha_pct: 10.0,
+            form: "pellet".into(),
+            forked_from_id: None,
+            beta_pct: None, type_: None, origin: None, year: None, notes: None,
+            substitutes: None, hsi_pct: None, humulene_pct: None,
+            caryophyllene_pct: None, cohumulone_pct: None, myrcene_pct: None,
+        }).await.unwrap();
+        let updated = repo.update_hop(&created.id, UpdateHopInput {
+            name: Some("My Hop v2".into()),
+            alpha_pct: Some(11.0),
+            ..Default::default()
+        }).await.unwrap();
+        assert_eq!(updated.name, "My Hop v2");
+        assert_eq!(updated.alpha_pct, 11.0);
+    }
+
+    #[tokio::test]
+    async fn test_hop_update_seeded_row_fails() {
+        let db = setup_test_db().await;
+        let repo = IngredientRepository::new(&db);
+        // Seeded hops exist in the test DB from migrations
+        let hops = hops::Entity::find()
+            .filter(hops::Column::Source.eq("seeded"))
+            .one(&db)
+            .await
+            .unwrap()
+            .unwrap();
+        let result = repo.update_hop(&hops.id, UpdateHopInput {
+            name: Some("Hacked".into()),
+            ..Default::default()
+        }).await;
+        assert!(matches!(result, Err(AppError::NotFound)));
+    }
+
+    #[tokio::test]
+    async fn test_hop_delete_user_row() {
+        let db = setup_test_db().await;
+        let repo = IngredientRepository::new(&db);
+        let created = repo.create_hop(CreateHopInput {
+            name: "Temp Hop".into(),
+            alpha_pct: 5.0,
+            form: "pellet".into(),
+            forked_from_id: None,
+            beta_pct: None, type_: None, origin: None, year: None, notes: None,
+            substitutes: None, hsi_pct: None, humulene_pct: None,
+            caryophyllene_pct: None, cohumulone_pct: None, myrcene_pct: None,
+        }).await.unwrap();
+        repo.delete_hop(&created.id).await.unwrap();
+        let result = hops::Entity::find_by_id(&created.id).one(&db).await.unwrap();
+        assert!(result.is_none());
+    }
+
+    #[tokio::test]
+    async fn test_hop_delete_seeded_row_fails() {
+        let db = setup_test_db().await;
+        let repo = IngredientRepository::new(&db);
+        let seeded = hops::Entity::find()
+            .filter(hops::Column::Source.eq("seeded"))
+            .one(&db)
+            .await
+            .unwrap()
+            .unwrap();
+        let result = repo.delete_hop(&seeded.id).await;
+        assert!(matches!(result, Err(AppError::NotFound)));
+    }
+
+    // ── Fermentable ──────────────────────────────────────────────────────────
+
+    #[tokio::test]
+    async fn test_fermentable_create_sets_source_user() {
+        let db = setup_test_db().await;
+        let repo = IngredientRepository::new(&db);
+        let f = repo.create_fermentable(CreateFermentableInput {
+            name: "My Malt".into(),
+            type_: "Grain".into(),
+            yield_pct: 75.0,
+            color_lovibond: 3.5,
+            forked_from_id: None,
+            origin: None, supplier: None, notes: None, add_after_boil: false,
+            coarse_fine_diff_pct: None, moisture_pct: None, diastatic_power_lintner: None,
+            protein_pct: None, max_in_batch_pct: None, recommend_mash: None, ibu_gal_per_lb: None,
+        }).await.unwrap();
+        assert_eq!(f.source, "user");
+    }
+
+    #[tokio::test]
+    async fn test_fermentable_delete_seeded_row_fails() {
+        let db = setup_test_db().await;
+        let repo = IngredientRepository::new(&db);
+        let seeded = fermentables::Entity::find()
+            .filter(fermentables::Column::Source.eq("seeded"))
+            .one(&db)
+            .await
+            .unwrap()
+            .unwrap();
+        let result = repo.delete_fermentable(&seeded.id).await;
+        assert!(matches!(result, Err(AppError::NotFound)));
+    }
+
+    // ── Yeast ────────────────────────────────────────────────────────────────
+
+    #[tokio::test]
+    async fn test_yeast_create_sets_source_user() {
+        let db = setup_test_db().await;
+        let repo = IngredientRepository::new(&db);
+        let y = repo.create_yeast(CreateYeastInput {
+            name: "My Yeast".into(),
+            type_: "ale".into(),
+            form: "dry".into(),
+            forked_from_id: None,
+            laboratory: None, product_id: None, min_temperature_c: None,
+            max_temperature_c: None, flocculation: None, attenuation_pct: None,
+            min_attenuation_pct: None, max_attenuation_pct: None, alcohol_tolerance: None,
+            flavor_profile: None, styles: None, substitutes: None, species: None,
+            pof_positive: None, sta1_positive: None, notes: None, best_for: None,
+            max_reuse: None, add_to_secondary: false,
+        }).await.unwrap();
+        assert_eq!(y.source, "user");
+    }
+}
+```
+
+- [ ] **Add `pub mod ingredient;` to repositories/mod.rs**
+
+```rust
+pub mod ingredient;
+```
+
+- [ ] **Run the tests — verify they fail with `not yet implemented`**
+
+```bash
+cd src-tauri && cargo test repositories::ingredient 2>&1 | grep -E "FAILED|panicked|not yet"
+```
+
+Expected: tests panic with `not yet implemented`.
+
+- [ ] **Implement the repository**
+
+Replace the `todo!()` bodies with real implementations:
+
+```rust
+pub async fn create_hop(&self, input: CreateHopInput) -> Result<Hop, AppError> {
+    let id = new_id();
+    hops::ActiveModel {
+        id: Set(id.clone()),
+        name: Set(input.name),
+        alpha_pct: Set(input.alpha_pct),
+        beta_pct: Set(input.beta_pct),
+        form: Set(input.form),
+        r#type: Set(input.type_),
+        origin: Set(input.origin),
+        year: Set(input.year),
+        notes: Set(input.notes),
+        substitutes: Set(input.substitutes),
+        hsi_pct: Set(input.hsi_pct),
+        humulene_pct: Set(input.humulene_pct),
+        caryophyllene_pct: Set(input.caryophyllene_pct),
+        cohumulone_pct: Set(input.cohumulone_pct),
+        myrcene_pct: Set(input.myrcene_pct),
+        source: Set("user".to_string()),
+        forked_from_id: Set(input.forked_from_id),
+    }
+    .insert(self.db)
+    .await?;
+
+    hops::Entity::find_by_id(&id)
+        .one(self.db)
+        .await?
+        .ok_or(AppError::NotFound)
+        .and_then(Hop::try_from)
+}
+
+pub async fn update_hop(&self, id: &str, input: UpdateHopInput) -> Result<Hop, AppError> {
+    let row = hops::Entity::find_by_id(id)
+        .filter(hops::Column::Source.eq("user"))
+        .one(self.db)
+        .await?
+        .ok_or(AppError::NotFound)?;
+
+    let mut active: hops::ActiveModel = row.into();
+    if let Some(v) = input.name        { active.name        = Set(v); }
+    if let Some(v) = input.alpha_pct   { active.alpha_pct   = Set(v); }
+    if let Some(v) = input.beta_pct    { active.beta_pct    = Set(v); }
+    if let Some(v) = input.form        { active.form        = Set(v); }
+    if let Some(v) = input.type_       { active.r#type      = Set(Some(v)); }
+    if let Some(v) = input.origin      { active.origin      = Set(Some(v)); }
+    if let Some(v) = input.year        { active.year        = Set(Some(v)); }
+    if let Some(v) = input.notes       { active.notes       = Set(Some(v)); }
+    if let Some(v) = input.substitutes { active.substitutes = Set(Some(v)); }
+    if let Some(v) = input.hsi_pct          { active.hsi_pct          = Set(Some(v)); }
+    if let Some(v) = input.humulene_pct     { active.humulene_pct     = Set(Some(v)); }
+    if let Some(v) = input.caryophyllene_pct { active.caryophyllene_pct = Set(Some(v)); }
+    if let Some(v) = input.cohumulone_pct   { active.cohumulone_pct   = Set(Some(v)); }
+    if let Some(v) = input.myrcene_pct      { active.myrcene_pct      = Set(Some(v)); }
+    active.update(self.db).await?;
+
+    hops::Entity::find_by_id(id)
+        .one(self.db)
+        .await?
+        .ok_or(AppError::NotFound)
+        .and_then(Hop::try_from)
+}
+
+pub async fn delete_hop(&self, id: &str) -> Result<(), AppError> {
+    let result = hops::Entity::delete_many()
+        .filter(hops::Column::Id.eq(id))
+        .filter(hops::Column::Source.eq("user"))
+        .exec(self.db)
+        .await?;
+    if result.rows_affected == 0 {
+        return Err(AppError::NotFound);
+    }
+    Ok(())
+}
+
+pub async fn create_fermentable(&self, input: CreateFermentableInput) -> Result<Fermentable, AppError> {
+    let id = new_id();
+    fermentables::ActiveModel {
+        id: Set(id.clone()),
+        name: Set(input.name),
+        r#type: Set(input.type_),
+        yield_pct: Set(input.yield_pct),
+        color_lovibond: Set(input.color_lovibond),
+        origin: Set(input.origin),
+        supplier: Set(input.supplier),
+        notes: Set(input.notes),
+        add_after_boil: Set(Some(input.add_after_boil as i32)),
+        coarse_fine_diff_pct: Set(input.coarse_fine_diff_pct),
+        moisture_pct: Set(input.moisture_pct),
+        diastatic_power_lintner: Set(input.diastatic_power_lintner),
+        protein_pct: Set(input.protein_pct),
+        max_in_batch_pct: Set(input.max_in_batch_pct),
+        recommend_mash: Set(input.recommend_mash.map(|b| b as i32)),
+        ibu_gal_per_lb: Set(input.ibu_gal_per_lb),
+        source: Set("user".to_string()),
+        forked_from_id: Set(input.forked_from_id),
+    }
+    .insert(self.db)
+    .await?;
+
+    fermentables::Entity::find_by_id(&id)
+        .one(self.db)
+        .await?
+        .ok_or(AppError::NotFound)
+        .and_then(Fermentable::try_from)
+}
+
+pub async fn update_fermentable(&self, id: &str, input: UpdateFermentableInput) -> Result<Fermentable, AppError> {
+    let row = fermentables::Entity::find_by_id(id)
+        .filter(fermentables::Column::Source.eq("user"))
+        .one(self.db)
+        .await?
+        .ok_or(AppError::NotFound)?;
+
+    let mut active: fermentables::ActiveModel = row.into();
+    if let Some(v) = input.name              { active.name              = Set(v); }
+    if let Some(v) = input.type_             { active.r#type            = Set(v); }
+    if let Some(v) = input.yield_pct         { active.yield_pct         = Set(v); }
+    if let Some(v) = input.color_lovibond    { active.color_lovibond    = Set(v); }
+    if let Some(v) = input.origin            { active.origin            = Set(Some(v)); }
+    if let Some(v) = input.supplier          { active.supplier          = Set(Some(v)); }
+    if let Some(v) = input.notes             { active.notes             = Set(Some(v)); }
+    if let Some(v) = input.add_after_boil    { active.add_after_boil    = Set(Some(v as i32)); }
+    if let Some(v) = input.coarse_fine_diff_pct  { active.coarse_fine_diff_pct  = Set(Some(v)); }
+    if let Some(v) = input.moisture_pct          { active.moisture_pct          = Set(Some(v)); }
+    if let Some(v) = input.diastatic_power_lintner { active.diastatic_power_lintner = Set(Some(v)); }
+    if let Some(v) = input.protein_pct       { active.protein_pct       = Set(Some(v)); }
+    if let Some(v) = input.max_in_batch_pct  { active.max_in_batch_pct  = Set(Some(v)); }
+    if let Some(v) = input.recommend_mash    { active.recommend_mash    = Set(Some(v as i32)); }
+    if let Some(v) = input.ibu_gal_per_lb    { active.ibu_gal_per_lb    = Set(Some(v)); }
+    active.update(self.db).await?;
+
+    fermentables::Entity::find_by_id(id)
+        .one(self.db)
+        .await?
+        .ok_or(AppError::NotFound)
+        .and_then(Fermentable::try_from)
+}
+
+pub async fn delete_fermentable(&self, id: &str) -> Result<(), AppError> {
+    let result = fermentables::Entity::delete_many()
+        .filter(fermentables::Column::Id.eq(id))
+        .filter(fermentables::Column::Source.eq("user"))
+        .exec(self.db)
+        .await?;
+    if result.rows_affected == 0 {
+        return Err(AppError::NotFound);
+    }
+    Ok(())
+}
+
+pub async fn create_yeast(&self, input: CreateYeastInput) -> Result<Yeast, AppError> {
+    let id = new_id();
+    yeasts::ActiveModel {
+        id: Set(id.clone()),
+        name: Set(input.name),
+        r#type: Set(input.type_),
+        form: Set(input.form),
+        laboratory: Set(input.laboratory),
+        product_id: Set(input.product_id),
+        min_temperature_c: Set(input.min_temperature_c),
+        max_temperature_c: Set(input.max_temperature_c),
+        flocculation: Set(input.flocculation),
+        attenuation_pct: Set(input.attenuation_pct),
+        min_attenuation_pct: Set(input.min_attenuation_pct),
+        max_attenuation_pct: Set(input.max_attenuation_pct),
+        alcohol_tolerance: Set(input.alcohol_tolerance),
+        flavor_profile: Set(input.flavor_profile),
+        styles: Set(input.styles),
+        substitutes: Set(input.substitutes),
+        species: Set(input.species),
+        pof_positive: Set(input.pof_positive.map(|b| b as i32)),
+        sta1_positive: Set(input.sta1_positive.map(|b| b as i32)),
+        notes: Set(input.notes),
+        best_for: Set(input.best_for),
+        max_reuse: Set(input.max_reuse.map(|v| v as i32)),
+        add_to_secondary: Set(Some(input.add_to_secondary as i32)),
+        source: Set("user".to_string()),
+        forked_from_id: Set(input.forked_from_id),
+    }
+    .insert(self.db)
+    .await?;
+
+    yeasts::Entity::find_by_id(&id)
+        .one(self.db)
+        .await?
+        .ok_or(AppError::NotFound)
+        .and_then(Yeast::try_from)
+}
+
+pub async fn update_yeast(&self, id: &str, input: UpdateYeastInput) -> Result<Yeast, AppError> {
+    let row = yeasts::Entity::find_by_id(id)
+        .filter(yeasts::Column::Source.eq("user"))
+        .one(self.db)
+        .await?
+        .ok_or(AppError::NotFound)?;
+
+    let mut active: yeasts::ActiveModel = row.into();
+    if let Some(v) = input.name              { active.name              = Set(v); }
+    if let Some(v) = input.type_             { active.r#type            = Set(v); }
+    if let Some(v) = input.form              { active.form              = Set(v); }
+    if let Some(v) = input.laboratory        { active.laboratory        = Set(Some(v)); }
+    if let Some(v) = input.product_id        { active.product_id        = Set(Some(v)); }
+    if let Some(v) = input.min_temperature_c { active.min_temperature_c = Set(Some(v)); }
+    if let Some(v) = input.max_temperature_c { active.max_temperature_c = Set(Some(v)); }
+    if let Some(v) = input.flocculation      { active.flocculation      = Set(Some(v)); }
+    if let Some(v) = input.attenuation_pct   { active.attenuation_pct   = Set(Some(v)); }
+    if let Some(v) = input.min_attenuation_pct { active.min_attenuation_pct = Set(Some(v)); }
+    if let Some(v) = input.max_attenuation_pct { active.max_attenuation_pct = Set(Some(v)); }
+    if let Some(v) = input.alcohol_tolerance { active.alcohol_tolerance = Set(Some(v)); }
+    if let Some(v) = input.flavor_profile    { active.flavor_profile    = Set(Some(v)); }
+    if let Some(v) = input.styles            { active.styles            = Set(Some(v)); }
+    if let Some(v) = input.substitutes       { active.substitutes       = Set(Some(v)); }
+    if let Some(v) = input.species           { active.species           = Set(Some(v)); }
+    if let Some(v) = input.pof_positive      { active.pof_positive      = Set(Some(v as i32)); }
+    if let Some(v) = input.sta1_positive     { active.sta1_positive     = Set(Some(v as i32)); }
+    if let Some(v) = input.notes             { active.notes             = Set(Some(v)); }
+    if let Some(v) = input.best_for          { active.best_for          = Set(Some(v)); }
+    if let Some(v) = input.max_reuse         { active.max_reuse         = Set(Some(v as i32)); }
+    if let Some(v) = input.add_to_secondary  { active.add_to_secondary  = Set(Some(v as i32)); }
+    active.update(self.db).await?;
+
+    yeasts::Entity::find_by_id(id)
+        .one(self.db)
+        .await?
+        .ok_or(AppError::NotFound)
+        .and_then(Yeast::try_from)
+}
+
+pub async fn delete_yeast(&self, id: &str) -> Result<(), AppError> {
+    let result = yeasts::Entity::delete_many()
+        .filter(yeasts::Column::Id.eq(id))
+        .filter(yeasts::Column::Source.eq("user"))
+        .exec(self.db)
+        .await?;
+    if result.rows_affected == 0 {
+        return Err(AppError::NotFound);
+    }
+    Ok(())
+}
+
+pub async fn create_misc(&self, input: CreateMiscInput) -> Result<Misc, AppError> {
+    let id = new_id();
+    miscs::ActiveModel {
+        id: Set(id.clone()),
+        name: Set(input.name),
+        r#type: Set(input.type_),
+        r#use: Set(input.use_),
+        time_min: Set(input.time_min),
+        notes: Set(input.notes),
+        use_for: Set(input.use_for),
+        amount_is_weight: Set(Some(input.amount_is_weight as i32)),
+        source: Set("user".to_string()),
+        forked_from_id: Set(input.forked_from_id),
+    }
+    .insert(self.db)
+    .await?;
+
+    miscs::Entity::find_by_id(&id)
+        .one(self.db)
+        .await?
+        .ok_or(AppError::NotFound)
+        .and_then(Misc::try_from)
+}
+
+pub async fn update_misc(&self, id: &str, input: UpdateMiscInput) -> Result<Misc, AppError> {
+    let row = miscs::Entity::find_by_id(id)
+        .filter(miscs::Column::Source.eq("user"))
+        .one(self.db)
+        .await?
+        .ok_or(AppError::NotFound)?;
+
+    let mut active: miscs::ActiveModel = row.into();
+    if let Some(v) = input.name             { active.name             = Set(v); }
+    if let Some(v) = input.type_            { active.r#type           = Set(v); }
+    if let Some(v) = input.use_             { active.r#use            = Set(v); }
+    if let Some(v) = input.time_min         { active.time_min         = Set(v); }
+    if let Some(v) = input.notes            { active.notes            = Set(Some(v)); }
+    if let Some(v) = input.use_for          { active.use_for          = Set(Some(v)); }
+    if let Some(v) = input.amount_is_weight { active.amount_is_weight = Set(Some(v as i32)); }
+    active.update(self.db).await?;
+
+    miscs::Entity::find_by_id(id)
+        .one(self.db)
+        .await?
+        .ok_or(AppError::NotFound)
+        .and_then(Misc::try_from)
+}
+
+pub async fn delete_misc(&self, id: &str) -> Result<(), AppError> {
+    let result = miscs::Entity::delete_many()
+        .filter(miscs::Column::Id.eq(id))
+        .filter(miscs::Column::Source.eq("user"))
+        .exec(self.db)
+        .await?;
+    if result.rows_affected == 0 {
+        return Err(AppError::NotFound);
+    }
+    Ok(())
+}
+
+pub async fn create_water(&self, input: CreateWaterInput) -> Result<Water, AppError> {
+    let id = new_id();
+    waters::ActiveModel {
+        id: Set(id.clone()),
+        name: Set(input.name),
+        calcium_ppm: Set(input.calcium_ppm),
+        bicarbonate_ppm: Set(input.bicarbonate_ppm),
+        sulfate_ppm: Set(input.sulfate_ppm),
+        chloride_ppm: Set(input.chloride_ppm),
+        sodium_ppm: Set(input.sodium_ppm),
+        magnesium_ppm: Set(input.magnesium_ppm),
+        ph: Set(input.ph),
+        notes: Set(input.notes),
+        source: Set("user".to_string()),
+        forked_from_id: Set(input.forked_from_id),
+    }
+    .insert(self.db)
+    .await?;
+
+    waters::Entity::find_by_id(&id)
+        .one(self.db)
+        .await?
+        .ok_or(AppError::NotFound)
+        .and_then(Water::try_from)
+}
+
+pub async fn update_water(&self, id: &str, input: UpdateWaterInput) -> Result<Water, AppError> {
+    let row = waters::Entity::find_by_id(id)
+        .filter(waters::Column::Source.eq("user"))
+        .one(self.db)
+        .await?
+        .ok_or(AppError::NotFound)?;
+
+    let mut active: waters::ActiveModel = row.into();
+    if let Some(v) = input.name            { active.name            = Set(v); }
+    if let Some(v) = input.calcium_ppm     { active.calcium_ppm     = Set(v); }
+    if let Some(v) = input.bicarbonate_ppm { active.bicarbonate_ppm = Set(v); }
+    if let Some(v) = input.sulfate_ppm     { active.sulfate_ppm     = Set(v); }
+    if let Some(v) = input.chloride_ppm    { active.chloride_ppm    = Set(v); }
+    if let Some(v) = input.sodium_ppm      { active.sodium_ppm      = Set(v); }
+    if let Some(v) = input.magnesium_ppm   { active.magnesium_ppm   = Set(v); }
+    if let Some(v) = input.ph              { active.ph              = Set(Some(v)); }
+    if let Some(v) = input.notes           { active.notes           = Set(Some(v)); }
+    active.update(self.db).await?;
+
+    waters::Entity::find_by_id(id)
+        .one(self.db)
+        .await?
+        .ok_or(AppError::NotFound)
+        .and_then(Water::try_from)
+}
+
+pub async fn delete_water(&self, id: &str) -> Result<(), AppError> {
+    let result = waters::Entity::delete_many()
+        .filter(waters::Column::Id.eq(id))
+        .filter(waters::Column::Source.eq("user"))
+        .exec(self.db)
+        .await?;
+    if result.rows_affected == 0 {
+        return Err(AppError::NotFound);
+    }
+    Ok(())
+}
+```
+
+- [ ] **Run tests — verify they pass**
+
+```bash
+cd src-tauri && cargo test repositories::ingredient
+```
+
+Expected: all tests pass.
+
+- [ ] **Commit**
+
+```bash
+git add src-tauri/src/repositories/
+git commit -m "feat: add IngredientRepository with source-guarded CRUD for all 5 types"
+```
+
+---
+
+### Task 6: Ingredient Commands + Registration
+
+**Files:**
+- Create: `src-tauri/src/commands/ingredients.rs`
+- Modify: `src-tauri/src/commands/mod.rs`
+- Modify: `src-tauri/src/lib.rs`
+
+- [ ] **Create commands/ingredients.rs**
+
+```rust
+use crate::error::AppError;
+use crate::models::{
+    CreateFermentableInput, CreateHopInput, CreateMiscInput, CreateWaterInput, CreateYeastInput,
+    Fermentable, Hop, Misc, UpdateFermentableInput, UpdateHopInput, UpdateMiscInput,
+    UpdateWaterInput, UpdateYeastInput, Water, Yeast,
+};
+use crate::repositories::ingredient::IngredientRepository;
+use crate::AppState;
+use tauri::State;
+
+#[tauri::command]
+pub async fn create_hop(state: State<'_, AppState>, input: CreateHopInput) -> Result<Hop, AppError> {
+    IngredientRepository::new(&state.db).create_hop(input).await
+}
+
+#[tauri::command]
+pub async fn update_hop(state: State<'_, AppState>, id: String, input: UpdateHopInput) -> Result<Hop, AppError> {
+    IngredientRepository::new(&state.db).update_hop(&id, input).await
+}
+
+#[tauri::command]
+pub async fn delete_hop(state: State<'_, AppState>, id: String) -> Result<(), AppError> {
+    IngredientRepository::new(&state.db).delete_hop(&id).await
+}
+
+#[tauri::command]
+pub async fn create_fermentable(state: State<'_, AppState>, input: CreateFermentableInput) -> Result<Fermentable, AppError> {
+    IngredientRepository::new(&state.db).create_fermentable(input).await
+}
+
+#[tauri::command]
+pub async fn update_fermentable(state: State<'_, AppState>, id: String, input: UpdateFermentableInput) -> Result<Fermentable, AppError> {
+    IngredientRepository::new(&state.db).update_fermentable(&id, input).await
+}
+
+#[tauri::command]
+pub async fn delete_fermentable(state: State<'_, AppState>, id: String) -> Result<(), AppError> {
+    IngredientRepository::new(&state.db).delete_fermentable(&id).await
+}
+
+#[tauri::command]
+pub async fn create_yeast(state: State<'_, AppState>, input: CreateYeastInput) -> Result<Yeast, AppError> {
+    IngredientRepository::new(&state.db).create_yeast(input).await
+}
+
+#[tauri::command]
+pub async fn update_yeast(state: State<'_, AppState>, id: String, input: UpdateYeastInput) -> Result<Yeast, AppError> {
+    IngredientRepository::new(&state.db).update_yeast(&id, input).await
+}
+
+#[tauri::command]
+pub async fn delete_yeast(state: State<'_, AppState>, id: String) -> Result<(), AppError> {
+    IngredientRepository::new(&state.db).delete_yeast(&id).await
+}
+
+#[tauri::command]
+pub async fn create_misc(state: State<'_, AppState>, input: CreateMiscInput) -> Result<Misc, AppError> {
+    IngredientRepository::new(&state.db).create_misc(input).await
+}
+
+#[tauri::command]
+pub async fn update_misc(state: State<'_, AppState>, id: String, input: UpdateMiscInput) -> Result<Misc, AppError> {
+    IngredientRepository::new(&state.db).update_misc(&id, input).await
+}
+
+#[tauri::command]
+pub async fn delete_misc(state: State<'_, AppState>, id: String) -> Result<(), AppError> {
+    IngredientRepository::new(&state.db).delete_misc(&id).await
+}
+
+#[tauri::command]
+pub async fn create_water(state: State<'_, AppState>, input: CreateWaterInput) -> Result<Water, AppError> {
+    IngredientRepository::new(&state.db).create_water(input).await
+}
+
+#[tauri::command]
+pub async fn update_water(state: State<'_, AppState>, id: String, input: UpdateWaterInput) -> Result<Water, AppError> {
+    IngredientRepository::new(&state.db).update_water(&id, input).await
+}
+
+#[tauri::command]
+pub async fn delete_water(state: State<'_, AppState>, id: String) -> Result<(), AppError> {
+    IngredientRepository::new(&state.db).delete_water(&id).await
+}
+```
+
+- [ ] **Add module to commands/mod.rs**
+
+Add `pub mod ingredients;` to `src-tauri/src/commands/mod.rs`.
+
+- [ ] **Register commands in lib.rs**
+
+Add the 15 new commands to the `invoke_handler` list in `src-tauri/src/lib.rs`:
+
+```rust
+commands::ingredients::create_hop,
+commands::ingredients::update_hop,
+commands::ingredients::delete_hop,
+commands::ingredients::create_fermentable,
+commands::ingredients::update_fermentable,
+commands::ingredients::delete_fermentable,
+commands::ingredients::create_yeast,
+commands::ingredients::update_yeast,
+commands::ingredients::delete_yeast,
+commands::ingredients::create_misc,
+commands::ingredients::update_misc,
+commands::ingredients::delete_misc,
+commands::ingredients::create_water,
+commands::ingredients::update_water,
+commands::ingredients::delete_water,
+```
+
+- [ ] **Verify compilation**
+
+```bash
+cd src-tauri && cargo check
+```
+
+Expected: 0 errors.
+
+- [ ] **Run all Rust tests**
+
+```bash
+just test-rust
+```
+
+Expected: all pass.
+
+- [ ] **Commit**
+
+```bash
+git add src-tauri/src/commands/ src-tauri/src/lib.rs
+git commit -m "feat: expose ingredient CRUD as Tauri commands"
+```
