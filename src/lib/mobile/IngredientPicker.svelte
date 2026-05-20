@@ -13,11 +13,12 @@
   import type { BrewingIconName } from "$lib/icons";
 
   export type AddPayload =
-    | { type: 'hop'; item: Hop; amount_kg: number; use_: string; time_min: number; hopstand_temp_c: number | null }
+    | { type: 'hop'; item: Hop; form: string; amount_kg: number; use_: string; time_min: number; hopstand_temp_c: number | null }
     | { type: 'fermentable'; item: Fermentable; amount_kg: number }
     | { type: 'yeast'; item: Yeast; amount: number };
 
   const HOP_USES = ['boil', 'aroma', 'dry hop', 'first wort', 'hopstand'] as const;
+  const HOP_FORMS = ['Pellet', 'Cryo', 'CO2 Extract', 'Plug', 'Leaf'] as const;
 
   let {
     type,
@@ -40,6 +41,7 @@
   let use_ = $state('boil');
   let time = $state(60);
   let hopstand_temp_c = $state(80);
+  let hopForm = $state('Pellet');
 
   const units = $derived<Units>($settings.units === 'imperial' ? 'imperial' : 'metric');
 
@@ -62,7 +64,14 @@
 
   $effect(() => {
     if (!selected) return;
-    if (type === 'hop') { amount = hopDisplayToKg(units === 'imperial' ? 1 : 28, units); use_ = 'boil'; time = 60; hopstand_temp_c = 80; }
+    if (type === 'hop') {
+      const h = selected as Hop;
+      amount = hopDisplayToKg(units === 'imperial' ? 1 : 28, units);
+      use_ = 'boil';
+      time = 60;
+      hopstand_temp_c = 80;
+      hopForm = h.form;
+    }
     else if (type === 'fermentable') { amount = units === 'imperial' ? lbToKg(2) : 1.0; }
     else { amount = 1; }
   });
@@ -83,7 +92,7 @@
   function handleAdd() {
     if (!selected || amount <= 0) return;
     if (type === 'hop') {
-      onadd({ type: 'hop', item: selected as Hop, amount_kg: amount, use_, time_min: time, hopstand_temp_c: use_ === 'hopstand' ? hopstand_temp_c : null });
+      onadd({ type: 'hop', item: selected as Hop, form: hopForm, amount_kg: amount, use_, time_min: time, hopstand_temp_c: use_ === 'hopstand' ? hopstand_temp_c : null });
     } else if (type === 'fermentable') {
       onadd({ type: 'fermentable', item: selected as Fermentable, amount_kg: amount });
     } else {
@@ -229,6 +238,13 @@
                      onblur={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); if (!isNaN(v)) amount = hopDisplayToKg(v, units); }}
                      min="0.001" class="px-3 py-2 rounded-lg text-sm"
                      style="background: var(--color-bg-elevated); border: 1px solid var(--color-border); color: var(--color-text-primary);" />
+            </label>
+            <label class="flex flex-col gap-1 text-xs" style="color: var(--color-text-secondary);">
+              Form
+              <select bind:value={hopForm} class="px-3 py-2 rounded-lg text-sm"
+                      style="background: var(--color-bg-elevated); border: 1px solid var(--color-border); color: var(--color-text-primary);">
+                {#each HOP_FORMS as f}<option value={f}>{f}</option>{/each}
+              </select>
             </label>
             <label class="flex flex-col gap-1 flex-1 text-xs" style="color: var(--color-text-secondary);">
               Use

@@ -18,7 +18,7 @@
       hop_id: payload.item.id,
       name: payload.item.name,
       alpha_pct: payload.item.alpha_pct,
-      form: payload.item.form,
+      form: payload.form,
       amount_kg: payload.amount_kg,
       use_: payload.use_,
       time_min: payload.time_min,
@@ -67,7 +67,16 @@
       <tbody>
         {#each recipe.hops as h (h.id)}
           <tr class="border-t" style="border-color: var(--color-border);">
-            <td class="py-1.5" style="color: var(--color-text-primary);">{h.name}</td>
+            <td class="py-1.5" style="color: var(--color-text-primary);">
+              {h.name}
+              {#if h.form !== 'Pellet'}
+                {@const badgeColor =
+                  h.form === 'Cryo' ? 'background: #d1fae5; color: #065f46;' :
+                  h.form === 'CO2 Extract' ? 'background: #ede9fe; color: #5b21b6;' :
+                  'background: var(--color-bg-elevated); color: var(--color-text-secondary);'}
+                <span style="font-size: 10px; padding: 1px 5px; border-radius: 4px; font-weight: 600; margin-left: 4px; {badgeColor}">{h.form}</span>
+              {/if}
+            </td>
             <td class="text-right py-1.5" style="color: var(--color-text-secondary);">{h.alpha_pct}%</td>
             <td class="text-right py-1.5" style="color: var(--color-text-secondary);">{kgToHopDisplay(h.amount_kg, units).toFixed(units === "imperial" ? 2 : 0)}{hopWeightLabel(units)}</td>
             <td class="text-right py-1.5" style="color: var(--color-text-secondary);">
