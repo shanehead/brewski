@@ -12,6 +12,7 @@
   const isBatches = $derived($page.url.pathname.startsWith("/batches"));
   const isTools = $derived($page.url.pathname.startsWith("/tools"));
   const isEquipment = $derived($page.url.pathname.startsWith("/equipment"));
+  const isLibrary = $derived($page.url.pathname.startsWith("/library"));
 </script>
 
 <div class="flex h-screen overflow-hidden" style="background: var(--color-bg-base); color: var(--color-text-primary);">
@@ -59,6 +60,16 @@
         <path d="M4 6v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6"/>
         <path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2"/>
         <path d="M10 11h4"/>
+      </svg>
+    </a>
+
+    <!-- Library icon -->
+    <a href="/library" class="w-9 h-9 flex items-center justify-center rounded transition-colors"
+       aria-label="Library"
+       style={isLibrary ? "background: var(--color-accent); color: #fff;" : "color: var(--color-text-secondary);"}>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
       </svg>
     </a>
 
