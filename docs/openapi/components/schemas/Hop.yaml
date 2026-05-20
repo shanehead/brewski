@@ -18,7 +18,7 @@ properties:
       - "null"
   form:
     type: string
-    description: Pellet, Plug, Leaf
+    description: "Pellet, Plug, Leaf, Cryo, CO2 Extract"
   type_:
     type:
       - string

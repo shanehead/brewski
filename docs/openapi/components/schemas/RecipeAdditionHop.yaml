@@ -24,6 +24,7 @@ properties:
     type: number
   form:
     type: string
+    description: "Pellet, Plug, Leaf, Cryo, CO2 Extract"
   amount_kg:
     type: number
   use_:

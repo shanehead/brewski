@@ -1480,7 +1480,7 @@ export interface components {
             name: string;
             alpha_pct: number;
             beta_pct?: number | null;
-            /** @description Pellet, Plug, Leaf */
+            /** @description Pellet, Plug, Leaf, Cryo, CO2 Extract */
             form: string;
             /** @description Bittering, Aroma, Both */
             type_?: string | null;
@@ -1586,6 +1586,7 @@ export interface components {
             hop_id?: string | null;
             name: string;
             alpha_pct: number;
+            /** @description Pellet, Plug, Leaf, Cryo, CO2 Extract */
             form: string;
             amount_kg: number;
             /** @description Boil, Dry Hop, Mash, First Wort, Aroma, Hopstand */
@@ -1762,6 +1763,7 @@ export interface components {
             hop_id?: string;
             name: string;
             alpha_pct: number;
+            /** @description Pellet, Plug, Leaf, Cryo, CO2 Extract */
             form?: string;
             amount_kg: number;
             use_: string;
@@ -2007,7 +2009,7 @@ export interface components {
             forked_from_id?: string | null;
             alpha_pct: number;
             beta_pct?: number | null;
-            /** @description Pellet, Plug, Leaf */
+            /** @description Pellet, Plug, Leaf, Cryo, CO2 Extract */
             form: string;
             type_?: string | null;
             origin?: string | null;
