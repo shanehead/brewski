@@ -35,10 +35,12 @@
   } = $props();
 
   const isEdit = $derived(ingredient !== null);
+  const isSeeded = $derived((ingredient as { source?: string } | null)?.source === 'seeded');
+  const typeName = $derived(type.charAt(0).toUpperCase() + type.slice(1));
   const title = $derived(
-    isEdit
-      ? `Edit ${type.charAt(0).toUpperCase() + type.slice(1)}`
-      : `New ${type.charAt(0).toUpperCase() + type.slice(1)}`
+    isSeeded ? `Built-in ${typeName}` :
+    isEdit ? `Edit ${typeName}` :
+    `New ${typeName}`
   );
 
   // Snapshot all initial values once (component is always remounted fresh via {#if editModalOpen})
@@ -243,6 +245,53 @@
     saving = false;
     if (saved) onsave(saved);
   }
+
+  async function handleDuplicate() {
+    if (saving || !ingredient) return;
+    saving = true;
+    let saved: AnyIngredient | null | undefined = null;
+    if (type === 'hop') {
+      saved = await ipc(createHop({
+        name: hopName.trim(), alpha_pct: hopAlpha, form: hopForm,
+        beta_pct: hopBeta === '' ? null : Number(hopBeta),
+        type_: hopType.trim() || null, origin: hopOrigin.trim() || null,
+        notes: hopNotes.trim() || null, substitutes: hopSubstitutes.trim() || null,
+        forked_from_id: (ingredient as Hop).id,
+      }));
+    } else if (type === 'fermentable') {
+      saved = await ipc(createFermentable({
+        name: fermName.trim(), type_: fermType, yield_pct: fermYield,
+        color_lovibond: fermColor, origin: fermOrigin.trim() || null,
+        notes: fermNotes.trim() || null, add_after_boil: fermAddAfterBoil,
+        forked_from_id: (ingredient as Fermentable).id,
+      }));
+    } else if (type === 'yeast') {
+      saved = await ipc(createYeast({
+        name: yeastName.trim(), type_: yeastType, form: yeastForm,
+        laboratory: yeastLab.trim() || null, product_id: yeastProductId.trim() || null,
+        attenuation_pct: yeastAttenuation === '' ? null : Number(yeastAttenuation),
+        flocculation: yeastFlocculation.trim() || null,
+        notes: yeastNotes.trim() || null, add_to_secondary: yeastAddToSecondary,
+        forked_from_id: (ingredient as Yeast).id,
+      }));
+    } else if (type === 'misc') {
+      saved = await ipc(createMisc({
+        name: miscName.trim(), type_: miscType, use_: miscUse, time_min: miscTime,
+        amount_is_weight: miscAmountIsWeight, notes: miscNotes.trim() || null,
+        use_for: miscUseFor.trim() || null,
+        forked_from_id: (ingredient as Misc).id,
+      }));
+    } else {
+      saved = await ipc(createWater({
+        name: waterName.trim(), calcium_ppm: waterCa, bicarbonate_ppm: waterBicarb,
+        sulfate_ppm: waterSulfate, chloride_ppm: waterChloride, sodium_ppm: waterSodium,
+        magnesium_ppm: waterMg, notes: waterNotes.trim() || null,
+        forked_from_id: (ingredient as Water).id,
+      }));
+    }
+    saving = false;
+    if (saved) onsave(saved);
+  }
 </script>
 
 <div class="fixed inset-0 flex items-center justify-center" style="z-index: 1000;">
@@ -266,12 +315,21 @@
     <!-- Body -->
     <div class="flex-1 overflow-y-auto p-5 flex flex-col gap-4">
 
+      {#if isSeeded}
+        <div class="text-sm px-3 py-2 rounded flex items-center gap-2"
+             style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-secondary);">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Built-in ingredients can't be edited. Duplicate to create your own editable copy.
+        </div>
+      {/if}
+
       {#if nameCollision}
         <div class="text-sm px-3 py-2 rounded" style="background: #7f1d1d20; border: 1px solid #dc262650; color: #fca5a5;">
           An ingredient with this name already exists. Please choose a different name.
         </div>
       {/if}
 
+      <div style={isSeeded ? 'pointer-events: none; opacity: 0.65; user-select: none;' : ''}>
       {#if type === 'hop'}
         <div class="grid grid-cols-2 gap-3">
           <div class="col-span-2">
@@ -535,6 +593,7 @@
           </div>
         </div>
       {/if}
+      </div>
     </div>
 
     <!-- Footer -->
@@ -542,12 +601,19 @@
          style="border-top: 1px solid var(--color-border);">
       <button onclick={oncancel} class="px-4 py-1.5 rounded text-sm"
               style="background: var(--color-bg-surface); color: var(--color-text-primary); border: 1px solid var(--color-border);">
-        Cancel
+        {isSeeded ? 'Close' : 'Cancel'}
       </button>
-      <button onclick={handleSave} disabled={saving || nameCollision || !currentName.trim()} class="px-4 py-1.5 rounded text-sm font-medium"
-              style="background: {saving || nameCollision || !currentName.trim() ? 'var(--color-bg-elevated)' : 'var(--color-accent)'}; color: {saving || nameCollision || !currentName.trim() ? 'var(--color-text-muted)' : '#fff'}; border: none; cursor: {saving || nameCollision || !currentName.trim() ? 'default' : 'pointer'};">
-        {saving ? 'Saving…' : isEdit ? 'Save' : 'Create'}
-      </button>
+      {#if isSeeded}
+        <button onclick={handleDuplicate} disabled={saving} class="px-4 py-1.5 rounded text-sm font-medium"
+                style="background: {saving ? 'var(--color-bg-elevated)' : 'var(--color-accent)'}; color: {saving ? 'var(--color-text-muted)' : '#fff'}; border: none; cursor: {saving ? 'default' : 'pointer'};">
+          {saving ? 'Duplicating…' : 'Duplicate & Edit'}
+        </button>
+      {:else}
+        <button onclick={handleSave} disabled={saving || nameCollision || !currentName.trim()} class="px-4 py-1.5 rounded text-sm font-medium"
+                style="background: {saving || nameCollision || !currentName.trim() ? 'var(--color-bg-elevated)' : 'var(--color-accent)'}; color: {saving || nameCollision || !currentName.trim() ? 'var(--color-text-muted)' : '#fff'}; border: none; cursor: {saving || nameCollision || !currentName.trim() ? 'default' : 'pointer'};">
+          {saving ? 'Saving…' : isEdit ? 'Save' : 'Create'}
+        </button>
+      {/if}
     </div>
   </div>
 </div>

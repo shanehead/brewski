@@ -175,7 +175,10 @@
         {#each filtered as item (item.id)}
           {@const isSeeded = item.source === 'seeded'}
           <div class="flex items-center gap-3 px-3 py-2.5 rounded"
-               style="background: var(--color-bg-elevated); border: 1px solid var(--color-border);">
+               role="button" tabindex="0"
+               onclick={() => openEdit(item)}
+               onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') openEdit(item); }}
+               style="background: var(--color-bg-elevated); border: 1px solid var(--color-border); cursor: pointer;">
             <div class="flex-1 min-w-0">
               <div class="flex items-center gap-2">
                 <span class="text-sm font-medium truncate" style="color: var(--color-text-primary);">{item.name}</span>
@@ -187,12 +190,12 @@
               <div class="text-xs mt-0.5 truncate" style="color: var(--color-text-secondary);">{rowSubtext(item)}</div>
             </div>
             {#if !isSeeded}
-              <button onclick={() => openEdit(item)}
+              <button onclick={(e) => { e.stopPropagation(); openEdit(item); }}
                       class="text-xs px-2 py-1 rounded flex-shrink-0"
                       style="background: var(--color-bg-surface); color: var(--color-text-secondary); border: 1px solid var(--color-border); cursor: pointer;">
                 Edit
               </button>
-              <button onclick={() => openDelete(item)}
+              <button onclick={(e) => { e.stopPropagation(); openDelete(item); }}
                       class="text-xs px-2 py-1 rounded flex-shrink-0"
                       style="background: var(--color-bg-surface); color: #f87171; border: 1px solid var(--color-border); cursor: pointer;">
                 Delete
