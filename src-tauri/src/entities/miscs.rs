@@ -20,10 +20,22 @@ pub struct Model {
     #[sea_orm(column_type = "Text", nullable)]
     pub use_for: Option<String>,
     pub amount_is_weight: Option<i32>,
+    #[sea_orm(column_type = "Text")]
+    pub source: String,
+    #[sea_orm(column_type = "Text", nullable)]
+    pub forked_from_id: Option<String>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
 pub enum Relation {
+    #[sea_orm(
+        belongs_to = "Entity",
+        from = "Column::ForkedFromId",
+        to = "Column::Id",
+        on_update = "NoAction",
+        on_delete = "NoAction"
+    )]
+    SelfRef,
     #[sea_orm(has_many = "super::recipe_addition_miscs::Entity")]
     RecipeAdditionMiscs,
     #[sea_orm(has_many = "super::recipe_version_miscs::Entity")]

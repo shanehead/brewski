@@ -19,6 +19,10 @@ pub struct Model {
     pub ph: Option<f64>,
     #[sea_orm(column_type = "Text", nullable)]
     pub notes: Option<String>,
+    #[sea_orm(column_type = "Text")]
+    pub source: String,
+    #[sea_orm(column_type = "Text", nullable)]
+    pub forked_from_id: Option<String>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
@@ -27,6 +31,14 @@ pub enum Relation {
     RecipeAdditionWaters,
     #[sea_orm(has_many = "super::recipe_version_waters::Entity")]
     RecipeVersionWaters,
+    #[sea_orm(
+        belongs_to = "Entity",
+        from = "Column::ForkedFromId",
+        to = "Column::Id",
+        on_update = "NoAction",
+        on_delete = "NoAction"
+    )]
+    SelfRef,
 }
 
 impl Related<super::recipe_addition_waters::Entity> for Entity {

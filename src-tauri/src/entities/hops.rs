@@ -29,10 +29,22 @@ pub struct Model {
     pub caryophyllene_pct: Option<f64>,
     pub cohumulone_pct: Option<f64>,
     pub myrcene_pct: Option<f64>,
+    #[sea_orm(column_type = "Text")]
+    pub source: String,
+    #[sea_orm(column_type = "Text", nullable)]
+    pub forked_from_id: Option<String>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
 pub enum Relation {
+    #[sea_orm(
+        belongs_to = "Entity",
+        from = "Column::ForkedFromId",
+        to = "Column::Id",
+        on_update = "NoAction",
+        on_delete = "NoAction"
+    )]
+    SelfRef,
     #[sea_orm(has_many = "super::recipe_addition_hops::Entity")]
     RecipeAdditionHops,
     #[sea_orm(has_many = "super::recipe_version_hops::Entity")]

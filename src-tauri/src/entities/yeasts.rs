@@ -43,6 +43,10 @@ pub struct Model {
     pub best_for: Option<String>,
     pub max_reuse: Option<i32>,
     pub add_to_secondary: Option<i32>,
+    #[sea_orm(column_type = "Text")]
+    pub source: String,
+    #[sea_orm(column_type = "Text", nullable)]
+    pub forked_from_id: Option<String>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
@@ -51,6 +55,14 @@ pub enum Relation {
     RecipeAdditionYeasts,
     #[sea_orm(has_many = "super::recipe_version_yeasts::Entity")]
     RecipeVersionYeasts,
+    #[sea_orm(
+        belongs_to = "Entity",
+        from = "Column::ForkedFromId",
+        to = "Column::Id",
+        on_update = "NoAction",
+        on_delete = "NoAction"
+    )]
+    SelfRef,
 }
 
 impl Related<super::recipe_addition_yeasts::Entity> for Entity {
