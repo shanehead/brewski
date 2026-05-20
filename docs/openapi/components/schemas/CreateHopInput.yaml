@@ -1,15 +1,15 @@
 type: object
 required:
-  - id
   - name
   - alpha_pct
   - form
-  - source
 properties:
-  id:
-    type: string
   name:
     type: string
+  forked_from_id:
+    type:
+      - string
+      - "null"
   alpha_pct:
     type: number
   beta_pct:
@@ -18,12 +18,10 @@ properties:
       - "null"
   form:
     type: string
-    description: Pellet, Plug, Leaf
   type_:
     type:
       - string
       - "null"
-    description: Bittering, Aroma, Both
   origin:
     type:
       - string
@@ -59,11 +57,4 @@ properties:
   myrcene_pct:
     type:
       - number
-      - "null"
-  source:
-    type: string
-    description: "'seeded' | 'user'"
-  forked_from_id:
-    type:
-      - string
       - "null"

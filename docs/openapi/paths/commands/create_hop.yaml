@@ -1,0 +1,25 @@
+post:
+  operationId: createHop
+  summary: Create a custom hop in the ingredient library
+  tags:
+    - Library
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - input
+          properties:
+            input:
+              $ref: "../../components/schemas/CreateHopInput.yaml"
+  responses:
+    "200":
+      description: Created hop
+      content:
+        application/json:
+          schema:
+            $ref: "../../components/schemas/Hop.yaml"
+    "500":
+      $ref: "../../components/responses/Error.yaml"

@@ -596,6 +596,143 @@ impl CreateFermentableAdditionInput {
         Default::default()
     }
 }
+#[doc = "`CreateFermentableInput`"]
+#[doc = r""]
+#[doc = r" <details><summary>JSON schema</summary>"]
+#[doc = r""]
+#[doc = r" ```json"]
+#[doc = "{"]
+#[doc = "  \"type\": \"object\","]
+#[doc = "  \"required\": ["]
+#[doc = "    \"color_lovibond\","]
+#[doc = "    \"name\","]
+#[doc = "    \"type_\","]
+#[doc = "    \"yield_pct\""]
+#[doc = "  ],"]
+#[doc = "  \"properties\": {"]
+#[doc = "    \"add_after_boil\": {"]
+#[doc = "      \"type\": \"boolean\""]
+#[doc = "    },"]
+#[doc = "    \"coarse_fine_diff_pct\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"number\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"color_lovibond\": {"]
+#[doc = "      \"type\": \"number\""]
+#[doc = "    },"]
+#[doc = "    \"diastatic_power_lintner\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"number\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"forked_from_id\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"ibu_gal_per_lb\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"number\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"max_in_batch_pct\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"number\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"moisture_pct\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"number\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"name\": {"]
+#[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
+#[doc = "    \"notes\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"origin\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"protein_pct\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"number\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"recommend_mash\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"boolean\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"supplier\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"type_\": {"]
+#[doc = "      \"description\": \"Grain, Sugar, Extract, Dry Extract, Adjunct\","]
+#[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
+#[doc = "    \"yield_pct\": {"]
+#[doc = "      \"type\": \"number\""]
+#[doc = "    }"]
+#[doc = "  }"]
+#[doc = "}"]
+#[doc = r" ```"]
+#[doc = r" </details>"]
+#[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+pub struct CreateFermentableInput {
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub add_after_boil: ::std::option::Option<bool>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub coarse_fine_diff_pct: ::std::option::Option<f64>,
+    pub color_lovibond: f64,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub diastatic_power_lintner: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub forked_from_id: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub ibu_gal_per_lb: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub max_in_batch_pct: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub moisture_pct: ::std::option::Option<f64>,
+    pub name: ::std::string::String,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub notes: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub origin: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub protein_pct: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub recommend_mash: ::std::option::Option<bool>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub supplier: ::std::option::Option<::std::string::String>,
+    #[doc = "Grain, Sugar, Extract, Dry Extract, Adjunct"]
+    pub type_: ::std::string::String,
+    pub yield_pct: f64,
+}
+impl CreateFermentableInput {
+    pub fn builder() -> builder::CreateFermentableInput {
+        Default::default()
+    }
+}
 #[doc = "`CreateGravityReadingInput`"]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
@@ -705,6 +842,139 @@ pub struct CreateHopAdditionInput {
 }
 impl CreateHopAdditionInput {
     pub fn builder() -> builder::CreateHopAdditionInput {
+        Default::default()
+    }
+}
+#[doc = "`CreateHopInput`"]
+#[doc = r""]
+#[doc = r" <details><summary>JSON schema</summary>"]
+#[doc = r""]
+#[doc = r" ```json"]
+#[doc = "{"]
+#[doc = "  \"type\": \"object\","]
+#[doc = "  \"required\": ["]
+#[doc = "    \"alpha_pct\","]
+#[doc = "    \"form\","]
+#[doc = "    \"name\""]
+#[doc = "  ],"]
+#[doc = "  \"properties\": {"]
+#[doc = "    \"alpha_pct\": {"]
+#[doc = "      \"type\": \"number\""]
+#[doc = "    },"]
+#[doc = "    \"beta_pct\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"number\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"caryophyllene_pct\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"number\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"cohumulone_pct\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"number\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"forked_from_id\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"form\": {"]
+#[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
+#[doc = "    \"hsi_pct\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"number\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"humulene_pct\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"number\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"myrcene_pct\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"number\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"name\": {"]
+#[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
+#[doc = "    \"notes\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"origin\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"substitutes\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"type_\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"year\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    }"]
+#[doc = "  }"]
+#[doc = "}"]
+#[doc = r" ```"]
+#[doc = r" </details>"]
+#[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+pub struct CreateHopInput {
+    pub alpha_pct: f64,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub beta_pct: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub caryophyllene_pct: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub cohumulone_pct: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub forked_from_id: ::std::option::Option<::std::string::String>,
+    pub form: ::std::string::String,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub hsi_pct: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub humulene_pct: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub myrcene_pct: ::std::option::Option<f64>,
+    pub name: ::std::string::String,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub notes: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub origin: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub substitutes: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub year: ::std::option::Option<::std::string::String>,
+}
+impl CreateHopInput {
+    pub fn builder() -> builder::CreateHopInput {
         Default::default()
     }
 }
@@ -819,6 +1089,81 @@ pub struct CreateMiscAdditionInput {
 }
 impl CreateMiscAdditionInput {
     pub fn builder() -> builder::CreateMiscAdditionInput {
+        Default::default()
+    }
+}
+#[doc = "`CreateMiscInput`"]
+#[doc = r""]
+#[doc = r" <details><summary>JSON schema</summary>"]
+#[doc = r""]
+#[doc = r" ```json"]
+#[doc = "{"]
+#[doc = "  \"type\": \"object\","]
+#[doc = "  \"required\": ["]
+#[doc = "    \"name\","]
+#[doc = "    \"time_min\","]
+#[doc = "    \"type_\","]
+#[doc = "    \"use_\""]
+#[doc = "  ],"]
+#[doc = "  \"properties\": {"]
+#[doc = "    \"amount_is_weight\": {"]
+#[doc = "      \"type\": \"boolean\""]
+#[doc = "    },"]
+#[doc = "    \"forked_from_id\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"name\": {"]
+#[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
+#[doc = "    \"notes\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"time_min\": {"]
+#[doc = "      \"type\": \"number\""]
+#[doc = "    },"]
+#[doc = "    \"type_\": {"]
+#[doc = "      \"description\": \"Spice, Fining, Water Agent, Herb, Flavor, Other\","]
+#[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
+#[doc = "    \"use_\": {"]
+#[doc = "      \"description\": \"Boil, Mash, Primary, Secondary, Bottling\","]
+#[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
+#[doc = "    \"use_for\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    }"]
+#[doc = "  }"]
+#[doc = "}"]
+#[doc = r" ```"]
+#[doc = r" </details>"]
+#[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+pub struct CreateMiscInput {
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub amount_is_weight: ::std::option::Option<bool>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub forked_from_id: ::std::option::Option<::std::string::String>,
+    pub name: ::std::string::String,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub notes: ::std::option::Option<::std::string::String>,
+    pub time_min: f64,
+    #[doc = "Spice, Fining, Water Agent, Herb, Flavor, Other"]
+    pub type_: ::std::string::String,
+    #[doc = "Boil, Mash, Primary, Secondary, Bottling"]
+    pub use_: ::std::string::String,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub use_for: ::std::option::Option<::std::string::String>,
+}
+impl CreateMiscInput {
+    pub fn builder() -> builder::CreateMiscInput {
         Default::default()
     }
 }
@@ -1157,6 +1502,87 @@ impl ::std::convert::TryFrom<::std::string::String> for CreateWaterAdjustmentInp
         value.parse()
     }
 }
+#[doc = "`CreateWaterInput`"]
+#[doc = r""]
+#[doc = r" <details><summary>JSON schema</summary>"]
+#[doc = r""]
+#[doc = r" ```json"]
+#[doc = "{"]
+#[doc = "  \"type\": \"object\","]
+#[doc = "  \"required\": ["]
+#[doc = "    \"bicarbonate_ppm\","]
+#[doc = "    \"calcium_ppm\","]
+#[doc = "    \"chloride_ppm\","]
+#[doc = "    \"magnesium_ppm\","]
+#[doc = "    \"name\","]
+#[doc = "    \"sodium_ppm\","]
+#[doc = "    \"sulfate_ppm\""]
+#[doc = "  ],"]
+#[doc = "  \"properties\": {"]
+#[doc = "    \"bicarbonate_ppm\": {"]
+#[doc = "      \"type\": \"number\""]
+#[doc = "    },"]
+#[doc = "    \"calcium_ppm\": {"]
+#[doc = "      \"type\": \"number\""]
+#[doc = "    },"]
+#[doc = "    \"chloride_ppm\": {"]
+#[doc = "      \"type\": \"number\""]
+#[doc = "    },"]
+#[doc = "    \"forked_from_id\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"magnesium_ppm\": {"]
+#[doc = "      \"type\": \"number\""]
+#[doc = "    },"]
+#[doc = "    \"name\": {"]
+#[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
+#[doc = "    \"notes\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"ph\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"number\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"sodium_ppm\": {"]
+#[doc = "      \"type\": \"number\""]
+#[doc = "    },"]
+#[doc = "    \"sulfate_ppm\": {"]
+#[doc = "      \"type\": \"number\""]
+#[doc = "    }"]
+#[doc = "  }"]
+#[doc = "}"]
+#[doc = r" ```"]
+#[doc = r" </details>"]
+#[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+pub struct CreateWaterInput {
+    pub bicarbonate_ppm: f64,
+    pub calcium_ppm: f64,
+    pub chloride_ppm: f64,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub forked_from_id: ::std::option::Option<::std::string::String>,
+    pub magnesium_ppm: f64,
+    pub name: ::std::string::String,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub notes: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub ph: ::std::option::Option<f64>,
+    pub sodium_ppm: f64,
+    pub sulfate_ppm: f64,
+}
+impl CreateWaterInput {
+    pub fn builder() -> builder::CreateWaterInput {
+        Default::default()
+    }
+}
 #[doc = "`CreateYeastAdditionInput`"]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
@@ -1266,6 +1692,204 @@ pub struct CreateYeastAdditionInput {
 }
 impl CreateYeastAdditionInput {
     pub fn builder() -> builder::CreateYeastAdditionInput {
+        Default::default()
+    }
+}
+#[doc = "`CreateYeastInput`"]
+#[doc = r""]
+#[doc = r" <details><summary>JSON schema</summary>"]
+#[doc = r""]
+#[doc = r" ```json"]
+#[doc = "{"]
+#[doc = "  \"type\": \"object\","]
+#[doc = "  \"required\": ["]
+#[doc = "    \"form\","]
+#[doc = "    \"name\","]
+#[doc = "    \"type_\""]
+#[doc = "  ],"]
+#[doc = "  \"properties\": {"]
+#[doc = "    \"add_to_secondary\": {"]
+#[doc = "      \"type\": \"boolean\""]
+#[doc = "    },"]
+#[doc = "    \"alcohol_tolerance\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"attenuation_pct\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"number\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"best_for\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"flavor_profile\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"flocculation\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"forked_from_id\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"form\": {"]
+#[doc = "      \"description\": \"Liquid, Dry, Slant, Culture\","]
+#[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
+#[doc = "    \"laboratory\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"max_attenuation_pct\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"number\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"max_reuse\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"integer\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"max_temperature_c\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"number\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"min_attenuation_pct\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"number\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"min_temperature_c\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"number\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"name\": {"]
+#[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
+#[doc = "    \"notes\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"pof_positive\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"boolean\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"product_id\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"species\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"sta1_positive\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"boolean\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"styles\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"substitutes\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"type_\": {"]
+#[doc = "      \"description\": \"Ale, Lager, Wheat, Wine, Champagne\","]
+#[doc = "      \"type\": \"string\""]
+#[doc = "    }"]
+#[doc = "  }"]
+#[doc = "}"]
+#[doc = r" ```"]
+#[doc = r" </details>"]
+#[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+pub struct CreateYeastInput {
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub add_to_secondary: ::std::option::Option<bool>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub alcohol_tolerance: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub attenuation_pct: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub best_for: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub flavor_profile: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub flocculation: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub forked_from_id: ::std::option::Option<::std::string::String>,
+    #[doc = "Liquid, Dry, Slant, Culture"]
+    pub form: ::std::string::String,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub laboratory: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub max_attenuation_pct: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub max_reuse: ::std::option::Option<i64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub max_temperature_c: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub min_attenuation_pct: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub min_temperature_c: ::std::option::Option<f64>,
+    pub name: ::std::string::String,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub notes: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub pof_positive: ::std::option::Option<bool>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub product_id: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub species: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub sta1_positive: ::std::option::Option<bool>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub styles: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub substitutes: ::std::option::Option<::std::string::String>,
+    #[doc = "Ale, Lager, Wheat, Wine, Champagne"]
+    pub type_: ::std::string::String,
+}
+impl CreateYeastInput {
+    pub fn builder() -> builder::CreateYeastInput {
         Default::default()
     }
 }
@@ -1564,6 +2188,7 @@ impl EquipmentProfile {
 #[doc = "    \"color_lovibond\","]
 #[doc = "    \"id\","]
 #[doc = "    \"name\","]
+#[doc = "    \"source\","]
 #[doc = "    \"type_\","]
 #[doc = "    \"yield_pct\""]
 #[doc = "  ],"]
@@ -1583,6 +2208,12 @@ impl EquipmentProfile {
 #[doc = "    \"diastatic_power_lintner\": {"]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"forked_from_id\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
@@ -1634,6 +2265,10 @@ impl EquipmentProfile {
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
+#[doc = "    \"source\": {"]
+#[doc = "      \"description\": \"'seeded' | 'user'\","]
+#[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
 #[doc = "    \"supplier\": {"]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
@@ -1660,6 +2295,8 @@ pub struct Fermentable {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub diastatic_power_lintner: ::std::option::Option<f64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub forked_from_id: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub ibu_gal_per_lb: ::std::option::Option<f64>,
     pub id: ::std::string::String,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -1675,6 +2312,8 @@ pub struct Fermentable {
     pub protein_pct: ::std::option::Option<f64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub recommend_mash: ::std::option::Option<bool>,
+    #[doc = "'seeded' | 'user'"]
+    pub source: ::std::string::String,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub supplier: ::std::option::Option<::std::string::String>,
     #[doc = "Grain, Sugar, Extract, Dry Extract, Adjunct"]
@@ -1756,7 +2395,8 @@ impl GravityReading {
 #[doc = "    \"alpha_pct\","]
 #[doc = "    \"form\","]
 #[doc = "    \"id\","]
-#[doc = "    \"name\""]
+#[doc = "    \"name\","]
+#[doc = "    \"source\""]
 #[doc = "  ],"]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"alpha_pct\": {"]
@@ -1777,6 +2417,12 @@ impl GravityReading {
 #[doc = "    \"cohumulone_pct\": {"]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"forked_from_id\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
@@ -1820,6 +2466,10 @@ impl GravityReading {
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
+#[doc = "    \"source\": {"]
+#[doc = "      \"description\": \"'seeded' | 'user'\","]
+#[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
 #[doc = "    \"substitutes\": {"]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
@@ -1852,6 +2502,8 @@ pub struct Hop {
     pub caryophyllene_pct: ::std::option::Option<f64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub cohumulone_pct: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub forked_from_id: ::std::option::Option<::std::string::String>,
     #[doc = "Pellet, Plug, Leaf"]
     pub form: ::std::string::String,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -1866,6 +2518,8 @@ pub struct Hop {
     pub notes: ::std::option::Option<::std::string::String>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub origin: ::std::option::Option<::std::string::String>,
+    #[doc = "'seeded' | 'user'"]
+    pub source: ::std::string::String,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub substitutes: ::std::option::Option<::std::string::String>,
     #[doc = "Bittering, Aroma, Both"]
@@ -2086,6 +2740,7 @@ impl MashStep {
 #[doc = "    \"amount_is_weight\","]
 #[doc = "    \"id\","]
 #[doc = "    \"name\","]
+#[doc = "    \"source\","]
 #[doc = "    \"time_min\","]
 #[doc = "    \"type_\","]
 #[doc = "    \"use_\""]
@@ -2093,6 +2748,12 @@ impl MashStep {
 #[doc = "  \"properties\": {"]
 #[doc = "    \"amount_is_weight\": {"]
 #[doc = "      \"type\": \"boolean\""]
+#[doc = "    },"]
+#[doc = "    \"forked_from_id\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"id\": {"]
 #[doc = "      \"type\": \"string\""]
@@ -2105,6 +2766,10 @@ impl MashStep {
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"source\": {"]
+#[doc = "      \"description\": \"'seeded' | 'user'\","]
+#[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"time_min\": {"]
 #[doc = "      \"type\": \"number\""]
@@ -2130,10 +2795,14 @@ impl MashStep {
 #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
 pub struct Misc {
     pub amount_is_weight: bool,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub forked_from_id: ::std::option::Option<::std::string::String>,
     pub id: ::std::string::String,
     pub name: ::std::string::String,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub notes: ::std::option::Option<::std::string::String>,
+    #[doc = "'seeded' | 'user'"]
+    pub source: ::std::string::String,
     pub time_min: f64,
     #[doc = "Spice, Fining, Water Agent, Herb, Flavor, Other"]
     pub type_: ::std::string::String,
@@ -3978,6 +4647,152 @@ impl UpdateFermentableAdditionInput {
         Default::default()
     }
 }
+#[doc = "`UpdateFermentableInput`"]
+#[doc = r""]
+#[doc = r" <details><summary>JSON schema</summary>"]
+#[doc = r""]
+#[doc = r" ```json"]
+#[doc = "{"]
+#[doc = "  \"type\": \"object\","]
+#[doc = "  \"properties\": {"]
+#[doc = "    \"add_after_boil\": {"]
+#[doc = "      \"type\": \"boolean\""]
+#[doc = "    },"]
+#[doc = "    \"coarse_fine_diff_pct\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"number\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"color_lovibond\": {"]
+#[doc = "      \"type\": \"number\""]
+#[doc = "    },"]
+#[doc = "    \"diastatic_power_lintner\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"number\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"ibu_gal_per_lb\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"number\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"max_in_batch_pct\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"number\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"moisture_pct\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"number\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"name\": {"]
+#[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
+#[doc = "    \"notes\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"origin\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"protein_pct\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"number\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"recommend_mash\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"boolean\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"supplier\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"type_\": {"]
+#[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
+#[doc = "    \"yield_pct\": {"]
+#[doc = "      \"type\": \"number\""]
+#[doc = "    }"]
+#[doc = "  }"]
+#[doc = "}"]
+#[doc = r" ```"]
+#[doc = r" </details>"]
+#[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+pub struct UpdateFermentableInput {
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub add_after_boil: ::std::option::Option<bool>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub coarse_fine_diff_pct: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub color_lovibond: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub diastatic_power_lintner: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub ibu_gal_per_lb: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub max_in_batch_pct: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub moisture_pct: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub notes: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub origin: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub protein_pct: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub recommend_mash: ::std::option::Option<bool>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub supplier: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub yield_pct: ::std::option::Option<f64>,
+}
+impl ::std::default::Default for UpdateFermentableInput {
+    fn default() -> Self {
+        Self {
+            add_after_boil: Default::default(),
+            coarse_fine_diff_pct: Default::default(),
+            color_lovibond: Default::default(),
+            diastatic_power_lintner: Default::default(),
+            ibu_gal_per_lb: Default::default(),
+            max_in_batch_pct: Default::default(),
+            moisture_pct: Default::default(),
+            name: Default::default(),
+            notes: Default::default(),
+            origin: Default::default(),
+            protein_pct: Default::default(),
+            recommend_mash: Default::default(),
+            supplier: Default::default(),
+            type_: Default::default(),
+            yield_pct: Default::default(),
+        }
+    }
+}
+impl UpdateFermentableInput {
+    pub fn builder() -> builder::UpdateFermentableInput {
+        Default::default()
+    }
+}
 #[doc = "`UpdateHopAdditionInput`"]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
@@ -4033,6 +4848,149 @@ impl ::std::default::Default for UpdateHopAdditionInput {
 }
 impl UpdateHopAdditionInput {
     pub fn builder() -> builder::UpdateHopAdditionInput {
+        Default::default()
+    }
+}
+#[doc = "`UpdateHopInput`"]
+#[doc = r""]
+#[doc = r" <details><summary>JSON schema</summary>"]
+#[doc = r""]
+#[doc = r" ```json"]
+#[doc = "{"]
+#[doc = "  \"type\": \"object\","]
+#[doc = "  \"properties\": {"]
+#[doc = "    \"alpha_pct\": {"]
+#[doc = "      \"type\": \"number\""]
+#[doc = "    },"]
+#[doc = "    \"beta_pct\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"number\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"caryophyllene_pct\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"number\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"cohumulone_pct\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"number\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"form\": {"]
+#[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
+#[doc = "    \"hsi_pct\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"number\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"humulene_pct\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"number\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"myrcene_pct\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"number\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"name\": {"]
+#[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
+#[doc = "    \"notes\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"origin\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"substitutes\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"type_\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"year\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    }"]
+#[doc = "  }"]
+#[doc = "}"]
+#[doc = r" ```"]
+#[doc = r" </details>"]
+#[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+pub struct UpdateHopInput {
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub alpha_pct: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub beta_pct: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub caryophyllene_pct: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub cohumulone_pct: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub form: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub hsi_pct: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub humulene_pct: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub myrcene_pct: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub notes: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub origin: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub substitutes: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub year: ::std::option::Option<::std::string::String>,
+}
+impl ::std::default::Default for UpdateHopInput {
+    fn default() -> Self {
+        Self {
+            alpha_pct: Default::default(),
+            beta_pct: Default::default(),
+            caryophyllene_pct: Default::default(),
+            cohumulone_pct: Default::default(),
+            form: Default::default(),
+            hsi_pct: Default::default(),
+            humulene_pct: Default::default(),
+            myrcene_pct: Default::default(),
+            name: Default::default(),
+            notes: Default::default(),
+            origin: Default::default(),
+            substitutes: Default::default(),
+            type_: Default::default(),
+            year: Default::default(),
+        }
+    }
+}
+impl UpdateHopInput {
+    pub fn builder() -> builder::UpdateHopInput {
         Default::default()
     }
 }
@@ -4227,6 +5185,80 @@ impl ::std::default::Default for UpdateMiscAdditionInput {
 }
 impl UpdateMiscAdditionInput {
     pub fn builder() -> builder::UpdateMiscAdditionInput {
+        Default::default()
+    }
+}
+#[doc = "`UpdateMiscInput`"]
+#[doc = r""]
+#[doc = r" <details><summary>JSON schema</summary>"]
+#[doc = r""]
+#[doc = r" ```json"]
+#[doc = "{"]
+#[doc = "  \"type\": \"object\","]
+#[doc = "  \"properties\": {"]
+#[doc = "    \"amount_is_weight\": {"]
+#[doc = "      \"type\": \"boolean\""]
+#[doc = "    },"]
+#[doc = "    \"name\": {"]
+#[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
+#[doc = "    \"notes\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"time_min\": {"]
+#[doc = "      \"type\": \"number\""]
+#[doc = "    },"]
+#[doc = "    \"type_\": {"]
+#[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
+#[doc = "    \"use_\": {"]
+#[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
+#[doc = "    \"use_for\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    }"]
+#[doc = "  }"]
+#[doc = "}"]
+#[doc = r" ```"]
+#[doc = r" </details>"]
+#[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+pub struct UpdateMiscInput {
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub amount_is_weight: ::std::option::Option<bool>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub notes: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub time_min: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub use_: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub use_for: ::std::option::Option<::std::string::String>,
+}
+impl ::std::default::Default for UpdateMiscInput {
+    fn default() -> Self {
+        Self {
+            amount_is_weight: Default::default(),
+            name: Default::default(),
+            notes: Default::default(),
+            time_min: Default::default(),
+            type_: Default::default(),
+            use_: Default::default(),
+            use_for: Default::default(),
+        }
+    }
+}
+impl UpdateMiscInput {
+    pub fn builder() -> builder::UpdateMiscInput {
         Default::default()
     }
 }
@@ -4704,6 +5736,92 @@ impl ::std::convert::TryFrom<::std::string::String> for UpdateWaterAdjustmentInp
         value.parse()
     }
 }
+#[doc = "`UpdateWaterInput`"]
+#[doc = r""]
+#[doc = r" <details><summary>JSON schema</summary>"]
+#[doc = r""]
+#[doc = r" ```json"]
+#[doc = "{"]
+#[doc = "  \"type\": \"object\","]
+#[doc = "  \"properties\": {"]
+#[doc = "    \"bicarbonate_ppm\": {"]
+#[doc = "      \"type\": \"number\""]
+#[doc = "    },"]
+#[doc = "    \"calcium_ppm\": {"]
+#[doc = "      \"type\": \"number\""]
+#[doc = "    },"]
+#[doc = "    \"chloride_ppm\": {"]
+#[doc = "      \"type\": \"number\""]
+#[doc = "    },"]
+#[doc = "    \"magnesium_ppm\": {"]
+#[doc = "      \"type\": \"number\""]
+#[doc = "    },"]
+#[doc = "    \"name\": {"]
+#[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
+#[doc = "    \"notes\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"ph\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"number\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"sodium_ppm\": {"]
+#[doc = "      \"type\": \"number\""]
+#[doc = "    },"]
+#[doc = "    \"sulfate_ppm\": {"]
+#[doc = "      \"type\": \"number\""]
+#[doc = "    }"]
+#[doc = "  }"]
+#[doc = "}"]
+#[doc = r" ```"]
+#[doc = r" </details>"]
+#[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+pub struct UpdateWaterInput {
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub bicarbonate_ppm: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub calcium_ppm: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub chloride_ppm: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub magnesium_ppm: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub notes: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub ph: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub sodium_ppm: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub sulfate_ppm: ::std::option::Option<f64>,
+}
+impl ::std::default::Default for UpdateWaterInput {
+    fn default() -> Self {
+        Self {
+            bicarbonate_ppm: Default::default(),
+            calcium_ppm: Default::default(),
+            chloride_ppm: Default::default(),
+            magnesium_ppm: Default::default(),
+            name: Default::default(),
+            notes: Default::default(),
+            ph: Default::default(),
+            sodium_ppm: Default::default(),
+            sulfate_ppm: Default::default(),
+        }
+    }
+}
+impl UpdateWaterInput {
+    pub fn builder() -> builder::UpdateWaterInput {
+        Default::default()
+    }
+}
 #[doc = "`UpdateYeastAdditionInput`"]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
@@ -4760,6 +5878,218 @@ impl UpdateYeastAdditionInput {
         Default::default()
     }
 }
+#[doc = "`UpdateYeastInput`"]
+#[doc = r""]
+#[doc = r" <details><summary>JSON schema</summary>"]
+#[doc = r""]
+#[doc = r" ```json"]
+#[doc = "{"]
+#[doc = "  \"type\": \"object\","]
+#[doc = "  \"properties\": {"]
+#[doc = "    \"add_to_secondary\": {"]
+#[doc = "      \"type\": \"boolean\""]
+#[doc = "    },"]
+#[doc = "    \"alcohol_tolerance\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"attenuation_pct\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"number\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"best_for\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"flavor_profile\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"flocculation\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"form\": {"]
+#[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
+#[doc = "    \"laboratory\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"max_attenuation_pct\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"number\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"max_reuse\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"integer\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"max_temperature_c\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"number\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"min_attenuation_pct\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"number\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"min_temperature_c\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"number\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"name\": {"]
+#[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
+#[doc = "    \"notes\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"pof_positive\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"boolean\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"product_id\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"species\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"sta1_positive\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"boolean\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"styles\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"substitutes\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"type_\": {"]
+#[doc = "      \"type\": \"string\""]
+#[doc = "    }"]
+#[doc = "  }"]
+#[doc = "}"]
+#[doc = r" ```"]
+#[doc = r" </details>"]
+#[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+pub struct UpdateYeastInput {
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub add_to_secondary: ::std::option::Option<bool>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub alcohol_tolerance: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub attenuation_pct: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub best_for: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub flavor_profile: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub flocculation: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub form: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub laboratory: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub max_attenuation_pct: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub max_reuse: ::std::option::Option<i64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub max_temperature_c: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub min_attenuation_pct: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub min_temperature_c: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub notes: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub pof_positive: ::std::option::Option<bool>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub product_id: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub species: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub sta1_positive: ::std::option::Option<bool>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub styles: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub substitutes: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<::std::string::String>,
+}
+impl ::std::default::Default for UpdateYeastInput {
+    fn default() -> Self {
+        Self {
+            add_to_secondary: Default::default(),
+            alcohol_tolerance: Default::default(),
+            attenuation_pct: Default::default(),
+            best_for: Default::default(),
+            flavor_profile: Default::default(),
+            flocculation: Default::default(),
+            form: Default::default(),
+            laboratory: Default::default(),
+            max_attenuation_pct: Default::default(),
+            max_reuse: Default::default(),
+            max_temperature_c: Default::default(),
+            min_attenuation_pct: Default::default(),
+            min_temperature_c: Default::default(),
+            name: Default::default(),
+            notes: Default::default(),
+            pof_positive: Default::default(),
+            product_id: Default::default(),
+            species: Default::default(),
+            sta1_positive: Default::default(),
+            styles: Default::default(),
+            substitutes: Default::default(),
+            type_: Default::default(),
+        }
+    }
+}
+impl UpdateYeastInput {
+    pub fn builder() -> builder::UpdateYeastInput {
+        Default::default()
+    }
+}
 #[doc = "`Water`"]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
@@ -4775,6 +6105,7 @@ impl UpdateYeastAdditionInput {
 #[doc = "    \"magnesium_ppm\","]
 #[doc = "    \"name\","]
 #[doc = "    \"sodium_ppm\","]
+#[doc = "    \"source\","]
 #[doc = "    \"sulfate_ppm\""]
 #[doc = "  ],"]
 #[doc = "  \"properties\": {"]
@@ -4786,6 +6117,12 @@ impl UpdateYeastAdditionInput {
 #[doc = "    },"]
 #[doc = "    \"chloride_ppm\": {"]
 #[doc = "      \"type\": \"number\""]
+#[doc = "    },"]
+#[doc = "    \"forked_from_id\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"id\": {"]
 #[doc = "      \"type\": \"string\""]
@@ -4811,6 +6148,10 @@ impl UpdateYeastAdditionInput {
 #[doc = "    \"sodium_ppm\": {"]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
+#[doc = "    \"source\": {"]
+#[doc = "      \"description\": \"'seeded' | 'user'\","]
+#[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
 #[doc = "    \"sulfate_ppm\": {"]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    }"]
@@ -4823,6 +6164,8 @@ pub struct Water {
     pub bicarbonate_ppm: f64,
     pub calcium_ppm: f64,
     pub chloride_ppm: f64,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub forked_from_id: ::std::option::Option<::std::string::String>,
     pub id: ::std::string::String,
     pub magnesium_ppm: f64,
     pub name: ::std::string::String,
@@ -4831,6 +6174,8 @@ pub struct Water {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub ph: ::std::option::Option<f64>,
     pub sodium_ppm: f64,
+    #[doc = "'seeded' | 'user'"]
+    pub source: ::std::string::String,
     pub sulfate_ppm: f64,
 }
 impl Water {
@@ -4907,6 +6252,7 @@ impl WaterProfile {
 #[doc = "    \"form\","]
 #[doc = "    \"id\","]
 #[doc = "    \"name\","]
+#[doc = "    \"source\","]
 #[doc = "    \"type_\""]
 #[doc = "  ],"]
 #[doc = "  \"properties\": {"]
@@ -4941,6 +6287,12 @@ impl WaterProfile {
 #[doc = "    },"]
 #[doc = "    \"flocculation\": {"]
 #[doc = "      \"description\": \"Low, Medium, High, Very High\","]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"forked_from_id\": {"]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
@@ -5013,6 +6365,10 @@ impl WaterProfile {
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
+#[doc = "    \"source\": {"]
+#[doc = "      \"description\": \"'seeded' | 'user'\","]
+#[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
 #[doc = "    \"species\": {"]
 #[doc = "      \"description\": \"e.g. Saccharomyces cerevisiae\","]
 #[doc = "      \"type\": ["]
@@ -5065,6 +6421,8 @@ pub struct Yeast {
     #[doc = "Low, Medium, High, Very High"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub flocculation: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub forked_from_id: ::std::option::Option<::std::string::String>,
     #[doc = "Liquid, Dry, Slant, Culture"]
     pub form: ::std::string::String,
     pub id: ::std::string::String,
@@ -5090,6 +6448,8 @@ pub struct Yeast {
     pub pof_positive: ::std::option::Option<bool>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub product_id: ::std::option::Option<::std::string::String>,
+    #[doc = "'seeded' | 'user'"]
+    pub source: ::std::string::String,
     #[doc = "e.g. Saccharomyces cerevisiae"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub species: ::std::option::Option<::std::string::String>,
@@ -6325,6 +7685,270 @@ pub mod builder {
         }
     }
     #[derive(Clone, Debug)]
+    pub struct CreateFermentableInput {
+        add_after_boil: ::std::result::Result<::std::option::Option<bool>, ::std::string::String>,
+        coarse_fine_diff_pct:
+            ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        color_lovibond: ::std::result::Result<f64, ::std::string::String>,
+        diastatic_power_lintner:
+            ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        forked_from_id: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+        ibu_gal_per_lb: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        max_in_batch_pct: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        moisture_pct: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        name: ::std::result::Result<::std::string::String, ::std::string::String>,
+        notes: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+        origin: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+        protein_pct: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        recommend_mash: ::std::result::Result<::std::option::Option<bool>, ::std::string::String>,
+        supplier: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+        type_: ::std::result::Result<::std::string::String, ::std::string::String>,
+        yield_pct: ::std::result::Result<f64, ::std::string::String>,
+    }
+    impl ::std::default::Default for CreateFermentableInput {
+        fn default() -> Self {
+            Self {
+                add_after_boil: Ok(Default::default()),
+                coarse_fine_diff_pct: Ok(Default::default()),
+                color_lovibond: Err("no value supplied for color_lovibond".to_string()),
+                diastatic_power_lintner: Ok(Default::default()),
+                forked_from_id: Ok(Default::default()),
+                ibu_gal_per_lb: Ok(Default::default()),
+                max_in_batch_pct: Ok(Default::default()),
+                moisture_pct: Ok(Default::default()),
+                name: Err("no value supplied for name".to_string()),
+                notes: Ok(Default::default()),
+                origin: Ok(Default::default()),
+                protein_pct: Ok(Default::default()),
+                recommend_mash: Ok(Default::default()),
+                supplier: Ok(Default::default()),
+                type_: Err("no value supplied for type_".to_string()),
+                yield_pct: Err("no value supplied for yield_pct".to_string()),
+            }
+        }
+    }
+    impl CreateFermentableInput {
+        pub fn add_after_boil<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<bool>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.add_after_boil = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for add_after_boil: {e}"));
+            self
+        }
+        pub fn coarse_fine_diff_pct<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.coarse_fine_diff_pct = value.try_into().map_err(|e| {
+                format!("error converting supplied value for coarse_fine_diff_pct: {e}")
+            });
+            self
+        }
+        pub fn color_lovibond<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<f64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.color_lovibond = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for color_lovibond: {e}"));
+            self
+        }
+        pub fn diastatic_power_lintner<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.diastatic_power_lintner = value.try_into().map_err(|e| {
+                format!("error converting supplied value for diastatic_power_lintner: {e}")
+            });
+            self
+        }
+        pub fn forked_from_id<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.forked_from_id = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for forked_from_id: {e}"));
+            self
+        }
+        pub fn ibu_gal_per_lb<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.ibu_gal_per_lb = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for ibu_gal_per_lb: {e}"));
+            self
+        }
+        pub fn max_in_batch_pct<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.max_in_batch_pct = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for max_in_batch_pct: {e}"));
+            self
+        }
+        pub fn moisture_pct<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.moisture_pct = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for moisture_pct: {e}"));
+            self
+        }
+        pub fn name<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::string::String>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.name = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for name: {e}"));
+            self
+        }
+        pub fn notes<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.notes = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for notes: {e}"));
+            self
+        }
+        pub fn origin<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.origin = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for origin: {e}"));
+            self
+        }
+        pub fn protein_pct<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.protein_pct = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for protein_pct: {e}"));
+            self
+        }
+        pub fn recommend_mash<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<bool>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.recommend_mash = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for recommend_mash: {e}"));
+            self
+        }
+        pub fn supplier<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.supplier = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for supplier: {e}"));
+            self
+        }
+        pub fn type_<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::string::String>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.type_ = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for type_: {e}"));
+            self
+        }
+        pub fn yield_pct<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<f64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.yield_pct = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for yield_pct: {e}"));
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<CreateFermentableInput> for super::CreateFermentableInput {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: CreateFermentableInput,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self {
+                add_after_boil: value.add_after_boil?,
+                coarse_fine_diff_pct: value.coarse_fine_diff_pct?,
+                color_lovibond: value.color_lovibond?,
+                diastatic_power_lintner: value.diastatic_power_lintner?,
+                forked_from_id: value.forked_from_id?,
+                ibu_gal_per_lb: value.ibu_gal_per_lb?,
+                max_in_batch_pct: value.max_in_batch_pct?,
+                moisture_pct: value.moisture_pct?,
+                name: value.name?,
+                notes: value.notes?,
+                origin: value.origin?,
+                protein_pct: value.protein_pct?,
+                recommend_mash: value.recommend_mash?,
+                supplier: value.supplier?,
+                type_: value.type_?,
+                yield_pct: value.yield_pct?,
+            })
+        }
+    }
+    impl ::std::convert::From<super::CreateFermentableInput> for CreateFermentableInput {
+        fn from(value: super::CreateFermentableInput) -> Self {
+            Self {
+                add_after_boil: Ok(value.add_after_boil),
+                coarse_fine_diff_pct: Ok(value.coarse_fine_diff_pct),
+                color_lovibond: Ok(value.color_lovibond),
+                diastatic_power_lintner: Ok(value.diastatic_power_lintner),
+                forked_from_id: Ok(value.forked_from_id),
+                ibu_gal_per_lb: Ok(value.ibu_gal_per_lb),
+                max_in_batch_pct: Ok(value.max_in_batch_pct),
+                moisture_pct: Ok(value.moisture_pct),
+                name: Ok(value.name),
+                notes: Ok(value.notes),
+                origin: Ok(value.origin),
+                protein_pct: Ok(value.protein_pct),
+                recommend_mash: Ok(value.recommend_mash),
+                supplier: Ok(value.supplier),
+                type_: Ok(value.type_),
+                yield_pct: Ok(value.yield_pct),
+            }
+        }
+    }
+    #[derive(Clone, Debug)]
     pub struct CreateGravityReadingInput {
         gravity: ::std::result::Result<f64, ::std::string::String>,
         notes: ::std::result::Result<
@@ -6550,6 +8174,260 @@ pub mod builder {
                 name: Ok(value.name),
                 time_min: Ok(value.time_min),
                 use_: Ok(value.use_),
+            }
+        }
+    }
+    #[derive(Clone, Debug)]
+    pub struct CreateHopInput {
+        alpha_pct: ::std::result::Result<f64, ::std::string::String>,
+        beta_pct: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        caryophyllene_pct: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        cohumulone_pct: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        forked_from_id: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+        form: ::std::result::Result<::std::string::String, ::std::string::String>,
+        hsi_pct: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        humulene_pct: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        myrcene_pct: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        name: ::std::result::Result<::std::string::String, ::std::string::String>,
+        notes: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+        origin: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+        substitutes: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+        type_: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+        year: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+    }
+    impl ::std::default::Default for CreateHopInput {
+        fn default() -> Self {
+            Self {
+                alpha_pct: Err("no value supplied for alpha_pct".to_string()),
+                beta_pct: Ok(Default::default()),
+                caryophyllene_pct: Ok(Default::default()),
+                cohumulone_pct: Ok(Default::default()),
+                forked_from_id: Ok(Default::default()),
+                form: Err("no value supplied for form".to_string()),
+                hsi_pct: Ok(Default::default()),
+                humulene_pct: Ok(Default::default()),
+                myrcene_pct: Ok(Default::default()),
+                name: Err("no value supplied for name".to_string()),
+                notes: Ok(Default::default()),
+                origin: Ok(Default::default()),
+                substitutes: Ok(Default::default()),
+                type_: Ok(Default::default()),
+                year: Ok(Default::default()),
+            }
+        }
+    }
+    impl CreateHopInput {
+        pub fn alpha_pct<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<f64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.alpha_pct = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for alpha_pct: {e}"));
+            self
+        }
+        pub fn beta_pct<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.beta_pct = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for beta_pct: {e}"));
+            self
+        }
+        pub fn caryophyllene_pct<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.caryophyllene_pct = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for caryophyllene_pct: {e}"));
+            self
+        }
+        pub fn cohumulone_pct<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.cohumulone_pct = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for cohumulone_pct: {e}"));
+            self
+        }
+        pub fn forked_from_id<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.forked_from_id = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for forked_from_id: {e}"));
+            self
+        }
+        pub fn form<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::string::String>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.form = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for form: {e}"));
+            self
+        }
+        pub fn hsi_pct<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.hsi_pct = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for hsi_pct: {e}"));
+            self
+        }
+        pub fn humulene_pct<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.humulene_pct = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for humulene_pct: {e}"));
+            self
+        }
+        pub fn myrcene_pct<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.myrcene_pct = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for myrcene_pct: {e}"));
+            self
+        }
+        pub fn name<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::string::String>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.name = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for name: {e}"));
+            self
+        }
+        pub fn notes<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.notes = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for notes: {e}"));
+            self
+        }
+        pub fn origin<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.origin = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for origin: {e}"));
+            self
+        }
+        pub fn substitutes<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.substitutes = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for substitutes: {e}"));
+            self
+        }
+        pub fn type_<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.type_ = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for type_: {e}"));
+            self
+        }
+        pub fn year<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.year = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for year: {e}"));
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<CreateHopInput> for super::CreateHopInput {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: CreateHopInput,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self {
+                alpha_pct: value.alpha_pct?,
+                beta_pct: value.beta_pct?,
+                caryophyllene_pct: value.caryophyllene_pct?,
+                cohumulone_pct: value.cohumulone_pct?,
+                forked_from_id: value.forked_from_id?,
+                form: value.form?,
+                hsi_pct: value.hsi_pct?,
+                humulene_pct: value.humulene_pct?,
+                myrcene_pct: value.myrcene_pct?,
+                name: value.name?,
+                notes: value.notes?,
+                origin: value.origin?,
+                substitutes: value.substitutes?,
+                type_: value.type_?,
+                year: value.year?,
+            })
+        }
+    }
+    impl ::std::convert::From<super::CreateHopInput> for CreateHopInput {
+        fn from(value: super::CreateHopInput) -> Self {
+            Self {
+                alpha_pct: Ok(value.alpha_pct),
+                beta_pct: Ok(value.beta_pct),
+                caryophyllene_pct: Ok(value.caryophyllene_pct),
+                cohumulone_pct: Ok(value.cohumulone_pct),
+                forked_from_id: Ok(value.forked_from_id),
+                form: Ok(value.form),
+                hsi_pct: Ok(value.hsi_pct),
+                humulene_pct: Ok(value.humulene_pct),
+                myrcene_pct: Ok(value.myrcene_pct),
+                name: Ok(value.name),
+                notes: Ok(value.notes),
+                origin: Ok(value.origin),
+                substitutes: Ok(value.substitutes),
+                type_: Ok(value.type_),
+                year: Ok(value.year),
             }
         }
     }
@@ -6804,6 +8682,153 @@ pub mod builder {
                 time_min: Ok(value.time_min),
                 type_: Ok(value.type_),
                 use_: Ok(value.use_),
+            }
+        }
+    }
+    #[derive(Clone, Debug)]
+    pub struct CreateMiscInput {
+        amount_is_weight: ::std::result::Result<::std::option::Option<bool>, ::std::string::String>,
+        forked_from_id: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+        name: ::std::result::Result<::std::string::String, ::std::string::String>,
+        notes: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+        time_min: ::std::result::Result<f64, ::std::string::String>,
+        type_: ::std::result::Result<::std::string::String, ::std::string::String>,
+        use_: ::std::result::Result<::std::string::String, ::std::string::String>,
+        use_for: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+    }
+    impl ::std::default::Default for CreateMiscInput {
+        fn default() -> Self {
+            Self {
+                amount_is_weight: Ok(Default::default()),
+                forked_from_id: Ok(Default::default()),
+                name: Err("no value supplied for name".to_string()),
+                notes: Ok(Default::default()),
+                time_min: Err("no value supplied for time_min".to_string()),
+                type_: Err("no value supplied for type_".to_string()),
+                use_: Err("no value supplied for use_".to_string()),
+                use_for: Ok(Default::default()),
+            }
+        }
+    }
+    impl CreateMiscInput {
+        pub fn amount_is_weight<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<bool>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.amount_is_weight = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for amount_is_weight: {e}"));
+            self
+        }
+        pub fn forked_from_id<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.forked_from_id = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for forked_from_id: {e}"));
+            self
+        }
+        pub fn name<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::string::String>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.name = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for name: {e}"));
+            self
+        }
+        pub fn notes<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.notes = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for notes: {e}"));
+            self
+        }
+        pub fn time_min<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<f64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.time_min = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for time_min: {e}"));
+            self
+        }
+        pub fn type_<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::string::String>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.type_ = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for type_: {e}"));
+            self
+        }
+        pub fn use_<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::string::String>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.use_ = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for use_: {e}"));
+            self
+        }
+        pub fn use_for<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.use_for = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for use_for: {e}"));
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<CreateMiscInput> for super::CreateMiscInput {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: CreateMiscInput,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self {
+                amount_is_weight: value.amount_is_weight?,
+                forked_from_id: value.forked_from_id?,
+                name: value.name?,
+                notes: value.notes?,
+                time_min: value.time_min?,
+                type_: value.type_?,
+                use_: value.use_?,
+                use_for: value.use_for?,
+            })
+        }
+    }
+    impl ::std::convert::From<super::CreateMiscInput> for CreateMiscInput {
+        fn from(value: super::CreateMiscInput) -> Self {
+            Self {
+                amount_is_weight: Ok(value.amount_is_weight),
+                forked_from_id: Ok(value.forked_from_id),
+                name: Ok(value.name),
+                notes: Ok(value.notes),
+                time_min: Ok(value.time_min),
+                type_: Ok(value.type_),
+                use_: Ok(value.use_),
+                use_for: Ok(value.use_for),
             }
         }
     }
@@ -7113,6 +9138,178 @@ pub mod builder {
         }
     }
     #[derive(Clone, Debug)]
+    pub struct CreateWaterInput {
+        bicarbonate_ppm: ::std::result::Result<f64, ::std::string::String>,
+        calcium_ppm: ::std::result::Result<f64, ::std::string::String>,
+        chloride_ppm: ::std::result::Result<f64, ::std::string::String>,
+        forked_from_id: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+        magnesium_ppm: ::std::result::Result<f64, ::std::string::String>,
+        name: ::std::result::Result<::std::string::String, ::std::string::String>,
+        notes: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+        ph: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        sodium_ppm: ::std::result::Result<f64, ::std::string::String>,
+        sulfate_ppm: ::std::result::Result<f64, ::std::string::String>,
+    }
+    impl ::std::default::Default for CreateWaterInput {
+        fn default() -> Self {
+            Self {
+                bicarbonate_ppm: Err("no value supplied for bicarbonate_ppm".to_string()),
+                calcium_ppm: Err("no value supplied for calcium_ppm".to_string()),
+                chloride_ppm: Err("no value supplied for chloride_ppm".to_string()),
+                forked_from_id: Ok(Default::default()),
+                magnesium_ppm: Err("no value supplied for magnesium_ppm".to_string()),
+                name: Err("no value supplied for name".to_string()),
+                notes: Ok(Default::default()),
+                ph: Ok(Default::default()),
+                sodium_ppm: Err("no value supplied for sodium_ppm".to_string()),
+                sulfate_ppm: Err("no value supplied for sulfate_ppm".to_string()),
+            }
+        }
+    }
+    impl CreateWaterInput {
+        pub fn bicarbonate_ppm<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<f64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.bicarbonate_ppm = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for bicarbonate_ppm: {e}"));
+            self
+        }
+        pub fn calcium_ppm<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<f64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.calcium_ppm = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for calcium_ppm: {e}"));
+            self
+        }
+        pub fn chloride_ppm<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<f64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.chloride_ppm = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for chloride_ppm: {e}"));
+            self
+        }
+        pub fn forked_from_id<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.forked_from_id = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for forked_from_id: {e}"));
+            self
+        }
+        pub fn magnesium_ppm<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<f64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.magnesium_ppm = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for magnesium_ppm: {e}"));
+            self
+        }
+        pub fn name<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::string::String>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.name = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for name: {e}"));
+            self
+        }
+        pub fn notes<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.notes = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for notes: {e}"));
+            self
+        }
+        pub fn ph<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.ph = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for ph: {e}"));
+            self
+        }
+        pub fn sodium_ppm<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<f64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.sodium_ppm = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for sodium_ppm: {e}"));
+            self
+        }
+        pub fn sulfate_ppm<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<f64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.sulfate_ppm = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for sulfate_ppm: {e}"));
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<CreateWaterInput> for super::CreateWaterInput {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: CreateWaterInput,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self {
+                bicarbonate_ppm: value.bicarbonate_ppm?,
+                calcium_ppm: value.calcium_ppm?,
+                chloride_ppm: value.chloride_ppm?,
+                forked_from_id: value.forked_from_id?,
+                magnesium_ppm: value.magnesium_ppm?,
+                name: value.name?,
+                notes: value.notes?,
+                ph: value.ph?,
+                sodium_ppm: value.sodium_ppm?,
+                sulfate_ppm: value.sulfate_ppm?,
+            })
+        }
+    }
+    impl ::std::convert::From<super::CreateWaterInput> for CreateWaterInput {
+        fn from(value: super::CreateWaterInput) -> Self {
+            Self {
+                bicarbonate_ppm: Ok(value.bicarbonate_ppm),
+                calcium_ppm: Ok(value.calcium_ppm),
+                chloride_ppm: Ok(value.chloride_ppm),
+                forked_from_id: Ok(value.forked_from_id),
+                magnesium_ppm: Ok(value.magnesium_ppm),
+                name: Ok(value.name),
+                notes: Ok(value.notes),
+                ph: Ok(value.ph),
+                sodium_ppm: Ok(value.sodium_ppm),
+                sulfate_ppm: Ok(value.sulfate_ppm),
+            }
+        }
+    }
+    #[derive(Clone, Debug)]
     pub struct CreateYeastAdditionInput {
         add_to_secondary: ::std::result::Result<::std::option::Option<bool>, ::std::string::String>,
         amount: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
@@ -7298,6 +9495,389 @@ pub mod builder {
                 times_cultured: Ok(value.times_cultured),
                 type_: Ok(value.type_),
                 yeast_id: Ok(value.yeast_id),
+            }
+        }
+    }
+    #[derive(Clone, Debug)]
+    pub struct CreateYeastInput {
+        add_to_secondary: ::std::result::Result<::std::option::Option<bool>, ::std::string::String>,
+        alcohol_tolerance: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+        attenuation_pct: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        best_for: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+        flavor_profile: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+        flocculation: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+        forked_from_id: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+        form: ::std::result::Result<::std::string::String, ::std::string::String>,
+        laboratory: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+        max_attenuation_pct:
+            ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        max_reuse: ::std::result::Result<::std::option::Option<i64>, ::std::string::String>,
+        max_temperature_c: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        min_attenuation_pct:
+            ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        min_temperature_c: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        name: ::std::result::Result<::std::string::String, ::std::string::String>,
+        notes: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+        pof_positive: ::std::result::Result<::std::option::Option<bool>, ::std::string::String>,
+        product_id: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+        species: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+        sta1_positive: ::std::result::Result<::std::option::Option<bool>, ::std::string::String>,
+        styles: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+        substitutes: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+        type_: ::std::result::Result<::std::string::String, ::std::string::String>,
+    }
+    impl ::std::default::Default for CreateYeastInput {
+        fn default() -> Self {
+            Self {
+                add_to_secondary: Ok(Default::default()),
+                alcohol_tolerance: Ok(Default::default()),
+                attenuation_pct: Ok(Default::default()),
+                best_for: Ok(Default::default()),
+                flavor_profile: Ok(Default::default()),
+                flocculation: Ok(Default::default()),
+                forked_from_id: Ok(Default::default()),
+                form: Err("no value supplied for form".to_string()),
+                laboratory: Ok(Default::default()),
+                max_attenuation_pct: Ok(Default::default()),
+                max_reuse: Ok(Default::default()),
+                max_temperature_c: Ok(Default::default()),
+                min_attenuation_pct: Ok(Default::default()),
+                min_temperature_c: Ok(Default::default()),
+                name: Err("no value supplied for name".to_string()),
+                notes: Ok(Default::default()),
+                pof_positive: Ok(Default::default()),
+                product_id: Ok(Default::default()),
+                species: Ok(Default::default()),
+                sta1_positive: Ok(Default::default()),
+                styles: Ok(Default::default()),
+                substitutes: Ok(Default::default()),
+                type_: Err("no value supplied for type_".to_string()),
+            }
+        }
+    }
+    impl CreateYeastInput {
+        pub fn add_to_secondary<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<bool>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.add_to_secondary = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for add_to_secondary: {e}"));
+            self
+        }
+        pub fn alcohol_tolerance<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.alcohol_tolerance = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for alcohol_tolerance: {e}"));
+            self
+        }
+        pub fn attenuation_pct<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.attenuation_pct = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for attenuation_pct: {e}"));
+            self
+        }
+        pub fn best_for<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.best_for = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for best_for: {e}"));
+            self
+        }
+        pub fn flavor_profile<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.flavor_profile = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for flavor_profile: {e}"));
+            self
+        }
+        pub fn flocculation<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.flocculation = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for flocculation: {e}"));
+            self
+        }
+        pub fn forked_from_id<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.forked_from_id = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for forked_from_id: {e}"));
+            self
+        }
+        pub fn form<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::string::String>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.form = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for form: {e}"));
+            self
+        }
+        pub fn laboratory<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.laboratory = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for laboratory: {e}"));
+            self
+        }
+        pub fn max_attenuation_pct<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.max_attenuation_pct = value.try_into().map_err(|e| {
+                format!("error converting supplied value for max_attenuation_pct: {e}")
+            });
+            self
+        }
+        pub fn max_reuse<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<i64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.max_reuse = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for max_reuse: {e}"));
+            self
+        }
+        pub fn max_temperature_c<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.max_temperature_c = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for max_temperature_c: {e}"));
+            self
+        }
+        pub fn min_attenuation_pct<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.min_attenuation_pct = value.try_into().map_err(|e| {
+                format!("error converting supplied value for min_attenuation_pct: {e}")
+            });
+            self
+        }
+        pub fn min_temperature_c<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.min_temperature_c = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for min_temperature_c: {e}"));
+            self
+        }
+        pub fn name<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::string::String>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.name = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for name: {e}"));
+            self
+        }
+        pub fn notes<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.notes = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for notes: {e}"));
+            self
+        }
+        pub fn pof_positive<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<bool>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.pof_positive = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for pof_positive: {e}"));
+            self
+        }
+        pub fn product_id<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.product_id = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for product_id: {e}"));
+            self
+        }
+        pub fn species<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.species = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for species: {e}"));
+            self
+        }
+        pub fn sta1_positive<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<bool>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.sta1_positive = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for sta1_positive: {e}"));
+            self
+        }
+        pub fn styles<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.styles = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for styles: {e}"));
+            self
+        }
+        pub fn substitutes<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.substitutes = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for substitutes: {e}"));
+            self
+        }
+        pub fn type_<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::string::String>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.type_ = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for type_: {e}"));
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<CreateYeastInput> for super::CreateYeastInput {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: CreateYeastInput,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self {
+                add_to_secondary: value.add_to_secondary?,
+                alcohol_tolerance: value.alcohol_tolerance?,
+                attenuation_pct: value.attenuation_pct?,
+                best_for: value.best_for?,
+                flavor_profile: value.flavor_profile?,
+                flocculation: value.flocculation?,
+                forked_from_id: value.forked_from_id?,
+                form: value.form?,
+                laboratory: value.laboratory?,
+                max_attenuation_pct: value.max_attenuation_pct?,
+                max_reuse: value.max_reuse?,
+                max_temperature_c: value.max_temperature_c?,
+                min_attenuation_pct: value.min_attenuation_pct?,
+                min_temperature_c: value.min_temperature_c?,
+                name: value.name?,
+                notes: value.notes?,
+                pof_positive: value.pof_positive?,
+                product_id: value.product_id?,
+                species: value.species?,
+                sta1_positive: value.sta1_positive?,
+                styles: value.styles?,
+                substitutes: value.substitutes?,
+                type_: value.type_?,
+            })
+        }
+    }
+    impl ::std::convert::From<super::CreateYeastInput> for CreateYeastInput {
+        fn from(value: super::CreateYeastInput) -> Self {
+            Self {
+                add_to_secondary: Ok(value.add_to_secondary),
+                alcohol_tolerance: Ok(value.alcohol_tolerance),
+                attenuation_pct: Ok(value.attenuation_pct),
+                best_for: Ok(value.best_for),
+                flavor_profile: Ok(value.flavor_profile),
+                flocculation: Ok(value.flocculation),
+                forked_from_id: Ok(value.forked_from_id),
+                form: Ok(value.form),
+                laboratory: Ok(value.laboratory),
+                max_attenuation_pct: Ok(value.max_attenuation_pct),
+                max_reuse: Ok(value.max_reuse),
+                max_temperature_c: Ok(value.max_temperature_c),
+                min_attenuation_pct: Ok(value.min_attenuation_pct),
+                min_temperature_c: Ok(value.min_temperature_c),
+                name: Ok(value.name),
+                notes: Ok(value.notes),
+                pof_positive: Ok(value.pof_positive),
+                product_id: Ok(value.product_id),
+                species: Ok(value.species),
+                sta1_positive: Ok(value.sta1_positive),
+                styles: Ok(value.styles),
+                substitutes: Ok(value.substitutes),
+                type_: Ok(value.type_),
             }
         }
     }
@@ -7868,6 +10448,10 @@ pub mod builder {
         color_lovibond: ::std::result::Result<f64, ::std::string::String>,
         diastatic_power_lintner:
             ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        forked_from_id: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
         ibu_gal_per_lb: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         id: ::std::result::Result<::std::string::String, ::std::string::String>,
         max_in_batch_pct: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
@@ -7883,6 +10467,7 @@ pub mod builder {
         >,
         protein_pct: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         recommend_mash: ::std::result::Result<::std::option::Option<bool>, ::std::string::String>,
+        source: ::std::result::Result<::std::string::String, ::std::string::String>,
         supplier: ::std::result::Result<
             ::std::option::Option<::std::string::String>,
             ::std::string::String,
@@ -7897,6 +10482,7 @@ pub mod builder {
                 coarse_fine_diff_pct: Ok(Default::default()),
                 color_lovibond: Err("no value supplied for color_lovibond".to_string()),
                 diastatic_power_lintner: Ok(Default::default()),
+                forked_from_id: Ok(Default::default()),
                 ibu_gal_per_lb: Ok(Default::default()),
                 id: Err("no value supplied for id".to_string()),
                 max_in_batch_pct: Ok(Default::default()),
@@ -7906,6 +10492,7 @@ pub mod builder {
                 origin: Ok(Default::default()),
                 protein_pct: Ok(Default::default()),
                 recommend_mash: Ok(Default::default()),
+                source: Err("no value supplied for source".to_string()),
                 supplier: Ok(Default::default()),
                 type_: Err("no value supplied for type_".to_string()),
                 yield_pct: Err("no value supplied for yield_pct".to_string()),
@@ -7951,6 +10538,16 @@ pub mod builder {
             self.diastatic_power_lintner = value.try_into().map_err(|e| {
                 format!("error converting supplied value for diastatic_power_lintner: {e}")
             });
+            self
+        }
+        pub fn forked_from_id<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.forked_from_id = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for forked_from_id: {e}"));
             self
         }
         pub fn ibu_gal_per_lb<T>(mut self, value: T) -> Self
@@ -8043,6 +10640,16 @@ pub mod builder {
                 .map_err(|e| format!("error converting supplied value for recommend_mash: {e}"));
             self
         }
+        pub fn source<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::string::String>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.source = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for source: {e}"));
+            self
+        }
         pub fn supplier<T>(mut self, value: T) -> Self
         where
             T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
@@ -8084,6 +10691,7 @@ pub mod builder {
                 coarse_fine_diff_pct: value.coarse_fine_diff_pct?,
                 color_lovibond: value.color_lovibond?,
                 diastatic_power_lintner: value.diastatic_power_lintner?,
+                forked_from_id: value.forked_from_id?,
                 ibu_gal_per_lb: value.ibu_gal_per_lb?,
                 id: value.id?,
                 max_in_batch_pct: value.max_in_batch_pct?,
@@ -8093,6 +10701,7 @@ pub mod builder {
                 origin: value.origin?,
                 protein_pct: value.protein_pct?,
                 recommend_mash: value.recommend_mash?,
+                source: value.source?,
                 supplier: value.supplier?,
                 type_: value.type_?,
                 yield_pct: value.yield_pct?,
@@ -8106,6 +10715,7 @@ pub mod builder {
                 coarse_fine_diff_pct: Ok(value.coarse_fine_diff_pct),
                 color_lovibond: Ok(value.color_lovibond),
                 diastatic_power_lintner: Ok(value.diastatic_power_lintner),
+                forked_from_id: Ok(value.forked_from_id),
                 ibu_gal_per_lb: Ok(value.ibu_gal_per_lb),
                 id: Ok(value.id),
                 max_in_batch_pct: Ok(value.max_in_batch_pct),
@@ -8115,6 +10725,7 @@ pub mod builder {
                 origin: Ok(value.origin),
                 protein_pct: Ok(value.protein_pct),
                 recommend_mash: Ok(value.recommend_mash),
+                source: Ok(value.source),
                 supplier: Ok(value.supplier),
                 type_: Ok(value.type_),
                 yield_pct: Ok(value.yield_pct),
@@ -8240,6 +10851,10 @@ pub mod builder {
         beta_pct: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         caryophyllene_pct: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         cohumulone_pct: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        forked_from_id: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
         form: ::std::result::Result<::std::string::String, ::std::string::String>,
         hsi_pct: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         humulene_pct: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
@@ -8254,6 +10869,7 @@ pub mod builder {
             ::std::option::Option<::std::string::String>,
             ::std::string::String,
         >,
+        source: ::std::result::Result<::std::string::String, ::std::string::String>,
         substitutes: ::std::result::Result<
             ::std::option::Option<::std::string::String>,
             ::std::string::String,
@@ -8274,6 +10890,7 @@ pub mod builder {
                 beta_pct: Ok(Default::default()),
                 caryophyllene_pct: Ok(Default::default()),
                 cohumulone_pct: Ok(Default::default()),
+                forked_from_id: Ok(Default::default()),
                 form: Err("no value supplied for form".to_string()),
                 hsi_pct: Ok(Default::default()),
                 humulene_pct: Ok(Default::default()),
@@ -8282,6 +10899,7 @@ pub mod builder {
                 name: Err("no value supplied for name".to_string()),
                 notes: Ok(Default::default()),
                 origin: Ok(Default::default()),
+                source: Err("no value supplied for source".to_string()),
                 substitutes: Ok(Default::default()),
                 type_: Ok(Default::default()),
                 year: Ok(Default::default()),
@@ -8327,6 +10945,16 @@ pub mod builder {
             self.cohumulone_pct = value
                 .try_into()
                 .map_err(|e| format!("error converting supplied value for cohumulone_pct: {e}"));
+            self
+        }
+        pub fn forked_from_id<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.forked_from_id = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for forked_from_id: {e}"));
             self
         }
         pub fn form<T>(mut self, value: T) -> Self
@@ -8409,6 +11037,16 @@ pub mod builder {
                 .map_err(|e| format!("error converting supplied value for origin: {e}"));
             self
         }
+        pub fn source<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::string::String>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.source = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for source: {e}"));
+            self
+        }
         pub fn substitutes<T>(mut self, value: T) -> Self
         where
             T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
@@ -8448,6 +11086,7 @@ pub mod builder {
                 beta_pct: value.beta_pct?,
                 caryophyllene_pct: value.caryophyllene_pct?,
                 cohumulone_pct: value.cohumulone_pct?,
+                forked_from_id: value.forked_from_id?,
                 form: value.form?,
                 hsi_pct: value.hsi_pct?,
                 humulene_pct: value.humulene_pct?,
@@ -8456,6 +11095,7 @@ pub mod builder {
                 name: value.name?,
                 notes: value.notes?,
                 origin: value.origin?,
+                source: value.source?,
                 substitutes: value.substitutes?,
                 type_: value.type_?,
                 year: value.year?,
@@ -8469,6 +11109,7 @@ pub mod builder {
                 beta_pct: Ok(value.beta_pct),
                 caryophyllene_pct: Ok(value.caryophyllene_pct),
                 cohumulone_pct: Ok(value.cohumulone_pct),
+                forked_from_id: Ok(value.forked_from_id),
                 form: Ok(value.form),
                 hsi_pct: Ok(value.hsi_pct),
                 humulene_pct: Ok(value.humulene_pct),
@@ -8477,6 +11118,7 @@ pub mod builder {
                 name: Ok(value.name),
                 notes: Ok(value.notes),
                 origin: Ok(value.origin),
+                source: Ok(value.source),
                 substitutes: Ok(value.substitutes),
                 type_: Ok(value.type_),
                 year: Ok(value.year),
@@ -8859,12 +11501,17 @@ pub mod builder {
     #[derive(Clone, Debug)]
     pub struct Misc {
         amount_is_weight: ::std::result::Result<bool, ::std::string::String>,
+        forked_from_id: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
         id: ::std::result::Result<::std::string::String, ::std::string::String>,
         name: ::std::result::Result<::std::string::String, ::std::string::String>,
         notes: ::std::result::Result<
             ::std::option::Option<::std::string::String>,
             ::std::string::String,
         >,
+        source: ::std::result::Result<::std::string::String, ::std::string::String>,
         time_min: ::std::result::Result<f64, ::std::string::String>,
         type_: ::std::result::Result<::std::string::String, ::std::string::String>,
         use_: ::std::result::Result<::std::string::String, ::std::string::String>,
@@ -8877,9 +11524,11 @@ pub mod builder {
         fn default() -> Self {
             Self {
                 amount_is_weight: Err("no value supplied for amount_is_weight".to_string()),
+                forked_from_id: Ok(Default::default()),
                 id: Err("no value supplied for id".to_string()),
                 name: Err("no value supplied for name".to_string()),
                 notes: Ok(Default::default()),
+                source: Err("no value supplied for source".to_string()),
                 time_min: Err("no value supplied for time_min".to_string()),
                 type_: Err("no value supplied for type_".to_string()),
                 use_: Err("no value supplied for use_".to_string()),
@@ -8896,6 +11545,16 @@ pub mod builder {
             self.amount_is_weight = value
                 .try_into()
                 .map_err(|e| format!("error converting supplied value for amount_is_weight: {e}"));
+            self
+        }
+        pub fn forked_from_id<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.forked_from_id = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for forked_from_id: {e}"));
             self
         }
         pub fn id<T>(mut self, value: T) -> Self
@@ -8926,6 +11585,16 @@ pub mod builder {
             self.notes = value
                 .try_into()
                 .map_err(|e| format!("error converting supplied value for notes: {e}"));
+            self
+        }
+        pub fn source<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::string::String>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.source = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for source: {e}"));
             self
         }
         pub fn time_min<T>(mut self, value: T) -> Self
@@ -8974,9 +11643,11 @@ pub mod builder {
         fn try_from(value: Misc) -> ::std::result::Result<Self, super::error::ConversionError> {
             Ok(Self {
                 amount_is_weight: value.amount_is_weight?,
+                forked_from_id: value.forked_from_id?,
                 id: value.id?,
                 name: value.name?,
                 notes: value.notes?,
+                source: value.source?,
                 time_min: value.time_min?,
                 type_: value.type_?,
                 use_: value.use_?,
@@ -8988,9 +11659,11 @@ pub mod builder {
         fn from(value: super::Misc) -> Self {
             Self {
                 amount_is_weight: Ok(value.amount_is_weight),
+                forked_from_id: Ok(value.forked_from_id),
                 id: Ok(value.id),
                 name: Ok(value.name),
                 notes: Ok(value.notes),
+                source: Ok(value.source),
                 time_min: Ok(value.time_min),
                 type_: Ok(value.type_),
                 use_: Ok(value.use_),
@@ -12229,6 +14902,259 @@ pub mod builder {
         }
     }
     #[derive(Clone, Debug)]
+    pub struct UpdateFermentableInput {
+        add_after_boil: ::std::result::Result<::std::option::Option<bool>, ::std::string::String>,
+        coarse_fine_diff_pct:
+            ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        color_lovibond: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        diastatic_power_lintner:
+            ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        ibu_gal_per_lb: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        max_in_batch_pct: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        moisture_pct: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        name: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+        notes: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+        origin: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+        protein_pct: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        recommend_mash: ::std::result::Result<::std::option::Option<bool>, ::std::string::String>,
+        supplier: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+        type_: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+        yield_pct: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+    }
+    impl ::std::default::Default for UpdateFermentableInput {
+        fn default() -> Self {
+            Self {
+                add_after_boil: Ok(Default::default()),
+                coarse_fine_diff_pct: Ok(Default::default()),
+                color_lovibond: Ok(Default::default()),
+                diastatic_power_lintner: Ok(Default::default()),
+                ibu_gal_per_lb: Ok(Default::default()),
+                max_in_batch_pct: Ok(Default::default()),
+                moisture_pct: Ok(Default::default()),
+                name: Ok(Default::default()),
+                notes: Ok(Default::default()),
+                origin: Ok(Default::default()),
+                protein_pct: Ok(Default::default()),
+                recommend_mash: Ok(Default::default()),
+                supplier: Ok(Default::default()),
+                type_: Ok(Default::default()),
+                yield_pct: Ok(Default::default()),
+            }
+        }
+    }
+    impl UpdateFermentableInput {
+        pub fn add_after_boil<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<bool>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.add_after_boil = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for add_after_boil: {e}"));
+            self
+        }
+        pub fn coarse_fine_diff_pct<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.coarse_fine_diff_pct = value.try_into().map_err(|e| {
+                format!("error converting supplied value for coarse_fine_diff_pct: {e}")
+            });
+            self
+        }
+        pub fn color_lovibond<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.color_lovibond = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for color_lovibond: {e}"));
+            self
+        }
+        pub fn diastatic_power_lintner<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.diastatic_power_lintner = value.try_into().map_err(|e| {
+                format!("error converting supplied value for diastatic_power_lintner: {e}")
+            });
+            self
+        }
+        pub fn ibu_gal_per_lb<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.ibu_gal_per_lb = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for ibu_gal_per_lb: {e}"));
+            self
+        }
+        pub fn max_in_batch_pct<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.max_in_batch_pct = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for max_in_batch_pct: {e}"));
+            self
+        }
+        pub fn moisture_pct<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.moisture_pct = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for moisture_pct: {e}"));
+            self
+        }
+        pub fn name<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.name = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for name: {e}"));
+            self
+        }
+        pub fn notes<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.notes = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for notes: {e}"));
+            self
+        }
+        pub fn origin<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.origin = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for origin: {e}"));
+            self
+        }
+        pub fn protein_pct<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.protein_pct = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for protein_pct: {e}"));
+            self
+        }
+        pub fn recommend_mash<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<bool>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.recommend_mash = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for recommend_mash: {e}"));
+            self
+        }
+        pub fn supplier<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.supplier = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for supplier: {e}"));
+            self
+        }
+        pub fn type_<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.type_ = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for type_: {e}"));
+            self
+        }
+        pub fn yield_pct<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.yield_pct = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for yield_pct: {e}"));
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<UpdateFermentableInput> for super::UpdateFermentableInput {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: UpdateFermentableInput,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self {
+                add_after_boil: value.add_after_boil?,
+                coarse_fine_diff_pct: value.coarse_fine_diff_pct?,
+                color_lovibond: value.color_lovibond?,
+                diastatic_power_lintner: value.diastatic_power_lintner?,
+                ibu_gal_per_lb: value.ibu_gal_per_lb?,
+                max_in_batch_pct: value.max_in_batch_pct?,
+                moisture_pct: value.moisture_pct?,
+                name: value.name?,
+                notes: value.notes?,
+                origin: value.origin?,
+                protein_pct: value.protein_pct?,
+                recommend_mash: value.recommend_mash?,
+                supplier: value.supplier?,
+                type_: value.type_?,
+                yield_pct: value.yield_pct?,
+            })
+        }
+    }
+    impl ::std::convert::From<super::UpdateFermentableInput> for UpdateFermentableInput {
+        fn from(value: super::UpdateFermentableInput) -> Self {
+            Self {
+                add_after_boil: Ok(value.add_after_boil),
+                coarse_fine_diff_pct: Ok(value.coarse_fine_diff_pct),
+                color_lovibond: Ok(value.color_lovibond),
+                diastatic_power_lintner: Ok(value.diastatic_power_lintner),
+                ibu_gal_per_lb: Ok(value.ibu_gal_per_lb),
+                max_in_batch_pct: Ok(value.max_in_batch_pct),
+                moisture_pct: Ok(value.moisture_pct),
+                name: Ok(value.name),
+                notes: Ok(value.notes),
+                origin: Ok(value.origin),
+                protein_pct: Ok(value.protein_pct),
+                recommend_mash: Ok(value.recommend_mash),
+                supplier: Ok(value.supplier),
+                type_: Ok(value.type_),
+                yield_pct: Ok(value.yield_pct),
+            }
+        }
+    }
+    #[derive(Clone, Debug)]
     pub struct UpdateHopAdditionInput {
         addition_order: ::std::result::Result<::std::option::Option<i64>, ::std::string::String>,
         amount_kg: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
@@ -12324,6 +15250,249 @@ pub mod builder {
                 hopstand_temp_c: Ok(value.hopstand_temp_c),
                 time_min: Ok(value.time_min),
                 use_: Ok(value.use_),
+            }
+        }
+    }
+    #[derive(Clone, Debug)]
+    pub struct UpdateHopInput {
+        alpha_pct: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        beta_pct: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        caryophyllene_pct: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        cohumulone_pct: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        form: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+        hsi_pct: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        humulene_pct: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        myrcene_pct: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        name: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+        notes: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+        origin: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+        substitutes: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+        type_: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+        year: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+    }
+    impl ::std::default::Default for UpdateHopInput {
+        fn default() -> Self {
+            Self {
+                alpha_pct: Ok(Default::default()),
+                beta_pct: Ok(Default::default()),
+                caryophyllene_pct: Ok(Default::default()),
+                cohumulone_pct: Ok(Default::default()),
+                form: Ok(Default::default()),
+                hsi_pct: Ok(Default::default()),
+                humulene_pct: Ok(Default::default()),
+                myrcene_pct: Ok(Default::default()),
+                name: Ok(Default::default()),
+                notes: Ok(Default::default()),
+                origin: Ok(Default::default()),
+                substitutes: Ok(Default::default()),
+                type_: Ok(Default::default()),
+                year: Ok(Default::default()),
+            }
+        }
+    }
+    impl UpdateHopInput {
+        pub fn alpha_pct<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.alpha_pct = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for alpha_pct: {e}"));
+            self
+        }
+        pub fn beta_pct<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.beta_pct = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for beta_pct: {e}"));
+            self
+        }
+        pub fn caryophyllene_pct<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.caryophyllene_pct = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for caryophyllene_pct: {e}"));
+            self
+        }
+        pub fn cohumulone_pct<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.cohumulone_pct = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for cohumulone_pct: {e}"));
+            self
+        }
+        pub fn form<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.form = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for form: {e}"));
+            self
+        }
+        pub fn hsi_pct<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.hsi_pct = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for hsi_pct: {e}"));
+            self
+        }
+        pub fn humulene_pct<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.humulene_pct = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for humulene_pct: {e}"));
+            self
+        }
+        pub fn myrcene_pct<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.myrcene_pct = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for myrcene_pct: {e}"));
+            self
+        }
+        pub fn name<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.name = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for name: {e}"));
+            self
+        }
+        pub fn notes<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.notes = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for notes: {e}"));
+            self
+        }
+        pub fn origin<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.origin = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for origin: {e}"));
+            self
+        }
+        pub fn substitutes<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.substitutes = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for substitutes: {e}"));
+            self
+        }
+        pub fn type_<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.type_ = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for type_: {e}"));
+            self
+        }
+        pub fn year<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.year = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for year: {e}"));
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<UpdateHopInput> for super::UpdateHopInput {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: UpdateHopInput,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self {
+                alpha_pct: value.alpha_pct?,
+                beta_pct: value.beta_pct?,
+                caryophyllene_pct: value.caryophyllene_pct?,
+                cohumulone_pct: value.cohumulone_pct?,
+                form: value.form?,
+                hsi_pct: value.hsi_pct?,
+                humulene_pct: value.humulene_pct?,
+                myrcene_pct: value.myrcene_pct?,
+                name: value.name?,
+                notes: value.notes?,
+                origin: value.origin?,
+                substitutes: value.substitutes?,
+                type_: value.type_?,
+                year: value.year?,
+            })
+        }
+    }
+    impl ::std::convert::From<super::UpdateHopInput> for UpdateHopInput {
+        fn from(value: super::UpdateHopInput) -> Self {
+            Self {
+                alpha_pct: Ok(value.alpha_pct),
+                beta_pct: Ok(value.beta_pct),
+                caryophyllene_pct: Ok(value.caryophyllene_pct),
+                cohumulone_pct: Ok(value.cohumulone_pct),
+                form: Ok(value.form),
+                hsi_pct: Ok(value.hsi_pct),
+                humulene_pct: Ok(value.humulene_pct),
+                myrcene_pct: Ok(value.myrcene_pct),
+                name: Ok(value.name),
+                notes: Ok(value.notes),
+                origin: Ok(value.origin),
+                substitutes: Ok(value.substitutes),
+                type_: Ok(value.type_),
+                year: Ok(value.year),
             }
         }
     }
@@ -12683,6 +15852,145 @@ pub mod builder {
                 amount_is_weight: Ok(value.amount_is_weight),
                 time_min: Ok(value.time_min),
                 use_: Ok(value.use_),
+            }
+        }
+    }
+    #[derive(Clone, Debug)]
+    pub struct UpdateMiscInput {
+        amount_is_weight: ::std::result::Result<::std::option::Option<bool>, ::std::string::String>,
+        name: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+        notes: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+        time_min: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        type_: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+        use_: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+        use_for: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+    }
+    impl ::std::default::Default for UpdateMiscInput {
+        fn default() -> Self {
+            Self {
+                amount_is_weight: Ok(Default::default()),
+                name: Ok(Default::default()),
+                notes: Ok(Default::default()),
+                time_min: Ok(Default::default()),
+                type_: Ok(Default::default()),
+                use_: Ok(Default::default()),
+                use_for: Ok(Default::default()),
+            }
+        }
+    }
+    impl UpdateMiscInput {
+        pub fn amount_is_weight<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<bool>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.amount_is_weight = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for amount_is_weight: {e}"));
+            self
+        }
+        pub fn name<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.name = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for name: {e}"));
+            self
+        }
+        pub fn notes<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.notes = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for notes: {e}"));
+            self
+        }
+        pub fn time_min<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.time_min = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for time_min: {e}"));
+            self
+        }
+        pub fn type_<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.type_ = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for type_: {e}"));
+            self
+        }
+        pub fn use_<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.use_ = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for use_: {e}"));
+            self
+        }
+        pub fn use_for<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.use_for = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for use_for: {e}"));
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<UpdateMiscInput> for super::UpdateMiscInput {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: UpdateMiscInput,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self {
+                amount_is_weight: value.amount_is_weight?,
+                name: value.name?,
+                notes: value.notes?,
+                time_min: value.time_min?,
+                type_: value.type_?,
+                use_: value.use_?,
+                use_for: value.use_for?,
+            })
+        }
+    }
+    impl ::std::convert::From<super::UpdateMiscInput> for UpdateMiscInput {
+        fn from(value: super::UpdateMiscInput) -> Self {
+            Self {
+                amount_is_weight: Ok(value.amount_is_weight),
+                name: Ok(value.name),
+                notes: Ok(value.notes),
+                time_min: Ok(value.time_min),
+                type_: Ok(value.type_),
+                use_: Ok(value.use_),
+                use_for: Ok(value.use_for),
             }
         }
     }
@@ -13287,6 +16595,164 @@ pub mod builder {
         }
     }
     #[derive(Clone, Debug)]
+    pub struct UpdateWaterInput {
+        bicarbonate_ppm: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        calcium_ppm: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        chloride_ppm: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        magnesium_ppm: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        name: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+        notes: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+        ph: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        sodium_ppm: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        sulfate_ppm: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+    }
+    impl ::std::default::Default for UpdateWaterInput {
+        fn default() -> Self {
+            Self {
+                bicarbonate_ppm: Ok(Default::default()),
+                calcium_ppm: Ok(Default::default()),
+                chloride_ppm: Ok(Default::default()),
+                magnesium_ppm: Ok(Default::default()),
+                name: Ok(Default::default()),
+                notes: Ok(Default::default()),
+                ph: Ok(Default::default()),
+                sodium_ppm: Ok(Default::default()),
+                sulfate_ppm: Ok(Default::default()),
+            }
+        }
+    }
+    impl UpdateWaterInput {
+        pub fn bicarbonate_ppm<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.bicarbonate_ppm = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for bicarbonate_ppm: {e}"));
+            self
+        }
+        pub fn calcium_ppm<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.calcium_ppm = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for calcium_ppm: {e}"));
+            self
+        }
+        pub fn chloride_ppm<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.chloride_ppm = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for chloride_ppm: {e}"));
+            self
+        }
+        pub fn magnesium_ppm<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.magnesium_ppm = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for magnesium_ppm: {e}"));
+            self
+        }
+        pub fn name<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.name = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for name: {e}"));
+            self
+        }
+        pub fn notes<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.notes = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for notes: {e}"));
+            self
+        }
+        pub fn ph<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.ph = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for ph: {e}"));
+            self
+        }
+        pub fn sodium_ppm<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.sodium_ppm = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for sodium_ppm: {e}"));
+            self
+        }
+        pub fn sulfate_ppm<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.sulfate_ppm = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for sulfate_ppm: {e}"));
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<UpdateWaterInput> for super::UpdateWaterInput {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: UpdateWaterInput,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self {
+                bicarbonate_ppm: value.bicarbonate_ppm?,
+                calcium_ppm: value.calcium_ppm?,
+                chloride_ppm: value.chloride_ppm?,
+                magnesium_ppm: value.magnesium_ppm?,
+                name: value.name?,
+                notes: value.notes?,
+                ph: value.ph?,
+                sodium_ppm: value.sodium_ppm?,
+                sulfate_ppm: value.sulfate_ppm?,
+            })
+        }
+    }
+    impl ::std::convert::From<super::UpdateWaterInput> for UpdateWaterInput {
+        fn from(value: super::UpdateWaterInput) -> Self {
+            Self {
+                bicarbonate_ppm: Ok(value.bicarbonate_ppm),
+                calcium_ppm: Ok(value.calcium_ppm),
+                chloride_ppm: Ok(value.chloride_ppm),
+                magnesium_ppm: Ok(value.magnesium_ppm),
+                name: Ok(value.name),
+                notes: Ok(value.notes),
+                ph: Ok(value.ph),
+                sodium_ppm: Ok(value.sodium_ppm),
+                sulfate_ppm: Ok(value.sulfate_ppm),
+            }
+        }
+    }
+    #[derive(Clone, Debug)]
     pub struct UpdateYeastAdditionInput {
         add_to_secondary: ::std::result::Result<::std::option::Option<bool>, ::std::string::String>,
         amount: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
@@ -13383,10 +16849,389 @@ pub mod builder {
         }
     }
     #[derive(Clone, Debug)]
+    pub struct UpdateYeastInput {
+        add_to_secondary: ::std::result::Result<::std::option::Option<bool>, ::std::string::String>,
+        alcohol_tolerance: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+        attenuation_pct: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        best_for: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+        flavor_profile: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+        flocculation: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+        form: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+        laboratory: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+        max_attenuation_pct:
+            ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        max_reuse: ::std::result::Result<::std::option::Option<i64>, ::std::string::String>,
+        max_temperature_c: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        min_attenuation_pct:
+            ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        min_temperature_c: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        name: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+        notes: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+        pof_positive: ::std::result::Result<::std::option::Option<bool>, ::std::string::String>,
+        product_id: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+        species: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+        sta1_positive: ::std::result::Result<::std::option::Option<bool>, ::std::string::String>,
+        styles: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+        substitutes: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+        type_: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+    }
+    impl ::std::default::Default for UpdateYeastInput {
+        fn default() -> Self {
+            Self {
+                add_to_secondary: Ok(Default::default()),
+                alcohol_tolerance: Ok(Default::default()),
+                attenuation_pct: Ok(Default::default()),
+                best_for: Ok(Default::default()),
+                flavor_profile: Ok(Default::default()),
+                flocculation: Ok(Default::default()),
+                form: Ok(Default::default()),
+                laboratory: Ok(Default::default()),
+                max_attenuation_pct: Ok(Default::default()),
+                max_reuse: Ok(Default::default()),
+                max_temperature_c: Ok(Default::default()),
+                min_attenuation_pct: Ok(Default::default()),
+                min_temperature_c: Ok(Default::default()),
+                name: Ok(Default::default()),
+                notes: Ok(Default::default()),
+                pof_positive: Ok(Default::default()),
+                product_id: Ok(Default::default()),
+                species: Ok(Default::default()),
+                sta1_positive: Ok(Default::default()),
+                styles: Ok(Default::default()),
+                substitutes: Ok(Default::default()),
+                type_: Ok(Default::default()),
+            }
+        }
+    }
+    impl UpdateYeastInput {
+        pub fn add_to_secondary<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<bool>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.add_to_secondary = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for add_to_secondary: {e}"));
+            self
+        }
+        pub fn alcohol_tolerance<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.alcohol_tolerance = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for alcohol_tolerance: {e}"));
+            self
+        }
+        pub fn attenuation_pct<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.attenuation_pct = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for attenuation_pct: {e}"));
+            self
+        }
+        pub fn best_for<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.best_for = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for best_for: {e}"));
+            self
+        }
+        pub fn flavor_profile<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.flavor_profile = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for flavor_profile: {e}"));
+            self
+        }
+        pub fn flocculation<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.flocculation = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for flocculation: {e}"));
+            self
+        }
+        pub fn form<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.form = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for form: {e}"));
+            self
+        }
+        pub fn laboratory<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.laboratory = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for laboratory: {e}"));
+            self
+        }
+        pub fn max_attenuation_pct<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.max_attenuation_pct = value.try_into().map_err(|e| {
+                format!("error converting supplied value for max_attenuation_pct: {e}")
+            });
+            self
+        }
+        pub fn max_reuse<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<i64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.max_reuse = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for max_reuse: {e}"));
+            self
+        }
+        pub fn max_temperature_c<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.max_temperature_c = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for max_temperature_c: {e}"));
+            self
+        }
+        pub fn min_attenuation_pct<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.min_attenuation_pct = value.try_into().map_err(|e| {
+                format!("error converting supplied value for min_attenuation_pct: {e}")
+            });
+            self
+        }
+        pub fn min_temperature_c<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.min_temperature_c = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for min_temperature_c: {e}"));
+            self
+        }
+        pub fn name<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.name = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for name: {e}"));
+            self
+        }
+        pub fn notes<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.notes = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for notes: {e}"));
+            self
+        }
+        pub fn pof_positive<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<bool>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.pof_positive = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for pof_positive: {e}"));
+            self
+        }
+        pub fn product_id<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.product_id = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for product_id: {e}"));
+            self
+        }
+        pub fn species<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.species = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for species: {e}"));
+            self
+        }
+        pub fn sta1_positive<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<bool>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.sta1_positive = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for sta1_positive: {e}"));
+            self
+        }
+        pub fn styles<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.styles = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for styles: {e}"));
+            self
+        }
+        pub fn substitutes<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.substitutes = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for substitutes: {e}"));
+            self
+        }
+        pub fn type_<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.type_ = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for type_: {e}"));
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<UpdateYeastInput> for super::UpdateYeastInput {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: UpdateYeastInput,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self {
+                add_to_secondary: value.add_to_secondary?,
+                alcohol_tolerance: value.alcohol_tolerance?,
+                attenuation_pct: value.attenuation_pct?,
+                best_for: value.best_for?,
+                flavor_profile: value.flavor_profile?,
+                flocculation: value.flocculation?,
+                form: value.form?,
+                laboratory: value.laboratory?,
+                max_attenuation_pct: value.max_attenuation_pct?,
+                max_reuse: value.max_reuse?,
+                max_temperature_c: value.max_temperature_c?,
+                min_attenuation_pct: value.min_attenuation_pct?,
+                min_temperature_c: value.min_temperature_c?,
+                name: value.name?,
+                notes: value.notes?,
+                pof_positive: value.pof_positive?,
+                product_id: value.product_id?,
+                species: value.species?,
+                sta1_positive: value.sta1_positive?,
+                styles: value.styles?,
+                substitutes: value.substitutes?,
+                type_: value.type_?,
+            })
+        }
+    }
+    impl ::std::convert::From<super::UpdateYeastInput> for UpdateYeastInput {
+        fn from(value: super::UpdateYeastInput) -> Self {
+            Self {
+                add_to_secondary: Ok(value.add_to_secondary),
+                alcohol_tolerance: Ok(value.alcohol_tolerance),
+                attenuation_pct: Ok(value.attenuation_pct),
+                best_for: Ok(value.best_for),
+                flavor_profile: Ok(value.flavor_profile),
+                flocculation: Ok(value.flocculation),
+                form: Ok(value.form),
+                laboratory: Ok(value.laboratory),
+                max_attenuation_pct: Ok(value.max_attenuation_pct),
+                max_reuse: Ok(value.max_reuse),
+                max_temperature_c: Ok(value.max_temperature_c),
+                min_attenuation_pct: Ok(value.min_attenuation_pct),
+                min_temperature_c: Ok(value.min_temperature_c),
+                name: Ok(value.name),
+                notes: Ok(value.notes),
+                pof_positive: Ok(value.pof_positive),
+                product_id: Ok(value.product_id),
+                species: Ok(value.species),
+                sta1_positive: Ok(value.sta1_positive),
+                styles: Ok(value.styles),
+                substitutes: Ok(value.substitutes),
+                type_: Ok(value.type_),
+            }
+        }
+    }
+    #[derive(Clone, Debug)]
     pub struct Water {
         bicarbonate_ppm: ::std::result::Result<f64, ::std::string::String>,
         calcium_ppm: ::std::result::Result<f64, ::std::string::String>,
         chloride_ppm: ::std::result::Result<f64, ::std::string::String>,
+        forked_from_id: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
         id: ::std::result::Result<::std::string::String, ::std::string::String>,
         magnesium_ppm: ::std::result::Result<f64, ::std::string::String>,
         name: ::std::result::Result<::std::string::String, ::std::string::String>,
@@ -13396,6 +17241,7 @@ pub mod builder {
         >,
         ph: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         sodium_ppm: ::std::result::Result<f64, ::std::string::String>,
+        source: ::std::result::Result<::std::string::String, ::std::string::String>,
         sulfate_ppm: ::std::result::Result<f64, ::std::string::String>,
     }
     impl ::std::default::Default for Water {
@@ -13404,12 +17250,14 @@ pub mod builder {
                 bicarbonate_ppm: Err("no value supplied for bicarbonate_ppm".to_string()),
                 calcium_ppm: Err("no value supplied for calcium_ppm".to_string()),
                 chloride_ppm: Err("no value supplied for chloride_ppm".to_string()),
+                forked_from_id: Ok(Default::default()),
                 id: Err("no value supplied for id".to_string()),
                 magnesium_ppm: Err("no value supplied for magnesium_ppm".to_string()),
                 name: Err("no value supplied for name".to_string()),
                 notes: Ok(Default::default()),
                 ph: Ok(Default::default()),
                 sodium_ppm: Err("no value supplied for sodium_ppm".to_string()),
+                source: Err("no value supplied for source".to_string()),
                 sulfate_ppm: Err("no value supplied for sulfate_ppm".to_string()),
             }
         }
@@ -13443,6 +17291,16 @@ pub mod builder {
             self.chloride_ppm = value
                 .try_into()
                 .map_err(|e| format!("error converting supplied value for chloride_ppm: {e}"));
+            self
+        }
+        pub fn forked_from_id<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.forked_from_id = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for forked_from_id: {e}"));
             self
         }
         pub fn id<T>(mut self, value: T) -> Self
@@ -13505,6 +17363,16 @@ pub mod builder {
                 .map_err(|e| format!("error converting supplied value for sodium_ppm: {e}"));
             self
         }
+        pub fn source<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::string::String>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.source = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for source: {e}"));
+            self
+        }
         pub fn sulfate_ppm<T>(mut self, value: T) -> Self
         where
             T: ::std::convert::TryInto<f64>,
@@ -13523,12 +17391,14 @@ pub mod builder {
                 bicarbonate_ppm: value.bicarbonate_ppm?,
                 calcium_ppm: value.calcium_ppm?,
                 chloride_ppm: value.chloride_ppm?,
+                forked_from_id: value.forked_from_id?,
                 id: value.id?,
                 magnesium_ppm: value.magnesium_ppm?,
                 name: value.name?,
                 notes: value.notes?,
                 ph: value.ph?,
                 sodium_ppm: value.sodium_ppm?,
+                source: value.source?,
                 sulfate_ppm: value.sulfate_ppm?,
             })
         }
@@ -13539,12 +17409,14 @@ pub mod builder {
                 bicarbonate_ppm: Ok(value.bicarbonate_ppm),
                 calcium_ppm: Ok(value.calcium_ppm),
                 chloride_ppm: Ok(value.chloride_ppm),
+                forked_from_id: Ok(value.forked_from_id),
                 id: Ok(value.id),
                 magnesium_ppm: Ok(value.magnesium_ppm),
                 name: Ok(value.name),
                 notes: Ok(value.notes),
                 ph: Ok(value.ph),
                 sodium_ppm: Ok(value.sodium_ppm),
+                source: Ok(value.source),
                 sulfate_ppm: Ok(value.sulfate_ppm),
             }
         }
@@ -13693,6 +17565,10 @@ pub mod builder {
             ::std::option::Option<::std::string::String>,
             ::std::string::String,
         >,
+        forked_from_id: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
         form: ::std::result::Result<::std::string::String, ::std::string::String>,
         id: ::std::result::Result<::std::string::String, ::std::string::String>,
         laboratory: ::std::result::Result<
@@ -13716,6 +17592,7 @@ pub mod builder {
             ::std::option::Option<::std::string::String>,
             ::std::string::String,
         >,
+        source: ::std::result::Result<::std::string::String, ::std::string::String>,
         species: ::std::result::Result<
             ::std::option::Option<::std::string::String>,
             ::std::string::String,
@@ -13740,6 +17617,7 @@ pub mod builder {
                 best_for: Ok(Default::default()),
                 flavor_profile: Ok(Default::default()),
                 flocculation: Ok(Default::default()),
+                forked_from_id: Ok(Default::default()),
                 form: Err("no value supplied for form".to_string()),
                 id: Err("no value supplied for id".to_string()),
                 laboratory: Ok(Default::default()),
@@ -13752,6 +17630,7 @@ pub mod builder {
                 notes: Ok(Default::default()),
                 pof_positive: Ok(Default::default()),
                 product_id: Ok(Default::default()),
+                source: Err("no value supplied for source".to_string()),
                 species: Ok(Default::default()),
                 sta1_positive: Ok(Default::default()),
                 styles: Ok(Default::default()),
@@ -13819,6 +17698,16 @@ pub mod builder {
             self.flocculation = value
                 .try_into()
                 .map_err(|e| format!("error converting supplied value for flocculation: {e}"));
+            self
+        }
+        pub fn forked_from_id<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.forked_from_id = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for forked_from_id: {e}"));
             self
         }
         pub fn form<T>(mut self, value: T) -> Self
@@ -13941,6 +17830,16 @@ pub mod builder {
                 .map_err(|e| format!("error converting supplied value for product_id: {e}"));
             self
         }
+        pub fn source<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::string::String>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.source = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for source: {e}"));
+            self
+        }
         pub fn species<T>(mut self, value: T) -> Self
         where
             T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
@@ -14002,6 +17901,7 @@ pub mod builder {
                 best_for: value.best_for?,
                 flavor_profile: value.flavor_profile?,
                 flocculation: value.flocculation?,
+                forked_from_id: value.forked_from_id?,
                 form: value.form?,
                 id: value.id?,
                 laboratory: value.laboratory?,
@@ -14014,6 +17914,7 @@ pub mod builder {
                 notes: value.notes?,
                 pof_positive: value.pof_positive?,
                 product_id: value.product_id?,
+                source: value.source?,
                 species: value.species?,
                 sta1_positive: value.sta1_positive?,
                 styles: value.styles?,
@@ -14031,6 +17932,7 @@ pub mod builder {
                 best_for: Ok(value.best_for),
                 flavor_profile: Ok(value.flavor_profile),
                 flocculation: Ok(value.flocculation),
+                forked_from_id: Ok(value.forked_from_id),
                 form: Ok(value.form),
                 id: Ok(value.id),
                 laboratory: Ok(value.laboratory),
@@ -14043,6 +17945,7 @@ pub mod builder {
                 notes: Ok(value.notes),
                 pof_positive: Ok(value.pof_positive),
                 product_id: Ok(value.product_id),
+                source: Ok(value.source),
                 species: Ok(value.species),
                 sta1_positive: Ok(value.sta1_positive),
                 styles: Ok(value.styles),

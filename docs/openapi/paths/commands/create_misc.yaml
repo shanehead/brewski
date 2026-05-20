@@ -1,0 +1,25 @@
+post:
+  operationId: createMisc
+  summary: Create a custom misc ingredient in the ingredient library
+  tags:
+    - Library
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - input
+          properties:
+            input:
+              $ref: "../../components/schemas/CreateMiscInput.yaml"
+  responses:
+    "200":
+      description: Created misc ingredient
+      content:
+        application/json:
+          schema:
+            $ref: "../../components/schemas/Misc.yaml"
+    "500":
+      $ref: "../../components/responses/Error.yaml"

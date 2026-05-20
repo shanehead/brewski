@@ -1,0 +1,25 @@
+post:
+  operationId: createYeast
+  summary: Create a custom yeast in the ingredient library
+  tags:
+    - Library
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - input
+          properties:
+            input:
+              $ref: "../../components/schemas/CreateYeastInput.yaml"
+  responses:
+    "200":
+      description: Created yeast
+      content:
+        application/json:
+          schema:
+            $ref: "../../components/schemas/Yeast.yaml"
+    "500":
+      $ref: "../../components/responses/Error.yaml"

@@ -167,6 +167,36 @@ paths:
     $ref: ./paths/commands/branch_from_version.yaml
   /commands/copy_equipment_profile:
     $ref: ./paths/commands/copy_equipment_profile.yaml
+  /commands/create_hop:
+    $ref: ./paths/commands/create_hop.yaml
+  /commands/update_hop:
+    $ref: ./paths/commands/update_hop.yaml
+  /commands/delete_hop:
+    $ref: ./paths/commands/delete_hop.yaml
+  /commands/create_fermentable:
+    $ref: ./paths/commands/create_fermentable.yaml
+  /commands/update_fermentable:
+    $ref: ./paths/commands/update_fermentable.yaml
+  /commands/delete_fermentable:
+    $ref: ./paths/commands/delete_fermentable.yaml
+  /commands/create_yeast:
+    $ref: ./paths/commands/create_yeast.yaml
+  /commands/update_yeast:
+    $ref: ./paths/commands/update_yeast.yaml
+  /commands/delete_yeast:
+    $ref: ./paths/commands/delete_yeast.yaml
+  /commands/create_misc:
+    $ref: ./paths/commands/create_misc.yaml
+  /commands/update_misc:
+    $ref: ./paths/commands/update_misc.yaml
+  /commands/delete_misc:
+    $ref: ./paths/commands/delete_misc.yaml
+  /commands/create_water:
+    $ref: ./paths/commands/create_water.yaml
+  /commands/update_water:
+    $ref: ./paths/commands/update_water.yaml
+  /commands/delete_water:
+    $ref: ./paths/commands/delete_water.yaml
 components:
   schemas:
     RecipeSummary:
@@ -263,6 +293,26 @@ components:
       $ref: ./components/schemas/UpdateBatchInput.yaml
     CreateGravityReadingInput:
       $ref: ./components/schemas/CreateGravityReadingInput.yaml
+    CreateHopInput:
+      $ref: ./components/schemas/CreateHopInput.yaml
+    UpdateHopInput:
+      $ref: ./components/schemas/UpdateHopInput.yaml
+    CreateFermentableInput:
+      $ref: ./components/schemas/CreateFermentableInput.yaml
+    UpdateFermentableInput:
+      $ref: ./components/schemas/UpdateFermentableInput.yaml
+    CreateYeastInput:
+      $ref: ./components/schemas/CreateYeastInput.yaml
+    UpdateYeastInput:
+      $ref: ./components/schemas/UpdateYeastInput.yaml
+    CreateMiscInput:
+      $ref: ./components/schemas/CreateMiscInput.yaml
+    UpdateMiscInput:
+      $ref: ./components/schemas/UpdateMiscInput.yaml
+    CreateWaterInput:
+      $ref: ./components/schemas/CreateWaterInput.yaml
+    UpdateWaterInput:
+      $ref: ./components/schemas/UpdateWaterInput.yaml
   responses:
     Error:
       $ref: ./components/responses/Error.yaml

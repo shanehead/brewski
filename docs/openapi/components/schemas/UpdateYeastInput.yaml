@@ -1,0 +1,82 @@
+type: object
+properties:
+  name:
+    type: string
+  type_:
+    type: string
+  form:
+    type: string
+  laboratory:
+    type:
+      - string
+      - "null"
+  product_id:
+    type:
+      - string
+      - "null"
+  min_temperature_c:
+    type:
+      - number
+      - "null"
+  max_temperature_c:
+    type:
+      - number
+      - "null"
+  flocculation:
+    type:
+      - string
+      - "null"
+  attenuation_pct:
+    type:
+      - number
+      - "null"
+  min_attenuation_pct:
+    type:
+      - number
+      - "null"
+  max_attenuation_pct:
+    type:
+      - number
+      - "null"
+  alcohol_tolerance:
+    type:
+      - string
+      - "null"
+  flavor_profile:
+    type:
+      - string
+      - "null"
+  styles:
+    type:
+      - string
+      - "null"
+  substitutes:
+    type:
+      - string
+      - "null"
+  species:
+    type:
+      - string
+      - "null"
+  pof_positive:
+    type:
+      - boolean
+      - "null"
+  sta1_positive:
+    type:
+      - boolean
+      - "null"
+  notes:
+    type:
+      - string
+      - "null"
+  best_for:
+    type:
+      - string
+      - "null"
+  max_reuse:
+    type:
+      - integer
+      - "null"
+  add_to_secondary:
+    type: boolean

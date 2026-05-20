@@ -1,0 +1,21 @@
+post:
+  operationId: deleteHop
+  summary: Delete a custom hop from the ingredient library
+  tags:
+    - Library
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+  responses:
+    "200":
+      description: Deleted
+    "500":
+      $ref: "../../components/responses/Error.yaml"

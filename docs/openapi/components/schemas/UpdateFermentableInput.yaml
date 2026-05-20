@@ -1,20 +1,9 @@
 type: object
-required:
-  - id
-  - name
-  - type_
-  - yield_pct
-  - color_lovibond
-  - add_after_boil
-  - source
 properties:
-  id:
-    type: string
   name:
     type: string
   type_:
     type: string
-    description: Grain, Sugar, Extract, Dry Extract, Adjunct
   yield_pct:
     type: number
   color_lovibond:
@@ -60,11 +49,4 @@ properties:
   ibu_gal_per_lb:
     type:
       - number
-      - "null"
-  source:
-    type: string
-    description: "'seeded' | 'user'"
-  forked_from_id:
-    type:
-      - string
       - "null"

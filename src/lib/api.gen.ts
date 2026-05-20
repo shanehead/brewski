@@ -1007,6 +1007,261 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/commands/create_hop": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create a custom hop in the ingredient library */
+        post: operations["createHop"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/commands/update_hop": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Update a custom hop in the ingredient library */
+        post: operations["updateHop"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/commands/delete_hop": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Delete a custom hop from the ingredient library */
+        post: operations["deleteHop"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/commands/create_fermentable": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create a custom fermentable in the ingredient library */
+        post: operations["createFermentable"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/commands/update_fermentable": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Update a custom fermentable in the ingredient library */
+        post: operations["updateFermentable"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/commands/delete_fermentable": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Delete a custom fermentable from the ingredient library */
+        post: operations["deleteFermentable"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/commands/create_yeast": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create a custom yeast in the ingredient library */
+        post: operations["createYeast"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/commands/update_yeast": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Update a custom yeast in the ingredient library */
+        post: operations["updateYeast"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/commands/delete_yeast": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Delete a custom yeast from the ingredient library */
+        post: operations["deleteYeast"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/commands/create_misc": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create a custom misc ingredient in the ingredient library */
+        post: operations["createMisc"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/commands/update_misc": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Update a custom misc ingredient in the ingredient library */
+        post: operations["updateMisc"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/commands/delete_misc": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Delete a custom misc ingredient from the ingredient library */
+        post: operations["deleteMisc"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/commands/create_water": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create a custom water profile in the ingredient library */
+        post: operations["createWater"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/commands/update_water": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Update a custom water profile in the ingredient library */
+        post: operations["updateWater"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/commands/delete_water": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Delete a custom water profile from the ingredient library */
+        post: operations["deleteWater"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -1216,6 +1471,9 @@ export interface components {
             max_in_batch_pct?: number | null;
             recommend_mash?: boolean | null;
             ibu_gal_per_lb?: number | null;
+            /** @description 'seeded' | 'user' */
+            source: string;
+            forked_from_id?: string | null;
         };
         Hop: {
             id: string;
@@ -1235,6 +1493,9 @@ export interface components {
             caryophyllene_pct?: number | null;
             cohumulone_pct?: number | null;
             myrcene_pct?: number | null;
+            /** @description 'seeded' | 'user' */
+            source: string;
+            forked_from_id?: string | null;
         };
         Yeast: {
             id: string;
@@ -1272,6 +1533,9 @@ export interface components {
             pof_positive?: boolean | null;
             /** @description STA-1 dextrin-fermenting gene present */
             sta1_positive?: boolean | null;
+            /** @description 'seeded' | 'user' */
+            source: string;
+            forked_from_id?: string | null;
         };
         Misc: {
             id: string;
@@ -1284,6 +1548,9 @@ export interface components {
             notes?: string | null;
             use_for?: string | null;
             amount_is_weight: boolean;
+            /** @description 'seeded' | 'user' */
+            source: string;
+            forked_from_id?: string | null;
         };
         Water: {
             id: string;
@@ -1296,6 +1563,9 @@ export interface components {
             magnesium_ppm: number;
             ph?: number | null;
             notes?: string | null;
+            /** @description 'seeded' | 'user' */
+            source: string;
+            forked_from_id?: string | null;
         };
         RecipeAdditionFermentable: {
             id: string;
@@ -1730,6 +2000,170 @@ export interface components {
             recorded_at: number;
             gravity: number;
             temp_c?: number | null;
+            notes?: string | null;
+        };
+        CreateHopInput: {
+            name: string;
+            forked_from_id?: string | null;
+            alpha_pct: number;
+            beta_pct?: number | null;
+            form: string;
+            type_?: string | null;
+            origin?: string | null;
+            year?: string | null;
+            notes?: string | null;
+            substitutes?: string | null;
+            hsi_pct?: number | null;
+            humulene_pct?: number | null;
+            caryophyllene_pct?: number | null;
+            cohumulone_pct?: number | null;
+            myrcene_pct?: number | null;
+        };
+        UpdateHopInput: {
+            name?: string;
+            alpha_pct?: number;
+            beta_pct?: number | null;
+            form?: string;
+            type_?: string | null;
+            origin?: string | null;
+            year?: string | null;
+            notes?: string | null;
+            substitutes?: string | null;
+            hsi_pct?: number | null;
+            humulene_pct?: number | null;
+            caryophyllene_pct?: number | null;
+            cohumulone_pct?: number | null;
+            myrcene_pct?: number | null;
+        };
+        CreateFermentableInput: {
+            name: string;
+            forked_from_id?: string | null;
+            /** @description Grain, Sugar, Extract, Dry Extract, Adjunct */
+            type_: string;
+            yield_pct: number;
+            color_lovibond: number;
+            origin?: string | null;
+            supplier?: string | null;
+            notes?: string | null;
+            add_after_boil?: boolean;
+            coarse_fine_diff_pct?: number | null;
+            moisture_pct?: number | null;
+            diastatic_power_lintner?: number | null;
+            protein_pct?: number | null;
+            max_in_batch_pct?: number | null;
+            recommend_mash?: boolean | null;
+            ibu_gal_per_lb?: number | null;
+        };
+        UpdateFermentableInput: {
+            name?: string;
+            type_?: string;
+            yield_pct?: number;
+            color_lovibond?: number;
+            origin?: string | null;
+            supplier?: string | null;
+            notes?: string | null;
+            add_after_boil?: boolean;
+            coarse_fine_diff_pct?: number | null;
+            moisture_pct?: number | null;
+            diastatic_power_lintner?: number | null;
+            protein_pct?: number | null;
+            max_in_batch_pct?: number | null;
+            recommend_mash?: boolean | null;
+            ibu_gal_per_lb?: number | null;
+        };
+        CreateYeastInput: {
+            name: string;
+            forked_from_id?: string | null;
+            /** @description Ale, Lager, Wheat, Wine, Champagne */
+            type_: string;
+            /** @description Liquid, Dry, Slant, Culture */
+            form: string;
+            laboratory?: string | null;
+            product_id?: string | null;
+            min_temperature_c?: number | null;
+            max_temperature_c?: number | null;
+            flocculation?: string | null;
+            attenuation_pct?: number | null;
+            min_attenuation_pct?: number | null;
+            max_attenuation_pct?: number | null;
+            alcohol_tolerance?: string | null;
+            flavor_profile?: string | null;
+            styles?: string | null;
+            substitutes?: string | null;
+            species?: string | null;
+            pof_positive?: boolean | null;
+            sta1_positive?: boolean | null;
+            notes?: string | null;
+            best_for?: string | null;
+            max_reuse?: number | null;
+            add_to_secondary?: boolean;
+        };
+        UpdateYeastInput: {
+            name?: string;
+            type_?: string;
+            form?: string;
+            laboratory?: string | null;
+            product_id?: string | null;
+            min_temperature_c?: number | null;
+            max_temperature_c?: number | null;
+            flocculation?: string | null;
+            attenuation_pct?: number | null;
+            min_attenuation_pct?: number | null;
+            max_attenuation_pct?: number | null;
+            alcohol_tolerance?: string | null;
+            flavor_profile?: string | null;
+            styles?: string | null;
+            substitutes?: string | null;
+            species?: string | null;
+            pof_positive?: boolean | null;
+            sta1_positive?: boolean | null;
+            notes?: string | null;
+            best_for?: string | null;
+            max_reuse?: number | null;
+            add_to_secondary?: boolean;
+        };
+        CreateMiscInput: {
+            name: string;
+            forked_from_id?: string | null;
+            /** @description Spice, Fining, Water Agent, Herb, Flavor, Other */
+            type_: string;
+            /** @description Boil, Mash, Primary, Secondary, Bottling */
+            use_: string;
+            time_min: number;
+            notes?: string | null;
+            use_for?: string | null;
+            amount_is_weight?: boolean;
+        };
+        UpdateMiscInput: {
+            name?: string;
+            type_?: string;
+            use_?: string;
+            time_min?: number;
+            notes?: string | null;
+            use_for?: string | null;
+            amount_is_weight?: boolean;
+        };
+        CreateWaterInput: {
+            name: string;
+            forked_from_id?: string | null;
+            calcium_ppm: number;
+            bicarbonate_ppm: number;
+            sulfate_ppm: number;
+            chloride_ppm: number;
+            sodium_ppm: number;
+            magnesium_ppm: number;
+            ph?: number | null;
+            notes?: string | null;
+        };
+        UpdateWaterInput: {
+            name?: string;
+            calcium_ppm?: number;
+            bicarbonate_ppm?: number;
+            sulfate_ppm?: number;
+            chloride_ppm?: number;
+            sodium_ppm?: number;
+            magnesium_ppm?: number;
+            ph?: number | null;
             notes?: string | null;
         };
     };
@@ -3281,6 +3715,406 @@ export interface operations {
                     "application/json": components["schemas"]["EquipmentProfile"];
                 };
             };
+        };
+    };
+    createHop: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    input: components["schemas"]["CreateHopInput"];
+                };
+            };
+        };
+        responses: {
+            /** @description Created hop */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Hop"];
+                };
+            };
+            500: components["responses"]["Error"];
+        };
+    };
+    updateHop: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    id: string;
+                    input: components["schemas"]["UpdateHopInput"];
+                };
+            };
+        };
+        responses: {
+            /** @description Updated hop */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Hop"];
+                };
+            };
+            500: components["responses"]["Error"];
+        };
+    };
+    deleteHop: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    id: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Deleted */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            500: components["responses"]["Error"];
+        };
+    };
+    createFermentable: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    input: components["schemas"]["CreateFermentableInput"];
+                };
+            };
+        };
+        responses: {
+            /** @description Created fermentable */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Fermentable"];
+                };
+            };
+            500: components["responses"]["Error"];
+        };
+    };
+    updateFermentable: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    id: string;
+                    input: components["schemas"]["UpdateFermentableInput"];
+                };
+            };
+        };
+        responses: {
+            /** @description Updated fermentable */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Fermentable"];
+                };
+            };
+            500: components["responses"]["Error"];
+        };
+    };
+    deleteFermentable: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    id: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Deleted */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            500: components["responses"]["Error"];
+        };
+    };
+    createYeast: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    input: components["schemas"]["CreateYeastInput"];
+                };
+            };
+        };
+        responses: {
+            /** @description Created yeast */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Yeast"];
+                };
+            };
+            500: components["responses"]["Error"];
+        };
+    };
+    updateYeast: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    id: string;
+                    input: components["schemas"]["UpdateYeastInput"];
+                };
+            };
+        };
+        responses: {
+            /** @description Updated yeast */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Yeast"];
+                };
+            };
+            500: components["responses"]["Error"];
+        };
+    };
+    deleteYeast: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    id: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Deleted */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            500: components["responses"]["Error"];
+        };
+    };
+    createMisc: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    input: components["schemas"]["CreateMiscInput"];
+                };
+            };
+        };
+        responses: {
+            /** @description Created misc ingredient */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Misc"];
+                };
+            };
+            500: components["responses"]["Error"];
+        };
+    };
+    updateMisc: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    id: string;
+                    input: components["schemas"]["UpdateMiscInput"];
+                };
+            };
+        };
+        responses: {
+            /** @description Updated misc ingredient */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Misc"];
+                };
+            };
+            500: components["responses"]["Error"];
+        };
+    };
+    deleteMisc: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    id: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Deleted */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            500: components["responses"]["Error"];
+        };
+    };
+    createWater: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    input: components["schemas"]["CreateWaterInput"];
+                };
+            };
+        };
+        responses: {
+            /** @description Created water profile */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Water"];
+                };
+            };
+            500: components["responses"]["Error"];
+        };
+    };
+    updateWater: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    id: string;
+                    input: components["schemas"]["UpdateWaterInput"];
+                };
+            };
+        };
+        responses: {
+            /** @description Updated water profile */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Water"];
+                };
+            };
+            500: components["responses"]["Error"];
+        };
+    };
+    deleteWater: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    id: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Deleted */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            500: components["responses"]["Error"];
         };
     };
 }

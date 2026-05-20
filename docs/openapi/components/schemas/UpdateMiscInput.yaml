@@ -1,0 +1,20 @@
+type: object
+properties:
+  name:
+    type: string
+  type_:
+    type: string
+  use_:
+    type: string
+  time_min:
+    type: number
+  notes:
+    type:
+      - string
+      - "null"
+  use_for:
+    type:
+      - string
+      - "null"
+  amount_is_weight:
+    type: boolean

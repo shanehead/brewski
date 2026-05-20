@@ -1,16 +1,15 @@
 type: object
 required:
-  - id
   - name
   - type_
   - form
-  - add_to_secondary
-  - source
 properties:
-  id:
-    type: string
   name:
     type: string
+  forked_from_id:
+    type:
+      - string
+      - "null"
   type_:
     type: string
     description: Ale, Lager, Wheat, Wine, Champagne
@@ -37,12 +36,46 @@ properties:
     type:
       - string
       - "null"
-    description: Low, Medium, High, Very High
   attenuation_pct:
     type:
       - number
       - "null"
-    description: BeerXML single attenuation value; see min/max fields for range
+  min_attenuation_pct:
+    type:
+      - number
+      - "null"
+  max_attenuation_pct:
+    type:
+      - number
+      - "null"
+  alcohol_tolerance:
+    type:
+      - string
+      - "null"
+  flavor_profile:
+    type:
+      - string
+      - "null"
+  styles:
+    type:
+      - string
+      - "null"
+  substitutes:
+    type:
+      - string
+      - "null"
+  species:
+    type:
+      - string
+      - "null"
+  pof_positive:
+    type:
+      - boolean
+      - "null"
+  sta1_positive:
+    type:
+      - boolean
+      - "null"
   notes:
     type:
       - string
@@ -57,54 +90,3 @@ properties:
       - "null"
   add_to_secondary:
     type: boolean
-  min_attenuation_pct:
-    type:
-      - number
-      - "null"
-    description: BeerMaverick attenuation range lower bound
-  max_attenuation_pct:
-    type:
-      - number
-      - "null"
-    description: BeerMaverick attenuation range upper bound
-  alcohol_tolerance:
-    type:
-      - string
-      - "null"
-    description: low, medium, high, very_high
-  flavor_profile:
-    type:
-      - string
-      - "null"
-  styles:
-    type:
-      - string
-      - "null"
-    description: Suitable beer styles, comma-separated
-  substitutes:
-    type:
-      - string
-      - "null"
-    description: Substitute yeast strains, comma-separated
-  species:
-    type:
-      - string
-      - "null"
-    description: e.g. Saccharomyces cerevisiae
-  pof_positive:
-    type:
-      - boolean
-      - "null"
-    description: Phenolic Off-Flavor gene present
-  sta1_positive:
-    type:
-      - boolean
-      - "null"
-    description: STA-1 dextrin-fermenting gene present
-  source:
-    type: string
-    description: "'seeded' | 'user'"
-  forked_from_id:
-    type:
-      - string
-      - "null"

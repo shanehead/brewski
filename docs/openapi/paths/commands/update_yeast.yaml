@@ -1,0 +1,28 @@
+post:
+  operationId: updateYeast
+  summary: Update a custom yeast in the ingredient library
+  tags:
+    - Library
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - id
+            - input
+          properties:
+            id:
+              type: string
+            input:
+              $ref: "../../components/schemas/UpdateYeastInput.yaml"
+  responses:
+    "200":
+      description: Updated yeast
+      content:
+        application/json:
+          schema:
+            $ref: "../../components/schemas/Yeast.yaml"
+    "500":
+      $ref: "../../components/responses/Error.yaml"

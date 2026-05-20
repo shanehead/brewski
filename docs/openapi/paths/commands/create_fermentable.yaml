@@ -1,0 +1,25 @@
+post:
+  operationId: createFermentable
+  summary: Create a custom fermentable in the ingredient library
+  tags:
+    - Library
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - input
+          properties:
+            input:
+              $ref: "../../components/schemas/CreateFermentableInput.yaml"
+  responses:
+    "200":
+      description: Created fermentable
+      content:
+        application/json:
+          schema:
+            $ref: "../../components/schemas/Fermentable.yaml"
+    "500":
+      $ref: "../../components/responses/Error.yaml"

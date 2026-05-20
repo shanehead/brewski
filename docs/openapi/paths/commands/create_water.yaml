@@ -1,0 +1,25 @@
+post:
+  operationId: createWater
+  summary: Create a custom water profile in the ingredient library
+  tags:
+    - Library
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - input
+          properties:
+            input:
+              $ref: "../../components/schemas/CreateWaterInput.yaml"
+  responses:
+    "200":
+      description: Created water profile
+      content:
+        application/json:
+          schema:
+            $ref: "../../components/schemas/Water.yaml"
+    "500":
+      $ref: "../../components/responses/Error.yaml"

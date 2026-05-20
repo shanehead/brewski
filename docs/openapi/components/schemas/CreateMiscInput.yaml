@@ -1,17 +1,16 @@
 type: object
 required:
-  - id
   - name
   - type_
   - use_
   - time_min
-  - amount_is_weight
-  - source
 properties:
-  id:
-    type: string
   name:
     type: string
+  forked_from_id:
+    type:
+      - string
+      - "null"
   type_:
     type: string
     description: Spice, Fining, Water Agent, Herb, Flavor, Other
@@ -30,10 +29,3 @@ properties:
       - "null"
   amount_is_weight:
     type: boolean
-  source:
-    type: string
-    description: "'seeded' | 'user'"
-  forked_from_id:
-    type:
-      - string
-      - "null"

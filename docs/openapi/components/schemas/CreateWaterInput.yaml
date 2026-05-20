@@ -1,6 +1,5 @@
 type: object
 required:
-  - id
   - name
   - calcium_ppm
   - bicarbonate_ppm
@@ -8,12 +7,13 @@ required:
   - chloride_ppm
   - sodium_ppm
   - magnesium_ppm
-  - source
 properties:
-  id:
-    type: string
   name:
     type: string
+  forked_from_id:
+    type:
+      - string
+      - "null"
   calcium_ppm:
     type: number
   bicarbonate_ppm:
@@ -31,13 +31,6 @@ properties:
       - number
       - "null"
   notes:
-    type:
-      - string
-      - "null"
-  source:
-    type: string
-    description: "'seeded' | 'user'"
-  forked_from_id:
     type:
       - string
       - "null"
