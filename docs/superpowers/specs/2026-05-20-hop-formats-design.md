@@ -92,9 +92,15 @@ Badge colors:
 - `CO2 Extract` → purple  
 - `Leaf` / `Plug` → neutral gray
 
+## Notes
+
+- `recipe_version_hops` already has a `form` column and stores it at snapshot time, so version history works correctly with no additional changes.
+- `recipe_version_hops` is missing `hopstand_temp_c` (present on `recipe_addition_hops` but not snapshotted) — this is a pre-existing gap, not introduced by this work.
+
 ## Out of Scope
 
 - User-configurable utilization multipliers (hardcoded by design)
 - Pre-isomerized extracts (Iso-extract, Tetra-hop) — requires a completely different IBU contribution path; tiny user base
 - Updating seeded hop library with cryo-specific entries
 - Inventory tracking of hop formats
+- Fixing the missing `hopstand_temp_c` in `recipe_version_hops`
