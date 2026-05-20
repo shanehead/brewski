@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
+  import { onMount, tick } from 'svelte';
   import type { Hop, Fermentable, Yeast, Misc, Water } from '$lib/api';
   import {
     listHopLibrary, deleteHop,
@@ -120,6 +120,14 @@
     await refreshTab(editType);
     editIngredient = null;
   }
+
+  async function handleDuplicate(saved: AnyIngredient) {
+    editModalOpen = false;
+    await refreshTab(editType);
+    await tick();
+    editIngredient = saved;
+    editModalOpen = true;
+  }
 </script>
 
 <div class="flex flex-col flex-1 overflow-hidden" style="background: var(--color-bg-base);">
@@ -214,6 +222,7 @@
     ingredient={editIngredient}
     existingNames={existingNames}
     onsave={handleSave}
+    onduplicate={handleDuplicate}
     oncancel={() => { editModalOpen = false; editIngredient = null; }}
   />
 {/if}

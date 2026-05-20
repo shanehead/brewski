@@ -25,12 +25,14 @@
     ingredient = null,
     existingNames = [],
     onsave,
+    onduplicate = onsave,
     oncancel,
   }: {
     type: IngredientType;
     ingredient?: AnyIngredient | null;
     existingNames?: string[];
     onsave: (saved: AnyIngredient) => void;
+    onduplicate?: (saved: AnyIngredient) => void;
     oncancel: () => void;
   } = $props();
 
@@ -247,6 +249,7 @@
   }
 
   async function handleDuplicate() {
+    // onduplicate is called instead of onsave so the caller can reopen in edit mode
     if (saving || !ingredient) return;
     saving = true;
     let saved: AnyIngredient | null | undefined = null;
@@ -290,7 +293,7 @@
       }));
     }
     saving = false;
-    if (saved) onsave(saved);
+    if (saved) onduplicate(saved);
   }
 </script>
 
