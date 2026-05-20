@@ -222,228 +222,264 @@
 
       {#if type === 'hop'}
         <div class="grid grid-cols-2 gap-3">
-          <div class="col-span-2 flex flex-col gap-1">
-            <label class="text-xs" style="color: var(--color-text-secondary);">Name *</label>
-            <input bind:value={hopName} class="px-2 py-1.5 rounded text-sm"
-                   style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);" />
+          <div class="col-span-2">
+            <label class="flex flex-col gap-1 text-xs" style="color: var(--color-text-secondary);">Name *
+              <input bind:value={hopName} class="px-2 py-1.5 rounded text-sm"
+                     style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);" />
+            </label>
           </div>
-          <div class="flex flex-col gap-1">
-            <label class="text-xs" style="color: var(--color-text-secondary);">Alpha % *</label>
-            <input type="number" step="0.1" min="0" bind:value={hopAlpha} class="px-2 py-1.5 rounded text-sm"
-                   style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);" />
+          <div>
+            <label class="flex flex-col gap-1 text-xs" style="color: var(--color-text-secondary);">Alpha % *
+              <input type="number" step="0.1" min="0" bind:value={hopAlpha} class="px-2 py-1.5 rounded text-sm"
+                     style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);" />
+            </label>
           </div>
-          <div class="flex flex-col gap-1">
-            <label class="text-xs" style="color: var(--color-text-secondary);">Beta %</label>
-            <input type="number" step="0.1" min="0" bind:value={hopBeta} placeholder="—" class="px-2 py-1.5 rounded text-sm"
-                   style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);" />
+          <div>
+            <label class="flex flex-col gap-1 text-xs" style="color: var(--color-text-secondary);">Beta %
+              <input type="number" step="0.1" min="0" bind:value={hopBeta} placeholder="—" class="px-2 py-1.5 rounded text-sm"
+                     style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);" />
+            </label>
           </div>
-          <div class="flex flex-col gap-1">
-            <label class="text-xs" style="color: var(--color-text-secondary);">Form *</label>
-            <select bind:value={hopForm} class="px-2 py-1.5 rounded text-sm"
-                    style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);">
-              <option>Pellet</option><option>Plug</option><option>Leaf</option>
-            </select>
+          <div>
+            <label class="flex flex-col gap-1 text-xs" style="color: var(--color-text-secondary);">Form *
+              <select bind:value={hopForm} class="px-2 py-1.5 rounded text-sm"
+                      style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);">
+                <option>Pellet</option><option>Plug</option><option>Leaf</option>
+              </select>
+            </label>
           </div>
-          <div class="flex flex-col gap-1">
-            <label class="text-xs" style="color: var(--color-text-secondary);">Type</label>
-            <input bind:value={hopType} placeholder="e.g. Bittering" class="px-2 py-1.5 rounded text-sm"
-                   style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);" />
+          <div>
+            <label class="flex flex-col gap-1 text-xs" style="color: var(--color-text-secondary);">Type
+              <input bind:value={hopType} placeholder="e.g. Bittering" class="px-2 py-1.5 rounded text-sm"
+                     style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);" />
+            </label>
           </div>
-          <div class="flex flex-col gap-1">
-            <label class="text-xs" style="color: var(--color-text-secondary);">Origin</label>
-            <input bind:value={hopOrigin} class="px-2 py-1.5 rounded text-sm"
-                   style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);" />
+          <div>
+            <label class="flex flex-col gap-1 text-xs" style="color: var(--color-text-secondary);">Origin
+              <input bind:value={hopOrigin} class="px-2 py-1.5 rounded text-sm"
+                     style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);" />
+            </label>
           </div>
-          <div class="col-span-2 flex flex-col gap-1">
-            <label class="text-xs" style="color: var(--color-text-secondary);">Substitutes</label>
-            <input bind:value={hopSubstitutes} class="px-2 py-1.5 rounded text-sm"
-                   style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);" />
+          <div class="col-span-2">
+            <label class="flex flex-col gap-1 text-xs" style="color: var(--color-text-secondary);">Substitutes
+              <input bind:value={hopSubstitutes} class="px-2 py-1.5 rounded text-sm"
+                     style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);" />
+            </label>
           </div>
-          <div class="col-span-2 flex flex-col gap-1">
-            <label class="text-xs" style="color: var(--color-text-secondary);">Notes</label>
-            <textarea bind:value={hopNotes} rows="3" class="px-2 py-1.5 rounded text-sm resize-none"
-                      style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);"></textarea>
+          <div class="col-span-2">
+            <label class="flex flex-col gap-1 text-xs" style="color: var(--color-text-secondary);">Notes
+              <textarea bind:value={hopNotes} rows="3" class="px-2 py-1.5 rounded text-sm resize-none"
+                        style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);"></textarea>
+            </label>
           </div>
         </div>
 
       {:else if type === 'fermentable'}
         <div class="grid grid-cols-2 gap-3">
-          <div class="col-span-2 flex flex-col gap-1">
-            <label class="text-xs" style="color: var(--color-text-secondary);">Name *</label>
-            <input bind:value={fermName} class="px-2 py-1.5 rounded text-sm"
-                   style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);" />
+          <div class="col-span-2">
+            <label class="flex flex-col gap-1 text-xs" style="color: var(--color-text-secondary);">Name *
+              <input bind:value={fermName} class="px-2 py-1.5 rounded text-sm"
+                     style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);" />
+            </label>
           </div>
-          <div class="flex flex-col gap-1">
-            <label class="text-xs" style="color: var(--color-text-secondary);">Type *</label>
-            <select bind:value={fermType} class="px-2 py-1.5 rounded text-sm"
-                    style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);">
-              <option>Grain</option><option>Sugar</option><option>Extract</option><option>Dry Extract</option><option>Adjunct</option>
-            </select>
+          <div>
+            <label class="flex flex-col gap-1 text-xs" style="color: var(--color-text-secondary);">Type *
+              <select bind:value={fermType} class="px-2 py-1.5 rounded text-sm"
+                      style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);">
+                <option>Grain</option><option>Sugar</option><option>Extract</option><option>Dry Extract</option><option>Adjunct</option>
+              </select>
+            </label>
           </div>
-          <div class="flex flex-col gap-1">
-            <label class="text-xs" style="color: var(--color-text-secondary);">Origin</label>
-            <input bind:value={fermOrigin} class="px-2 py-1.5 rounded text-sm"
-                   style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);" />
+          <div>
+            <label class="flex flex-col gap-1 text-xs" style="color: var(--color-text-secondary);">Origin
+              <input bind:value={fermOrigin} class="px-2 py-1.5 rounded text-sm"
+                     style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);" />
+            </label>
           </div>
-          <div class="flex flex-col gap-1">
-            <label class="text-xs" style="color: var(--color-text-secondary);">Yield % *</label>
-            <input type="number" step="0.1" min="0" max="100" bind:value={fermYield} class="px-2 py-1.5 rounded text-sm"
-                   style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);" />
+          <div>
+            <label class="flex flex-col gap-1 text-xs" style="color: var(--color-text-secondary);">Yield % *
+              <input type="number" step="0.1" min="0" max="100" bind:value={fermYield} class="px-2 py-1.5 rounded text-sm"
+                     style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);" />
+            </label>
           </div>
-          <div class="flex flex-col gap-1">
-            <label class="text-xs" style="color: var(--color-text-secondary);">Color (°L) *</label>
-            <input type="number" step="0.1" min="0" bind:value={fermColor} class="px-2 py-1.5 rounded text-sm"
-                   style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);" />
+          <div>
+            <label class="flex flex-col gap-1 text-xs" style="color: var(--color-text-secondary);">Color (°L) *
+              <input type="number" step="0.1" min="0" bind:value={fermColor} class="px-2 py-1.5 rounded text-sm"
+                     style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);" />
+            </label>
           </div>
           <div class="col-span-2 flex items-center gap-2">
             <input type="checkbox" id="add-after-boil" bind:checked={fermAddAfterBoil} class="rounded" />
             <label for="add-after-boil" class="text-sm" style="color: var(--color-text-primary);">Add after boil</label>
           </div>
-          <div class="col-span-2 flex flex-col gap-1">
-            <label class="text-xs" style="color: var(--color-text-secondary);">Notes</label>
-            <textarea bind:value={fermNotes} rows="3" class="px-2 py-1.5 rounded text-sm resize-none"
-                      style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);"></textarea>
+          <div class="col-span-2">
+            <label class="flex flex-col gap-1 text-xs" style="color: var(--color-text-secondary);">Notes
+              <textarea bind:value={fermNotes} rows="3" class="px-2 py-1.5 rounded text-sm resize-none"
+                        style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);"></textarea>
+            </label>
           </div>
         </div>
 
       {:else if type === 'yeast'}
         <div class="grid grid-cols-2 gap-3">
-          <div class="col-span-2 flex flex-col gap-1">
-            <label class="text-xs" style="color: var(--color-text-secondary);">Name *</label>
-            <input bind:value={yeastName} class="px-2 py-1.5 rounded text-sm"
-                   style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);" />
+          <div class="col-span-2">
+            <label class="flex flex-col gap-1 text-xs" style="color: var(--color-text-secondary);">Name *
+              <input bind:value={yeastName} class="px-2 py-1.5 rounded text-sm"
+                     style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);" />
+            </label>
           </div>
-          <div class="flex flex-col gap-1">
-            <label class="text-xs" style="color: var(--color-text-secondary);">Type *</label>
-            <select bind:value={yeastType} class="px-2 py-1.5 rounded text-sm"
-                    style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);">
-              <option>Ale</option><option>Lager</option><option>Wheat</option><option>Wine</option><option>Champagne</option>
-            </select>
+          <div>
+            <label class="flex flex-col gap-1 text-xs" style="color: var(--color-text-secondary);">Type *
+              <select bind:value={yeastType} class="px-2 py-1.5 rounded text-sm"
+                      style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);">
+                <option>Ale</option><option>Lager</option><option>Wheat</option><option>Wine</option><option>Champagne</option>
+              </select>
+            </label>
           </div>
-          <div class="flex flex-col gap-1">
-            <label class="text-xs" style="color: var(--color-text-secondary);">Form *</label>
-            <select bind:value={yeastForm} class="px-2 py-1.5 rounded text-sm"
-                    style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);">
-              <option>Liquid</option><option>Dry</option><option>Slant</option><option>Culture</option>
-            </select>
+          <div>
+            <label class="flex flex-col gap-1 text-xs" style="color: var(--color-text-secondary);">Form *
+              <select bind:value={yeastForm} class="px-2 py-1.5 rounded text-sm"
+                      style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);">
+                <option>Liquid</option><option>Dry</option><option>Slant</option><option>Culture</option>
+              </select>
+            </label>
           </div>
-          <div class="flex flex-col gap-1">
-            <label class="text-xs" style="color: var(--color-text-secondary);">Laboratory</label>
-            <input bind:value={yeastLab} class="px-2 py-1.5 rounded text-sm"
-                   style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);" />
+          <div>
+            <label class="flex flex-col gap-1 text-xs" style="color: var(--color-text-secondary);">Laboratory
+              <input bind:value={yeastLab} class="px-2 py-1.5 rounded text-sm"
+                     style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);" />
+            </label>
           </div>
-          <div class="flex flex-col gap-1">
-            <label class="text-xs" style="color: var(--color-text-secondary);">Product ID</label>
-            <input bind:value={yeastProductId} class="px-2 py-1.5 rounded text-sm"
-                   style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);" />
+          <div>
+            <label class="flex flex-col gap-1 text-xs" style="color: var(--color-text-secondary);">Product ID
+              <input bind:value={yeastProductId} class="px-2 py-1.5 rounded text-sm"
+                     style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);" />
+            </label>
           </div>
-          <div class="flex flex-col gap-1">
-            <label class="text-xs" style="color: var(--color-text-secondary);">Attenuation %</label>
-            <input type="number" step="1" min="0" max="100" bind:value={yeastAttenuation} placeholder="—" class="px-2 py-1.5 rounded text-sm"
-                   style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);" />
+          <div>
+            <label class="flex flex-col gap-1 text-xs" style="color: var(--color-text-secondary);">Attenuation %
+              <input type="number" step="1" min="0" max="100" bind:value={yeastAttenuation} placeholder="—" class="px-2 py-1.5 rounded text-sm"
+                     style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);" />
+            </label>
           </div>
-          <div class="flex flex-col gap-1">
-            <label class="text-xs" style="color: var(--color-text-secondary);">Flocculation</label>
-            <select bind:value={yeastFlocculation} class="px-2 py-1.5 rounded text-sm"
-                    style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);">
-              <option value="">—</option><option>Low</option><option>Medium</option><option>High</option><option>Very High</option>
-            </select>
+          <div>
+            <label class="flex flex-col gap-1 text-xs" style="color: var(--color-text-secondary);">Flocculation
+              <select bind:value={yeastFlocculation} class="px-2 py-1.5 rounded text-sm"
+                      style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);">
+                <option value="">—</option><option>Low</option><option>Medium</option><option>High</option><option>Very High</option>
+              </select>
+            </label>
           </div>
           <div class="col-span-2 flex items-center gap-2">
             <input type="checkbox" id="add-to-secondary" bind:checked={yeastAddToSecondary} class="rounded" />
             <label for="add-to-secondary" class="text-sm" style="color: var(--color-text-primary);">Add to secondary</label>
           </div>
-          <div class="col-span-2 flex flex-col gap-1">
-            <label class="text-xs" style="color: var(--color-text-secondary);">Notes</label>
-            <textarea bind:value={yeastNotes} rows="3" class="px-2 py-1.5 rounded text-sm resize-none"
-                      style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);"></textarea>
+          <div class="col-span-2">
+            <label class="flex flex-col gap-1 text-xs" style="color: var(--color-text-secondary);">Notes
+              <textarea bind:value={yeastNotes} rows="3" class="px-2 py-1.5 rounded text-sm resize-none"
+                        style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);"></textarea>
+            </label>
           </div>
         </div>
 
       {:else if type === 'misc'}
         <div class="grid grid-cols-2 gap-3">
-          <div class="col-span-2 flex flex-col gap-1">
-            <label class="text-xs" style="color: var(--color-text-secondary);">Name *</label>
-            <input bind:value={miscName} class="px-2 py-1.5 rounded text-sm"
-                   style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);" />
+          <div class="col-span-2">
+            <label class="flex flex-col gap-1 text-xs" style="color: var(--color-text-secondary);">Name *
+              <input bind:value={miscName} class="px-2 py-1.5 rounded text-sm"
+                     style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);" />
+            </label>
           </div>
-          <div class="flex flex-col gap-1">
-            <label class="text-xs" style="color: var(--color-text-secondary);">Type *</label>
-            <select bind:value={miscType} class="px-2 py-1.5 rounded text-sm"
-                    style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);">
-              <option>Spice</option><option>Fining</option><option>Water Agent</option><option>Herb</option><option>Flavor</option><option>Other</option>
-            </select>
+          <div>
+            <label class="flex flex-col gap-1 text-xs" style="color: var(--color-text-secondary);">Type *
+              <select bind:value={miscType} class="px-2 py-1.5 rounded text-sm"
+                      style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);">
+                <option>Spice</option><option>Fining</option><option>Water Agent</option><option>Herb</option><option>Flavor</option><option>Other</option>
+              </select>
+            </label>
           </div>
-          <div class="flex flex-col gap-1">
-            <label class="text-xs" style="color: var(--color-text-secondary);">Default Use *</label>
-            <select bind:value={miscUse} class="px-2 py-1.5 rounded text-sm"
-                    style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);">
-              <option>Boil</option><option>Mash</option><option>Primary</option><option>Secondary</option><option>Bottling</option>
-            </select>
+          <div>
+            <label class="flex flex-col gap-1 text-xs" style="color: var(--color-text-secondary);">Default Use *
+              <select bind:value={miscUse} class="px-2 py-1.5 rounded text-sm"
+                      style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);">
+                <option>Boil</option><option>Mash</option><option>Primary</option><option>Secondary</option><option>Bottling</option>
+              </select>
+            </label>
           </div>
-          <div class="flex flex-col gap-1">
-            <label class="text-xs" style="color: var(--color-text-secondary);">Default Time (min) *</label>
-            <input type="number" step="1" min="0" bind:value={miscTime} class="px-2 py-1.5 rounded text-sm"
-                   style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);" />
+          <div>
+            <label class="flex flex-col gap-1 text-xs" style="color: var(--color-text-secondary);">Default Time (min) *
+              <input type="number" step="1" min="0" bind:value={miscTime} class="px-2 py-1.5 rounded text-sm"
+                     style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);" />
+            </label>
           </div>
           <div class="col-span-2 flex items-center gap-2">
             <input type="checkbox" id="amount-is-weight" bind:checked={miscAmountIsWeight} class="rounded" />
             <label for="amount-is-weight" class="text-sm" style="color: var(--color-text-primary);">Amount is weight (vs. volume)</label>
           </div>
-          <div class="col-span-2 flex flex-col gap-1">
-            <label class="text-xs" style="color: var(--color-text-secondary);">Use For</label>
-            <input bind:value={miscUseFor} class="px-2 py-1.5 rounded text-sm"
-                   style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);" />
+          <div class="col-span-2">
+            <label class="flex flex-col gap-1 text-xs" style="color: var(--color-text-secondary);">Use For
+              <input bind:value={miscUseFor} class="px-2 py-1.5 rounded text-sm"
+                     style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);" />
+            </label>
           </div>
-          <div class="col-span-2 flex flex-col gap-1">
-            <label class="text-xs" style="color: var(--color-text-secondary);">Notes</label>
-            <textarea bind:value={miscNotes} rows="3" class="px-2 py-1.5 rounded text-sm resize-none"
-                      style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);"></textarea>
+          <div class="col-span-2">
+            <label class="flex flex-col gap-1 text-xs" style="color: var(--color-text-secondary);">Notes
+              <textarea bind:value={miscNotes} rows="3" class="px-2 py-1.5 rounded text-sm resize-none"
+                        style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);"></textarea>
+            </label>
           </div>
         </div>
 
       {:else}
         <!-- Water -->
         <div class="grid grid-cols-2 gap-3">
-          <div class="col-span-2 flex flex-col gap-1">
-            <label class="text-xs" style="color: var(--color-text-secondary);">Name *</label>
-            <input bind:value={waterName} class="px-2 py-1.5 rounded text-sm"
-                   style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);" />
+          <div class="col-span-2">
+            <label class="flex flex-col gap-1 text-xs" style="color: var(--color-text-secondary);">Name *
+              <input bind:value={waterName} class="px-2 py-1.5 rounded text-sm"
+                     style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);" />
+            </label>
           </div>
-          <div class="flex flex-col gap-1">
-            <label class="text-xs" style="color: var(--color-text-secondary);">Calcium (ppm) *</label>
-            <input type="number" step="1" min="0" bind:value={waterCa} class="px-2 py-1.5 rounded text-sm"
-                   style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);" />
+          <div>
+            <label class="flex flex-col gap-1 text-xs" style="color: var(--color-text-secondary);">Calcium (ppm) *
+              <input type="number" step="1" min="0" bind:value={waterCa} class="px-2 py-1.5 rounded text-sm"
+                     style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);" />
+            </label>
           </div>
-          <div class="flex flex-col gap-1">
-            <label class="text-xs" style="color: var(--color-text-secondary);">Bicarbonate (ppm) *</label>
-            <input type="number" step="1" min="0" bind:value={waterBicarb} class="px-2 py-1.5 rounded text-sm"
-                   style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);" />
+          <div>
+            <label class="flex flex-col gap-1 text-xs" style="color: var(--color-text-secondary);">Bicarbonate (ppm) *
+              <input type="number" step="1" min="0" bind:value={waterBicarb} class="px-2 py-1.5 rounded text-sm"
+                     style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);" />
+            </label>
           </div>
-          <div class="flex flex-col gap-1">
-            <label class="text-xs" style="color: var(--color-text-secondary);">Sulfate (ppm) *</label>
-            <input type="number" step="1" min="0" bind:value={waterSulfate} class="px-2 py-1.5 rounded text-sm"
-                   style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);" />
+          <div>
+            <label class="flex flex-col gap-1 text-xs" style="color: var(--color-text-secondary);">Sulfate (ppm) *
+              <input type="number" step="1" min="0" bind:value={waterSulfate} class="px-2 py-1.5 rounded text-sm"
+                     style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);" />
+            </label>
           </div>
-          <div class="flex flex-col gap-1">
-            <label class="text-xs" style="color: var(--color-text-secondary);">Chloride (ppm) *</label>
-            <input type="number" step="1" min="0" bind:value={waterChloride} class="px-2 py-1.5 rounded text-sm"
-                   style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);" />
+          <div>
+            <label class="flex flex-col gap-1 text-xs" style="color: var(--color-text-secondary);">Chloride (ppm) *
+              <input type="number" step="1" min="0" bind:value={waterChloride} class="px-2 py-1.5 rounded text-sm"
+                     style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);" />
+            </label>
           </div>
-          <div class="flex flex-col gap-1">
-            <label class="text-xs" style="color: var(--color-text-secondary);">Sodium (ppm) *</label>
-            <input type="number" step="1" min="0" bind:value={waterSodium} class="px-2 py-1.5 rounded text-sm"
-                   style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);" />
+          <div>
+            <label class="flex flex-col gap-1 text-xs" style="color: var(--color-text-secondary);">Sodium (ppm) *
+              <input type="number" step="1" min="0" bind:value={waterSodium} class="px-2 py-1.5 rounded text-sm"
+                     style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);" />
+            </label>
           </div>
-          <div class="flex flex-col gap-1">
-            <label class="text-xs" style="color: var(--color-text-secondary);">Magnesium (ppm) *</label>
-            <input type="number" step="1" min="0" bind:value={waterMg} class="px-2 py-1.5 rounded text-sm"
-                   style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);" />
+          <div>
+            <label class="flex flex-col gap-1 text-xs" style="color: var(--color-text-secondary);">Magnesium (ppm) *
+              <input type="number" step="1" min="0" bind:value={waterMg} class="px-2 py-1.5 rounded text-sm"
+                     style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);" />
+            </label>
           </div>
-          <div class="col-span-2 flex flex-col gap-1">
-            <label class="text-xs" style="color: var(--color-text-secondary);">Notes</label>
-            <textarea bind:value={waterNotes} rows="2" class="px-2 py-1.5 rounded text-sm resize-none"
-                      style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);"></textarea>
+          <div class="col-span-2">
+            <label class="flex flex-col gap-1 text-xs" style="color: var(--color-text-secondary);">Notes
+              <textarea bind:value={waterNotes} rows="2" class="px-2 py-1.5 rounded text-sm resize-none"
+                        style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);"></textarea>
+            </label>
           </div>
         </div>
       {/if}
