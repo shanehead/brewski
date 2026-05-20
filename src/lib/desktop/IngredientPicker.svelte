@@ -343,6 +343,7 @@
             {/if}
             <div style="display: flex; gap: 8px; align-items: center;">
               <input bind:value={forkName}
+                     aria-label="Custom ingredient name"
                      style="flex: 1; background: var(--color-bg-elevated); border: 1px solid var(--color-border); border-radius: 5px; padding: 5px 8px; color: var(--color-text-primary); font-size: 13px;" />
               <button onclick={() => { forkMode = false; }} style="background: var(--color-bg-elevated); border: 1px solid var(--color-border); border-radius: 6px; padding: 6px 12px; font-size: 13px; color: var(--color-text-secondary); cursor: pointer;">Cancel</button>
               <button onclick={saveFork} disabled={forkSaving || forkNameCollision || !forkName.trim()}
@@ -439,6 +440,7 @@
             {/if}
             <div style="display: flex; gap: 8px; align-items: center;">
               <input bind:value={forkName}
+                     aria-label="Custom ingredient name"
                      style="flex: 1; background: var(--color-bg-elevated); border: 1px solid var(--color-border); border-radius: 5px; padding: 5px 8px; color: var(--color-text-primary); font-size: 13px;" />
               <button onclick={() => { forkMode = false; }} style="background: var(--color-bg-elevated); border: 1px solid var(--color-border); border-radius: 6px; padding: 6px 12px; font-size: 13px; color: var(--color-text-secondary); cursor: pointer;">Cancel</button>
               <button onclick={saveFork} disabled={forkSaving || forkNameCollision || !forkName.trim()}
@@ -549,6 +551,7 @@
             {/if}
             <div style="display: flex; gap: 8px; align-items: center;">
               <input bind:value={forkName}
+                     aria-label="Custom ingredient name"
                      style="flex: 1; background: var(--color-bg-elevated); border: 1px solid var(--color-border); border-radius: 5px; padding: 5px 8px; color: var(--color-text-primary); font-size: 13px;" />
               <button onclick={() => { forkMode = false; }} style="background: var(--color-bg-elevated); border: 1px solid var(--color-border); border-radius: 6px; padding: 6px 12px; font-size: 13px; color: var(--color-text-secondary); cursor: pointer;">Cancel</button>
               <button onclick={saveFork} disabled={forkSaving || forkNameCollision || !forkName.trim()}
