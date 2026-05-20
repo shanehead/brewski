@@ -2,6 +2,7 @@ pub mod additions;
 pub mod batches;
 pub mod equipment;
 pub mod import_export;
+pub mod ingredients;
 pub mod library;
 pub mod mash;
 pub mod recipes;

@@ -118,6 +118,21 @@ pub fn run() {
             commands::sync::detect_sync_folders,
             commands::sync::move_database,
             commands::sync::get_db_path,
+            commands::ingredients::create_hop,
+            commands::ingredients::update_hop,
+            commands::ingredients::delete_hop,
+            commands::ingredients::create_fermentable,
+            commands::ingredients::update_fermentable,
+            commands::ingredients::delete_fermentable,
+            commands::ingredients::create_yeast,
+            commands::ingredients::update_yeast,
+            commands::ingredients::delete_yeast,
+            commands::ingredients::create_misc,
+            commands::ingredients::update_misc,
+            commands::ingredients::delete_misc,
+            commands::ingredients::create_water,
+            commands::ingredients::update_water,
+            commands::ingredients::delete_water,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
