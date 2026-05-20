@@ -124,6 +124,7 @@ pub fn calculate_stats(recipe: &Recipe) -> RecipeStats {
             amount_kg: &h.amount_kg,
             time_min: &h.time_min,
             use_type: &h.use_,
+            form: &h.form,
             hopstand_temp_c: h.hopstand_temp_c.unwrap_or(hopstand_default),
             whirlpool_time_min: whirlpool_time,
             aroma_utilization_override: aroma_hop_utilization_override,
