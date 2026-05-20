@@ -258,7 +258,7 @@
             Amount ({weightLabel(units)})
             <input type="number" inputmode="decimal" step="0.1" min="0"
                    value={units === 'imperial' ? kgToLb(amount).toFixed(2) : amount.toFixed(2)}
-                   onblur={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); if (!isNaN(v)) amount = units === 'imperial' ? v * 0.453592 : v; }}
+                   onblur={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); if (!isNaN(v)) amount = units === 'imperial' ? lbToKg(v) : v; }}
                    class="px-3 py-2 rounded-lg text-sm"
                    style="background: var(--color-bg-elevated); border: 1px solid var(--color-border); color: var(--color-text-primary); max-width: 150px;" />
           </label>

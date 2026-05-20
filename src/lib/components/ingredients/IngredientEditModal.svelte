@@ -14,6 +14,7 @@
     createMisc, updateMisc,
     createWater, updateWater,
   } from '$lib/api';
+  import { untrack } from 'svelte';
   import { ipc } from '$lib/stores/error';
 
   type IngredientType = 'hop' | 'fermentable' | 'yeast' | 'misc' | 'water';
@@ -40,54 +41,105 @@
       : `New ${type.charAt(0).toUpperCase() + type.slice(1)}`
   );
 
+  // Snapshot all initial values once (component is always remounted fresh via {#if editModalOpen})
+  const _init = untrack(() => {
+    const hop = ingredient as Hop;
+    const ferm = ingredient as Fermentable;
+    const yeast = ingredient as Yeast;
+    const misc = ingredient as Misc;
+    const water = ingredient as Water;
+    const e = ingredient !== null;
+    return {
+      hopName: e && type === 'hop' ? hop.name : '',
+      hopAlpha: e && type === 'hop' ? hop.alpha_pct : 0,
+      hopBeta: e && type === 'hop' ? (hop.beta_pct ?? '') : '',
+      hopForm: e && type === 'hop' ? hop.form : 'Pellet',
+      hopType: e && type === 'hop' ? (hop.type_ ?? '') : '',
+      hopOrigin: e && type === 'hop' ? (hop.origin ?? '') : '',
+      hopNotes: e && type === 'hop' ? (hop.notes ?? '') : '',
+      hopSubstitutes: e && type === 'hop' ? (hop.substitutes ?? '') : '',
+      fermName: e && type === 'fermentable' ? ferm.name : '',
+      fermType: e && type === 'fermentable' ? ferm.type_ : 'Grain',
+      fermYield: e && type === 'fermentable' ? ferm.yield_pct : 75,
+      fermColor: e && type === 'fermentable' ? ferm.color_lovibond : 2,
+      fermOrigin: e && type === 'fermentable' ? (ferm.origin ?? '') : '',
+      fermNotes: e && type === 'fermentable' ? (ferm.notes ?? '') : '',
+      fermAddAfterBoil: e && type === 'fermentable' ? ferm.add_after_boil : false,
+      yeastName: e && type === 'yeast' ? yeast.name : '',
+      yeastType: e && type === 'yeast' ? yeast.type_ : 'Ale',
+      yeastForm: e && type === 'yeast' ? yeast.form : 'Dry',
+      yeastLab: e && type === 'yeast' ? (yeast.laboratory ?? '') : '',
+      yeastProductId: e && type === 'yeast' ? (yeast.product_id ?? '') : '',
+      yeastAttenuation: e && type === 'yeast' ? (yeast.attenuation_pct ?? '') : '',
+      yeastFlocculation: e && type === 'yeast' ? (yeast.flocculation ?? '') : '',
+      yeastNotes: e && type === 'yeast' ? (yeast.notes ?? '') : '',
+      yeastAddToSecondary: e && type === 'yeast' ? yeast.add_to_secondary : false,
+      miscName: e && type === 'misc' ? misc.name : '',
+      miscType: e && type === 'misc' ? misc.type_ : 'Spice',
+      miscUse: e && type === 'misc' ? misc.use_ : 'Boil',
+      miscTime: e && type === 'misc' ? misc.time_min : 15,
+      miscAmountIsWeight: e && type === 'misc' ? misc.amount_is_weight : true,
+      miscNotes: e && type === 'misc' ? (misc.notes ?? '') : '',
+      miscUseFor: e && type === 'misc' ? (misc.use_for ?? '') : '',
+      waterName: e && type === 'water' ? water.name : '',
+      waterCa: e && type === 'water' ? water.calcium_ppm : 0,
+      waterBicarb: e && type === 'water' ? water.bicarbonate_ppm : 0,
+      waterSulfate: e && type === 'water' ? water.sulfate_ppm : 0,
+      waterChloride: e && type === 'water' ? water.chloride_ppm : 0,
+      waterSodium: e && type === 'water' ? water.sodium_ppm : 0,
+      waterMg: e && type === 'water' ? water.magnesium_ppm : 0,
+      waterNotes: e && type === 'water' ? (water.notes ?? '') : '',
+    };
+  });
+
   // --- Hop fields ---
-  let hopName = $state(isEdit && type === 'hop' ? (ingredient as Hop).name : '');
-  let hopAlpha = $state(isEdit && type === 'hop' ? (ingredient as Hop).alpha_pct : 0);
-  let hopBeta = $state(isEdit && type === 'hop' ? ((ingredient as Hop).beta_pct ?? '') : '');
-  let hopForm = $state(isEdit && type === 'hop' ? (ingredient as Hop).form : 'Pellet');
-  let hopType = $state(isEdit && type === 'hop' ? ((ingredient as Hop).type_ ?? '') : '');
-  let hopOrigin = $state(isEdit && type === 'hop' ? ((ingredient as Hop).origin ?? '') : '');
-  let hopNotes = $state(isEdit && type === 'hop' ? ((ingredient as Hop).notes ?? '') : '');
-  let hopSubstitutes = $state(isEdit && type === 'hop' ? ((ingredient as Hop).substitutes ?? '') : '');
+  let hopName = $state(_init.hopName);
+  let hopAlpha = $state(_init.hopAlpha);
+  let hopBeta = $state(_init.hopBeta);
+  let hopForm = $state(_init.hopForm);
+  let hopType = $state(_init.hopType);
+  let hopOrigin = $state(_init.hopOrigin);
+  let hopNotes = $state(_init.hopNotes);
+  let hopSubstitutes = $state(_init.hopSubstitutes);
 
   // --- Fermentable fields ---
-  let fermName = $state(isEdit && type === 'fermentable' ? (ingredient as Fermentable).name : '');
-  let fermType = $state(isEdit && type === 'fermentable' ? (ingredient as Fermentable).type_ : 'Grain');
-  let fermYield = $state(isEdit && type === 'fermentable' ? (ingredient as Fermentable).yield_pct : 75);
-  let fermColor = $state(isEdit && type === 'fermentable' ? (ingredient as Fermentable).color_lovibond : 2);
-  let fermOrigin = $state(isEdit && type === 'fermentable' ? ((ingredient as Fermentable).origin ?? '') : '');
-  let fermNotes = $state(isEdit && type === 'fermentable' ? ((ingredient as Fermentable).notes ?? '') : '');
-  let fermAddAfterBoil = $state(isEdit && type === 'fermentable' ? (ingredient as Fermentable).add_after_boil : false);
+  let fermName = $state(_init.fermName);
+  let fermType = $state(_init.fermType);
+  let fermYield = $state(_init.fermYield);
+  let fermColor = $state(_init.fermColor);
+  let fermOrigin = $state(_init.fermOrigin);
+  let fermNotes = $state(_init.fermNotes);
+  let fermAddAfterBoil = $state(_init.fermAddAfterBoil);
 
   // --- Yeast fields ---
-  let yeastName = $state(isEdit && type === 'yeast' ? (ingredient as Yeast).name : '');
-  let yeastType = $state(isEdit && type === 'yeast' ? (ingredient as Yeast).type_ : 'Ale');
-  let yeastForm = $state(isEdit && type === 'yeast' ? (ingredient as Yeast).form : 'Dry');
-  let yeastLab = $state(isEdit && type === 'yeast' ? ((ingredient as Yeast).laboratory ?? '') : '');
-  let yeastProductId = $state(isEdit && type === 'yeast' ? ((ingredient as Yeast).product_id ?? '') : '');
-  let yeastAttenuation = $state(isEdit && type === 'yeast' ? ((ingredient as Yeast).attenuation_pct ?? '') : '');
-  let yeastFlocculation = $state(isEdit && type === 'yeast' ? ((ingredient as Yeast).flocculation ?? '') : '');
-  let yeastNotes = $state(isEdit && type === 'yeast' ? ((ingredient as Yeast).notes ?? '') : '');
-  let yeastAddToSecondary = $state(isEdit && type === 'yeast' ? (ingredient as Yeast).add_to_secondary : false);
+  let yeastName = $state(_init.yeastName);
+  let yeastType = $state(_init.yeastType);
+  let yeastForm = $state(_init.yeastForm);
+  let yeastLab = $state(_init.yeastLab);
+  let yeastProductId = $state(_init.yeastProductId);
+  let yeastAttenuation = $state(_init.yeastAttenuation);
+  let yeastFlocculation = $state(_init.yeastFlocculation);
+  let yeastNotes = $state(_init.yeastNotes);
+  let yeastAddToSecondary = $state(_init.yeastAddToSecondary);
 
   // --- Misc fields ---
-  let miscName = $state(isEdit && type === 'misc' ? (ingredient as Misc).name : '');
-  let miscType = $state(isEdit && type === 'misc' ? (ingredient as Misc).type_ : 'Spice');
-  let miscUse = $state(isEdit && type === 'misc' ? (ingredient as Misc).use_ : 'Boil');
-  let miscTime = $state(isEdit && type === 'misc' ? (ingredient as Misc).time_min : 15);
-  let miscAmountIsWeight = $state(isEdit && type === 'misc' ? (ingredient as Misc).amount_is_weight : true);
-  let miscNotes = $state(isEdit && type === 'misc' ? ((ingredient as Misc).notes ?? '') : '');
-  let miscUseFor = $state(isEdit && type === 'misc' ? ((ingredient as Misc).use_for ?? '') : '');
+  let miscName = $state(_init.miscName);
+  let miscType = $state(_init.miscType);
+  let miscUse = $state(_init.miscUse);
+  let miscTime = $state(_init.miscTime);
+  let miscAmountIsWeight = $state(_init.miscAmountIsWeight);
+  let miscNotes = $state(_init.miscNotes);
+  let miscUseFor = $state(_init.miscUseFor);
 
   // --- Water fields ---
-  let waterName = $state(isEdit && type === 'water' ? (ingredient as Water).name : '');
-  let waterCa = $state(isEdit && type === 'water' ? (ingredient as Water).calcium_ppm : 0);
-  let waterBicarb = $state(isEdit && type === 'water' ? (ingredient as Water).bicarbonate_ppm : 0);
-  let waterSulfate = $state(isEdit && type === 'water' ? (ingredient as Water).sulfate_ppm : 0);
-  let waterChloride = $state(isEdit && type === 'water' ? (ingredient as Water).chloride_ppm : 0);
-  let waterSodium = $state(isEdit && type === 'water' ? (ingredient as Water).sodium_ppm : 0);
-  let waterMg = $state(isEdit && type === 'water' ? (ingredient as Water).magnesium_ppm : 0);
-  let waterNotes = $state(isEdit && type === 'water' ? ((ingredient as Water).notes ?? '') : '');
+  let waterName = $state(_init.waterName);
+  let waterCa = $state(_init.waterCa);
+  let waterBicarb = $state(_init.waterBicarb);
+  let waterSulfate = $state(_init.waterSulfate);
+  let waterChloride = $state(_init.waterChloride);
+  let waterSodium = $state(_init.waterSodium);
+  let waterMg = $state(_init.waterMg);
+  let waterNotes = $state(_init.waterNotes);
 
   let saving = $state(false);
 
