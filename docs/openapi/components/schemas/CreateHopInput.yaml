@@ -18,6 +18,7 @@ properties:
       - "null"
   form:
     type: string
+    description: Pellet, Plug, Leaf
   type_:
     type:
       - string

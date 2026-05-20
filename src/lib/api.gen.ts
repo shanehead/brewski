@@ -2007,6 +2007,7 @@ export interface components {
             forked_from_id?: string | null;
             alpha_pct: number;
             beta_pct?: number | null;
+            /** @description Pellet, Plug, Leaf */
             form: string;
             type_?: string | null;
             origin?: string | null;
@@ -2045,7 +2046,7 @@ export interface components {
             origin?: string | null;
             supplier?: string | null;
             notes?: string | null;
-            add_after_boil?: boolean;
+            add_after_boil: boolean;
             coarse_fine_diff_pct?: number | null;
             moisture_pct?: number | null;
             diastatic_power_lintner?: number | null;
@@ -2096,7 +2097,7 @@ export interface components {
             notes?: string | null;
             best_for?: string | null;
             max_reuse?: number | null;
-            add_to_secondary?: boolean;
+            add_to_secondary: boolean;
         };
         UpdateYeastInput: {
             name?: string;
@@ -2132,7 +2133,7 @@ export interface components {
             time_min: number;
             notes?: string | null;
             use_for?: string | null;
-            amount_is_weight?: boolean;
+            amount_is_weight: boolean;
         };
         UpdateMiscInput: {
             name?: string;

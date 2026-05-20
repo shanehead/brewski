@@ -4,6 +4,7 @@ required:
   - type_
   - use_
   - time_min
+  - amount_is_weight
 properties:
   name:
     type: string

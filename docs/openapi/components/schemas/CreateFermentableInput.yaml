@@ -4,6 +4,7 @@ required:
   - type_
   - yield_pct
   - color_lovibond
+  - add_after_boil
 properties:
   name:
     type: string

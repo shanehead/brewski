@@ -604,6 +604,7 @@ impl CreateFermentableAdditionInput {
 #[doc = "{"]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"required\": ["]
+#[doc = "    \"add_after_boil\","]
 #[doc = "    \"color_lovibond\","]
 #[doc = "    \"name\","]
 #[doc = "    \"type_\","]
@@ -698,8 +699,7 @@ impl CreateFermentableAdditionInput {
 #[doc = r" </details>"]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
 pub struct CreateFermentableInput {
-    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub add_after_boil: ::std::option::Option<bool>,
+    pub add_after_boil: bool,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub coarse_fine_diff_pct: ::std::option::Option<f64>,
     pub color_lovibond: f64,
@@ -886,6 +886,7 @@ impl CreateHopAdditionInput {
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"form\": {"]
+#[doc = "      \"description\": \"Pellet, Plug, Leaf\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"hsi_pct\": {"]
@@ -954,6 +955,7 @@ pub struct CreateHopInput {
     pub cohumulone_pct: ::std::option::Option<f64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub forked_from_id: ::std::option::Option<::std::string::String>,
+    #[doc = "Pellet, Plug, Leaf"]
     pub form: ::std::string::String,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub hsi_pct: ::std::option::Option<f64>,
@@ -1100,6 +1102,7 @@ impl CreateMiscAdditionInput {
 #[doc = "{"]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"required\": ["]
+#[doc = "    \"amount_is_weight\","]
 #[doc = "    \"name\","]
 #[doc = "    \"time_min\","]
 #[doc = "    \"type_\","]
@@ -1147,8 +1150,7 @@ impl CreateMiscAdditionInput {
 #[doc = r" </details>"]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
 pub struct CreateMiscInput {
-    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub amount_is_weight: ::std::option::Option<bool>,
+    pub amount_is_weight: bool,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub forked_from_id: ::std::option::Option<::std::string::String>,
     pub name: ::std::string::String,
@@ -1703,6 +1705,7 @@ impl CreateYeastAdditionInput {
 #[doc = "{"]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"required\": ["]
+#[doc = "    \"add_to_secondary\","]
 #[doc = "    \"form\","]
 #[doc = "    \"name\","]
 #[doc = "    \"type_\""]
@@ -1842,8 +1845,7 @@ impl CreateYeastAdditionInput {
 #[doc = r" </details>"]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
 pub struct CreateYeastInput {
-    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub add_to_secondary: ::std::option::Option<bool>,
+    pub add_to_secondary: bool,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub alcohol_tolerance: ::std::option::Option<::std::string::String>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -7686,7 +7688,7 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct CreateFermentableInput {
-        add_after_boil: ::std::result::Result<::std::option::Option<bool>, ::std::string::String>,
+        add_after_boil: ::std::result::Result<bool, ::std::string::String>,
         coarse_fine_diff_pct:
             ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         color_lovibond: ::std::result::Result<f64, ::std::string::String>,
@@ -7720,7 +7722,7 @@ pub mod builder {
     impl ::std::default::Default for CreateFermentableInput {
         fn default() -> Self {
             Self {
-                add_after_boil: Ok(Default::default()),
+                add_after_boil: Err("no value supplied for add_after_boil".to_string()),
                 coarse_fine_diff_pct: Ok(Default::default()),
                 color_lovibond: Err("no value supplied for color_lovibond".to_string()),
                 diastatic_power_lintner: Ok(Default::default()),
@@ -7742,7 +7744,7 @@ pub mod builder {
     impl CreateFermentableInput {
         pub fn add_after_boil<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<::std::option::Option<bool>>,
+            T: ::std::convert::TryInto<bool>,
             T::Error: ::std::fmt::Display,
         {
             self.add_after_boil = value
@@ -8687,7 +8689,7 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct CreateMiscInput {
-        amount_is_weight: ::std::result::Result<::std::option::Option<bool>, ::std::string::String>,
+        amount_is_weight: ::std::result::Result<bool, ::std::string::String>,
         forked_from_id: ::std::result::Result<
             ::std::option::Option<::std::string::String>,
             ::std::string::String,
@@ -8708,7 +8710,7 @@ pub mod builder {
     impl ::std::default::Default for CreateMiscInput {
         fn default() -> Self {
             Self {
-                amount_is_weight: Ok(Default::default()),
+                amount_is_weight: Err("no value supplied for amount_is_weight".to_string()),
                 forked_from_id: Ok(Default::default()),
                 name: Err("no value supplied for name".to_string()),
                 notes: Ok(Default::default()),
@@ -8722,7 +8724,7 @@ pub mod builder {
     impl CreateMiscInput {
         pub fn amount_is_weight<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<::std::option::Option<bool>>,
+            T: ::std::convert::TryInto<bool>,
             T::Error: ::std::fmt::Display,
         {
             self.amount_is_weight = value
@@ -9500,7 +9502,7 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct CreateYeastInput {
-        add_to_secondary: ::std::result::Result<::std::option::Option<bool>, ::std::string::String>,
+        add_to_secondary: ::std::result::Result<bool, ::std::string::String>,
         alcohol_tolerance: ::std::result::Result<
             ::std::option::Option<::std::string::String>,
             ::std::string::String,
@@ -9562,7 +9564,7 @@ pub mod builder {
     impl ::std::default::Default for CreateYeastInput {
         fn default() -> Self {
             Self {
-                add_to_secondary: Ok(Default::default()),
+                add_to_secondary: Err("no value supplied for add_to_secondary".to_string()),
                 alcohol_tolerance: Ok(Default::default()),
                 attenuation_pct: Ok(Default::default()),
                 best_for: Ok(Default::default()),
@@ -9591,7 +9593,7 @@ pub mod builder {
     impl CreateYeastInput {
         pub fn add_to_secondary<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<::std::option::Option<bool>>,
+            T: ::std::convert::TryInto<bool>,
             T::Error: ::std::fmt::Display,
         {
             self.add_to_secondary = value
