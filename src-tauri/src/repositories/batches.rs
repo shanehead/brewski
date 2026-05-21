@@ -37,6 +37,7 @@ impl<'a> BatchRepository<'a> {
             status: Set("planned".to_string()),
             brew_date: Set(None),
             fermenter_date: Set(None),
+            conditioning_date: Set(None),
             packaging_date: Set(None),
             actual_pre_boil_volume_l: Set(None),
             actual_post_boil_volume_l: Set(None),
@@ -44,9 +45,7 @@ impl<'a> BatchRepository<'a> {
             actual_pre_boil_gravity: Set(None),
             actual_og: Set(None),
             actual_fg: Set(None),
-            brew_day_notes: Set(None),
-            fermentation_notes: Set(None),
-            tasting_notes: Set(None),
+            notes: Set(None),
             rating: Set(None),
             created_at: Set(now),
             updated_at: Set(now),
@@ -109,6 +108,8 @@ impl<'a> BatchRepository<'a> {
             status: batch.status,
             brew_date: batch.brew_date.map(|v| v as i64),
             fermenter_date: batch.fermenter_date.map(|v| v as i64),
+            // TODO: enable after Task 2 adds conditioning_date to Batch struct
+            // conditioning_date: batch.conditioning_date.map(|v| v as i64),
             packaging_date: batch.packaging_date.map(|v| v as i64),
             actual_pre_boil_volume_l: batch.actual_pre_boil_volume_l,
             actual_post_boil_volume_l: batch.actual_post_boil_volume_l,
@@ -116,9 +117,12 @@ impl<'a> BatchRepository<'a> {
             actual_pre_boil_gravity: batch.actual_pre_boil_gravity,
             actual_og: batch.actual_og,
             actual_fg: batch.actual_fg,
-            brew_day_notes: batch.brew_day_notes,
-            fermentation_notes: batch.fermentation_notes,
-            tasting_notes: batch.tasting_notes,
+            // TODO: remove after Task 2 removes brew_day_notes/fermentation_notes/tasting_notes from Batch struct
+            brew_day_notes: None,
+            fermentation_notes: None,
+            tasting_notes: None,
+            // TODO: enable after Task 2 adds notes to Batch struct
+            // notes: batch.notes,
             rating: batch.rating.map(|v| v as i64),
             gravity_readings,
             created_at: batch.created_at as i64,
@@ -151,6 +155,14 @@ impl<'a> BatchRepository<'a> {
         if let Some(v) = input.packaging_date {
             active.packaging_date = Set(Some(v as i32));
         }
+        // TODO: enable after Task 2 adds conditioning_date to UpdateBatchInput
+        // if let Some(v) = input.conditioning_date {
+        //     active.conditioning_date = Set(Some(v as i32));
+        // }
+        // TODO: enable after Task 2 adds notes to UpdateBatchInput
+        // if let Some(v) = input.notes {
+        //     active.notes = Set(Some(v));
+        // }
         if let Some(v) = input.actual_pre_boil_volume_l {
             active.actual_pre_boil_volume_l = Set(Some(v));
         }
@@ -168,15 +180,6 @@ impl<'a> BatchRepository<'a> {
         }
         if let Some(v) = input.actual_fg {
             active.actual_fg = Set(Some(v));
-        }
-        if let Some(v) = input.brew_day_notes {
-            active.brew_day_notes = Set(Some(v));
-        }
-        if let Some(v) = input.fermentation_notes {
-            active.fermentation_notes = Set(Some(v));
-        }
-        if let Some(v) = input.tasting_notes {
-            active.tasting_notes = Set(Some(v));
         }
         if let Some(v) = input.rating {
             active.rating = Set(Some(v as i32));
@@ -335,6 +338,35 @@ mod tests {
             .unwrap();
         assert_eq!(updated.status, "brewing");
         assert_eq!(updated.actual_og, Some(1.058));
+    }
+
+    // TODO: enable after Task 2 adds conditioning_date and notes to UpdateBatchInput and Batch
+    #[ignore]
+    #[tokio::test]
+    async fn test_update_conditioning_date_and_notes() {
+        let db = setup_test_db().await;
+        let (recipe_id, _) = setup(&db).await;
+        let repo = BatchRepository::new(&db);
+        let batch = repo
+            .create(CreateBatchInput {
+                recipe_id,
+                name: None,
+            })
+            .await
+            .unwrap();
+        let updated = repo
+            .update(
+                &batch.id,
+                UpdateBatchInput {
+                    status: Some("conditioning".into()),
+                    ..Default::default()
+                },
+            )
+            .await
+            .unwrap();
+        assert_eq!(updated.status, "conditioning");
+        // assert_eq!(updated.conditioning_date, Some(1_700_000_000));
+        // assert_eq!(updated.notes, Some("Dry hop day 3".into()));
     }
 
     #[tokio::test]

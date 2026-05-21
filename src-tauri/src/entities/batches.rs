@@ -18,6 +18,7 @@ pub struct Model {
     pub status: String,
     pub brew_date: Option<i32>,
     pub fermenter_date: Option<i32>,
+    pub conditioning_date: Option<i32>,
     pub packaging_date: Option<i32>,
     pub actual_pre_boil_volume_l: Option<f64>,
     pub actual_post_boil_volume_l: Option<f64>,
@@ -26,11 +27,7 @@ pub struct Model {
     pub actual_og: Option<f64>,
     pub actual_fg: Option<f64>,
     #[sea_orm(column_type = "Text", nullable)]
-    pub brew_day_notes: Option<String>,
-    #[sea_orm(column_type = "Text", nullable)]
-    pub fermentation_notes: Option<String>,
-    #[sea_orm(column_type = "Text", nullable)]
-    pub tasting_notes: Option<String>,
+    pub notes: Option<String>,
     pub rating: Option<i32>,
     pub created_at: i32,
     pub updated_at: i32,
