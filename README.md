@@ -4,7 +4,7 @@
 
 # Brewski
 
-A homebrewing recipe manager for crafting, organizing, and refining beer recipes. Runs natively on macOS, iOS, Android, Windows, and Linux — your recipes stay on your device, no account required.
+A homebrewing companion for crafting recipes, tracking brew days, managing your ingredient library, and dialing in your process — from grain to glass. Runs natively on macOS, iOS, Android, Windows, and Linux — your data stays on your device, no account required.
 
 **Free and open source — every feature, forever.** No subscriptions, no paywalls, no "pro" tier.
 
