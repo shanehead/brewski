@@ -99,6 +99,11 @@ impl<'a> BatchRepository<'a> {
 
         let recipe_name = recipe.map(|r| r.name).unwrap_or_default();
 
+        let full_recipe = RecipeVersionRepository::new(self.db)
+            .get_full(&batch.recipe_version_id)
+            .await?;
+        let stats = crate::brewing::calculate_stats(&full_recipe);
+
         Ok(Batch {
             id: batch.id,
             recipe_id: batch.recipe_id,
@@ -118,11 +123,11 @@ impl<'a> BatchRepository<'a> {
             actual_fg: batch.actual_fg,
             notes: batch.notes,
             rating: batch.rating.map(|v| v as i64),
-            planned_og: None,
-            planned_fg: None,
-            planned_pre_boil_gravity: None,
-            planned_post_boil_volume_l: None,
-            planned_batch_size_l: None,
+            planned_og: Some(stats.og),
+            planned_fg: Some(stats.fg),
+            planned_pre_boil_gravity: Some(stats.pre_boil_gravity),
+            planned_post_boil_volume_l: Some(stats.post_boil_volume_l),
+            planned_batch_size_l: Some(full_recipe.batch_size_l),
             gravity_readings,
             created_at: batch.created_at as i64,
             updated_at: batch.updated_at as i64,
@@ -391,6 +396,24 @@ mod tests {
         .unwrap();
         repo.delete(&batch.id).await.unwrap();
         assert!(repo.get(&batch.id).await.is_err());
+    }
+
+    #[tokio::test]
+    async fn test_get_includes_planned_targets() {
+        let db = setup_test_db().await;
+        let (recipe_id, _) = setup(&db).await;
+        let repo = BatchRepository::new(&db);
+        let batch = repo
+            .create(CreateBatchInput {
+                recipe_id,
+                name: None,
+            })
+            .await
+            .unwrap();
+        let fetched = repo.get(&batch.id).await.unwrap();
+        // Empty recipe has OG close to 1.0 (no fermentables)
+        assert!(fetched.planned_og.is_some());
+        assert!(fetched.planned_batch_size_l.is_some());
     }
 
     #[tokio::test]
