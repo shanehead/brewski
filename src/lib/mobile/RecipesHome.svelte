@@ -21,6 +21,7 @@
     const xml = await file.text();
     const imported = await ipc(createRecipesFromBeerxml(xml));
     if (!imported) return;
+    await ipc(refreshRecipeList());
     fileInput.value = "";
   }
 </script>
@@ -42,7 +43,7 @@
     <button
       onclick={() => fileInput.click()}
       class="w-full py-3 rounded text-sm font-medium"
-      style="background: var(--color-accent); color: #fff;"
+      style="border: 1px solid var(--color-border); color: var(--color-text-secondary); background: transparent;"
     >Import BeerXML</button>
   </div>
   <div class="flex-1 overflow-y-auto">
