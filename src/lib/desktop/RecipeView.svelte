@@ -186,7 +186,7 @@
       <button
         onclick={() => goto("/")}
         class="text-xs px-2 py-1 rounded"
-        style="color: var(--color-text-secondary); background: var(--color-bg-elevated);"
+        style="color: var(--color-text-secondary); background: var(--color-bg-elevated); border: 1px solid var(--color-border);"
       >
         ← Recipes
       </button>
@@ -206,7 +206,7 @@
         <button
           onclick={() => { showSavePopover = !showSavePopover; }}
           class="text-xs px-2 py-1 rounded"
-          style="color: var(--color-text-secondary); background: var(--color-bg-elevated);"
+          style="color: var(--color-text-secondary); background: var(--color-bg-elevated); border: 1px solid var(--color-border);"
         >
           Save Version
         </button>
@@ -242,6 +242,7 @@
         style="
           color: {showVersionPanel ? '#fff' : 'var(--color-text-secondary)'};
           background: {showVersionPanel ? 'var(--color-accent)' : 'var(--color-bg-elevated)'};
+          border: 1px solid {showVersionPanel ? 'transparent' : 'var(--color-border)'};
         "
       >
         History ({versions.length})
