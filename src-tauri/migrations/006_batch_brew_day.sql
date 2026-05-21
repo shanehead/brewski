@@ -1,7 +1,7 @@
 -- Recreate batches with updated schema:
 --   • status: adds 'conditioning', removes 'complete' (existing 'complete' rows → 'packaged')
 --   • conditioning_date: new stage date column
---   • notes: replaces brew_day_notes / fermentation_notes / tasting_notes
+--   • notes: replaces brew_day_notes (fermentation_notes and tasting_notes are dropped)
 CREATE TABLE batches_new (
   id                        TEXT PRIMARY KEY,
   recipe_id                 TEXT NOT NULL REFERENCES recipes(id) ON DELETE RESTRICT,
