@@ -68,7 +68,7 @@
     </div>
 
     <!-- Tab content -->
-    <div class="flex-1 overflow-hidden">
+    <div class="flex-1 overflow-y-auto">
       {#if activeTab === "overview"}
         <BatchOverviewTab {batch} onUpdate={handleUpdate} />
       {:else if activeTab === "gravity"}

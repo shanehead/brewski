@@ -91,7 +91,7 @@
   });
 </script>
 
-<div class="p-4 flex flex-col gap-6 overflow-y-auto">
+<div class="p-4 flex flex-col gap-6">
   {#if batchVersion}
     <div class="text-xs" style="color: var(--color-text-muted);">
       Brewed with
@@ -214,6 +214,15 @@
     </div>
   </div>
 
+  {#if batch.status === "conditioning" || batch.status === "packaged"}
+    <BatchCarbonationSection
+      {batch}
+      recipePrimaryTempC={recipe?.primary_temp_c ?? null}
+      recipeCarbonationVols={recipe?.carbonation_vols ?? null}
+      {onUpdate}
+    />
+  {/if}
+
   <!-- Notes -->
   <div>
     <div class="text-xs mb-2" style="color: var(--color-text-secondary);">NOTES</div>
@@ -226,13 +235,4 @@
       style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border); font-family: inherit;"
     ></textarea>
   </div>
-
-  {#if batch.status === "conditioning" || batch.status === "packaged"}
-    <BatchCarbonationSection
-      {batch}
-      recipePrimaryTempC={recipe?.primary_temp_c ?? null}
-      recipeCarbonationVols={recipe?.carbonation_vols ?? null}
-      {onUpdate}
-    />
-  {/if}
 </div>

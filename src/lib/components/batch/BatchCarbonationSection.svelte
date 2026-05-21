@@ -22,9 +22,9 @@
   const targetVols = $derived(recipeCarbonationVols ?? 2.4);
   const batchSizeL = $derived(batch.actual_batch_size_l ?? batch.planned_batch_size_l ?? null);
 
-  let tempC = $state(batch.packaging_temp_c ?? recipePrimaryTempC ?? 20);
+  let tempC = $state(untrack(() => batch.packaging_temp_c ?? recipePrimaryTempC ?? 20));
   let sugarType = $state<SugarType>(
-    (batch.carbonation_sugar_type as SugarType) ?? "corn_sugar"
+    untrack(() => (batch.carbonation_sugar_type as SugarType) ?? "corn_sugar")
   );
 
   const tempDisplay = $derived(units === "imperial" ? cToF(tempC) : tempC);
