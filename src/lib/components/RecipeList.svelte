@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
   import { goto } from "$app/navigation";
   import { recipeList, refreshRecipeList } from "$lib/stores/recipes";
-  import { createRecipe, deleteRecipe } from "$lib/api";
+  import { createRecipe, deleteRecipe, createRecipesFromBeerxml } from "$lib/api";
   import type { RecipeSummary } from "$lib/api";
   import { ipc } from "$lib/stores/error";
   import { settings } from "$lib/stores/settings";
@@ -10,6 +10,7 @@
 
   let { selectedId = $bindable<string | null>(null) } = $props();
   let search = $state("");
+  let fileInput: HTMLInputElement;
 
   const units = $derived<Units>($settings.units === "imperial" ? "imperial" : "metric");
 
@@ -32,6 +33,15 @@
     await ipc(deleteRecipe(id));
     await ipc(refreshRecipeList());
     if (selectedId === id) goto("/");
+  }
+
+  async function handleImport(event: Event) {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (!file) return;
+    const xml = await file.text();
+    await ipc(createRecipesFromBeerxml(xml));
+    await ipc(refreshRecipeList());
+    fileInput.value = "";
   }
 </script>
 
@@ -57,6 +67,20 @@
       style="background: var(--color-accent); color: #fff;"
     >
       + New Recipe
+    </button>
+    <input
+      type="file"
+      accept=".xml"
+      bind:this={fileInput}
+      onchange={handleImport}
+      class="hidden"
+    />
+    <button
+      onclick={() => fileInput.click()}
+      class="w-full py-1.5 rounded text-sm font-medium transition-colors"
+      style="border: 1px solid var(--color-border); color: var(--color-text-secondary); background: transparent;"
+    >
+      Import BeerXML
     </button>
   </div>
 
