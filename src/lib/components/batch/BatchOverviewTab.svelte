@@ -143,9 +143,9 @@
     <div class="text-xs mb-2" style="color: var(--color-text-secondary);">MEASUREMENTS</div>
     <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
       {#each [
-        { label: "Pre-Boil Gravity", field: "actual_pre_boil_gravity", value: batch.actual_pre_boil_gravity },
-        { label: "Original Gravity (OG)", field: "actual_og", value: batch.actual_og },
-        { label: "Final Gravity (FG)", field: "actual_fg", value: batch.actual_fg },
+        { label: "Pre-Boil Gravity", field: "actual_pre_boil_gravity", value: batch.actual_pre_boil_gravity, decimals: 3 },
+        { label: "Original Gravity (OG)", field: "actual_og", value: batch.actual_og, decimals: 3 },
+        { label: "Final Gravity (FG)", field: "actual_fg", value: batch.actual_fg, decimals: 3 },
         { label: "Pre-Boil Volume (L)", field: "actual_pre_boil_volume_l", value: batch.actual_pre_boil_volume_l },
         { label: "Post-Boil Volume (L)", field: "actual_post_boil_volume_l", value: batch.actual_post_boil_volume_l },
         { label: "Batch Size (L)", field: "actual_batch_size_l", value: batch.actual_batch_size_l },
@@ -162,7 +162,7 @@
             id="batch-{row.field}"
             type="number" inputmode="decimal"
             step="0.001"
-            value={row.value ?? ""}
+            value={row.value != null ? (row.decimals != null ? row.value.toFixed(row.decimals) : row.value) : ""}
             onblur={(e) => {
               const v = e.currentTarget.value;
               onUpdate({ [row.field]: v ? parseFloat(v) : null } as UpdateBatchInput);
