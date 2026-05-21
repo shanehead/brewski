@@ -6,6 +6,8 @@
 
 A homebrewing recipe manager for crafting, organizing, and refining beer recipes. Runs natively on macOS, iOS, Android, Windows, and Linux — your recipes stay on your device, no account required.
 
+**Free and open source — every feature, forever.** No subscriptions, no paywalls, no "pro" tier.
+
 ## Features
 
 **Recipes**
