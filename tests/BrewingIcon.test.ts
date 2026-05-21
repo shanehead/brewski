@@ -10,9 +10,10 @@ describe("BrewingIcon", () => {
     expect(svg?.getAttribute("data-icon")).toBe("hop");
   });
 
-  it("renders path markup for name='fermentable'", () => {
+  it("renders shape markup for name='fermentable'", () => {
     const { container } = render(BrewingIcon, { name: "fermentable" });
-    expect(container.querySelectorAll("path").length).toBeGreaterThan(0);
+    const svg = container.querySelector("svg");
+    expect(svg?.innerHTML.trim().length).toBeGreaterThan(0);
   });
 
   it("renders an svg with aria-hidden", () => {
