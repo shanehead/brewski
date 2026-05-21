@@ -130,4 +130,42 @@ describe("BatchCarbonationSection", () => {
       })
     );
   });
+
+  it("calls onUpdate after temperature change", async () => {
+    mockInvoke
+      .mockResolvedValueOnce(134.5)  // calculatePrimingSugar (initial effect)
+      .mockResolvedValueOnce(97.2)   // calculateCo2Pressure (initial effect)
+      .mockResolvedValueOnce(130.0)  // calculatePrimingSugar (after temp change)
+      .mockResolvedValueOnce(95.0);  // calculateCo2Pressure (after temp change)
+    const onUpdate = vi.fn();
+    const user = userEvent.setup();
+    render(BatchCarbonationSection, {
+      batch: makeBatch(),
+      recipePrimaryTempC: 20,
+      recipeCarbonationVols: 2.4,
+      onUpdate,
+    });
+
+    // Flush the initial $effect async calculation
+    await tick();
+    await new Promise((r) => setTimeout(r, 0));
+    await tick();
+
+    const input = screen.getByLabelText(/Packaging Temp/i) as HTMLInputElement;
+    await user.clear(input);
+    await user.type(input, "18");
+
+    // Flush the recalculation triggered by temp change
+    await tick();
+    await new Promise((r) => setTimeout(r, 0));
+    await tick();
+
+    expect(onUpdate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        packaging_temp_c: expect.any(Number),
+        priming_sugar_g: expect.any(Number),
+        serving_pressure_kpa: expect.any(Number),
+      })
+    );
+  });
 });

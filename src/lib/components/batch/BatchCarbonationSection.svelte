@@ -68,6 +68,7 @@
   });
 
   function updateTemp(value: string) {
+    hasInteracted = true;
     const next = Number(value);
     tempC = units === "imperial" ? fToC(next) : next;
   }
