@@ -4,11 +4,73 @@
 
 # Brewski
 
-A homebrewing recipe manager — native desktop app for crafting, organizing, and refining beer recipes.
+A homebrewing recipe manager for crafting, organizing, and refining beer recipes. Runs natively on macOS, iOS, Android, Windows, and Linux — your recipes stay on your device, no account required.
 
-Built with Tauri 2, SvelteKit, and Rust. Runs on macOS, iOS, Android, Windows, and Linux.
+## Features
 
-## Architecture
+**Recipes**
+- Build recipes from scratch with full ingredient control — fermentables, hops, yeast, and water additions
+- Real-time stats as you build: OG, FG, ABV, IBU, SRM color
+- Version history so you can track changes across brew days
+
+**Batch tracking**
+- Log brew days against any recipe
+- Track fermentation progress and carbonation
+- Record notes at every stage
+
+**Water chemistry**
+- Model your water source and target profiles
+- Calculate mineral additions (gypsum, calcium chloride, etc.)
+- See adjusted water chemistry before you brew
+
+**Mash**
+- Build multi-step mash schedules
+- Track temperatures and times
+
+**Ingredient library**
+- Searchable database of hops, fermentables, and yeasts
+- Data sourced from [BeerMaverick](https://beermaverick.com)
+
+**Brewing tools**
+- ABV & calorie calculator
+- Carbonation calculator
+- Gravity conversions
+- Hydrometer temperature correction
+- Pitch rate calculator
+- Refractometer correction
+- Unit conversions
+
+**Equipment profiles**
+- Save your system's volumes and efficiency for accurate recipe scaling
+
+## Download
+
+Download the latest release for your platform from the [Releases](../../releases) page.
+
+| Platform | Format |
+|---|---|
+| macOS | `.dmg` (universal — Apple Silicon + Intel) |
+| iOS | `.ipa` |
+| Android | `.apk` / `.aab` |
+| Windows | `.msi` / `.exe` |
+| Linux | `.deb` · `.AppImage` · `.rpm` |
+
+## Your data
+
+Brewski stores everything locally — no cloud, no account. Your database lives at:
+
+| Platform | Path |
+|---|---|
+| macOS | `~/Library/Application Support/brewski/brewski.db` |
+| Windows | `%APPDATA%\brewski\brewski.db` |
+| Linux | `~/.local/share/brewski/brewski.db` |
+| iOS / Android | App sandbox (export via the app) |
+
+---
+
+## For developers
+
+### Architecture
 
 <p align="center">
   <img src="docs/architecture.svg" alt="Architecture diagram" width="580"/>
@@ -18,7 +80,7 @@ The frontend is a SvelteKit app running inside Tauri's WebView. All backend acce
 
 C4 diagrams (System Context, Container, and Component levels) are in [`docs/c4.md`](docs/c4.md).
 
-## Tech Stack
+### Tech Stack
 
 | Layer | Technology |
 |---|---|
@@ -28,15 +90,15 @@ C4 diagrams (System Context, Container, and Component levels) are in [`docs/c4.m
 | ORM | SeaORM · sqlx |
 | Database | SQLite (embedded, single file) |
 
-## Getting Started
+### Getting Started
 
-### Prerequisites
+**Prerequisites**
 
 - [Rust](https://rustup.rs/)
 - [Bun](https://bun.sh/)
 - [Tauri v2 prerequisites](https://v2.tauri.app/start/prerequisites/) for your platform
 
-### Development
+**Development**
 
 ```bash
 bun install        # install frontend dependencies
@@ -46,7 +108,7 @@ just dev-ios       # iOS simulator (set IOS_SIMULATOR env var to override device
 just dev-android   # Android emulator
 ```
 
-### Build
+**Build**
 
 ```bash
 just build           # release build for current platform (no bundling)
@@ -58,7 +120,7 @@ just build-linux     # Linux packages (.deb, .AppImage, .rpm)
 just build-all       # all platforms
 ```
 
-### Other commands
+**Other commands**
 
 ```bash
 just check          # TypeScript check + OpenAPI lint
@@ -67,7 +129,7 @@ just lint-openapi   # validate docs/openapi/openapi.yaml
 just preview-docs   # render API docs in a browser
 ```
 
-## CI / CD
+### CI / CD
 
 GitHub Actions workflows live in [`.github/workflows/`](.github/workflows/):
 
@@ -78,27 +140,13 @@ GitHub Actions workflows live in [`.github/workflows/`](.github/workflows/):
 
 Release jobs are gated on the `release` environment — add signing secrets there (Apple certificates, Android keystore) before tagging a release.
 
-## Database location
-
-Brewski stores its SQLite database in the OS app data directory:
-
-| Platform | Path |
-|---|---|
-| macOS | `~/Library/Application Support/brewski/brewski.db` |
-| Windows | `%APPDATA%\brewski\brewski.db` |
-| Linux | `~/.local/share/brewski/brewski.db` |
-
-## API
+### API
 
 The full Tauri IPC interface is documented as an OpenAPI 3.1 spec at [`docs/openapi/openapi.yaml`](docs/openapi/openapi.yaml).
 
-## Contributing
+### Contributing
 
 Commits follow [Conventional Commits](https://www.conventionalcommits.org/) style: `type(scope): description` (e.g. `feat(recipes): add clone command`, `fix(ibu): correct rager formula`).
-
-## Data
-
-Hop, fermentable, and yeast library data sourced from [BeerMaverick](https://beermaverick.com).
 
 ## License
 
