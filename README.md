@@ -4,9 +4,9 @@
 
 # Brewski
 
-Brewski is a homebrewing app for managing recipes, tracking brew days, and dialing in your process. Everything stays on your device — no account needed.
+Brewski is a homebrewing app for managing recipes, tracking brew days, and dialing in your process. Build recipes, log fermentation, work out your water chemistry, and keep notes along the way — all in one place.
 
-Runs on macOS, iOS, Android, Windows, and Linux. Free and open source, no paywalls.
+Everything stays on your device, no account needed. Runs on macOS, iOS, Android, Windows, and Linux. Free and open source, no paywalls.
 
 ## Features
 
