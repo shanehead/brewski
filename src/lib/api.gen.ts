@@ -1935,7 +1935,7 @@ export interface components {
             recipe_name: string;
             recipe_version_id: string;
             name?: string | null;
-            /** @description planned | brewing | fermenting | packaged | complete */
+            /** @description planned | brewing | fermenting | conditioning | packaged */
             status: string;
             /** Format: int64 */
             brew_date?: number | null;
@@ -1953,12 +1953,14 @@ export interface components {
             recipe_name: string;
             recipe_version_id: string;
             name?: string | null;
-            /** @description planned | brewing | fermenting | packaged | complete */
+            /** @description planned | brewing | fermenting | conditioning | packaged */
             status: string;
             /** Format: int64 */
             brew_date?: number | null;
             /** Format: int64 */
             fermenter_date?: number | null;
+            /** Format: int64 */
+            conditioning_date?: number | null;
             /** Format: int64 */
             packaging_date?: number | null;
             actual_pre_boil_volume_l?: number | null;
@@ -1967,10 +1969,18 @@ export interface components {
             actual_pre_boil_gravity?: number | null;
             actual_og?: number | null;
             actual_fg?: number | null;
-            brew_day_notes?: string | null;
-            fermentation_notes?: string | null;
-            tasting_notes?: string | null;
+            notes?: string | null;
             rating?: number | null;
+            /** @description Planned OG from recipe stats */
+            planned_og?: number | null;
+            /** @description Planned FG from recipe stats */
+            planned_fg?: number | null;
+            /** @description Planned pre-boil gravity from recipe stats */
+            planned_pre_boil_gravity?: number | null;
+            /** @description Planned post-boil volume from recipe stats */
+            planned_post_boil_volume_l?: number | null;
+            /** @description Planned batch size from recipe */
+            planned_batch_size_l?: number | null;
             gravity_readings: components["schemas"]["GravityReading"][];
             /** Format: int64 */
             created_at: number;
@@ -1986,6 +1996,7 @@ export interface components {
             status?: string | null;
             brew_date?: number | null;
             fermenter_date?: number | null;
+            conditioning_date?: number | null;
             packaging_date?: number | null;
             actual_pre_boil_volume_l?: number | null;
             actual_post_boil_volume_l?: number | null;
@@ -1993,9 +2004,7 @@ export interface components {
             actual_pre_boil_gravity?: number | null;
             actual_og?: number | null;
             actual_fg?: number | null;
-            brew_day_notes?: string | null;
-            fermentation_notes?: string | null;
-            tasting_notes?: string | null;
+            notes?: string | null;
             rating?: number | null;
         };
         CreateGravityReadingInput: {

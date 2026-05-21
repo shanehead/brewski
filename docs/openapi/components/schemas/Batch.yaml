@@ -21,11 +21,14 @@ properties:
     type: [string, "null"]
   status:
     type: string
-    description: "planned | brewing | fermenting | packaged | complete"
+    description: "planned | brewing | fermenting | conditioning | packaged"
   brew_date:
     type: [integer, "null"]
     format: int64
   fermenter_date:
+    type: [integer, "null"]
+    format: int64
+  conditioning_date:
     type: [integer, "null"]
     format: int64
   packaging_date:
@@ -43,14 +46,25 @@ properties:
     type: [number, "null"]
   actual_fg:
     type: [number, "null"]
-  brew_day_notes:
-    type: [string, "null"]
-  fermentation_notes:
-    type: [string, "null"]
-  tasting_notes:
+  notes:
     type: [string, "null"]
   rating:
     type: [integer, "null"]
+  planned_og:
+    type: [number, "null"]
+    description: Planned OG from recipe stats
+  planned_fg:
+    type: [number, "null"]
+    description: Planned FG from recipe stats
+  planned_pre_boil_gravity:
+    type: [number, "null"]
+    description: Planned pre-boil gravity from recipe stats
+  planned_post_boil_volume_l:
+    type: [number, "null"]
+    description: Planned post-boil volume from recipe stats
+  planned_batch_size_l:
+    type: [number, "null"]
+    description: Planned batch size from recipe
   gravity_readings:
     type: array
     items:

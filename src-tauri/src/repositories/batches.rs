@@ -108,8 +108,7 @@ impl<'a> BatchRepository<'a> {
             status: batch.status,
             brew_date: batch.brew_date.map(|v| v as i64),
             fermenter_date: batch.fermenter_date.map(|v| v as i64),
-            // TODO: enable after Task 2 adds conditioning_date to Batch struct
-            // conditioning_date: batch.conditioning_date.map(|v| v as i64),
+            conditioning_date: batch.conditioning_date.map(|v| v as i64),
             packaging_date: batch.packaging_date.map(|v| v as i64),
             actual_pre_boil_volume_l: batch.actual_pre_boil_volume_l,
             actual_post_boil_volume_l: batch.actual_post_boil_volume_l,
@@ -117,13 +116,13 @@ impl<'a> BatchRepository<'a> {
             actual_pre_boil_gravity: batch.actual_pre_boil_gravity,
             actual_og: batch.actual_og,
             actual_fg: batch.actual_fg,
-            // TODO: remove after Task 2 removes brew_day_notes/fermentation_notes/tasting_notes from Batch struct
-            brew_day_notes: None,
-            fermentation_notes: None,
-            tasting_notes: None,
-            // TODO: enable after Task 2 adds notes to Batch struct
-            // notes: batch.notes,
+            notes: batch.notes,
             rating: batch.rating.map(|v| v as i64),
+            planned_og: None,
+            planned_fg: None,
+            planned_pre_boil_gravity: None,
+            planned_post_boil_volume_l: None,
+            planned_batch_size_l: None,
             gravity_readings,
             created_at: batch.created_at as i64,
             updated_at: batch.updated_at as i64,
@@ -155,14 +154,12 @@ impl<'a> BatchRepository<'a> {
         if let Some(v) = input.packaging_date {
             active.packaging_date = Set(Some(v as i32));
         }
-        // TODO: enable after Task 2 adds conditioning_date to UpdateBatchInput
-        // if let Some(v) = input.conditioning_date {
-        //     active.conditioning_date = Set(Some(v as i32));
-        // }
-        // TODO: enable after Task 2 adds notes to UpdateBatchInput
-        // if let Some(v) = input.notes {
-        //     active.notes = Set(Some(v));
-        // }
+        if let Some(v) = input.conditioning_date {
+            active.conditioning_date = Set(Some(v as i32));
+        }
+        if let Some(v) = input.notes {
+            active.notes = Set(Some(v));
+        }
         if let Some(v) = input.actual_pre_boil_volume_l {
             active.actual_pre_boil_volume_l = Set(Some(v));
         }
@@ -340,8 +337,6 @@ mod tests {
         assert_eq!(updated.actual_og, Some(1.058));
     }
 
-    // TODO: enable after Task 2 adds conditioning_date and notes to UpdateBatchInput and Batch
-    #[ignore]
     #[tokio::test]
     async fn test_update_conditioning_date_and_notes() {
         let db = setup_test_db().await;

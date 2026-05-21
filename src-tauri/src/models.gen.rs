@@ -90,21 +90,16 @@ pub mod error {
 #[doc = "      ],"]
 #[doc = "      \"format\": \"int64\""]
 #[doc = "    },"]
-#[doc = "    \"brew_day_notes\": {"]
+#[doc = "    \"conditioning_date\": {"]
 #[doc = "      \"type\": ["]
-#[doc = "        \"string\","]
+#[doc = "        \"integer\","]
 #[doc = "        \"null\""]
-#[doc = "      ]"]
+#[doc = "      ],"]
+#[doc = "      \"format\": \"int64\""]
 #[doc = "    },"]
 #[doc = "    \"created_at\": {"]
 #[doc = "      \"type\": \"integer\","]
 #[doc = "      \"format\": \"int64\""]
-#[doc = "    },"]
-#[doc = "    \"fermentation_notes\": {"]
-#[doc = "      \"type\": ["]
-#[doc = "        \"string\","]
-#[doc = "        \"null\""]
-#[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"fermenter_date\": {"]
 #[doc = "      \"type\": ["]
@@ -128,12 +123,53 @@ pub mod error {
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
+#[doc = "    \"notes\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
 #[doc = "    \"packaging_date\": {"]
 #[doc = "      \"type\": ["]
 #[doc = "        \"integer\","]
 #[doc = "        \"null\""]
 #[doc = "      ],"]
 #[doc = "      \"format\": \"int64\""]
+#[doc = "    },"]
+#[doc = "    \"planned_batch_size_l\": {"]
+#[doc = "      \"description\": \"Planned batch size from recipe\","]
+#[doc = "      \"type\": ["]
+#[doc = "        \"number\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"planned_fg\": {"]
+#[doc = "      \"description\": \"Planned FG from recipe stats\","]
+#[doc = "      \"type\": ["]
+#[doc = "        \"number\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"planned_og\": {"]
+#[doc = "      \"description\": \"Planned OG from recipe stats\","]
+#[doc = "      \"type\": ["]
+#[doc = "        \"number\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"planned_post_boil_volume_l\": {"]
+#[doc = "      \"description\": \"Planned post-boil volume from recipe stats\","]
+#[doc = "      \"type\": ["]
+#[doc = "        \"number\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"planned_pre_boil_gravity\": {"]
+#[doc = "      \"description\": \"Planned pre-boil gravity from recipe stats\","]
+#[doc = "      \"type\": ["]
+#[doc = "        \"number\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"rating\": {"]
 #[doc = "      \"type\": ["]
@@ -151,14 +187,8 @@ pub mod error {
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"status\": {"]
-#[doc = "      \"description\": \"planned | brewing | fermenting | packaged | complete\","]
+#[doc = "      \"description\": \"planned | brewing | fermenting | conditioning | packaged\","]
 #[doc = "      \"type\": \"string\""]
-#[doc = "    },"]
-#[doc = "    \"tasting_notes\": {"]
-#[doc = "      \"type\": ["]
-#[doc = "        \"string\","]
-#[doc = "        \"null\""]
-#[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"updated_at\": {"]
 #[doc = "      \"type\": \"integer\","]
@@ -185,10 +215,8 @@ pub struct Batch {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub brew_date: ::std::option::Option<i64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub brew_day_notes: ::std::option::Option<::std::string::String>,
+    pub conditioning_date: ::std::option::Option<i64>,
     pub created_at: i64,
-    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub fermentation_notes: ::std::option::Option<::std::string::String>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub fermenter_date: ::std::option::Option<i64>,
     pub gravity_readings: ::std::vec::Vec<GravityReading>,
@@ -196,16 +224,31 @@ pub struct Batch {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub name: ::std::option::Option<::std::string::String>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub notes: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub packaging_date: ::std::option::Option<i64>,
+    #[doc = "Planned batch size from recipe"]
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub planned_batch_size_l: ::std::option::Option<f64>,
+    #[doc = "Planned FG from recipe stats"]
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub planned_fg: ::std::option::Option<f64>,
+    #[doc = "Planned OG from recipe stats"]
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub planned_og: ::std::option::Option<f64>,
+    #[doc = "Planned post-boil volume from recipe stats"]
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub planned_post_boil_volume_l: ::std::option::Option<f64>,
+    #[doc = "Planned pre-boil gravity from recipe stats"]
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub planned_pre_boil_gravity: ::std::option::Option<f64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub rating: ::std::option::Option<i64>,
     pub recipe_id: ::std::string::String,
     pub recipe_name: ::std::string::String,
     pub recipe_version_id: ::std::string::String,
-    #[doc = "planned | brewing | fermenting | packaged | complete"]
+    #[doc = "planned | brewing | fermenting | conditioning | packaged"]
     pub status: ::std::string::String,
-    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub tasting_notes: ::std::option::Option<::std::string::String>,
     pub updated_at: i64,
 }
 impl Batch {
@@ -278,7 +321,7 @@ impl Batch {
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"status\": {"]
-#[doc = "      \"description\": \"planned | brewing | fermenting | packaged | complete\","]
+#[doc = "      \"description\": \"planned | brewing | fermenting | conditioning | packaged\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"updated_at\": {"]
@@ -306,7 +349,7 @@ pub struct BatchSummary {
     pub recipe_id: ::std::string::String,
     pub recipe_name: ::std::string::String,
     pub recipe_version_id: ::std::string::String,
-    #[doc = "planned | brewing | fermenting | packaged | complete"]
+    #[doc = "planned | brewing | fermenting | conditioning | packaged"]
     pub status: ::std::string::String,
     pub updated_at: i64,
 }
@@ -803,6 +846,7 @@ impl CreateGravityReadingInput {
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"form\": {"]
+#[doc = "      \"description\": \"Pellet, Plug, Leaf, Cryo, CO2 Extract\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"hop_id\": {"]
@@ -829,6 +873,7 @@ impl CreateGravityReadingInput {
 pub struct CreateHopAdditionInput {
     pub alpha_pct: f64,
     pub amount_kg: f64,
+    #[doc = "Pellet, Plug, Leaf, Cryo, CO2 Extract"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub form: ::std::option::Option<::std::string::String>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -886,7 +931,7 @@ impl CreateHopAdditionInput {
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"form\": {"]
-#[doc = "      \"description\": \"Pellet, Plug, Leaf\","]
+#[doc = "      \"description\": \"Pellet, Plug, Leaf, Cryo, CO2 Extract\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"hsi_pct\": {"]
@@ -955,7 +1000,7 @@ pub struct CreateHopInput {
     pub cohumulone_pct: ::std::option::Option<f64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub forked_from_id: ::std::option::Option<::std::string::String>,
-    #[doc = "Pellet, Plug, Leaf"]
+    #[doc = "Pellet, Plug, Leaf, Cryo, CO2 Extract"]
     pub form: ::std::string::String,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub hsi_pct: ::std::option::Option<f64>,
@@ -2429,7 +2474,7 @@ impl GravityReading {
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"form\": {"]
-#[doc = "      \"description\": \"Pellet, Plug, Leaf\","]
+#[doc = "      \"description\": \"Pellet, Plug, Leaf, Cryo, CO2 Extract\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"hsi_pct\": {"]
@@ -2506,7 +2551,7 @@ pub struct Hop {
     pub cohumulone_pct: ::std::option::Option<f64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub forked_from_id: ::std::option::Option<::std::string::String>,
-    #[doc = "Pellet, Plug, Leaf"]
+    #[doc = "Pellet, Plug, Leaf, Cryo, CO2 Extract"]
     pub form: ::std::string::String,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub hsi_pct: ::std::option::Option<f64>,
@@ -3316,6 +3361,7 @@ impl RecipeAdditionFermentable {
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"form\": {"]
+#[doc = "      \"description\": \"Pellet, Plug, Leaf, Cryo, CO2 Extract\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"hop_id\": {"]
@@ -3356,6 +3402,7 @@ pub struct RecipeAdditionHop {
     pub addition_order: i64,
     pub alpha_pct: f64,
     pub amount_kg: f64,
+    #[doc = "Pellet, Plug, Leaf, Cryo, CO2 Extract"]
     pub form: ::std::string::String,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub hop_id: ::std::option::Option<::std::string::String>,
@@ -4312,15 +4359,9 @@ impl Style {
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
-#[doc = "    \"brew_day_notes\": {"]
+#[doc = "    \"conditioning_date\": {"]
 #[doc = "      \"type\": ["]
-#[doc = "        \"string\","]
-#[doc = "        \"null\""]
-#[doc = "      ]"]
-#[doc = "    },"]
-#[doc = "    \"fermentation_notes\": {"]
-#[doc = "      \"type\": ["]
-#[doc = "        \"string\","]
+#[doc = "        \"integer\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
@@ -4331,6 +4372,12 @@ impl Style {
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"name\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"notes\": {"]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
@@ -4349,12 +4396,6 @@ impl Style {
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"status\": {"]
-#[doc = "      \"type\": ["]
-#[doc = "        \"string\","]
-#[doc = "        \"null\""]
-#[doc = "      ]"]
-#[doc = "    },"]
-#[doc = "    \"tasting_notes\": {"]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
@@ -4381,21 +4422,19 @@ pub struct UpdateBatchInput {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub brew_date: ::std::option::Option<i64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub brew_day_notes: ::std::option::Option<::std::string::String>,
-    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub fermentation_notes: ::std::option::Option<::std::string::String>,
+    pub conditioning_date: ::std::option::Option<i64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub fermenter_date: ::std::option::Option<i64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub name: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub notes: ::std::option::Option<::std::string::String>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub packaging_date: ::std::option::Option<i64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub rating: ::std::option::Option<i64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub status: ::std::option::Option<::std::string::String>,
-    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub tasting_notes: ::std::option::Option<::std::string::String>,
 }
 impl ::std::default::Default for UpdateBatchInput {
     fn default() -> Self {
@@ -4407,14 +4446,13 @@ impl ::std::default::Default for UpdateBatchInput {
             actual_pre_boil_gravity: Default::default(),
             actual_pre_boil_volume_l: Default::default(),
             brew_date: Default::default(),
-            brew_day_notes: Default::default(),
-            fermentation_notes: Default::default(),
+            conditioning_date: Default::default(),
             fermenter_date: Default::default(),
             name: Default::default(),
+            notes: Default::default(),
             packaging_date: Default::default(),
             rating: Default::default(),
             status: Default::default(),
-            tasting_notes: Default::default(),
         }
     }
 }
@@ -6487,15 +6525,8 @@ pub mod builder {
         actual_pre_boil_volume_l:
             ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         brew_date: ::std::result::Result<::std::option::Option<i64>, ::std::string::String>,
-        brew_day_notes: ::std::result::Result<
-            ::std::option::Option<::std::string::String>,
-            ::std::string::String,
-        >,
+        conditioning_date: ::std::result::Result<::std::option::Option<i64>, ::std::string::String>,
         created_at: ::std::result::Result<i64, ::std::string::String>,
-        fermentation_notes: ::std::result::Result<
-            ::std::option::Option<::std::string::String>,
-            ::std::string::String,
-        >,
         fermenter_date: ::std::result::Result<::std::option::Option<i64>, ::std::string::String>,
         gravity_readings:
             ::std::result::Result<::std::vec::Vec<super::GravityReading>, ::std::string::String>,
@@ -6504,16 +6535,24 @@ pub mod builder {
             ::std::option::Option<::std::string::String>,
             ::std::string::String,
         >,
+        notes: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
         packaging_date: ::std::result::Result<::std::option::Option<i64>, ::std::string::String>,
+        planned_batch_size_l:
+            ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        planned_fg: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        planned_og: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        planned_post_boil_volume_l:
+            ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        planned_pre_boil_gravity:
+            ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         rating: ::std::result::Result<::std::option::Option<i64>, ::std::string::String>,
         recipe_id: ::std::result::Result<::std::string::String, ::std::string::String>,
         recipe_name: ::std::result::Result<::std::string::String, ::std::string::String>,
         recipe_version_id: ::std::result::Result<::std::string::String, ::std::string::String>,
         status: ::std::result::Result<::std::string::String, ::std::string::String>,
-        tasting_notes: ::std::result::Result<
-            ::std::option::Option<::std::string::String>,
-            ::std::string::String,
-        >,
         updated_at: ::std::result::Result<i64, ::std::string::String>,
     }
     impl ::std::default::Default for Batch {
@@ -6526,20 +6565,24 @@ pub mod builder {
                 actual_pre_boil_gravity: Ok(Default::default()),
                 actual_pre_boil_volume_l: Ok(Default::default()),
                 brew_date: Ok(Default::default()),
-                brew_day_notes: Ok(Default::default()),
+                conditioning_date: Ok(Default::default()),
                 created_at: Err("no value supplied for created_at".to_string()),
-                fermentation_notes: Ok(Default::default()),
                 fermenter_date: Ok(Default::default()),
                 gravity_readings: Err("no value supplied for gravity_readings".to_string()),
                 id: Err("no value supplied for id".to_string()),
                 name: Ok(Default::default()),
+                notes: Ok(Default::default()),
                 packaging_date: Ok(Default::default()),
+                planned_batch_size_l: Ok(Default::default()),
+                planned_fg: Ok(Default::default()),
+                planned_og: Ok(Default::default()),
+                planned_post_boil_volume_l: Ok(Default::default()),
+                planned_pre_boil_gravity: Ok(Default::default()),
                 rating: Ok(Default::default()),
                 recipe_id: Err("no value supplied for recipe_id".to_string()),
                 recipe_name: Err("no value supplied for recipe_name".to_string()),
                 recipe_version_id: Err("no value supplied for recipe_version_id".to_string()),
                 status: Err("no value supplied for status".to_string()),
-                tasting_notes: Ok(Default::default()),
                 updated_at: Err("no value supplied for updated_at".to_string()),
             }
         }
@@ -6615,14 +6658,14 @@ pub mod builder {
                 .map_err(|e| format!("error converting supplied value for brew_date: {e}"));
             self
         }
-        pub fn brew_day_notes<T>(mut self, value: T) -> Self
+        pub fn conditioning_date<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T: ::std::convert::TryInto<::std::option::Option<i64>>,
             T::Error: ::std::fmt::Display,
         {
-            self.brew_day_notes = value
+            self.conditioning_date = value
                 .try_into()
-                .map_err(|e| format!("error converting supplied value for brew_day_notes: {e}"));
+                .map_err(|e| format!("error converting supplied value for conditioning_date: {e}"));
             self
         }
         pub fn created_at<T>(mut self, value: T) -> Self
@@ -6633,16 +6676,6 @@ pub mod builder {
             self.created_at = value
                 .try_into()
                 .map_err(|e| format!("error converting supplied value for created_at: {e}"));
-            self
-        }
-        pub fn fermentation_notes<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.fermentation_notes = value.try_into().map_err(|e| {
-                format!("error converting supplied value for fermentation_notes: {e}")
-            });
             self
         }
         pub fn fermenter_date<T>(mut self, value: T) -> Self
@@ -6685,6 +6718,16 @@ pub mod builder {
                 .map_err(|e| format!("error converting supplied value for name: {e}"));
             self
         }
+        pub fn notes<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.notes = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for notes: {e}"));
+            self
+        }
         pub fn packaging_date<T>(mut self, value: T) -> Self
         where
             T: ::std::convert::TryInto<::std::option::Option<i64>>,
@@ -6693,6 +6736,56 @@ pub mod builder {
             self.packaging_date = value
                 .try_into()
                 .map_err(|e| format!("error converting supplied value for packaging_date: {e}"));
+            self
+        }
+        pub fn planned_batch_size_l<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.planned_batch_size_l = value.try_into().map_err(|e| {
+                format!("error converting supplied value for planned_batch_size_l: {e}")
+            });
+            self
+        }
+        pub fn planned_fg<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.planned_fg = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for planned_fg: {e}"));
+            self
+        }
+        pub fn planned_og<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.planned_og = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for planned_og: {e}"));
+            self
+        }
+        pub fn planned_post_boil_volume_l<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.planned_post_boil_volume_l = value.try_into().map_err(|e| {
+                format!("error converting supplied value for planned_post_boil_volume_l: {e}")
+            });
+            self
+        }
+        pub fn planned_pre_boil_gravity<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.planned_pre_boil_gravity = value.try_into().map_err(|e| {
+                format!("error converting supplied value for planned_pre_boil_gravity: {e}")
+            });
             self
         }
         pub fn rating<T>(mut self, value: T) -> Self
@@ -6745,16 +6838,6 @@ pub mod builder {
                 .map_err(|e| format!("error converting supplied value for status: {e}"));
             self
         }
-        pub fn tasting_notes<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.tasting_notes = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for tasting_notes: {e}"));
-            self
-        }
         pub fn updated_at<T>(mut self, value: T) -> Self
         where
             T: ::std::convert::TryInto<i64>,
@@ -6777,20 +6860,24 @@ pub mod builder {
                 actual_pre_boil_gravity: value.actual_pre_boil_gravity?,
                 actual_pre_boil_volume_l: value.actual_pre_boil_volume_l?,
                 brew_date: value.brew_date?,
-                brew_day_notes: value.brew_day_notes?,
+                conditioning_date: value.conditioning_date?,
                 created_at: value.created_at?,
-                fermentation_notes: value.fermentation_notes?,
                 fermenter_date: value.fermenter_date?,
                 gravity_readings: value.gravity_readings?,
                 id: value.id?,
                 name: value.name?,
+                notes: value.notes?,
                 packaging_date: value.packaging_date?,
+                planned_batch_size_l: value.planned_batch_size_l?,
+                planned_fg: value.planned_fg?,
+                planned_og: value.planned_og?,
+                planned_post_boil_volume_l: value.planned_post_boil_volume_l?,
+                planned_pre_boil_gravity: value.planned_pre_boil_gravity?,
                 rating: value.rating?,
                 recipe_id: value.recipe_id?,
                 recipe_name: value.recipe_name?,
                 recipe_version_id: value.recipe_version_id?,
                 status: value.status?,
-                tasting_notes: value.tasting_notes?,
                 updated_at: value.updated_at?,
             })
         }
@@ -6805,20 +6892,24 @@ pub mod builder {
                 actual_pre_boil_gravity: Ok(value.actual_pre_boil_gravity),
                 actual_pre_boil_volume_l: Ok(value.actual_pre_boil_volume_l),
                 brew_date: Ok(value.brew_date),
-                brew_day_notes: Ok(value.brew_day_notes),
+                conditioning_date: Ok(value.conditioning_date),
                 created_at: Ok(value.created_at),
-                fermentation_notes: Ok(value.fermentation_notes),
                 fermenter_date: Ok(value.fermenter_date),
                 gravity_readings: Ok(value.gravity_readings),
                 id: Ok(value.id),
                 name: Ok(value.name),
+                notes: Ok(value.notes),
                 packaging_date: Ok(value.packaging_date),
+                planned_batch_size_l: Ok(value.planned_batch_size_l),
+                planned_fg: Ok(value.planned_fg),
+                planned_og: Ok(value.planned_og),
+                planned_post_boil_volume_l: Ok(value.planned_post_boil_volume_l),
+                planned_pre_boil_gravity: Ok(value.planned_pre_boil_gravity),
                 rating: Ok(value.rating),
                 recipe_id: Ok(value.recipe_id),
                 recipe_name: Ok(value.recipe_name),
                 recipe_version_id: Ok(value.recipe_version_id),
                 status: Ok(value.status),
-                tasting_notes: Ok(value.tasting_notes),
                 updated_at: Ok(value.updated_at),
             }
         }
@@ -14176,26 +14267,19 @@ pub mod builder {
         actual_pre_boil_volume_l:
             ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         brew_date: ::std::result::Result<::std::option::Option<i64>, ::std::string::String>,
-        brew_day_notes: ::std::result::Result<
-            ::std::option::Option<::std::string::String>,
-            ::std::string::String,
-        >,
-        fermentation_notes: ::std::result::Result<
-            ::std::option::Option<::std::string::String>,
-            ::std::string::String,
-        >,
+        conditioning_date: ::std::result::Result<::std::option::Option<i64>, ::std::string::String>,
         fermenter_date: ::std::result::Result<::std::option::Option<i64>, ::std::string::String>,
         name: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+        notes: ::std::result::Result<
             ::std::option::Option<::std::string::String>,
             ::std::string::String,
         >,
         packaging_date: ::std::result::Result<::std::option::Option<i64>, ::std::string::String>,
         rating: ::std::result::Result<::std::option::Option<i64>, ::std::string::String>,
         status: ::std::result::Result<
-            ::std::option::Option<::std::string::String>,
-            ::std::string::String,
-        >,
-        tasting_notes: ::std::result::Result<
             ::std::option::Option<::std::string::String>,
             ::std::string::String,
         >,
@@ -14210,14 +14294,13 @@ pub mod builder {
                 actual_pre_boil_gravity: Ok(Default::default()),
                 actual_pre_boil_volume_l: Ok(Default::default()),
                 brew_date: Ok(Default::default()),
-                brew_day_notes: Ok(Default::default()),
-                fermentation_notes: Ok(Default::default()),
+                conditioning_date: Ok(Default::default()),
                 fermenter_date: Ok(Default::default()),
                 name: Ok(Default::default()),
+                notes: Ok(Default::default()),
                 packaging_date: Ok(Default::default()),
                 rating: Ok(Default::default()),
                 status: Ok(Default::default()),
-                tasting_notes: Ok(Default::default()),
             }
         }
     }
@@ -14292,24 +14375,14 @@ pub mod builder {
                 .map_err(|e| format!("error converting supplied value for brew_date: {e}"));
             self
         }
-        pub fn brew_day_notes<T>(mut self, value: T) -> Self
+        pub fn conditioning_date<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T: ::std::convert::TryInto<::std::option::Option<i64>>,
             T::Error: ::std::fmt::Display,
         {
-            self.brew_day_notes = value
+            self.conditioning_date = value
                 .try_into()
-                .map_err(|e| format!("error converting supplied value for brew_day_notes: {e}"));
-            self
-        }
-        pub fn fermentation_notes<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.fermentation_notes = value.try_into().map_err(|e| {
-                format!("error converting supplied value for fermentation_notes: {e}")
-            });
+                .map_err(|e| format!("error converting supplied value for conditioning_date: {e}"));
             self
         }
         pub fn fermenter_date<T>(mut self, value: T) -> Self
@@ -14330,6 +14403,16 @@ pub mod builder {
             self.name = value
                 .try_into()
                 .map_err(|e| format!("error converting supplied value for name: {e}"));
+            self
+        }
+        pub fn notes<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.notes = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for notes: {e}"));
             self
         }
         pub fn packaging_date<T>(mut self, value: T) -> Self
@@ -14362,16 +14445,6 @@ pub mod builder {
                 .map_err(|e| format!("error converting supplied value for status: {e}"));
             self
         }
-        pub fn tasting_notes<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.tasting_notes = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for tasting_notes: {e}"));
-            self
-        }
     }
     impl ::std::convert::TryFrom<UpdateBatchInput> for super::UpdateBatchInput {
         type Error = super::error::ConversionError;
@@ -14386,14 +14459,13 @@ pub mod builder {
                 actual_pre_boil_gravity: value.actual_pre_boil_gravity?,
                 actual_pre_boil_volume_l: value.actual_pre_boil_volume_l?,
                 brew_date: value.brew_date?,
-                brew_day_notes: value.brew_day_notes?,
-                fermentation_notes: value.fermentation_notes?,
+                conditioning_date: value.conditioning_date?,
                 fermenter_date: value.fermenter_date?,
                 name: value.name?,
+                notes: value.notes?,
                 packaging_date: value.packaging_date?,
                 rating: value.rating?,
                 status: value.status?,
-                tasting_notes: value.tasting_notes?,
             })
         }
     }
@@ -14407,14 +14479,13 @@ pub mod builder {
                 actual_pre_boil_gravity: Ok(value.actual_pre_boil_gravity),
                 actual_pre_boil_volume_l: Ok(value.actual_pre_boil_volume_l),
                 brew_date: Ok(value.brew_date),
-                brew_day_notes: Ok(value.brew_day_notes),
-                fermentation_notes: Ok(value.fermentation_notes),
+                conditioning_date: Ok(value.conditioning_date),
                 fermenter_date: Ok(value.fermenter_date),
                 name: Ok(value.name),
+                notes: Ok(value.notes),
                 packaging_date: Ok(value.packaging_date),
                 rating: Ok(value.rating),
                 status: Ok(value.status),
-                tasting_notes: Ok(value.tasting_notes),
             }
         }
     }

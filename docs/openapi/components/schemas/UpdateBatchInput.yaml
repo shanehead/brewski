@@ -8,6 +8,8 @@ properties:
     type: [integer, "null"]
   fermenter_date:
     type: [integer, "null"]
+  conditioning_date:
+    type: [integer, "null"]
   packaging_date:
     type: [integer, "null"]
   actual_pre_boil_volume_l:
@@ -22,11 +24,7 @@ properties:
     type: [number, "null"]
   actual_fg:
     type: [number, "null"]
-  brew_day_notes:
-    type: [string, "null"]
-  fermentation_notes:
-    type: [string, "null"]
-  tasting_notes:
+  notes:
     type: [string, "null"]
   rating:
     type: [integer, "null"]

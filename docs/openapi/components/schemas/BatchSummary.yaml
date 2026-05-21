@@ -20,7 +20,7 @@ properties:
     type: [string, "null"]
   status:
     type: string
-    description: "planned | brewing | fermenting | packaged | complete"
+    description: "planned | brewing | fermenting | conditioning | packaged"
   brew_date:
     type: [integer, "null"]
     format: int64
