@@ -1,8 +1,9 @@
 <script lang="ts">
+  import { onMount } from "svelte";
   import type { Recipe, Water, CalculatedWaterProfile, RecipeWaterAdjustment } from "$lib/api";
-  import { 
-    listWaterLibrary, 
-    setRecipeWaterSources, 
+  import {
+    listWaterLibrary,
+    setRecipeWaterSources,
     calculateWaterProfile,
     createWaterAdjustment,
     updateWaterAdjustment,
@@ -44,9 +45,8 @@
   async function handleMashWaterChange(e: Event) {
     const target = e.target as HTMLSelectElement;
     const mash_water_id = target.value || null;
-    const updated = await ipc(setRecipeWaterSources(recipe.id, mash_water_id, recipe.sparge_water_id ?? null)) ?? recipe;
-    recipe = updated;
-    adjustments = updated.water_adjustments ?? [];
+    const updated = await ipc(setRecipeWaterSources(recipe.id, mash_water_id, recipe.sparge_water_id ?? null));
+    adjustments = updated?.water_adjustments ?? [];
     await refreshProfile();
     onchange();
   }
@@ -54,9 +54,8 @@
   async function handleSpargeWaterChange(e: Event) {
     const target = e.target as HTMLSelectElement;
     const sparge_water_id = target.value || null;
-    const updated = await ipc(setRecipeWaterSources(recipe.id, recipe.mash_water_id ?? null, sparge_water_id)) ?? recipe;
-    recipe = updated;
-    adjustments = updated.water_adjustments ?? [];
+    const updated = await ipc(setRecipeWaterSources(recipe.id, recipe.mash_water_id ?? null, sparge_water_id));
+    adjustments = updated?.water_adjustments ?? [];
     await refreshProfile();
     onchange();
   }
@@ -96,7 +95,7 @@
     return "Malty";
   }
 
-  $effect(() => {
+  onMount(() => {
     loadData();
   });
 </script>
@@ -142,6 +141,7 @@
                 <div class="flex items-center gap-2">
                   <span class="text-sm flex-1" style="color: var(--color-text-secondary);">{getAdditionLabel(adj.addition)}</span>
                   <input type="number" inputmode="decimal" step="0.1" min="0" value={adj.amount}
+                         aria-label="{getAdditionLabel(adj.addition)} amount in grams"
                          onchange={(e) => handleUpdateAddition(adj.id, parseFloat((e.target as HTMLInputElement).value) || 0)}
                          class="w-20 px-2 py-1 rounded text-sm"
                          style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />

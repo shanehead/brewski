@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onDestroy, tick } from "svelte";
   import type { Recipe, MashStep, RecipeStats, UpdateMashInput } from "$lib/api";
   import { updateMash, createMashStep, deleteMashStep, updateMashStep } from "$lib/api";
   import { ipc } from "$lib/stores/error";
@@ -59,72 +60,64 @@
   const STEP_TYPES = ["infusion", "temperature", "decoction"] as const;
   const units = $derived<Units>($settings.units === "imperial" ? "imperial" : "metric");
 
-import { onDestroy, tick } from 'svelte';
-let editingStepId = $state<string | null>(null);
-let hoveredStepId = $state<string | null>(null);
-let _docClickHandler: ((e: MouseEvent) => void) | null = null;
-  
-async function handleUpdateStepField(id: string, field: string, value: any) {
-  const payload: any = {};
-  payload[field] = value;
-  await ipc(updateMashStep(id, payload));
-  onchange();
-}
-  
-function _attachDocClick(id: string) {
-  // detach any existing
-  if (_docClickHandler) {
-    document.removeEventListener('click', _docClickHandler);
-    _docClickHandler = null;
+  let editingStepId = $state<string | null>(null);
+  let hoveredStepId = $state<string | null>(null);
+  let docClickHandler: ((e: MouseEvent) => void) | null = null;
+
+  async function handleUpdateStepField(id: string, field: string, value: unknown) {
+    await ipc(updateMashStep(id, { [field]: value } as any));
+    onchange();
   }
-  const currentId = id;
-  _docClickHandler = (e: MouseEvent) => {
-    const target = e.target as HTMLElement | null;
-    if (!target) return;
-    // if click is outside the editing row, close the editor
-    if (!target.closest(`[data-step-id="${currentId}"]`)) {
+
+  function attachDocClick(id: string) {
+    if (docClickHandler) {
+      document.removeEventListener("click", docClickHandler);
+      docClickHandler = null;
+    }
+    docClickHandler = (e: MouseEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (!target?.closest(`[data-step-id="${id}"]`)) {
+        closeEdit();
+      }
+    };
+    setTimeout(() => {
+      document.addEventListener("click", docClickHandler as EventListener);
+    }, 0);
+  }
+
+  function detachDocClick() {
+    if (docClickHandler) {
+      document.removeEventListener("click", docClickHandler);
+      docClickHandler = null;
+    }
+  }
+
+  async function toggleEditStep(id: string) {
+    if (editingStepId === id) {
+      closeEdit();
+      return;
+    }
+    editingStepId = id;
+    attachDocClick(id);
+    await tick();
+    const el = document.getElementById(`step-${id}-name`) as HTMLInputElement | null;
+    if (el) el.focus();
+  }
+
+  function closeEdit() {
+    editingStepId = null;
+    detachDocClick();
+  }
+
+  function onEditKeydown(e: KeyboardEvent) {
+    if (e.key === "Escape") {
       closeEdit();
     }
-  };
-  // attach handler on next tick so the opening click doesn't immediately trigger it
-  setTimeout(() => {
-    document.addEventListener('click', _docClickHandler as EventListener);
-  }, 0);
-}
-
-function _detachDocClick() {
-  if (_docClickHandler) {
-    document.removeEventListener('click', _docClickHandler);
-    _docClickHandler = null;
   }
-}
 
-async function toggleEditStep(id: string) {
-  if (editingStepId === id) {
-    closeEdit();
-    return;
-  }
-  editingStepId = id;
-  _attachDocClick(id);
-  await tick();
-  const el = document.getElementById(`step-${id}-name`) as HTMLInputElement | null;
-  if (el) el.focus();
-}
-  
-function closeEdit() {
-  editingStepId = null;
-  _detachDocClick();
-}
-  
-function onEditKeydown(e: KeyboardEvent) {
-  if (e.key === 'Escape') {
-    closeEdit();
-  }
-}
-
-onDestroy(() => {
-  _detachDocClick();
-});
+  onDestroy(() => {
+    detachDocClick();
+  });
 </script>
 
 <div class="flex flex-col gap-4 max-w-2xl">

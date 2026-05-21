@@ -38,7 +38,7 @@
                 class="w-full px-2 py-1.5 rounded text-sm"
                 style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);">
           {#each RECIPE_TYPES as t}
-            <option value={t}>{t.replace("_", " ")}</option>
+            <option value={t}>{t.replaceAll("_", " ")}</option>
           {/each}
         </select>
       </div>
