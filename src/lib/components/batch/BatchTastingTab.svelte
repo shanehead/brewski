@@ -27,14 +27,4 @@
       style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);"
     />
   </div>
-  <div class="flex flex-col gap-1 flex-1">
-    <label for="batch-tasting-notes" class="text-xs" style="color: var(--color-text-muted);">TASTING NOTES</label>
-    <textarea id="batch-tasting-notes"
-      value={batch.tasting_notes ?? ""}
-      onblur={(e) => onUpdate({ tasting_notes: e.currentTarget.value || null })}
-      placeholder="Appearance, aroma, flavor, mouthfeel…"
-      class="p-2 rounded text-sm outline-none resize-none min-h-48"
-      style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);"
-    ></textarea>
-  </div>
 </div>

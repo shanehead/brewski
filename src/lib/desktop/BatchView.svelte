@@ -9,18 +9,16 @@
   import TabBar from "$lib/components/TabBar.svelte";
   import BatchOverviewTab from "$lib/components/batch/BatchOverviewTab.svelte";
   import BatchGravityTab from "$lib/components/batch/BatchGravityTab.svelte";
-  import BatchNotesTab from "$lib/components/batch/BatchNotesTab.svelte";
   import BatchTastingTab from "$lib/components/batch/BatchTastingTab.svelte";
 
   let { id }: { id: string } = $props();
 
   let batch = $state<Batch | null>(null);
-  let activeTab = $state<"overview" | "gravity" | "notes" | "tasting">("overview");
+  let activeTab = $state<"overview" | "gravity" | "tasting">("overview");
 
   const TABS = [
     { key: "overview", label: "Overview" },
     { key: "gravity", label: "Gravity Log" },
-    { key: "notes", label: "Notes" },
     { key: "tasting", label: "Tasting" },
   ] as const;
 
@@ -75,8 +73,6 @@
         <BatchOverviewTab {batch} onUpdate={handleUpdate} />
       {:else if activeTab === "gravity"}
         <BatchGravityTab {batch} onRefresh={loadBatch} />
-      {:else if activeTab === "notes"}
-        <BatchNotesTab {batch} onUpdate={handleUpdate} />
       {:else if activeTab === "tasting"}
         <BatchTastingTab {batch} onUpdate={handleUpdate} />
       {/if}

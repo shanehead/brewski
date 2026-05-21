@@ -7,7 +7,6 @@
   import { refreshBatchList } from "$lib/stores/batches";
   import BatchOverviewTab from "$lib/components/batch/BatchOverviewTab.svelte";
   import BatchGravityTab from "$lib/components/batch/BatchGravityTab.svelte";
-  import BatchNotesTab from "$lib/components/batch/BatchNotesTab.svelte";
   import BatchTastingTab from "$lib/components/batch/BatchTastingTab.svelte";
 
   let { id }: { id: string } = $props();
@@ -59,13 +58,6 @@
           <div class="text-xs font-semibold uppercase tracking-wider mb-3"
                style="color: var(--color-text-secondary);">Gravity Log</div>
           <BatchGravityTab {batch} onRefresh={loadBatch} />
-        </section>
-
-        <!-- Notes -->
-        <section>
-          <div class="text-xs font-semibold uppercase tracking-wider mb-3"
-               style="color: var(--color-text-secondary);">Notes</div>
-          <BatchNotesTab {batch} onUpdate={handleUpdate} />
         </section>
 
         <!-- Tasting -->
