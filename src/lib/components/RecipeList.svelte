@@ -66,10 +66,10 @@
       <li class="group relative">
         <a
           href="/recipe/{recipe.id}"
-          class="flex flex-col px-3 py-2 pr-7 cursor-pointer transition-colors"
+          class="flex flex-col px-3 py-2 pr-7 cursor-pointer transition-colors hover:bg-[var(--color-bg-elevated)]"
           style={selectedId === recipe.id
-            ? "background: var(--color-bg-elevated);"
-            : "color: var(--color-text-primary);"}
+            ? "background: var(--color-bg-elevated); border-left: 2px solid var(--color-accent); padding-left: calc(0.75rem - 2px);"
+            : "color: var(--color-text-primary); border-left: 2px solid transparent; padding-left: calc(0.75rem - 2px);"}
         >
           <span class="text-sm font-medium truncate" style="color: var(--color-text-primary);">{recipe.name}</span>
           <span class="text-xs truncate mt-0.5" style="color: var(--color-text-secondary);">
