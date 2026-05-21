@@ -411,8 +411,11 @@ mod tests {
             .await
             .unwrap();
         let fetched = repo.get(&batch.id).await.unwrap();
-        // Empty recipe has OG close to 1.0 (no fermentables)
-        assert!(fetched.planned_og.is_some());
+        // Empty recipe (no fermentables) → OG = 1.000
+        assert_eq!(fetched.planned_og, Some(1.0));
+        assert_eq!(fetched.planned_fg, Some(1.0));
+        assert!(fetched.planned_pre_boil_gravity.is_some());
+        assert!(fetched.planned_post_boil_volume_l.is_some());
         assert!(fetched.planned_batch_size_l.is_some());
     }
 
