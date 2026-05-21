@@ -3,7 +3,7 @@ name: Release
 on:
   push:
     tags:
-      - 'v*'
+      - "v*"
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
@@ -12,11 +12,11 @@ permissions:
   contents: write
 
 jobs:
-
   # ── macOS ──────────────────────────────────────────────────────────────────
 
   build-macos:
     runs-on: macos-latest
+    environment: release
     steps:
       - uses: actions/checkout@v4
 
@@ -49,6 +49,7 @@ jobs:
 
   build-ios:
     runs-on: macos-latest
+    environment: release
     steps:
       - uses: actions/checkout@v4
 
@@ -79,6 +80,7 @@ jobs:
 
   build-android:
     runs-on: ubuntu-latest
+    environment: release
     steps:
       - uses: actions/checkout@v4
 
@@ -116,6 +118,7 @@ jobs:
 
   build-windows:
     runs-on: windows-latest
+    environment: release
     steps:
       - uses: actions/checkout@v4
 
@@ -143,6 +146,7 @@ jobs:
 
   build-linux:
     runs-on: ubuntu-latest
+    environment: release
     steps:
       - uses: actions/checkout@v4
 
