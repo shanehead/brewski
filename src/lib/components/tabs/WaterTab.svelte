@@ -9,6 +9,7 @@
     deleteWaterAdjustment
   } from "$lib/api";
   import { ipc } from "$lib/stores/error";
+  import Card from "$lib/components/Card.svelte";
 
   let { recipe, onchange }: { recipe: Recipe; onchange: () => void } = $props();
 
@@ -100,29 +101,25 @@
   });
 </script>
 
-<div class="flex flex-col gap-6 max-w-4xl">
+<div class="flex flex-col gap-4 max-w-3xl">
   {#if loading}
     <div style="color: var(--color-text-secondary);">Loading water data…</div>
   {:else}
-    <!-- Source Water Section -->
-    <div class="flex flex-col gap-3">
-      <h3 class="text-sm font-semibold" style="color: var(--color-text-primary);">Source Water</h3>
-      
-      <div class="flex flex-col gap-2">
-        <label for="mash-water" class="text-sm font-medium" style="color: var(--color-text-secondary);">Mash Water</label>
-        <select id="mash-water" value={recipe.mash_water_id ?? ""} onchange={handleMashWaterChange}
-                class="px-2 py-1.5 rounded text-sm"
-                style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);">
-          <option value="">— Select water profile —</option>
-          {#each waters as water}
-            <option value={water.id}>{water.name}</option>
-          {/each}
-        </select>
-      </div>
-
-      <div class="flex flex-col gap-2">
-        <label for="sparge-water" class="text-sm font-medium" style="color: var(--color-text-secondary);">Sparge Water</label>
-        <div class="flex gap-2 items-center">
+    <Card title="Source Water">
+      <div class="flex flex-col gap-3">
+        <div class="flex flex-col gap-1">
+          <label for="mash-water" class="text-xs font-medium" style="color: var(--color-text-secondary);">Mash Water</label>
+          <select id="mash-water" value={recipe.mash_water_id ?? ""} onchange={handleMashWaterChange}
+                  class="px-2 py-1.5 rounded text-sm"
+                  style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);">
+            <option value="">— Select water profile —</option>
+            {#each waters as water}
+              <option value={water.id}>{water.name}</option>
+            {/each}
+          </select>
+        </div>
+        <div class="flex flex-col gap-1">
+          <label for="sparge-water" class="text-xs font-medium" style="color: var(--color-text-secondary);">Sparge Water</label>
           <select id="sparge-water" value={recipe.sparge_water_id ?? ""} onchange={handleSpargeWaterChange}
                   class="flex-1 px-2 py-1.5 rounded text-sm"
                   style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);">
@@ -133,85 +130,78 @@
           </select>
         </div>
       </div>
-    </div>
+    </Card>
 
-    <!-- Additions Section -->
-    <div class="flex flex-col gap-3">
-      <h3 class="text-sm font-semibold" style="color: var(--color-text-primary);">Mineral Adjustments</h3>
-      
-      {#each ["mash", "sparge"] as target}
-        <div class="flex flex-col gap-2">
-          <h4 class="text-sm font-medium capitalize" style="color: var(--color-text-secondary);">{target} Additions</h4>
-          
-          <div class="flex flex-col gap-1">
-            {#each adjustments.filter(a => a.target === target) as adj}
-              <div class="flex items-center gap-2">
-                <span class="text-sm flex-1" style="color: var(--color-text-secondary);">{getAdditionLabel(adj.addition)}</span>
-                <input type="number" inputmode="decimal" step="0.1" min="0" value={adj.amount}
-                       onchange={(e) => handleUpdateAddition(adj.id, parseFloat((e.target as HTMLInputElement).value) || 0)}
-                       class="w-20 px-2 py-1 rounded text-sm"
-                       style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
-                <span class="text-sm" style="color: var(--color-text-muted); width: 30px;">g</span>
-                <button onclick={() => handleDeleteAddition(adj.id)}
-                        class="px-2 py-1 rounded text-xs"
-                        style="background: var(--color-bg-elevated); color: var(--color-text-secondary); border: 1px solid var(--color-border);">
-                  ✕
-                </button>
+    <Card title="Mineral Adjustments">
+      <div class="flex flex-col gap-5">
+        {#each ["mash", "sparge"] as target}
+          <div class="flex flex-col gap-2">
+            <h4 class="text-xs font-semibold uppercase tracking-wider capitalize" style="color: var(--color-text-muted);">{target} Additions</h4>
+            <div class="flex flex-col gap-1">
+              {#each adjustments.filter(a => a.target === target) as adj}
+                <div class="flex items-center gap-2">
+                  <span class="text-sm flex-1" style="color: var(--color-text-secondary);">{getAdditionLabel(adj.addition)}</span>
+                  <input type="number" inputmode="decimal" step="0.1" min="0" value={adj.amount}
+                         onchange={(e) => handleUpdateAddition(adj.id, parseFloat((e.target as HTMLInputElement).value) || 0)}
+                         class="w-20 px-2 py-1 rounded text-sm"
+                         style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
+                  <span class="text-sm" style="color: var(--color-text-muted); width: 30px;">g</span>
+                  <button onclick={() => handleDeleteAddition(adj.id)}
+                          class="px-2 py-1 rounded text-xs"
+                          style="background: var(--color-bg-elevated); color: var(--color-text-secondary); border: 1px solid var(--color-border);">
+                    ✕
+                  </button>
+                </div>
+              {/each}
+            </div>
+            <div class="flex gap-1 flex-wrap">
+              {#each ADDITIONS as addition}
+                {#if !adjustments.some(a => a.target === target && a.addition === addition.value)}
+                  <button onclick={() => handleAddAddition(target as any, addition.value)}
+                          class="px-2 py-1 rounded text-xs"
+                          style="background: var(--color-bg-elevated); color: var(--color-text-secondary); border: 1px solid var(--color-border);">
+                    + {addition.label}
+                  </button>
+                {/if}
+              {/each}
+            </div>
+          </div>
+        {/each}
+      </div>
+    </Card>
+
+    {#if profile}
+      <Card title="Adjusted Profile">
+        <div class="flex flex-col gap-3">
+          <div class="grid grid-cols-3 gap-4">
+            {#each [
+              { label: "Calcium", key: "calcium_ppm" },
+              { label: "Magnesium", key: "magnesium_ppm" },
+              { label: "Sodium", key: "sodium_ppm" },
+              { label: "Chloride", key: "chloride_ppm" },
+              { label: "Sulfate", key: "sulfate_ppm" },
+              { label: "Bicarbonate", key: "bicarbonate_ppm" }
+            ] as item}
+              <div class="flex flex-col gap-0.5">
+                <span class="text-xs" style="color: var(--color-text-secondary);">{item.label}</span>
+                <span class="text-base font-semibold font-mono" style="color: var(--color-text-primary);">
+                  {profile.combined[item.key as keyof typeof profile.combined].toFixed(1)}<span class="text-xs font-normal ml-0.5" style="color: var(--color-text-muted);">ppm</span>
+                </span>
               </div>
             {/each}
           </div>
-
-          <div class="flex gap-1 flex-wrap">
-            {#each ADDITIONS as addition}
-              {#if !adjustments.some(a => a.target === target && a.addition === addition.value)}
-                <button onclick={() => handleAddAddition(target as any, addition.value)}
-                        class="px-2 py-1 rounded text-xs"
-                        style="background: var(--color-bg-elevated); color: var(--color-text-secondary); border: 1px solid var(--color-border);">
-                  + {addition.label}
-                </button>
-              {/if}
-            {/each}
-          </div>
-        </div>
-      {/each}
-    </div>
-
-    <!-- Profile Summary -->
-    {#if profile}
-      <div class="flex flex-col gap-3">
-        <h3 class="text-sm font-semibold" style="color: var(--color-text-primary);">Adjusted Profile</h3>
-        
-        <div class="grid grid-cols-3 gap-4">
-          {#each [
-            { label: "Calcium", key: "calcium_ppm" },
-            { label: "Magnesium", key: "magnesium_ppm" },
-            { label: "Sodium", key: "sodium_ppm" },
-            { label: "Chloride", key: "chloride_ppm" },
-            { label: "Sulfate", key: "sulfate_ppm" },
-            { label: "Bicarbonate", key: "bicarbonate_ppm" }
-          ] as item}
-            <div class="flex flex-col gap-1">
-              <span class="text-sm font-medium" style="color: var(--color-text-secondary);">{item.label}</span>
-              <span class="text-sm font-semibold" style="color: var(--color-text-primary);">
-                {profile.combined[item.key as keyof typeof profile.combined].toFixed(1)} ppm
-              </span>
+          <div class="pt-2 border-t flex items-center gap-3" style="border-color: var(--color-border);">
+            <div class="flex flex-col gap-0.5">
+              <span class="text-xs" style="color: var(--color-text-secondary);">Cl:SO₄ Ratio</span>
+              <span class="text-base font-semibold font-mono" style="color: var(--color-text-primary);">{profile.combined.cl_so4_ratio.toFixed(2)}</span>
             </div>
-          {/each}
-        </div>
-
-        <div class="flex flex-col gap-1 pt-2 border-t" style="border-color: var(--color-border);">
-          <span class="text-sm font-medium" style="color: var(--color-text-secondary);">Cl:SO₄ Ratio</span>
-          <div class="flex items-center gap-2">
-            <span class="text-sm font-semibold" style="color: var(--color-text-primary);">
-              {profile.combined.cl_so4_ratio.toFixed(2)}
-            </span>
-            <span class="text-sm px-2 py-1 rounded" 
+            <span class="text-sm px-2 py-1 rounded"
                   style="background: var(--color-bg-elevated); color: var(--color-text-secondary);">
               {getRatioLabel(profile.combined.cl_so4_ratio)}
             </span>
           </div>
         </div>
-      </div>
+      </Card>
     {/if}
   {/if}
 </div>
