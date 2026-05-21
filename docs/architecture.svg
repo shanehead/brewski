@@ -1,150 +1,164 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 580 692" width="580" height="692">
-  <rect width="580" height="692" rx="12" fill="#0d0d12" stroke="#1e1e2e" stroke-width="1"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 580 726" width="580" height="726">
+  <rect width="580" height="726" rx="12" fill="#0d0d12" stroke="#1e1e2e" stroke-width="1"/>
 
   <!-- Title -->
   <text x="290" y="26" text-anchor="middle"
         font-family="system-ui, -apple-system, sans-serif"
         fill="#5c5cff" font-size="12" font-weight="700" letter-spacing="4">BREWSKI</text>
 
+  <!-- ─── Platform row ─── -->
+  <rect x="126" y="38" width="62" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
+  <text x="157" y="53" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#aaa" font-size="10">macOS</text>
+  <rect x="196" y="38" width="44" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
+  <text x="218" y="53" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#aaa" font-size="10">iOS</text>
+  <rect x="248" y="38" width="68" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
+  <text x="282" y="53" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#aaa" font-size="10">Android</text>
+  <rect x="324" y="38" width="68" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
+  <text x="358" y="53" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#aaa" font-size="10">Windows</text>
+  <rect x="400" y="38" width="54" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
+  <text x="427" y="53" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#aaa" font-size="10">Linux</text>
+
   <!-- ─── Box 1: SvelteKit Frontend ─── -->
-  <rect x="36" y="36" width="508" height="116" rx="8" fill="#13131c" stroke="#1e1e2e" stroke-width="1"/>
-  <text x="56" y="61" font-family="system-ui, -apple-system, sans-serif" fill="#f0f0f5" font-size="13" font-weight="600">SvelteKit Frontend</text>
-  <line x1="56" y1="70" x2="524" y2="70" stroke="#1e1e2e" stroke-width="1"/>
-  <text x="56" y="85" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="11">SvelteKit · Svelte 5 · TypeScript · TailwindCSS 4</text>
+  <rect x="36" y="70" width="508" height="130" rx="8" fill="#13131c" stroke="#1e1e2e" stroke-width="1"/>
+  <text x="56" y="95" font-family="system-ui, -apple-system, sans-serif" fill="#f0f0f5" font-size="13" font-weight="600">SvelteKit Frontend</text>
+  <line x1="56" y1="104" x2="524" y2="104" stroke="#1e1e2e" stroke-width="1"/>
+  <text x="56" y="119" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="11">SvelteKit · Svelte 5 · TypeScript · TailwindCSS 4</text>
   <!-- chips row 1 -->
-  <rect x="56"  y="93" width="56" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
-  <text x="84"  y="108" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">Routes</text>
-  <rect x="120" y="93" width="84" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
-  <text x="162" y="108" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">Components</text>
-  <rect x="212" y="93" width="48" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
-  <text x="236" y="108" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">api.ts</text>
+  <rect x="56"  y="127" width="56" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
+  <text x="84"  y="142" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">Routes</text>
+  <rect x="120" y="127" width="84" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
+  <text x="162" y="142" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">Components</text>
+  <rect x="212" y="127" width="48" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
+  <text x="236" y="142" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">api.ts</text>
   <!-- chips row 2 -->
-  <rect x="56"  y="121" width="76" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
-  <text x="94"  y="136" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">api.gen.ts</text>
-  <rect x="140" y="121" width="54" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
-  <text x="167" y="136" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">tools/</text>
-  <rect x="202" y="121" width="54" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
-  <text x="229" y="136" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">themes</text>
+  <rect x="56"  y="155" width="76" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
+  <text x="94"  y="170" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">api.gen.ts</text>
+  <rect x="140" y="155" width="54" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
+  <text x="167" y="170" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">tools/</text>
+  <rect x="202" y="155" width="54" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
+  <text x="229" y="170" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">themes</text>
+  <rect x="264" y="155" width="58" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
+  <text x="293" y="170" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">icons.ts</text>
 
   <!-- ─── Arrow 1: tauri.invoke() ─── -->
-  <line x1="290" y1="152" x2="290" y2="179" stroke="#5c5cff" stroke-width="1.5" stroke-dasharray="4 3"/>
-  <polygon points="290,189 284,179 296,179" fill="#5c5cff"/>
-  <rect x="206" y="161" width="168" height="18" rx="3" fill="#0d0d12"/>
-  <text x="290" y="174" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#5c5cff" font-size="11" font-style="italic">tauri.invoke()</text>
+  <line x1="290" y1="200" x2="290" y2="223" stroke="#5c5cff" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <polygon points="290,233 284,223 296,223" fill="#5c5cff"/>
+  <rect x="206" y="205" width="168" height="18" rx="3" fill="#0d0d12"/>
+  <text x="290" y="218" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#5c5cff" font-size="11" font-style="italic">tauri.invoke()</text>
 
   <!-- ─── Box 2: Command Handlers ─── -->
-  <rect x="36" y="189" width="508" height="110" rx="8" fill="#13131c" stroke="#1e1e2e" stroke-width="1"/>
-  <text x="56"  y="212" font-family="system-ui, -apple-system, sans-serif" fill="#f0f0f5" font-size="13" font-weight="600">Tauri Command Handlers</text>
-  <text x="299" y="212" font-family="system-ui, -apple-system, sans-serif" fill="#555"   font-size="11"> · Rust</text>
-  <line x1="56" y1="220" x2="524" y2="220" stroke="#1e1e2e" stroke-width="1"/>
-  <text x="56"  y="234" font-family="'SFMono-Regular', Consolas, monospace" fill="#555" font-size="10">src-tauri/src/commands/</text>
+  <rect x="36" y="233" width="508" height="110" rx="8" fill="#13131c" stroke="#1e1e2e" stroke-width="1"/>
+  <text x="56"  y="256" font-family="system-ui, -apple-system, sans-serif" fill="#f0f0f5" font-size="13" font-weight="600">Tauri Command Handlers</text>
+  <text x="299" y="256" font-family="system-ui, -apple-system, sans-serif" fill="#555"   font-size="11"> · Rust</text>
+  <line x1="56" y1="264" x2="524" y2="264" stroke="#1e1e2e" stroke-width="1"/>
+  <text x="56"  y="278" font-family="'SFMono-Regular', Consolas, monospace" fill="#555" font-size="10">src-tauri/src/commands/</text>
   <!-- chips row 1 -->
-  <rect x="56"  y="242" width="58" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
-  <text x="85"  y="257" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">recipes</text>
-  <rect x="122" y="242" width="67" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
-  <text x="155" y="257" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">additions</text>
-  <rect x="197" y="242" width="42" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
-  <text x="218" y="257" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">mash</text>
-  <rect x="247" y="242" width="68" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
-  <text x="281" y="257" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">equipment</text>
-  <rect x="323" y="242" width="54" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
-  <text x="350" y="257" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">library</text>
-  <rect x="385" y="242" width="58" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
-  <text x="414" y="257" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">settings</text>
+  <rect x="56"  y="286" width="58" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
+  <text x="85"  y="301" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">recipes</text>
+  <rect x="122" y="286" width="67" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
+  <text x="155" y="301" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">additions</text>
+  <rect x="197" y="286" width="42" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
+  <text x="218" y="301" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">mash</text>
+  <rect x="247" y="286" width="68" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
+  <text x="281" y="301" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">equipment</text>
+  <rect x="323" y="286" width="54" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
+  <text x="350" y="301" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">library</text>
+  <rect x="385" y="286" width="58" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
+  <text x="414" y="301" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">settings</text>
   <!-- chips row 2 -->
-  <rect x="56"  y="270" width="54" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
-  <text x="83"  y="285" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">batches</text>
-  <rect x="118" y="270" width="42" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
-  <text x="139" y="285" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">tools</text>
-  <rect x="168" y="270" width="100" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
-  <text x="218" y="285" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">water_chemistry</text>
-  <rect x="276" y="270" width="84" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
-  <text x="318" y="285" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">import_export</text>
+  <rect x="56"  y="314" width="54" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
+  <text x="83"  y="329" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">batches</text>
+  <rect x="118" y="314" width="42" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
+  <text x="139" y="329" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">tools</text>
+  <rect x="168" y="314" width="100" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
+  <text x="218" y="329" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">water_chemistry</text>
+  <rect x="276" y="314" width="84" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
+  <text x="318" y="329" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">import_export</text>
 
   <!-- ─── Arrow 2 ─── -->
-  <line x1="290" y1="299" x2="290" y2="322" stroke="#444" stroke-width="1.5"/>
-  <polygon points="290,332 284,322 296,322" fill="#444"/>
+  <line x1="290" y1="343" x2="290" y2="366" stroke="#444" stroke-width="1.5"/>
+  <polygon points="290,376 284,366 296,366" fill="#444"/>
 
   <!-- ─── Box 3: Brewing Calculations ─── -->
-  <rect x="36" y="332" width="508" height="84" rx="8" fill="#13131c" stroke="#1e1e2e" stroke-width="1"/>
-  <text x="56"  y="355" font-family="system-ui, -apple-system, sans-serif" fill="#f0f0f5" font-size="13" font-weight="600">Brewing Calculations</text>
-  <text x="236" y="355" font-family="system-ui, -apple-system, sans-serif" fill="#555"   font-size="11"> · Rust</text>
-  <line x1="56" y1="363" x2="524" y2="363" stroke="#1e1e2e" stroke-width="1"/>
-  <text x="56"  y="377" font-family="'SFMono-Regular', Consolas, monospace" fill="#555" font-size="10">src-tauri/src/brewing/</text>
+  <rect x="36" y="376" width="508" height="84" rx="8" fill="#13131c" stroke="#1e1e2e" stroke-width="1"/>
+  <text x="56"  y="399" font-family="system-ui, -apple-system, sans-serif" fill="#f0f0f5" font-size="13" font-weight="600">Brewing Calculations</text>
+  <text x="236" y="399" font-family="system-ui, -apple-system, sans-serif" fill="#555"   font-size="11"> · Rust</text>
+  <line x1="56" y1="407" x2="524" y2="407" stroke="#1e1e2e" stroke-width="1"/>
+  <text x="56"  y="421" font-family="'SFMono-Regular', Consolas, monospace" fill="#555" font-size="10">src-tauri/src/brewing/</text>
   <!-- chips -->
-  <rect x="56"  y="385" width="34" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
-  <text x="73"  y="400" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">OG</text>
-  <rect x="98"  y="385" width="32" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
-  <text x="114" y="400" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">IBU</text>
-  <rect x="138" y="385" width="38" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
-  <text x="157" y="400" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">SRM</text>
-  <rect x="184" y="385" width="38" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
-  <text x="203" y="400" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">ABV</text>
-  <rect x="230" y="385" width="30" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
-  <text x="245" y="400" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">FG</text>
-  <rect x="268" y="385" width="64" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
-  <text x="300" y="400" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">Pitch Rate</text>
-  <rect x="340" y="385" width="78" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
-  <text x="379" y="400" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">Carbonation</text>
-  <rect x="426" y="385" width="62" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
-  <text x="457" y="400" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">Water · …</text>
+  <rect x="56"  y="429" width="34" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
+  <text x="73"  y="444" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">OG</text>
+  <rect x="98"  y="429" width="32" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
+  <text x="114" y="444" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">IBU</text>
+  <rect x="138" y="429" width="38" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
+  <text x="157" y="444" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">SRM</text>
+  <rect x="184" y="429" width="38" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
+  <text x="203" y="444" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">ABV</text>
+  <rect x="230" y="429" width="30" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
+  <text x="245" y="444" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">FG</text>
+  <rect x="268" y="429" width="64" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
+  <text x="300" y="444" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">Pitch Rate</text>
+  <rect x="340" y="429" width="78" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
+  <text x="379" y="444" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">Carbonation</text>
+  <rect x="426" y="429" width="62" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
+  <text x="457" y="444" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">Water · …</text>
 
   <!-- ─── Arrow 3 ─── -->
-  <line x1="290" y1="416" x2="290" y2="439" stroke="#444" stroke-width="1.5"/>
-  <polygon points="290,449 284,439 296,439" fill="#444"/>
+  <line x1="290" y1="460" x2="290" y2="483" stroke="#444" stroke-width="1.5"/>
+  <polygon points="290,493 284,483 296,483" fill="#444"/>
 
   <!-- ─── Box 4: Repository Layer ─── -->
-  <rect x="36" y="449" width="508" height="116" rx="8" fill="#13131c" stroke="#1e1e2e" stroke-width="1"/>
-  <text x="56"  y="472" font-family="system-ui, -apple-system, sans-serif" fill="#f0f0f5" font-size="13" font-weight="600">Repository Layer</text>
-  <text x="231" y="472" font-family="system-ui, -apple-system, sans-serif" fill="#555"   font-size="11"> · Rust</text>
-  <line x1="56" y1="480" x2="524" y2="480" stroke="#1e1e2e" stroke-width="1"/>
-  <text x="56"  y="494" font-family="'SFMono-Regular', Consolas, monospace" fill="#555" font-size="10">src-tauri/src/repositories/</text>
+  <rect x="36" y="493" width="508" height="116" rx="8" fill="#13131c" stroke="#1e1e2e" stroke-width="1"/>
+  <text x="56"  y="516" font-family="system-ui, -apple-system, sans-serif" fill="#f0f0f5" font-size="13" font-weight="600">Repository Layer</text>
+  <text x="231" y="516" font-family="system-ui, -apple-system, sans-serif" fill="#555"   font-size="11"> · Rust</text>
+  <line x1="56" y1="524" x2="524" y2="524" stroke="#1e1e2e" stroke-width="1"/>
+  <text x="56"  y="538" font-family="'SFMono-Regular', Consolas, monospace" fill="#555" font-size="10">src-tauri/src/repositories/</text>
   <!-- chips row 1 -->
-  <rect x="56"  y="502" width="52" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
-  <text x="82"  y="517" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">Recipe</text>
-  <rect x="116" y="502" width="80" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
-  <text x="156" y="517" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">Fermentable</text>
-  <rect x="204" y="502" width="38" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
-  <text x="223" y="517" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">Hop</text>
-  <rect x="250" y="502" width="46" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
-  <text x="273" y="517" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">Yeast</text>
-  <rect x="304" y="502" width="42" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
-  <text x="325" y="517" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">Misc</text>
-  <rect x="354" y="502" width="46" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
-  <text x="377" y="517" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">Water</text>
-  <rect x="408" y="502" width="42" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
-  <text x="429" y="517" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">Mash</text>
+  <rect x="56"  y="546" width="52" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
+  <text x="82"  y="561" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">Recipe</text>
+  <rect x="116" y="546" width="80" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
+  <text x="156" y="561" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">Fermentable</text>
+  <rect x="204" y="546" width="38" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
+  <text x="223" y="561" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">Hop</text>
+  <rect x="250" y="546" width="46" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
+  <text x="273" y="561" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">Yeast</text>
+  <rect x="304" y="546" width="42" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
+  <text x="325" y="561" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">Misc</text>
+  <rect x="354" y="546" width="46" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
+  <text x="377" y="561" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">Water</text>
+  <rect x="408" y="546" width="42" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
+  <text x="429" y="561" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">Mash</text>
   <!-- chips row 2 -->
-  <rect x="56"  y="530" width="68" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
-  <text x="90"  y="545" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">Equipment</text>
-  <rect x="132" y="530" width="52" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
-  <text x="158" y="545" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">Library</text>
-  <rect x="192" y="530" width="56" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
-  <text x="220" y="545" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">Settings</text>
-  <rect x="256" y="530" width="100" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
-  <text x="306" y="545" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">WaterChemistry</text>
-  <rect x="364" y="530" width="46" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
-  <text x="387" y="545" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">Styles</text>
+  <rect x="56"  y="574" width="68" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
+  <text x="90"  y="589" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">Equipment</text>
+  <rect x="132" y="574" width="52" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
+  <text x="158" y="589" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">Library</text>
+  <rect x="192" y="574" width="56" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
+  <text x="220" y="589" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">Settings</text>
+  <rect x="256" y="574" width="100" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
+  <text x="306" y="589" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">WaterChemistry</text>
+  <rect x="364" y="574" width="46" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
+  <text x="387" y="589" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">Styles</text>
 
   <!-- ─── Arrow 4: SeaORM / sqlx ─── -->
-  <line x1="290" y1="565" x2="290" y2="590" stroke="#444" stroke-width="1.5"/>
-  <polygon points="290,600 284,590 296,590" fill="#444"/>
-  <rect x="215" y="573" width="150" height="16" rx="3" fill="#0d0d12"/>
-  <text x="290" y="585" text-anchor="middle" font-family="'SFMono-Regular', Consolas, monospace" fill="#555" font-size="10">SeaORM · sqlx</text>
+  <line x1="290" y1="609" x2="290" y2="632" stroke="#444" stroke-width="1.5"/>
+  <polygon points="290,642 284,632 296,632" fill="#444"/>
+  <rect x="215" y="617" width="150" height="16" rx="3" fill="#0d0d12"/>
+  <text x="290" y="629" text-anchor="middle" font-family="'SFMono-Regular', Consolas, monospace" fill="#555" font-size="10">SeaORM · sqlx</text>
 
   <!-- ─── Box 5: SQLite ─── -->
-  <rect x="36" y="600" width="508" height="82" rx="8" fill="#13131c" stroke="#1e1e2e" stroke-width="1"/>
-  <text x="56"  y="623" font-family="system-ui, -apple-system, sans-serif" fill="#f0f0f5" font-size="13" font-weight="600">SQLite</text>
-  <text x="110" y="623" font-family="system-ui, -apple-system, sans-serif" fill="#555"   font-size="11"> · embedded · single file</text>
-  <line x1="56" y1="631" x2="524" y2="631" stroke="#1e1e2e" stroke-width="1"/>
-  <text x="56"  y="645" font-family="'SFMono-Regular', Consolas, monospace" fill="#555" font-size="10">src-tauri/migrations/</text>
+  <rect x="36" y="642" width="508" height="74" rx="8" fill="#13131c" stroke="#1e1e2e" stroke-width="1"/>
+  <text x="56"  y="665" font-family="system-ui, -apple-system, sans-serif" fill="#f0f0f5" font-size="13" font-weight="600">SQLite</text>
+  <text x="110" y="665" font-family="system-ui, -apple-system, sans-serif" fill="#555"   font-size="11"> · embedded · single file</text>
+  <line x1="56" y1="673" x2="524" y2="673" stroke="#1e1e2e" stroke-width="1"/>
+  <text x="56"  y="687" font-family="'SFMono-Regular', Consolas, monospace" fill="#555" font-size="10">src-tauri/migrations/</text>
   <!-- chips -->
-  <rect x="56"  y="653" width="70" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
-  <text x="91"  y="668" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">Styles (BJCP)</text>
-  <rect x="134" y="653" width="38" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
-  <text x="153" y="668" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">Hops</text>
-  <rect x="180" y="653" width="80" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
-  <text x="220" y="668" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">Fermentables</text>
-  <rect x="268" y="653" width="48" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
-  <text x="292" y="668" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">Yeasts</text>
+  <rect x="56"  y="695" width="70" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
+  <text x="91"  y="710" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">Styles (BJCP)</text>
+  <rect x="134" y="695" width="38" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
+  <text x="153" y="710" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">Hops</text>
+  <rect x="180" y="695" width="80" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
+  <text x="220" y="710" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">Fermentables</text>
+  <rect x="268" y="695" width="48" height="22" rx="4" fill="#1a1a2a" stroke="#2a2a3e" stroke-width="1"/>
+  <text x="292" y="710" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" fill="#888" font-size="10">Yeasts</text>
 </svg>
