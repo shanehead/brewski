@@ -42,7 +42,7 @@
       class="flex flex-col items-center justify-center flex-1 py-2 gap-1 text-xs transition-colors"
       style={active ? "color: var(--color-accent);" : "color: var(--color-text-secondary);"}
     >
-      <span style={active ? "opacity: 1;" : "opacity: 0.45;"}>
+      <span style={active ? "opacity: 1; transition: opacity 0.15s;" : "opacity: 0.45; transition: opacity 0.15s;"}>
         <BrewingIcon name={tab.icon} size={22} />
       </span>
       {tab.label}
