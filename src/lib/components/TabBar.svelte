@@ -30,7 +30,9 @@
         : "color: var(--color-text-secondary); border-color: transparent; background: transparent;"}
     >
       {#if tab.icon}
-        <BrewingIcon name={tab.icon} />
+        <span style={active === tab.key ? "opacity: 1;" : "opacity: 0.45;"}>
+          <BrewingIcon name={tab.icon} size={20} />
+        </span>
       {/if}
       {tab.label}
     </button>
