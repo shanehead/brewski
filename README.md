@@ -2,7 +2,7 @@
   <img src="logo.png" alt="Brewski" width="320"/>
 </p>
 
-# Brewski
+# Brewski 🍺
 
 A homebrewing companion for crafting recipes, tracking brew days, managing your ingredient library, and dialing in your process — from grain to glass. Runs natively on macOS, iOS, Android, Windows, and Linux — your data stays on your device, no account required.
 
@@ -10,30 +10,30 @@ A homebrewing companion for crafting recipes, tracking brew days, managing your 
 
 ## Features
 
-**Recipes**
+**🍻 Recipes**
 - Build recipes from scratch with full ingredient control — fermentables, hops, yeast, and water additions
 - Real-time stats as you build: OG, FG, ABV, IBU, SRM color
 - Version history so you can track changes across brew days
 
-**Batch tracking**
+**📋 Batch tracking**
 - Log brew days against any recipe
 - Track fermentation progress and carbonation
 - Record notes at every stage
 
-**Water chemistry**
+**💧 Water chemistry**
 - Model your water source and target profiles
 - Calculate mineral additions (gypsum, calcium chloride, etc.)
 - See adjusted water chemistry before you brew
 
-**Mash**
+**🌡️ Mash**
 - Build multi-step mash schedules
 - Track temperatures and times
 
-**Ingredient library**
+**📦 Ingredient library**
 - Searchable database of hops, fermentables, and yeasts
 - Data sourced from [BeerMaverick](https://beermaverick.com)
 
-**Brewing tools**
+**🔧 Brewing tools**
 - ABV & calorie calculator
 - Carbonation calculator
 - Gravity conversions
@@ -42,7 +42,7 @@ A homebrewing companion for crafting recipes, tracking brew days, managing your 
 - Refractometer correction
 - Unit conversions
 
-**Equipment profiles**
+**⚙️ Equipment profiles**
 - Save your system's volumes and efficiency for accurate recipe scaling
 
 ## Download
@@ -68,7 +68,7 @@ Brewski stores everything locally — no cloud, no account. Your database lives 
 | Linux | `~/.local/share/brewski/brewski.db` |
 | iOS / Android | App sandbox (export via the app) |
 
-The database path is configurable in Settings. Point it to a folder inside iCloud Drive, Dropbox, Google Drive, or any other sync service to keep your data backed up and in sync across your computers.
+The database path is configurable in Settings. Point it to a folder inside iCloud Drive, Dropbox, Google Drive, or any other sync service to keep your data backed up and in sync across your devices.
 
 ---
 
