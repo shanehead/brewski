@@ -20,4 +20,4 @@ memory/
 .worktrees/
 dev.db
 .superpowers/
-superpowers/
+/superpowers/
