@@ -2,9 +2,11 @@
   <img src="logo.png" alt="Brewski" width="320"/>
 </p>
 
-# Brewski 🍺
+# Brewski
 
-A homebrewing companion for crafting recipes, tracking brew days, managing your ingredient library, and dialing in your process — from grain to glass. Runs natively on macOS, iOS, Android, Windows, and Linux — your data stays on your device, no account required.
+Whether you're brewing your first batch or your hundredth, Brewski keeps everything in one place — recipes, brew day logs, water chemistry, fermentation notes, and more. It's built for homebrewers who want to focus on the beer, not the bookkeeping.
+
+Runs natively on macOS, iOS, Android, Windows, and Linux. Your data lives on your device — no account, no cloud, no nonsense.
 
 **Free and open source — every feature, forever.** No subscriptions, no paywalls, no "pro" tier.
 
