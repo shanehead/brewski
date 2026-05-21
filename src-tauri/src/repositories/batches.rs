@@ -47,6 +47,10 @@ impl<'a> BatchRepository<'a> {
             actual_fg: Set(None),
             notes: Set(None),
             rating: Set(None),
+            packaging_temp_c: Set(None),
+            carbonation_sugar_type: Set(None),
+            priming_sugar_g: Set(None),
+            serving_pressure_kpa: Set(None),
             created_at: Set(now),
             updated_at: Set(now),
         }

@@ -29,6 +29,11 @@ pub struct Model {
     #[sea_orm(column_type = "Text", nullable)]
     pub notes: Option<String>,
     pub rating: Option<i32>,
+    pub packaging_temp_c: Option<f64>,
+    #[sea_orm(column_type = "Text", nullable)]
+    pub carbonation_sugar_type: Option<String>,
+    pub priming_sugar_g: Option<f64>,
+    pub serving_pressure_kpa: Option<f64>,
     pub created_at: i32,
     pub updated_at: i32,
 }
