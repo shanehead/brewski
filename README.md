@@ -6,7 +6,7 @@
 
 A homebrewing recipe manager — native desktop app for crafting, organizing, and refining beer recipes.
 
-Built with Tauri 2, SvelteKit, and Rust. Runs on macOS, Windows, and Linux.
+Built with Tauri 2, SvelteKit, and Rust. Runs on macOS, iOS, Android, Windows, and Linux.
 
 ## Architecture
 
@@ -39,24 +39,44 @@ C4 diagrams (System Context, Container, and Component levels) are in [`docs/c4.m
 ### Development
 
 ```bash
-bun install      # install frontend dependencies
-just dev         # Tauri dev server (frontend + backend)
-just dev-web     # frontend only (no Rust compilation)
+bun install        # install frontend dependencies
+just dev           # Tauri dev server (frontend + backend)
+just dev-web       # frontend only (no Rust compilation)
+just dev-ios       # iOS simulator (set IOS_SIMULATOR env var to override device)
+just dev-android   # Android emulator
 ```
 
 ### Build
 
 ```bash
-just build       # release build for current platform
+just build           # release build for current platform (no bundling)
+just build-macos     # macOS universal binary (arm64 + x86_64)
+just build-ios       # iOS IPA
+just build-android   # Android APK + AAB
+just build-windows   # Windows installer
+just build-linux     # Linux packages (.deb, .AppImage, .rpm)
+just build-all       # all platforms
 ```
 
 ### Other commands
 
 ```bash
 just check          # TypeScript check + OpenAPI lint
+just test           # Rust + frontend tests
 just lint-openapi   # validate docs/openapi/openapi.yaml
 just preview-docs   # render API docs in a browser
 ```
+
+## CI / CD
+
+GitHub Actions workflows live in [`.github/workflows/`](.github/workflows/):
+
+| Workflow | Trigger | What it does |
+|---|---|---|
+| `ci.yml` | Push to `main`, pull requests | Type check, OpenAPI lint, frontend tests, Rust tests |
+| `release.yml` | Push a `v*` tag | Builds all platforms in parallel, uploads artifacts to a draft GitHub Release |
+
+Release jobs are gated on the `release` environment — add signing secrets there (Apple certificates, Android keystore) before tagging a release.
 
 ## Database location
 
