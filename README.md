@@ -61,12 +61,14 @@ Download the latest release for your platform from the [Releases](../../releases
 
 Brewski stores everything locally — no cloud, no account. Your database lives at:
 
-| Platform | Path |
+| Platform | Default path |
 |---|---|
 | macOS | `~/Library/Application Support/brewski/brewski.db` |
 | Windows | `%APPDATA%\brewski\brewski.db` |
 | Linux | `~/.local/share/brewski/brewski.db` |
 | iOS / Android | App sandbox (export via the app) |
+
+The database path is configurable in Settings. Point it to a folder inside iCloud Drive, Dropbox, Google Drive, or any other sync service to keep your data backed up and in sync across your computers.
 
 ---
 
