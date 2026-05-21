@@ -277,10 +277,8 @@
     {/if}
 
     <!-- Tab bar -->
-    <nav
-      class="px-4 py-3 border-b flex-shrink-0"
-      style="background: var(--color-bg-surface); border-color: var(--color-border);"
-    >
+    <nav class="px-4 pt-1 flex-shrink-0"
+         style="background: var(--color-bg-surface);">
       <TabBar tabs={TABS} active={activeTab} onchange={(key) => activeTab = key as typeof activeTab} />
     </nav>
 

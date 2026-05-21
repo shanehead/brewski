@@ -58,13 +58,13 @@
 <div class="flex flex-1 flex-col overflow-hidden">
   {#if batch}
     <!-- Header -->
-    <div class="px-4 pt-3 pb-0 border-b flex-shrink-0" style="border-color: var(--color-border);">
+    <div class="px-4 pt-3 pb-0 flex-shrink-0">
       <div class="font-semibold text-base truncate">{batch.recipe_name}</div>
       <div class="text-xs mb-2" style="color: var(--color-text-muted);">
         {batch.name ?? "Batch"} · v{batch.recipe_version_id.slice(0, 6)}
       </div>
       <!-- Tab bar -->
-      <TabBar tabs={TABS} active={activeTab} onchange={(key) => activeTab = key as typeof activeTab} flush />
+      <TabBar tabs={TABS} active={activeTab} onchange={(key) => activeTab = key as typeof activeTab} />
     </div>
 
     <!-- Tab content -->

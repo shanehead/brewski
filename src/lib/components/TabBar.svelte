@@ -1,3 +1,4 @@
+<!-- src/lib/components/TabBar.svelte -->
 <script lang="ts">
   import BrewingIcon from "$lib/components/BrewingIcon.svelte";
   import type { BrewingIconName } from "$lib/icons";
@@ -12,33 +13,21 @@
     tabs,
     active,
     onchange,
-    flush = false,
   }: {
     tabs: readonly Tab[];
     active: string;
     onchange: (key: string) => void;
-    flush?: boolean;
   } = $props();
 </script>
 
-<div
-  class="flex gap-1 w-fit"
-  class:p-1={!flush}
-  class:px-1={flush}
-  class:pt-1={flush}
-  class:rounded-lg={!flush}
-  class:rounded-t-lg={flush}
-  style="background: var(--color-bg-elevated); border: 1px solid var(--color-border); {flush ? 'border-bottom: none;' : ''}"
->
+<div class="flex gap-0 border-b" style="border-color: var(--color-border);">
   {#each tabs as tab}
     <button
       onclick={() => onchange(tab.key)}
-      class="px-3 py-1 text-sm transition-colors inline-flex items-center gap-1.5"
-      class:rounded-md={!flush}
-      class:rounded-t-md={flush}
+      class="px-4 py-2.5 text-sm transition-colors inline-flex items-center gap-1.5 border-b-2 -mb-px"
       style={active === tab.key
-        ? "background: var(--color-accent); color: #fff;"
-        : "color: var(--color-text-secondary); background: transparent;"}
+        ? "color: var(--color-accent); border-color: var(--color-accent); background: transparent;"
+        : "color: var(--color-text-secondary); border-color: transparent; background: transparent;"}
     >
       {#if tab.icon}
         <BrewingIcon name={tab.icon} />
