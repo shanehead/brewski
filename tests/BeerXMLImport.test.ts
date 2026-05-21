@@ -1,6 +1,7 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, fireEvent } from "@testing-library/svelte";
 import RecipeList from "$lib/components/RecipeList.svelte";
+import MobileRecipesHome from "$lib/mobile/RecipesHome.svelte";
 
 vi.mock("$lib/stores/recipes", () => ({
   recipeList: {
@@ -54,5 +55,12 @@ describe("RecipeList", () => {
     await fireEvent.change(input);
 
     expect(createRecipesFromBeerxml).toHaveBeenCalledWith(xml);
+  });
+});
+
+describe("Mobile RecipesHome", () => {
+  it("renders the Import BeerXML button", () => {
+    const { getByText } = render(MobileRecipesHome);
+    expect(getByText("Import BeerXML")).toBeTruthy();
   });
 });
