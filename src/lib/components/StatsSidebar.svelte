@@ -1,3 +1,4 @@
+<!-- src/lib/components/StatsSidebar.svelte -->
 <script lang="ts" module>
   const SRM_STOPS: [number, string][] = [
     [1, "#FFE699"], [2, "#FFD878"], [3, "#FFCA5A"], [4, "#FFBF42"],
@@ -16,7 +17,7 @@
 
   const units = $derived<Units>($settings.units === "imperial" ? "imperial" : "metric");
 
-  function fmt(val: number | undefined, decimals = 3): string {
+  function fmt(val: number | undefined | null, decimals = 3): string {
     if (val === undefined || val === null) return "—";
     return val.toFixed(decimals);
   }
@@ -28,63 +29,104 @@
     }
     return "#FFE699";
   }
+
+  function pct(value: number, min: number, max: number): number {
+    return Math.min(100, Math.max(0, ((value - min) / (max - min)) * 100));
+  }
 </script>
 
-<aside class="w-40 flex-shrink-0 flex flex-col border-l p-3 gap-3"
+<aside class="w-44 flex-shrink-0 flex flex-col border-l overflow-y-auto p-3 gap-1.5"
        style="background: var(--color-bg-surface); border-color: var(--color-border);">
-  <h3 class="text-xs font-semibold uppercase tracking-wider" style="color: var(--color-text-muted);">Stats</h3>
+  <p class="text-xs font-semibold uppercase tracking-wider mb-1"
+     style="color: var(--color-text-muted);">Stats</p>
 
   {#if stats}
-    <div class="flex flex-col gap-2">
-      <div class="flex items-center justify-between">
-        <span class="text-xs" style="color: var(--color-text-secondary);">OG</span>
-        <span class="text-xs font-mono" style="color: var(--color-text-primary);">{fmt(stats.og, 3)}</span>
-      </div>
-      <div class="flex items-center justify-between">
-        <span class="text-xs" style="color: var(--color-text-secondary);">FG</span>
-        <span class="text-xs font-mono" style="color: var(--color-text-primary);">{fmt(stats.fg, 3)}</span>
-      </div>
-      <div class="flex items-center justify-between">
-        <span class="text-xs" style="color: var(--color-text-secondary);">ABV</span>
-        <span class="text-xs font-mono" style="color: var(--color-text-primary);">{fmt(stats.abv_pct, 1)}%</span>
-      </div>
-      <div class="flex items-center justify-between">
-        <span class="text-xs" style="color: var(--color-text-secondary);">IBU</span>
-        <span class="text-xs font-mono" style="color: var(--color-text-primary);">{fmt(stats.ibu, 0)}</span>
-      </div>
-      <div class="flex items-center justify-between">
-        <span class="text-xs" style="color: var(--color-text-secondary);">SRM</span>
-        <div class="flex items-center gap-1.5">
-          <div class="w-3 h-3 rounded-full border border-white/20"
-               style="background: {srmToHex(stats.srm)};"></div>
-          <span class="text-xs font-mono" style="color: var(--color-text-primary);">{fmt(stats.srm, 1)}</span>
-        </div>
-      </div>
-      <div class="flex items-center justify-between">
-        <span class="text-xs" style="color: var(--color-text-secondary);">BU:GU</span>
-        <span class="text-xs font-mono" style="color: var(--color-text-primary);">{fmt(stats.bu_gu_ratio, 2)}</span>
-      </div>
-      <div class="flex items-center justify-between">
-        <span class="text-xs" style="color: var(--color-text-secondary);">Cal</span>
-        <span class="text-xs font-mono" style="color: var(--color-text-primary);">{fmt(stats.calories_per_355ml, 0)} kcal</span>
+    <!-- OG -->
+    <div class="rounded-lg p-2.5" style="background: var(--color-bg-elevated); border: 1px solid var(--color-border);">
+      <p class="text-xs mb-0.5" style="color: var(--color-text-muted);">OG</p>
+      <p class="text-xl font-bold font-mono leading-none" style="color: var(--color-text-primary);">{fmt(stats.og, 3)}</p>
+      <div class="mt-1.5 h-1 rounded-full" style="background: var(--color-border);">
+        <div class="h-full rounded-full" style="width: {pct(stats.og, 1.000, 1.120)}%; background: var(--color-accent);"></div>
       </div>
     </div>
 
-    <div class="border-t pt-2" style="border-color: var(--color-border);">
-      <h4 class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--color-text-muted);">Volumes</h4>
-      <div class="flex items-center justify-between">
-        <span class="text-xs" style="color: var(--color-text-secondary);">Pre-boil</span>
-        <span class="text-xs font-mono" style="color: var(--color-text-primary);">{fmt(units === "imperial" ? lToGal(stats.pre_boil_volume_l) : stats.pre_boil_volume_l, 1)}{volumeLabel(units)}</span>
-      </div>
-      <div class="flex items-center justify-between">
-        <span class="text-xs" style="color: var(--color-text-secondary);">Post-boil</span>
-        <span class="text-xs font-mono" style="color: var(--color-text-primary);">{fmt(units === "imperial" ? lToGal(stats.post_boil_volume_l) : stats.post_boil_volume_l, 1)}{volumeLabel(units)}</span>
-      </div>
-      <div class="flex items-center justify-between">
-        <span class="text-xs" style="color: var(--color-text-secondary);">Pre-boil G</span>
-        <span class="text-xs font-mono" style="color: var(--color-text-primary);">{fmt(stats.pre_boil_gravity, 3)}</span>
+    <!-- FG -->
+    <div class="rounded-lg p-2.5" style="background: var(--color-bg-elevated); border: 1px solid var(--color-border);">
+      <p class="text-xs mb-0.5" style="color: var(--color-text-muted);">FG</p>
+      <p class="text-xl font-bold font-mono leading-none" style="color: var(--color-text-primary);">{fmt(stats.fg, 3)}</p>
+      <div class="mt-1.5 h-1 rounded-full" style="background: var(--color-border);">
+        <div class="h-full rounded-full" style="width: {pct(stats.fg, 1.000, 1.030)}%; background: var(--color-accent);"></div>
       </div>
     </div>
+
+    <!-- ABV -->
+    <div class="rounded-lg p-2.5" style="background: var(--color-bg-elevated); border: 1px solid var(--color-border);">
+      <p class="text-xs mb-0.5" style="color: var(--color-text-muted);">ABV</p>
+      <p class="text-xl font-bold font-mono leading-none" style="color: var(--color-text-primary);">
+        {fmt(stats.abv_pct, 1)}<span class="text-sm font-normal" style="color: var(--color-text-muted);">%</span>
+      </p>
+      <div class="mt-1.5 h-1 rounded-full" style="background: var(--color-border);">
+        <div class="h-full rounded-full" style="width: {pct(stats.abv_pct, 0, 12)}%; background: #a6e3a1;"></div>
+      </div>
+    </div>
+
+    <!-- IBU -->
+    <div class="rounded-lg p-2.5" style="background: var(--color-bg-elevated); border: 1px solid var(--color-border);">
+      <p class="text-xs mb-0.5" style="color: var(--color-text-muted);">IBU</p>
+      <p class="text-xl font-bold font-mono leading-none" style="color: var(--color-text-primary);">{fmt(stats.ibu, 0)}</p>
+      <div class="mt-1.5 h-1 rounded-full" style="background: var(--color-border);">
+        <div class="h-full rounded-full" style="width: {pct(stats.ibu, 0, 120)}%; background: #fab387;"></div>
+      </div>
+    </div>
+
+    <!-- SRM -->
+    <div class="rounded-lg p-2.5" style="background: var(--color-bg-elevated); border: 1px solid var(--color-border);">
+      <p class="text-xs mb-0.5" style="color: var(--color-text-muted);">SRM</p>
+      <div class="flex items-center gap-2">
+        <div class="w-5 h-5 rounded flex-shrink-0"
+             style="background: {srmToHex(stats.srm)}; border: 1px solid rgba(255,255,255,0.15);"></div>
+        <p class="text-xl font-bold font-mono leading-none" style="color: var(--color-text-primary);">{fmt(stats.srm, 1)}</p>
+      </div>
+    </div>
+
+    <!-- BU:GU -->
+    <div class="rounded-lg p-2.5" style="background: var(--color-bg-elevated); border: 1px solid var(--color-border);">
+      <p class="text-xs mb-0.5" style="color: var(--color-text-muted);">BU:GU</p>
+      <p class="text-xl font-bold font-mono leading-none" style="color: var(--color-text-primary);">{fmt(stats.bu_gu_ratio, 2)}</p>
+    </div>
+
+    <!-- Calories -->
+    <div class="rounded-lg p-2.5" style="background: var(--color-bg-elevated); border: 1px solid var(--color-border);">
+      <p class="text-xs mb-0.5" style="color: var(--color-text-muted);">Cal / 12oz</p>
+      <p class="text-xl font-bold font-mono leading-none" style="color: var(--color-text-primary);">{fmt(stats.calories_per_355ml, 0)}</p>
+    </div>
+
+    <!-- Volumes divider -->
+    <p class="text-xs font-semibold uppercase tracking-wider mt-1 mb-0.5"
+       style="color: var(--color-text-muted);">Volumes</p>
+
+    <!-- Pre-boil -->
+    <div class="rounded-lg p-2.5" style="background: var(--color-bg-elevated); border: 1px solid var(--color-border);">
+      <p class="text-xs mb-0.5" style="color: var(--color-text-muted);">Pre-boil</p>
+      <p class="text-base font-bold font-mono leading-none" style="color: var(--color-text-primary);">
+        {fmt(units === "imperial" ? lToGal(stats.pre_boil_volume_l) : stats.pre_boil_volume_l, 1)}<span class="text-xs font-normal ml-0.5" style="color: var(--color-text-muted);">{volumeLabel(units)}</span>
+      </p>
+    </div>
+
+    <!-- Post-boil -->
+    <div class="rounded-lg p-2.5" style="background: var(--color-bg-elevated); border: 1px solid var(--color-border);">
+      <p class="text-xs mb-0.5" style="color: var(--color-text-muted);">Post-boil</p>
+      <p class="text-base font-bold font-mono leading-none" style="color: var(--color-text-primary);">
+        {fmt(units === "imperial" ? lToGal(stats.post_boil_volume_l) : stats.post_boil_volume_l, 1)}<span class="text-xs font-normal ml-0.5" style="color: var(--color-text-muted);">{volumeLabel(units)}</span>
+      </p>
+    </div>
+
+    <!-- Pre-boil gravity -->
+    <div class="rounded-lg p-2.5" style="background: var(--color-bg-elevated); border: 1px solid var(--color-border);">
+      <p class="text-xs mb-0.5" style="color: var(--color-text-muted);">Pre-boil G</p>
+      <p class="text-base font-bold font-mono leading-none" style="color: var(--color-text-primary);">{fmt(stats.pre_boil_gravity, 3)}</p>
+    </div>
+
   {:else}
     <p class="text-xs" style="color: var(--color-text-muted);">Add ingredients to see stats</p>
   {/if}
