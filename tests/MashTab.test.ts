@@ -7,6 +7,7 @@ import MashTab from "$lib/components/tabs/MashTab.svelte";
 // FORM_RESET_HANDLER is not re-exported from svelte/internal/client — import directly.
 // happy-dom hides symbol properties from Object.getOwnPropertySymbols, so we must
 // hold the exact Symbol instance that Svelte used when it attached the reset handler.
+// @ts-expect-error — no declaration file for Svelte internal path
 import { FORM_RESET_HANDLER } from "../node_modules/svelte/src/internal/client/constants.js";
 
 vi.mock("@tauri-apps/api/core", () => ({ invoke: vi.fn() }));
