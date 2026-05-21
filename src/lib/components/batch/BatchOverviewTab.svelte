@@ -20,7 +20,7 @@
   });
 
   function toDateInput(ts: number | null | undefined): string {
-    if (!ts) return "";
+    if (ts == null) return "";
     return new Date(ts * 1000).toISOString().slice(0, 10);
   }
 
@@ -128,7 +128,7 @@
       style="background: rgba(99,102,241,0.12); border: 1px solid rgba(99,102,241,0.25);"
     >
       <span class="text-xs font-bold uppercase tracking-wide" style="color: var(--color-text-secondary); min-width: 48px;">
-        {batch.status === "fermenting" || batch.status === "conditioning" || batch.status === "packaged" ? "Actuals" : "Targets"}
+        {batch.status === "conditioning" || batch.status === "packaged" ? "Actuals" : batch.status === "fermenting" ? "Progress" : "Targets"}
       </span>
       {#each stageTargets as t}
         <span style="color: var(--color-text-secondary);">
