@@ -354,14 +354,16 @@ mod tests {
                 &batch.id,
                 UpdateBatchInput {
                     status: Some("conditioning".into()),
+                    conditioning_date: Some(1_700_000_000),
+                    notes: Some("Dry hop day 3".into()),
                     ..Default::default()
                 },
             )
             .await
             .unwrap();
         assert_eq!(updated.status, "conditioning");
-        // assert_eq!(updated.conditioning_date, Some(1_700_000_000));
-        // assert_eq!(updated.notes, Some("Dry hop day 3".into()));
+        assert_eq!(updated.conditioning_date, Some(1_700_000_000));
+        assert_eq!(updated.notes, Some("Dry hop day 3".into()));
     }
 
     #[tokio::test]
