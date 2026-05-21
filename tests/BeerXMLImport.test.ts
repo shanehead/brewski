@@ -1,5 +1,5 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render } from "@testing-library/svelte";
+import { describe, it, expect, vi } from "vitest";
+import { render, fireEvent } from "@testing-library/svelte";
 import RecipeList from "$lib/components/RecipeList.svelte";
 
 vi.mock("$lib/stores/recipes", () => ({
@@ -39,5 +39,20 @@ describe("RecipeList", () => {
   it("renders the Import BeerXML button", () => {
     const { getByText } = render(RecipeList);
     expect(getByText("Import BeerXML")).toBeTruthy();
+  });
+
+  it("calls createRecipesFromBeerxml with file contents when a file is selected", async () => {
+    const { createRecipesFromBeerxml } = await import("$lib/api");
+    const { container } = render(RecipeList);
+
+    const xml = "<RECIPES><RECIPE><NAME>Test</NAME></RECIPE></RECIPES>";
+    const file = new File([xml], "recipe.xml", { type: "text/xml" });
+
+    const input = container.querySelector('input[type="file"]') as HTMLInputElement;
+    Object.defineProperty(input, "files", { value: [file], configurable: true });
+
+    await fireEvent.change(input);
+
+    expect(createRecipesFromBeerxml).toHaveBeenCalledWith(xml);
   });
 });

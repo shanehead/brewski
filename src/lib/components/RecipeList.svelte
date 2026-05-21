@@ -39,7 +39,8 @@
     const file = (event.target as HTMLInputElement).files?.[0];
     if (!file) return;
     const xml = await file.text();
-    await ipc(createRecipesFromBeerxml(xml));
+    const imported = await ipc(createRecipesFromBeerxml(xml));
+    if (!imported) return;
     await ipc(refreshRecipeList());
     fileInput.value = "";
   }
@@ -70,7 +71,7 @@
     </button>
     <input
       type="file"
-      accept=".xml"
+      accept=".xml,.beerxml,text/xml,application/xml"
       bind:this={fileInput}
       onchange={handleImport}
       class="hidden"
