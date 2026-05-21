@@ -32,6 +32,8 @@ The frontend uses a build-time `$platform` alias (resolved in `vite.config.ts` a
 
 Route pages are thin wrappers that import from `$platform`. When adding a new page or major UI section, **create implementations in both `src/lib/desktop/` and `src/lib/mobile/`**.
 
+**Any UI design — including mockups, plans, and implementation — must cover both desktop and mobile.** Never design or propose UI for one platform without addressing the other.
+
 Mobile layout rules:
 - Use `height: 100dvh` (not `100vh`) to handle iOS URL bar resizing
 - Apply `env(safe-area-inset-top/bottom, 0px)` padding for notch/home-indicator clearance
