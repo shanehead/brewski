@@ -48,6 +48,7 @@ describe("RecipeList", () => {
 
     const xml = "<RECIPES><RECIPE><NAME>Test</NAME></RECIPE></RECIPES>";
     const file = new File([xml], "recipe.xml", { type: "text/xml" });
+    vi.spyOn(file, "text").mockResolvedValue(xml);
 
     const input = container.querySelector('input[type="file"]') as HTMLInputElement;
     Object.defineProperty(input, "files", { value: [file], configurable: true });
