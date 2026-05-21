@@ -3,7 +3,6 @@
   import { goto } from "$app/navigation";
   import { recipeList, refreshRecipeList } from "$lib/stores/recipes";
   import { createRecipe, createRecipesFromBeerxml } from "$lib/api";
-  import type { RecipeSummary } from "$lib/api";
   import { ipc } from "$lib/stores/error";
 
   let fileInput: HTMLInputElement;
@@ -12,7 +11,9 @@
 
   async function handleNew() {
     const recipe = await ipc(createRecipe({ name: "New Recipe" }));
-    if (recipe) goto(`/recipe/${recipe.id}`);
+    if (!recipe) return;
+    await ipc(refreshRecipeList());
+    goto(`/recipe/${recipe.id}`);
   }
 
   async function handleImport(event: Event) {
