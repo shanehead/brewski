@@ -19,6 +19,10 @@ vi.mock("$lib/stores/error", () => ({
   lastError: { subscribe: vi.fn((fn) => { fn(null); return () => {}; }) },
 }));
 
+vi.mock("@tauri-apps/api/window", () => ({
+  getCurrentWindow: vi.fn(() => ({ show: vi.fn() })),
+}));
+
 describe("AppShell rail", () => {
   it("renders an Equipment nav link", () => {
     const { container } = render(AppShell, { children: () => null });
