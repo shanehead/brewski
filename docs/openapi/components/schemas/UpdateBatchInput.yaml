@@ -28,3 +28,11 @@ properties:
     type: [string, "null"]
   rating:
     type: [integer, "null"]
+  packaging_temp_c:
+    type: [number, "null"]
+  carbonation_sugar_type:
+    type: [string, "null"]
+  priming_sugar_g:
+    type: [number, "null"]
+  serving_pressure_kpa:
+    type: [number, "null"]

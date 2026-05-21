@@ -65,6 +65,14 @@ properties:
   planned_batch_size_l:
     type: [number, "null"]
     description: Planned batch size from recipe
+  packaging_temp_c:
+    type: [number, "null"]
+  carbonation_sugar_type:
+    type: [string, "null"]
+  priming_sugar_g:
+    type: [number, "null"]
+  serving_pressure_kpa:
+    type: [number, "null"]
   gravity_readings:
     type: array
     items:

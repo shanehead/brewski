@@ -90,6 +90,12 @@ pub mod error {
 #[doc = "      ],"]
 #[doc = "      \"format\": \"int64\""]
 #[doc = "    },"]
+#[doc = "    \"carbonation_sugar_type\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
 #[doc = "    \"conditioning_date\": {"]
 #[doc = "      \"type\": ["]
 #[doc = "        \"integer\","]
@@ -136,6 +142,12 @@ pub mod error {
 #[doc = "      ],"]
 #[doc = "      \"format\": \"int64\""]
 #[doc = "    },"]
+#[doc = "    \"packaging_temp_c\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"number\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
 #[doc = "    \"planned_batch_size_l\": {"]
 #[doc = "      \"description\": \"Planned batch size from recipe\","]
 #[doc = "      \"type\": ["]
@@ -171,6 +183,12 @@ pub mod error {
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
+#[doc = "    \"priming_sugar_g\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"number\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
 #[doc = "    \"rating\": {"]
 #[doc = "      \"type\": ["]
 #[doc = "        \"integer\","]
@@ -185,6 +203,12 @@ pub mod error {
 #[doc = "    },"]
 #[doc = "    \"recipe_version_id\": {"]
 #[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
+#[doc = "    \"serving_pressure_kpa\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"number\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"status\": {"]
 #[doc = "      \"description\": \"planned | brewing | fermenting | conditioning | packaged\","]
@@ -215,6 +239,8 @@ pub struct Batch {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub brew_date: ::std::option::Option<i64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub carbonation_sugar_type: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub conditioning_date: ::std::option::Option<i64>,
     pub created_at: i64,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -227,6 +253,8 @@ pub struct Batch {
     pub notes: ::std::option::Option<::std::string::String>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub packaging_date: ::std::option::Option<i64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub packaging_temp_c: ::std::option::Option<f64>,
     #[doc = "Planned batch size from recipe"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub planned_batch_size_l: ::std::option::Option<f64>,
@@ -243,10 +271,14 @@ pub struct Batch {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub planned_pre_boil_gravity: ::std::option::Option<f64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub priming_sugar_g: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub rating: ::std::option::Option<i64>,
     pub recipe_id: ::std::string::String,
     pub recipe_name: ::std::string::String,
     pub recipe_version_id: ::std::string::String,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub serving_pressure_kpa: ::std::option::Option<f64>,
     #[doc = "planned | brewing | fermenting | conditioning | packaged"]
     pub status: ::std::string::String,
     pub updated_at: i64,
@@ -4359,6 +4391,12 @@ impl Style {
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
+#[doc = "    \"carbonation_sugar_type\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
 #[doc = "    \"conditioning_date\": {"]
 #[doc = "      \"type\": ["]
 #[doc = "        \"integer\","]
@@ -4389,9 +4427,27 @@ impl Style {
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
+#[doc = "    \"packaging_temp_c\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"number\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"priming_sugar_g\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"number\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
 #[doc = "    \"rating\": {"]
 #[doc = "      \"type\": ["]
 #[doc = "        \"integer\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"serving_pressure_kpa\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
@@ -4422,6 +4478,8 @@ pub struct UpdateBatchInput {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub brew_date: ::std::option::Option<i64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub carbonation_sugar_type: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub conditioning_date: ::std::option::Option<i64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub fermenter_date: ::std::option::Option<i64>,
@@ -4432,7 +4490,13 @@ pub struct UpdateBatchInput {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub packaging_date: ::std::option::Option<i64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub packaging_temp_c: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub priming_sugar_g: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub rating: ::std::option::Option<i64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub serving_pressure_kpa: ::std::option::Option<f64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub status: ::std::option::Option<::std::string::String>,
 }
@@ -4446,12 +4510,16 @@ impl ::std::default::Default for UpdateBatchInput {
             actual_pre_boil_gravity: Default::default(),
             actual_pre_boil_volume_l: Default::default(),
             brew_date: Default::default(),
+            carbonation_sugar_type: Default::default(),
             conditioning_date: Default::default(),
             fermenter_date: Default::default(),
             name: Default::default(),
             notes: Default::default(),
             packaging_date: Default::default(),
+            packaging_temp_c: Default::default(),
+            priming_sugar_g: Default::default(),
             rating: Default::default(),
+            serving_pressure_kpa: Default::default(),
             status: Default::default(),
         }
     }
@@ -6525,6 +6593,10 @@ pub mod builder {
         actual_pre_boil_volume_l:
             ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         brew_date: ::std::result::Result<::std::option::Option<i64>, ::std::string::String>,
+        carbonation_sugar_type: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
         conditioning_date: ::std::result::Result<::std::option::Option<i64>, ::std::string::String>,
         created_at: ::std::result::Result<i64, ::std::string::String>,
         fermenter_date: ::std::result::Result<::std::option::Option<i64>, ::std::string::String>,
@@ -6540,6 +6612,7 @@ pub mod builder {
             ::std::string::String,
         >,
         packaging_date: ::std::result::Result<::std::option::Option<i64>, ::std::string::String>,
+        packaging_temp_c: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         planned_batch_size_l:
             ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         planned_fg: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
@@ -6548,10 +6621,13 @@ pub mod builder {
             ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         planned_pre_boil_gravity:
             ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        priming_sugar_g: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         rating: ::std::result::Result<::std::option::Option<i64>, ::std::string::String>,
         recipe_id: ::std::result::Result<::std::string::String, ::std::string::String>,
         recipe_name: ::std::result::Result<::std::string::String, ::std::string::String>,
         recipe_version_id: ::std::result::Result<::std::string::String, ::std::string::String>,
+        serving_pressure_kpa:
+            ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         status: ::std::result::Result<::std::string::String, ::std::string::String>,
         updated_at: ::std::result::Result<i64, ::std::string::String>,
     }
@@ -6565,6 +6641,7 @@ pub mod builder {
                 actual_pre_boil_gravity: Ok(Default::default()),
                 actual_pre_boil_volume_l: Ok(Default::default()),
                 brew_date: Ok(Default::default()),
+                carbonation_sugar_type: Ok(Default::default()),
                 conditioning_date: Ok(Default::default()),
                 created_at: Err("no value supplied for created_at".to_string()),
                 fermenter_date: Ok(Default::default()),
@@ -6573,15 +6650,18 @@ pub mod builder {
                 name: Ok(Default::default()),
                 notes: Ok(Default::default()),
                 packaging_date: Ok(Default::default()),
+                packaging_temp_c: Ok(Default::default()),
                 planned_batch_size_l: Ok(Default::default()),
                 planned_fg: Ok(Default::default()),
                 planned_og: Ok(Default::default()),
                 planned_post_boil_volume_l: Ok(Default::default()),
                 planned_pre_boil_gravity: Ok(Default::default()),
+                priming_sugar_g: Ok(Default::default()),
                 rating: Ok(Default::default()),
                 recipe_id: Err("no value supplied for recipe_id".to_string()),
                 recipe_name: Err("no value supplied for recipe_name".to_string()),
                 recipe_version_id: Err("no value supplied for recipe_version_id".to_string()),
+                serving_pressure_kpa: Ok(Default::default()),
                 status: Err("no value supplied for status".to_string()),
                 updated_at: Err("no value supplied for updated_at".to_string()),
             }
@@ -6656,6 +6736,16 @@ pub mod builder {
             self.brew_date = value
                 .try_into()
                 .map_err(|e| format!("error converting supplied value for brew_date: {e}"));
+            self
+        }
+        pub fn carbonation_sugar_type<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.carbonation_sugar_type = value.try_into().map_err(|e| {
+                format!("error converting supplied value for carbonation_sugar_type: {e}")
+            });
             self
         }
         pub fn conditioning_date<T>(mut self, value: T) -> Self
@@ -6738,6 +6828,16 @@ pub mod builder {
                 .map_err(|e| format!("error converting supplied value for packaging_date: {e}"));
             self
         }
+        pub fn packaging_temp_c<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.packaging_temp_c = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for packaging_temp_c: {e}"));
+            self
+        }
         pub fn planned_batch_size_l<T>(mut self, value: T) -> Self
         where
             T: ::std::convert::TryInto<::std::option::Option<f64>>,
@@ -6788,6 +6888,16 @@ pub mod builder {
             });
             self
         }
+        pub fn priming_sugar_g<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.priming_sugar_g = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for priming_sugar_g: {e}"));
+            self
+        }
         pub fn rating<T>(mut self, value: T) -> Self
         where
             T: ::std::convert::TryInto<::std::option::Option<i64>>,
@@ -6828,6 +6938,16 @@ pub mod builder {
                 .map_err(|e| format!("error converting supplied value for recipe_version_id: {e}"));
             self
         }
+        pub fn serving_pressure_kpa<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.serving_pressure_kpa = value.try_into().map_err(|e| {
+                format!("error converting supplied value for serving_pressure_kpa: {e}")
+            });
+            self
+        }
         pub fn status<T>(mut self, value: T) -> Self
         where
             T: ::std::convert::TryInto<::std::string::String>,
@@ -6860,6 +6980,7 @@ pub mod builder {
                 actual_pre_boil_gravity: value.actual_pre_boil_gravity?,
                 actual_pre_boil_volume_l: value.actual_pre_boil_volume_l?,
                 brew_date: value.brew_date?,
+                carbonation_sugar_type: value.carbonation_sugar_type?,
                 conditioning_date: value.conditioning_date?,
                 created_at: value.created_at?,
                 fermenter_date: value.fermenter_date?,
@@ -6868,15 +6989,18 @@ pub mod builder {
                 name: value.name?,
                 notes: value.notes?,
                 packaging_date: value.packaging_date?,
+                packaging_temp_c: value.packaging_temp_c?,
                 planned_batch_size_l: value.planned_batch_size_l?,
                 planned_fg: value.planned_fg?,
                 planned_og: value.planned_og?,
                 planned_post_boil_volume_l: value.planned_post_boil_volume_l?,
                 planned_pre_boil_gravity: value.planned_pre_boil_gravity?,
+                priming_sugar_g: value.priming_sugar_g?,
                 rating: value.rating?,
                 recipe_id: value.recipe_id?,
                 recipe_name: value.recipe_name?,
                 recipe_version_id: value.recipe_version_id?,
+                serving_pressure_kpa: value.serving_pressure_kpa?,
                 status: value.status?,
                 updated_at: value.updated_at?,
             })
@@ -6892,6 +7016,7 @@ pub mod builder {
                 actual_pre_boil_gravity: Ok(value.actual_pre_boil_gravity),
                 actual_pre_boil_volume_l: Ok(value.actual_pre_boil_volume_l),
                 brew_date: Ok(value.brew_date),
+                carbonation_sugar_type: Ok(value.carbonation_sugar_type),
                 conditioning_date: Ok(value.conditioning_date),
                 created_at: Ok(value.created_at),
                 fermenter_date: Ok(value.fermenter_date),
@@ -6900,15 +7025,18 @@ pub mod builder {
                 name: Ok(value.name),
                 notes: Ok(value.notes),
                 packaging_date: Ok(value.packaging_date),
+                packaging_temp_c: Ok(value.packaging_temp_c),
                 planned_batch_size_l: Ok(value.planned_batch_size_l),
                 planned_fg: Ok(value.planned_fg),
                 planned_og: Ok(value.planned_og),
                 planned_post_boil_volume_l: Ok(value.planned_post_boil_volume_l),
                 planned_pre_boil_gravity: Ok(value.planned_pre_boil_gravity),
+                priming_sugar_g: Ok(value.priming_sugar_g),
                 rating: Ok(value.rating),
                 recipe_id: Ok(value.recipe_id),
                 recipe_name: Ok(value.recipe_name),
                 recipe_version_id: Ok(value.recipe_version_id),
+                serving_pressure_kpa: Ok(value.serving_pressure_kpa),
                 status: Ok(value.status),
                 updated_at: Ok(value.updated_at),
             }
@@ -14267,6 +14395,10 @@ pub mod builder {
         actual_pre_boil_volume_l:
             ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         brew_date: ::std::result::Result<::std::option::Option<i64>, ::std::string::String>,
+        carbonation_sugar_type: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
         conditioning_date: ::std::result::Result<::std::option::Option<i64>, ::std::string::String>,
         fermenter_date: ::std::result::Result<::std::option::Option<i64>, ::std::string::String>,
         name: ::std::result::Result<
@@ -14278,7 +14410,11 @@ pub mod builder {
             ::std::string::String,
         >,
         packaging_date: ::std::result::Result<::std::option::Option<i64>, ::std::string::String>,
+        packaging_temp_c: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        priming_sugar_g: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         rating: ::std::result::Result<::std::option::Option<i64>, ::std::string::String>,
+        serving_pressure_kpa:
+            ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         status: ::std::result::Result<
             ::std::option::Option<::std::string::String>,
             ::std::string::String,
@@ -14294,12 +14430,16 @@ pub mod builder {
                 actual_pre_boil_gravity: Ok(Default::default()),
                 actual_pre_boil_volume_l: Ok(Default::default()),
                 brew_date: Ok(Default::default()),
+                carbonation_sugar_type: Ok(Default::default()),
                 conditioning_date: Ok(Default::default()),
                 fermenter_date: Ok(Default::default()),
                 name: Ok(Default::default()),
                 notes: Ok(Default::default()),
                 packaging_date: Ok(Default::default()),
+                packaging_temp_c: Ok(Default::default()),
+                priming_sugar_g: Ok(Default::default()),
                 rating: Ok(Default::default()),
+                serving_pressure_kpa: Ok(Default::default()),
                 status: Ok(Default::default()),
             }
         }
@@ -14375,6 +14515,16 @@ pub mod builder {
                 .map_err(|e| format!("error converting supplied value for brew_date: {e}"));
             self
         }
+        pub fn carbonation_sugar_type<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.carbonation_sugar_type = value.try_into().map_err(|e| {
+                format!("error converting supplied value for carbonation_sugar_type: {e}")
+            });
+            self
+        }
         pub fn conditioning_date<T>(mut self, value: T) -> Self
         where
             T: ::std::convert::TryInto<::std::option::Option<i64>>,
@@ -14425,6 +14575,26 @@ pub mod builder {
                 .map_err(|e| format!("error converting supplied value for packaging_date: {e}"));
             self
         }
+        pub fn packaging_temp_c<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.packaging_temp_c = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for packaging_temp_c: {e}"));
+            self
+        }
+        pub fn priming_sugar_g<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.priming_sugar_g = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for priming_sugar_g: {e}"));
+            self
+        }
         pub fn rating<T>(mut self, value: T) -> Self
         where
             T: ::std::convert::TryInto<::std::option::Option<i64>>,
@@ -14433,6 +14603,16 @@ pub mod builder {
             self.rating = value
                 .try_into()
                 .map_err(|e| format!("error converting supplied value for rating: {e}"));
+            self
+        }
+        pub fn serving_pressure_kpa<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.serving_pressure_kpa = value.try_into().map_err(|e| {
+                format!("error converting supplied value for serving_pressure_kpa: {e}")
+            });
             self
         }
         pub fn status<T>(mut self, value: T) -> Self
@@ -14459,12 +14639,16 @@ pub mod builder {
                 actual_pre_boil_gravity: value.actual_pre_boil_gravity?,
                 actual_pre_boil_volume_l: value.actual_pre_boil_volume_l?,
                 brew_date: value.brew_date?,
+                carbonation_sugar_type: value.carbonation_sugar_type?,
                 conditioning_date: value.conditioning_date?,
                 fermenter_date: value.fermenter_date?,
                 name: value.name?,
                 notes: value.notes?,
                 packaging_date: value.packaging_date?,
+                packaging_temp_c: value.packaging_temp_c?,
+                priming_sugar_g: value.priming_sugar_g?,
                 rating: value.rating?,
+                serving_pressure_kpa: value.serving_pressure_kpa?,
                 status: value.status?,
             })
         }
@@ -14479,12 +14663,16 @@ pub mod builder {
                 actual_pre_boil_gravity: Ok(value.actual_pre_boil_gravity),
                 actual_pre_boil_volume_l: Ok(value.actual_pre_boil_volume_l),
                 brew_date: Ok(value.brew_date),
+                carbonation_sugar_type: Ok(value.carbonation_sugar_type),
                 conditioning_date: Ok(value.conditioning_date),
                 fermenter_date: Ok(value.fermenter_date),
                 name: Ok(value.name),
                 notes: Ok(value.notes),
                 packaging_date: Ok(value.packaging_date),
+                packaging_temp_c: Ok(value.packaging_temp_c),
+                priming_sugar_g: Ok(value.priming_sugar_g),
                 rating: Ok(value.rating),
+                serving_pressure_kpa: Ok(value.serving_pressure_kpa),
                 status: Ok(value.status),
             }
         }

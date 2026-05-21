@@ -1981,6 +1981,10 @@ export interface components {
             planned_post_boil_volume_l?: number | null;
             /** @description Planned batch size from recipe */
             planned_batch_size_l?: number | null;
+            packaging_temp_c?: number | null;
+            carbonation_sugar_type?: string | null;
+            priming_sugar_g?: number | null;
+            serving_pressure_kpa?: number | null;
             gravity_readings: components["schemas"]["GravityReading"][];
             /** Format: int64 */
             created_at: number;
@@ -2006,6 +2010,10 @@ export interface components {
             actual_fg?: number | null;
             notes?: string | null;
             rating?: number | null;
+            packaging_temp_c?: number | null;
+            carbonation_sugar_type?: string | null;
+            priming_sugar_g?: number | null;
+            serving_pressure_kpa?: number | null;
         };
         CreateGravityReadingInput: {
             recorded_at: number;
