@@ -132,6 +132,10 @@ impl<'a> BatchRepository<'a> {
             planned_pre_boil_gravity: Some(stats.pre_boil_gravity),
             planned_post_boil_volume_l: Some(stats.post_boil_volume_l),
             planned_batch_size_l: Some(full_recipe.batch_size_l),
+            packaging_temp_c: batch.packaging_temp_c,
+            carbonation_sugar_type: batch.carbonation_sugar_type,
+            priming_sugar_g: batch.priming_sugar_g,
+            serving_pressure_kpa: batch.serving_pressure_kpa,
             gravity_readings,
             created_at: batch.created_at as i64,
             updated_at: batch.updated_at as i64,
@@ -189,6 +193,18 @@ impl<'a> BatchRepository<'a> {
         }
         if let Some(v) = input.rating {
             active.rating = Set(Some(v as i32));
+        }
+        if let Some(v) = input.packaging_temp_c {
+            active.packaging_temp_c = Set(Some(v));
+        }
+        if let Some(v) = input.carbonation_sugar_type {
+            active.carbonation_sugar_type = Set(Some(v));
+        }
+        if let Some(v) = input.priming_sugar_g {
+            active.priming_sugar_g = Set(Some(v));
+        }
+        if let Some(v) = input.serving_pressure_kpa {
+            active.serving_pressure_kpa = Set(Some(v));
         }
 
         active.update(self.db).await?;
@@ -455,5 +471,36 @@ mod tests {
         repo.delete_gravity_reading(&reading.id).await.unwrap();
         let fetched2 = repo.get(&batch.id).await.unwrap();
         assert!(fetched2.gravity_readings.is_empty());
+    }
+
+    #[tokio::test]
+    async fn test_update_carbonation_fields() {
+        let db = setup_test_db().await;
+        let (recipe_id, _) = setup(&db).await;
+        let repo = BatchRepository::new(&db);
+        let batch = repo
+            .create(CreateBatchInput {
+                recipe_id,
+                name: None,
+            })
+            .await
+            .unwrap();
+        let updated = repo
+            .update(
+                &batch.id,
+                UpdateBatchInput {
+                    packaging_temp_c: Some(18.0),
+                    carbonation_sugar_type: Some("corn_sugar".into()),
+                    priming_sugar_g: Some(134.5),
+                    serving_pressure_kpa: Some(97.2),
+                    ..Default::default()
+                },
+            )
+            .await
+            .unwrap();
+        assert_eq!(updated.packaging_temp_c, Some(18.0));
+        assert_eq!(updated.carbonation_sugar_type, Some("corn_sugar".into()));
+        assert_eq!(updated.priming_sugar_g, Some(134.5));
+        assert_eq!(updated.serving_pressure_kpa, Some(97.2));
     }
 }
