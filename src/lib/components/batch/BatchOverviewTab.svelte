@@ -2,20 +2,28 @@
   import { onMount } from "svelte";
   import { goto } from "$app/navigation";
   import TabBar from "$lib/components/TabBar.svelte";
-  import type { Batch, UpdateBatchInput, RecipeVersionSummary } from "$lib/api";
-  import { listRecipeVersions } from "$lib/api";
+  import type { Batch, UpdateBatchInput, RecipeVersionSummary, Recipe } from "$lib/api";
+  import { listRecipeVersions, getRecipe } from "$lib/api";
   import { ipc } from "$lib/stores/error";
+  import BatchCarbonationSection from "$lib/components/batch/BatchCarbonationSection.svelte";
 
   let { batch, onUpdate }: { batch: Batch; onUpdate: (input: UpdateBatchInput) => void } = $props();
 
   const STATUSES = ["planned", "brewing", "fermenting", "conditioning", "packaged"] as const;
 
   let batchVersion = $state<RecipeVersionSummary | null>(null);
+  let recipe = $state<Recipe | null>(null);
 
   onMount(async () => {
-    const versions = await ipc(listRecipeVersions(batch.recipe_id));
+    const [versions, fetchedRecipe] = await Promise.all([
+      ipc(listRecipeVersions(batch.recipe_id)),
+      ipc(getRecipe(batch.recipe_id)),
+    ]);
     if (versions) {
       batchVersion = versions.find((v) => v.id === batch.recipe_version_id) ?? null;
+    }
+    if (fetchedRecipe) {
+      recipe = fetchedRecipe;
     }
   });
 
@@ -218,4 +226,13 @@
       style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border); font-family: inherit;"
     ></textarea>
   </div>
+
+  {#if batch.status === "conditioning" || batch.status === "packaged"}
+    <BatchCarbonationSection
+      {batch}
+      recipePrimaryTempC={recipe?.primary_temp_c ?? null}
+      recipeCarbonationVols={recipe?.carbonation_vols ?? null}
+      {onUpdate}
+    />
+  {/if}
 </div>
