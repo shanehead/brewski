@@ -44,7 +44,7 @@
     <button
       onclick={() => fileInput.click()}
       class="w-full py-3 rounded text-sm font-medium"
-      style="border: 1px solid var(--color-border); color: var(--color-text-secondary); background: transparent;"
+      style="border: 1px solid var(--color-accent); color: var(--color-accent); background: transparent;"
     >Import BeerXML</button>
   </div>
   <div class="flex-1 overflow-y-auto">

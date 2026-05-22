@@ -79,7 +79,7 @@
     <button
       onclick={() => fileInput.click()}
       class="w-full py-1.5 rounded text-sm font-medium transition-colors"
-      style="border: 1px solid var(--color-border); color: var(--color-text-secondary); background: transparent;"
+      style="border: 1px solid var(--color-accent); color: var(--color-accent); background: transparent;"
     >
       Import BeerXML
     </button>
