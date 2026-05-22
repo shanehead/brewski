@@ -28,9 +28,32 @@ dev-web:
 
 # ── Build ─────────────────────────────────────────────────────────────────────
 
-# Build the app for release
+# Build the app for release (no bundling)
 build:
     bun run tauri build --no-bundle
+
+# Build macOS universal binary (arm64 + x86_64)
+build-macos:
+    bun run tauri build --target universal-apple-darwin
+
+# Build iOS release IPA
+build-ios:
+    bun run tauri ios build
+
+# Build Android APK and AAB
+build-android:
+    bun run tauri android build --apk --aab
+
+# Build Windows installer (requires Windows or cross-compilation toolchain)
+build-windows:
+    bun run tauri build --target x86_64-pc-windows-msvc
+
+# Build Linux packages (requires Linux or cross-compilation toolchain)
+build-linux:
+    bun run tauri build --target x86_64-unknown-linux-gnu
+
+# Build all platforms
+build-all: build-macos build-ios build-android build-windows build-linux
 
 # ── Check & Lint ──────────────────────────────────────────────────────────────
 
