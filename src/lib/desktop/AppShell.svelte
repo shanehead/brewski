@@ -28,41 +28,41 @@
   <nav class="flex flex-col items-center w-14 py-3 gap-2 border-r flex-shrink-0"
        style="background: var(--color-bg-surface); border-color: var(--color-border);">
 
-    <a href="/" class="w-9 h-9 flex items-center justify-center rounded-lg transition-opacity"
+    <a href="/" class="w-9 h-9 flex items-center justify-center rounded-lg transition-colors"
        aria-label="Recipes"
-       style={isRecipes ? "opacity: 1;" : "opacity: 0.45;"}>
+       style={isRecipes ? "background: color-mix(in srgb, var(--color-accent) 18%, transparent);" : ""}>
       <BrewingIcon name="recipes" size={22} />
     </a>
 
-    <a href="/batches" class="w-9 h-9 flex items-center justify-center rounded-lg transition-opacity"
+    <a href="/batches" class="w-9 h-9 flex items-center justify-center rounded-lg transition-colors"
        aria-label="Batches"
-       style={isBatches ? "opacity: 1;" : "opacity: 0.45;"}>
+       style={isBatches ? "background: color-mix(in srgb, var(--color-accent) 18%, transparent);" : ""}>
       <BrewingIcon name="batches" size={22} />
     </a>
 
-    <a href="/tools" class="w-9 h-9 flex items-center justify-center rounded-lg transition-opacity"
+    <a href="/tools" class="w-9 h-9 flex items-center justify-center rounded-lg transition-colors"
        aria-label="Tools"
-       style={isTools ? "opacity: 1;" : "opacity: 0.45;"}>
+       style={isTools ? "background: color-mix(in srgb, var(--color-accent) 18%, transparent);" : ""}>
       <BrewingIcon name="tools" size={22} />
     </a>
 
-    <a href="/equipment" class="w-9 h-9 flex items-center justify-center rounded-lg transition-opacity"
+    <a href="/equipment" class="w-9 h-9 flex items-center justify-center rounded-lg transition-colors"
        aria-label="Equipment"
-       style={isEquipment ? "opacity: 1;" : "opacity: 0.45;"}>
+       style={isEquipment ? "background: color-mix(in srgb, var(--color-accent) 18%, transparent);" : ""}>
       <BrewingIcon name="equipment" size={22} />
     </a>
 
-    <a href="/library" class="w-9 h-9 flex items-center justify-center rounded-lg transition-opacity"
+    <a href="/library" class="w-9 h-9 flex items-center justify-center rounded-lg transition-colors"
        aria-label="Library"
-       style={isLibrary ? "opacity: 1;" : "opacity: 0.45;"}>
+       style={isLibrary ? "background: color-mix(in srgb, var(--color-accent) 18%, transparent);" : ""}>
       <BrewingIcon name="library" size={22} />
     </a>
 
     <div class="flex-1"></div>
 
-    <a href="/settings" class="w-9 h-9 flex items-center justify-center rounded-lg transition-opacity"
+    <a href="/settings" class="w-9 h-9 flex items-center justify-center rounded-lg transition-colors"
        aria-label="Settings"
-       style={$page.url.pathname.startsWith('/settings') ? "opacity: 1;" : "opacity: 0.45;"}>
+       style={$page.url.pathname.startsWith('/settings') ? "background: color-mix(in srgb, var(--color-accent) 18%, transparent);" : ""}>
       <BrewingIcon name="settings" size={22} />
     </a>
   </nav>
