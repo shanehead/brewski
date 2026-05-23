@@ -32,13 +32,13 @@ dev-web:
 build:
     bun run tauri build --no-bundle
 
-# Build macOS universal binary (arm64 + x86_64)
+# Build macOS universal binary (arm64 + x86_64), signed for Mac App Store
 build-macos:
     bun run tauri build --target universal-apple-darwin
 
-# Build iOS release IPA
+# Build iOS release IPA, signed for App Store
 build-ios:
-    bun run tauri ios build
+    bun run tauri ios build --export-method app-store-connect
 
 # Build Android APK and AAB
 build-android:
