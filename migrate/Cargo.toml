@@ -1,0 +1,13 @@
+[package]
+name = "brewski-migrate"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "migrate"
+path = "src/main.rs"
+
+[dependencies]
+sqlx = { version = "0.8", features = ["sqlite", "runtime-tokio-rustls", "migrate"] }
+libsqlite3-sys = { version = "0.30", features = ["bundled"] }
+tokio = { version = "1", features = ["full"] }

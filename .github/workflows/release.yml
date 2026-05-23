@@ -32,7 +32,23 @@ jobs:
 
       - run: bun install
 
+      - name: Import signing certificate
+        env:
+          APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
+          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+        run: |
+          echo "$APPLE_CERTIFICATE" | base64 --decode > certificate.p12
+          security create-keychain -p temp brewski-ci.keychain
+          security default-keychain -s brewski-ci.keychain
+          security unlock-keychain -p temp brewski-ci.keychain
+          security import certificate.p12 -k brewski-ci.keychain -P "$APPLE_CERTIFICATE_PASSWORD" -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple: -s -k temp brewski-ci.keychain
+          rm certificate.p12
+
       - name: Build macOS universal binary
+        env:
+          APPLE_SIGNING_IDENTITY: ${{ secrets.APPLE_SIGNING_IDENTITY }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         run: bun run tauri build --target universal-apple-darwin
 
       - uses: softprops/action-gh-release@v2
@@ -65,8 +81,26 @@ jobs:
 
       - run: bun install
 
+      - name: Import signing certificate and provisioning profile
+        env:
+          APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
+          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+          APPLE_IOS_PROVISIONING_PROFILE: ${{ secrets.APPLE_IOS_PROVISIONING_PROFILE }}
+        run: |
+          echo "$APPLE_CERTIFICATE" | base64 --decode > certificate.p12
+          security create-keychain -p temp ios-ci.keychain
+          security default-keychain -s ios-ci.keychain
+          security unlock-keychain -p temp ios-ci.keychain
+          security import certificate.p12 -k ios-ci.keychain -P "$APPLE_CERTIFICATE_PASSWORD" -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple: -s -k temp ios-ci.keychain
+          rm certificate.p12
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          echo "$APPLE_IOS_PROVISIONING_PROFILE" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/brewski-ios.mobileprovision
+
       - name: Build iOS IPA
-        run: bun run tauri ios build
+        env:
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: bun run tauri ios build --export-method app-store-connect
 
       - uses: softprops/action-gh-release@v2
         with:

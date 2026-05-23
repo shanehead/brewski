@@ -13,7 +13,7 @@ async fn main() {
     let pool = SqlitePool::connect_with(opts)
         .await
         .expect("DB connect failed");
-    sqlx::migrate!("./migrations")
+    sqlx::migrate!("../src-tauri/migrations")
         .run(&pool)
         .await
         .expect("migration failed");

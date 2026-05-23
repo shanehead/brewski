@@ -108,7 +108,7 @@ coverage:
 
 # Apply SeaORM migrations to a local dev database
 migrate:
-    cargo run --manifest-path src-tauri/Cargo.toml --bin migrate -- sqlite://./dev.db?mode=rwc
+    cargo run --manifest-path migrate/Cargo.toml --bin migrate -- sqlite://./dev.db?mode=rwc
 
 seed-styles:
     bun scripts/seed-styles.mjs

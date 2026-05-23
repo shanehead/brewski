@@ -1,6 +1,6 @@
 {
   "build": {
-    "beforeDevCommand": "TAURI_ENV_PLATFORM=android /opt/homebrew/bin/bun run dev",
-    "beforeBuildCommand": "TAURI_ENV_PLATFORM=android /opt/homebrew/bin/bun run build"
+    "beforeDevCommand": "TAURI_ENV_PLATFORM=android bun run dev",
+    "beforeBuildCommand": "TAURI_ENV_PLATFORM=android bun run build"
   }
 }
