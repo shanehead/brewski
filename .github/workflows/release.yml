@@ -39,10 +39,11 @@ jobs:
         run: |
           echo "$APPLE_CERTIFICATE" | base64 --decode > certificate.p12
           security create-keychain -p temp brewski-ci.keychain
-          security default-keychain -s brewski-ci.keychain
+          security set-keychain-settings -lut 21600 brewski-ci.keychain
           security unlock-keychain -p temp brewski-ci.keychain
-          security import certificate.p12 -k brewski-ci.keychain -P "$APPLE_CERTIFICATE_PASSWORD" -T /usr/bin/codesign
-          security set-key-partition-list -S apple-tool:,apple: -s -k temp brewski-ci.keychain
+          security import certificate.p12 -k brewski-ci.keychain -P "$APPLE_CERTIFICATE_PASSWORD" -T /usr/bin/codesign -T /usr/bin/security
+          security list-keychains -d user -s brewski-ci.keychain $(security list-keychains -d user | tr -d '"')
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k temp brewski-ci.keychain
           rm certificate.p12
 
       - name: Build macOS universal binary
@@ -89,17 +90,18 @@ jobs:
         run: |
           echo "$APPLE_CERTIFICATE" | base64 --decode > certificate.p12
           security create-keychain -p temp ios-ci.keychain
-          security default-keychain -s ios-ci.keychain
+          security set-keychain-settings -lut 21600 ios-ci.keychain
           security unlock-keychain -p temp ios-ci.keychain
-          security import certificate.p12 -k ios-ci.keychain -P "$APPLE_CERTIFICATE_PASSWORD" -T /usr/bin/codesign
-          security set-key-partition-list -S apple-tool:,apple: -s -k temp ios-ci.keychain
+          security import certificate.p12 -k ios-ci.keychain -P "$APPLE_CERTIFICATE_PASSWORD" -T /usr/bin/codesign -T /usr/bin/security
+          security list-keychains -d user -s ios-ci.keychain $(security list-keychains -d user | tr -d '"')
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k temp ios-ci.keychain
           rm certificate.p12
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           echo "$APPLE_IOS_PROVISIONING_PROFILE" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/brewski-ios.mobileprovision
 
       - name: Build iOS IPA
         env:
-          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          APPLE_DEVELOPMENT_TEAM: ${{ secrets.APPLE_TEAM_ID }}
         run: bun run tauri ios build --export-method app-store-connect
 
       - uses: softprops/action-gh-release@v2
@@ -133,8 +135,24 @@ jobs:
         with:
           workspaces: src-tauri
 
-      - name: Set NDK_HOME
-        run: echo "NDK_HOME=$(ls -d $ANDROID_HOME/ndk/* | sort -V | tail -1)" >> $GITHUB_ENV
+      - name: Set NDK_HOME and Android linker paths
+        run: |
+          NDK=$(ls -d $ANDROID_HOME/ndk/* | sort -V | tail -1)
+          echo "NDK_HOME=$NDK" >> $GITHUB_ENV
+          HOST=linux-x86_64
+          TOOLCHAIN=$NDK/toolchains/llvm/prebuilt/$HOST/bin
+          echo "CARGO_TARGET_AARCH64_LINUX_ANDROID_LINKER=$TOOLCHAIN/aarch64-linux-android24-clang" >> $GITHUB_ENV
+          echo "CARGO_TARGET_ARMV7_LINUX_ANDROIDEABI_LINKER=$TOOLCHAIN/armv7a-linux-androideabi24-clang" >> $GITHUB_ENV
+          echo "CARGO_TARGET_I686_LINUX_ANDROID_LINKER=$TOOLCHAIN/i686-linux-android24-clang" >> $GITHUB_ENV
+          echo "CARGO_TARGET_X86_64_LINUX_ANDROID_LINKER=$TOOLCHAIN/x86_64-linux-android24-clang" >> $GITHUB_ENV
+          echo "CC_aarch64_linux_android=$TOOLCHAIN/aarch64-linux-android24-clang" >> $GITHUB_ENV
+          echo "CC_armv7_linux_androideabi=$TOOLCHAIN/armv7a-linux-androideabi24-clang" >> $GITHUB_ENV
+          echo "CC_i686_linux_android=$TOOLCHAIN/i686-linux-android24-clang" >> $GITHUB_ENV
+          echo "CC_x86_64_linux_android=$TOOLCHAIN/x86_64-linux-android24-clang" >> $GITHUB_ENV
+          echo "AR_aarch64_linux_android=$TOOLCHAIN/llvm-ar" >> $GITHUB_ENV
+          echo "AR_armv7_linux_androideabi=$TOOLCHAIN/llvm-ar" >> $GITHUB_ENV
+          echo "AR_i686_linux_android=$TOOLCHAIN/llvm-ar" >> $GITHUB_ENV
+          echo "AR_x86_64_linux_android=$TOOLCHAIN/llvm-ar" >> $GITHUB_ENV
 
       - run: bun install
 
