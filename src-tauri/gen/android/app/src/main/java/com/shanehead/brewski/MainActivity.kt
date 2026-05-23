@@ -1,4 +1,4 @@
-package com.brewski
+package com.shanehead.brewski
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
