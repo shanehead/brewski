@@ -1,12 +1,23 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { loadSettings } from "$lib/stores/settings";
+  import { afterNavigate, goto } from "$app/navigation";
+  import { page } from "$app/stores";
+  import { loadSettings, settings, saveSetting } from "$lib/stores/settings";
   import { lastError } from "$lib/stores/error";
   import BottomTabBar from "./BottomTabBar.svelte";
 
   let { children } = $props();
 
-  onMount(() => { loadSettings(); });
+  onMount(async () => {
+    await loadSettings();
+    if ($settings.last_route && $settings.last_route !== $page.url.pathname) {
+      goto($settings.last_route);
+    }
+  });
+
+  afterNavigate(({ to }) => {
+    if (to) saveSetting('last_route', to.url.pathname);
+  });
 </script>
 
 <div
