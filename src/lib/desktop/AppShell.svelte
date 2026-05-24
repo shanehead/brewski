@@ -1,7 +1,8 @@
 <script lang="ts">
   import { onMount } from "svelte";
+  import { afterNavigate, goto } from "$app/navigation";
   import { page } from "$app/stores";
-  import { loadSettings } from "$lib/stores/settings";
+  import { loadSettings, settings, saveSetting } from "$lib/stores/settings";
   import { lastError } from "$lib/stores/error";
   import BrewingIcon from "$lib/components/BrewingIcon.svelte";
 
@@ -10,10 +11,17 @@
   onMount(async () => {
     try {
       await loadSettings();
+      if ($settings.last_route && $settings.last_route !== $page.url.pathname) {
+        goto($settings.last_route);
+      }
     } finally {
       const { getCurrentWindow } = await import('@tauri-apps/api/window');
       getCurrentWindow().show();
     }
+  });
+
+  afterNavigate(({ to }) => {
+    if (to) saveSetting('last_route', to.url.pathname);
   });
 
   const isRecipes = $derived($page.url.pathname === "/" || $page.url.pathname.startsWith("/recipe"));
