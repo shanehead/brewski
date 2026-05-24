@@ -5,6 +5,7 @@ export interface AppSettings {
   units?: "metric" | "imperial";
   theme?: string;
   default_equipment_profile_id?: string;
+  last_route?: string;
 }
 
 export const settings = writable<AppSettings>({});
