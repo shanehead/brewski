@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<link rel="stylesheet" href="_card.css"/>
+<style>
+  body { padding: 16px 22px; }
+  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .stat {
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 10px 12px;
+  }
+  .lbl { font: 400 11px/1 var(--font-sans); color: var(--color-text-muted); margin-bottom: 4px; }
+  .val { font-family: var(--font-mono); font-weight: 700; font-size: 22px; line-height: 1; color: var(--color-text-primary); font-variant-numeric: tabular-nums; }
+  .bar { margin-top: 8px; height: 3px; border-radius: 2px; background: var(--color-border); }
+  .bar > div { height: 100%; border-radius: 2px; }
+  .anno { font: 500 10px var(--font-mono); color: var(--color-text-muted); margin-top: 4px; }
+</style></head>
+<body data-theme="midnight">
+  <div class="grid">
+    <div>
+      <div class="stat">
+        <div class="lbl">OG</div>
+        <div class="val">1.052</div>
+        <div class="bar"><div style="width:44%;background:var(--color-accent)"></div></div>
+      </div>
+      <div class="anno">stat-card · accent</div>
+    </div>
+    <div>
+      <div class="stat">
+        <div class="lbl">ABV</div>
+        <div class="val">5.4<span style="font-family:var(--font-sans);font-size:13px;font-weight:400;color:var(--color-text-muted)">%</span></div>
+        <div class="bar"><div style="width:45%;background:#a6e3a1"></div></div>
+      </div>
+      <div class="anno">green progress</div>
+    </div>
+    <div>
+      <div class="stat">
+        <div class="lbl">IBU</div>
+        <div class="val">38</div>
+        <div class="bar"><div style="width:32%;background:#fab387"></div></div>
+      </div>
+      <div class="anno">amber progress</div>
+    </div>
+    <div>
+      <div class="stat">
+        <div class="lbl">Pre-boil</div>
+        <div class="val" style="font-size:16px">6.5<span style="font-family:var(--font-sans);font-size:11px;color:var(--color-text-muted);margin-left:2px">gal</span></div>
+      </div>
+      <div class="anno">volume · no bar</div>
+    </div>
+  </div>
+</body></html>

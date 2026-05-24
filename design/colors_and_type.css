@@ -1,0 +1,385 @@
+/* =============================================================
+   Brewski — Colors & Type
+   -------------------------------------------------------------
+   Brewski is a themed app. Every surface, text color, and accent
+   is a CSS variable. Switching themes = swapping a single
+   data-theme attribute on :root. Authors must NEVER hard-code
+   brand colors — always go through these tokens.
+
+   The default brand identity is Midnight (dark, indigo-violet
+   accent). The full theme set ships with the app.
+   ============================================================= */
+
+/* ---------- Type ---------- */
+
+/* The product uses the platform-native UI stack — SF on Apple,
+   Segoe on Windows, Roboto on Android, Inter/system on Linux —
+   so the app feels native everywhere. JetBrains Mono is the
+   chosen mono for tabular numerics (gravity readings, ABV%,
+   IBU, etc.). Fonts are loaded from Google Fonts as a fallback
+   when the platform stacks aren't available. */
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap");
+
+:root {
+  /* ----- Font families ----- */
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI",
+    Roboto, "Helvetica Neue", "Inter", Arial, sans-serif;
+  --font-mono:
+    "JetBrains Mono", "SF Mono", "Menlo", "Consolas",
+    "Roboto Mono", ui-monospace, monospace;
+
+  /* ----- Type scale (px) ----- */
+  --fs-xs:   11px;   /* eyebrow / micro labels (uppercase) */
+  --fs-sm:   13px;   /* secondary metadata */
+  --fs-base: 14px;   /* default body */
+  --fs-md:   16px;   /* prominent body */
+  --fs-lg:   18px;   /* section headers */
+  --fs-xl:   20px;   /* page headers */
+  --fs-2xl:  24px;   /* stat values inline */
+  --fs-3xl:  30px;   /* hero metric */
+  --fs-4xl:  36px;   /* tool result */
+
+  /* ----- Weights ----- */
+  --fw-regular: 400;
+  --fw-medium:  500;
+  --fw-semibold: 600;
+  --fw-bold:    700;
+
+  /* ----- Line heights ----- */
+  --lh-tight:   1.1;
+  --lh-snug:    1.25;
+  --lh-normal:  1.45;
+  --lh-relaxed: 1.6;
+
+  /* ----- Letter spacing ----- */
+  --tracking-wide: 0.08em;     /* uppercase micro labels */
+  --tracking-wider: 0.12em;    /* eyebrow tags */
+
+  /* ----- Spacing (Tailwind-aligned 4px grid) ----- */
+  --space-0: 0;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+
+  /* ----- Radii ----- */
+  --radius-sm: 4px;     /* badges, status pills */
+  --radius-md: 6px;     /* buttons, inputs */
+  --radius-lg: 8px;     /* nav rail tiles, stat cards */
+  --radius-xl: 12px;    /* surface cards */
+  --radius-2xl: 16px;   /* modal sheets */
+  --radius-full: 9999px;
+
+  /* ----- Shadows ----- */
+  /* Brewski uses borders for separation more than shadows.
+     Shadows only appear on floating UI (popovers, modals, toasts). */
+  --shadow-sm:  0 1px 2px 0 rgba(0,0,0,0.18);
+  --shadow-md:  0 4px 12px -2px rgba(0,0,0,0.30);
+  --shadow-lg:  0 12px 32px -6px rgba(0,0,0,0.45);
+
+  /* ----- Motion ----- */
+  --motion-fast:   120ms;
+  --motion-base:   180ms;
+  --motion-slow:   240ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+
+  /* ----- Layout constants ----- */
+  --rail-width-desktop: 56px;     /* w-14 left icon rail */
+  --sidebar-width:      224px;    /* w-56 recipe list */
+  --stats-width:        176px;    /* w-44 stats rail */
+  --tap-target-mobile:  44px;     /* iOS HIG minimum */
+
+  /* ============================================================
+     Domain palette — NOT theme-dependent.
+     These are physical colors of brewing (beer color by SRM, hop
+     greens, status indicators). They live OUTSIDE the theme so a
+     batch in "fermenting" looks the same on light and dark.
+     ============================================================ */
+
+  /* SRM color stops (1..40, ascending) — beer hue by ° SRM */
+  --srm-1:  #FFE699;
+  --srm-2:  #FFD878;
+  --srm-3:  #FFCA5A;
+  --srm-4:  #FFBF42;
+  --srm-6:  #FBB123;
+  --srm-8:  #F8A600;
+  --srm-10: #F39C00;
+  --srm-13: #EA8F00;
+  --srm-17: #D77200;
+  --srm-20: #CF6900;
+  --srm-24: #BB5100;
+  --srm-29: #A13600;
+  --srm-35: #8D1D00;
+  --srm-40: #611200;
+
+  /* Batch status — semantic */
+  --status-planned:    #8a8aa0;
+  --status-brewing:    #f59e0b;
+  --status-fermenting: #10b981;
+  --status-packaged:   #3b82f6;
+  --status-complete:   var(--color-accent);
+
+  /* Ingredient category accents (used by built-in brewing icons) */
+  --ing-fermentable: #f59e0b;
+  --ing-hop:         #22c55e;
+  --ing-yeast:       #14b8a6;
+  --ing-water:       #38bdf8;
+  --ing-equipment:   #8b5cf6;
+
+  /* Feedback */
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-danger:  #ef4444;
+  --color-info:    #3b82f6;
+}
+
+/* =============================================================
+   THEMES
+   -------------------------------------------------------------
+   Every theme defines the same eight tokens:
+     --color-bg-base       page background (lowest layer)
+     --color-bg-surface    panels, sidebars, headers
+     --color-bg-elevated   cards on a surface, inputs, hover
+     --color-border        1px dividers between surfaces
+     --color-accent        primary action / selected state
+     --color-accent-hover  accent hover
+     --color-text-primary  default body color
+     --color-text-secondary  metadata, labels
+     --color-text-muted      placeholder / disabled
+   ============================================================= */
+
+/* ----- DEFAULT: Midnight (dark, indigo-violet accent) ----- */
+:root,
+:root[data-theme="midnight"] {
+  color-scheme: dark;
+  --color-bg-base:        #0d0d12;
+  --color-bg-surface:     #13131c;
+  --color-bg-elevated:    #1a1a2a;
+  --color-border:         #1e1e2e;
+  --color-accent:         #5c5cff;
+  --color-accent-hover:   #7c7cff;
+  --color-text-primary:   #f0f0f5;
+  --color-text-secondary: #a0a0b4;
+  --color-text-muted:     #66667a;
+}
+
+:root[data-theme="tokyo-night"] {
+  color-scheme: dark;
+  --color-bg-base:        #1a1b2e;
+  --color-bg-surface:     #16161e;
+  --color-bg-elevated:    #1f2335;
+  --color-border:         #292e42;
+  --color-accent:         #7aa2f7;
+  --color-accent-hover:   #89b4f8;
+  --color-text-primary:   #c0caf5;
+  --color-text-secondary: #565f89;
+  --color-text-muted:     #3b4261;
+}
+
+:root[data-theme="dracula"] {
+  color-scheme: dark;
+  --color-bg-base:        #282a36;
+  --color-bg-surface:     #1e1f29;
+  --color-bg-elevated:    #44475a;
+  --color-border:         #44475a;
+  --color-accent:         #bd93f9;
+  --color-accent-hover:   #caa5ff;
+  --color-text-primary:   #f8f8f2;
+  --color-text-secondary: #6272a4;
+  --color-text-muted:     #44475a;
+}
+
+:root[data-theme="catppuccin"] {
+  color-scheme: dark;
+  --color-bg-base:        #1e1e2e;
+  --color-bg-surface:     #181825;
+  --color-bg-elevated:    #313244;
+  --color-border:         #45475a;
+  --color-accent:         #cba6f7;
+  --color-accent-hover:   #d9b8ff;
+  --color-text-primary:   #cdd6f4;
+  --color-text-secondary: #a6adc8;
+  --color-text-muted:     #585b70;
+}
+
+:root[data-theme="nord"] {
+  color-scheme: dark;
+  --color-bg-base:        #2e3440;
+  --color-bg-surface:     #242933;
+  --color-bg-elevated:    #3b4252;
+  --color-border:         #434c5e;
+  --color-accent:         #88c0d0;
+  --color-accent-hover:   #8fbcbb;
+  --color-text-primary:   #eceff4;
+  --color-text-secondary: #d8dee9;
+  --color-text-muted:     #4c566a;
+}
+
+:root[data-theme="monokai"] {
+  color-scheme: dark;
+  --color-bg-base:        #272822;
+  --color-bg-surface:     #1e1f1c;
+  --color-bg-elevated:    #3e3d32;
+  --color-border:         #3e3d32;
+  --color-accent:         #a6e22e;
+  --color-accent-hover:   #b8f54a;
+  --color-text-primary:   #f8f8f2;
+  --color-text-secondary: #75715e;
+  --color-text-muted:     #49483e;
+}
+
+:root[data-theme="catppuccin-latte"] {
+  color-scheme: light;
+  --color-bg-base:        #eff1f5;
+  --color-bg-surface:     #e6e9ef;
+  --color-bg-elevated:    #dce0e8;
+  --color-border:         #ccd0da;
+  --color-accent:         #8839ef;
+  --color-accent-hover:   #7527d7;
+  --color-text-primary:   #4c4f69;
+  --color-text-secondary: #6c6f85;
+  --color-text-muted:     #9ca0b0;
+}
+
+:root[data-theme="solarized-light"] {
+  color-scheme: light;
+  --color-bg-base:        #fdf6e3;
+  --color-bg-surface:     #eee8d5;
+  --color-bg-elevated:    #e5dfc9;
+  --color-border:         #d3cbb8;
+  --color-accent:         #268bd2;
+  --color-accent-hover:   #1a6fad;
+  --color-text-primary:   #657b83;
+  --color-text-secondary: #839496;
+  --color-text-muted:     #93a1a1;
+}
+
+:root[data-theme="ayu-light"] {
+  color-scheme: light;
+  --color-bg-base:        #fafafa;
+  --color-bg-surface:     #f3f4f5;
+  --color-bg-elevated:    #e7e8e9;
+  --color-border:         #d9dbe0;
+  --color-accent:         #ff9940;
+  --color-accent-hover:   #e8852a;
+  --color-text-primary:   #5c6166;
+  --color-text-secondary: #8a9199;
+  --color-text-muted:     #abb0b6;
+}
+
+:root[data-theme="github-light"] {
+  color-scheme: light;
+  --color-bg-base:        #ffffff;
+  --color-bg-surface:     #f6f8fa;
+  --color-bg-elevated:    #eaeef2;
+  --color-border:         #d0d7de;
+  --color-accent:         #0969da;
+  --color-accent-hover:   #0757ba;
+  --color-text-primary:   #1f2328;
+  --color-text-secondary: #656d76;
+  --color-text-muted:     #9198a1;
+}
+
+/* =============================================================
+   SEMANTIC TYPOGRAPHY
+   -------------------------------------------------------------
+   Brewski leans hard on consistency: page titles, section titles
+   and the lowercase uppercase eyebrow labels are reused
+   everywhere. These classes match the live SvelteKit app.
+   ============================================================= */
+
+body {
+  font-family: var(--font-sans);
+  font-size: var(--fs-base);
+  line-height: var(--lh-normal);
+  color: var(--color-text-primary);
+  background: var(--color-bg-base);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.h-page {
+  font-size: var(--fs-lg);        /* "Settings", "Ingredient Library" */
+  font-weight: var(--fw-semibold);
+  color: var(--color-text-primary);
+  line-height: var(--lh-tight);
+}
+
+.h-section {
+  font-size: var(--fs-sm);        /* "Appearance", "Units" */
+  font-weight: var(--fw-semibold);
+  color: var(--color-text-secondary);
+  line-height: var(--lh-tight);
+}
+
+.h-eyebrow {                       /* "RECIPE DETAILS", "STATS" */
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  color: var(--color-text-muted);
+  line-height: var(--lh-tight);
+}
+
+.t-label {                         /* form labels */
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-medium);
+  color: var(--color-text-secondary);
+}
+
+.t-body {
+  font-size: var(--fs-base);
+  color: var(--color-text-primary);
+}
+
+.t-meta {                          /* "8.4 gal · Pale Ale" */
+  font-size: var(--fs-sm);
+  color: var(--color-text-secondary);
+}
+
+.t-muted {
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+}
+
+.t-stat-value {                    /* OG / FG / ABV display */
+  font-family: var(--font-mono);
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-2xl);
+  line-height: var(--lh-tight);
+  color: var(--color-text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.t-stat-value--hero {              /* tool results */
+  font-family: var(--font-mono);
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-4xl);
+  line-height: var(--lh-tight);
+  color: var(--color-text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.t-mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Code/keyboard spans (rare) */
+code,
+kbd,
+samp {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 1px 5px;
+}

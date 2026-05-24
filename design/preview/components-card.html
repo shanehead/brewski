@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<link rel="stylesheet" href="_card.css"/>
+<style>
+  body { padding: 18px 22px; }
+  .card {
+    background: var(--color-bg-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+  }
+  .card .head {
+    padding: 8px 14px;
+    border-bottom: 1px solid var(--color-border);
+  }
+  .card .head span { font: 600 10px var(--font-sans); letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-text-muted); }
+  .card .body { padding: 12px 14px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .field { display: flex; flex-direction: column; gap: 3px; }
+  .field label { font: 500 10px var(--font-sans); color: var(--color-text-secondary); }
+  .field input, .field select {
+    background: var(--color-bg-elevated);
+    color: var(--color-text-primary);
+    border: 1px solid var(--color-border);
+    border-radius: 6px; padding: 4px 6px;
+    font: 400 12px var(--font-sans); outline: none;
+  }
+</style></head>
+<body data-theme="midnight">
+  <div class="card">
+    <div class="head"><span>Recipe Details</span></div>
+    <div class="body">
+      <div class="field"><label>Recipe Type</label><select><option>all grain</option></select></div>
+      <div class="field"><label>Brewer</label><input value="Shane"/></div>
+      <div class="field"><label>Style</label><select><option>American IPA</option></select></div>
+      <div class="field"><label>Date</label><input value="2025-11-12"/></div>
+    </div>
+  </div>
+</body></html>

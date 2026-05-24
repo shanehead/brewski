@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<link rel="stylesheet" href="_card.css"/>
+<style>
+  body { padding: 0; background: var(--color-bg-base); }
+  .bar { display: flex; padding: 4px 16px 0; border-bottom: 1px solid var(--color-border); background: var(--color-bg-surface); }
+  .tab {
+    padding: 10px 14px;
+    display: inline-flex; align-items: center; gap: 6px;
+    border-bottom: 2px solid transparent;
+    color: var(--color-text-secondary);
+    font: 400 13px var(--font-sans);
+    cursor: pointer;
+    margin-bottom: -1px;
+  }
+  .tab.active { color: var(--color-accent); border-bottom-color: var(--color-accent); }
+  .tab svg { width: 18px; height: 18px; }
+  .tab.inactive svg { opacity: 0.45; }
+  .pad { padding: 22px 22px 18px; color: var(--color-text-muted); font: 400 11px var(--font-mono); }
+</style></head>
+<body data-theme="midnight">
+  <div class="bar">
+    <div class="tab active"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2" fill="#3b82f6"/><rect x="5" y="3" width="14" height="9" rx="2" fill="#2563eb"/><rect x="9" y="1" width="6" height="4" rx="2" fill="#93c5fd"/></svg>Overview</div>
+    <div class="tab inactive"><svg viewBox="0 0 24 24"><circle cx="8" cy="12" r="6" fill="#84cc16"/><ellipse cx="16" cy="8" rx="2.5" ry="4" fill="#f59e0b"/></svg>Ingredients</div>
+    <div class="tab inactive"><svg viewBox="0 0 24 24"><rect x="10" y="3" width="4" height="13" rx="2" fill="#fed7aa"/><rect x="11" y="9" width="2" height="7" fill="#f97316"/><circle cx="12" cy="17" r="4" fill="#f97316"/></svg>Mash</div>
+    <div class="tab inactive"><svg viewBox="0 0 24 24"><path d="M12 3C12 3 4 12 4 16C4 20 7.6 23 12 23C16.4 23 20 20 20 16C20 12 12 3 12 3Z" fill="#38bdf8"/></svg>Water</div>
+    <div class="tab inactive"><svg viewBox="0 0 24 24"><path d="M7 8L5 19C5 20.1 5.9 21 7 21H17C18.1 21 19 20.1 19 19L17 8Z" fill="#8b5cf6"/><rect x="6" y="6" width="12" height="3" rx="1.5" fill="#a78bfa"/></svg>Fermentation</div>
+    <div class="tab inactive"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2" fill="#fbbf24"/><rect x="4" y="3" width="16" height="9" rx="2" fill="#f59e0b"/></svg>Notes</div>
+  </div>
+  <div class="pad">tab-bar · 2px accent underline · 18px brewing icon · sentence case label</div>
+</body></html>

@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<link rel="stylesheet" href="_card.css"/>
+<style>
+  .pills { display: flex; gap: 10px; flex-wrap: wrap; }
+  .pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 10px;
+    border-radius: var(--radius-sm);
+    background: var(--color-bg-elevated);
+    font-size: 12px; font-weight: 500;
+    font-family: var(--font-sans);
+    border: 1px solid var(--color-border);
+  }
+  .pill .dot { width: 6px; height: 6px; border-radius: 50%; }
+  .hint { font-size: 11px; color: var(--color-text-muted); font-family: var(--font-mono); margin-top: 4px; }
+</style></head>
+<body data-theme="midnight">
+  <div class="card-wrap">
+    <div class="pills">
+      <span class="pill" style="color:#8a8aa0"><span class="dot" style="background:#8a8aa0"></span>Planned</span>
+      <span class="pill" style="color:#f59e0b"><span class="dot" style="background:#f59e0b"></span>Brewing</span>
+      <span class="pill" style="color:#10b981"><span class="dot" style="background:#10b981"></span>Fermenting</span>
+      <span class="pill" style="color:#3b82f6"><span class="dot" style="background:#3b82f6"></span>Packaged</span>
+      <span class="pill" style="color:var(--color-accent)"><span class="dot" style="background:var(--color-accent)"></span>Complete</span>
+    </div>
+    <div class="hint">--status-planned / brewing / fermenting / packaged / complete</div>
+  </div>
+</body></html>

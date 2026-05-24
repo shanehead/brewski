@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<link rel="stylesheet" href="_card.css"/>
+<style>
+  body { padding: 22px; }
+  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; row-gap: 18px; align-items: end; }
+  .col { display: flex; flex-direction: column; gap: 6px; }
+  .btn {
+    padding: 6px 12px;
+    border-radius: 6px;
+    font: 500 13px var(--font-sans);
+    border: 1px solid transparent;
+    cursor: pointer; transition: background var(--motion-fast) var(--ease-standard);
+  }
+  .primary { background: var(--color-accent); color: #fff; }
+  .primary:hover { background: var(--color-accent-hover); }
+  .outline { background: transparent; border-color: var(--color-accent); color: var(--color-accent); }
+  .secondary { background: var(--color-bg-elevated); color: var(--color-text-secondary); border-color: var(--color-border); }
+  .dangerous { background: var(--color-bg-elevated); color: #f87171; border-color: var(--color-border); }
+  .label { font: 500 10px var(--font-mono); color: var(--color-text-muted); }
+</style></head>
+<body data-theme="midnight">
+  <div class="grid">
+    <div class="col"><button class="btn primary">+ New Recipe</button><span class="label">primary</span></div>
+    <div class="col"><button class="btn outline">Import BeerXML</button><span class="label">outline</span></div>
+    <div class="col"><button class="btn secondary">Save Version</button><span class="label">secondary</span></div>
+    <div class="col"><button class="btn dangerous">Delete</button><span class="label">dangerous</span></div>
+  </div>
+</body></html>

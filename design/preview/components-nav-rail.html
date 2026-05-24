@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<link rel="stylesheet" href="_card.css"/>
+<style>
+  body { padding: 0; }
+  .stage { display: flex; height: 280px; }
+  .rail {
+    width: 56px;
+    background: var(--color-bg-surface);
+    border-right: 1px solid var(--color-border);
+    display: flex; flex-direction: column; align-items: center; padding: 12px 0; gap: 8px;
+  }
+  .tile {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .tile.active { background: color-mix(in srgb, var(--color-accent) 18%, transparent); }
+  .rail-spacer { flex: 1; }
+  .right { flex: 1; background: var(--color-bg-base); padding: 18px 22px; color: var(--color-text-secondary); font: 400 12px/1.5 var(--font-sans); }
+  .right h2 { font: 600 14px var(--font-sans); color: var(--color-text-primary); margin: 0 0 8px; }
+  .right ul { margin: 0; padding-left: 18px; }
+  .right li { margin-bottom: 3px; }
+  .right code { font: 500 11px var(--font-mono); background: var(--color-bg-elevated); padding: 1px 6px; border-radius: 4px; }
+</style></head>
+<body data-theme="midnight">
+<div class="stage">
+  <nav class="rail">
+    <div class="tile active" aria-label="Recipes"><svg viewBox="0 0 24 24" width="22" height="22"><path d="M4 4C4 3 5 2 6 2H12V12L9 10.5L6 12V2" fill="#3b82f6"/><path d="M12 2H18C19 2 20 3 20 4V20C20 21 19 22 18 22H6C5 22 4 21 4 20V12" fill="#2563eb"/><rect x="8" y="14" width="8" height="1.5" rx="0.75" fill="white" opacity="0.5"/><rect x="8" y="17" width="5" height="1.5" rx="0.75" fill="white" opacity="0.5"/></svg></div>
+    <div class="tile"><svg viewBox="0 0 24 24" width="22" height="22"><ellipse cx="12" cy="6" rx="7" ry="2.5" fill="#10b981"/><rect x="5" y="6" width="14" height="4" fill="#059669"/><ellipse cx="12" cy="10" rx="7" ry="2.5" fill="#10b981"/><rect x="5" y="10" width="14" height="5" fill="#047857"/><ellipse cx="12" cy="15" rx="7" ry="2.5" fill="#10b981"/></svg></div>
+    <div class="tile"><svg viewBox="0 0 24 24" width="22" height="22"><path d="M14.5 2.5C11.5 2.5 9 5 9 8C9 8.8 9.2 9.5 9.5 10.2L3 17C2.4 17.6 2.4 18.6 3 19.2L4.8 21C5.4 21.6 6.4 21.6 7 21L13.8 14.5C14.5 14.8 15.2 15 16 15C19 15 21.5 12.5 21.5 9.5C21.5 8.9 21.4 8.3 21.2 7.8L18 11L16 9L19.2 5.8C18.7 5.6 18.1 5.5 17.5 5.5" fill="#f59e0b"/></svg></div>
+    <div class="tile"><svg viewBox="0 0 24 24" width="22" height="22"><rect x="4" y="7" width="16" height="11" rx="3" fill="#7c3aed"/><rect x="4" y="7" width="16" height="5" rx="3" fill="#8b5cf6"/><rect x="6" y="4" width="12" height="4" rx="2" fill="#a78bfa"/></svg></div>
+    <div class="tile"><svg viewBox="0 0 24 24" width="22" height="22"><rect x="3" y="4" width="5" height="16" rx="1.5" fill="#ec4899"/><rect x="9" y="6" width="4" height="14" rx="1.5" fill="#f97316"/><rect x="14.5" y="3" width="6" height="17" rx="1.5" fill="#06b6d4"/></svg></div>
+    <div class="rail-spacer"></div>
+    <div class="tile"><svg viewBox="0 0 24 24" width="22" height="22"><circle cx="12" cy="12" r="10" fill="#64748b"/><circle cx="12" cy="12" r="7" fill="#475569"/><circle cx="12" cy="12" r="4" fill="#94a3b8"/><circle cx="12" cy="12" r="2.5" fill="#334155"/></svg></div>
+  </nav>
+  <div class="right">
+    <h2>Desktop icon rail</h2>
+    <ul>
+      <li>Width: <code>56px</code> · always visible</li>
+      <li>Active: tile bg = <code>accent @ 18%</code></li>
+      <li>Order: Recipes, Batches, Tools, Equipment, Library — Settings pinned to bottom</li>
+    </ul>
+  </div>
+</div>
+</body></html>

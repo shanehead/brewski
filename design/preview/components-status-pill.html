@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<link rel="stylesheet" href="_card.css"/>
+<style>
+  body { padding: 18px 22px; }
+  .row {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 12px;
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    margin-bottom: 8px;
+  }
+  .nm { flex: 1; font: 500 13px var(--font-sans); color: var(--color-text-primary); }
+  .meta { font: 400 11px var(--font-mono); color: var(--color-text-muted); }
+  .og { font: 500 11px var(--font-mono); color: var(--color-text-muted); }
+  .pill {
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: var(--color-bg-surface);
+    font: 500 11px var(--font-sans);
+    border: 1px solid var(--color-border);
+  }
+</style></head>
+<body data-theme="midnight">
+  <div class="row">
+    <span class="nm">West Coast IPA</span>
+    <span class="og">OG 1.061</span>
+    <span class="pill" style="color:#f59e0b">Brewing</span>
+  </div>
+  <div class="row">
+    <span class="nm">Maris Pale</span>
+    <span class="og">OG 1.048</span>
+    <span class="pill" style="color:#10b981">Fermenting</span>
+  </div>
+  <div class="row">
+    <span class="nm">Oatmeal Stout</span>
+    <span class="og">OG 1.054</span>
+    <span class="pill" style="color:#3b82f6">Packaged</span>
+  </div>
+</body></html>

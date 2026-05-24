@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<link rel="stylesheet" href="_card.css"/>
+<style>
+  body { padding: 14px 22px; }
+  .list { display: flex; flex-direction: column; }
+  .row { padding: 8px 12px; display: flex; flex-direction: column; gap: 1px; cursor: pointer; border-left: 2px solid transparent; padding-left: 10px; }
+  .row .nm { font: 500 13px var(--font-sans); color: var(--color-text-primary); }
+  .row .sub { font: 400 11px var(--font-sans); color: var(--color-text-secondary); }
+  .row.selected { background: var(--color-bg-elevated); border-left-color: var(--color-accent); }
+  .row.hover { background: var(--color-bg-elevated); }
+  .anno { font: 500 10px var(--font-mono); color: var(--color-text-muted); padding: 6px 12px 0; }
+</style></head>
+<body data-theme="midnight">
+  <div class="list">
+    <div class="row selected"><span class="nm">West Coast IPA</span><span class="sub">American IPA · 5.5 gal</span></div>
+    <div class="row hover"><span class="nm">Maris Pale</span><span class="sub">English IPA · 5.0 gal</span></div>
+    <div class="row"><span class="nm">Saison Belge</span><span class="sub">Saison · 5.0 gal</span></div>
+    <div class="row"><span class="nm">Oatmeal Stout</span><span class="sub">Sweet Stout · 5.0 gal</span></div>
+  </div>
+  <div class="anno">selected (accent stripe) · hover · default · default</div>
+</body></html>

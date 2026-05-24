@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<link rel="stylesheet" href="_card.css"/>
+<style>
+  .row .sample {
+    flex: 1;
+    padding: 14px 16px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-bg-surface);
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .preview-line { font: 600 18px/1.1 var(--font-sans); }
+  .token { font-family: var(--font-mono); font-size: 10px; color: var(--color-text-muted); }
+  .hex { font-family: var(--font-mono); font-size: 10px; color: var(--color-text-muted); }
+</style>
+</head>
+<body data-theme="midnight">
+  <div class="card-wrap">
+    <div class="row">
+      <div class="sample">
+        <span class="preview-line" style="color:var(--color-text-primary)">Recipe details</span>
+        <span class="token">text-primary</span>
+        <span class="hex">#f0f0f5</span>
+      </div>
+      <div class="sample">
+        <span class="preview-line" style="color:var(--color-text-secondary)">Pale Ale · 5.0 gal</span>
+        <span class="token">text-secondary</span>
+        <span class="hex">#a0a0b4</span>
+      </div>
+      <div class="sample">
+        <span class="preview-line" style="color:var(--color-text-muted)">Add ingredients to see stats</span>
+        <span class="token">text-muted</span>
+        <span class="hex">#66667a</span>
+      </div>
+    </div>
+  </div>
+</body></html>

@@ -53,6 +53,37 @@ Everything stays on your device, no account needed. Runs on macOS, iOS, Android,
 **⚙️ Equipment profiles**
 - Save your system's volumes and efficiency for accurate recipe scaling
 
+## Screenshots
+
+<table>
+  <tr>
+    <td align="center" width="60%">
+      <img src="docs/screenshots/tools-abv.png" alt="ABV, attenuation, and calorie calculator" style="max-width:100%;"/>
+      <br/><sub>Brewing calculators — desktop</sub>
+    </td>
+    <td align="center" width="40%">
+      <img src="docs/screenshots/tools-abv-mobile.png" alt="ABV calculator on mobile" style="max-width:100%;"/>
+      <br/><sub>Mobile view</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="60%">
+      <img src="docs/screenshots/recipes.png" alt="Recipe list" style="max-width:100%;"/>
+      <br/><sub>Recipe list — desktop</sub>
+    </td>
+    <td align="center" width="40%">
+      <img src="docs/screenshots/tools-mobile.png" alt="Tools list on mobile" style="max-width:100%;"/>
+      <br/><sub>Tools list — mobile</sub>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center">
+      <img src="docs/screenshots/library.png" alt="Ingredient library" style="max-width:100%;"/>
+      <br/><sub>Ingredient library — Hops, Fermentables, Yeasts, Water profiles</sub>
+    </td>
+  </tr>
+</table>
+
 ## Download
 
 Download the latest release for your platform from the [Releases](../../releases) page.
@@ -91,6 +122,8 @@ The database path is configurable in Settings. Point it to a folder inside iClou
 The frontend is a SvelteKit app running inside Tauri's WebView. All backend access goes through Tauri's IPC bridge via `tauri.invoke()` — typed wrappers live in [`src/lib/api.gen.ts`](src/lib/api.gen.ts). The Rust side handles commands, delegates to a repository layer, and persists everything to an embedded SQLite database via SeaORM and sqlx.
 
 C4 diagrams (System Context, Container, and Component levels) are in [`docs/c4.md`](docs/c4.md).
+
+Design system + brand reference: see [`design/`](./design/README.md)
 
 ### Tech Stack
 

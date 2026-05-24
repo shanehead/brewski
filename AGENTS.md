@@ -49,6 +49,14 @@ just dev-android    # Android emulator
 just dev-web        # frontend only (no Tauri)
 ```
 
+## README screenshots
+
+Screenshots live in `docs/screenshots/` and are referenced in `README.md`. **Update them whenever a UI change affects a captured screen.** They are generated with Playwright against the `just dev-web` frontend server, with `window.__TAURI_INTERNALS__` mocked so IPC calls return canned data.
+
+To regenerate: start `just dev-web`, then run `bun scripts/capture-screenshots.mjs` (requires `playwright` as a dev dependency; install with `bun add -d playwright && bunx playwright install chromium`). The script captures desktop (1280×800) and mobile (390×844) views of the key screens and writes PNGs to `docs/screenshots/`.
+
+Screens currently captured: `recipes`, `tools`, `tools-abv`, `tools-carbonation`, `library`, `tools-mobile`, `tools-abv-mobile`, `recipes-mobile`.
+
 ## Common commands (via Justfile)
 
 ```bash
@@ -102,6 +110,12 @@ Lint with `just lint-openapi` before committing changes.
 Use [Conventional Commits](https://www.conventionalcommits.org/) style: `type(scope): description`.
 
 Common types: `feat`, `fix`, `refactor`, `test`, `docs`, `chore`.
+
+## Design
+
+Brand guidelines, color tokens, iconography rules, and a clickable UI kit
+live in [`design/`](./design/). When working on user-facing UI, follow
+[`design/SKILL.md`](./design/SKILL.md).
 
 ## Style guide
 

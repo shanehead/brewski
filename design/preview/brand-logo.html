@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<link rel="stylesheet" href="_card.css"/>
+<style>
+  body { padding: 0; }
+  .stage { display: grid; grid-template-columns: 1fr 1fr; gap: 0; height: 240px; }
+  .light, .dark { display: flex; align-items: center; justify-content: center; gap: 22px; padding: 0 30px; }
+  .dark  { background: #0d0d12; }
+  .light { background: #ffffff; }
+  .dark .name { color: #f0f0f5; }
+  .light .name { color: #1f2328; }
+  .name { font: 700 32px/1 var(--font-sans); letter-spacing: -0.02em; }
+  .tag { display: block; font: 500 12px/1.4 var(--font-sans); margin-top: 8px; opacity: 0.55; }
+  img.logo { width: 96px; height: 96px; border-radius: 22px; }
+</style></head>
+<body data-theme="midnight">
+  <div class="stage">
+    <div class="dark">
+      <img class="logo" src="../assets/brewski-logo.png" alt=""/>
+      <div><span class="name">Brewski</span><span class="tag">Home-brewing, on every device</span></div>
+    </div>
+    <div class="light">
+      <img class="logo" src="../assets/brewski-logo.png" alt=""/>
+      <div><span class="name">Brewski</span><span class="tag">Home-brewing, on every device</span></div>
+    </div>
+  </div>
+</body></html>

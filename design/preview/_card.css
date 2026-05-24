@@ -1,0 +1,34 @@
+/* Preview-card shared helpers. Keeps each card file tiny. */
+:root { color-scheme: dark; }
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--color-bg-base);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  padding: 18px 22px;
+}
+.card-wrap { display: flex; flex-direction: column; gap: 14px; }
+.row { display: flex; gap: 10px; flex-wrap: wrap; align-items: stretch; }
+.eyebrow {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--color-text-muted);
+}
+.swatch {
+  border-radius: var(--radius-md);
+  display: flex; flex-direction: column; gap: 4px;
+  padding: 10px;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-surface);
+  min-width: 0;
+}
+.swatch .chip {
+  height: 36px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.swatch .lbl { font-size: 11px; color: var(--color-text-primary); font-weight: 500; }
+.swatch .hex { font-size: 10px; color: var(--color-text-muted); font-family: var(--font-mono); }

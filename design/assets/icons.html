@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Brewski icons</title>
+  <link rel="stylesheet" href="../colors_and_type.css" />
+  <style>
+    body { background: var(--color-bg-base); padding: 32px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
+    .tile {
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+      padding: 18px 12px;
+      background: var(--color-bg-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+    }
+    .tile svg { width: 48px; height: 48px; }
+    .tile .name { font-size: var(--fs-xs); color: var(--color-text-secondary); font-family: var(--font-mono); }
+    h1 { color: var(--color-text-primary); margin: 0 0 8px; font: var(--fw-semibold) var(--fs-lg)/1 var(--font-sans); }
+    p { color: var(--color-text-secondary); margin: 0 0 24px; font: var(--fw-regular) var(--fs-sm)/1.5 var(--font-sans); max-width: 60ch; }
+  </style>
+</head>
+<body data-theme="midnight">
+  <h1>Brewski icons</h1>
+  <p>The full set of 15 hand-crafted multi-color brewing icons, drawn on a 24×24 grid. Render at 18–22 in chrome, 48–64 in marketing.</p>
+  <div class="grid" id="grid"></div>
+  <script src="icons.js"></script>
+  <script>
+    const grid = document.getElementById('grid');
+    for (const [name, body] of Object.entries(window.BREWSKI_ICONS)) {
+      const t = document.createElement('div');
+      t.className = 'tile';
+      t.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true">${body}</svg><div class="name">${name}</div>`;
+      grid.appendChild(t);
+    }
+  </script>
+</body>
+</html>
