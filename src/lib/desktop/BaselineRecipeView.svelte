@@ -80,7 +80,7 @@
       </button>
       <div class="flex-1">
         <h1 class="text-base font-semibold" style="color: var(--color-text-primary);">{recipe.name}</h1>
-        <p class="text-xs" style="color: var(--color-text-muted);">Starter Recipe — read only</p>
+        <p class="text-xs" style="color: var(--color-text-muted);">Example Recipe — read only</p>
       </div>
       <button
         onclick={handleClone}

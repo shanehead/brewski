@@ -72,7 +72,7 @@
       <p class="p-4 text-sm" style="color: var(--color-text-muted);">No recipes yet. Tap + to create one.</p>
     {/each}
 
-    <!-- Starter Recipes section -->
+    <!-- Example Recipes section -->
     {#if $baselineRecipeList.length > 0}
       <button
         onclick={toggleStarters}
@@ -80,7 +80,7 @@
         style="background: var(--color-bg-base); border-color: var(--color-border);"
       >
         <span class="text-xs font-semibold uppercase tracking-wider" style="color: var(--color-text-muted);">
-          Starter Recipes
+          Example Recipes
         </span>
         <span class="text-xs" style="color: var(--color-text-muted);">
           {startersCollapsed ? "▸" : "▾"}

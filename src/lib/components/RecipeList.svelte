@@ -122,7 +122,7 @@
       </li>
     {/each}
 
-    <!-- Starter Recipes section -->
+    <!-- Example Recipes section -->
     {#if $baselineRecipeList.length > 0}
       <li>
         <button
@@ -131,7 +131,7 @@
           style="background: var(--color-bg-base); border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border);"
         >
           <span class="text-xs font-semibold uppercase tracking-wider" style="color: var(--color-text-muted);">
-            Starter Recipes
+            Example Recipes
           </span>
           <span class="text-xs" style="color: var(--color-text-muted);">
             {startersCollapsed ? "▸" : "▾"}

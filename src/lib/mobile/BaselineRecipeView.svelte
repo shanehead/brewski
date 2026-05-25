@@ -60,7 +60,7 @@
       <div class="flex-1 min-w-0">
         <span class="font-semibold text-base truncate block"
               style="color: var(--color-text-primary);">{recipe.name}</span>
-        <p class="text-xs" style="color: var(--color-text-muted);">Starter Recipe — read only</p>
+        <p class="text-xs" style="color: var(--color-text-muted);">Example Recipe — read only</p>
       </div>
       <button
         onclick={handleClone}
