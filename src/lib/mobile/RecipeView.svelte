@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { goto } from "$app/navigation";
-  import { getRecipe, getRecipeStats } from "$lib/api";
+  import { getRecipe, getRecipeStats, getRecipeBeerxml } from "$lib/api";
   import type { Recipe, RecipeStats } from "$lib/api";
   import { ipc } from "$lib/stores/error";
   import { settings } from "$lib/stores/settings";
@@ -25,6 +25,19 @@
   onMount(load);
   $effect(() => { if (id) load(); });
 
+  async function handleExport() {
+    if (!recipe) return;
+    const xml = await ipc(getRecipeBeerxml(recipe.id));
+    if (!xml) return;
+    const blob = new Blob([xml], { type: "application/xml" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${recipe.name}.xml`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
   function fmt(val: number | undefined, decimals = 3): string {
     if (val === undefined || val === null) return "—";
     return val.toFixed(decimals);
@@ -43,6 +56,18 @@
       >‹ Recipes</button>
       <span class="flex-1 font-semibold text-base truncate"
             style="color: var(--color-text-primary);">{recipe.name}</span>
+      <button
+        onclick={handleExport}
+        aria-label="Export BeerXML"
+        class="flex items-center justify-center rounded flex-shrink-0"
+        style="width: 28px; height: 28px; color: var(--color-text-secondary); background: var(--color-bg-elevated); border: 1px solid var(--color-border); border-radius: var(--radius-md);"
+      >
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+      </button>
     </div>
 
     <!-- Single scroll -->
