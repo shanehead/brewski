@@ -18,5 +18,6 @@ export async function loadSettings() {
 
 export async function saveSetting(key: keyof AppSettings, value: string) {
   await updateSetting(key, value);
-  settings.update((s) => ({ ...s, [key]: value }));
+  const parsed: string | boolean = value === "true" ? true : value === "false" ? false : value;
+  settings.update((s) => ({ ...s, [key]: parsed }));
 }
