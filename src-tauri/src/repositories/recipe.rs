@@ -1,4 +1,6 @@
-use sea_orm::{ActiveModelTrait, DatabaseConnection, EntityTrait, QueryOrder, Set};
+use sea_orm::{
+    ActiveModelTrait, ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter, QueryOrder, Set,
+};
 
 use crate::entities::{recipes, styles};
 use crate::error::AppError;
@@ -30,6 +32,7 @@ impl<'a> RecipeRepository<'a> {
 
     pub async fn list(&self) -> Result<Vec<RecipeSummary>, AppError> {
         let results = recipes::Entity::find()
+            .filter(recipes::Column::Source.eq("user"))
             .find_also_related(styles::Entity)
             .order_by_desc(recipes::Column::UpdatedAt)
             .all(self.db)
@@ -44,6 +47,38 @@ impl<'a> RecipeRepository<'a> {
                     style_name: s.map(|st| st.name),
                     type_: r.r#type,
                     batch_size_l: r.batch_size_l,
+                    source: r
+                        .source
+                        .parse()
+                        .map_err(|e| AppError::Internal(format!("invalid source value: {e}")))?,
+                    created_at: r.created_at as i64,
+                    updated_at: r.updated_at as i64,
+                })
+            })
+            .collect()
+    }
+
+    pub async fn list_baseline(&self) -> Result<Vec<RecipeSummary>, AppError> {
+        let results = recipes::Entity::find()
+            .filter(recipes::Column::Source.eq("seeded"))
+            .find_also_related(styles::Entity)
+            .order_by_asc(recipes::Column::Name)
+            .all(self.db)
+            .await?;
+
+        results
+            .into_iter()
+            .map(|(r, s)| {
+                Ok(RecipeSummary {
+                    id: r.id,
+                    name: r.name,
+                    style_name: s.map(|st| st.name),
+                    type_: r.r#type,
+                    batch_size_l: r.batch_size_l,
+                    source: r
+                        .source
+                        .parse()
+                        .map_err(|e| AppError::Internal(format!("invalid source value: {e}")))?,
                     created_at: r.created_at as i64,
                     updated_at: r.updated_at as i64,
                 })
@@ -117,6 +152,10 @@ impl<'a> RecipeRepository<'a> {
             priming_sugar_equiv: recipe_row.priming_sugar_equiv,
             keg_priming_factor: recipe_row.keg_priming_factor,
             date: recipe_row.date,
+            source: recipe_row
+                .source
+                .parse()
+                .map_err(|e| AppError::Internal(format!("invalid source value: {e}")))?,
             created_at: recipe_row.created_at as i64,
             updated_at: recipe_row.updated_at as i64,
             equipment_profile,
@@ -419,7 +458,10 @@ impl<'a> RecipeRepository<'a> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::models::{CreateFermentableAdditionInput, CreateHopAdditionInput};
+    use crate::entities::recipes;
+    use crate::models::{
+        CreateFermentableAdditionInput, CreateHopAdditionInput, RecipeSummarySource,
+    };
     use crate::repositories::fermentable::FermentableRepository;
     use crate::repositories::hop::HopRepository;
     use crate::test_helpers::setup_test_db;
@@ -608,5 +650,69 @@ mod tests {
         assert_eq!(dupe.fermentables[0].name, "Pale Malt");
         assert_eq!(dupe.hops.len(), 1);
         assert_eq!(dupe.hops[0].name, "Cascade");
+    }
+
+    #[tokio::test]
+    async fn test_list_excludes_seeded_recipes() {
+        let db = setup_test_db().await;
+        let repo = RecipeRepository::new(&db);
+
+        // Create a user recipe (default source = 'user')
+        repo.create(basic_input()).await.unwrap();
+
+        // Directly insert a seeded recipe
+        recipes::ActiveModel {
+            id: Set("bm-test-seeded".to_string()),
+            name: Set("Seeded Recipe".to_string()),
+            r#type: Set("All Grain".to_string()),
+            batch_size_l: Set(19.0),
+            boil_size_l: Set(23.0),
+            boil_time_min: Set(60.0),
+            source: Set("seeded".to_string()),
+            created_at: Set(0),
+            updated_at: Set(0),
+            ..Default::default()
+        }
+        .insert(&db)
+        .await
+        .unwrap();
+
+        let list = repo.list().await.unwrap();
+        assert!(list.iter().all(|r| r.source == RecipeSummarySource::User));
+        assert_eq!(list.len(), 1);
+    }
+
+    #[tokio::test]
+    async fn test_list_baseline_returns_only_seeded() {
+        let db = setup_test_db().await;
+        let repo = RecipeRepository::new(&db);
+
+        repo.create(basic_input()).await.unwrap();
+
+        recipes::ActiveModel {
+            id: Set("bm-test-seeded".to_string()),
+            name: Set("Seeded Recipe".to_string()),
+            r#type: Set("All Grain".to_string()),
+            batch_size_l: Set(19.0),
+            boil_size_l: Set(23.0),
+            boil_time_min: Set(60.0),
+            source: Set("seeded".to_string()),
+            created_at: Set(0),
+            updated_at: Set(0),
+            ..Default::default()
+        }
+        .insert(&db)
+        .await
+        .unwrap();
+
+        let baselines = repo.list_baseline().await.unwrap();
+        // All returned recipes must have source = 'seeded'
+        assert!(baselines
+            .iter()
+            .all(|r| r.source == RecipeSummarySource::Seeded));
+        // Our explicitly inserted seeded recipe must be present
+        assert!(baselines.iter().any(|r| r.name == "Seeded Recipe"));
+        // The user recipe must not appear
+        assert!(!baselines.iter().any(|r| r.name == "Test Recipe"));
     }
 }

@@ -266,6 +266,7 @@ pub fn load_fixture(filename: &str) -> (Recipe, ExpectedStats) {
         priming_sugar_equiv: None,
         keg_priming_factor: None,
         date: None,
+        source: crate::models::RecipeSource::User,
         created_at: 0,
         updated_at: 0,
         equipment_profile: None,

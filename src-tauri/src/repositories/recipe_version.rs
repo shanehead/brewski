@@ -1010,6 +1010,10 @@ impl<'a> RecipeVersionRepository<'a> {
             priming_sugar_equiv: v.priming_sugar_equiv,
             keg_priming_factor: v.keg_priming_factor,
             date: None,
+            source: recipe_row
+                .source
+                .parse()
+                .map_err(|e| AppError::Internal(format!("invalid source value: {e}")))?,
             mash_water_id: v.mash_water_id,
             sparge_water_id: v.sparge_water_id,
             hopstand_temp_c: None,
