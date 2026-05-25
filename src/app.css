@@ -112,6 +112,9 @@
   --srm-29: #A13600;
   --srm-35: #8D1D00;
   --srm-40: #611200;
+  --srm-45: #4A0F00;
+  --srm-50: #350900;
+  --srm-60: #1F0400;
 
   /* Batch status */
   --status-planned:    #8a8aa0;
@@ -132,6 +135,16 @@
   --color-warning: #f59e0b;
   --color-danger:  #ef4444;
   --color-info:    #3b82f6;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: var(--fs-base);
+  line-height: var(--lh-normal);
+  color: var(--color-text-primary);
+  background: var(--color-bg-base);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* IngredientPicker: fixed size on desktop, full-screen on mobile */
