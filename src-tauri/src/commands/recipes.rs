@@ -11,6 +11,13 @@ pub async fn list_recipes(state: State<'_, AppState>) -> Result<Vec<RecipeSummar
 }
 
 #[tauri::command]
+pub async fn list_baseline_recipes(
+    state: State<'_, AppState>,
+) -> Result<Vec<RecipeSummary>, AppError> {
+    RecipeRepository::new(&state.db).list_baseline().await
+}
+
+#[tauri::command]
 pub async fn get_recipe(state: State<'_, AppState>, id: String) -> Result<Recipe, AppError> {
     RecipeRepository::new(&state.db).get(&id).await
 }

@@ -58,6 +58,7 @@ pub fn run() {
             commands::library::list_misc_library,
             commands::library::list_water_library,
             commands::recipes::list_recipes,
+            commands::recipes::list_baseline_recipes,
             commands::recipes::get_recipe,
             commands::recipes::create_recipe,
             commands::recipes::update_recipe,
