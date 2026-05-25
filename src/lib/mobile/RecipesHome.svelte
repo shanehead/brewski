@@ -1,13 +1,20 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { goto } from "$app/navigation";
-  import { recipeList, refreshRecipeList } from "$lib/stores/recipes";
+  import { recipeList, refreshRecipeList, baselineRecipeList, refreshBaselineRecipeList } from "$lib/stores/recipes";
   import { createRecipe, createRecipesFromBeerxml } from "$lib/api";
   import { ipc } from "$lib/stores/error";
+  import { settings } from "$lib/stores/settings";
+  import { saveSetting } from "$lib/stores/settings";
 
   let fileInput: HTMLInputElement;
 
-  onMount(() => ipc(refreshRecipeList()));
+  const startersCollapsed = $derived($settings.starters_collapsed ?? false);
+
+  onMount(() => {
+    ipc(refreshRecipeList());
+    ipc(refreshBaselineRecipeList());
+  });
 
   async function handleNew() {
     const recipe = await ipc(createRecipe({ name: "New Recipe" }));
@@ -24,6 +31,10 @@
     if (!imported) return;
     await ipc(refreshRecipeList());
     fileInput.value = "";
+  }
+
+  function toggleStarters() {
+    saveSetting("starters_collapsed", startersCollapsed ? "false" : "true");
   }
 </script>
 
@@ -60,5 +71,33 @@
     {:else}
       <p class="p-4 text-sm" style="color: var(--color-text-muted);">No recipes yet. Tap + to create one.</p>
     {/each}
+
+    <!-- Starter Recipes section -->
+    {#if $baselineRecipeList.length > 0}
+      <button
+        onclick={toggleStarters}
+        class="w-full flex items-center justify-between px-4 py-2 border-b"
+        style="background: var(--color-bg-base); border-color: var(--color-border);"
+      >
+        <span class="text-xs font-semibold uppercase tracking-wider" style="color: var(--color-text-muted);">
+          Starter Recipes
+        </span>
+        <span class="text-xs" style="color: var(--color-text-muted);">
+          {startersCollapsed ? "▸" : "▾"}
+        </span>
+      </button>
+      {#if !startersCollapsed}
+        {#each $baselineRecipeList as recipe (recipe.id)}
+          <a
+            href="/baseline-recipe/{recipe.id}"
+            class="flex items-center justify-between px-4 py-3 border-b text-sm"
+            style="border-color: var(--color-border); color: var(--color-text-secondary);"
+          >
+            <span class="truncate">{recipe.name}</span>
+            <span style="color: var(--color-text-muted);">›</span>
+          </a>
+        {/each}
+      {/if}
+    {/if}
   </div>
 </div>
