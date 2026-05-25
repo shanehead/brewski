@@ -1,11 +1,11 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { goto } from "$app/navigation";
-  import { recipeList, refreshRecipeList } from "$lib/stores/recipes";
+  import { recipeList, refreshRecipeList, baselineRecipeList, refreshBaselineRecipeList } from "$lib/stores/recipes";
   import { createRecipe, deleteRecipe, createRecipesFromBeerxml } from "$lib/api";
   import type { RecipeSummary } from "$lib/api";
   import { ipc } from "$lib/stores/error";
-  import { settings } from "$lib/stores/settings";
+  import { settings, saveSetting } from "$lib/stores/settings";
   import { type Units, lToGal, volumeLabel } from "$lib/units";
 
   let { selectedId = $bindable<string | null>(null) } = $props();
@@ -13,6 +13,7 @@
   let fileInput: HTMLInputElement;
 
   const units = $derived<Units>($settings.units === "imperial" ? "imperial" : "metric");
+  const startersCollapsed = $derived($settings.starters_collapsed ?? false);
 
   const filtered = $derived(
     search.trim()
@@ -20,7 +21,10 @@
       : $recipeList
   );
 
-  onMount(() => ipc(refreshRecipeList()));
+  onMount(() => {
+    ipc(refreshRecipeList());
+    ipc(refreshBaselineRecipeList());
+  });
 
   async function handleNew() {
     const recipe = await ipc(createRecipe({ name: "New Recipe" }));
@@ -43,6 +47,10 @@
     if (!imported) return;
     await ipc(refreshRecipeList());
     fileInput.value = "";
+  }
+
+  function toggleStarters() {
+    saveSetting("starters_collapsed", startersCollapsed ? "false" : "true");
   }
 </script>
 
@@ -113,5 +121,39 @@
         {search ? "No matches" : "No recipes yet"}
       </li>
     {/each}
+
+    <!-- Starter Recipes section -->
+    {#if $baselineRecipeList.length > 0}
+      <li>
+        <button
+          onclick={toggleStarters}
+          class="w-full flex items-center justify-between px-3 py-1.5 text-left"
+          style="background: var(--color-bg-base); border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border);"
+        >
+          <span class="text-xs font-semibold uppercase tracking-wider" style="color: var(--color-text-muted);">
+            Starter Recipes
+          </span>
+          <span class="text-xs" style="color: var(--color-text-muted);">
+            {startersCollapsed ? "▸" : "▾"}
+          </span>
+        </button>
+      </li>
+      {#if !startersCollapsed}
+        {#each $baselineRecipeList as recipe (recipe.id)}
+          <li>
+            <a
+              href="/baseline-recipe/{recipe.id}"
+              class="flex flex-col px-3 py-2 cursor-pointer transition-colors hover:bg-[var(--color-bg-elevated)]"
+              style="border-left: 2px solid transparent; padding-left: calc(0.75rem - 2px); color: var(--color-text-secondary);"
+            >
+              <span class="text-sm font-medium truncate">{recipe.name}</span>
+              <span class="text-xs truncate mt-0.5" style="color: var(--color-text-muted);">
+                {recipe.style_name ?? recipe.type_} · {(units === "imperial" ? lToGal(recipe.batch_size_l) : recipe.batch_size_l).toFixed(1)}{volumeLabel(units)}
+              </span>
+            </a>
+          </li>
+        {/each}
+      {/if}
+    {/if}
   </ul>
 </aside>
