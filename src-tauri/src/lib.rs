@@ -26,6 +26,7 @@ pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_process::init())
+        .plugin(tauri_plugin_dialog::init())
         .setup(|app| {
             let app_dir = app.path().app_data_dir()?;
             std::fs::create_dir_all(&app_dir)?;
@@ -107,6 +108,7 @@ pub fn run() {
             commands::settings::update_setting,
             commands::import_export::get_recipe_beerxml,
             commands::import_export::create_recipes_from_beerxml,
+            commands::import_export::write_recipe_beerxml,
             commands::tools::calculate_abv_calories,
             commands::tools::correct_hydrometer_temp,
             commands::tools::calculate_refractometer,
