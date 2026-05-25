@@ -11,6 +11,13 @@ vi.mock("$lib/stores/recipes", () => ({
     },
   },
   refreshRecipeList: vi.fn().mockResolvedValue(undefined),
+  baselineRecipeList: {
+    subscribe: (fn: (val: unknown[]) => void) => {
+      fn([]);
+      return () => {};
+    },
+  },
+  refreshBaselineRecipeList: vi.fn().mockResolvedValue(undefined),
 }));
 
 vi.mock("$lib/stores/settings", () => ({
