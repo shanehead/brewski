@@ -21,6 +21,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/commands/list_baseline_recipes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** List all built-in starter recipes */
+        post: operations["listBaselineRecipes"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/commands/get_recipe": {
         parameters: {
             query?: never;
@@ -1284,6 +1301,11 @@ export interface components {
              * @description Unix timestamp (milliseconds)
              */
             updated_at: number;
+            /**
+             * @description 'user' = created by the user; 'seeded' = built-in starter recipe
+             * @enum {string}
+             */
+            source: "user" | "seeded";
         };
         Recipe: {
             id: string;
@@ -1328,6 +1350,11 @@ export interface components {
             created_at: number;
             /** Format: int64 */
             updated_at: number;
+            /**
+             * @description 'user' = created by the user; 'seeded' = built-in starter recipe
+             * @enum {string}
+             */
+            source: "user" | "seeded";
             equipment_profile?: components["schemas"]["EquipmentProfile"] | null;
             style?: components["schemas"]["Style"] | null;
             fermentables: components["schemas"]["RecipeAdditionFermentable"][];
@@ -2215,6 +2242,27 @@ export interface operations {
         requestBody?: never;
         responses: {
             /** @description Array of recipe summaries */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RecipeSummary"][];
+                };
+            };
+            500: components["responses"]["Error"];
+        };
+    };
+    listBaselineRecipes: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Array of seeded recipe summaries */
             200: {
                 headers: {
                     [name: string]: unknown;

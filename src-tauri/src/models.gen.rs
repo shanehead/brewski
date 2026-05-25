@@ -2914,6 +2914,7 @@ impl Misc {
 #[doc = "    \"id\","]
 #[doc = "    \"miscs\","]
 #[doc = "    \"name\","]
+#[doc = "    \"source\","]
 #[doc = "    \"type_\","]
 #[doc = "    \"updated_at\","]
 #[doc = "    \"waters\","]
@@ -3116,6 +3117,14 @@ impl Misc {
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
+#[doc = "    \"source\": {"]
+#[doc = "      \"description\": \"'user' = created by the user; 'seeded' = built-in starter recipe\","]
+#[doc = "      \"type\": \"string\","]
+#[doc = "      \"enum\": ["]
+#[doc = "        \"user\","]
+#[doc = "        \"seeded\""]
+#[doc = "      ]"]
+#[doc = "    },"]
 #[doc = "    \"sparge_water_id\": {"]
 #[doc = "      \"description\": \"ID of the sparge water profile (null means use mash water)\","]
 #[doc = "      \"type\": ["]
@@ -3259,6 +3268,8 @@ pub struct Recipe {
     pub secondary_age_days: ::std::option::Option<f64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub secondary_temp_c: ::std::option::Option<f64>,
+    #[doc = "'user' = created by the user; 'seeded' = built-in starter recipe"]
+    pub source: RecipeSource,
     #[doc = "ID of the sparge water profile (null means use mash water)"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub sparge_water_id: ::std::option::Option<::std::string::String>,
@@ -3680,6 +3691,79 @@ impl RecipeAdditionYeast {
         Default::default()
     }
 }
+#[doc = "'user' = created by the user; 'seeded' = built-in starter recipe"]
+#[doc = r""]
+#[doc = r" <details><summary>JSON schema</summary>"]
+#[doc = r""]
+#[doc = r" ```json"]
+#[doc = "{"]
+#[doc = "  \"description\": \"'user' = created by the user; 'seeded' = built-in starter recipe\","]
+#[doc = "  \"type\": \"string\","]
+#[doc = "  \"enum\": ["]
+#[doc = "    \"user\","]
+#[doc = "    \"seeded\""]
+#[doc = "  ]"]
+#[doc = "}"]
+#[doc = r" ```"]
+#[doc = r" </details>"]
+#[derive(
+    :: serde :: Deserialize,
+    :: serde :: Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+)]
+pub enum RecipeSource {
+    #[serde(rename = "user")]
+    User,
+    #[serde(rename = "seeded")]
+    Seeded,
+}
+impl ::std::fmt::Display for RecipeSource {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::User => f.write_str("user"),
+            Self::Seeded => f.write_str("seeded"),
+        }
+    }
+}
+impl ::std::str::FromStr for RecipeSource {
+    type Err = self::error::ConversionError;
+    fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "user" => Ok(Self::User),
+            "seeded" => Ok(Self::Seeded),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for RecipeSource {
+    type Error = self::error::ConversionError;
+    fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for RecipeSource {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for RecipeSource {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
 #[doc = "`RecipeStats`"]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
@@ -3794,6 +3878,7 @@ impl RecipeStats {
 #[doc = "    \"created_at\","]
 #[doc = "    \"id\","]
 #[doc = "    \"name\","]
+#[doc = "    \"source\","]
 #[doc = "    \"type_\","]
 #[doc = "    \"updated_at\""]
 #[doc = "  ],"]
@@ -3812,6 +3897,14 @@ impl RecipeStats {
 #[doc = "    },"]
 #[doc = "    \"name\": {"]
 #[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
+#[doc = "    \"source\": {"]
+#[doc = "      \"description\": \"'user' = created by the user; 'seeded' = built-in starter recipe\","]
+#[doc = "      \"type\": \"string\","]
+#[doc = "      \"enum\": ["]
+#[doc = "        \"user\","]
+#[doc = "        \"seeded\""]
+#[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"style_name\": {"]
 #[doc = "      \"type\": ["]
@@ -3840,6 +3933,8 @@ pub struct RecipeSummary {
     pub created_at: i64,
     pub id: ::std::string::String,
     pub name: ::std::string::String,
+    #[doc = "'user' = created by the user; 'seeded' = built-in starter recipe"]
+    pub source: RecipeSummarySource,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub style_name: ::std::option::Option<::std::string::String>,
     #[doc = "Recipe type (e.g. All Grain, Extract, Partial Mash)"]
@@ -3850,6 +3945,79 @@ pub struct RecipeSummary {
 impl RecipeSummary {
     pub fn builder() -> builder::RecipeSummary {
         Default::default()
+    }
+}
+#[doc = "'user' = created by the user; 'seeded' = built-in starter recipe"]
+#[doc = r""]
+#[doc = r" <details><summary>JSON schema</summary>"]
+#[doc = r""]
+#[doc = r" ```json"]
+#[doc = "{"]
+#[doc = "  \"description\": \"'user' = created by the user; 'seeded' = built-in starter recipe\","]
+#[doc = "  \"type\": \"string\","]
+#[doc = "  \"enum\": ["]
+#[doc = "    \"user\","]
+#[doc = "    \"seeded\""]
+#[doc = "  ]"]
+#[doc = "}"]
+#[doc = r" ```"]
+#[doc = r" </details>"]
+#[derive(
+    :: serde :: Deserialize,
+    :: serde :: Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+)]
+pub enum RecipeSummarySource {
+    #[serde(rename = "user")]
+    User,
+    #[serde(rename = "seeded")]
+    Seeded,
+}
+impl ::std::fmt::Display for RecipeSummarySource {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::User => f.write_str("user"),
+            Self::Seeded => f.write_str("seeded"),
+        }
+    }
+}
+impl ::std::str::FromStr for RecipeSummarySource {
+    type Err = self::error::ConversionError;
+    fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "user" => Ok(Self::User),
+            "seeded" => Ok(Self::Seeded),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for RecipeSummarySource {
+    type Error = self::error::ConversionError;
+    fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for RecipeSummarySource {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for RecipeSummarySource {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
     }
 }
 #[doc = "`RecipeVersionSummary`"]
@@ -11963,6 +12131,7 @@ pub mod builder {
         secondary_age_days:
             ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         secondary_temp_c: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        source: ::std::result::Result<super::RecipeSource, ::std::string::String>,
         sparge_water_id: ::std::result::Result<
             ::std::option::Option<::std::string::String>,
             ::std::string::String,
@@ -12031,6 +12200,7 @@ pub mod builder {
                 priming_sugar_name: Ok(Default::default()),
                 secondary_age_days: Ok(Default::default()),
                 secondary_temp_c: Ok(Default::default()),
+                source: Err("no value supplied for source".to_string()),
                 sparge_water_id: Ok(Default::default()),
                 style: Ok(Default::default()),
                 style_id: Ok(Default::default()),
@@ -12387,6 +12557,16 @@ pub mod builder {
                 .map_err(|e| format!("error converting supplied value for secondary_temp_c: {e}"));
             self
         }
+        pub fn source<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<super::RecipeSource>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.source = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for source: {e}"));
+            self
+        }
         pub fn sparge_water_id<T>(mut self, value: T) -> Self
         where
             T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
@@ -12546,6 +12726,7 @@ pub mod builder {
                 priming_sugar_name: value.priming_sugar_name?,
                 secondary_age_days: value.secondary_age_days?,
                 secondary_temp_c: value.secondary_temp_c?,
+                source: value.source?,
                 sparge_water_id: value.sparge_water_id?,
                 style: value.style?,
                 style_id: value.style_id?,
@@ -12598,6 +12779,7 @@ pub mod builder {
                 priming_sugar_name: Ok(value.priming_sugar_name),
                 secondary_age_days: Ok(value.secondary_age_days),
                 secondary_temp_c: Ok(value.secondary_temp_c),
+                source: Ok(value.source),
                 sparge_water_id: Ok(value.sparge_water_id),
                 style: Ok(value.style),
                 style_id: Ok(value.style_id),
@@ -13636,6 +13818,7 @@ pub mod builder {
         created_at: ::std::result::Result<i64, ::std::string::String>,
         id: ::std::result::Result<::std::string::String, ::std::string::String>,
         name: ::std::result::Result<::std::string::String, ::std::string::String>,
+        source: ::std::result::Result<super::RecipeSummarySource, ::std::string::String>,
         style_name: ::std::result::Result<
             ::std::option::Option<::std::string::String>,
             ::std::string::String,
@@ -13650,6 +13833,7 @@ pub mod builder {
                 created_at: Err("no value supplied for created_at".to_string()),
                 id: Err("no value supplied for id".to_string()),
                 name: Err("no value supplied for name".to_string()),
+                source: Err("no value supplied for source".to_string()),
                 style_name: Ok(Default::default()),
                 type_: Err("no value supplied for type_".to_string()),
                 updated_at: Err("no value supplied for updated_at".to_string()),
@@ -13697,6 +13881,16 @@ pub mod builder {
                 .map_err(|e| format!("error converting supplied value for name: {e}"));
             self
         }
+        pub fn source<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<super::RecipeSummarySource>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.source = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for source: {e}"));
+            self
+        }
         pub fn style_name<T>(mut self, value: T) -> Self
         where
             T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
@@ -13738,6 +13932,7 @@ pub mod builder {
                 created_at: value.created_at?,
                 id: value.id?,
                 name: value.name?,
+                source: value.source?,
                 style_name: value.style_name?,
                 type_: value.type_?,
                 updated_at: value.updated_at?,
@@ -13751,6 +13946,7 @@ pub mod builder {
                 created_at: Ok(value.created_at),
                 id: Ok(value.id),
                 name: Ok(value.name),
+                source: Ok(value.source),
                 style_name: Ok(value.style_name),
                 type_: Ok(value.type_),
                 updated_at: Ok(value.updated_at),

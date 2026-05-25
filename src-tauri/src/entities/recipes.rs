@@ -58,6 +58,8 @@ pub struct Model {
     pub hopstand_temp_c: Option<f64>,
     #[sea_orm(column_type = "Text", nullable)]
     pub branch_parent_id: Option<String>,
+    #[sea_orm(column_type = "Text")]
+    pub source: String,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
