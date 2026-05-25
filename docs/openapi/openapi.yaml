@@ -51,6 +51,8 @@ tags:
 paths:
   /commands/list_recipes:
     $ref: ./paths/commands/list_recipes.yaml
+  /commands/list_baseline_recipes:
+    $ref: ./paths/commands/list_baseline_recipes.yaml
   /commands/get_recipe:
     $ref: ./paths/commands/get_recipe.yaml
   /commands/create_recipe:

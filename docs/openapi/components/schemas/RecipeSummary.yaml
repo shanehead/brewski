@@ -6,6 +6,7 @@ required:
   - batch_size_l
   - created_at
   - updated_at
+  - source
 properties:
   id:
     type: string
@@ -29,3 +30,7 @@ properties:
     type: integer
     format: int64
     description: Unix timestamp (milliseconds)
+  source:
+    type: string
+    enum: [user, seeded]
+    description: "'user' = created by the user; 'seeded' = built-in starter recipe"

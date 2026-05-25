@@ -15,6 +15,7 @@ required:
   - yeasts
   - miscs
   - waters
+  - source
 properties:
   id:
     type: string
@@ -140,6 +141,10 @@ properties:
   updated_at:
     type: integer
     format: int64
+  source:
+    type: string
+    enum: [user, seeded]
+    description: "'user' = created by the user; 'seeded' = built-in starter recipe"
   equipment_profile:
     oneOf:
       - $ref: "./EquipmentProfile.yaml"
