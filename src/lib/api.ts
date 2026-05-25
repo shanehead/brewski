@@ -225,6 +225,8 @@ export const getRecipeBeerxml = (recipeId: string) =>
   invoke<string>("get_recipe_beerxml", { recipeId });
 export const createRecipesFromBeerxml = (xml: string) =>
   invoke<RecipeSummary[]>("create_recipes_from_beerxml", { xml });
+export const writeRecipeBeerxml = (recipeId: string, path: string) =>
+  invoke<void>("write_recipe_beerxml", { recipeId, path });
 
 // --- Water Chemistry ---
 export const setRecipeWaterSources = (recipeId: string, mashWaterId: string | null, spargeWaterId: string | null) =>
