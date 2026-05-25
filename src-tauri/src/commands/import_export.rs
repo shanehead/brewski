@@ -1,3 +1,4 @@
+use quick_xml::escape::escape;
 use quick_xml::events::Event;
 use quick_xml::reader::Reader;
 use tauri::State;
@@ -20,7 +21,7 @@ fn build_recipe_beerxml(recipe: &Recipe) -> String {
         .map(|s| {
             format!(
                 "    <STYLE>\n      <NAME>{}</NAME>\n      <CATEGORY>{}</CATEGORY>\n      <STYLE_GUIDE>{}</STYLE_GUIDE>\n    </STYLE>",
-                s.name, s.category, s.style_guide
+                escape(&s.name), escape(&s.category), escape(&s.style_guide)
             )
         })
         .unwrap_or_default();
@@ -31,7 +32,7 @@ fn build_recipe_beerxml(recipe: &Recipe) -> String {
         .map(|f| {
             format!(
                 "      <FERMENTABLE>\n        <NAME>{}</NAME>\n        <AMOUNT>{:.4}</AMOUNT>\n        <TYPE>{}</TYPE>\n        <YIELD>{:.1}</YIELD>\n        <COLOR>{:.1}</COLOR>\n      </FERMENTABLE>",
-                f.name, f.amount_kg, f.type_, f.yield_pct, f.color_lovibond
+                escape(&f.name), f.amount_kg, escape(&f.type_), f.yield_pct, f.color_lovibond
             )
         })
         .collect::<Vec<_>>()
@@ -43,7 +44,7 @@ fn build_recipe_beerxml(recipe: &Recipe) -> String {
         .map(|h| {
             format!(
                 "      <HOP>\n        <NAME>{}</NAME>\n        <AMOUNT>{:.5}</AMOUNT>\n        <ALPHA>{:.1}</ALPHA>\n        <USE>{}</USE>\n        <TIME>{:.0}</TIME>\n        <FORM>{}</FORM>\n      </HOP>",
-                h.name, h.amount_kg, h.alpha_pct, h.use_, h.time_min, h.form
+                escape(&h.name), h.amount_kg, h.alpha_pct, escape(&h.use_), h.time_min, escape(&h.form)
             )
         })
         .collect::<Vec<_>>()
@@ -55,7 +56,7 @@ fn build_recipe_beerxml(recipe: &Recipe) -> String {
         .map(|y| {
             format!(
                 "      <YEAST>\n        <NAME>{}</NAME>\n        <TYPE>{}</TYPE>\n        <FORM>{}</FORM>\n        <AMOUNT>{:.4}</AMOUNT>\n      </YEAST>",
-                y.name, y.type_, y.form, y.amount.unwrap_or(0.0)
+                escape(&y.name), escape(&y.type_), escape(&y.form), y.amount.unwrap_or(0.0)
             )
         })
         .collect::<Vec<_>>()
@@ -63,9 +64,9 @@ fn build_recipe_beerxml(recipe: &Recipe) -> String {
 
     format!(
         "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<RECIPES>\n  <RECIPE>\n    <NAME>{name}</NAME>\n    <VERSION>1</VERSION>\n    <TYPE>{type_}</TYPE>\n    <BREWER>{brewer}</BREWER>\n    <BATCH_SIZE>{batch_size:.1}</BATCH_SIZE>\n    <BOIL_SIZE>{boil_size:.1}</BOIL_SIZE>\n    <BOIL_TIME>{boil_time:.0}</BOIL_TIME>\n    <EFFICIENCY>{efficiency:.1}</EFFICIENCY>\n{style}\n    <FERMENTABLES>\n{fermentables}\n    </FERMENTABLES>\n    <HOPS>\n{hops}\n    </HOPS>\n    <YEASTS>\n{yeasts}\n    </YEASTS>\n  </RECIPE>\n</RECIPES>",
-        name = recipe.name,
-        type_ = recipe.type_,
-        brewer = recipe.brewer.as_deref().unwrap_or(""),
+        name = escape(&recipe.name),
+        type_ = escape(&recipe.type_),
+        brewer = escape(recipe.brewer.as_deref().unwrap_or("")),
         batch_size = recipe.batch_size_l,
         boil_size = recipe.boil_size_l,
         boil_time = recipe.boil_time_min,
@@ -546,6 +547,66 @@ mod tests {
     #[test]
     fn test_parse_malformed_xml_returns_error() {
         assert!(parse_beerxml("<RECIPES><RECIPE><NAME>Oops</NAME>").is_err());
+    }
+
+    #[test]
+    fn test_build_recipe_beerxml_escapes_special_chars() {
+        use crate::models::{Recipe, RecipeSource};
+
+        let recipe = Recipe {
+            id: "r2".to_string(),
+            name: "Oats & Honey <Wheat>".to_string(),
+            type_: "all_grain".to_string(),
+            batch_size_l: 20.0,
+            boil_size_l: 25.0,
+            boil_time_min: 60.0,
+            brewer: Some("Tom & Jerry".to_string()),
+            efficiency_pct: Some(72.0),
+            source: RecipeSource::User,
+            fermentation_stages: 1,
+            forced_carbonation: false,
+            created_at: 0,
+            updated_at: 0,
+            fermentables: vec![],
+            hops: vec![],
+            yeasts: vec![],
+            miscs: vec![],
+            waters: vec![],
+            water_adjustments: vec![],
+            age_days: None,
+            age_temp_c: None,
+            asst_brewer: None,
+            carbonation_temp_c: None,
+            carbonation_vols: None,
+            date: None,
+            equipment_profile: None,
+            equipment_profile_id: None,
+            fg: None,
+            hopstand_temp_c: None,
+            keg_priming_factor: None,
+            mash: None,
+            mash_water_id: None,
+            notes: None,
+            og: None,
+            primary_age_days: None,
+            primary_temp_c: None,
+            priming_sugar_equiv: None,
+            priming_sugar_name: None,
+            secondary_age_days: None,
+            secondary_temp_c: None,
+            sparge_water_id: None,
+            style: None,
+            style_id: None,
+            taste_notes: None,
+            taste_rating: None,
+            tertiary_age_days: None,
+            tertiary_temp_c: None,
+        };
+
+        let xml = build_recipe_beerxml(&recipe);
+        assert!(xml.contains("<NAME>Oats &amp; Honey &lt;Wheat&gt;</NAME>"));
+        assert!(xml.contains("<BREWER>Tom &amp; Jerry</BREWER>"));
+        assert!(!xml.contains("<NAME>Oats & Honey"));
     }
 
     #[test]
