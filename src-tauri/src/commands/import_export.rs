@@ -4,7 +4,7 @@ use tauri::State;
 
 use crate::models::{
     CreateFermentableAdditionInput, CreateHopAdditionInput, CreateMiscAdditionInput,
-    CreateRecipeInput, CreateYeastAdditionInput, RecipeSummary,
+    CreateRecipeInput, CreateYeastAdditionInput, Recipe, RecipeSummary,
 };
 use crate::repositories::fermentable::FermentableRepository;
 use crate::repositories::hop::HopRepository;
@@ -13,16 +13,7 @@ use crate::repositories::recipe::RecipeRepository;
 use crate::repositories::yeast::YeastRepository;
 use crate::AppState;
 
-#[tauri::command]
-pub async fn get_recipe_beerxml(
-    state: State<'_, AppState>,
-    recipe_id: String,
-) -> Result<String, String> {
-    let recipe = RecipeRepository::new(&state.db)
-        .get(&recipe_id)
-        .await
-        .map_err(|e| e.to_string())?;
-
+fn build_recipe_beerxml(recipe: &Recipe) -> String {
     let style_block = recipe
         .style
         .as_ref()
@@ -70,7 +61,7 @@ pub async fn get_recipe_beerxml(
         .collect::<Vec<_>>()
         .join("\n");
 
-    Ok(format!(
+    format!(
         "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<RECIPES>\n  <RECIPE>\n    <NAME>{name}</NAME>\n    <VERSION>1</VERSION>\n    <TYPE>{type_}</TYPE>\n    <BREWER>{brewer}</BREWER>\n    <BATCH_SIZE>{batch_size:.1}</BATCH_SIZE>\n    <BOIL_SIZE>{boil_size:.1}</BOIL_SIZE>\n    <BOIL_TIME>{boil_time:.0}</BOIL_TIME>\n    <EFFICIENCY>{efficiency:.1}</EFFICIENCY>\n{style}\n    <FERMENTABLES>\n{fermentables}\n    </FERMENTABLES>\n    <HOPS>\n{hops}\n    </HOPS>\n    <YEASTS>\n{yeasts}\n    </YEASTS>\n  </RECIPE>\n</RECIPES>",
         name = recipe.name,
         type_ = recipe.type_,
@@ -83,7 +74,33 @@ pub async fn get_recipe_beerxml(
         fermentables = fermentables,
         hops = hops,
         yeasts = yeasts,
-    ))
+    )
+}
+
+#[tauri::command]
+pub async fn get_recipe_beerxml(
+    state: State<'_, AppState>,
+    recipe_id: String,
+) -> Result<String, String> {
+    let recipe = RecipeRepository::new(&state.db)
+        .get(&recipe_id)
+        .await
+        .map_err(|e| e.to_string())?;
+    Ok(build_recipe_beerxml(&recipe))
+}
+
+#[tauri::command]
+pub async fn write_recipe_beerxml(
+    state: State<'_, AppState>,
+    recipe_id: String,
+    path: String,
+) -> Result<(), String> {
+    let recipe = RecipeRepository::new(&state.db)
+        .get(&recipe_id)
+        .await
+        .map_err(|e| e.to_string())?;
+    let xml = build_recipe_beerxml(&recipe);
+    std::fs::write(&path, xml).map_err(|e| e.to_string())
 }
 
 // Parsed representation of a single BeerXML <RECIPE> block.
@@ -529,5 +546,69 @@ mod tests {
     #[test]
     fn test_parse_malformed_xml_returns_error() {
         assert!(parse_beerxml("<RECIPES><RECIPE><NAME>Oops</NAME>").is_err());
+    }
+
+    #[test]
+    fn test_build_recipe_beerxml_contains_recipe_fields() {
+        use crate::models::{Recipe, RecipeSource};
+
+        let recipe = Recipe {
+            id: "r1".to_string(),
+            name: "Pale Ale".to_string(),
+            type_: "all_grain".to_string(),
+            batch_size_l: 23.0,
+            boil_size_l: 27.0,
+            boil_time_min: 60.0,
+            brewer: Some("Test Brewer".to_string()),
+            efficiency_pct: Some(75.0),
+            source: RecipeSource::User,
+            fermentation_stages: 1,
+            forced_carbonation: false,
+            created_at: 0,
+            updated_at: 0,
+            fermentables: vec![],
+            hops: vec![],
+            yeasts: vec![],
+            miscs: vec![],
+            waters: vec![],
+            water_adjustments: vec![],
+            // All Option fields:
+            age_days: None,
+            age_temp_c: None,
+            asst_brewer: None,
+            carbonation_temp_c: None,
+            carbonation_vols: None,
+            date: None,
+            equipment_profile: None,
+            equipment_profile_id: None,
+            fg: None,
+            hopstand_temp_c: None,
+            keg_priming_factor: None,
+            mash: None,
+            mash_water_id: None,
+            notes: None,
+            og: None,
+            primary_age_days: None,
+            primary_temp_c: None,
+            priming_sugar_equiv: None,
+            priming_sugar_name: None,
+            secondary_age_days: None,
+            secondary_temp_c: None,
+            sparge_water_id: None,
+            style: None,
+            style_id: None,
+            taste_notes: None,
+            taste_rating: None,
+            tertiary_age_days: None,
+            tertiary_temp_c: None,
+        };
+
+        let xml = build_recipe_beerxml(&recipe);
+        assert!(xml.starts_with("<?xml version=\"1.0\""));
+        assert!(xml.contains("<NAME>Pale Ale</NAME>"));
+        assert!(xml.contains("<BATCH_SIZE>23.0</BATCH_SIZE>"));
+        assert!(xml.contains("<BOIL_TIME>60</BOIL_TIME>"));
+        assert!(xml.contains("<BREWER>Test Brewer</BREWER>"));
+        assert!(xml.contains("<EFFICIENCY>75.0</EFFICIENCY>"));
     }
 }
