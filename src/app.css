@@ -1,5 +1,139 @@
 @import "tailwindcss";
 
+/* ---- Fonts ---- */
+
+@font-face {
+  font-family: "Geist";
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+  src: url("/fonts/Geist-Variable.woff2") format("woff2-variations"),
+       url("/fonts/Geist-Variable.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Geist Mono";
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+  src: url("/fonts/GeistMono-Variable.woff2") format("woff2-variations"),
+       url("/fonts/GeistMono-Variable.woff2") format("woff2");
+}
+
+/* ---- Design tokens ---- */
+
+:root {
+  /* Font families */
+  --font-sans:
+    "Geist",
+    -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono:
+    "Geist Mono",
+    "SF Mono", "Menlo", "Consolas",
+    "Roboto Mono", ui-monospace, monospace;
+
+  /* Type scale */
+  --fs-xs:   11px;
+  --fs-sm:   13px;
+  --fs-base: 14px;
+  --fs-md:   16px;
+  --fs-lg:   18px;
+  --fs-xl:   20px;
+  --fs-2xl:  24px;
+  --fs-3xl:  30px;
+  --fs-4xl:  36px;
+
+  /* Weights */
+  --fw-regular:  400;
+  --fw-medium:   500;
+  --fw-semibold: 600;
+  --fw-bold:     700;
+
+  /* Line heights */
+  --lh-tight:   1.1;
+  --lh-snug:    1.25;
+  --lh-normal:  1.45;
+  --lh-relaxed: 1.6;
+
+  /* Letter spacing */
+  --tracking-wide:  0.08em;
+  --tracking-wider: 0.12em;
+
+  /* Spacing (4px grid) */
+  --space-0:  0;
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+
+  /* Radii */
+  --radius-sm:   4px;
+  --radius-md:   6px;
+  --radius-lg:   8px;
+  --radius-xl:   12px;
+  --radius-2xl:  16px;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0,0,0,0.18);
+  --shadow-md: 0 4px 12px -2px rgba(0,0,0,0.30);
+  --shadow-lg: 0 12px 32px -6px rgba(0,0,0,0.45);
+
+  /* Motion */
+  --motion-fast:   120ms;
+  --motion-base:   180ms;
+  --motion-slow:   240ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+
+  /* Layout */
+  --rail-width-desktop: 56px;
+  --sidebar-width:      224px;
+  --stats-width:        176px;
+  --tap-target-mobile:  44px;
+
+  /* SRM color scale */
+  --srm-1:  #FFE699;
+  --srm-2:  #FFD878;
+  --srm-3:  #FFCA5A;
+  --srm-4:  #FFBF42;
+  --srm-6:  #FBB123;
+  --srm-8:  #F8A600;
+  --srm-10: #F39C00;
+  --srm-13: #EA8F00;
+  --srm-17: #D77200;
+  --srm-20: #CF6900;
+  --srm-24: #BB5100;
+  --srm-29: #A13600;
+  --srm-35: #8D1D00;
+  --srm-40: #611200;
+
+  /* Batch status */
+  --status-planned:    #8a8aa0;
+  --status-brewing:    #f59e0b;
+  --status-fermenting: #10b981;
+  --status-packaged:   #3b82f6;
+  --status-complete:   var(--color-accent);
+
+  /* Ingredient category accents */
+  --ing-fermentable: #f59e0b;
+  --ing-hop:         #22c55e;
+  --ing-yeast:       #14b8a6;
+  --ing-water:       #38bdf8;
+  --ing-equipment:   #8b5cf6;
+
+  /* Feedback */
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-danger:  #ef4444;
+  --color-info:    #3b82f6;
+}
+
 /* IngredientPicker: fixed size on desktop, full-screen on mobile */
 .ingredient-picker-dialog {
   width: 80vw;
