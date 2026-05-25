@@ -4,18 +4,23 @@
 <link rel="stylesheet" href="_card.css"/>
 <style>
   body { padding: 18px 22px; }
+
   .row {
-    display: flex; align-items: center; gap: 12px;
+    display: grid;
+    /* name takes remaining space · OG fixed-width · pill fixed-width */
+    grid-template-columns: 1fr 80px 110px;
+    align-items: center;
+    gap: 12px;
     padding: 10px 12px;
     background: var(--color-bg-elevated);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-md);
     margin-bottom: 8px;
   }
-  .nm { flex: 1; font: 500 13px var(--font-sans); color: var(--color-text-primary); }
-  .meta { font: 400 11px var(--font-mono); color: var(--color-text-muted); }
-  .og { font: 500 11px var(--font-mono); color: var(--color-text-muted); }
+  .nm { font: 500 13px var(--font-sans); color: var(--color-text-primary); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .og { font: 500 11px var(--font-mono); color: var(--color-text-muted); font-variant-numeric: tabular-nums; }
   .pill {
+    justify-self: end;
     padding: 2px 8px;
     border-radius: 4px;
     background: var(--color-bg-surface);

@@ -3,34 +3,151 @@
 <link rel="stylesheet" href="../colors_and_type.css"/>
 <link rel="stylesheet" href="_card.css"/>
 <style>
-  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; padding-top: 6px; }
-  .box {
+  body { padding: 18px 22px; display: flex; flex-direction: column; gap: 18px; }
+
+  /* Each row: a mini "scene" on the left, explanatory text on the right */
+  .row { display: grid; grid-template-columns: 280px 1fr; gap: 24px; align-items: center; }
+
+  /* Common scene chrome — a fake page that the elevated thing sits on */
+  .scene {
+    height: 140px;
+    background: var(--color-bg-base);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* ------- Scene 1: flat (no shadow) ------- */
+  .scene .panel-flat {
+    position: absolute; left: 22px; right: 22px; top: 22px;
+    background: var(--color-bg-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 12px 14px;
+  }
+  .scene .panel-flat .eyebrow { font: 600 9px var(--font-sans); text-transform: uppercase; letter-spacing: 0.12em; color: var(--color-text-muted); margin-bottom: 6px; }
+  .scene .panel-flat .body { font: 400 11px var(--font-sans); color: var(--color-text-secondary); line-height: 1.4; }
+
+  /* ------- Scene 2: popover (shadow-md) ------- */
+  .scene .trigger {
+    position: absolute; left: 22px; top: 32px;
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 5px 10px;
+    font: 500 11px var(--font-sans);
+    color: var(--color-text-secondary);
+  }
+  .scene .popover {
+    position: absolute; left: 22px; top: 62px;
     background: var(--color-bg-elevated);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
-    height: 72px;
-    display: flex; align-items: center; justify-content: center;
-    font: 500 11px var(--font-mono); color: var(--color-text-secondary);
+    padding: 4px;
+    box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.35);
+    display: flex; flex-direction: column; gap: 1px;
+    min-width: 140px;
   }
-  .lbl { font: 500 10px/1 var(--font-mono); color: var(--color-text-muted); margin-top: 8px; text-align: center; }
+  .scene .popover .item {
+    padding: 4px 10px;
+    font: 400 11px var(--font-sans);
+    color: var(--color-text-primary);
+    border-radius: var(--radius-sm);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .scene .popover .item.active { background: color-mix(in srgb, var(--color-accent) 18%, transparent); color: var(--color-accent); }
+  .scene .popover .item .dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+  /* ------- Scene 3: modal (shadow-lg) ------- */
+  .scene .scrim {
+    position: absolute; inset: 0;
+    background: rgba(0,0,0,0.55);
+  }
+  .scene .modal {
+    position: absolute; left: 50%; top: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--color-bg-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: 14px 16px 12px;
+    width: 240px;
+    box-shadow: 0 16px 40px -6px rgba(0,0,0,0.6);
+  }
+  .scene .modal h3 { margin: 0 0 4px; font: 600 12px var(--font-sans); color: var(--color-text-primary); }
+  .scene .modal p { margin: 0 0 10px; font: 400 11px/1.4 var(--font-sans); color: var(--color-text-secondary); }
+  .scene .modal .btns { display: flex; justify-content: flex-end; gap: 6px; }
+  .scene .modal button {
+    background: var(--color-bg-elevated); color: var(--color-text-primary);
+    border: 1px solid var(--color-border); border-radius: var(--radius-sm);
+    padding: 3px 9px;
+    font: 500 10px var(--font-sans);
+  }
+  .scene .modal button.danger { background: #ef4444; color: #fff; border-color: #ef4444; }
+
+  /* ------- text column ------- */
+  .text .level {
+    font: 500 10px/1 var(--font-mono);
+    text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--color-text-muted);
+    margin-bottom: 4px;
+  }
+  .text .name { font: 600 13px var(--font-sans); color: var(--color-text-primary); margin-bottom: 4px; }
+  .text .desc { font: 400 12px/1.5 var(--font-sans); color: var(--color-text-secondary); }
+  .text .desc strong { color: var(--color-text-primary); font-weight: 600; }
 </style></head>
 <body data-theme="midnight">
-  <div class="grid">
-    <div>
-      <div class="box">border only</div>
-      <div class="lbl">default surface separation</div>
+
+  <!-- Row 1: flat surface (no shadow) — the dominant pattern -->
+  <div class="row">
+    <div class="scene">
+      <div class="panel-flat">
+        <div class="eyebrow">Recipe Details</div>
+        <div class="body">Brewer · Shane<br/>Style · American IPA</div>
+      </div>
     </div>
-    <div>
-      <div class="box" style="box-shadow: 0 1px 2px rgba(0,0,0,0.18)">shadow-sm</div>
-      <div class="lbl">rare — small popovers</div>
-    </div>
-    <div>
-      <div class="box" style="box-shadow: 0 4px 12px -2px rgba(0,0,0,0.30)">shadow-md</div>
-      <div class="lbl">save-version popover</div>
-    </div>
-    <div>
-      <div class="box" style="box-shadow: 0 12px 32px -6px rgba(0,0,0,0.45)">shadow-lg</div>
-      <div class="lbl">confirm modal sheet</div>
+    <div class="text">
+      <div class="level">Default · no shadow</div>
+      <div class="name">Borders separate surfaces</div>
+      <div class="desc"><strong>95% of the UI.</strong> Every card, sidebar, tab, and header sits on the page with a 1&nbsp;px border — no shadow, no glow. This is the Brewski look.</div>
     </div>
   </div>
+
+  <!-- Row 2: popover (shadow-md) -->
+  <div class="row">
+    <div class="scene">
+      <div class="trigger">Theme ▾</div>
+      <div class="popover">
+        <div class="item active"><span class="dot" style="background:#5c5cff"></span>Midnight</div>
+        <div class="item"><span class="dot" style="background:#7aa2f7"></span>Tokyo Night</div>
+        <div class="item"><span class="dot" style="background:#bd93f9"></span>Dracula</div>
+      </div>
+    </div>
+    <div class="text">
+      <div class="level">shadow-md</div>
+      <div class="name">Popovers, menus, dropdowns</div>
+      <div class="desc">Used when a small floating panel attaches to a trigger — the <strong>theme picker</strong>, <strong>Save Version</strong>, dropdown menus. Soft and short so it reads as "hovering just above," not "lifted up."</div>
+    </div>
+  </div>
+
+  <!-- Row 3: modal (shadow-lg) -->
+  <div class="row">
+    <div class="scene">
+      <div class="scrim"></div>
+      <div class="modal">
+        <h3>Delete v3 "Hop bomb"?</h3>
+        <p>This cannot be undone.</p>
+        <div class="btns">
+          <button>Cancel</button>
+          <button class="danger">Delete</button>
+        </div>
+      </div>
+    </div>
+    <div class="text">
+      <div class="level">shadow-lg</div>
+      <div class="name">Modals & confirm sheets</div>
+      <div class="desc">Used only when the UI is gated — a <strong>destructive confirm</strong> or <strong>full-screen sheet</strong> (the iOS-style mobile ingredient picker). Paired with a 55% black scrim so the shadow has somewhere to land.</div>
+    </div>
+  </div>
+
 </body></html>

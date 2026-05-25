@@ -4,31 +4,150 @@
 <link rel="stylesheet" href="_card.css"/>
 <style>
   body { padding: 16px 20px; background: #0d0d12; }
-  .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
-  .t {
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+  }
+
+  .tile {
     border-radius: var(--radius-md);
     overflow: hidden;
-    border: 1px solid rgba(255,255,255,0.08);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex; flex-direction: column;
   }
-  .t .preview { height: 60px; display: flex; flex-direction: column; }
-  .t .top { flex: 1; display: flex; }
-  .t .base { flex: 1; }
-  .t .surface { width: 40%; }
-  .t .dot { width: 8px; height: 8px; border-radius: 50%; align-self: center; margin-left: 10px; }
-  .t .name { font: 600 10px/1 var(--font-sans); padding: 6px 8px; text-align: center; background: rgba(255,255,255,0.04); color: rgba(255,255,255,0.85); }
-  .t.lighty .name { background: rgba(0,0,0,0.04); color: #1f2328; border-top: 1px solid rgba(0,0,0,0.06); }
+  .tile.light { border-color: rgba(0, 0, 0, 0.10); }
+
+  /* Visual preview — two flat color bands + accent dot, sized to read at thumbnail scale */
+  .preview {
+    height: 56px;
+    display: flex;
+  }
+  .preview .base { flex: 1; }
+  .preview .surface {
+    width: 38%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding-left: 8px;
+  }
+  .preview .dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08);
+  }
+  .tile.light .preview .dot { box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08); }
+
+  /* Name strip — explicit colors, no opacity tricks, 12px so it actually reads */
+  .name {
+    padding: 8px 10px;
+    font: 600 12px/1.1 var(--font-sans);
+    letter-spacing: -0.005em;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 6px;
+    height: 32px;                /* fixed — never wraps */
+    box-sizing: border-box;
+  }
+  .name > span:first-child {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+  }
+  .tile.dark  .name { background: #1a1a2a; color: #f0f0f5; border-top: 1px solid rgba(255,255,255,0.06); }
+  .tile.light .name { background: #ffffff; color: #1f2328; border-top: 1px solid rgba(0,0,0,0.08); }
+
+  .name .scheme {
+    font: 500 9px/1 var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .tile.dark  .name .scheme { color: rgba(255,255,255,0.45); }
+  .tile.light .name .scheme { color: rgba(0,0,0,0.45); }
 </style></head>
 <body>
 <div class="grid">
-  <div class="t" style="--bg:#13131c;--surf:#0d0d12;--accent:#5c5cff"><div class="preview" style="background:var(--surf)"><div class="top" style="background:var(--bg)"><span class="dot" style="background:var(--accent)"></span></div></div><div class="name">Midnight</div></div>
-  <div class="t" style="--bg:#16161e;--surf:#1a1b2e;--accent:#7aa2f7"><div class="preview" style="background:var(--surf)"><div class="top" style="background:var(--bg)"><span class="dot" style="background:var(--accent)"></span></div></div><div class="name">Tokyo Night</div></div>
-  <div class="t" style="--bg:#1e1f29;--surf:#282a36;--accent:#bd93f9"><div class="preview" style="background:var(--surf)"><div class="top" style="background:var(--bg)"><span class="dot" style="background:var(--accent)"></span></div></div><div class="name">Dracula</div></div>
-  <div class="t" style="--bg:#181825;--surf:#1e1e2e;--accent:#cba6f7"><div class="preview" style="background:var(--surf)"><div class="top" style="background:var(--bg)"><span class="dot" style="background:var(--accent)"></span></div></div><div class="name">Catppuccin</div></div>
-  <div class="t" style="--bg:#242933;--surf:#2e3440;--accent:#88c0d0"><div class="preview" style="background:var(--surf)"><div class="top" style="background:var(--bg)"><span class="dot" style="background:var(--accent)"></span></div></div><div class="name">Nord</div></div>
-  <div class="t" style="--bg:#1e1f1c;--surf:#272822;--accent:#a6e22e"><div class="preview" style="background:var(--surf)"><div class="top" style="background:var(--bg)"><span class="dot" style="background:var(--accent)"></span></div></div><div class="name">Monokai</div></div>
-  <div class="t lighty" style="--bg:#e6e9ef;--surf:#eff1f5;--accent:#8839ef"><div class="preview" style="background:var(--surf)"><div class="top" style="background:var(--bg)"><span class="dot" style="background:var(--accent)"></span></div></div><div class="name">Catppuccin Latte</div></div>
-  <div class="t lighty" style="--bg:#eee8d5;--surf:#fdf6e3;--accent:#268bd2"><div class="preview" style="background:var(--surf)"><div class="top" style="background:var(--bg)"><span class="dot" style="background:var(--accent)"></span></div></div><div class="name">Solarized Light</div></div>
-  <div class="t lighty" style="--bg:#f3f4f5;--surf:#fafafa;--accent:#ff9940"><div class="preview" style="background:var(--surf)"><div class="top" style="background:var(--bg)"><span class="dot" style="background:var(--accent)"></span></div></div><div class="name">Ayu Light</div></div>
-  <div class="t lighty" style="--bg:#f6f8fa;--surf:#ffffff;--accent:#0969da"><div class="preview" style="background:var(--surf)"><div class="top" style="background:var(--bg)"><span class="dot" style="background:var(--accent)"></span></div></div><div class="name">GitHub Light</div></div>
+
+  <div class="tile dark">
+    <div class="preview" style="background:#0d0d12">
+      <div class="base"></div>
+      <div class="surface" style="background:#13131c"><span class="dot" style="background:#5c5cff"></span></div>
+    </div>
+    <div class="name"><span>Midnight</span><span class="scheme">Dark</span></div>
+  </div>
+
+  <div class="tile dark">
+    <div class="preview" style="background:#1a1b2e">
+      <div class="base"></div>
+      <div class="surface" style="background:#16161e"><span class="dot" style="background:#7aa2f7"></span></div>
+    </div>
+    <div class="name"><span>Tokyo Night</span><span class="scheme">Dark</span></div>
+  </div>
+
+  <div class="tile dark">
+    <div class="preview" style="background:#282a36">
+      <div class="base"></div>
+      <div class="surface" style="background:#1e1f29"><span class="dot" style="background:#bd93f9"></span></div>
+    </div>
+    <div class="name"><span>Dracula</span><span class="scheme">Dark</span></div>
+  </div>
+
+  <div class="tile dark">
+    <div class="preview" style="background:#1e1e2e">
+      <div class="base"></div>
+      <div class="surface" style="background:#181825"><span class="dot" style="background:#cba6f7"></span></div>
+    </div>
+    <div class="name"><span>Catppuccin</span><span class="scheme">Dark</span></div>
+  </div>
+
+  <div class="tile dark">
+    <div class="preview" style="background:#2e3440">
+      <div class="base"></div>
+      <div class="surface" style="background:#242933"><span class="dot" style="background:#88c0d0"></span></div>
+    </div>
+    <div class="name"><span>Nord</span><span class="scheme">Dark</span></div>
+  </div>
+
+  <div class="tile dark">
+    <div class="preview" style="background:#272822">
+      <div class="base"></div>
+      <div class="surface" style="background:#1e1f1c"><span class="dot" style="background:#a6e22e"></span></div>
+    </div>
+    <div class="name"><span>Monokai</span><span class="scheme">Dark</span></div>
+  </div>
+
+  <div class="tile light">
+    <div class="preview" style="background:#eff1f5">
+      <div class="base"></div>
+      <div class="surface" style="background:#e6e9ef"><span class="dot" style="background:#8839ef"></span></div>
+    </div>
+    <div class="name"><span>Catppuccin Latte</span><span class="scheme">Light</span></div>
+  </div>
+
+  <div class="tile light">
+    <div class="preview" style="background:#fdf6e3">
+      <div class="base"></div>
+      <div class="surface" style="background:#eee8d5"><span class="dot" style="background:#268bd2"></span></div>
+    </div>
+    <div class="name"><span>Solarized Light</span><span class="scheme">Light</span></div>
+  </div>
+
+  <div class="tile light">
+    <div class="preview" style="background:#fafafa">
+      <div class="base"></div>
+      <div class="surface" style="background:#f3f4f5"><span class="dot" style="background:#ff9940"></span></div>
+    </div>
+    <div class="name"><span>Ayu Light</span><span class="scheme">Light</span></div>
+  </div>
+
+  <div class="tile light">
+    <div class="preview" style="background:#ffffff">
+      <div class="base"></div>
+      <div class="surface" style="background:#f6f8fa"><span class="dot" style="background:#0969da"></span></div>
+    </div>
+    <div class="name"><span>GitHub Light</span><span class="scheme">Light</span></div>
+  </div>
+
 </div>
 </body></html>

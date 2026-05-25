@@ -120,7 +120,10 @@
      batch in "fermenting" looks the same on light and dark.
      ============================================================ */
 
-  /* SRM color stops (1..40, ascending) — beer hue by ° SRM */
+  /* SRM color stops (1..60, ascending) — beer hue by ° SRM.
+     Standard chart maxes at 40, but very dark stouts and roasted
+     ingredients push into 45–60 where beer reads as functionally
+     black. Anything past ~60 is visually indistinguishable. */
   --srm-1:  #FFE699;
   --srm-2:  #FFD878;
   --srm-3:  #FFCA5A;
@@ -135,6 +138,9 @@
   --srm-29: #A13600;
   --srm-35: #8D1D00;
   --srm-40: #611200;
+  --srm-45: #4A0F00;
+  --srm-50: #350900;
+  --srm-60: #1F0400;
 
   /* Batch status — semantic */
   --status-planned:    #8a8aa0;

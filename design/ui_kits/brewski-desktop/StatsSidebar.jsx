@@ -8,11 +8,16 @@ function StatItem({ label, value, unit, progress, progressColor }) {
       <div className="val">
         {value}{unit && <span className="unit">{unit}</span>}
       </div>
-      {progress !== undefined && (
-        <div className="bar">
-          <div style={{ width: `${Math.min(100, Math.max(0, progress * 100))}%`, background: progressColor || "var(--color-accent)" }} />
-        </div>
-      )}
+      {/* `.bar-slot` is always rendered so every stat card has the
+          same height. The `.bar` track only renders when there's a
+          progress value. */}
+      <div className="bar-slot">
+        {progress !== undefined && (
+          <div className="bar">
+            <div style={{ width: `${Math.min(100, Math.max(0, progress * 100))}%`, background: progressColor || "var(--color-accent)" }} />
+          </div>
+        )}
+      </div>
     </div>
   );
 }
@@ -45,6 +50,7 @@ function StatsSidebar({ recipe }) {
           <span style={{ width: 18, height: 18, borderRadius: 4, background: window.srmToHex(recipe.srm), border: "1px solid rgba(255,255,255,0.15)", flexShrink: 0 }} />
           {recipe.srm.toFixed(1)}
         </div>
+        <div className="bar-slot" />
       </div>
 
       <StatItem label="BU:GU"     value={recipe.bu_gu.toFixed(2)} />

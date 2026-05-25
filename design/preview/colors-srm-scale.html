@@ -3,27 +3,81 @@
 <link rel="stylesheet" href="../colors_and_type.css"/>
 <link rel="stylesheet" href="_card.css"/>
 <style>
-  .scale { display: flex; gap: 0; height: 56px; border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--color-border); }
-  .scale .stop { flex: 1; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 4px; font-family: var(--font-mono); font-size: 9px; color: rgba(0,0,0,0.55); font-weight: 600; }
-  .legend { display: flex; justify-content: space-between; font-size: 10px; color: var(--color-text-muted); font-family: var(--font-mono); margin-top: 4px; }
-  .caption { display: flex; gap: 14px; align-items: center; }
-  .swatch-inline { width: 22px; height: 22px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.15); }
-  .lbl { font: 600 13px/1.2 var(--font-sans); color: var(--color-text-primary); }
-  .sub { font: 400 11px/1.4 var(--font-sans); color: var(--color-text-secondary); }
-</style>
-</head>
+  body { padding: 18px 22px; }
+
+  .scale {
+    display: flex; gap: 0; height: 56px;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+  }
+  .scale .stop {
+    flex: 1;
+    display: flex; align-items: flex-end; justify-content: center;
+    padding-bottom: 4px;
+    font-family: var(--font-mono); font-size: 9px; font-weight: 600;
+    color: rgba(0, 0, 0, 0.55);
+  }
+  /* On dark stops the SRM number disappears — invert it. */
+  .scale .stop.invert { color: rgba(255, 255, 255, 0.55); }
+
+  .legend {
+    display: flex; justify-content: space-between;
+    font: 500 10px/1 var(--font-mono);
+    color: var(--color-text-muted);
+    margin-top: 4px;
+  }
+
+  /* Two example chips below to anchor the extreme ends. */
+  .examples { display: flex; gap: 16px; margin-top: 14px; }
+  .ex {
+    display: flex; align-items: center; gap: 10px;
+    flex: 1;
+  }
+  .ex .swatch {
+    width: 30px; height: 30px; border-radius: var(--radius-md);
+    border: 1px solid rgba(255,255,255,0.15);
+    flex-shrink: 0;
+  }
+  .ex .lbl { font: 600 13px/1.2 var(--font-sans); color: var(--color-text-primary); }
+  .ex .sub { font: 400 11px/1.4 var(--font-sans); color: var(--color-text-secondary); }
+</style></head>
 <body data-theme="midnight">
-  <div class="card-wrap">
-    <div class="scale" id="scale"></div>
-    <div class="legend"><span>1°</span><span>10°</span><span>20°</span><span>30°</span><span>40°</span></div>
-    <div class="caption">
-      <div class="swatch-inline" style="background:#FBB123"></div>
-      <div><div class="lbl">SRM 5.4 · Pale Ale</div><div class="sub">SRM color stops live outside the theme — beer color is physical.</div></div>
+  <div class="scale" id="scale"></div>
+  <div class="legend">
+    <span>1°</span><span>10°</span><span>20°</span><span>30°</span><span>40°</span><span>50°</span><span>60°</span>
+  </div>
+
+  <div class="examples">
+    <div class="ex">
+      <div class="swatch" style="background:#FBB123"></div>
+      <div>
+        <div class="lbl">SRM 5.4 · Pale Ale</div>
+        <div class="sub">Mid-range, golden — Maris Otter base.</div>
+      </div>
+    </div>
+    <div class="ex">
+      <div class="swatch" style="background:#350900"></div>
+      <div>
+        <div class="lbl">SRM 50 · Imperial Stout</div>
+        <div class="sub">Roasted barley dominant, nearly opaque black.</div>
+      </div>
     </div>
   </div>
+
   <script>
-    const stops = ['#FFE699','#FFD878','#FFCA5A','#FFBF42','#FBB123','#F8A600','#F39C00','#EA8F00','#D77200','#CF6900','#BB5100','#A13600','#8D1D00','#611200'];
-    const srm = [1,2,3,4,6,8,10,13,17,20,24,29,35,40];
-    document.getElementById('scale').innerHTML = stops.map((c,i)=>`<div class="stop" style="background:${c}">${srm[i]}</div>`).join('');
+    const stops = [
+      ['#FFE699',1],['#FFD878',2],['#FFCA5A',3],['#FFBF42',4],
+      ['#FBB123',6],['#F8A600',8],['#F39C00',10],['#EA8F00',13],
+      ['#D77200',17],['#CF6900',20],['#BB5100',24],['#A13600',29],
+      ['#8D1D00',35],['#611200',40],['#4A0F00',45],['#350900',50],
+      ['#1F0400',60],
+    ];
+    document.getElementById('scale').innerHTML = stops
+      .map(([c, srm]) => {
+        const invert = srm >= 24 ? ' invert' : '';
+        return `<div class="stop${invert}" style="background:${c}">${srm}</div>`;
+      })
+      .join('');
   </script>
 </body></html>

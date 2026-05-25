@@ -7,46 +7,85 @@
   .grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
   .field { display: flex; flex-direction: column; gap: 4px; }
   .field label { font: 500 11px var(--font-sans); color: var(--color-text-secondary); }
-  .field input, .field select {
+
+  /* All form controls share the same box. They MUST match — same
+     height, same padding, same font — or they look ragged in a form. */
+  .control {
+    box-sizing: border-box;
+    height: 30px;                       /* the source of truth */
+    width: 100%;
     background: var(--color-bg-elevated);
     color: var(--color-text-primary);
     border: 1px solid var(--color-border);
-    border-radius: 6px;
-    padding: 6px 8px;
+    border-radius: var(--radius-md);
+    padding: 0 8px;
     font: 400 13px var(--font-sans);
+    line-height: 28px;                  /* height - borders */
     outline: none;
   }
-  .field input:focus, .field select:focus { border-color: var(--color-accent); }
-  .search {
-    position: relative;
+  .control:focus { border-color: var(--color-accent); }
+
+  /* Select needs the native chrome stripped + extra right padding
+     so its text doesn't run under the custom caret. */
+  select.control {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    padding-right: 26px;
+    background-image:
+      linear-gradient(45deg, transparent 50%, var(--color-text-muted) 50%),
+      linear-gradient(135deg, var(--color-text-muted) 50%, transparent 50%);
+    background-position:
+      calc(100% - 14px) 13px,
+      calc(100% - 10px) 13px;
+    background-size: 4px 4px, 4px 4px;
+    background-repeat: no-repeat;
   }
-  .search input {
-    padding-left: 28px;
-    background: var(--color-bg-elevated);
-    color: var(--color-text-primary);
-    border: 1px solid var(--color-border);
-    border-radius: 6px; font-size: 13px; width: 100%;
-    padding-top: 6px; padding-bottom: 6px;
-    outline: none;
+
+  /* Search has a leading icon — bump left padding to make room. */
+  .search { position: relative; }
+  .search .control { padding-left: 28px; }
+  .search svg {
+    position: absolute;
+    left: 9px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-text-muted);
+    pointer-events: none;
   }
-  .search svg { position: absolute; left: 8px; top: 50%; transform: translateY(-50%); color: var(--color-text-muted); }
+
+  /* tiny annotation under the row */
+  .anno {
+    margin-top: 10px;
+    font: 500 10px/1 var(--font-mono);
+    text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--color-text-muted);
+  }
 </style></head>
 <body data-theme="midnight">
   <div class="grid">
     <div class="field">
       <label>Batch Size (gal)</label>
-      <input type="text" value="5.0"/>
+      <input type="text" class="control" value="5.0"/>
     </div>
     <div class="field">
       <label>Recipe Type</label>
-      <select><option>all grain</option><option>extract</option></select>
+      <select class="control">
+        <option>all grain</option>
+        <option>extract</option>
+        <option>partial mash</option>
+      </select>
     </div>
     <div class="field">
       <label>Search recipes</label>
       <div class="search">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input type="search" placeholder="Search recipes…"/>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input type="search" class="control" placeholder="Search recipes…"/>
       </div>
     </div>
   </div>
+  <div class="anno">all controls · height 30px · same padding · matched borders</div>
 </body></html>

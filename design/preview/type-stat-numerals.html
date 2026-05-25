@@ -3,29 +3,96 @@
 <link rel="stylesheet" href="../colors_and_type.css"/>
 <link rel="stylesheet" href="_card.css"/>
 <style>
-  .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+  body { padding: 16px 22px; display: flex; flex-direction: column; gap: 12px; }
+
+  .heading { display: flex; align-items: baseline; justify-content: space-between; }
+  .heading h2 {
+    margin: 0;
+    font: 600 13px/1 var(--font-sans);
+    color: var(--color-text-primary);
+  }
+  .heading .tag {
+    font: 500 10px/1 "Geist Mono", var(--font-mono);
+    text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--color-text-muted);
+  }
+
+  .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; align-items: stretch; }
+
   .stat {
     background: var(--color-bg-elevated);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
     padding: 10px 12px;
+    display: flex; flex-direction: column; gap: 6px;
   }
-  .lbl { font: 500 11px/1 var(--font-sans); color: var(--color-text-muted); margin-bottom: 6px; }
-  .val { font-family: var(--font-mono); font-weight: 700; font-size: 22px; line-height: 1; color: var(--color-text-primary); font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
-  .val .unit { font: 500 13px var(--font-sans); color: var(--color-text-muted); }
-  .bar { margin-top: 8px; height: 3px; border-radius: 2px; background: var(--color-border); overflow: hidden; }
-  .bar > div { height: 100%; border-radius: 2px; background: var(--color-accent); }
+  .lbl {
+    font: 500 11px/1 var(--font-sans);
+    color: var(--color-text-muted);
+  }
+  .val {
+    /* explicit Geist Mono — same family the StatsSidebar uses live */
+    font-family: "Geist Mono", var(--font-mono);
+    font-weight: 700;
+    font-size: 22px;
+    line-height: 1;
+    color: var(--color-text-primary);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .val .unit {
+    font-family: var(--font-sans);
+    font-weight: 400;
+    font-size: 13px;
+    color: var(--color-text-muted);
+  }
+  .val .swatch {
+    width: 18px; height: 18px; border-radius: 4px;
+    background: #FBB123;
+    border: 1px solid rgba(255,255,255,0.15);
+    flex-shrink: 0;
+  }
+  .bar {
+    margin-top: auto;
+    height: 3px;
+    border-radius: 2px;
+    background: var(--color-border);
+    overflow: hidden;
+  }
+  .bar > div { height: 100%; border-radius: 2px; }
 </style></head>
 <body data-theme="midnight">
+  <div class="heading">
+    <h2>Numerals · tabular figures</h2>
+    <span class="tag">Geist Mono</span>
+  </div>
+
   <div class="grid">
-    <div class="stat"><div class="lbl">OG</div><div class="val">1.052</div><div class="bar"><div style="width:44%"></div></div></div>
-    <div class="stat"><div class="lbl">FG</div><div class="val">1.011</div><div class="bar"><div style="width:36%"></div></div></div>
-    <div class="stat"><div class="lbl">ABV</div><div class="val">5.4<span class="unit">%</span></div><div class="bar"><div style="width:45%;background:#a6e3a1"></div></div></div>
-    <div class="stat"><div class="lbl">IBU</div><div class="val">38</div><div class="bar"><div style="width:32%;background:#fab387"></div></div></div>
-    <div class="stat"><div class="lbl">SRM</div>
-      <div class="val" style="display:flex;align-items:center;gap:8px">
-        <span style="width:18px;height:18px;border-radius:4px;background:#FBB123;border:1px solid rgba(255,255,255,0.15);display:inline-block"></span>5.4
-      </div>
+    <div class="stat">
+      <div class="lbl">OG</div>
+      <div class="val">1.052</div>
+      <div class="bar"><div style="width:44%;background:var(--color-accent)"></div></div>
+    </div>
+    <div class="stat">
+      <div class="lbl">FG</div>
+      <div class="val">1.011</div>
+      <div class="bar"><div style="width:36%;background:var(--color-accent)"></div></div>
+    </div>
+    <div class="stat">
+      <div class="lbl">ABV</div>
+      <div class="val">5.4<span class="unit">%</span></div>
+      <div class="bar"><div style="width:45%;background:#a6e3a1"></div></div>
+    </div>
+    <div class="stat">
+      <div class="lbl">IBU</div>
+      <div class="val">38</div>
+      <div class="bar"><div style="width:32%;background:#fab387"></div></div>
+    </div>
+    <div class="stat">
+      <div class="lbl">SRM</div>
+      <div class="val"><span class="swatch"></span>5.4</div>
+      <div class="bar"></div>
     </div>
   </div>
 </body></html>

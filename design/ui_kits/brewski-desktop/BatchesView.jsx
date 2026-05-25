@@ -13,21 +13,41 @@ function BatchesView() {
         {batches.map((b) => (
           <li key={b.id}>
             <div
-              className="list-row"
               style={{
                 background: "var(--color-bg-elevated)",
-                borderLeft: "0",
-                paddingLeft: "12px",
+                border: "1px solid var(--color-border)",
                 borderRadius: "var(--radius-md)",
+                padding: "10px 12px",
                 cursor: "pointer",
+                display: "flex",
+                flexDirection: "column",
+                gap: 2,
               }}
               onClick={() => setSelectedId(b.id)}
             >
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <span className="nm" style={{ flex: 1 }}>{b.recipe_name}</span>
+                <span style={{
+                  flex: 1, minWidth: 0,
+                  fontSize: 13, fontWeight: 500, color: "var(--color-text-primary)",
+                  overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
+                }}>{b.recipe_name}</span>
                 <window.StatPill status={b.status} />
               </div>
-              <span className="sub">{b.name} · {new Date(b.brew_date).toLocaleDateString()}</span>
+              <div style={{
+                fontSize: 11,
+                color: "var(--color-text-secondary)",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+              }}>
+                <span style={{ fontFamily: "var(--font-mono)", fontVariantNumeric: "tabular-nums", color: "var(--color-text-muted)" }}>
+                  OG {b.actual_og.toFixed(3)}
+                </span>
+                <span style={{ color: "var(--color-text-muted)", margin: "0 6px" }}>·</span>
+                <span>{b.name}</span>
+                <span style={{ color: "var(--color-text-muted)", margin: "0 6px" }}>·</span>
+                <span>{new Date(b.brew_date).toLocaleDateString()}</span>
+              </div>
             </div>
           </li>
         ))}
