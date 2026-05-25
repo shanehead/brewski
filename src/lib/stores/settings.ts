@@ -6,6 +6,7 @@ export interface AppSettings {
   theme?: string;
   default_equipment_profile_id?: string;
   last_route?: string;
+  starters_collapsed?: boolean;
 }
 
 export const settings = writable<AppSettings>({});

@@ -95,6 +95,7 @@ export interface ColorConversionResult {
 
 // --- Recipes ---
 export const listRecipes = () => invoke<RecipeSummary[]>("list_recipes");
+export const listBaselineRecipes = () => invoke<RecipeSummary[]>("list_baseline_recipes");
 export const getRecipe = (id: string) => invoke<Recipe>("get_recipe", { id });
 export const createRecipe = (input: CreateRecipeInput) => invoke<Recipe>("create_recipe", { input });
 export const updateRecipe = (id: string, input: UpdateRecipeInput) =>
