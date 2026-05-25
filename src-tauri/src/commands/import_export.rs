@@ -1,6 +1,6 @@
-use quick_xml::escape::escape;
-use quick_xml::events::Event;
+use quick_xml::events::{BytesDecl, BytesText, Event};
 use quick_xml::reader::Reader;
+use quick_xml::Writer;
 use tauri::State;
 
 use crate::models::{
@@ -14,68 +14,141 @@ use crate::repositories::recipe::RecipeRepository;
 use crate::repositories::yeast::YeastRepository;
 use crate::AppState;
 
-fn build_recipe_beerxml(recipe: &Recipe) -> String {
-    let style_block = recipe
-        .style
-        .as_ref()
-        .map(|s| {
-            format!(
-                "    <STYLE>\n      <NAME>{}</NAME>\n      <CATEGORY>{}</CATEGORY>\n      <STYLE_GUIDE>{}</STYLE_GUIDE>\n    </STYLE>",
-                escape(&s.name), escape(&s.category), escape(&s.style_guide)
-            )
-        })
-        .unwrap_or_default();
+fn build_recipe_beerxml(recipe: &Recipe) -> Result<String, quick_xml::Error> {
+    let mut writer = Writer::new_with_indent(Vec::new(), b' ', 2);
+    writer.write_event(Event::Decl(BytesDecl::new("1.0", Some("UTF-8"), None)))?;
 
-    let fermentables: String = recipe
-        .fermentables
-        .iter()
-        .map(|f| {
-            format!(
-                "      <FERMENTABLE>\n        <NAME>{}</NAME>\n        <AMOUNT>{:.4}</AMOUNT>\n        <TYPE>{}</TYPE>\n        <YIELD>{:.1}</YIELD>\n        <COLOR>{:.1}</COLOR>\n      </FERMENTABLE>",
-                escape(&f.name), f.amount_kg, escape(&f.type_), f.yield_pct, f.color_lovibond
-            )
-        })
-        .collect::<Vec<_>>()
-        .join("\n");
+    let brewer = recipe.brewer.as_deref().unwrap_or("");
+    let efficiency = format!("{:.1}", recipe.efficiency_pct.unwrap_or(72.0));
 
-    let hops: String = recipe
-        .hops
-        .iter()
-        .map(|h| {
-            format!(
-                "      <HOP>\n        <NAME>{}</NAME>\n        <AMOUNT>{:.5}</AMOUNT>\n        <ALPHA>{:.1}</ALPHA>\n        <USE>{}</USE>\n        <TIME>{:.0}</TIME>\n        <FORM>{}</FORM>\n      </HOP>",
-                escape(&h.name), h.amount_kg, h.alpha_pct, escape(&h.use_), h.time_min, escape(&h.form)
-            )
-        })
-        .collect::<Vec<_>>()
-        .join("\n");
+    type E = quick_xml::Error;
 
-    let yeasts: String = recipe
-        .yeasts
-        .iter()
-        .map(|y| {
-            format!(
-                "      <YEAST>\n        <NAME>{}</NAME>\n        <TYPE>{}</TYPE>\n        <FORM>{}</FORM>\n        <AMOUNT>{:.4}</AMOUNT>\n      </YEAST>",
-                escape(&y.name), escape(&y.type_), escape(&y.form), y.amount.unwrap_or(0.0)
-            )
-        })
-        .collect::<Vec<_>>()
-        .join("\n");
+    writer
+        .create_element("RECIPES")
+        .write_inner_content(|w| -> Result<(), E> {
+            w.create_element("RECIPE")
+                .write_inner_content(|w| -> Result<(), E> {
+                    w.create_element("NAME")
+                        .write_text_content(BytesText::new(&recipe.name))?;
+                    w.create_element("VERSION")
+                        .write_text_content(BytesText::new("1"))?;
+                    w.create_element("TYPE")
+                        .write_text_content(BytesText::new(&recipe.type_))?;
+                    w.create_element("BREWER")
+                        .write_text_content(BytesText::new(brewer))?;
+                    w.create_element("BATCH_SIZE")
+                        .write_text_content(BytesText::new(&format!(
+                            "{:.1}",
+                            recipe.batch_size_l
+                        )))?;
+                    w.create_element("BOIL_SIZE")
+                        .write_text_content(BytesText::new(&format!(
+                            "{:.1}",
+                            recipe.boil_size_l
+                        )))?;
+                    w.create_element("BOIL_TIME")
+                        .write_text_content(BytesText::new(&format!(
+                            "{:.0}",
+                            recipe.boil_time_min
+                        )))?;
+                    w.create_element("EFFICIENCY")
+                        .write_text_content(BytesText::new(&efficiency))?;
 
-    format!(
-        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<RECIPES>\n  <RECIPE>\n    <NAME>{name}</NAME>\n    <VERSION>1</VERSION>\n    <TYPE>{type_}</TYPE>\n    <BREWER>{brewer}</BREWER>\n    <BATCH_SIZE>{batch_size:.1}</BATCH_SIZE>\n    <BOIL_SIZE>{boil_size:.1}</BOIL_SIZE>\n    <BOIL_TIME>{boil_time:.0}</BOIL_TIME>\n    <EFFICIENCY>{efficiency:.1}</EFFICIENCY>\n{style}\n    <FERMENTABLES>\n{fermentables}\n    </FERMENTABLES>\n    <HOPS>\n{hops}\n    </HOPS>\n    <YEASTS>\n{yeasts}\n    </YEASTS>\n  </RECIPE>\n</RECIPES>",
-        name = escape(&recipe.name),
-        type_ = escape(&recipe.type_),
-        brewer = escape(recipe.brewer.as_deref().unwrap_or("")),
-        batch_size = recipe.batch_size_l,
-        boil_size = recipe.boil_size_l,
-        boil_time = recipe.boil_time_min,
-        efficiency = recipe.efficiency_pct.unwrap_or(72.0),
-        style = style_block,
-        fermentables = fermentables,
-        hops = hops,
-        yeasts = yeasts,
-    )
+                    if let Some(s) = &recipe.style {
+                        w.create_element("STYLE")
+                            .write_inner_content(|w| -> Result<(), E> {
+                                w.create_element("NAME")
+                                    .write_text_content(BytesText::new(&s.name))?;
+                                w.create_element("CATEGORY")
+                                    .write_text_content(BytesText::new(&s.category))?;
+                                w.create_element("STYLE_GUIDE")
+                                    .write_text_content(BytesText::new(&s.style_guide))?;
+                                Ok(())
+                            })?;
+                    }
+
+                    w.create_element("FERMENTABLES")
+                        .write_inner_content(|w| -> Result<(), E> {
+                            for f in &recipe.fermentables {
+                                w.create_element("FERMENTABLE").write_inner_content(
+                                    |w| -> Result<(), E> {
+                                        w.create_element("NAME")
+                                            .write_text_content(BytesText::new(&f.name))?;
+                                        w.create_element("AMOUNT").write_text_content(
+                                            BytesText::new(&format!("{:.4}", f.amount_kg)),
+                                        )?;
+                                        w.create_element("TYPE")
+                                            .write_text_content(BytesText::new(&f.type_))?;
+                                        w.create_element("YIELD").write_text_content(
+                                            BytesText::new(&format!("{:.1}", f.yield_pct)),
+                                        )?;
+                                        w.create_element("COLOR").write_text_content(
+                                            BytesText::new(&format!("{:.1}", f.color_lovibond)),
+                                        )?;
+                                        Ok(())
+                                    },
+                                )?;
+                            }
+                            Ok(())
+                        })?;
+
+                    w.create_element("HOPS")
+                        .write_inner_content(|w| -> Result<(), E> {
+                            for h in &recipe.hops {
+                                w.create_element("HOP").write_inner_content(
+                                    |w| -> Result<(), E> {
+                                        w.create_element("NAME")
+                                            .write_text_content(BytesText::new(&h.name))?;
+                                        w.create_element("AMOUNT").write_text_content(
+                                            BytesText::new(&format!("{:.5}", h.amount_kg)),
+                                        )?;
+                                        w.create_element("ALPHA").write_text_content(
+                                            BytesText::new(&format!("{:.1}", h.alpha_pct)),
+                                        )?;
+                                        w.create_element("USE")
+                                            .write_text_content(BytesText::new(&h.use_))?;
+                                        w.create_element("TIME").write_text_content(
+                                            BytesText::new(&format!("{:.0}", h.time_min)),
+                                        )?;
+                                        w.create_element("FORM")
+                                            .write_text_content(BytesText::new(&h.form))?;
+                                        Ok(())
+                                    },
+                                )?;
+                            }
+                            Ok(())
+                        })?;
+
+                    w.create_element("YEASTS")
+                        .write_inner_content(|w| -> Result<(), E> {
+                            for y in &recipe.yeasts {
+                                w.create_element("YEAST").write_inner_content(
+                                    |w| -> Result<(), E> {
+                                        w.create_element("NAME")
+                                            .write_text_content(BytesText::new(&y.name))?;
+                                        w.create_element("TYPE")
+                                            .write_text_content(BytesText::new(&y.type_))?;
+                                        w.create_element("FORM")
+                                            .write_text_content(BytesText::new(&y.form))?;
+                                        w.create_element("AMOUNT").write_text_content(
+                                            BytesText::new(&format!(
+                                                "{:.4}",
+                                                y.amount.unwrap_or(0.0)
+                                            )),
+                                        )?;
+                                        Ok(())
+                                    },
+                                )?;
+                            }
+                            Ok(())
+                        })?;
+
+                    Ok(())
+                })?;
+            Ok(())
+        })?;
+
+    Ok(String::from_utf8(writer.into_inner()).expect("quick_xml produced non-UTF-8"))
 }
 
 #[tauri::command]
@@ -87,7 +160,7 @@ pub async fn get_recipe_beerxml(
         .get(&recipe_id)
         .await
         .map_err(|e| e.to_string())?;
-    Ok(build_recipe_beerxml(&recipe))
+    build_recipe_beerxml(&recipe).map_err(|e| e.to_string())
 }
 
 #[tauri::command]
@@ -100,7 +173,7 @@ pub async fn write_recipe_beerxml(
         .get(&recipe_id)
         .await
         .map_err(|e| e.to_string())?;
-    let xml = build_recipe_beerxml(&recipe);
+    let xml = build_recipe_beerxml(&recipe).map_err(|e| e.to_string())?;
     std::fs::write(&path, xml).map_err(|e| e.to_string())
 }
 
@@ -603,7 +676,7 @@ mod tests {
             tertiary_temp_c: None,
         };
 
-        let xml = build_recipe_beerxml(&recipe);
+        let xml = build_recipe_beerxml(&recipe).unwrap();
         assert!(xml.contains("<NAME>Oats &amp; Honey &lt;Wheat&gt;</NAME>"));
         assert!(xml.contains("<BREWER>Tom &amp; Jerry</BREWER>"));
         assert!(!xml.contains("<NAME>Oats & Honey"));
@@ -664,7 +737,7 @@ mod tests {
             tertiary_temp_c: None,
         };
 
-        let xml = build_recipe_beerxml(&recipe);
+        let xml = build_recipe_beerxml(&recipe).unwrap();
         assert!(xml.starts_with("<?xml version=\"1.0\""));
         assert!(xml.contains("<NAME>Pale Ale</NAME>"));
         assert!(xml.contains("<BATCH_SIZE>23.0</BATCH_SIZE>"));
