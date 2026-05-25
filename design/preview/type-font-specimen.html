@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<link rel="stylesheet" href="_card.css"/>
+<style>
+  body { padding: 16px 22px; }
+  .row {
+    display: flex; align-items: baseline; gap: 16px;
+    padding: 5px 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+  .row:last-child { border-bottom: 0; }
+  .meta {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--color-text-muted);
+    width: 130px;
+    flex-shrink: 0;
+  }
+  .spec {
+    font-family: var(--font-sans);
+    font-size: 22px; line-height: 1.1;
+    color: var(--color-text-primary);
+    letter-spacing: -0.01em;
+  }
+  .heading {
+    display: flex; align-items: baseline; justify-content: space-between;
+    margin: 0 0 12px;
+  }
+  .heading h2 {
+    margin: 0;
+    font-weight: 800; font-size: 32px; letter-spacing: -0.025em;
+    color: var(--color-text-primary);
+  }
+  .heading .sub {
+    font: 500 11px/1 var(--font-mono);
+    color: var(--color-text-muted);
+    text-transform: uppercase; letter-spacing: 0.12em;
+  }
+</style></head>
+<body data-theme="midnight">
+  <div class="heading">
+    <h2>Geist</h2>
+    <span class="sub">Variable · self-hosted · OFL</span>
+  </div>
+  <div class="row"><span class="meta">100 · Thin</span><span class="spec" style="font-weight:100">Brewski 1.062</span></div>
+  <div class="row"><span class="meta">200 · UltraLight</span><span class="spec" style="font-weight:200">Brewski 1.062</span></div>
+  <div class="row"><span class="meta">300 · Light</span><span class="spec" style="font-weight:300">Brewski 1.062</span></div>
+  <div class="row"><span class="meta">400 · Regular</span><span class="spec" style="font-weight:400">Brewski 1.062</span></div>
+  <div class="row"><span class="meta">500 · Medium</span><span class="spec" style="font-weight:500">Brewski 1.062</span></div>
+  <div class="row"><span class="meta">600 · SemiBold</span><span class="spec" style="font-weight:600">Brewski 1.062</span></div>
+  <div class="row"><span class="meta">700 · Bold</span><span class="spec" style="font-weight:700">Brewski 1.062</span></div>
+  <div class="row"><span class="meta">800 · Black</span><span class="spec" style="font-weight:800">Brewski 1.062</span></div>
+  <div class="row"><span class="meta">900 · UltraBlack</span><span class="spec" style="font-weight:900">Brewski 1.062</span></div>
+</body></html>

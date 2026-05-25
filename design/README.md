@@ -30,7 +30,8 @@ This system was built from:
 .
 ├── README.md                  ← you are here
 ├── SKILL.md                   ← Claude Code / Agent Skills entry point
-├── colors_and_type.css        ← all design tokens + 10 themes
+├── colors_and_type.css        ← all design tokens + 10 themes + @font-face
+├── fonts/                     ← brand type (Geist + Geist Mono variable WOFF2 + OFL license)
 ├── assets/
 │   ├── brewski-logo.png       ← app logo (1024×1024)
 │   ├── favicon.png            ← tab icon
@@ -230,14 +231,16 @@ Brewski's icon set is intentionally minimal. If you need an icon outside the 15 
 
 ## Fonts
 
-Brewski uses **platform-native fonts** by intent — SF on Apple, Segoe on Windows, Roboto on Android, system on Linux. There is no webfont shipped with the app. For browser-based work (this design system, marketing pages), the closest free substitutes are loaded from Google Fonts:
+Brewski's brand type pairing is **Geist** (sans) + **Geist Mono** (numerics) — both Vercel's open-source families, licensed under [SIL Open Font License](./fonts/OFL.txt). Same designer, matched metrics and x-height, so a heading and an inline gravity readout sit on the same baseline without visual tension. Sleek, precise letterforms with excellent dark-mode legibility.
 
-| Brewski role | Native stack                                | Google Fonts substitute |
-| ------------ | ------------------------------------------- | ----------------------- |
-| Sans (body)  | `-apple-system, SF Pro Text, Segoe UI, Roboto, Helvetica Neue` | **Inter** |
-| Mono (numbers, gravity) | `SF Mono, Menlo, Consolas, Roboto Mono` | **JetBrains Mono** |
+Both ship as **variable WOFF2** files (~50 KB each, all weights 100–900 in one file). OFL is cross-platform-friendly — safe to bundle in Tauri builds for macOS, iOS, Android, Windows, and Linux.
 
-> ⚠️ **Substitution flag for the user:** This design system uses **Inter** and **JetBrains Mono** from Google Fonts as visual placeholders for the platform-native stacks. The shipped app does **not** ship webfonts; on real platforms the OS UI font takes over. If you want pixel-perfect matches to a specific platform target (e.g. macOS-only renders), please drop SF Pro / SF Mono files into a `fonts/` folder and I'll update the system to reference them.
+| Brewski role     | Font                | File                                  | Status        |
+| ---------------- | ------------------- | ------------------------------------- | ------------- |
+| Sans (body, UI)  | **Geist**           | `fonts/Geist-Variable.woff2` (OFL)    | ✅ self-hosted |
+| Mono (numerics)  | **Geist Mono**      | `fonts/GeistMono-Variable.woff2` (OFL)| ✅ self-hosted |
+
+The design system is now **fully offline-capable** for both font families. No Google Fonts CDN calls at runtime.
 
 ---
 
@@ -292,7 +295,6 @@ sed -n '/^export const ICONS/,$ p' assets/icons.ts \
 
 ## Caveats & open items
 
-- **No real fonts shipped.** Google Fonts stand in for SF Pro / Segoe / Roboto. Drop the licensed files in if you need exact target rendering.
 - **No mobile UI kit yet.** Desktop only for now.
 - **No marketing/website assets.** The repo is app-only — there is no landing page or docs site to reference. If you need website mocks, ask and I'll build them as a separate kit from scratch using the brand foundations.
 - **Icons are SVG-in-TypeScript.** They render fine in HTML via `dangerouslySetInnerHTML` / `{@html …}` patterns. Inline-SVG-by-name (e.g. SVGUse sprite) would require an extra build step we haven't added.
