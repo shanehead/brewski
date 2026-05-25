@@ -27,13 +27,24 @@ ALTER TABLE recipes ADD COLUMN source TEXT NOT NULL DEFAULT 'user'
 ### Seeded recipes (initial set)
 
 IPAs / DIPAs:
-- Pliny the Elder (Russian River) — DIPA
-- Heady Topper (The Alchemist) — DIPA
-- Tree House Julius — NEIPA
+- **Pliny the Elder** (Russian River) — DIPA
+  - [Russian River Pliny the Elder Clone — American Homebrewers Association](https://homebrewersassociation.org/homebrew-recipe/russian-river-pliny-the-elder-clone/)
+  - [Russian River Brewing Co.'s Pliny the Elder clone — Brew Your Own](https://byo.com/recipes/russian-river-brewing-co-s-pliny-the-elder-clone/)
+- **Heady Topper** (The Alchemist) — DIPA
+  - [The Alchemist: Heady Topper clone — Brew Your Own](https://byo.com/recipes/alchemist-heady-topper-clone/)
+  - [Heady Topper clone — Brewer's Friend](https://www.brewersfriend.com/homebrew/recipe/view/306610/heady-topper-clone)
+- **Julius** (Tree House) — NEIPA
+  - [Tree House Brewing Company: Julius clone — Brew Your Own](https://byo.com/recipe/tree-house-brewing-company-julius-clone/)
+  - [Tree House Julius Clone — American Homebrewers Association](https://homebrewersassociation.org/homebrew-recipe/tree-house-brewing-company-julius-clone/)
+  - [Marshall Bishop's Treehouse Julius Clone — Hazy and Hoppy](https://hazyandhoppy.com/marshall-bishops-treehouse-julius-clone-recipe/)
 
 Non-IPA:
-- Guinness Draught (Irish Stout)
-- Saison Dupont (Belgian Saison)
+- **Guinness Draught** (Irish Stout)
+  - [Guinness Draught clone — Brew Your Own](https://byo.com/recipe/guinness-draught-clone/)
+  - [How to Brew Guinness and Hack a Clone — Homebrew Academy](https://homebrewacademy.com/guinness-recipe/)
+- **Saison Dupont** (Belgian Saison)
+  - [Belgian Saison in the Style of Saison Dupont — Craft Beer & Brewing](https://www.beerandbrewing.com/belgian-saison-in-the-style-of-saison-dupont-recipe)
+  - [Saison Dupont Clone — Brewer's Friend](https://www.brewersfriend.com/homebrew/recipe/view/438817/saison-dupont-clone)
 
 All seeded recipes use ingredient IDs from the existing seeded ingredient library where possible. Any gaps are handled by embedding ingredient data directly (name-only, no library FK required).
 
