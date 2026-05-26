@@ -1,9 +1,11 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { goto } from "$app/navigation";
-  import { getRecipe, getRecipeStats, getRecipeBeerxml } from "$lib/api";
+  import { getRecipe, getRecipeStats, getRecipeBeerxml, uploadRecipeImage, deleteRecipeImage } from "$lib/api";
   import type { Recipe, RecipeStats } from "$lib/api";
   import { ipc } from "$lib/stores/error";
+  import { appDataDir as getAppDataDir } from "@tauri-apps/api/path";
+  import RecipeHero from "$lib/components/RecipeHero.svelte";
   import { settings } from "$lib/stores/settings";
   import OverviewTab from "$lib/components/tabs/OverviewTab.svelte";
   import IngredientsTab from "$lib/components/tabs/IngredientsTab.svelte";
@@ -16,13 +18,18 @@
 
   let recipe = $state<Recipe | null>(null);
   let stats = $state<RecipeStats | null>(null);
+  let appDataDir = $state("");
+  let fileInput: HTMLInputElement;
 
   async function load() {
     recipe = await ipc(getRecipe(id)) ?? null;
     if (recipe) stats = await ipc(getRecipeStats(recipe.id)) ?? null;
   }
 
-  onMount(load);
+  onMount(async () => {
+    appDataDir = await getAppDataDir();
+    await load();
+  });
   $effect(() => { if (id) load(); });
 
   async function handleExport() {
@@ -36,6 +43,25 @@
     a.download = `${recipe.name}.xml`;
     a.click();
     URL.revokeObjectURL(url);
+  }
+
+  async function handleImageUpload() {
+    fileInput?.click();
+  }
+
+  async function handleFileSelected(event: Event) {
+    if (!recipe) return;
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (!file) return;
+    const path = (file as File & { path?: string }).path;
+    if (!path) return;
+    recipe = await ipc(uploadRecipeImage({ recipe_id: recipe.id, source_path: path })) ?? recipe;
+    fileInput.value = "";
+  }
+
+  async function handleImageRemove() {
+    if (!recipe) return;
+    recipe = await ipc(deleteRecipeImage({ recipe_id: recipe.id })) ?? recipe;
   }
 
   function fmt(val: number | undefined, decimals = 3): string {
@@ -69,6 +95,22 @@
         </svg>
       </button>
     </div>
+
+    <input
+      type="file"
+      accept="image/*"
+      bind:this={fileInput}
+      onchange={handleFileSelected}
+      class="hidden"
+    />
+
+    <RecipeHero
+      recipe={{ ...recipe, srm: stats?.srm ?? null }}
+      {appDataDir}
+      height="160px"
+      onUploadClick={handleImageUpload}
+      onRemoveClick={handleImageRemove}
+    />
 
     <!-- Single scroll -->
     <div class="flex-1 overflow-y-auto">
