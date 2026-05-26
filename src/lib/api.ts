@@ -278,6 +278,12 @@ export const branchFromVersion = (recipeId: string, versionId: string) =>
 export const deleteRecipeVersion = (id: string) =>
   invoke<void>("delete_recipe_version", { id });
 
+// --- Recipe Images ---
+export const uploadRecipeImage = (input: { recipe_id: string; source_path: string }) =>
+  invoke<Recipe>("upload_recipe_image", { input });
+export const deleteRecipeImage = (input: { recipe_id: string }) =>
+  invoke<Recipe>("delete_recipe_image", { input });
+
 // --- Sync / Database location ---
 
 export type SyncFolder = { name: string; path: string };

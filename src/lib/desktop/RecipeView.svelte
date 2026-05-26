@@ -15,6 +15,10 @@
   import type { Recipe, RecipeStats, RecipeVersionSummary } from "$lib/api";
   import { ipc, lastError } from "$lib/stores/error";
   import { save } from "@tauri-apps/plugin-dialog";
+  import { appDataDir as getAppDataDir } from "@tauri-apps/api/path";
+  import { open } from "@tauri-apps/plugin-dialog";
+  import { uploadRecipeImage, deleteRecipeImage } from "$lib/api";
+  import RecipeHero from "$lib/components/RecipeHero.svelte";
   import RecipeList from "$lib/components/RecipeList.svelte";
   import StatsSidebar from "$lib/components/StatsSidebar.svelte";
   import OverviewTab from "$lib/components/tabs/OverviewTab.svelte";
@@ -35,6 +39,7 @@
   let stats = $state<RecipeStats | null>(null);
   let activeTab = $state<"overview" | "ingredients" | "mash" | "water" | "fermentation" | "notes" | "batches">("overview");
   let saving = $state(false);
+  let appDataDir = $state("");
 
   // Version history state
   let showVersionPanel = $state(false);
@@ -82,6 +87,7 @@
   }
 
   onMount(async () => {
+    appDataDir = await getAppDataDir();
     await loadRecipeById(id);
     await loadVersions(id);
   });
@@ -183,6 +189,20 @@
     await ipc(writeRecipeBeerxml(recipe.id, path));
   }
 
+  async function handleImageUpload() {
+    if (!recipe) return;
+    const path = await open({
+      filters: [{ name: "Image", extensions: ["jpg", "jpeg", "png", "webp", "heic"] }],
+    });
+    if (!path || typeof path !== "string") return;
+    recipe = await ipc(uploadRecipeImage({ recipe_id: recipe.id, source_path: path })) ?? recipe;
+  }
+
+  async function handleImageRemove() {
+    if (!recipe) return;
+    recipe = await ipc(deleteRecipeImage({ recipe_id: recipe.id })) ?? recipe;
+  }
+
   const displayRecipe = $derived(viewingRecipe ?? recipe);
 </script>
 
@@ -274,6 +294,16 @@
         History ({versions.length})
       </button>
     </header>
+
+    {#if recipe}
+      <RecipeHero
+        recipe={{ ...recipe, srm: stats?.srm ?? null }}
+        {appDataDir}
+        height="120px"
+        onUploadClick={handleImageUpload}
+        onRemoveClick={handleImageRemove}
+      />
+    {/if}
 
     <!-- Read-only version banner -->
     {#if viewingVersion}
