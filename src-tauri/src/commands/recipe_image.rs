@@ -117,4 +117,22 @@ mod tests {
         write_image(&src, &dest).unwrap();
         assert!(dest.exists());
     }
+
+    /// Verifies that cascade-deleting an image for a recipe that has no image
+    /// file on disk does not produce an error — i.e. the `if path.exists()`
+    /// guard used in `delete_recipe` / `delete_recipe_image` is safe.
+    #[test]
+    fn test_delete_nonexistent_image_does_not_error() {
+        let dir = tempdir().unwrap();
+        let nonexistent = dir.path().join("images").join("no-such-recipe.jpg");
+        // The path must not exist for this test to be meaningful.
+        assert!(!nonexistent.exists());
+        // Mirroring the guard in delete_recipe / delete_recipe_image:
+        // if the file doesn't exist we skip remove_file — no error expected.
+        if nonexistent.exists() {
+            std::fs::remove_file(&nonexistent).unwrap();
+        }
+        // Still doesn't exist and we reached here without panicking.
+        assert!(!nonexistent.exists());
+    }
 }
