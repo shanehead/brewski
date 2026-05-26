@@ -17,6 +17,7 @@
     type Units,
   } from '$lib/units';
   import type { BrewingIconName } from "$lib/icons";
+  import { srmToHex } from "$lib/utils/srm";
   export type AddPayload =
     | { type: 'hop'; item: Hop; form: string; amount_kg: number; use_: string; time_min: number; hopstand_temp_c: number | null }
     | { type: 'fermentable'; item: Fermentable; amount_kg: number }
@@ -198,20 +199,6 @@
     }
     const y = item as Yeast;
     return y.laboratory ?? y.form;
-  }
-
-  const SRM_STOPS: [number, string][] = [
-    [1, '#f8f753'], [2, '#f6f513'], [3, '#ece61a'], [4, '#d5bc26'],
-    [6, '#c1a331'], [8, '#a58c43'], [10, '#8d7537'], [13, '#7a5c34'],
-    [17, '#5d3d2b'], [20, '#4a2c24'], [24, '#3d1f1d'], [29, '#2d1616'],
-    [35, '#1e0f0f'], [40, '#160b0b'],
-  ];
-  function srmToHex(srm: number): string {
-    const clamp = Math.min(Math.max(srm, 1), 40);
-    for (let i = SRM_STOPS.length - 1; i >= 0; i--) {
-      if (clamp >= SRM_STOPS[i][0]) return SRM_STOPS[i][1];
-    }
-    return SRM_STOPS[0][1];
   }
 
   function fmt(val: number | null, digits = 1): string {
