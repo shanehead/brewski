@@ -40,7 +40,16 @@ pub async fn update_recipe(
 }
 
 #[tauri::command]
-pub async fn delete_recipe(state: State<'_, AppState>, id: String) -> Result<(), AppError> {
+pub async fn delete_recipe(
+    app: tauri::AppHandle,
+    state: State<'_, AppState>,
+    id: String,
+) -> Result<(), AppError> {
+    let image = crate::commands::recipe_image::image_path(&app, &id)?;
+    if image.exists() {
+        std::fs::remove_file(&image)
+            .map_err(|e| AppError::Internal(format!("remove image on delete: {e}")))?;
+    }
     RecipeRepository::new(&state.db).delete(&id).await
 }
 
