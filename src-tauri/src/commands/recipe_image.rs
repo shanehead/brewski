@@ -4,6 +4,14 @@ use crate::repositories::recipe::RecipeRepository;
 use std::path::{Path, PathBuf};
 use tauri::{AppHandle, Manager};
 
+pub(crate) fn delete_image_file(path: &Path) -> Result<(), AppError> {
+    match std::fs::remove_file(path) {
+        Ok(()) => Ok(()),
+        Err(e) if e.kind() == std::io::ErrorKind::NotFound => Ok(()),
+        Err(e) => Err(AppError::Internal(format!("remove image: {e}"))),
+    }
+}
+
 pub fn images_dir(app: &AppHandle) -> Result<PathBuf, AppError> {
     let base = app
         .path()
@@ -63,10 +71,7 @@ pub async fn delete_recipe_image(
     recipe_id: String,
 ) -> Result<Recipe, AppError> {
     let path = image_path(&app, &recipe_id)?;
-    if path.exists() {
-        std::fs::remove_file(&path)
-            .map_err(|e| AppError::Internal(format!("remove image: {e}")))?;
-    }
+    delete_image_file(&path)?;
     RecipeRepository::new(&state.db)
         .set_image_path(&recipe_id, None)
         .await
@@ -118,21 +123,22 @@ mod tests {
         assert!(dest.exists());
     }
 
-    /// Verifies that cascade-deleting an image for a recipe that has no image
-    /// file on disk does not produce an error — i.e. the `if path.exists()`
-    /// guard used in `delete_recipe` / `delete_recipe_image` is safe.
     #[test]
-    fn test_delete_nonexistent_image_does_not_error() {
+    fn test_delete_image_file_nonexistent_returns_ok() {
         let dir = tempdir().unwrap();
         let nonexistent = dir.path().join("images").join("no-such-recipe.jpg");
-        // The path must not exist for this test to be meaningful.
         assert!(!nonexistent.exists());
-        // Mirroring the guard in delete_recipe / delete_recipe_image:
-        // if the file doesn't exist we skip remove_file — no error expected.
-        if nonexistent.exists() {
-            std::fs::remove_file(&nonexistent).unwrap();
-        }
-        // Still doesn't exist and we reached here without panicking.
-        assert!(!nonexistent.exists());
+        // Calling delete_image_file on a missing path must not return an error.
+        delete_image_file(&nonexistent).unwrap();
+    }
+
+    #[test]
+    fn test_delete_image_file_existing_deletes_file() {
+        let dir = tempdir().unwrap();
+        let path = dir.path().join("recipe.jpg");
+        make_test_image(&path, 100, 100);
+        assert!(path.exists());
+        delete_image_file(&path).unwrap();
+        assert!(!path.exists());
     }
 }

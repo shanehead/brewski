@@ -1,4 +1,5 @@
 use crate::brewing;
+use crate::commands::recipe_image;
 use crate::error::AppError;
 use crate::models::{CreateRecipeInput, Recipe, RecipeStats, RecipeSummary, UpdateRecipeInput};
 use crate::repositories::recipe::RecipeRepository;
@@ -45,11 +46,8 @@ pub async fn delete_recipe(
     state: State<'_, AppState>,
     id: String,
 ) -> Result<(), AppError> {
-    let image = crate::commands::recipe_image::image_path(&app, &id)?;
-    if image.exists() {
-        std::fs::remove_file(&image)
-            .map_err(|e| AppError::Internal(format!("remove image on delete: {e}")))?;
-    }
+    let image = recipe_image::image_path(&app, &id)?;
+    recipe_image::delete_image_file(&image)?;
     RecipeRepository::new(&state.db).delete(&id).await
 }
 
