@@ -3,18 +3,30 @@
   import { goto } from "$app/navigation";
   import { recipeList, refreshRecipeList, baselineRecipeList, refreshBaselineRecipeList } from "$lib/stores/recipes";
   import { createRecipe, createRecipesFromBeerxml } from "$lib/api";
+  import type { RecipeSummary } from "$lib/api";
   import { ipc } from "$lib/stores/error";
   import { settings } from "$lib/stores/settings";
   import { saveSetting } from "$lib/stores/settings";
+  import { convertFileSrc } from "@tauri-apps/api/core";
+  import { appDataDir as getAppDataDir } from "@tauri-apps/api/path";
+  import { srmToHex } from "$lib/utils/srm";
 
   let fileInput: HTMLInputElement;
+  let appDataDir = $state("");
 
   const startersCollapsed = $derived($settings.starters_collapsed ?? false);
 
-  onMount(() => {
+  onMount(async () => {
+    appDataDir = await getAppDataDir();
     ipc(refreshRecipeList());
     ipc(refreshBaselineRecipeList());
   });
+
+  function thumbnailSrc(recipe: RecipeSummary): string | null {
+    return recipe.image_path
+      ? convertFileSrc(`${appDataDir}/images/${recipe.image_path}`)
+      : null;
+  }
 
   async function handleNew() {
     const recipe = await ipc(createRecipe({ name: "New Recipe" }));
@@ -60,12 +72,18 @@
   </div>
   <div class="flex-1 overflow-y-auto">
     {#each $recipeList as recipe (recipe.id)}
+      {@const thumb = thumbnailSrc(recipe)}
       <a
         href="/recipe/{recipe.id}"
-        class="flex items-center justify-between px-4 py-3 border-b text-sm"
+        class="flex items-center gap-3 px-4 py-3 border-b text-sm"
         style="border-color: var(--color-border); color: var(--color-text-primary);"
       >
-        <span class="truncate">{recipe.name}</span>
+        {#if thumb}
+          <img src={thumb} alt="" class="w-8 h-8 rounded flex-shrink-0 object-cover" />
+        {:else}
+          <div class="w-8 h-8 rounded flex-shrink-0" style="background: linear-gradient(135deg, {srmToHex(4)}, {srmToHex(16)});"></div>
+        {/if}
+        <span class="truncate flex-1">{recipe.name}</span>
         <span style="color: var(--color-text-muted);">›</span>
       </a>
     {:else}
@@ -88,12 +106,18 @@
       </button>
       {#if !startersCollapsed}
         {#each $baselineRecipeList as recipe (recipe.id)}
+          {@const thumb = thumbnailSrc(recipe)}
           <a
             href="/baseline-recipe/{recipe.id}"
-            class="flex items-center justify-between px-4 py-3 border-b text-sm"
+            class="flex items-center gap-3 px-4 py-3 border-b text-sm"
             style="border-color: var(--color-border); color: var(--color-text-secondary);"
           >
-            <span class="truncate">{recipe.name}</span>
+            {#if thumb}
+              <img src={thumb} alt="" class="w-8 h-8 rounded flex-shrink-0 object-cover" />
+            {:else}
+              <div class="w-8 h-8 rounded flex-shrink-0" style="background: linear-gradient(135deg, {srmToHex(4)}, {srmToHex(16)});"></div>
+            {/if}
+            <span class="truncate flex-1">{recipe.name}</span>
             <span style="color: var(--color-text-muted);">›</span>
           </a>
         {/each}
