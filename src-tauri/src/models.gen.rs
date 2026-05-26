@@ -3036,6 +3036,13 @@ impl Misc {
 #[doc = "    \"id\": {"]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
+#[doc = "    \"image_path\": {"]
+#[doc = "      \"description\": \"Filename of the recipe's image in {appDataDir}/images/\","]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
 #[doc = "    \"keg_priming_factor\": {"]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
@@ -3242,6 +3249,9 @@ pub struct Recipe {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub hopstand_temp_c: ::std::option::Option<f64>,
     pub id: ::std::string::String,
+    #[doc = "Filename of the recipe's image in {appDataDir}/images/"]
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub image_path: ::std::option::Option<::std::string::String>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub keg_priming_factor: ::std::option::Option<f64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -3895,6 +3905,13 @@ impl RecipeStats {
 #[doc = "    \"id\": {"]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
+#[doc = "    \"image_path\": {"]
+#[doc = "      \"description\": \"Filename of the recipe's image in {appDataDir}/images/\","]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
 #[doc = "    \"name\": {"]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
@@ -3932,6 +3949,9 @@ pub struct RecipeSummary {
     #[doc = "Unix timestamp (milliseconds)"]
     pub created_at: i64,
     pub id: ::std::string::String,
+    #[doc = "Filename of the recipe's image in {appDataDir}/images/"]
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub image_path: ::std::option::Option<::std::string::String>,
     pub name: ::std::string::String,
     #[doc = "'user' = created by the user; 'seeded' = built-in starter recipe"]
     pub source: RecipeSummarySource,
@@ -12103,6 +12123,10 @@ pub mod builder {
             ::std::result::Result<::std::vec::Vec<super::RecipeAdditionHop>, ::std::string::String>,
         hopstand_temp_c: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         id: ::std::result::Result<::std::string::String, ::std::string::String>,
+        image_path: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
         keg_priming_factor:
             ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         mash: ::std::result::Result<::std::option::Option<super::Mash>, ::std::string::String>,
@@ -12187,6 +12211,7 @@ pub mod builder {
                 hops: Err("no value supplied for hops".to_string()),
                 hopstand_temp_c: Ok(Default::default()),
                 id: Err("no value supplied for id".to_string()),
+                image_path: Ok(Default::default()),
                 keg_priming_factor: Ok(Default::default()),
                 mash: Ok(Default::default()),
                 mash_water_id: Ok(Default::default()),
@@ -12425,6 +12450,16 @@ pub mod builder {
             self.id = value
                 .try_into()
                 .map_err(|e| format!("error converting supplied value for id: {e}"));
+            self
+        }
+        pub fn image_path<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.image_path = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for image_path: {e}"));
             self
         }
         pub fn keg_priming_factor<T>(mut self, value: T) -> Self
@@ -12713,6 +12748,7 @@ pub mod builder {
                 hops: value.hops?,
                 hopstand_temp_c: value.hopstand_temp_c?,
                 id: value.id?,
+                image_path: value.image_path?,
                 keg_priming_factor: value.keg_priming_factor?,
                 mash: value.mash?,
                 mash_water_id: value.mash_water_id?,
@@ -12766,6 +12802,7 @@ pub mod builder {
                 hops: Ok(value.hops),
                 hopstand_temp_c: Ok(value.hopstand_temp_c),
                 id: Ok(value.id),
+                image_path: Ok(value.image_path),
                 keg_priming_factor: Ok(value.keg_priming_factor),
                 mash: Ok(value.mash),
                 mash_water_id: Ok(value.mash_water_id),
@@ -13817,6 +13854,10 @@ pub mod builder {
         batch_size_l: ::std::result::Result<f64, ::std::string::String>,
         created_at: ::std::result::Result<i64, ::std::string::String>,
         id: ::std::result::Result<::std::string::String, ::std::string::String>,
+        image_path: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
         name: ::std::result::Result<::std::string::String, ::std::string::String>,
         source: ::std::result::Result<super::RecipeSummarySource, ::std::string::String>,
         style_name: ::std::result::Result<
@@ -13832,6 +13873,7 @@ pub mod builder {
                 batch_size_l: Err("no value supplied for batch_size_l".to_string()),
                 created_at: Err("no value supplied for created_at".to_string()),
                 id: Err("no value supplied for id".to_string()),
+                image_path: Ok(Default::default()),
                 name: Err("no value supplied for name".to_string()),
                 source: Err("no value supplied for source".to_string()),
                 style_name: Ok(Default::default()),
@@ -13869,6 +13911,16 @@ pub mod builder {
             self.id = value
                 .try_into()
                 .map_err(|e| format!("error converting supplied value for id: {e}"));
+            self
+        }
+        pub fn image_path<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.image_path = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for image_path: {e}"));
             self
         }
         pub fn name<T>(mut self, value: T) -> Self
@@ -13931,6 +13983,7 @@ pub mod builder {
                 batch_size_l: value.batch_size_l?,
                 created_at: value.created_at?,
                 id: value.id?,
+                image_path: value.image_path?,
                 name: value.name?,
                 source: value.source?,
                 style_name: value.style_name?,
@@ -13945,6 +13998,7 @@ pub mod builder {
                 batch_size_l: Ok(value.batch_size_l),
                 created_at: Ok(value.created_at),
                 id: Ok(value.id),
+                image_path: Ok(value.image_path),
                 name: Ok(value.name),
                 source: Ok(value.source),
                 style_name: Ok(value.style_name),

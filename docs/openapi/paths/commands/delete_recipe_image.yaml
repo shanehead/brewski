@@ -1,0 +1,25 @@
+post:
+  operationId: deleteRecipeImage
+  summary: Remove a recipe's image
+  tags:
+    - Recipes
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - recipe_id
+          properties:
+            recipe_id:
+              type: string
+  responses:
+    "200":
+      description: Updated recipe
+      content:
+        application/json:
+          schema:
+            $ref: "../../components/schemas/Recipe.yaml"
+    "500":
+      $ref: "../../components/responses/Error.yaml"

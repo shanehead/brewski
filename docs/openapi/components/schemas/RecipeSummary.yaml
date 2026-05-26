@@ -34,3 +34,8 @@ properties:
     type: string
     enum: [user, seeded]
     description: "'user' = created by the user; 'seeded' = built-in starter recipe"
+  image_path:
+    type:
+      - string
+      - "null"
+    description: Filename of the recipe's image in {appDataDir}/images/

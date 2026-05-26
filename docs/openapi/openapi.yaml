@@ -61,6 +61,10 @@ paths:
     $ref: ./paths/commands/update_recipe.yaml
   /commands/delete_recipe:
     $ref: ./paths/commands/delete_recipe.yaml
+  /commands/upload_recipe_image:
+    $ref: ./paths/commands/upload_recipe_image.yaml
+  /commands/delete_recipe_image:
+    $ref: ./paths/commands/delete_recipe_image.yaml
   /commands/get_recipe_stats:
     $ref: ./paths/commands/get_recipe_stats.yaml
   /commands/create_recipe_fermentable:

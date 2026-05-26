@@ -196,3 +196,8 @@ properties:
     oneOf:
       - $ref: "./Mash.yaml"
       - type: "null"
+  image_path:
+    type:
+      - string
+      - "null"
+    description: Filename of the recipe's image in {appDataDir}/images/

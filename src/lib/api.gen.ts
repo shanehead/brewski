@@ -106,6 +106,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/commands/upload_recipe_image": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Upload and set a recipe's image */
+        post: operations["uploadRecipeImage"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/commands/delete_recipe_image": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Remove a recipe's image */
+        post: operations["deleteRecipeImage"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/commands/get_recipe_stats": {
         parameters: {
             query?: never;
@@ -1306,6 +1340,8 @@ export interface components {
              * @enum {string}
              */
             source: "user" | "seeded";
+            /** @description Filename of the recipe's image in {appDataDir}/images/ */
+            image_path?: string | null;
         };
         Recipe: {
             id: string;
@@ -1370,6 +1406,8 @@ export interface components {
             /** @description Default hopstand temperature in °C for this recipe */
             hopstand_temp_c?: number | null;
             mash?: components["schemas"]["Mash"] | null;
+            /** @description Filename of the recipe's image in {appDataDir}/images/ */
+            image_path?: string | null;
         };
         RecipeStats: {
             /** @description Calculated original gravity (specific gravity) */
@@ -2378,6 +2416,62 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+            500: components["responses"]["Error"];
+        };
+    };
+    uploadRecipeImage: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    recipe_id: string;
+                    /** @description Absolute path to the source image file */
+                    source_path: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Updated recipe */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Recipe"];
+                };
+            };
+            500: components["responses"]["Error"];
+        };
+    };
+    deleteRecipeImage: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    recipe_id: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Updated recipe */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Recipe"];
+                };
             };
             500: components["responses"]["Error"];
         };
