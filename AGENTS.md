@@ -151,3 +151,11 @@ Use full words for local variables — avoid abbreviations except where noted be
 **Use `addition`, not `ingredient`**, for recipe line items (e.g. `RecipeAdditionHop`, `recipe_addition_hops`).
 
 In brewing, an *addition* captures a timed event — a hop addition at 60 minutes, a dry-hop addition at day 3 — not just a static ingredient list. The term encodes the temporal/process context that distinguishes a recipe's use of an ingredient from the ingredient itself in the library.
+
+## Rust guidelines
+
+When making Rust design decisions — API shape, error handling, naming, trait design, unsafe code, FFI, or library ergonomics — fetch and consult the Microsoft Pragmatic Rust Guidelines before proposing or implementing:
+
+**URL:** https://microsoft.github.io/rust-guidelines/agents/all.txt
+
+The document is formatted for agent consumption (structured IDs, `<why>` tags, runnable code examples). Fetch it on demand rather than loading it into every session.

@@ -1,5 +1,8 @@
 use crate::error::AppError;
-use crate::models::*;
+use crate::models::{
+    Batch, BatchSummary, CreateBatchInput, CreateGravityReadingInput, GravityReading, Recipe,
+    RecipeVersionSummary, SaveRecipeVersionInput, UpdateBatchInput,
+};
 use crate::repositories::batches::BatchRepository;
 use crate::repositories::recipe_version::RecipeVersionRepository;
 use crate::AppState;

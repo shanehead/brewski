@@ -1,5 +1,11 @@
 use crate::error::AppError;
-use crate::models::*;
+use crate::models::{
+    CreateFermentableAdditionInput, CreateHopAdditionInput, CreateMiscAdditionInput,
+    CreateWaterAdditionInput, CreateYeastAdditionInput, RecipeAdditionFermentable,
+    RecipeAdditionHop, RecipeAdditionMisc, RecipeAdditionWater, RecipeAdditionYeast,
+    UpdateFermentableAdditionInput, UpdateHopAdditionInput, UpdateMiscAdditionInput,
+    UpdateWaterAdditionInput, UpdateYeastAdditionInput,
+};
 use crate::repositories::fermentable::FermentableRepository;
 use crate::repositories::hop::HopRepository;
 use crate::repositories::misc::MiscRepository;

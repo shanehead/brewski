@@ -1,5 +1,6 @@
 use crate::entities;
 use crate::error::AppError;
+#[allow(clippy::wildcard_imports)]
 pub use crate::models_gen::*;
 
 impl TryFrom<entities::styles::Model> for Style {

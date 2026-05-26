@@ -1,5 +1,8 @@
 use crate::error::AppError;
-use crate::models::*;
+use crate::models::{
+    CalculatedWaterProfile, CreateWaterAdjustmentInput, Recipe, RecipeWaterAdjustment,
+    UpdateWaterAdjustmentInput,
+};
 use crate::repositories::water_chemistry::WaterChemistryRepository;
 use crate::AppState;
 use tauri::State;

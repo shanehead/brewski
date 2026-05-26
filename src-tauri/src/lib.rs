@@ -1,3 +1,5 @@
+#![warn(clippy::wildcard_imports)]
+
 pub mod brewing;
 mod commands;
 pub mod entities;
