@@ -5,6 +5,7 @@ pub mod import_export;
 pub mod ingredients;
 pub mod library;
 pub mod mash;
+pub mod recipe_image;
 pub mod recipes;
 pub mod settings;
 pub mod sync;

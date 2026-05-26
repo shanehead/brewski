@@ -674,6 +674,7 @@ mod tests {
             taste_rating: None,
             tertiary_age_days: None,
             tertiary_temp_c: None,
+            image_path: None,
         };
 
         let xml = build_recipe_beerxml(&recipe).unwrap();
@@ -735,6 +736,7 @@ mod tests {
             taste_rating: None,
             tertiary_age_days: None,
             tertiary_temp_c: None,
+            image_path: None,
         };
 
         let xml = build_recipe_beerxml(&recipe).unwrap();

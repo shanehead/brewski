@@ -60,6 +60,8 @@ pub struct Model {
     pub branch_parent_id: Option<String>,
     #[sea_orm(column_type = "Text")]
     pub source: String,
+    #[sea_orm(column_type = "Text", nullable)]
+    pub image_path: Option<String>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]

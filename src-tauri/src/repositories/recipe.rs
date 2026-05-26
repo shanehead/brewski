@@ -53,6 +53,7 @@ impl<'a> RecipeRepository<'a> {
                         .map_err(|e| AppError::Internal(format!("invalid source value: {e}")))?,
                     created_at: r.created_at as i64,
                     updated_at: r.updated_at as i64,
+                    image_path: r.image_path,
                 })
             })
             .collect()
@@ -81,6 +82,7 @@ impl<'a> RecipeRepository<'a> {
                         .map_err(|e| AppError::Internal(format!("invalid source value: {e}")))?,
                     created_at: r.created_at as i64,
                     updated_at: r.updated_at as i64,
+                    image_path: r.image_path,
                 })
             })
             .collect()
@@ -169,6 +171,7 @@ impl<'a> RecipeRepository<'a> {
             mash_water_id: recipe_row.mash_water_id,
             sparge_water_id: recipe_row.sparge_water_id,
             hopstand_temp_c: recipe_row.hopstand_temp_c,
+            image_path: recipe_row.image_path,
             mash,
         })
     }
@@ -452,6 +455,22 @@ impl<'a> RecipeRepository<'a> {
     pub async fn delete(&self, id: &str) -> Result<(), AppError> {
         recipes::Entity::delete_by_id(id).exec(self.db).await?;
         Ok(())
+    }
+
+    pub async fn set_image_path(
+        &self,
+        id: &str,
+        filename: Option<&str>,
+    ) -> Result<Recipe, AppError> {
+        use sea_orm::ActiveValue::Set;
+        let model = recipes::Entity::find_by_id(id)
+            .one(self.db)
+            .await?
+            .ok_or(AppError::NotFound)?;
+        let mut active: recipes::ActiveModel = model.into();
+        active.image_path = Set(filename.map(|s| s.to_owned()));
+        active.update(self.db).await?;
+        self.get(id).await
     }
 }
 

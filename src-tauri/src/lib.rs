@@ -67,6 +67,8 @@ pub fn run() {
             commands::recipes::update_recipe,
             commands::recipes::delete_recipe,
             commands::recipes::get_recipe_stats,
+            commands::recipe_image::upload_recipe_image,
+            commands::recipe_image::delete_recipe_image,
             commands::additions::create_recipe_fermentable,
             commands::additions::update_recipe_fermentable,
             commands::additions::delete_recipe_fermentable,

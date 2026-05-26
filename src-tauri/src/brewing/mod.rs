@@ -241,6 +241,7 @@ mod tests {
             mash_water_id: None,
             sparge_water_id: None,
             hopstand_temp_c: None,
+            image_path: None,
             mash: None,
         }
     }
