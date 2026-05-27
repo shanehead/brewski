@@ -1,13 +1,50 @@
 <!-- src/lib/components/StatsSidebar.svelte -->
 <script lang="ts">
   import type { RecipeStats } from "$lib/api";
+  import { convertGravity } from "$lib/api";
   import { settings } from "$lib/stores/settings";
   import { type Units, lToGal, volumeLabel } from "$lib/units";
   import { srmToHex } from "$lib/utils/srm";
+  import { formatGravity } from "$lib/gravity-display";
+  import { ipc } from "$lib/stores/error";
 
   let { stats }: { stats: RecipeStats | null } = $props();
 
   const units = $derived<Units>($settings.units === "imperial" ? "imperial" : "metric");
+  const gravityUnit = $derived($settings.gravity_unit ?? "sg");
+
+  let displayOg = $state("—");
+  let displayFg = $state("—");
+  let displayPreBoil = $state("—");
+
+  $effect(() => {
+    const unit = gravityUnit;
+    if (stats?.og != null) {
+      ipc(convertGravity(stats.og, "sg")).then(r => { if (r) displayOg = formatGravity(r, unit); });
+    } else {
+      displayOg = "—";
+    }
+  });
+
+  $effect(() => {
+    const unit = gravityUnit;
+    if (stats?.fg != null) {
+      ipc(convertGravity(stats.fg, "sg")).then(r => { if (r) displayFg = formatGravity(r, unit); });
+    } else {
+      displayFg = "—";
+    }
+  });
+
+  $effect(() => {
+    const unit = gravityUnit;
+    if (stats?.pre_boil_gravity != null) {
+      ipc(convertGravity(stats.pre_boil_gravity, "sg")).then(r => {
+        if (r) displayPreBoil = formatGravity(r, unit);
+      });
+    } else {
+      displayPreBoil = "—";
+    }
+  });
 
   function fmt(val: number | undefined | null, decimals = 3): string {
     if (val === undefined || val === null) return "—";
@@ -28,7 +65,7 @@
     <!-- OG -->
     <div class="rounded-lg p-2.5" style="background: var(--color-bg-elevated); border: 1px solid var(--color-border);">
       <p class="text-xs mb-0.5" style="color: var(--color-text-muted);">OG</p>
-      <p class="text-xl font-bold font-mono leading-none" style="color: var(--color-text-primary);">{fmt(stats.og, 3)}</p>
+      <p class="text-xl font-bold font-mono leading-none" style="color: var(--color-text-primary);">{displayOg}</p>
       <div class="mt-1.5 h-1 rounded-full" style="background: var(--color-border);">
         <div class="h-full rounded-full" style="width: {pct(stats.og, 1.000, 1.120)}%; background: var(--color-accent);"></div>
       </div>
@@ -37,7 +74,7 @@
     <!-- FG -->
     <div class="rounded-lg p-2.5" style="background: var(--color-bg-elevated); border: 1px solid var(--color-border);">
       <p class="text-xs mb-0.5" style="color: var(--color-text-muted);">FG</p>
-      <p class="text-xl font-bold font-mono leading-none" style="color: var(--color-text-primary);">{fmt(stats.fg, 3)}</p>
+      <p class="text-xl font-bold font-mono leading-none" style="color: var(--color-text-primary);">{displayFg}</p>
       <div class="mt-1.5 h-1 rounded-full" style="background: var(--color-border);">
         <div class="h-full rounded-full" style="width: {pct(stats.fg, 1.000, 1.030)}%; background: var(--color-accent);"></div>
       </div>
@@ -108,7 +145,7 @@
     <!-- Pre-boil gravity -->
     <div class="rounded-lg p-2.5" style="background: var(--color-bg-elevated); border: 1px solid var(--color-border);">
       <p class="text-xs mb-0.5" style="color: var(--color-text-muted);">Pre-boil G</p>
-      <p class="text-base font-bold font-mono leading-none" style="color: var(--color-text-primary);">{fmt(stats.pre_boil_gravity, 3)}</p>
+      <p class="text-base font-bold font-mono leading-none" style="color: var(--color-text-primary);">{displayPreBoil}</p>
     </div>
 
   {:else}
