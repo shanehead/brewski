@@ -15,6 +15,10 @@
   async function handleUnitsChange(e: Event) {
     await ipc(saveSetting("units", (e.target as HTMLSelectElement).value));
   }
+
+  async function handleGravityUnitChange(e: Event) {
+    await ipc(saveSetting("gravity_unit", (e.target as HTMLSelectElement).value));
+  }
 </script>
 
 <div class="flex-1 overflow-y-auto p-6" style="background: var(--color-bg-base);">
@@ -53,6 +57,16 @@
                 style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);">
           <option value="metric">Metric (L, kg, °C)</option>
           <option value="imperial">Imperial (gal, lb, °F)</option>
+        </select>
+      </div>
+      <div class="flex items-center justify-between">
+        <label for="select-gravity-unit" class="text-sm" style="color: var(--color-text-primary);">Gravity Unit</label>
+        <select id="select-gravity-unit" value={$settings.gravity_unit ?? "sg"} onchange={handleGravityUnitChange}
+                class="px-2 py-1.5 rounded text-sm"
+                style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);">
+          <option value="sg">SG (1.050)</option>
+          <option value="plato">Plato (°P)</option>
+          <option value="brix">Brix (°Bx)</option>
         </select>
       </div>
     </section>
