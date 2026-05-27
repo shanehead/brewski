@@ -14,11 +14,13 @@
   } from "$lib/api";
   import type { Recipe, RecipeStats, RecipeVersionSummary } from "$lib/api";
   import { ipc, lastError } from "$lib/stores/error";
+  import { refreshRecipeList } from "$lib/stores/recipes";
   import { save } from "@tauri-apps/plugin-dialog";
   import { appDataDir as getAppDataDir } from "@tauri-apps/api/path";
+  import { convertFileSrc } from "@tauri-apps/api/core";
+  import { srmToHex } from "$lib/utils/srm";
   import { open } from "@tauri-apps/plugin-dialog";
   import { uploadRecipeImage, deleteRecipeImage } from "$lib/api";
-  import RecipeHero from "$lib/components/RecipeHero.svelte";
   import RecipeList from "$lib/components/RecipeList.svelte";
   import StatsSidebar from "$lib/components/StatsSidebar.svelte";
   import OverviewTab from "$lib/components/tabs/OverviewTab.svelte";
@@ -51,6 +53,9 @@
   let showSavePopover = $state(false);
   let saveVersionName = $state("");
   let savingVersion = $state(false);
+
+  // Image popover state
+  let showImagePopover = $state(false);
 
   // Delete confirmation modal state
   let showDeleteModal = $state(false);
@@ -196,14 +201,23 @@
     });
     if (!path || typeof path !== "string") return;
     recipe = await ipc(uploadRecipeImage({ recipe_id: recipe.id, source_path: path })) ?? recipe;
+    refreshRecipeList();
   }
 
   async function handleImageRemove() {
     if (!recipe) return;
     recipe = await ipc(deleteRecipeImage({ recipe_id: recipe.id })) ?? recipe;
+    refreshRecipeList();
   }
 
   const displayRecipe = $derived(viewingRecipe ?? recipe);
+  const recipeImageSrc = $derived(
+    recipe?.image_path
+      ? convertFileSrc(`${appDataDir}/images/${recipe.image_path}`)
+      : null
+  );
+  const srmColor1 = $derived(srmToHex(stats?.srm ?? 4));
+  const srmColor2 = $derived(srmToHex(Math.min((stats?.srm ?? 4) + 12, 40)));
 </script>
 
 <RecipeList selectedId={id} />
@@ -222,6 +236,50 @@
       >
         ← Recipes
       </button>
+
+      <!-- Recipe image thumbnail + popover -->
+      <div class="relative flex-shrink-0">
+        <button
+          onclick={() => { showImagePopover = !showImagePopover; }}
+          aria-label="Photo options"
+          class="w-10 h-10 rounded overflow-hidden block"
+          style="border: 1px solid var(--color-border);"
+        >
+          {#if recipeImageSrc}
+            <img src={recipeImageSrc} alt="" class="w-full h-full object-cover" />
+          {:else}
+            <div class="w-full h-full" style="background: linear-gradient(135deg, {srmColor1}, {srmColor2});"></div>
+          {/if}
+        </button>
+        {#if showImagePopover}
+          <div
+            class="absolute left-0 top-full mt-1 rounded shadow-lg z-20 flex flex-col overflow-hidden"
+            style="background: var(--color-bg-elevated); border: 1px solid var(--color-border); min-width: 140px;"
+          >
+            <button
+              onclick={() => { showImagePopover = false; handleImageUpload(); }}
+              class="px-3 py-2 text-left text-sm hover:bg-[var(--color-bg-surface)] transition-colors"
+              style="color: var(--color-text-primary);"
+            >{recipe?.image_path ? "Change photo" : "Add photo"}</button>
+            {#if recipe?.image_path}
+              <button
+                onclick={() => { showImagePopover = false; handleImageRemove(); }}
+                class="px-3 py-2 text-left text-sm hover:bg-[var(--color-bg-surface)] transition-colors"
+                style="color: var(--color-text-danger, #e55);"
+              >Remove photo</button>
+            {/if}
+          </div>
+          <!-- Click-away backdrop -->
+          <button
+            class="fixed inset-0 z-10"
+            style="background: transparent;"
+            onclick={() => { showImagePopover = false; }}
+            aria-label="Close menu"
+            tabindex="-1"
+          ></button>
+        {/if}
+      </div>
+
       <input
         value={recipe.name}
         onblur={handleNameBlur}
@@ -294,16 +352,6 @@
         History ({versions.length})
       </button>
     </header>
-
-    {#if recipe}
-      <RecipeHero
-        recipe={{ ...recipe, srm: stats?.srm ?? null }}
-        {appDataDir}
-        height="120px"
-        onUploadClick={handleImageUpload}
-        onRemoveClick={handleImageRemove}
-      />
-    {/if}
 
     <!-- Read-only version banner -->
     {#if viewingVersion}

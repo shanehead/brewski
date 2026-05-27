@@ -280,9 +280,9 @@ export const deleteRecipeVersion = (id: string) =>
 
 // --- Recipe Images ---
 export const uploadRecipeImage = (input: { recipe_id: string; source_path: string }) =>
-  invoke<Recipe>("upload_recipe_image", { input });
+  invoke<Recipe>("upload_recipe_image", { recipeId: input.recipe_id, sourcePath: input.source_path });
 export const deleteRecipeImage = (input: { recipe_id: string }) =>
-  invoke<Recipe>("delete_recipe_image", { input });
+  invoke<Recipe>("delete_recipe_image", { recipeId: input.recipe_id });
 
 // --- Sync / Database location ---
 
