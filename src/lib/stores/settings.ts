@@ -1,8 +1,9 @@
 import { writable } from "svelte/store";
-import { getSettings, updateSetting } from "$lib/api";
+import { getSettings, updateSetting, type GravityUnit } from "$lib/api";
 
 export interface AppSettings {
   units?: "metric" | "imperial";
+  gravity_unit?: GravityUnit;
   theme?: string;
   default_equipment_profile_id?: string;
   last_route?: string;
