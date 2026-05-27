@@ -73,8 +73,14 @@ Progress bar width calculations in `StatsSidebar` continue to use raw SG values 
 - **Measurements grid:** For the three gravity fields (`actual_pre_boil_gravity`, `actual_og`, `actual_fg`), display values converted to preferred unit and accept input in preferred unit. On blur, convert back to SG before calling `onUpdate`.
 - `decimals: 3` for gravity fields becomes dynamic based on unit.
 
+### `src/lib/mobile/RecipeView.svelte`
+- Converts `stats.og` and `stats.fg` for display in the recipe stats list. Same `$effect` pattern as `StatsSidebar`.
+
+### `src/lib/mobile/BaselineRecipeView.svelte`
+- Same as `RecipeView.svelte` — OG and FG display in the stats list.
+
 ### `src/lib/mobile/BatchView.svelte`
-- Audit for any gravity display and apply the same conversion pattern used in desktop `BatchOverviewTab`.
+- Uses the shared `BatchGravityTab` and `BatchOverviewTab` components, so no direct changes needed. Mobile batch gravity is covered by those components.
 
 ## Out of Scope
 
