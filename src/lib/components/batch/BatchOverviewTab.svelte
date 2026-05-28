@@ -3,8 +3,10 @@
   import { goto } from "$app/navigation";
   import TabBar from "$lib/components/TabBar.svelte";
   import type { Batch, UpdateBatchInput, RecipeVersionSummary, Recipe } from "$lib/api";
-  import { listRecipeVersions, getRecipe } from "$lib/api";
+  import { listRecipeVersions, getRecipe, convertGravity } from "$lib/api";
   import { ipc } from "$lib/stores/error";
+  import { settings } from "$lib/stores/settings";
+  import { formatGravity, gravityStep } from "$lib/gravity-display";
   import BatchCarbonationSection from "$lib/components/batch/BatchCarbonationSection.svelte";
 
   let { batch, onUpdate }: { batch: Batch; onUpdate: (input: UpdateBatchInput) => void } = $props();
@@ -13,6 +15,37 @@
 
   let batchVersion = $state<RecipeVersionSummary | null>(null);
   let recipe = $state<Recipe | null>(null);
+
+  const gravityUnit = $derived($settings.gravity_unit ?? "sg");
+
+  let gravityDisplays = $state<Record<string, string>>({});
+
+  $effect(() => {
+    let cancelled = false;
+    const unit = gravityUnit;
+    const b = batch;
+    const gravityFields = [
+      "planned_og", "planned_fg", "planned_pre_boil_gravity",
+      "actual_og", "actual_fg", "actual_pre_boil_gravity",
+    ] as const;
+
+    const toConvert = gravityFields.filter(f => (b as Record<string, unknown>)[f] != null);
+
+    Promise.all(
+      toConvert.map(f =>
+        convertGravity((b as unknown as Record<string, number>)[f], "sg")
+          .then(r => [f, formatGravity(r, unit)] as const)
+      )
+    ).then(entries => {
+      if (cancelled) return;
+      const next: Record<string, string> = {};
+      for (const f of gravityFields) next[f] = "";
+      for (const [f, v] of entries) next[f] = v;
+      gravityDisplays = next;
+    });
+
+    return () => { cancelled = true; };
+  });
 
   onMount(async () => {
     const [versions, fetchedRecipe] = await Promise.all([
@@ -66,24 +99,24 @@
     const items: { label: string; value: string }[] = [];
     switch (batch.status) {
       case "planned":
-        if (og) items.push({ label: "OG", value: og.toFixed(3) });
-        if (fg) items.push({ label: "FG", value: fg.toFixed(3) });
+        if (og && gravityDisplays.planned_og) items.push({ label: "OG", value: gravityDisplays.planned_og });
+        if (fg && gravityDisplays.planned_fg) items.push({ label: "FG", value: gravityDisplays.planned_fg });
         if (bs) items.push({ label: "Batch", value: `${bs.toFixed(1)} L` });
         break;
       case "brewing":
-        if (pbg) items.push({ label: "Pre-boil", value: pbg.toFixed(3) });
-        if (og) items.push({ label: "OG", value: og.toFixed(3) });
+        if (pbg && gravityDisplays.planned_pre_boil_gravity) items.push({ label: "Pre-boil", value: gravityDisplays.planned_pre_boil_gravity });
+        if (og && gravityDisplays.planned_og) items.push({ label: "OG", value: gravityDisplays.planned_og });
         if (pbv) items.push({ label: "Post-boil", value: `${pbv.toFixed(1)} L` });
         break;
       case "fermenting":
-        if (actual_og) items.push({ label: "Actual OG", value: actual_og.toFixed(3) });
-        if (fg) items.push({ label: "Target FG", value: fg.toFixed(3) });
+        if (actual_og && gravityDisplays.actual_og) items.push({ label: "Actual OG", value: gravityDisplays.actual_og });
+        if (fg && gravityDisplays.planned_fg) items.push({ label: "Target FG", value: gravityDisplays.planned_fg });
         if (targetAbv) items.push({ label: "Target ABV", value: `${targetAbv}%` });
         break;
       case "conditioning":
       case "packaged":
-        if (actual_og) items.push({ label: "OG", value: actual_og.toFixed(3) });
-        if (actual_fg) items.push({ label: "FG", value: actual_fg.toFixed(3) });
+        if (actual_og && gravityDisplays.actual_og) items.push({ label: "OG", value: gravityDisplays.actual_og });
+        if (actual_fg && gravityDisplays.actual_fg) items.push({ label: "FG", value: gravityDisplays.actual_fg });
         if (actualAbv) items.push({ label: "ABV", value: `${actualAbv}%` });
         break;
     }
@@ -151,34 +184,53 @@
     <div class="text-xs mb-2" style="color: var(--color-text-secondary);">MEASUREMENTS</div>
     <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
       {#each [
-        { label: "Pre-Boil Gravity", field: "actual_pre_boil_gravity", value: batch.actual_pre_boil_gravity, decimals: 3 },
-        { label: "Original Gravity (OG)", field: "actual_og", value: batch.actual_og, decimals: 3 },
-        { label: "Final Gravity (FG)", field: "actual_fg", value: batch.actual_fg, decimals: 3 },
-        { label: "Pre-Boil Volume (L)", field: "actual_pre_boil_volume_l", value: batch.actual_pre_boil_volume_l },
-        { label: "Post-Boil Volume (L)", field: "actual_post_boil_volume_l", value: batch.actual_post_boil_volume_l },
-        { label: "Batch Size (L)", field: "actual_batch_size_l", value: batch.actual_batch_size_l },
+        { label: "Pre-Boil Gravity", field: "actual_pre_boil_gravity", isGravity: true },
+        { label: "Original Gravity (OG)", field: "actual_og", isGravity: true },
+        { label: "Final Gravity (FG)", field: "actual_fg", isGravity: true },
+        { label: "Pre-Boil Volume (L)", field: "actual_pre_boil_volume_l" },
+        { label: "Post-Boil Volume (L)", field: "actual_post_boil_volume_l" },
+        { label: "Batch Size (L)", field: "actual_batch_size_l" },
       ] as row}
+        {@const rawValue = (batch as unknown as Record<string, number | null>)[row.field]}
         {@const highlighted = highlightedFields.has(row.field)}
         <div
           class="p-3 rounded"
           style="background: var(--color-bg-elevated);
                  border: 1px solid {highlighted ? 'rgba(99,102,241,0.4)' : 'var(--color-border)'};
-                 opacity: {highlighted || row.value != null ? '1' : '0.55'};"
+                 opacity: {highlighted || rawValue != null ? '1' : '0.55'};"
         >
           <label for="batch-{row.field}" class="text-xs block mb-1" style="color: var(--color-text-secondary);">{row.label}</label>
-          <input
-            id="batch-{row.field}"
-            type="number" inputmode="decimal"
-            step="0.001"
-            value={row.value != null ? (row.decimals != null ? row.value.toFixed(row.decimals) : row.value) : ""}
-            onblur={(e) => {
-              const v = e.currentTarget.value;
-              onUpdate({ [row.field]: v ? parseFloat(v) : null } as UpdateBatchInput);
-            }}
-            placeholder="—"
-            class="w-full bg-transparent text-sm outline-none"
-            style="color: {highlighted ? 'var(--color-accent)' : 'var(--color-text-primary)'}; font-weight: {highlighted ? '600' : '400'};"
-          />
+          {#if row.isGravity}
+            <input
+              id="batch-{row.field}"
+              type="number" inputmode="decimal"
+              step={gravityStep(gravityUnit)}
+              value={gravityDisplays[row.field] ?? ""}
+              onblur={async (e) => {
+                const v = e.currentTarget.value;
+                if (!v) { onUpdate({ [row.field]: null } as UpdateBatchInput); return; }
+                const converted = await ipc(convertGravity(parseFloat(v), gravityUnit));
+                if (converted) onUpdate({ [row.field]: converted.sg } as UpdateBatchInput);
+              }}
+              placeholder="—"
+              class="w-full bg-transparent text-sm outline-none"
+              style="color: {highlighted ? 'var(--color-accent)' : 'var(--color-text-primary)'}; font-weight: {highlighted ? '600' : '400'};"
+            />
+          {:else}
+            <input
+              id="batch-{row.field}"
+              type="number" inputmode="decimal"
+              step="0.1"
+              value={rawValue != null ? rawValue.toFixed(1) : ""}
+              onblur={(e) => {
+                const v = e.currentTarget.value;
+                onUpdate({ [row.field]: v ? parseFloat(v) : null } as UpdateBatchInput);
+              }}
+              placeholder="—"
+              class="w-full bg-transparent text-sm outline-none"
+              style="color: {highlighted ? 'var(--color-accent)' : 'var(--color-text-primary)'}; font-weight: {highlighted ? '600' : '400'};"
+            />
+          {/if}
         </div>
       {/each}
     </div>
