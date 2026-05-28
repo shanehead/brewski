@@ -101,6 +101,8 @@ export const createRecipe = (input: CreateRecipeInput) => invoke<Recipe>("create
 export const updateRecipe = (id: string, input: UpdateRecipeInput) =>
   invoke<Recipe>("update_recipe", { id, input });
 export const deleteRecipe = (id: string) => invoke<void>("delete_recipe", { id });
+export const scaleRecipe = (recipeId: string, newBatchSizeL: number) =>
+  invoke<Recipe>("scale_recipe", { recipeId, newBatchSizeL });
 export const getRecipeStats = (recipeId: string) =>
   invoke<RecipeStats>("get_recipe_stats", { recipeId });
 
