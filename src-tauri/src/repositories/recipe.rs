@@ -5,9 +5,10 @@ use sea_orm::{
 use crate::entities::{recipes, styles};
 use crate::error::AppError;
 use crate::models::{
-    CreateFermentableAdditionInput, CreateHopAdditionInput, CreateMiscAdditionInput,
-    CreateRecipeInput, CreateWaterAdditionInput, CreateWaterAdjustmentInput,
-    CreateYeastAdditionInput, Recipe, RecipeSummary, UpdateRecipeInput,
+    CreateFermentableAdditionInput, CreateHopAdditionInput, CreateMashStepInput,
+    CreateMiscAdditionInput, CreateRecipeInput, CreateWaterAdditionInput,
+    CreateWaterAdjustmentInput, CreateYeastAdditionInput, Recipe, RecipeSummary, UpdateMashInput,
+    UpdateRecipeInput,
 };
 
 use super::equipment::EquipmentRepository;
@@ -345,6 +346,203 @@ impl<'a> RecipeRepository<'a> {
         }
 
         Ok(())
+    }
+
+    pub async fn scale(&self, recipe_id: &str, new_batch_size_l: f64) -> Result<Recipe, AppError> {
+        let src = self.get(recipe_id).await?;
+        let ratio = new_batch_size_l / src.batch_size_l;
+        let id = new_id();
+        let now = now_secs() as i32;
+
+        recipes::ActiveModel {
+            id: Set(id.clone()),
+            name: Set(format!("{} (scaled)", src.name)),
+            r#type: Set(src.type_),
+            brewer: Set(src.brewer),
+            asst_brewer: Set(src.asst_brewer),
+            batch_size_l: Set(new_batch_size_l),
+            boil_size_l: Set(src.boil_size_l * ratio),
+            boil_time_min: Set(src.boil_time_min),
+            efficiency_pct: Set(src.efficiency_pct),
+            style_id: Set(src.style_id),
+            equipment_profile_id: Set(src.equipment_profile_id),
+            notes: Set(src.notes),
+            taste_notes: Set(src.taste_notes),
+            taste_rating: Set(src.taste_rating),
+            fermentation_stages: Set(Some(src.fermentation_stages as i32)),
+            primary_age_days: Set(src.primary_age_days),
+            primary_temp_c: Set(src.primary_temp_c),
+            secondary_age_days: Set(src.secondary_age_days),
+            secondary_temp_c: Set(src.secondary_temp_c),
+            tertiary_age_days: Set(src.tertiary_age_days),
+            tertiary_temp_c: Set(src.tertiary_temp_c),
+            age_days: Set(src.age_days),
+            age_temp_c: Set(src.age_temp_c),
+            carbonation_vols: Set(src.carbonation_vols),
+            forced_carbonation: Set(Some(if src.forced_carbonation { 1 } else { 0 })),
+            priming_sugar_name: Set(src.priming_sugar_name),
+            carbonation_temp_c: Set(src.carbonation_temp_c),
+            priming_sugar_equiv: Set(src.priming_sugar_equiv),
+            keg_priming_factor: Set(src.keg_priming_factor),
+            date: Set(src.date),
+            hopstand_temp_c: Set(src.hopstand_temp_c),
+            mash_water_id: Set(src.mash_water_id),
+            sparge_water_id: Set(src.sparge_water_id),
+            created_at: Set(now),
+            updated_at: Set(now),
+            ..Default::default()
+        }
+        .insert(self.db)
+        .await?;
+
+        let fermentable_repo = FermentableRepository::new(self.db);
+        for f in fermentable_repo.list(recipe_id).await? {
+            fermentable_repo
+                .create(
+                    &id,
+                    CreateFermentableAdditionInput {
+                        fermentable_id: f.fermentable_id,
+                        name: f.name,
+                        type_: f.type_,
+                        yield_pct: f.yield_pct,
+                        color_lovibond: f.color_lovibond,
+                        amount_kg: f.amount_kg * ratio,
+                        add_after_boil: Some(f.add_after_boil),
+                    },
+                )
+                .await?;
+        }
+
+        let hop_repo = HopRepository::new(self.db);
+        for h in hop_repo.list(recipe_id).await? {
+            hop_repo
+                .create(
+                    &id,
+                    CreateHopAdditionInput {
+                        hop_id: h.hop_id,
+                        name: h.name,
+                        alpha_pct: h.alpha_pct,
+                        form: Some(h.form),
+                        amount_kg: h.amount_kg * ratio,
+                        use_: h.use_,
+                        time_min: h.time_min,
+                        hopstand_temp_c: h.hopstand_temp_c,
+                    },
+                )
+                .await?;
+        }
+
+        let yeast_repo = YeastRepository::new(self.db);
+        for y in yeast_repo.list(recipe_id).await? {
+            yeast_repo
+                .create(
+                    &id,
+                    CreateYeastAdditionInput {
+                        yeast_id: y.yeast_id,
+                        name: y.name,
+                        type_: y.type_,
+                        form: y.form,
+                        laboratory: y.laboratory,
+                        product_id: y.product_id,
+                        attenuation_pct: y.attenuation_pct,
+                        amount: y.amount.map(|a| a * ratio),
+                        amount_is_weight: Some(y.amount_is_weight),
+                        add_to_secondary: Some(y.add_to_secondary),
+                        times_cultured: Some(y.times_cultured),
+                    },
+                )
+                .await?;
+        }
+
+        let misc_repo = MiscRepository::new(self.db);
+        for m in misc_repo.list(recipe_id).await? {
+            misc_repo
+                .create(
+                    &id,
+                    CreateMiscAdditionInput {
+                        misc_id: m.misc_id,
+                        name: m.name,
+                        type_: m.type_,
+                        use_: m.use_,
+                        amount: m.amount * ratio,
+                        amount_is_weight: Some(m.amount_is_weight),
+                        time_min: m.time_min,
+                    },
+                )
+                .await?;
+        }
+
+        let water_repo = WaterRepository::new(self.db);
+        for w in water_repo.list(recipe_id).await? {
+            water_repo
+                .create(
+                    &id,
+                    CreateWaterAdditionInput {
+                        water_id: w.water_id,
+                        name: w.name,
+                        amount_l: w.amount_l * ratio,
+                    },
+                )
+                .await?;
+        }
+
+        let water_chem_repo = WaterChemistryRepository::new(self.db);
+        for a in water_chem_repo.list_adjustments(recipe_id).await? {
+            water_chem_repo
+                .create_water_adjustment(
+                    &id,
+                    CreateWaterAdjustmentInput {
+                        addition: a
+                            .addition
+                            .to_string()
+                            .parse()
+                            .map_err(|e| AppError::Internal(format!("{}", e)))?,
+                        target: a
+                            .target
+                            .to_string()
+                            .parse()
+                            .map_err(|e| AppError::Internal(format!("{}", e)))?,
+                        amount: a.amount * ratio,
+                    },
+                )
+                .await?;
+        }
+
+        if let Some(mash) = src.mash {
+            let mash_repo = MashRepository::new(self.db);
+            let new_mash = mash_repo
+                .upsert_for_recipe(
+                    &id,
+                    UpdateMashInput {
+                        name: Some(mash.name),
+                        grain_temp_c: Some(mash.grain_temp_c),
+                        tun_temp_c: mash.tun_temp_c,
+                        sparge_temp_c: mash.sparge_temp_c,
+                        ph: mash.ph,
+                        ratio_l_per_kg: mash.ratio_l_per_kg,
+                        notes: mash.notes,
+                    },
+                )
+                .await?;
+            for step in mash.steps {
+                mash_repo
+                    .create_step(
+                        &new_mash.id,
+                        CreateMashStepInput {
+                            name: step.name,
+                            type_: Some(step.type_),
+                            step_temp_c: step.step_temp_c,
+                            step_time_min: step.step_time_min,
+                            infuse_amount_l: step.infuse_amount_l.map(|v| v * ratio),
+                            ramp_time_min: step.ramp_time_min,
+                            end_temp_c: step.end_temp_c,
+                        },
+                    )
+                    .await?;
+            }
+        }
+
+        self.get(&id).await
     }
 
     pub async fn update(&self, id: &str, input: UpdateRecipeInput) -> Result<Recipe, AppError> {
@@ -733,5 +931,141 @@ mod tests {
         assert!(baselines.iter().any(|r| r.name == "Seeded Recipe"));
         // The user recipe must not appear
         assert!(!baselines.iter().any(|r| r.name == "Test Recipe"));
+    }
+
+    #[tokio::test]
+    async fn test_scale_creates_new_recipe() {
+        let db = setup_test_db().await;
+        let repo = RecipeRepository::new(&db);
+        let original = repo
+            .create(CreateRecipeInput {
+                name: "My IPA".into(),
+                batch_size_l: Some(23.0),
+                boil_size_l: Some(27.0),
+                ..Default::default()
+            })
+            .await
+            .unwrap();
+
+        let scaled = repo.scale(&original.id, 46.0).await.unwrap();
+
+        assert_ne!(scaled.id, original.id);
+        assert_eq!(scaled.name, "My IPA (scaled)");
+        assert_eq!(scaled.batch_size_l, 46.0);
+        assert!((scaled.boil_size_l - 54.0).abs() < 0.001);
+        // original unchanged
+        let still_original = repo.get(&original.id).await.unwrap();
+        assert_eq!(still_original.batch_size_l, 23.0);
+    }
+
+    #[tokio::test]
+    async fn test_scale_ingredients() {
+        let db = setup_test_db().await;
+        let repo = RecipeRepository::new(&db);
+        let original = repo
+            .create(CreateRecipeInput {
+                name: "My IPA".into(),
+                batch_size_l: Some(23.0),
+                boil_size_l: Some(27.0),
+                ..Default::default()
+            })
+            .await
+            .unwrap();
+
+        FermentableRepository::new(&db)
+            .create(
+                &original.id,
+                CreateFermentableAdditionInput {
+                    fermentable_id: None,
+                    name: "Pale Malt".into(),
+                    type_: "grain".into(),
+                    yield_pct: 78.0,
+                    color_lovibond: 1.8,
+                    amount_kg: 4.5,
+                    add_after_boil: None,
+                },
+            )
+            .await
+            .unwrap();
+
+        HopRepository::new(&db)
+            .create(
+                &original.id,
+                CreateHopAdditionInput {
+                    hop_id: None,
+                    name: "Cascade".into(),
+                    alpha_pct: 5.5,
+                    form: None,
+                    amount_kg: 0.05,
+                    use_: "Boil".into(),
+                    time_min: 60.0,
+                    hopstand_temp_c: None,
+                },
+            )
+            .await
+            .unwrap();
+
+        let scaled = repo.scale(&original.id, 46.0).await.unwrap();
+
+        assert_eq!(scaled.fermentables.len(), 1);
+        assert!((scaled.fermentables[0].amount_kg - 9.0).abs() < 0.001);
+        assert_eq!(scaled.hops.len(), 1);
+        assert!((scaled.hops[0].amount_kg - 0.1).abs() < 0.0001);
+    }
+
+    #[tokio::test]
+    async fn test_scale_mash_steps() {
+        use crate::models::{CreateMashStepInput, UpdateMashInput};
+        use crate::repositories::mash::MashRepository;
+
+        let db = setup_test_db().await;
+        let repo = RecipeRepository::new(&db);
+        let original = repo
+            .create(CreateRecipeInput {
+                name: "My IPA".into(),
+                batch_size_l: Some(23.0),
+                boil_size_l: Some(27.0),
+                ..Default::default()
+            })
+            .await
+            .unwrap();
+
+        let mash_repo = MashRepository::new(&db);
+        let mash = mash_repo
+            .upsert_for_recipe(
+                &original.id,
+                UpdateMashInput {
+                    name: Some("Single Infusion".into()),
+                    grain_temp_c: Some(20.0),
+                    ..Default::default()
+                },
+            )
+            .await
+            .unwrap();
+
+        mash_repo
+            .create_step(
+                &mash.id,
+                CreateMashStepInput {
+                    name: "Mash".into(),
+                    type_: Some("Infusion".into()),
+                    step_temp_c: 67.0,
+                    step_time_min: 60,
+                    infuse_amount_l: Some(15.0),
+                    ramp_time_min: None,
+                    end_temp_c: None,
+                },
+            )
+            .await
+            .unwrap();
+
+        let scaled = repo.scale(&original.id, 46.0).await.unwrap();
+
+        let scaled_mash = scaled.mash.expect("scaled recipe should have mash");
+        assert_eq!(scaled_mash.steps.len(), 1);
+        let infuse = scaled_mash.steps[0]
+            .infuse_amount_l
+            .expect("infuse should be set");
+        assert!((infuse - 30.0).abs() < 0.001);
     }
 }

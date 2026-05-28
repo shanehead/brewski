@@ -59,3 +59,14 @@ pub async fn get_recipe_stats(
     let recipe = RecipeRepository::new(&state.db).get(&recipe_id).await?;
     Ok(brewing::calculate_stats(&recipe))
 }
+
+#[tauri::command]
+pub async fn scale_recipe(
+    state: State<'_, AppState>,
+    recipe_id: String,
+    new_batch_size_l: f64,
+) -> Result<Recipe, AppError> {
+    RecipeRepository::new(&state.db)
+        .scale(&recipe_id, new_batch_size_l)
+        .await
+}
