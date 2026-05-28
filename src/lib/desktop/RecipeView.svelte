@@ -33,6 +33,7 @@
   import TabBar from "$lib/components/TabBar.svelte";
   import VersionHistoryPanel from "$lib/components/VersionHistoryPanel.svelte";
   import ConfirmModal from "$lib/components/ConfirmModal.svelte";
+  import ScaleRecipeModal from "$lib/components/ScaleRecipeModal.svelte";
   import type { BrewingIconName } from "$lib/icons";
 
   let { id }: { id: string } = $props();
@@ -64,6 +65,9 @@
   // Branch confirmation modal state
   let showBranchModal = $state(false);
   let branchCandidate = $state<RecipeVersionSummary | null>(null);
+
+  // Scale recipe modal state
+  let showScaleModal = $state(false);
 
   const TABS: { key: "overview" | "ingredients" | "mash" | "water" | "fermentation" | "notes" | "batches"; label: string; icon: BrewingIconName }[] = [
     { key: "overview", label: "Overview", icon: "overview" },
@@ -325,6 +329,15 @@
         {/if}
       </div>
 
+      <!-- Scale Recipe button -->
+      <button
+        onclick={() => { showScaleModal = true; }}
+        class="text-xs px-2 py-1 rounded"
+        style="color: var(--color-text-secondary); background: var(--color-bg-elevated); border: 1px solid var(--color-border);"
+      >
+        Scale Recipe
+      </button>
+
       <!-- Export BeerXML button -->
       <button
         onclick={handleExport}
@@ -435,6 +448,13 @@
         confirmLabel="Branch from here"
         onconfirm={confirmBranch}
         oncancel={cancelBranch}
+      />
+    {/if}
+    {#if showScaleModal && recipe}
+      <ScaleRecipeModal
+        recipeId={recipe.id}
+        currentBatchSizeL={recipe.batch_size_l}
+        onClose={() => { showScaleModal = false; }}
       />
     {/if}
 
