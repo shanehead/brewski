@@ -29,6 +29,17 @@
       "actual_og", "actual_fg", "actual_pre_boil_gravity",
     ] as const;
 
+    // Synchronous seed: show raw SG values immediately so the banner isn't blank
+    const seed: Record<string, string> = {};
+    for (const f of gravityFields) {
+      const v = (b as Record<string, unknown>)[f];
+      seed[f] = v != null ? (v as number).toFixed(3) : "";
+    }
+    gravityDisplays = seed;
+
+    // If unit is SG, the seed is already correct — skip IPC
+    if (unit === "sg") return () => { cancelled = true; };
+
     const toConvert = gravityFields.filter(f => (b as Record<string, unknown>)[f] != null);
 
     Promise.all(
@@ -38,10 +49,11 @@
       )
     ).then(entries => {
       if (cancelled) return;
-      const next: Record<string, string> = {};
-      for (const f of gravityFields) next[f] = "";
+      const next: Record<string, string> = { ...seed };
       for (const [f, v] of entries) next[f] = v;
       gravityDisplays = next;
+    }).catch(() => {
+      // IPC failed — seed values remain, which is better than blank
     });
 
     return () => { cancelled = true; };
