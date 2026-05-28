@@ -350,6 +350,14 @@ impl<'a> RecipeRepository<'a> {
 
     pub async fn scale(&self, recipe_id: &str, new_batch_size_l: f64) -> Result<Recipe, AppError> {
         let src = self.get(recipe_id).await?;
+        if new_batch_size_l <= 0.0 {
+            return Err(AppError::Internal(
+                "target batch size must be positive".into(),
+            ));
+        }
+        if src.batch_size_l == 0.0 {
+            return Err(AppError::Internal("source batch_size_l is zero".into()));
+        }
         let ratio = new_batch_size_l / src.batch_size_l;
         let id = new_id();
         let now = now_secs() as i32;
@@ -1067,5 +1075,25 @@ mod tests {
             .infuse_amount_l
             .expect("infuse should be set");
         assert!((infuse - 30.0).abs() < 0.001);
+    }
+
+    #[tokio::test]
+    async fn test_scale_rejects_zero_batch_size() {
+        let db = setup_test_db().await;
+        let repo = RecipeRepository::new(&db);
+        let original = repo
+            .create(CreateRecipeInput {
+                name: "My IPA".into(),
+                batch_size_l: Some(23.0),
+                ..Default::default()
+            })
+            .await
+            .unwrap();
+
+        let result = repo.scale(&original.id, 0.0).await;
+        assert!(result.is_err());
+
+        let result2 = repo.scale(&original.id, -5.0).await;
+        assert!(result2.is_err());
     }
 }
