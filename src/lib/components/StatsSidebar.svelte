@@ -19,30 +19,26 @@
 
   $effect(() => {
     const unit = gravityUnit;
-    if (stats?.og != null) {
-      ipc(convertGravity(stats.og, "sg")).then(r => { if (r) displayOg = formatGravity(r, unit); });
-    } else {
-      displayOg = "—";
-    }
-  });
+    const ogVal = stats?.og ?? null;
+    const fgVal = stats?.fg ?? null;
+    const preBoilVal = stats?.pre_boil_gravity ?? null;
 
-  $effect(() => {
-    const unit = gravityUnit;
-    if (stats?.fg != null) {
-      ipc(convertGravity(stats.fg, "sg")).then(r => { if (r) displayFg = formatGravity(r, unit); });
-    } else {
-      displayFg = "—";
-    }
-  });
+    if (ogVal == null) displayOg = "—";
+    if (fgVal == null) displayFg = "—";
+    if (preBoilVal == null) displayPreBoil = "—";
 
-  $effect(() => {
-    const unit = gravityUnit;
-    if (stats?.pre_boil_gravity != null) {
-      ipc(convertGravity(stats.pre_boil_gravity, "sg")).then(r => {
-        if (r) displayPreBoil = formatGravity(r, unit);
+    const toConvert: Array<{ val: number; set: (s: string) => void }> = [];
+    if (ogVal != null) toConvert.push({ val: ogVal, set: s => { displayOg = s; } });
+    if (fgVal != null) toConvert.push({ val: fgVal, set: s => { displayFg = s; } });
+    if (preBoilVal != null) toConvert.push({ val: preBoilVal, set: s => { displayPreBoil = s; } });
+
+    for (const { val, set } of toConvert) {
+      const capturedVal = val;
+      ipc(convertGravity(capturedVal, "sg")).then(r => {
+        if (r && gravityUnit === unit && stats?.og === ogVal && stats?.fg === fgVal && stats?.pre_boil_gravity === preBoilVal) {
+          set(formatGravity(r, unit));
+        }
       });
-    } else {
-      displayPreBoil = "—";
     }
   });
 
