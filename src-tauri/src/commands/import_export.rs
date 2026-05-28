@@ -3,6 +3,7 @@ use quick_xml::reader::Reader;
 use quick_xml::Writer;
 use tauri::State;
 
+use crate::error::AppError;
 use crate::models::{
     CreateFermentableAdditionInput, CreateHopAdditionInput, CreateMiscAdditionInput,
     CreateRecipeInput, CreateYeastAdditionInput, Recipe, RecipeSummary,
@@ -13,6 +14,14 @@ use crate::repositories::misc::MiscRepository;
 use crate::repositories::recipe::RecipeRepository;
 use crate::repositories::yeast::YeastRepository;
 use crate::AppState;
+
+fn bool_str(b: bool) -> &'static str {
+    if b {
+        "TRUE"
+    } else {
+        "FALSE"
+    }
+}
 
 fn build_recipe_beerxml(recipe: &Recipe) -> Result<String, quick_xml::Error> {
     let mut writer = Writer::new_with_indent(Vec::new(), b' ', 2);
@@ -85,6 +94,9 @@ fn build_recipe_beerxml(recipe: &Recipe) -> Result<String, quick_xml::Error> {
                                         w.create_element("COLOR").write_text_content(
                                             BytesText::new(&format!("{:.1}", f.color_lovibond)),
                                         )?;
+                                        w.create_element("ADD_AFTER_BOIL").write_text_content(
+                                            BytesText::new(bool_str(f.add_after_boil)),
+                                        )?;
                                         Ok(())
                                     },
                                 )?;
@@ -136,6 +148,52 @@ fn build_recipe_beerxml(recipe: &Recipe) -> Result<String, quick_xml::Error> {
                                                 y.amount.unwrap_or(0.0)
                                             )),
                                         )?;
+                                        w.create_element("AMOUNT_IS_WEIGHT").write_text_content(
+                                            BytesText::new(bool_str(y.amount_is_weight)),
+                                        )?;
+                                        if let Some(lab) = &y.laboratory {
+                                            w.create_element("LABORATORY")
+                                                .write_text_content(BytesText::new(lab))?;
+                                        }
+                                        if let Some(pid) = &y.product_id {
+                                            w.create_element("PRODUCT_ID")
+                                                .write_text_content(BytesText::new(pid))?;
+                                        }
+                                        if let Some(att) = y.attenuation_pct {
+                                            w.create_element("ATTENUATION").write_text_content(
+                                                BytesText::new(&format!("{:.1}", att)),
+                                            )?;
+                                        }
+                                        w.create_element("ADD_TO_SECONDARY").write_text_content(
+                                            BytesText::new(bool_str(y.add_to_secondary)),
+                                        )?;
+                                        Ok(())
+                                    },
+                                )?;
+                            }
+                            Ok(())
+                        })?;
+
+                    w.create_element("MISCS")
+                        .write_inner_content(|w| -> Result<(), E> {
+                            for m in &recipe.miscs {
+                                w.create_element("MISC").write_inner_content(
+                                    |w| -> Result<(), E> {
+                                        w.create_element("NAME")
+                                            .write_text_content(BytesText::new(&m.name))?;
+                                        w.create_element("TYPE")
+                                            .write_text_content(BytesText::new(&m.type_))?;
+                                        w.create_element("USE")
+                                            .write_text_content(BytesText::new(&m.use_))?;
+                                        w.create_element("AMOUNT").write_text_content(
+                                            BytesText::new(&format!("{:.4}", m.amount)),
+                                        )?;
+                                        w.create_element("AMOUNT_IS_WEIGHT").write_text_content(
+                                            BytesText::new(bool_str(m.amount_is_weight)),
+                                        )?;
+                                        w.create_element("TIME").write_text_content(
+                                            BytesText::new(&format!("{:.0}", m.time_min)),
+                                        )?;
                                         Ok(())
                                     },
                                 )?;
@@ -155,12 +213,9 @@ fn build_recipe_beerxml(recipe: &Recipe) -> Result<String, quick_xml::Error> {
 pub async fn get_recipe_beerxml(
     state: State<'_, AppState>,
     recipe_id: String,
-) -> Result<String, String> {
-    let recipe = RecipeRepository::new(&state.db)
-        .get(&recipe_id)
-        .await
-        .map_err(|e| e.to_string())?;
-    build_recipe_beerxml(&recipe).map_err(|e| e.to_string())
+) -> Result<String, AppError> {
+    let recipe = RecipeRepository::new(&state.db).get(&recipe_id).await?;
+    build_recipe_beerxml(&recipe).map_err(|e| AppError::Internal(e.to_string()))
 }
 
 #[tauri::command]
@@ -168,13 +223,10 @@ pub async fn write_recipe_beerxml(
     state: State<'_, AppState>,
     recipe_id: String,
     path: String,
-) -> Result<(), String> {
-    let recipe = RecipeRepository::new(&state.db)
-        .get(&recipe_id)
-        .await
-        .map_err(|e| e.to_string())?;
-    let xml = build_recipe_beerxml(&recipe).map_err(|e| e.to_string())?;
-    std::fs::write(&path, xml).map_err(|e| e.to_string())
+) -> Result<(), AppError> {
+    let recipe = RecipeRepository::new(&state.db).get(&recipe_id).await?;
+    let xml = build_recipe_beerxml(&recipe).map_err(|e| AppError::Internal(e.to_string()))?;
+    std::fs::write(&path, xml).map_err(|e| AppError::Internal(e.to_string()))
 }
 
 // Parsed representation of a single BeerXML <RECIPE> block.
@@ -461,10 +513,12 @@ fn skip_element(reader: &mut Reader<&[u8]>, tag_name: &[u8]) -> Result<(), Strin
 pub async fn create_recipes_from_beerxml(
     state: State<'_, AppState>,
     xml: String,
-) -> Result<Vec<RecipeSummary>, String> {
-    let parsed = parse_beerxml(&xml)?;
+) -> Result<Vec<RecipeSummary>, AppError> {
+    let parsed = parse_beerxml(&xml).map_err(AppError::Conversion)?;
     if parsed.is_empty() {
-        return Err("No <RECIPE> elements found in XML".into());
+        return Err(AppError::Conversion(
+            "No <RECIPE> elements found in XML".into(),
+        ));
     }
 
     let recipe_repo = RecipeRepository::new(&state.db);
@@ -473,7 +527,7 @@ pub async fn create_recipes_from_beerxml(
     let yeast_repo = YeastRepository::new(&state.db);
     let misc_repo = MiscRepository::new(&state.db);
 
-    let mut imported_ids = Vec::new();
+    let mut summaries = Vec::new();
 
     for p in parsed {
         let recipe = recipe_repo
@@ -485,42 +539,25 @@ pub async fn create_recipes_from_beerxml(
                 boil_time_min: Some(p.boil_time_min),
                 ..Default::default()
             })
-            .await
-            .map_err(|e| e.to_string())?;
+            .await?;
 
         for f in p.fermentables {
-            fermentable_repo
-                .create(&recipe.id, f)
-                .await
-                .map_err(|e| e.to_string())?;
+            fermentable_repo.create(&recipe.id, f).await?;
         }
         for h in p.hops {
-            hop_repo
-                .create(&recipe.id, h)
-                .await
-                .map_err(|e| e.to_string())?;
+            hop_repo.create(&recipe.id, h).await?;
         }
         for y in p.yeasts {
-            yeast_repo
-                .create(&recipe.id, y)
-                .await
-                .map_err(|e| e.to_string())?;
+            yeast_repo.create(&recipe.id, y).await?;
         }
         for m in p.miscs {
-            misc_repo
-                .create(&recipe.id, m)
-                .await
-                .map_err(|e| e.to_string())?;
+            misc_repo.create(&recipe.id, m).await?;
         }
 
-        imported_ids.push(recipe.id);
+        summaries.push(RecipeSummary::try_from(recipe)?);
     }
 
-    let all = recipe_repo.list().await.map_err(|e| e.to_string())?;
-    Ok(all
-        .into_iter()
-        .filter(|r| imported_ids.contains(&r.id))
-        .collect())
+    Ok(summaries)
 }
 
 #[cfg(test)]
@@ -746,5 +783,127 @@ mod tests {
         assert!(xml.contains("<BOIL_TIME>60</BOIL_TIME>"));
         assert!(xml.contains("<BREWER>Test Brewer</BREWER>"));
         assert!(xml.contains("<EFFICIENCY>75.0</EFFICIENCY>"));
+    }
+
+    #[test]
+    fn test_export_import_round_trip_preserves_all_parsed_fields() {
+        use crate::models::{
+            Recipe, RecipeAdditionFermentable, RecipeAdditionMisc, RecipeAdditionYeast,
+            RecipeSource,
+        };
+
+        let recipe = Recipe {
+            id: "r1".to_string(),
+            name: "Round Trip Ale".to_string(),
+            type_: "all_grain".to_string(),
+            batch_size_l: 23.0,
+            boil_size_l: 27.0,
+            boil_time_min: 60.0,
+            brewer: Some("Tester".to_string()),
+            efficiency_pct: Some(72.0),
+            source: RecipeSource::User,
+            fermentation_stages: 1,
+            forced_carbonation: false,
+            created_at: 0,
+            updated_at: 0,
+            fermentables: vec![RecipeAdditionFermentable {
+                add_after_boil: true,
+                addition_order: 0,
+                amount_kg: 4.5,
+                color_lovibond: 1.8,
+                fermentable_id: None,
+                id: "f1".to_string(),
+                name: "Pale Malt".to_string(),
+                recipe_id: "r1".to_string(),
+                type_: "grain".to_string(),
+                yield_pct: 78.0,
+            }],
+            hops: vec![],
+            yeasts: vec![RecipeAdditionYeast {
+                add_to_secondary: false,
+                amount: Some(0.011),
+                amount_is_weight: true,
+                attenuation_pct: Some(77.0),
+                form: "dry".to_string(),
+                id: "y1".to_string(),
+                laboratory: Some("Fermentis".to_string()),
+                name: "US-05".to_string(),
+                product_id: Some("US-05".to_string()),
+                recipe_id: "r1".to_string(),
+                times_cultured: 0,
+                type_: "ale".to_string(),
+                yeast_id: None,
+            }],
+            miscs: vec![RecipeAdditionMisc {
+                addition_order: 0,
+                amount: 0.005,
+                amount_is_weight: true,
+                id: "m1".to_string(),
+                misc_id: None,
+                name: "Irish Moss".to_string(),
+                recipe_id: "r1".to_string(),
+                time_min: 15.0,
+                type_: "fining".to_string(),
+                use_: "boil".to_string(),
+            }],
+            waters: vec![],
+            water_adjustments: vec![],
+            age_days: None,
+            age_temp_c: None,
+            asst_brewer: None,
+            carbonation_temp_c: None,
+            carbonation_vols: None,
+            date: None,
+            equipment_profile: None,
+            equipment_profile_id: None,
+            fg: None,
+            hopstand_temp_c: None,
+            keg_priming_factor: None,
+            mash: None,
+            mash_water_id: None,
+            notes: None,
+            og: None,
+            primary_age_days: None,
+            primary_temp_c: None,
+            priming_sugar_equiv: None,
+            priming_sugar_name: None,
+            secondary_age_days: None,
+            secondary_temp_c: None,
+            sparge_water_id: None,
+            style: None,
+            style_id: None,
+            taste_notes: None,
+            taste_rating: None,
+            tertiary_age_days: None,
+            tertiary_temp_c: None,
+            image_path: None,
+        };
+
+        let xml = build_recipe_beerxml(&recipe).unwrap();
+        let parsed = parse_beerxml(&xml).unwrap();
+        assert_eq!(parsed.len(), 1);
+        let r = &parsed[0];
+
+        // Fermentable: add_after_boil must survive
+        assert_eq!(r.fermentables.len(), 1);
+        assert_eq!(r.fermentables[0].add_after_boil, Some(true));
+
+        // Misc: entire section must survive
+        assert_eq!(r.miscs.len(), 1);
+        assert_eq!(r.miscs[0].name, "Irish Moss");
+        assert_eq!(r.miscs[0].type_, "fining");
+        assert_eq!(r.miscs[0].use_, "boil");
+        assert!((r.miscs[0].amount - 0.005).abs() < 1e-9);
+        assert_eq!(r.miscs[0].amount_is_weight, Some(true));
+        assert!((r.miscs[0].time_min - 15.0).abs() < 1e-9);
+
+        // Yeast: lab/product/attenuation/amount_is_weight/add_to_secondary must survive
+        assert_eq!(r.yeasts.len(), 1);
+        assert_eq!(r.yeasts[0].laboratory, Some("Fermentis".to_string()));
+        assert_eq!(r.yeasts[0].product_id, Some("US-05".to_string()));
+        assert_eq!(r.yeasts[0].attenuation_pct, Some(77.0));
+        assert_eq!(r.yeasts[0].amount_is_weight, Some(true));
+        assert_eq!(r.yeasts[0].add_to_secondary, Some(false));
+        assert!((r.yeasts[0].amount.unwrap() - 0.011).abs() < 1e-9);
     }
 }

@@ -384,3 +384,24 @@ impl TryFrom<entities::recipe_versions::Model> for RecipeVersionSummary {
         })
     }
 }
+
+impl TryFrom<Recipe> for RecipeSummary {
+    type Error = AppError;
+    fn try_from(r: Recipe) -> Result<Self, AppError> {
+        Ok(Self {
+            id: r.id,
+            name: r.name,
+            style_name: r.style.map(|s| s.name),
+            type_: r.type_,
+            batch_size_l: r.batch_size_l,
+            source: r
+                .source
+                .to_string()
+                .parse()
+                .map_err(|e| AppError::Internal(format!("invalid source value: {e}")))?,
+            created_at: r.created_at,
+            updated_at: r.updated_at,
+            image_path: r.image_path,
+        })
+    }
+}
