@@ -6,6 +6,7 @@
   import { ipc } from "$lib/stores/error";
   import { appDataDir as getAppDataDir } from "@tauri-apps/api/path";
   import RecipeHero from "$lib/components/RecipeHero.svelte";
+  import ScaleRecipeModal from "$lib/components/ScaleRecipeModal.svelte";
   import { settings } from "$lib/stores/settings";
   import { formatGravity } from "$lib/gravity-display";
   import OverviewTab from "$lib/components/tabs/OverviewTab.svelte";
@@ -21,6 +22,7 @@
   let stats = $state<RecipeStats | null>(null);
   let appDataDir = $state("");
   let fileInput: HTMLInputElement;
+  let showScaleModal = $state(false);
 
   const gravityUnit = $derived($settings.gravity_unit ?? "sg");
   let displayOg = $state("—");
@@ -126,6 +128,13 @@
           <line x1="12" y1="15" x2="12" y2="3"/>
         </svg>
       </button>
+      <button
+        onclick={() => { showScaleModal = true; }}
+        class="flex items-center justify-center rounded flex-shrink-0 text-xs px-2"
+        style="height: 28px; color: var(--color-text-secondary); background: var(--color-bg-elevated); border: 1px solid var(--color-border); border-radius: var(--radius-md);"
+      >
+        Scale
+      </button>
     </div>
 
     <input
@@ -135,6 +144,14 @@
       onchange={handleFileSelected}
       class="hidden"
     />
+
+    {#if showScaleModal && recipe}
+      <ScaleRecipeModal
+        recipeId={recipe.id}
+        currentBatchSizeL={recipe.batch_size_l}
+        onClose={() => { showScaleModal = false; }}
+      />
+    {/if}
 
     <RecipeHero
       recipe={{ ...recipe, srm: stats?.srm ?? null }}
