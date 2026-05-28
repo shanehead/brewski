@@ -1,11 +1,11 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { goto } from "$app/navigation";
-  import { getRecipe, getRecipeStats, createRecipe, convertGravity } from "$lib/api";
+  import { getRecipe, getRecipeStats, createRecipe } from "$lib/api";
   import type { Recipe, RecipeStats } from "$lib/api";
   import { ipc } from "$lib/stores/error";
   import { settings } from "$lib/stores/settings";
-  import { formatGravity } from "$lib/gravity-display";
+  import { formatSg } from "$lib/gravity-display";
   import OverviewTab from "$lib/components/tabs/OverviewTab.svelte";
   import IngredientsTab from "$lib/components/tabs/IngredientsTab.svelte";
   import MashTab from "$lib/components/tabs/MashTab.svelte";
@@ -20,35 +20,8 @@
   let cloning = $state(false);
 
   const gravityUnit = $derived($settings.gravity_unit ?? "sg");
-  let displayOg = $state("—");
-  let displayFg = $state("—");
-
-  $effect(() => {
-    let cancelled = false;
-    const unit = gravityUnit;
-    const og = stats?.og ?? null;
-    const fg = stats?.fg ?? null;
-
-    displayOg = og != null ? og.toFixed(3) : "—";
-    displayFg = fg != null ? fg.toFixed(3) : "—";
-
-    if (unit === "sg") return () => { cancelled = true; };
-
-    const conversions: Array<{ val: number; set: (s: string) => void }> = [];
-    if (og != null) conversions.push({ val: og, set: s => { displayOg = s; } });
-    if (fg != null) conversions.push({ val: fg, set: s => { displayFg = s; } });
-
-    for (const { val, set } of conversions) {
-      const capturedVal = val;
-      ipc(convertGravity(capturedVal, "sg")).then(r => {
-        if (r && !cancelled && stats?.og === og && stats?.fg === fg && gravityUnit === unit) {
-          set(formatGravity(r, unit));
-        }
-      });
-    }
-
-    return () => { cancelled = true; };
-  });
+  const displayOg = $derived(stats?.og != null ? formatSg(stats.og, gravityUnit) : "—");
+  const displayFg = $derived(stats?.fg != null ? formatSg(stats.fg, gravityUnit) : "—");
 
   async function load() {
     recipe = await ipc(getRecipe(id)) ?? null;

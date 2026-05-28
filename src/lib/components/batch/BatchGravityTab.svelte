@@ -4,7 +4,7 @@
   import { addGravityReading, deleteGravityReading, convertGravity } from "$lib/api";
   import { ipc } from "$lib/stores/error";
   import { settings } from "$lib/stores/settings";
-  import { formatGravity, gravityStep, gravityPlaceholder } from "$lib/gravity-display";
+  import { formatSg, gravityStep, gravityPlaceholder } from "$lib/gravity-display";
 
   let { batch, onRefresh }: { batch: Batch; onRefresh: () => void } = $props();
 
@@ -15,17 +15,9 @@
   let newDate = $state(new Date().toISOString().slice(0, 10));
   let newNotes = $state("");
 
-  let displayReadings = $state<string[]>([]);
-
-  $effect(() => {
-    let cancelled = false;
-    const unit = gravityUnit;
-    const readings = batch.gravity_readings;
-    if (readings.length === 0) { displayReadings = []; return () => { cancelled = true; }; }
-    Promise.all(readings.map(r => convertGravity(r.gravity, "sg")))
-      .then(results => { if (!cancelled) displayReadings = results.map(r => formatGravity(r, unit)); });
-    return () => { cancelled = true; };
-  });
+  const displayReadings = $derived(
+    batch.gravity_readings.map(r => formatSg(r.gravity, gravityUnit)),
+  );
 
   function formatDate(ts: number): string {
     return new Date(ts * 1000).toLocaleDateString();

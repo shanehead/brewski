@@ -1,46 +1,21 @@
 <!-- src/lib/components/StatsSidebar.svelte -->
 <script lang="ts">
   import type { RecipeStats } from "$lib/api";
-  import { convertGravity } from "$lib/api";
   import { settings } from "$lib/stores/settings";
   import { type Units, lToGal, volumeLabel } from "$lib/units";
   import { srmToHex } from "$lib/utils/srm";
-  import { formatGravity } from "$lib/gravity-display";
-  import { ipc } from "$lib/stores/error";
+  import { formatSg } from "$lib/gravity-display";
 
   let { stats }: { stats: RecipeStats | null } = $props();
 
   const units = $derived<Units>($settings.units === "imperial" ? "imperial" : "metric");
   const gravityUnit = $derived($settings.gravity_unit ?? "sg");
 
-  let displayOg = $state("—");
-  let displayFg = $state("—");
-  let displayPreBoil = $state("—");
-
-  $effect(() => {
-    const unit = gravityUnit;
-    const ogVal = stats?.og ?? null;
-    const fgVal = stats?.fg ?? null;
-    const preBoilVal = stats?.pre_boil_gravity ?? null;
-
-    if (ogVal == null) displayOg = "—";
-    if (fgVal == null) displayFg = "—";
-    if (preBoilVal == null) displayPreBoil = "—";
-
-    const toConvert: Array<{ val: number; set: (s: string) => void }> = [];
-    if (ogVal != null) toConvert.push({ val: ogVal, set: s => { displayOg = s; } });
-    if (fgVal != null) toConvert.push({ val: fgVal, set: s => { displayFg = s; } });
-    if (preBoilVal != null) toConvert.push({ val: preBoilVal, set: s => { displayPreBoil = s; } });
-
-    for (const { val, set } of toConvert) {
-      const capturedVal = val;
-      ipc(convertGravity(capturedVal, "sg")).then(r => {
-        if (r && gravityUnit === unit && stats?.og === ogVal && stats?.fg === fgVal && stats?.pre_boil_gravity === preBoilVal) {
-          set(formatGravity(r, unit));
-        }
-      });
-    }
-  });
+  const displayOg = $derived(stats?.og != null ? formatSg(stats.og, gravityUnit) : "—");
+  const displayFg = $derived(stats?.fg != null ? formatSg(stats.fg, gravityUnit) : "—");
+  const displayPreBoil = $derived(
+    stats?.pre_boil_gravity != null ? formatSg(stats.pre_boil_gravity, gravityUnit) : "—",
+  );
 
   function fmt(val: number | undefined | null, decimals = 3): string {
     if (val === undefined || val === null) return "—";

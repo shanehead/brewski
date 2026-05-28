@@ -6,7 +6,7 @@
   import { listRecipeVersions, getRecipe, convertGravity } from "$lib/api";
   import { ipc } from "$lib/stores/error";
   import { settings } from "$lib/stores/settings";
-  import { formatGravity, gravityStep } from "$lib/gravity-display";
+  import { formatSg, gravityStep } from "$lib/gravity-display";
   import BatchCarbonationSection from "$lib/components/batch/BatchCarbonationSection.svelte";
 
   let { batch, onUpdate }: { batch: Batch; onUpdate: (input: UpdateBatchInput) => void } = $props();
@@ -18,45 +18,17 @@
 
   const gravityUnit = $derived($settings.gravity_unit ?? "sg");
 
-  let gravityDisplays = $state<Record<string, string>>({});
-
-  $effect(() => {
-    let cancelled = false;
-    const unit = gravityUnit;
-    const b = batch;
+  const gravityDisplays = $derived.by(() => {
     const gravityFields = [
       "planned_og", "planned_fg", "planned_pre_boil_gravity",
       "actual_og", "actual_fg", "actual_pre_boil_gravity",
     ] as const;
-
-    // Synchronous seed: show raw SG values immediately so the banner isn't blank
-    const seed: Record<string, string> = {};
+    const out: Record<string, string> = {};
     for (const f of gravityFields) {
-      const v = (b as Record<string, unknown>)[f];
-      seed[f] = v != null ? (v as number).toFixed(3) : "";
+      const v = (batch as Record<string, unknown>)[f];
+      out[f] = v != null ? formatSg(v as number, gravityUnit) : "";
     }
-    gravityDisplays = seed;
-
-    // If unit is SG, the seed is already correct — skip IPC
-    if (unit === "sg") return () => { cancelled = true; };
-
-    const toConvert = gravityFields.filter(f => (b as Record<string, unknown>)[f] != null);
-
-    Promise.all(
-      toConvert.map(f =>
-        convertGravity((b as unknown as Record<string, number>)[f], "sg")
-          .then(r => [f, formatGravity(r, unit)] as const)
-      )
-    ).then(entries => {
-      if (cancelled) return;
-      const next: Record<string, string> = { ...seed };
-      for (const [f, v] of entries) next[f] = v;
-      gravityDisplays = next;
-    }).catch(() => {
-      // IPC failed — seed values remain, which is better than blank
-    });
-
-    return () => { cancelled = true; };
+    return out;
   });
 
   onMount(async () => {
