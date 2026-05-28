@@ -55,8 +55,9 @@
   >
     <div class="text-sm font-semibold" style="color: var(--color-text-primary);">Scale Recipe</div>
     <div class="flex items-center gap-2">
-      <label class="text-sm" style="color: var(--color-text-secondary);">Target Batch Size</label>
+      <label for="target-batch-size" class="text-sm" style="color: var(--color-text-secondary);">Target Batch Size</label>
       <input
+        id="target-batch-size"
         type="number"
         bind:value={targetValue}
         min="0.1"
