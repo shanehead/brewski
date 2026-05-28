@@ -7,8 +7,8 @@ use crate::error::AppError;
 use crate::models::{
     CreateFermentableAdditionInput, CreateHopAdditionInput, CreateMashStepInput,
     CreateMiscAdditionInput, CreateRecipeInput, CreateWaterAdditionInput,
-    CreateWaterAdjustmentInput, CreateYeastAdditionInput, Recipe, RecipeSummary, UpdateMashInput,
-    UpdateRecipeInput,
+    CreateWaterAdjustmentInput, CreateYeastAdditionInput, Mash, Recipe, RecipeSummary,
+    UpdateMashInput, UpdateRecipeInput,
 };
 
 use super::equipment::EquipmentRepository;
@@ -181,16 +181,20 @@ impl<'a> RecipeRepository<'a> {
         let id = new_id();
         let now = now_secs() as i32;
 
+        let source = match &input.source_id {
+            Some(src_id) => Some(self.get(src_id).await?),
+            None => None,
+        };
+
         let (batch_size, boil_size, boil_time, ep_id, mash_water_id, sparge_water_id) =
-            if let Some(ref src_id) = input.source_id {
-                let src = self.get(src_id).await?;
+            if let Some(src) = &source {
                 (
                     src.batch_size_l,
                     src.boil_size_l,
                     src.boil_time_min,
-                    src.equipment_profile_id,
-                    src.mash_water_id,
-                    src.sparge_water_id,
+                    src.equipment_profile_id.clone(),
+                    src.mash_water_id.clone(),
+                    src.sparge_water_id.clone(),
                 )
             } else {
                 (
@@ -221,8 +225,11 @@ impl<'a> RecipeRepository<'a> {
         .insert(self.db)
         .await?;
 
-        if let Some(src_id) = input.source_id {
-            self.copy_additions(&src_id, &id, 1.0).await?;
+        if let Some(src) = source {
+            self.copy_additions(&src.id, &id, 1.0).await?;
+            if let Some(mash) = src.mash {
+                self.copy_mash(mash, &id, 1.0).await?;
+            }
         }
 
         self.get(&id).await
@@ -407,40 +414,47 @@ impl<'a> RecipeRepository<'a> {
         self.copy_additions(recipe_id, &id, ratio).await?;
 
         if let Some(mash) = src.mash {
-            let mash_repo = MashRepository::new(self.db);
-            let new_mash = mash_repo
-                .upsert_for_recipe(
-                    &id,
-                    UpdateMashInput {
-                        name: Some(mash.name),
-                        grain_temp_c: Some(mash.grain_temp_c),
-                        tun_temp_c: mash.tun_temp_c,
-                        sparge_temp_c: mash.sparge_temp_c,
-                        ph: mash.ph,
-                        ratio_l_per_kg: mash.ratio_l_per_kg,
-                        notes: mash.notes,
-                    },
-                )
-                .await?;
-            for step in mash.steps {
-                mash_repo
-                    .create_step(
-                        &new_mash.id,
-                        CreateMashStepInput {
-                            name: step.name,
-                            type_: Some(step.type_),
-                            step_temp_c: step.step_temp_c,
-                            step_time_min: step.step_time_min,
-                            infuse_amount_l: step.infuse_amount_l.map(|v| v * ratio),
-                            ramp_time_min: step.ramp_time_min,
-                            end_temp_c: step.end_temp_c,
-                        },
-                    )
-                    .await?;
-            }
+            self.copy_mash(mash, &id, ratio).await?;
         }
 
         self.get(&id).await
+    }
+
+    /// Copy a mash and its steps onto `dst_id`, multiplying infusion amounts by
+    /// `ratio` (1.0 for a plain duplicate, a scaling factor for scale).
+    async fn copy_mash(&self, src_mash: Mash, dst_id: &str, ratio: f64) -> Result<(), AppError> {
+        let mash_repo = MashRepository::new(self.db);
+        let new_mash = mash_repo
+            .upsert_for_recipe(
+                dst_id,
+                UpdateMashInput {
+                    name: Some(src_mash.name),
+                    grain_temp_c: Some(src_mash.grain_temp_c),
+                    tun_temp_c: src_mash.tun_temp_c,
+                    sparge_temp_c: src_mash.sparge_temp_c,
+                    ph: src_mash.ph,
+                    ratio_l_per_kg: src_mash.ratio_l_per_kg,
+                    notes: src_mash.notes,
+                },
+            )
+            .await?;
+        for step in src_mash.steps {
+            mash_repo
+                .create_step(
+                    &new_mash.id,
+                    CreateMashStepInput {
+                        name: step.name,
+                        type_: Some(step.type_),
+                        step_temp_c: step.step_temp_c,
+                        step_time_min: step.step_time_min,
+                        infuse_amount_l: step.infuse_amount_l.map(|v| v * ratio),
+                        ramp_time_min: step.ramp_time_min,
+                        end_temp_c: step.end_temp_c,
+                    },
+                )
+                .await?;
+        }
+        Ok(())
     }
 
     pub async fn update(&self, id: &str, input: UpdateRecipeInput) -> Result<Recipe, AppError> {
@@ -1150,5 +1164,65 @@ mod tests {
         assert!((dupe.water_adjustments[0].amount - 5.0).abs() < 1e-9);
         assert_eq!(dupe.water_adjustments[0].addition.to_string(), "gypsum");
         assert_eq!(dupe.water_adjustments[0].target.to_string(), "mash");
+    }
+
+    #[tokio::test]
+    async fn test_duplicate_copies_mash() {
+        use crate::models::{CreateMashStepInput, UpdateMashInput};
+        use crate::repositories::mash::MashRepository;
+
+        let db = setup_test_db().await;
+        let repo = RecipeRepository::new(&db);
+        let original = repo
+            .create(CreateRecipeInput {
+                name: "My IPA".into(),
+                batch_size_l: Some(23.0),
+                ..Default::default()
+            })
+            .await
+            .unwrap();
+
+        let mash_repo = MashRepository::new(&db);
+        let mash = mash_repo
+            .upsert_for_recipe(
+                &original.id,
+                UpdateMashInput {
+                    name: Some("Single Infusion".into()),
+                    grain_temp_c: Some(20.0),
+                    ..Default::default()
+                },
+            )
+            .await
+            .unwrap();
+        mash_repo
+            .create_step(
+                &mash.id,
+                CreateMashStepInput {
+                    name: "Mash".into(),
+                    type_: Some("Infusion".into()),
+                    step_temp_c: 67.0,
+                    step_time_min: 60,
+                    infuse_amount_l: Some(15.0),
+                    ramp_time_min: None,
+                    end_temp_c: None,
+                },
+            )
+            .await
+            .unwrap();
+
+        let dupe = repo
+            .create(CreateRecipeInput {
+                name: "Copy".into(),
+                source_id: Some(original.id.clone()),
+                ..Default::default()
+            })
+            .await
+            .unwrap();
+
+        let dupe_mash = dupe.mash.expect("duplicate should copy the mash");
+        assert_eq!(dupe_mash.name, "Single Infusion");
+        assert_eq!(dupe_mash.steps.len(), 1);
+        // ratio 1.0 — infuse amount unchanged
+        assert!((dupe_mash.steps[0].infuse_amount_l.unwrap() - 15.0).abs() < 1e-9);
     }
 }
