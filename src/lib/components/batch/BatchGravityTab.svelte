@@ -18,11 +18,13 @@
   let displayReadings = $state<string[]>([]);
 
   $effect(() => {
+    let cancelled = false;
     const unit = gravityUnit;
     const readings = batch.gravity_readings;
-    if (readings.length === 0) { displayReadings = []; return; }
+    if (readings.length === 0) { displayReadings = []; return () => { cancelled = true; }; }
     Promise.all(readings.map(r => convertGravity(r.gravity, "sg")))
-      .then(results => { displayReadings = results.map(r => formatGravity(r, unit)); });
+      .then(results => { if (!cancelled) displayReadings = results.map(r => formatGravity(r, unit)); });
+    return () => { cancelled = true; };
   });
 
   function formatDate(ts: number): string {
