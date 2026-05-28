@@ -1,9 +1,11 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { goto } from "$app/navigation";
-  import { getRecipe, getRecipeStats, createRecipe } from "$lib/api";
+  import { getRecipe, getRecipeStats, createRecipe, convertGravity } from "$lib/api";
   import type { Recipe, RecipeStats } from "$lib/api";
   import { ipc } from "$lib/stores/error";
+  import { settings } from "$lib/stores/settings";
+  import { formatGravity } from "$lib/gravity-display";
   import OverviewTab from "$lib/components/tabs/OverviewTab.svelte";
   import IngredientsTab from "$lib/components/tabs/IngredientsTab.svelte";
   import MashTab from "$lib/components/tabs/MashTab.svelte";
@@ -16,6 +18,37 @@
   let recipe = $state<Recipe | null>(null);
   let stats = $state<RecipeStats | null>(null);
   let cloning = $state(false);
+
+  const gravityUnit = $derived($settings.gravity_unit ?? "sg");
+  let displayOg = $state("—");
+  let displayFg = $state("—");
+
+  $effect(() => {
+    let cancelled = false;
+    const unit = gravityUnit;
+    const og = stats?.og ?? null;
+    const fg = stats?.fg ?? null;
+
+    displayOg = og != null ? og.toFixed(3) : "—";
+    displayFg = fg != null ? fg.toFixed(3) : "—";
+
+    if (unit === "sg") return () => { cancelled = true; };
+
+    const conversions: Array<{ val: number; set: (s: string) => void }> = [];
+    if (og != null) conversions.push({ val: og, set: s => { displayOg = s; } });
+    if (fg != null) conversions.push({ val: fg, set: s => { displayFg = s; } });
+
+    for (const { val, set } of conversions) {
+      const capturedVal = val;
+      ipc(convertGravity(capturedVal, "sg")).then(r => {
+        if (r && !cancelled && stats?.og === og && stats?.fg === fg && gravityUnit === unit) {
+          set(formatGravity(r, unit));
+        }
+      });
+    }
+
+    return () => { cancelled = true; };
+  });
 
   async function load() {
     recipe = await ipc(getRecipe(id)) ?? null;
@@ -81,8 +114,8 @@
           <div class="rounded-lg p-4 grid grid-cols-5 gap-2"
                style="background: var(--color-bg-elevated); border: 1px solid var(--color-border);">
             {#each [
-              { label: "OG", value: fmt(stats.og, 3) },
-              { label: "FG", value: fmt(stats.fg, 3) },
+              { label: "OG", value: displayOg },
+              { label: "FG", value: displayFg },
               { label: "ABV", value: fmt(stats.abv_pct, 1) + "%" },
               { label: "IBU", value: fmt(stats.ibu, 0) },
               { label: "SRM", value: fmt(stats.srm, 1) },
