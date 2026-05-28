@@ -1,15 +1,29 @@
 <!-- src/lib/components/batch/BatchGravityTab.svelte -->
 <script lang="ts">
   import type { Batch, CreateGravityReadingInput } from "$lib/api";
-  import { addGravityReading, deleteGravityReading } from "$lib/api";
+  import { addGravityReading, deleteGravityReading, convertGravity } from "$lib/api";
   import { ipc } from "$lib/stores/error";
+  import { settings } from "$lib/stores/settings";
+  import { formatGravity, gravityStep, gravityPlaceholder } from "$lib/gravity-display";
 
   let { batch, onRefresh }: { batch: Batch; onRefresh: () => void } = $props();
+
+  const gravityUnit = $derived($settings.gravity_unit ?? "sg");
 
   let newGravity = $state("");
   let newTemp = $state("");
   let newDate = $state(new Date().toISOString().slice(0, 10));
   let newNotes = $state("");
+
+  let displayReadings = $state<string[]>([]);
+
+  $effect(() => {
+    const unit = gravityUnit;
+    const readings = batch.gravity_readings;
+    if (readings.length === 0) { displayReadings = []; return; }
+    Promise.all(readings.map(r => convertGravity(r.gravity, "sg")))
+      .then(results => { displayReadings = results.map(r => formatGravity(r, unit)); });
+  });
 
   function formatDate(ts: number): string {
     return new Date(ts * 1000).toLocaleDateString();
@@ -17,9 +31,12 @@
 
   async function handleAdd() {
     if (!newGravity || !newDate) return;
+    const unit = gravityUnit;
+    const converted = await ipc(convertGravity(parseFloat(newGravity), unit));
+    if (!converted) return;
     const input: CreateGravityReadingInput = {
       recorded_at: Math.floor(new Date(newDate).getTime() / 1000),
-      gravity: parseFloat(newGravity),
+      gravity: converted.sg,
       temp_c: newTemp ? parseFloat(newTemp) : null,
       notes: newNotes || null,
     };
@@ -49,10 +66,10 @@
         </tr>
       </thead>
       <tbody>
-        {#each batch.gravity_readings as r (r.id)}
+        {#each batch.gravity_readings as r, i (r.id)}
           <tr class="border-t" style="border-color: var(--color-border);">
             <td class="py-1.5">{formatDate(r.recorded_at)}</td>
-            <td class="py-1.5">{r.gravity.toFixed(3)}</td>
+            <td class="py-1.5">{displayReadings[i] ?? r.gravity.toFixed(3)}</td>
             <td class="py-1.5">{r.temp_c != null ? r.temp_c + "°" : "—"}</td>
             <td class="py-1.5 text-xs" style="color: var(--color-text-muted);">{r.notes ?? ""}</td>
             <td class="py-1.5">
@@ -76,7 +93,8 @@
       <input type="date" bind:value={newDate}
         class="px-2 py-1.5 rounded text-sm outline-none"
         style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
-      <input type="number" inputmode="decimal" step="0.001" placeholder="Gravity (e.g. 1.058)" bind:value={newGravity}
+      <input type="number" inputmode="decimal" step={gravityStep(gravityUnit)}
+        placeholder={gravityPlaceholder(gravityUnit)} bind:value={newGravity}
         class="px-2 py-1.5 rounded text-sm outline-none w-40"
         style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
       <input type="number" inputmode="decimal" step="0.1" placeholder="Temp °C" bind:value={newTemp}
