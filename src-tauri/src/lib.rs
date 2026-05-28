@@ -5,6 +5,7 @@ mod commands;
 pub mod entities;
 mod error;
 pub mod models;
+#[allow(clippy::derivable_impls)]
 #[path = "models.gen.rs"]
 pub mod models_gen;
 pub mod repositories;

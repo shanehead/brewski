@@ -2,6 +2,7 @@
 /// - pre_boil: cold volume needed in the kettle at start of boil
 /// - post_boil: cold volume in kettle after boil
 /// - total_water: pre_boil + hlt_deadspace (all water you need to start with)
+#[allow(clippy::too_many_arguments)]
 pub fn calculate_boil_volumes(
     batch_size_l: f64,
     boil_time_min: f64,

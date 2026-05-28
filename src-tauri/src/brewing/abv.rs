@@ -20,8 +20,7 @@ pub fn calculate_calories_per_355ml(og: f64, fg: f64) -> f64 {
 }
 
 pub(crate) fn og_to_plato(specific_gravity: f64) -> f64 {
-    (-1.0 * 616.868) + (1111.14 * specific_gravity)
-        - (630.272 * specific_gravity * specific_gravity)
+    -616.868 + (1111.14 * specific_gravity) - (630.272 * specific_gravity * specific_gravity)
         + (135.997 * specific_gravity * specific_gravity * specific_gravity)
 }
 

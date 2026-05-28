@@ -718,7 +718,7 @@ mod tests {
         assert_eq!(updated.batch_size_l, 19.0);
         assert_eq!(updated.efficiency_pct, Some(70.0));
         assert_eq!(updated.fermentation_stages, 2);
-        assert_eq!(updated.forced_carbonation, true);
+        assert!(updated.forced_carbonation);
         assert_eq!(updated.priming_sugar_name, Some("Corn Sugar".into()));
         assert_eq!(updated.priming_sugar_equiv, Some(1.0));
         assert_eq!(updated.keg_priming_factor, Some(0.5));
