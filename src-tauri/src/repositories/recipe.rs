@@ -222,16 +222,17 @@ impl<'a> RecipeRepository<'a> {
         .await?;
 
         if let Some(src_id) = input.source_id {
-            self.copy_additions(&src_id, &id).await?;
+            self.copy_additions(&src_id, &id, 1.0).await?;
         }
 
         self.get(&id).await
     }
 
-    async fn copy_additions(&self, src_id: &str, dst_id: &str) -> Result<(), AppError> {
-        // Additions are copied rather than referenced so that edits to the
-        // source recipe don't affect the duplicate.
-
+    /// Copy every addition from `src_id` onto `dst_id`, multiplying each amount
+    /// by `ratio`. Use `ratio = 1.0` for a plain duplicate; pass a scaling
+    /// factor to resize the recipe. Additions are copied rather than referenced
+    /// so that edits to the source recipe don't affect the destination.
+    async fn copy_additions(&self, src_id: &str, dst_id: &str, ratio: f64) -> Result<(), AppError> {
         let fermentable_repo = FermentableRepository::new(self.db);
         for f in fermentable_repo.list(src_id).await? {
             fermentable_repo
@@ -243,7 +244,7 @@ impl<'a> RecipeRepository<'a> {
                         type_: f.type_,
                         yield_pct: f.yield_pct,
                         color_lovibond: f.color_lovibond,
-                        amount_kg: f.amount_kg,
+                        amount_kg: f.amount_kg * ratio,
                         add_after_boil: Some(f.add_after_boil),
                     },
                 )
@@ -260,7 +261,7 @@ impl<'a> RecipeRepository<'a> {
                         name: h.name,
                         alpha_pct: h.alpha_pct,
                         form: Some(h.form),
-                        amount_kg: h.amount_kg,
+                        amount_kg: h.amount_kg * ratio,
                         use_: h.use_,
                         time_min: h.time_min,
                         hopstand_temp_c: h.hopstand_temp_c,
@@ -282,7 +283,7 @@ impl<'a> RecipeRepository<'a> {
                         laboratory: y.laboratory,
                         product_id: y.product_id,
                         attenuation_pct: y.attenuation_pct,
-                        amount: y.amount,
+                        amount: y.amount.map(|a| a * ratio),
                         amount_is_weight: Some(y.amount_is_weight),
                         add_to_secondary: Some(y.add_to_secondary),
                         times_cultured: Some(y.times_cultured),
@@ -301,7 +302,7 @@ impl<'a> RecipeRepository<'a> {
                         name: m.name,
                         type_: m.type_,
                         use_: m.use_,
-                        amount: m.amount,
+                        amount: m.amount * ratio,
                         amount_is_weight: Some(m.amount_is_weight),
                         time_min: m.time_min,
                     },
@@ -317,7 +318,7 @@ impl<'a> RecipeRepository<'a> {
                     CreateWaterAdditionInput {
                         water_id: w.water_id,
                         name: w.name,
-                        amount_l: w.amount_l,
+                        amount_l: w.amount_l * ratio,
                     },
                 )
                 .await?;
@@ -339,7 +340,7 @@ impl<'a> RecipeRepository<'a> {
                             .to_string()
                             .parse()
                             .map_err(|e| AppError::Internal(format!("{}", e)))?,
-                        amount: a.amount,
+                        amount: a.amount * ratio,
                     },
                 )
                 .await?;
@@ -403,118 +404,7 @@ impl<'a> RecipeRepository<'a> {
         .insert(self.db)
         .await?;
 
-        let fermentable_repo = FermentableRepository::new(self.db);
-        for f in fermentable_repo.list(recipe_id).await? {
-            fermentable_repo
-                .create(
-                    &id,
-                    CreateFermentableAdditionInput {
-                        fermentable_id: f.fermentable_id,
-                        name: f.name,
-                        type_: f.type_,
-                        yield_pct: f.yield_pct,
-                        color_lovibond: f.color_lovibond,
-                        amount_kg: f.amount_kg * ratio,
-                        add_after_boil: Some(f.add_after_boil),
-                    },
-                )
-                .await?;
-        }
-
-        let hop_repo = HopRepository::new(self.db);
-        for h in hop_repo.list(recipe_id).await? {
-            hop_repo
-                .create(
-                    &id,
-                    CreateHopAdditionInput {
-                        hop_id: h.hop_id,
-                        name: h.name,
-                        alpha_pct: h.alpha_pct,
-                        form: Some(h.form),
-                        amount_kg: h.amount_kg * ratio,
-                        use_: h.use_,
-                        time_min: h.time_min,
-                        hopstand_temp_c: h.hopstand_temp_c,
-                    },
-                )
-                .await?;
-        }
-
-        let yeast_repo = YeastRepository::new(self.db);
-        for y in yeast_repo.list(recipe_id).await? {
-            yeast_repo
-                .create(
-                    &id,
-                    CreateYeastAdditionInput {
-                        yeast_id: y.yeast_id,
-                        name: y.name,
-                        type_: y.type_,
-                        form: y.form,
-                        laboratory: y.laboratory,
-                        product_id: y.product_id,
-                        attenuation_pct: y.attenuation_pct,
-                        amount: y.amount.map(|a| a * ratio),
-                        amount_is_weight: Some(y.amount_is_weight),
-                        add_to_secondary: Some(y.add_to_secondary),
-                        times_cultured: Some(y.times_cultured),
-                    },
-                )
-                .await?;
-        }
-
-        let misc_repo = MiscRepository::new(self.db);
-        for m in misc_repo.list(recipe_id).await? {
-            misc_repo
-                .create(
-                    &id,
-                    CreateMiscAdditionInput {
-                        misc_id: m.misc_id,
-                        name: m.name,
-                        type_: m.type_,
-                        use_: m.use_,
-                        amount: m.amount * ratio,
-                        amount_is_weight: Some(m.amount_is_weight),
-                        time_min: m.time_min,
-                    },
-                )
-                .await?;
-        }
-
-        let water_repo = WaterRepository::new(self.db);
-        for w in water_repo.list(recipe_id).await? {
-            water_repo
-                .create(
-                    &id,
-                    CreateWaterAdditionInput {
-                        water_id: w.water_id,
-                        name: w.name,
-                        amount_l: w.amount_l * ratio,
-                    },
-                )
-                .await?;
-        }
-
-        let water_chem_repo = WaterChemistryRepository::new(self.db);
-        for a in water_chem_repo.list_adjustments(recipe_id).await? {
-            water_chem_repo
-                .create_water_adjustment(
-                    &id,
-                    CreateWaterAdjustmentInput {
-                        addition: a
-                            .addition
-                            .to_string()
-                            .parse()
-                            .map_err(|e| AppError::Internal(format!("{}", e)))?,
-                        target: a
-                            .target
-                            .to_string()
-                            .parse()
-                            .map_err(|e| AppError::Internal(format!("{}", e)))?,
-                        amount: a.amount * ratio,
-                    },
-                )
-                .await?;
-        }
+        self.copy_additions(recipe_id, &id, ratio).await?;
 
         if let Some(mash) = src.mash {
             let mash_repo = MashRepository::new(self.db);
@@ -1095,5 +985,170 @@ mod tests {
 
         let result2 = repo.scale(&original.id, -5.0).await;
         assert!(result2.is_err());
+    }
+
+    async fn seed_one_of_each(db: &sea_orm::DatabaseConnection, recipe_id: &str) {
+        use crate::models::{
+            CreateMiscAdditionInput, CreateWaterAdditionInput, CreateWaterAdjustmentInput,
+            CreateWaterAdjustmentInputAddition, CreateWaterAdjustmentInputTarget,
+            CreateYeastAdditionInput,
+        };
+        use crate::repositories::misc::MiscRepository;
+        use crate::repositories::water::WaterRepository;
+        use crate::repositories::water_chemistry::WaterChemistryRepository;
+        use crate::repositories::yeast::YeastRepository;
+
+        FermentableRepository::new(db)
+            .create(
+                recipe_id,
+                CreateFermentableAdditionInput {
+                    fermentable_id: None,
+                    name: "Pale Malt".into(),
+                    type_: "grain".into(),
+                    yield_pct: 78.0,
+                    color_lovibond: 1.8,
+                    amount_kg: 4.5,
+                    add_after_boil: None,
+                },
+            )
+            .await
+            .unwrap();
+        HopRepository::new(db)
+            .create(
+                recipe_id,
+                CreateHopAdditionInput {
+                    hop_id: None,
+                    name: "Cascade".into(),
+                    alpha_pct: 5.5,
+                    form: None,
+                    amount_kg: 0.05,
+                    use_: "Boil".into(),
+                    time_min: 60.0,
+                    hopstand_temp_c: None,
+                },
+            )
+            .await
+            .unwrap();
+        YeastRepository::new(db)
+            .create(
+                recipe_id,
+                CreateYeastAdditionInput {
+                    yeast_id: None,
+                    name: "US-05".into(),
+                    type_: "ale".into(),
+                    form: "dry".into(),
+                    laboratory: None,
+                    product_id: None,
+                    attenuation_pct: Some(77.0),
+                    amount: Some(1.0),
+                    amount_is_weight: Some(true),
+                    add_to_secondary: None,
+                    times_cultured: None,
+                },
+            )
+            .await
+            .unwrap();
+        MiscRepository::new(db)
+            .create(
+                recipe_id,
+                CreateMiscAdditionInput {
+                    misc_id: None,
+                    name: "Irish Moss".into(),
+                    type_: "fining".into(),
+                    use_: "boil".into(),
+                    amount: 0.005,
+                    amount_is_weight: Some(true),
+                    time_min: 15.0,
+                },
+            )
+            .await
+            .unwrap();
+        WaterRepository::new(db)
+            .create(
+                recipe_id,
+                CreateWaterAdditionInput {
+                    water_id: None,
+                    name: "Mash Water".into(),
+                    amount_l: 10.0,
+                },
+            )
+            .await
+            .unwrap();
+        WaterChemistryRepository::new(db)
+            .create_water_adjustment(
+                recipe_id,
+                CreateWaterAdjustmentInput {
+                    addition: CreateWaterAdjustmentInputAddition::Gypsum,
+                    target: CreateWaterAdjustmentInputTarget::Mash,
+                    amount: 5.0,
+                },
+            )
+            .await
+            .unwrap();
+    }
+
+    #[tokio::test]
+    async fn test_scale_scales_all_addition_types() {
+        let db = setup_test_db().await;
+        let repo = RecipeRepository::new(&db);
+        let original = repo
+            .create(CreateRecipeInput {
+                name: "Full Recipe".into(),
+                batch_size_l: Some(23.0),
+                ..Default::default()
+            })
+            .await
+            .unwrap();
+        seed_one_of_each(&db, &original.id).await;
+
+        let scaled = repo.scale(&original.id, 46.0).await.unwrap(); // ratio 2.0
+
+        assert!((scaled.fermentables[0].amount_kg - 9.0).abs() < 1e-9);
+        assert!((scaled.hops[0].amount_kg - 0.1).abs() < 1e-9);
+        assert!((scaled.yeasts[0].amount.unwrap() - 2.0).abs() < 1e-9);
+        assert!((scaled.miscs[0].amount - 0.01).abs() < 1e-9);
+        assert!((scaled.waters[0].amount_l - 20.0).abs() < 1e-9);
+        assert!((scaled.water_adjustments[0].amount - 10.0).abs() < 1e-9);
+        assert_eq!(scaled.water_adjustments[0].addition.to_string(), "gypsum");
+        assert_eq!(scaled.water_adjustments[0].target.to_string(), "mash");
+    }
+
+    #[tokio::test]
+    async fn test_duplicate_copies_all_addition_types_unchanged() {
+        let db = setup_test_db().await;
+        let repo = RecipeRepository::new(&db);
+        let original = repo
+            .create(CreateRecipeInput {
+                name: "Full Recipe".into(),
+                batch_size_l: Some(23.0),
+                ..Default::default()
+            })
+            .await
+            .unwrap();
+        seed_one_of_each(&db, &original.id).await;
+
+        let dupe = repo
+            .create(CreateRecipeInput {
+                name: "Copy".into(),
+                source_id: Some(original.id.clone()),
+                ..Default::default()
+            })
+            .await
+            .unwrap();
+
+        assert_eq!(dupe.fermentables.len(), 1);
+        assert!((dupe.fermentables[0].amount_kg - 4.5).abs() < 1e-9);
+        assert_eq!(dupe.hops.len(), 1);
+        assert!((dupe.hops[0].amount_kg - 0.05).abs() < 1e-9);
+        assert_eq!(dupe.yeasts.len(), 1);
+        assert!((dupe.yeasts[0].amount.unwrap() - 1.0).abs() < 1e-9);
+        assert_eq!(dupe.miscs.len(), 1);
+        assert!((dupe.miscs[0].amount - 0.005).abs() < 1e-9);
+        assert_eq!(dupe.waters.len(), 1);
+        assert!((dupe.waters[0].amount_l - 10.0).abs() < 1e-9);
+        assert_eq!(dupe.water_adjustments.len(), 1);
+        assert!((dupe.water_adjustments[0].amount - 5.0).abs() < 1e-9);
+        assert_eq!(dupe.water_adjustments[0].addition.to_string(), "gypsum");
+        assert_eq!(dupe.water_adjustments[0].target.to_string(), "mash");
     }
 }
