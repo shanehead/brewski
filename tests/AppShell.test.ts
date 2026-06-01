@@ -38,8 +38,18 @@ vi.mock("$lib/stores/settings", () => ({
   },
 }));
 
+let mockLastError: string | null = null;
+let mockLastSuccess: string | null = null;
+
 vi.mock("$lib/stores/error", () => ({
-  lastError: { subscribe: vi.fn((fn) => { fn(null); return () => {}; }) },
+  lastError: {
+    subscribe: vi.fn((fn) => { fn(mockLastError); return () => {}; }),
+    set: vi.fn(),
+  },
+  lastSuccess: {
+    subscribe: vi.fn((fn) => { fn(mockLastSuccess); return () => {}; }),
+    set: vi.fn(),
+  },
 }));
 
 vi.mock("@tauri-apps/api/window", () => ({
@@ -52,6 +62,8 @@ beforeEach(() => {
   afterNavigateCb = null;
   mockPathname = "/";
   mockSettings = {};
+  mockLastError = null;
+  mockLastSuccess = null;
 });
 
 describe("AppShell rail", () => {
@@ -115,5 +127,19 @@ describe("AppShell last route", () => {
     render(AppShell, { children: () => null });
     afterNavigateCb!({ to: null });
     expect(saveSettingMock).not.toHaveBeenCalled();
+  });
+});
+
+describe("AppShell success banner", () => {
+  it("shows success banner when lastSuccess has a message", () => {
+    mockLastSuccess = "2 recipes imported";
+    const { getByText } = render(AppShell, { children: () => null });
+    expect(getByText("2 recipes imported")).toBeTruthy();
+  });
+
+  it("does not show success banner when lastSuccess is null", () => {
+    mockLastSuccess = null;
+    const { queryByText } = render(AppShell, { children: () => null });
+    expect(queryByText(/recipes imported/)).toBeNull();
   });
 });

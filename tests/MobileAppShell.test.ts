@@ -37,8 +37,18 @@ vi.mock("$lib/stores/settings", () => ({
   },
 }));
 
+let mockLastError: string | null = null;
+let mockLastSuccess: string | null = null;
+
 vi.mock("$lib/stores/error", () => ({
-  lastError: { subscribe: vi.fn((fn) => { fn(null); return () => {}; }) },
+  lastError: {
+    subscribe: vi.fn((fn) => { fn(mockLastError); return () => {}; }),
+    set: vi.fn(),
+  },
+  lastSuccess: {
+    subscribe: vi.fn((fn) => { fn(mockLastSuccess); return () => {}; }),
+    set: vi.fn(),
+  },
 }));
 
 // BottomTabBar uses page store and BrewingIcon — stub it out
@@ -52,6 +62,8 @@ beforeEach(() => {
   afterNavigateCb = null;
   mockPathname = "/";
   mockSettings = {};
+  mockLastError = null;
+  mockLastSuccess = null;
 });
 
 describe("MobileAppShell last route", () => {
@@ -88,5 +100,19 @@ describe("MobileAppShell last route", () => {
     render(MobileAppShell, { children: () => null });
     afterNavigateCb!({ to: null });
     expect(saveSettingMock).not.toHaveBeenCalled();
+  });
+});
+
+describe("MobileAppShell success banner", () => {
+  it("shows success banner when lastSuccess has a message", () => {
+    mockLastSuccess = "1 recipe imported";
+    const { getByText } = render(MobileAppShell, { children: () => null });
+    expect(getByText("1 recipe imported")).toBeTruthy();
+  });
+
+  it("does not show success banner when lastSuccess is null", () => {
+    mockLastSuccess = null;
+    const { queryByText } = render(MobileAppShell, { children: () => null });
+    expect(queryByText(/recipe imported/)).toBeNull();
   });
 });

@@ -3,7 +3,7 @@
   import { afterNavigate, goto } from "$app/navigation";
   import { page } from "$app/stores";
   import { loadSettings, settings, saveSetting } from "$lib/stores/settings";
-  import { lastError } from "$lib/stores/error";
+  import { lastError, lastSuccess } from "$lib/stores/error";
   import BottomTabBar from "./BottomTabBar.svelte";
 
   let { children } = $props();
@@ -40,5 +40,13 @@
        style="background: #7f1d1d; color: #fecaca;">
     <span class="flex-1">{$lastError}</span>
     <button onclick={() => lastError.set(null)} class="opacity-70 flex-shrink-0">✕</button>
+  </div>
+{/if}
+
+{#if $lastSuccess}
+  <div class="fixed bottom-20 left-4 right-4 z-50 flex items-center gap-3 px-4 py-2.5 rounded shadow-lg text-sm"
+       style="background: #14532d; color: #bbf7d0;">
+    <span class="flex-1">{$lastSuccess}</span>
+    <button onclick={() => lastSuccess.set(null)} class="opacity-70 flex-shrink-0">✕</button>
   </div>
 {/if}

@@ -3,7 +3,7 @@
   import { afterNavigate, goto } from "$app/navigation";
   import { page } from "$app/stores";
   import { loadSettings, settings, saveSetting } from "$lib/stores/settings";
-  import { lastError } from "$lib/stores/error";
+  import { lastError, lastSuccess } from "$lib/stores/error";
   import BrewingIcon from "$lib/components/BrewingIcon.svelte";
 
   let { children } = $props();
@@ -86,5 +86,13 @@
        style="background: #7f1d1d; color: #fecaca; max-width: 480px;">
     <span class="flex-1 truncate">{$lastError}</span>
     <button onclick={() => lastError.set(null)} class="opacity-70 hover:opacity-100 flex-shrink-0">✕</button>
+  </div>
+{/if}
+
+{#if $lastSuccess}
+  <div class="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 px-4 py-2.5 rounded shadow-lg text-sm"
+       style="background: #14532d; color: #bbf7d0; max-width: 480px;">
+    <span class="flex-1 truncate">{$lastSuccess}</span>
+    <button onclick={() => lastSuccess.set(null)} class="opacity-70 hover:opacity-100 flex-shrink-0">✕</button>
   </div>
 {/if}
