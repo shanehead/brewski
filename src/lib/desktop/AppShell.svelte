@@ -90,9 +90,10 @@
 {/if}
 
 {#if $lastSuccess}
-  <div class="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 px-4 py-2.5 rounded shadow-lg text-sm"
+  <div role="status" aria-live="polite" aria-atomic="true"
+       class="fixed bottom-16 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 px-4 py-2.5 rounded shadow-lg text-sm"
        style="background: #14532d; color: #bbf7d0; max-width: 480px;">
     <span class="flex-1 truncate">{$lastSuccess}</span>
-    <button onclick={() => lastSuccess.set(null)} class="opacity-70 hover:opacity-100 flex-shrink-0">✕</button>
+    <button aria-label="Dismiss" onclick={() => lastSuccess.set(null)} class="opacity-70 hover:opacity-100 flex-shrink-0">✕</button>
   </div>
 {/if}

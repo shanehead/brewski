@@ -44,9 +44,10 @@
 {/if}
 
 {#if $lastSuccess}
-  <div class="fixed bottom-20 left-4 right-4 z-50 flex items-center gap-3 px-4 py-2.5 rounded shadow-lg text-sm"
+  <div role="status" aria-live="polite" aria-atomic="true"
+       class="fixed bottom-32 left-4 right-4 z-50 flex items-center gap-3 px-4 py-2.5 rounded shadow-lg text-sm"
        style="background: #14532d; color: #bbf7d0;">
     <span class="flex-1">{$lastSuccess}</span>
-    <button onclick={() => lastSuccess.set(null)} class="opacity-70 flex-shrink-0">✕</button>
+    <button aria-label="Dismiss" onclick={() => lastSuccess.set(null)} class="opacity-70 flex-shrink-0">✕</button>
   </div>
 {/if}
