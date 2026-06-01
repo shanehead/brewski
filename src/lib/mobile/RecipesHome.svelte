@@ -5,8 +5,7 @@
   import { createRecipe, createRecipesFromBeerxml } from "$lib/api";
   import type { RecipeSummary } from "$lib/api";
   import { ipc, setSuccess } from "$lib/stores/error";
-  import { settings } from "$lib/stores/settings";
-  import { saveSetting } from "$lib/stores/settings";
+  import { settings, saveSetting } from "$lib/stores/settings";
   import { convertFileSrc } from "@tauri-apps/api/core";
   import { appDataDir as getAppDataDir } from "@tauri-apps/api/path";
   import { srmToHex } from "$lib/utils/srm";
@@ -40,13 +39,16 @@
     const file = (event.target as HTMLInputElement).files?.[0];
     if (!file) return;
     importing = true;
-    const xml = await file.text();
-    const imported = await ipc(createRecipesFromBeerxml(xml));
-    importing = false;
-    if (!imported) return;
-    setSuccess(`${imported.length} recipe${imported.length === 1 ? "" : "s"} imported`);
-    await ipc(refreshRecipeList());
-    fileInput.value = "";
+    try {
+      const xml = await file.text();
+      const imported = await ipc(createRecipesFromBeerxml(xml));
+      if (!imported) return;
+      setSuccess(`${imported.length} recipe${imported.length === 1 ? "" : "s"} imported`);
+      await ipc(refreshRecipeList());
+      fileInput.value = "";
+    } finally {
+      importing = false;
+    }
   }
 
   function toggleStarters() {

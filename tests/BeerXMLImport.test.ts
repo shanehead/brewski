@@ -48,6 +48,14 @@ vi.mock("$app/navigation", () => ({
   goto: vi.fn(),
 }));
 
+vi.mock("@tauri-apps/api/path", () => ({
+  appDataDir: vi.fn().mockResolvedValue("/mock/app/data"),
+}));
+
+vi.mock("@tauri-apps/api/core", () => ({
+  convertFileSrc: vi.fn((src: string) => src),
+}));
+
 describe("RecipeList", () => {
   beforeEach(() => {
     setSuccessMock.mockClear();
@@ -97,6 +105,7 @@ describe("RecipeList", () => {
     expect((btn as HTMLButtonElement).disabled).toBe(true);
 
     resolve([]);
+    await tick();
     await tick();
     await tick();
     expect(getByText("Import BeerXML")).toBeTruthy();

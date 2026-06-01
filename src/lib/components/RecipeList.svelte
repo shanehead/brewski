@@ -55,13 +55,16 @@
     const file = (event.target as HTMLInputElement).files?.[0];
     if (!file) return;
     importing = true;
-    const xml = await file.text();
-    const imported = await ipc(createRecipesFromBeerxml(xml));
-    importing = false;
-    if (!imported) return;
-    setSuccess(`${imported.length} recipe${imported.length === 1 ? "" : "s"} imported`);
-    await ipc(refreshRecipeList());
-    fileInput.value = "";
+    try {
+      const xml = await file.text();
+      const imported = await ipc(createRecipesFromBeerxml(xml));
+      if (!imported) return;
+      setSuccess(`${imported.length} recipe${imported.length === 1 ? "" : "s"} imported`);
+      await ipc(refreshRecipeList());
+      fileInput.value = "";
+    } finally {
+      importing = false;
+    }
   }
 
   function toggleStarters() {
