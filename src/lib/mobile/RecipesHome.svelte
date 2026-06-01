@@ -4,7 +4,7 @@
   import { recipeList, refreshRecipeList, baselineRecipeList, refreshBaselineRecipeList } from "$lib/stores/recipes";
   import { createRecipe, createRecipesFromBeerxml } from "$lib/api";
   import type { RecipeSummary } from "$lib/api";
-  import { ipc } from "$lib/stores/error";
+  import { ipc, setSuccess } from "$lib/stores/error";
   import { settings } from "$lib/stores/settings";
   import { saveSetting } from "$lib/stores/settings";
   import { convertFileSrc } from "@tauri-apps/api/core";
@@ -12,6 +12,7 @@
   import { srmToHex } from "$lib/utils/srm";
 
   let fileInput: HTMLInputElement;
+  let importing = $state(false);
   let appDataDir = $state("");
 
   const startersCollapsed = $derived($settings.starters_collapsed ?? false);
@@ -38,9 +39,12 @@
   async function handleImport(event: Event) {
     const file = (event.target as HTMLInputElement).files?.[0];
     if (!file) return;
+    importing = true;
     const xml = await file.text();
     const imported = await ipc(createRecipesFromBeerxml(xml));
+    importing = false;
     if (!imported) return;
+    setSuccess(`${imported.length} recipe${imported.length === 1 ? "" : "s"} imported`);
     await ipc(refreshRecipeList());
     fileInput.value = "";
   }
@@ -66,9 +70,12 @@
     />
     <button
       onclick={() => fileInput.click()}
+      disabled={importing}
       class="w-full py-3 rounded text-sm font-medium"
       style="border: 1px solid var(--color-accent); color: var(--color-accent); background: transparent;"
-    >Import BeerXML</button>
+    >
+      {importing ? "Importing…" : "Import BeerXML"}
+    </button>
   </div>
   <div class="flex-1 overflow-y-auto">
     {#each $recipeList as recipe (recipe.id)}
