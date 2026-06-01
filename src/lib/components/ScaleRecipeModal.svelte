@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { untrack } from "svelte";
   import { goto } from "$app/navigation";
   import { scaleRecipe } from "$lib/api";
   import { ipc } from "$lib/stores/error";
@@ -16,15 +17,15 @@
   } = $props();
 
   const units = $derived<Units>($settings.units === "imperial" ? "imperial" : "metric");
-  const initialValue = $derived(units === "imperial" ? lToGal(currentBatchSizeL) : currentBatchSizeL);
 
-  let targetValue = $state(0);
+  let targetValue = $state(
+    untrack(() => {
+      const u: Units = $settings.units === "imperial" ? "imperial" : "metric";
+      return parseFloat((u === "imperial" ? lToGal(currentBatchSizeL) : currentBatchSizeL).toFixed(2));
+    })
+  );
   let scaling = $state(false);
   let error = $state<string | null>(null);
-
-  $effect(() => {
-    targetValue = parseFloat(initialValue.toFixed(2));
-  });
 
   async function handleConfirm() {
     if (!targetValue || targetValue <= 0) return;
@@ -41,13 +42,14 @@
   }
 </script>
 
+<svelte:window onkeydown={(e) => e.key === "Escape" && onClose()} />
+
 <div class="fixed inset-0 flex items-center justify-center" style="z-index: 1000;">
   <div
     class="absolute inset-0"
     style="background: rgba(0,0,0,0.4);"
     role="none"
     onclick={onClose}
-    onkeydown={onClose}
   ></div>
   <div
     class="p-4 rounded relative flex flex-col gap-3"
