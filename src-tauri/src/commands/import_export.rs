@@ -5,11 +5,13 @@ use tauri::State;
 
 use crate::error::AppError;
 use crate::models::{
-    CreateFermentableAdditionInput, CreateHopAdditionInput, CreateMiscAdditionInput,
-    CreateRecipeInput, CreateYeastAdditionInput, Recipe, RecipeSummary,
+    CreateFermentableAdditionInput, CreateHopAdditionInput, CreateMashStepInput,
+    CreateMiscAdditionInput, CreateRecipeInput, CreateYeastAdditionInput, Recipe, RecipeSummary,
+    UpdateMashInput,
 };
 use crate::repositories::fermentable::FermentableRepository;
 use crate::repositories::hop::HopRepository;
+use crate::repositories::mash::MashRepository;
 use crate::repositories::misc::MiscRepository;
 use crate::repositories::recipe::RecipeRepository;
 use crate::repositories::yeast::YeastRepository;
@@ -201,6 +203,72 @@ fn build_recipe_beerxml(recipe: &Recipe) -> Result<String, quick_xml::Error> {
                             Ok(())
                         })?;
 
+                    if let Some(mash) = &recipe.mash {
+                        w.create_element("MASH")
+                            .write_inner_content(|w| -> Result<(), E> {
+                                w.create_element("NAME")
+                                    .write_text_content(BytesText::new(&mash.name))?;
+                                w.create_element("GRAIN_TEMP").write_text_content(
+                                    BytesText::new(&format!("{:.1}", mash.grain_temp_c)),
+                                )?;
+                                if let Some(sparge) = mash.sparge_temp_c {
+                                    w.create_element("SPARGE_TEMP").write_text_content(
+                                        BytesText::new(&format!("{:.1}", sparge)),
+                                    )?;
+                                }
+                                if let Some(ph) = mash.ph {
+                                    w.create_element("PH").write_text_content(BytesText::new(
+                                        &format!("{:.2}", ph),
+                                    ))?;
+                                }
+                                w.create_element("MASH_STEPS").write_inner_content(
+                                    |w| -> Result<(), E> {
+                                        for step in &mash.steps {
+                                            w.create_element("MASH_STEP").write_inner_content(
+                                                |w| -> Result<(), E> {
+                                                    w.create_element("NAME").write_text_content(
+                                                        BytesText::new(&step.name),
+                                                    )?;
+                                                    w.create_element("TYPE").write_text_content(
+                                                        BytesText::new(&step.type_),
+                                                    )?;
+                                                    w.create_element("STEP_TEMP")
+                                                        .write_text_content(BytesText::new(
+                                                            &format!("{:.1}", step.step_temp_c),
+                                                        ))?;
+                                                    w.create_element("STEP_TIME")
+                                                        .write_text_content(BytesText::new(
+                                                            &format!("{}", step.step_time_min),
+                                                        ))?;
+                                                    if let Some(infuse) = step.infuse_amount_l {
+                                                        w.create_element("INFUSE_AMOUNT")
+                                                            .write_text_content(BytesText::new(
+                                                                &format!("{:.3}", infuse),
+                                                            ))?;
+                                                    }
+                                                    if let Some(ramp) = step.ramp_time_min {
+                                                        w.create_element("RAMP_TIME")
+                                                            .write_text_content(BytesText::new(
+                                                                &format!("{}", ramp),
+                                                            ))?;
+                                                    }
+                                                    if let Some(end) = step.end_temp_c {
+                                                        w.create_element("END_TEMP")
+                                                            .write_text_content(BytesText::new(
+                                                                &format!("{:.1}", end),
+                                                            ))?;
+                                                    }
+                                                    Ok(())
+                                                },
+                                            )?;
+                                        }
+                                        Ok(())
+                                    },
+                                )?;
+                                Ok(())
+                            })?;
+                    }
+
                     Ok(())
                 })?;
             Ok(())
@@ -229,6 +297,24 @@ pub async fn write_recipe_beerxml(
     std::fs::write(&path, xml).map_err(|e| AppError::Internal(e.to_string()))
 }
 
+struct ParsedMashStep {
+    name: String,
+    type_: String,
+    step_temp_c: f64,
+    step_time_min: i64,
+    infuse_amount_l: Option<f64>,
+    ramp_time_min: Option<i64>,
+    end_temp_c: Option<f64>,
+}
+
+struct ParsedMash {
+    name: String,
+    grain_temp_c: f64,
+    sparge_temp_c: Option<f64>,
+    ph: Option<f64>,
+    steps: Vec<ParsedMashStep>,
+}
+
 // Parsed representation of a single BeerXML <RECIPE> block.
 struct ParsedRecipe {
     name: String,
@@ -240,6 +326,7 @@ struct ParsedRecipe {
     hops: Vec<CreateHopAdditionInput>,
     yeasts: Vec<CreateYeastAdditionInput>,
     miscs: Vec<CreateMiscAdditionInput>,
+    mash: Option<ParsedMash>,
 }
 
 /// Parse all `<RECIPE>` blocks from a BeerXML string.
@@ -272,6 +359,7 @@ fn parse_recipe(reader: &mut Reader<&[u8]>) -> Result<ParsedRecipe, String> {
     let mut hops = Vec::new();
     let mut yeasts = Vec::new();
     let mut miscs = Vec::new();
+    let mut mash = None;
 
     loop {
         match reader.read_event().map_err(|e| e.to_string())? {
@@ -282,11 +370,12 @@ fn parse_recipe(reader: &mut Reader<&[u8]>) -> Result<ParsedRecipe, String> {
                 b"BOIL_SIZE" => boil_size_l = read_text(reader)?.parse().unwrap_or(27.0),
                 b"BOIL_TIME" => boil_time_min = read_text(reader)?.parse().unwrap_or(60.0),
                 // Container elements — just descend into them; children are matched below
-                b"FERMENTABLES" | b"HOPS" | b"YEASTS" | b"MISCS" => {}
+                b"FERMENTABLES" | b"HOPS" | b"YEASTS" | b"MISCS" | b"MASH_STEPS" => {}
                 b"FERMENTABLE" => fermentables.push(parse_fermentable(reader)?),
                 b"HOP" => hops.push(parse_hop(reader)?),
                 b"YEAST" => yeasts.push(parse_yeast(reader)?),
                 b"MISC" => miscs.push(parse_misc(reader)?),
+                b"MASH" => mash = Some(parse_mash(reader)?),
                 _ => skip_element(reader, e.name().as_ref())?,
             },
             Event::End(e) if e.name().as_ref() == b"RECIPE" => break,
@@ -305,6 +394,78 @@ fn parse_recipe(reader: &mut Reader<&[u8]>) -> Result<ParsedRecipe, String> {
         hops,
         yeasts,
         miscs,
+        mash,
+    })
+}
+
+fn parse_mash(reader: &mut Reader<&[u8]>) -> Result<ParsedMash, String> {
+    let mut name = String::from("Mash");
+    let mut grain_temp_c = 20.0f64;
+    let mut sparge_temp_c = None;
+    let mut ph = None;
+    let mut steps = Vec::new();
+
+    loop {
+        match reader.read_event().map_err(|e| e.to_string())? {
+            Event::Start(e) => match e.name().as_ref() {
+                b"NAME" => name = read_text(reader)?,
+                b"GRAIN_TEMP" => grain_temp_c = read_text(reader)?.parse().unwrap_or(20.0),
+                b"SPARGE_TEMP" => sparge_temp_c = read_text(reader)?.parse().ok(),
+                b"PH" => ph = read_text(reader)?.parse().ok(),
+                b"MASH_STEPS" => {}
+                b"MASH_STEP" => steps.push(parse_mash_step(reader)?),
+                _ => skip_element(reader, e.name().as_ref())?,
+            },
+            Event::End(e) if e.name().as_ref() == b"MASH" => break,
+            Event::Eof => return Err("Unexpected EOF inside <MASH>".into()),
+            _ => {}
+        }
+    }
+
+    Ok(ParsedMash {
+        name,
+        grain_temp_c,
+        sparge_temp_c,
+        ph,
+        steps,
+    })
+}
+
+fn parse_mash_step(reader: &mut Reader<&[u8]>) -> Result<ParsedMashStep, String> {
+    let mut name = String::from("Mash Step");
+    let mut type_ = String::from("Infusion");
+    let mut step_temp_c = 68.0f64;
+    let mut step_time_min = 60i64;
+    let mut infuse_amount_l = None;
+    let mut ramp_time_min = None;
+    let mut end_temp_c = None;
+
+    loop {
+        match reader.read_event().map_err(|e| e.to_string())? {
+            Event::Start(e) => match e.name().as_ref() {
+                b"NAME" => name = read_text(reader)?,
+                b"TYPE" => type_ = read_text(reader)?,
+                b"STEP_TEMP" => step_temp_c = read_text(reader)?.parse().unwrap_or(68.0),
+                b"STEP_TIME" => step_time_min = read_text(reader)?.parse().unwrap_or(60),
+                b"INFUSE_AMOUNT" => infuse_amount_l = read_text(reader)?.parse().ok(),
+                b"RAMP_TIME" => ramp_time_min = read_text(reader)?.parse().ok(),
+                b"END_TEMP" => end_temp_c = read_text(reader)?.parse().ok(),
+                _ => skip_element(reader, e.name().as_ref())?,
+            },
+            Event::End(e) if e.name().as_ref() == b"MASH_STEP" => break,
+            Event::Eof => return Err("Unexpected EOF inside <MASH_STEP>".into()),
+            _ => {}
+        }
+    }
+
+    Ok(ParsedMashStep {
+        name,
+        type_,
+        step_temp_c,
+        step_time_min,
+        infuse_amount_l,
+        ramp_time_min,
+        end_temp_c,
     })
 }
 
@@ -526,6 +687,7 @@ pub async fn create_recipes_from_beerxml(
     let hop_repo = HopRepository::new(&state.db);
     let yeast_repo = YeastRepository::new(&state.db);
     let misc_repo = MiscRepository::new(&state.db);
+    let mash_repo = MashRepository::new(&state.db);
 
     let mut summaries = Vec::new();
 
@@ -552,6 +714,36 @@ pub async fn create_recipes_from_beerxml(
         }
         for m in p.miscs {
             misc_repo.create(&recipe.id, m).await?;
+        }
+        if let Some(pm) = p.mash {
+            let mash = mash_repo
+                .upsert_for_recipe(
+                    &recipe.id,
+                    UpdateMashInput {
+                        name: Some(pm.name),
+                        grain_temp_c: Some(pm.grain_temp_c),
+                        sparge_temp_c: pm.sparge_temp_c,
+                        ph: pm.ph,
+                        ..Default::default()
+                    },
+                )
+                .await?;
+            for step in pm.steps {
+                mash_repo
+                    .create_step(
+                        &mash.id,
+                        CreateMashStepInput {
+                            name: step.name,
+                            type_: Some(step.type_),
+                            step_temp_c: step.step_temp_c,
+                            step_time_min: step.step_time_min,
+                            infuse_amount_l: step.infuse_amount_l,
+                            ramp_time_min: step.ramp_time_min,
+                            end_temp_c: step.end_temp_c,
+                        },
+                    )
+                    .await?;
+            }
         }
 
         summaries.push(RecipeSummary::try_from(recipe)?);
@@ -905,5 +1097,113 @@ mod tests {
         assert_eq!(r.yeasts[0].amount_is_weight, Some(true));
         assert_eq!(r.yeasts[0].add_to_secondary, Some(false));
         assert!((r.yeasts[0].amount.unwrap() - 0.011).abs() < 1e-9);
+    }
+
+    #[test]
+    fn test_export_import_round_trip_preserves_mash() {
+        use crate::models::{Mash, MashStep, Recipe, RecipeSource};
+
+        let recipe = Recipe {
+            id: "r1".to_string(),
+            name: "Mash Test".to_string(),
+            type_: "all_grain".to_string(),
+            batch_size_l: 23.0,
+            boil_size_l: 27.0,
+            boil_time_min: 60.0,
+            brewer: None,
+            efficiency_pct: Some(72.0),
+            source: RecipeSource::User,
+            fermentation_stages: 1,
+            forced_carbonation: false,
+            created_at: 0,
+            updated_at: 0,
+            fermentables: vec![],
+            hops: vec![],
+            yeasts: vec![],
+            miscs: vec![],
+            waters: vec![],
+            water_adjustments: vec![],
+            mash: Some(Mash {
+                id: "mash1".to_string(),
+                recipe_id: "r1".to_string(),
+                name: "Single Infusion".to_string(),
+                grain_temp_c: 18.0,
+                sparge_temp_c: Some(76.0),
+                ph: Some(5.4),
+                tun_temp_c: None,
+                tun_weight_kg: None,
+                tun_specific_heat: None,
+                equip_adjust: false,
+                ratio_l_per_kg: None,
+                notes: None,
+                steps: vec![MashStep {
+                    id: "s1".to_string(),
+                    mash_id: "mash1".to_string(),
+                    name: "Mash In".to_string(),
+                    type_: "Infusion".to_string(),
+                    step_temp_c: 67.0,
+                    step_time_min: 60,
+                    infuse_amount_l: Some(15.5),
+                    ramp_time_min: Some(5),
+                    end_temp_c: Some(66.0),
+                    step_order: 0,
+                }],
+            }),
+            age_days: None,
+            age_temp_c: None,
+            asst_brewer: None,
+            carbonation_temp_c: None,
+            carbonation_vols: None,
+            date: None,
+            equipment_profile: None,
+            equipment_profile_id: None,
+            fg: None,
+            hopstand_temp_c: None,
+            keg_priming_factor: None,
+            mash_water_id: None,
+            notes: None,
+            og: None,
+            primary_age_days: None,
+            primary_temp_c: None,
+            priming_sugar_equiv: None,
+            priming_sugar_name: None,
+            secondary_age_days: None,
+            secondary_temp_c: None,
+            sparge_water_id: None,
+            style: None,
+            style_id: None,
+            taste_notes: None,
+            taste_rating: None,
+            tertiary_age_days: None,
+            tertiary_temp_c: None,
+            image_path: None,
+        };
+
+        let xml = build_recipe_beerxml(&recipe).unwrap();
+        assert!(xml.contains("<MASH>"));
+        assert!(xml.contains("<GRAIN_TEMP>18.0</GRAIN_TEMP>"));
+        assert!(xml.contains("<SPARGE_TEMP>76.0</SPARGE_TEMP>"));
+        assert!(xml.contains("<PH>5.40</PH>"));
+        assert!(xml.contains("<MASH_STEP>"));
+        assert!(xml.contains("<STEP_TEMP>67.0</STEP_TEMP>"));
+        assert!(xml.contains("<INFUSE_AMOUNT>15.500</INFUSE_AMOUNT>"));
+        assert!(xml.contains("<RAMP_TIME>5</RAMP_TIME>"));
+        assert!(xml.contains("<END_TEMP>66.0</END_TEMP>"));
+
+        let parsed = parse_beerxml(&xml).unwrap();
+        let r = &parsed[0];
+        let m = r.mash.as_ref().unwrap();
+        assert_eq!(m.name, "Single Infusion");
+        assert!((m.grain_temp_c - 18.0).abs() < 1e-9);
+        assert_eq!(m.sparge_temp_c, Some(76.0));
+        assert!((m.ph.unwrap() - 5.4).abs() < 1e-9);
+        assert_eq!(m.steps.len(), 1);
+        assert_eq!(m.steps[0].name, "Mash In");
+        assert_eq!(m.steps[0].type_, "Infusion");
+        assert!((m.steps[0].step_temp_c - 67.0).abs() < 1e-9);
+        assert_eq!(m.steps[0].step_time_min, 60);
+        assert!((m.steps[0].infuse_amount_l.unwrap() - 15.5).abs() < 1e-3);
+        assert_eq!(m.steps[0].ramp_time_min, Some(5));
+        assert!((m.steps[0].end_temp_c.unwrap() - 66.0).abs() < 1e-9);
     }
 }
