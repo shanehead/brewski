@@ -4,9 +4,12 @@ export const lastError = writable<string | null>(null);
 
 export const lastSuccess = writable<string | null>(null);
 
+let clearTimer: ReturnType<typeof setTimeout> | undefined;
+
 export function setSuccess(message: string) {
+  clearTimeout(clearTimer);
   lastSuccess.set(message);
-  setTimeout(() => lastSuccess.set(null), 3000);
+  clearTimer = setTimeout(() => lastSuccess.set(null), 3000);
 }
 
 /** Await an IPC promise, routing any rejection to the error toast. Returns undefined on failure. */
