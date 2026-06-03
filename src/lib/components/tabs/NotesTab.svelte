@@ -2,6 +2,7 @@
   import type { Recipe } from "$lib/api";
   import { updateRecipe } from "$lib/api";
   import { ipc } from "$lib/stores/error";
+  import MarkdownEditor from "$lib/components/MarkdownEditor.svelte";
 
   let { recipe, onchange }: { recipe: Recipe; onchange: () => void } = $props();
 
@@ -14,22 +15,24 @@
 <div class="flex flex-col gap-4 max-w-2xl">
   <div class="flex flex-col gap-1">
     <label for="notes-recipe" class="text-sm font-medium" style="color: var(--color-text-secondary);">Recipe Notes</label>
-    <textarea id="notes-recipe" value={recipe.notes ?? ""}
-              onblur={(e) => save("notes", (e.target as HTMLTextAreaElement).value || null)}
-              rows="8"
-              placeholder="Process notes, observations…"
-              class="px-3 py-2 rounded text-sm resize-none outline-none"
-              style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);"></textarea>
+    <MarkdownEditor
+      id="notes-recipe"
+      value={recipe.notes ?? null}
+      onchange={(v) => save("notes", v)}
+      rows={8}
+      placeholder="Process notes, observations…"
+    />
   </div>
 
   <div class="flex flex-col gap-1">
     <label for="notes-taste" class="text-sm font-medium" style="color: var(--color-text-secondary);">Taste Notes</label>
-    <textarea id="notes-taste" value={recipe.taste_notes ?? ""}
-              onblur={(e) => save("taste_notes", (e.target as HTMLTextAreaElement).value || null)}
-              rows="4"
-              placeholder="Aroma, flavor, appearance, mouthfeel…"
-              class="px-3 py-2 rounded text-sm resize-none outline-none"
-              style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);"></textarea>
+    <MarkdownEditor
+      id="notes-taste"
+      value={recipe.taste_notes ?? null}
+      onchange={(v) => save("taste_notes", v)}
+      rows={4}
+      placeholder="Aroma, flavor, appearance, mouthfeel…"
+    />
   </div>
 
   <div class="flex flex-col gap-1">

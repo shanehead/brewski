@@ -8,6 +8,7 @@
   import { settings } from "$lib/stores/settings";
   import { formatSg, gravityStep } from "$lib/gravity-display";
   import BatchCarbonationSection from "$lib/components/batch/BatchCarbonationSection.svelte";
+  import MarkdownEditor from "$lib/components/MarkdownEditor.svelte";
 
   let { batch, onUpdate }: { batch: Batch; onUpdate: (input: UpdateBatchInput) => void } = $props();
 
@@ -262,13 +263,11 @@
   <!-- Notes -->
   <div>
     <div class="text-xs mb-2" style="color: var(--color-text-secondary);">NOTES</div>
-    <textarea
-      value={batch.notes ?? ""}
-      onblur={(e) => onUpdate({ notes: e.currentTarget.value || null })}
+    <MarkdownEditor
+      value={batch.notes ?? null}
+      onchange={(v) => onUpdate({ notes: v })}
+      rows={4}
       placeholder="Brew day observations, gravity readings, anything worth remembering…"
-      rows="4"
-      class="w-full px-3 py-2 rounded text-sm outline-none resize-y"
-      style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border); font-family: inherit;"
-    ></textarea>
+    />
   </div>
 </div>
