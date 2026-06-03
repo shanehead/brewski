@@ -2,6 +2,7 @@
 
 pub mod prelude;
 
+pub mod batch_attachments;
 pub mod batch_gravity_readings;
 pub mod batches;
 pub mod equipment_profiles;

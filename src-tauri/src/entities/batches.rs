@@ -40,6 +40,8 @@ pub struct Model {
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
 pub enum Relation {
+    #[sea_orm(has_many = "super::batch_attachments::Entity")]
+    BatchAttachments,
     #[sea_orm(has_many = "super::batch_gravity_readings::Entity")]
     BatchGravityReadings,
     #[sea_orm(
@@ -58,6 +60,12 @@ pub enum Relation {
         on_delete = "Restrict"
     )]
     Recipes,
+}
+
+impl Related<super::batch_attachments::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::BatchAttachments.def()
+    }
 }
 
 impl Related<super::batch_gravity_readings::Entity> for Entity {
