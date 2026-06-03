@@ -381,13 +381,15 @@
             </label>
           </div>
           <div class="col-span-2">
-            <label class="flex flex-col gap-1 text-xs" style="color: var(--color-text-secondary);">Notes
+            <div class="flex flex-col gap-1">
+              <label for="hop-notes" class="text-xs" style="color: var(--color-text-secondary);">Notes</label>
               <MarkdownEditor
+                id="hop-notes"
                 value={hopNotes || null}
                 onchange={(v) => { hopNotes = v ?? ''; }}
                 rows={3}
               />
-            </label>
+            </div>
           </div>
         </div>
 
@@ -430,13 +432,15 @@
             <label for="add-after-boil" class="text-sm" style="color: var(--color-text-primary);">Add after boil</label>
           </div>
           <div class="col-span-2">
-            <label class="flex flex-col gap-1 text-xs" style="color: var(--color-text-secondary);">Notes
+            <div class="flex flex-col gap-1">
+              <label for="ferm-notes" class="text-xs" style="color: var(--color-text-secondary);">Notes</label>
               <MarkdownEditor
+                id="ferm-notes"
                 value={fermNotes || null}
                 onchange={(v) => { fermNotes = v ?? ''; }}
                 rows={3}
               />
-            </label>
+            </div>
           </div>
         </div>
 
@@ -495,13 +499,15 @@
             <label for="add-to-secondary" class="text-sm" style="color: var(--color-text-primary);">Add to secondary</label>
           </div>
           <div class="col-span-2">
-            <label class="flex flex-col gap-1 text-xs" style="color: var(--color-text-secondary);">Notes
+            <div class="flex flex-col gap-1">
+              <label for="yeast-notes" class="text-xs" style="color: var(--color-text-secondary);">Notes</label>
               <MarkdownEditor
+                id="yeast-notes"
                 value={yeastNotes || null}
                 onchange={(v) => { yeastNotes = v ?? ''; }}
                 rows={3}
               />
-            </label>
+            </div>
           </div>
         </div>
 
@@ -546,13 +552,15 @@
             </label>
           </div>
           <div class="col-span-2">
-            <label class="flex flex-col gap-1 text-xs" style="color: var(--color-text-secondary);">Notes
+            <div class="flex flex-col gap-1">
+              <label for="misc-notes" class="text-xs" style="color: var(--color-text-secondary);">Notes</label>
               <MarkdownEditor
+                id="misc-notes"
                 value={miscNotes || null}
                 onchange={(v) => { miscNotes = v ?? ''; }}
                 rows={3}
               />
-            </label>
+            </div>
           </div>
         </div>
 
@@ -602,13 +610,15 @@
             </label>
           </div>
           <div class="col-span-2">
-            <label class="flex flex-col gap-1 text-xs" style="color: var(--color-text-secondary);">Notes
+            <div class="flex flex-col gap-1">
+              <label for="water-notes" class="text-xs" style="color: var(--color-text-secondary);">Notes</label>
               <MarkdownEditor
+                id="water-notes"
                 value={waterNotes || null}
                 onchange={(v) => { waterNotes = v ?? ''; }}
                 rows={2}
               />
-            </label>
+            </div>
           </div>
         </div>
       {/if}

@@ -59,22 +59,28 @@
       <div style="flex: 1;"></div>
       <div class="toolbar">
         <button type="button"
+          onmousedown={(e) => e.preventDefault()}
           onclick={() => textarea && applyEdit(wrapSelection(textarea.value, textarea.selectionStart, textarea.selectionEnd, '**', '**'))}
           class="toolbar-btn" style="font-weight: 700;" title="Bold">B</button>
         <button type="button"
+          onmousedown={(e) => e.preventDefault()}
           onclick={() => textarea && applyEdit(wrapSelection(textarea.value, textarea.selectionStart, textarea.selectionEnd, '*', '*'))}
           class="toolbar-btn" style="font-style: italic;" title="Italic">I</button>
         <button type="button"
+          onmousedown={(e) => e.preventDefault()}
           onclick={() => textarea && applyEdit(insertLinePrefix(textarea.value, textarea.selectionStart, '## '))}
           class="toolbar-btn" title="Heading">H</button>
         <div class="toolbar-sep"></div>
         <button type="button"
+          onmousedown={(e) => e.preventDefault()}
           onclick={() => textarea && applyEdit(insertLinePrefix(textarea.value, textarea.selectionStart, '- '))}
           class="toolbar-btn" title="List">≡</button>
         <button type="button"
+          onmousedown={(e) => e.preventDefault()}
           onclick={() => textarea && applyEdit(insertLinePrefix(textarea.value, textarea.selectionStart, '- [ ] '))}
           class="toolbar-btn" title="Task list">☑</button>
         <button type="button"
+          onmousedown={(e) => e.preventDefault()}
           onclick={() => textarea && applyEdit(insertBlock(textarea.value, textarea.selectionStart, '---'))}
           class="toolbar-btn" title="Rule">—</button>
       </div>
