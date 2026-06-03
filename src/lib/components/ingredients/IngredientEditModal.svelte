@@ -16,6 +16,7 @@
   } from '$lib/api';
   import { untrack } from 'svelte';
   import { ipc } from '$lib/stores/error';
+  import MarkdownEditor from "$lib/components/MarkdownEditor.svelte";
 
   type IngredientType = 'hop' | 'fermentable' | 'yeast' | 'misc' | 'water';
   type AnyIngredient = Hop | Fermentable | Yeast | Misc | Water;
@@ -381,8 +382,11 @@
           </div>
           <div class="col-span-2">
             <label class="flex flex-col gap-1 text-xs" style="color: var(--color-text-secondary);">Notes
-              <textarea bind:value={hopNotes} rows="3" class="px-2 py-1.5 rounded text-sm resize-none"
-                        style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);"></textarea>
+              <MarkdownEditor
+                value={hopNotes || null}
+                onchange={(v) => { hopNotes = v ?? ''; }}
+                rows={3}
+              />
             </label>
           </div>
         </div>
@@ -427,8 +431,11 @@
           </div>
           <div class="col-span-2">
             <label class="flex flex-col gap-1 text-xs" style="color: var(--color-text-secondary);">Notes
-              <textarea bind:value={fermNotes} rows="3" class="px-2 py-1.5 rounded text-sm resize-none"
-                        style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);"></textarea>
+              <MarkdownEditor
+                value={fermNotes || null}
+                onchange={(v) => { fermNotes = v ?? ''; }}
+                rows={3}
+              />
             </label>
           </div>
         </div>
@@ -489,8 +496,11 @@
           </div>
           <div class="col-span-2">
             <label class="flex flex-col gap-1 text-xs" style="color: var(--color-text-secondary);">Notes
-              <textarea bind:value={yeastNotes} rows="3" class="px-2 py-1.5 rounded text-sm resize-none"
-                        style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);"></textarea>
+              <MarkdownEditor
+                value={yeastNotes || null}
+                onchange={(v) => { yeastNotes = v ?? ''; }}
+                rows={3}
+              />
             </label>
           </div>
         </div>
@@ -537,8 +547,11 @@
           </div>
           <div class="col-span-2">
             <label class="flex flex-col gap-1 text-xs" style="color: var(--color-text-secondary);">Notes
-              <textarea bind:value={miscNotes} rows="3" class="px-2 py-1.5 rounded text-sm resize-none"
-                        style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);"></textarea>
+              <MarkdownEditor
+                value={miscNotes || null}
+                onchange={(v) => { miscNotes = v ?? ''; }}
+                rows={3}
+              />
             </label>
           </div>
         </div>
@@ -590,8 +603,11 @@
           </div>
           <div class="col-span-2">
             <label class="flex flex-col gap-1 text-xs" style="color: var(--color-text-secondary);">Notes
-              <textarea bind:value={waterNotes} rows="2" class="px-2 py-1.5 rounded text-sm resize-none"
-                        style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-primary);"></textarea>
+              <MarkdownEditor
+                value={waterNotes || null}
+                onchange={(v) => { waterNotes = v ?? ''; }}
+                rows={2}
+              />
             </label>
           </div>
         </div>
