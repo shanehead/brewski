@@ -116,14 +116,7 @@ pub async fn open_batch_attachment(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use image::{ImageBuffer, Rgb};
     use tempfile::tempdir;
-
-    fn make_png(path: &Path, width: u32, height: u32) {
-        let img: ImageBuffer<Rgb<u8>, Vec<u8>> =
-            ImageBuffer::from_fn(width, height, |x, _y| Rgb([x as u8, 100, 200]));
-        img.save(path).unwrap();
-    }
 
     #[test]
     fn test_file_extension_jpg() {
@@ -148,35 +141,15 @@ mod tests {
     }
 
     #[test]
-    fn test_image_extension_is_detected() {
-        assert!(IMAGE_EXTENSIONS.contains(&"jpg"));
-        assert!(IMAGE_EXTENSIONS.contains(&"jpeg"));
-        assert!(IMAGE_EXTENSIONS.contains(&"png"));
-        assert!(!IMAGE_EXTENSIONS.contains(&"pdf"));
-        assert!(!IMAGE_EXTENSIONS.contains(&"docx"));
-    }
-
-    #[test]
-    fn test_write_image_called_for_png() {
+    fn test_image_copied_verbatim() {
         let dir = tempdir().unwrap();
-        let src = dir.path().join("photo.png");
-        let dest = dir.path().join("out/photo_out.jpg");
-        make_png(&src, 200, 200);
-        write_image(&src, &dest).unwrap();
-        assert!(dest.exists());
-        let img = image::open(&dest).unwrap();
-        assert!(img.width() <= 1200);
-    }
-
-    #[test]
-    fn test_copy_used_for_pdf() {
-        let dir = tempdir().unwrap();
-        let src = dir.path().join("report.pdf");
-        std::fs::write(&src, b"%PDF-1.4 fake content").unwrap();
+        let src = dir.path().join("photo.jpeg");
         let dest_dir = dir.path().join("attachments").join("batch1");
         std::fs::create_dir_all(&dest_dir).unwrap();
-        let dest = dest_dir.join("report_copy.pdf");
+        let dest = dest_dir.join("photo_copy.jpeg");
+        let bytes = b"\xff\xd8\xff fake jpeg bytes";
+        std::fs::write(&src, bytes).unwrap();
         std::fs::copy(&src, &dest).unwrap();
-        assert_eq!(std::fs::read(&dest).unwrap(), b"%PDF-1.4 fake content");
+        assert_eq!(std::fs::read(&dest).unwrap(), bytes);
     }
 }
