@@ -1,3 +1,4 @@
+pub mod batch_attachments;
 pub mod batches;
 pub mod equipment;
 pub mod fermentable;
