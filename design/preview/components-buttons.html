@@ -11,7 +11,14 @@
     border-radius: 6px;
     font: 500 13px var(--font-sans);
     border: 1px solid transparent;
-    cursor: pointer; transition: background var(--motion-fast) var(--ease-standard);
+    cursor: pointer;
+    transition: background var(--motion-fast) var(--ease-standard),
+                transform 80ms cubic-bezier(0.2, 0, 0, 1),
+                filter 80ms cubic-bezier(0.2, 0, 0, 1);
+  }
+  .btn:not(:disabled):active {
+    transform: scale(0.96);
+    filter: brightness(0.82);
   }
   .primary { background: var(--color-accent); color: #fff; }
   .primary:hover { background: var(--color-accent-hover); }
