@@ -84,9 +84,9 @@ describe("RecipeList", () => {
 
   it("disables the Import button and shows 'Importing…' while in-flight", async () => {
     const { createRecipesFromBeerxml } = await import("$lib/api");
-    let resolve!: (val: unknown[]) => void;
+    let resolve!: (val: any) => void;
     vi.mocked(createRecipesFromBeerxml).mockReturnValue(
-      new Promise((r) => { resolve = r; }) as Promise<never>
+      new Promise((r) => { resolve = r; }) as any
     );
 
     const { container, getByText } = render(RecipeList);

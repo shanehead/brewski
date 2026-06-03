@@ -105,6 +105,17 @@ The Tauri IPC interface is documented as an OpenAPI 3.1 spec under `docs/openapi
 
 Lint with `just lint-openapi` before committing changes.
 
+## Quality gates — required before every commit
+
+Run both of these and ensure they pass (zero errors) before committing:
+
+```bash
+just check   # TypeScript type-check + OpenAPI lint
+just test    # Rust + frontend unit tests
+```
+
+Do not commit with failing type errors, test failures, or OpenAPI lint errors. Warnings are acceptable; errors are not.
+
 ## Git commits
 
 Use [Conventional Commits](https://www.conventionalcommits.org/) style: `type(scope): description`.
