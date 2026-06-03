@@ -32,6 +32,7 @@
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/svelte": "^5.3.1",
     "@testing-library/user-event": "^14.6.1",
+    "@types/markdown-it": "^14.1.2",
     "@types/node": "^25.8.0",
     "happy-dom": "^20.9.0",
     "js-yaml": "^4.1.1",

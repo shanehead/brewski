@@ -36,6 +36,7 @@
     textarea.value = result.value;
     textarea.setSelectionRange(result.selStart, result.selEnd);
     textarea.focus();
+    onchange(draft || null);  // commit formatted value immediately
   }
 </script>
 
