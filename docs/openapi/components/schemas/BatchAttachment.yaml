@@ -1,0 +1,27 @@
+type: object
+required:
+  - id
+  - batch_id
+  - filename
+  - original_name
+  - size_bytes
+  - created_at
+properties:
+  id:
+    type: string
+  batch_id:
+    type: string
+  filename:
+    type: string
+    description: UUID-based on-disk filename, e.g. "a1b2c3d4.jpg"
+  original_name:
+    type: string
+    description: User-facing display name, e.g. "brew-day.jpg"
+  mime_type:
+    type: [string, "null"]
+  size_bytes:
+    type: integer
+    format: int64
+  created_at:
+    type: integer
+    format: int64

@@ -1,0 +1,25 @@
+post:
+  operationId: deleteBatchAttachment
+  summary: Delete a batch attachment (removes file from disk and DB record)
+  tags:
+    - Batches
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+  responses:
+    "200":
+      description: Deleted
+      content:
+        application/json:
+          schema:
+            type: "null"
+    "500":
+      $ref: "../../components/responses/Error.yaml"

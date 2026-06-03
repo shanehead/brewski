@@ -973,6 +973,74 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/commands/add_batch_attachment": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Add a file attachment to a batch */
+        post: operations["addBatchAttachment"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/commands/list_batch_attachments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** List all attachments for a batch, ordered by created_at ASC */
+        post: operations["listBatchAttachments"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/commands/delete_batch_attachment": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Delete a batch attachment (removes file from disk and DB record) */
+        post: operations["deleteBatchAttachment"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/commands/open_batch_attachment": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Open a batch attachment with the OS default application */
+        post: operations["openBatchAttachment"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/commands/list_recipe_versions": {
         parameters: {
             query?: never;
@@ -2085,6 +2153,19 @@ export interface components {
             gravity: number;
             temp_c?: number | null;
             notes?: string | null;
+        };
+        BatchAttachment: {
+            id: string;
+            batch_id: string;
+            /** @description UUID-based on-disk filename, e.g. "a1b2c3d4.jpg" */
+            filename: string;
+            /** @description User-facing display name, e.g. "brew-day.jpg" */
+            original_name: string;
+            mime_type?: string | null;
+            /** Format: int64 */
+            size_bytes: number;
+            /** Format: int64 */
+            created_at: number;
         };
         CreateHopInput: {
             name: string;
@@ -3744,6 +3825,116 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+            500: components["responses"]["Error"];
+        };
+    };
+    addBatchAttachment: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    batchId: string;
+                    sourcePath: string;
+                    originalName: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Created attachment */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BatchAttachment"];
+                };
+            };
+            500: components["responses"]["Error"];
+        };
+    };
+    listBatchAttachments: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    batchId: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Attachment list */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BatchAttachment"][];
+                };
+            };
+            500: components["responses"]["Error"];
+        };
+    };
+    deleteBatchAttachment: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    id: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Deleted */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": null;
+                };
+            };
+            500: components["responses"]["Error"];
+        };
+    };
+    openBatchAttachment: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    id: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Opened */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": null;
+                };
             };
             500: components["responses"]["Error"];
         };

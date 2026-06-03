@@ -1,0 +1,31 @@
+post:
+  operationId: addBatchAttachment
+  summary: Add a file attachment to a batch
+  tags:
+    - Batches
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - batchId
+            - sourcePath
+            - originalName
+          properties:
+            batchId:
+              type: string
+            sourcePath:
+              type: string
+            originalName:
+              type: string
+  responses:
+    "200":
+      description: Created attachment
+      content:
+        application/json:
+          schema:
+            $ref: "../../components/schemas/BatchAttachment.yaml"
+    "500":
+      $ref: "../../components/responses/Error.yaml"

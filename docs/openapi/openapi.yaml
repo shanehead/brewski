@@ -163,6 +163,14 @@ paths:
     $ref: ./paths/commands/add_gravity_reading.yaml
   /commands/delete_gravity_reading:
     $ref: ./paths/commands/delete_gravity_reading.yaml
+  /commands/add_batch_attachment:
+    $ref: ./paths/commands/add_batch_attachment.yaml
+  /commands/list_batch_attachments:
+    $ref: ./paths/commands/list_batch_attachments.yaml
+  /commands/delete_batch_attachment:
+    $ref: ./paths/commands/delete_batch_attachment.yaml
+  /commands/open_batch_attachment:
+    $ref: ./paths/commands/open_batch_attachment.yaml
   /commands/list_recipe_versions:
     $ref: ./paths/commands/list_recipe_versions.yaml
   /commands/get_recipe_version:
@@ -299,6 +307,8 @@ components:
       $ref: ./components/schemas/UpdateBatchInput.yaml
     CreateGravityReadingInput:
       $ref: ./components/schemas/CreateGravityReadingInput.yaml
+    BatchAttachment:
+      $ref: ./components/schemas/BatchAttachment.yaml
     CreateHopInput:
       $ref: ./components/schemas/CreateHopInput.yaml
     UpdateHopInput:

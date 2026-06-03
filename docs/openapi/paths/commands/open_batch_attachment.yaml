@@ -1,0 +1,25 @@
+post:
+  operationId: openBatchAttachment
+  summary: Open a batch attachment with the OS default application
+  tags:
+    - Batches
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+  responses:
+    "200":
+      description: Opened
+      content:
+        application/json:
+          schema:
+            type: "null"
+    "500":
+      $ref: "../../components/responses/Error.yaml"

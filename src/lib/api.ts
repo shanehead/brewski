@@ -57,6 +57,7 @@ export type RecipeVersionSummary = components["schemas"]["RecipeVersionSummary"]
 export type CreateBatchInput = components["schemas"]["CreateBatchInput"];
 export type UpdateBatchInput = components["schemas"]["UpdateBatchInput"];
 export type CreateGravityReadingInput = components["schemas"]["CreateGravityReadingInput"];
+export type BatchAttachment = components["schemas"]["BatchAttachment"];
 
 export type SugarType = "table_sugar" | "corn_sugar" | "dry_malt_extract";
 export type GravityUnit = "sg" | "plato" | "brix";
@@ -261,6 +262,16 @@ export const addGravityReading = (batchId: string, input: CreateGravityReadingIn
   invoke<GravityReading>("add_gravity_reading", { batchId, input });
 export const deleteGravityReading = (id: string) =>
   invoke<void>("delete_gravity_reading", { id });
+
+// --- Batch Attachments ---
+export const listBatchAttachments = (batchId: string) =>
+  invoke<BatchAttachment[]>("list_batch_attachments", { batchId });
+export const addBatchAttachment = (batchId: string, sourcePath: string, originalName: string) =>
+  invoke<BatchAttachment>("add_batch_attachment", { batchId, sourcePath, originalName });
+export const deleteBatchAttachment = (id: string) =>
+  invoke<null>("delete_batch_attachment", { id });
+export const openBatchAttachment = (id: string) =>
+  invoke<null>("open_batch_attachment", { id });
 
 // --- Recipe Versions ---
 export const listRecipeVersions = (recipeId: string) =>

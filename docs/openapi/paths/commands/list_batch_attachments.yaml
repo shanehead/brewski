@@ -1,0 +1,27 @@
+post:
+  operationId: listBatchAttachments
+  summary: List all attachments for a batch, ordered by created_at ASC
+  tags:
+    - Batches
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - batchId
+          properties:
+            batchId:
+              type: string
+  responses:
+    "200":
+      description: Attachment list
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "../../components/schemas/BatchAttachment.yaml"
+    "500":
+      $ref: "../../components/responses/Error.yaml"

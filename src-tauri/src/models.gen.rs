@@ -288,6 +288,72 @@ impl Batch {
         Default::default()
     }
 }
+#[doc = "`BatchAttachment`"]
+#[doc = r""]
+#[doc = r" <details><summary>JSON schema</summary>"]
+#[doc = r""]
+#[doc = r" ```json"]
+#[doc = "{"]
+#[doc = "  \"type\": \"object\","]
+#[doc = "  \"required\": ["]
+#[doc = "    \"batch_id\","]
+#[doc = "    \"created_at\","]
+#[doc = "    \"filename\","]
+#[doc = "    \"id\","]
+#[doc = "    \"original_name\","]
+#[doc = "    \"size_bytes\""]
+#[doc = "  ],"]
+#[doc = "  \"properties\": {"]
+#[doc = "    \"batch_id\": {"]
+#[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
+#[doc = "    \"created_at\": {"]
+#[doc = "      \"type\": \"integer\","]
+#[doc = "      \"format\": \"int64\""]
+#[doc = "    },"]
+#[doc = "    \"filename\": {"]
+#[doc = "      \"description\": \"UUID-based on-disk filename, e.g. \\\"a1b2c3d4.jpg\\\"\","]
+#[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
+#[doc = "    \"id\": {"]
+#[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
+#[doc = "    \"mime_type\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"original_name\": {"]
+#[doc = "      \"description\": \"User-facing display name, e.g. \\\"brew-day.jpg\\\"\","]
+#[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
+#[doc = "    \"size_bytes\": {"]
+#[doc = "      \"type\": \"integer\","]
+#[doc = "      \"format\": \"int64\""]
+#[doc = "    }"]
+#[doc = "  }"]
+#[doc = "}"]
+#[doc = r" ```"]
+#[doc = r" </details>"]
+#[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+pub struct BatchAttachment {
+    pub batch_id: ::std::string::String,
+    pub created_at: i64,
+    #[doc = "UUID-based on-disk filename, e.g. \"a1b2c3d4.jpg\""]
+    pub filename: ::std::string::String,
+    pub id: ::std::string::String,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub mime_type: ::std::option::Option<::std::string::String>,
+    #[doc = "User-facing display name, e.g. \"brew-day.jpg\""]
+    pub original_name: ::std::string::String,
+    pub size_bytes: i64,
+}
+impl BatchAttachment {
+    pub fn builder() -> builder::BatchAttachment {
+        Default::default()
+    }
+}
 #[doc = "`BatchSummary`"]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
@@ -7227,6 +7293,133 @@ pub mod builder {
                 serving_pressure_kpa: Ok(value.serving_pressure_kpa),
                 status: Ok(value.status),
                 updated_at: Ok(value.updated_at),
+            }
+        }
+    }
+    #[derive(Clone, Debug)]
+    pub struct BatchAttachment {
+        batch_id: ::std::result::Result<::std::string::String, ::std::string::String>,
+        created_at: ::std::result::Result<i64, ::std::string::String>,
+        filename: ::std::result::Result<::std::string::String, ::std::string::String>,
+        id: ::std::result::Result<::std::string::String, ::std::string::String>,
+        mime_type: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+        original_name: ::std::result::Result<::std::string::String, ::std::string::String>,
+        size_bytes: ::std::result::Result<i64, ::std::string::String>,
+    }
+    impl ::std::default::Default for BatchAttachment {
+        fn default() -> Self {
+            Self {
+                batch_id: Err("no value supplied for batch_id".to_string()),
+                created_at: Err("no value supplied for created_at".to_string()),
+                filename: Err("no value supplied for filename".to_string()),
+                id: Err("no value supplied for id".to_string()),
+                mime_type: Ok(Default::default()),
+                original_name: Err("no value supplied for original_name".to_string()),
+                size_bytes: Err("no value supplied for size_bytes".to_string()),
+            }
+        }
+    }
+    impl BatchAttachment {
+        pub fn batch_id<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::string::String>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.batch_id = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for batch_id: {e}"));
+            self
+        }
+        pub fn created_at<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<i64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.created_at = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for created_at: {e}"));
+            self
+        }
+        pub fn filename<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::string::String>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.filename = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for filename: {e}"));
+            self
+        }
+        pub fn id<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::string::String>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.id = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for id: {e}"));
+            self
+        }
+        pub fn mime_type<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.mime_type = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for mime_type: {e}"));
+            self
+        }
+        pub fn original_name<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::string::String>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.original_name = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for original_name: {e}"));
+            self
+        }
+        pub fn size_bytes<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<i64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.size_bytes = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for size_bytes: {e}"));
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<BatchAttachment> for super::BatchAttachment {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: BatchAttachment,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self {
+                batch_id: value.batch_id?,
+                created_at: value.created_at?,
+                filename: value.filename?,
+                id: value.id?,
+                mime_type: value.mime_type?,
+                original_name: value.original_name?,
+                size_bytes: value.size_bytes?,
+            })
+        }
+    }
+    impl ::std::convert::From<super::BatchAttachment> for BatchAttachment {
+        fn from(value: super::BatchAttachment) -> Self {
+            Self {
+                batch_id: Ok(value.batch_id),
+                created_at: Ok(value.created_at),
+                filename: Ok(value.filename),
+                id: Ok(value.id),
+                mime_type: Ok(value.mime_type),
+                original_name: Ok(value.original_name),
+                size_bytes: Ok(value.size_bytes),
             }
         }
     }
