@@ -10,16 +10,18 @@
   import BatchOverviewTab from "$lib/components/batch/BatchOverviewTab.svelte";
   import BatchGravityTab from "$lib/components/batch/BatchGravityTab.svelte";
   import BatchTastingTab from "$lib/components/batch/BatchTastingTab.svelte";
+  import BatchAttachmentsTab from "$lib/components/batch/BatchAttachmentsTab.svelte";
 
   let { id }: { id: string } = $props();
 
   let batch = $state<Batch | null>(null);
-  let activeTab = $state<"overview" | "gravity" | "tasting">("overview");
+  let activeTab = $state<"overview" | "gravity" | "tasting" | "attachments">("overview");
 
   const TABS = [
     { key: "overview", label: "Overview" },
     { key: "gravity", label: "Gravity Log" },
     { key: "tasting", label: "Tasting" },
+    { key: "attachments", label: "Attachments" },
   ] as const;
 
   async function loadBatch() {
@@ -75,6 +77,8 @@
         <BatchGravityTab {batch} onRefresh={loadBatch} />
       {:else if activeTab === "tasting"}
         <BatchTastingTab {batch} onUpdate={handleUpdate} />
+      {:else if activeTab === "attachments"}
+        <BatchAttachmentsTab {batch} />
       {/if}
     </div>
   {:else}

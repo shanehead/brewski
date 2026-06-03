@@ -8,6 +8,7 @@
   import BatchOverviewTab from "$lib/components/batch/BatchOverviewTab.svelte";
   import BatchGravityTab from "$lib/components/batch/BatchGravityTab.svelte";
   import BatchTastingTab from "$lib/components/batch/BatchTastingTab.svelte";
+  import BatchAttachmentsTab from "$lib/components/batch/BatchAttachmentsTab.svelte";
 
   let { id }: { id: string } = $props();
 
@@ -65,6 +66,13 @@
           <div class="text-xs font-semibold uppercase tracking-wider mb-3"
                style="color: var(--color-text-secondary);">Tasting</div>
           <BatchTastingTab {batch} onUpdate={handleUpdate} />
+        </section>
+
+        <!-- Attachments -->
+        <section>
+          <div class="text-xs font-semibold uppercase tracking-wider mb-3"
+               style="color: var(--color-text-secondary);">Attachments</div>
+          <BatchAttachmentsTab {batch} />
         </section>
 
       </div>
