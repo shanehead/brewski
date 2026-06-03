@@ -46,7 +46,7 @@ fn resize_to_fit(img: image::DynamicImage, max_px: u32) -> image::DynamicImage {
     let scale = max_px as f32 / w.max(h) as f32;
     let new_w = (w as f32 * scale) as u32;
     let new_h = (h as f32 * scale) as u32;
-    img.resize(new_w, new_h, image::imageops::FilterType::Lanczos3)
+    img.resize(new_w, new_h, image::imageops::FilterType::Triangle)
 }
 
 #[tauri::command]
@@ -57,7 +57,10 @@ pub async fn upload_recipe_image(
     source_path: String,
 ) -> Result<Recipe, AppError> {
     let dest = image_path(&app, &recipe_id)?;
-    write_image(Path::new(&source_path), &dest)?;
+    let src = PathBuf::from(&source_path);
+    tokio::task::spawn_blocking(move || write_image(&src, &dest))
+        .await
+        .map_err(|e| AppError::Internal(format!("image task: {e}")))??;
     let filename = format!("{recipe_id}.jpg");
     RecipeRepository::new(&state.db)
         .set_image_path(&recipe_id, Some(&filename))

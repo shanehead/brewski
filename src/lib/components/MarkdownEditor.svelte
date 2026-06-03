@@ -2,6 +2,7 @@
 <script lang="ts">
   import MarkdownIt from 'markdown-it';
   import taskLists from 'markdown-it-task-lists';
+  import { untrack } from 'svelte';
   import { wrapSelection, insertLinePrefix, insertBlock } from '$lib/markdown';
 
   const md = new MarkdownIt({ linkify: true, breaks: true }).use(taskLists);
@@ -25,7 +26,7 @@
 
   // Local draft tracks the in-progress content so Preview reflects typed
   // text before the user blurs (which is when onchange fires).
-  let draft = $state(value ?? '');
+  let draft = $state(untrack(() => value ?? ''));
   $effect(() => {
     draft = value ?? '';
   });

@@ -12,12 +12,14 @@
     openBatchAttachment,
   } from "$lib/api";
   import { ipc } from "$lib/stores/error";
+  import ConfirmModal from "$lib/components/ConfirmModal.svelte";
 
   let { batch }: { batch: Batch } = $props();
 
   let attachments = $state<BatchAttachment[]>([]);
   let appDataDir = $state("");
   let adding = $state(false);
+  let deleteCandidate = $state<BatchAttachment | null>(null);
 
   const photos = $derived(
     attachments.filter((a) => a.mime_type?.startsWith("image/")),
@@ -57,7 +59,16 @@
   }
 
   async function handleDelete(id: string) {
-    await ipc(deleteBatchAttachment(id));
+    const attachment = attachments.find((a) => a.id === id);
+    if (attachment) {
+      deleteCandidate = attachment;
+    }
+  }
+
+  async function confirmDelete() {
+    if (!deleteCandidate) return;
+    await ipc(deleteBatchAttachment(deleteCandidate.id));
+    deleteCandidate = null;
     await load();
   }
 
@@ -107,11 +118,13 @@
       style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px;"
     >
       {#each photos as photo (photo.id)}
-        <!-- svelte-ignore a11y_click_events_have_key_events a11y_no_static_element_interactions -->
         <div
           class="photo-cell"
+          role="button"
+          tabindex="0"
           style="position: relative; aspect-ratio: 1; overflow: hidden; border-radius: 4px; background: var(--color-bg-elevated); cursor: pointer;"
           onclick={() => handleOpen(photo.id)}
+          onkeydown={(e) => e.key === "Enter" && handleOpen(photo.id)}
         >
           <img
             src={attachmentSrc(photo)}
@@ -180,6 +193,16 @@
     </p>
   {/if}
 </div>
+
+{#if deleteCandidate}
+  <ConfirmModal
+    message={`Delete "${deleteCandidate.original_name}"? This cannot be undone.`}
+    confirmLabel="Delete"
+    dangerous={true}
+    onconfirm={confirmDelete}
+    oncancel={() => { deleteCandidate = null; }}
+  />
+{/if}
 
 <style>
   @media (max-width: 640px) {

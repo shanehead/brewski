@@ -1,12 +1,9 @@
-use crate::commands::recipe_image::write_image;
 use crate::error::AppError;
 use crate::models::BatchAttachment;
 use crate::repositories::batch_attachments::BatchAttachmentRepository;
 use crate::AppState;
 use std::path::{Path, PathBuf};
 use tauri::{AppHandle, Manager, State};
-
-const IMAGE_EXTENSIONS: &[&str] = &["jpg", "jpeg", "png", "gif", "webp", "heic"];
 
 pub fn attachments_dir(app: &AppHandle, batch_id: &str) -> Result<PathBuf, AppError> {
     let base = app
@@ -61,12 +58,7 @@ pub async fn add_batch_attachment(
     std::fs::create_dir_all(&dest_dir)
         .map_err(|e| AppError::Internal(format!("create attachments dir: {e}")))?;
 
-    if IMAGE_EXTENSIONS.contains(&ext.as_str()) {
-        write_image(src, &dest)?;
-    } else {
-        std::fs::copy(src, &dest)
-            .map_err(|e| AppError::Internal(format!("copy attachment: {e}")))?;
-    }
+    std::fs::copy(src, &dest).map_err(|e| AppError::Internal(format!("copy attachment: {e}")))?;
 
     let size_bytes = std::fs::metadata(&dest)
         .map_err(|e| AppError::Internal(format!("stat attachment: {e}")))?
