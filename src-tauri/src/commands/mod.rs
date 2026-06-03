@@ -1,4 +1,5 @@
 pub mod additions;
+pub mod batch_attachments;
 pub mod batches;
 pub mod equipment;
 pub mod import_export;
