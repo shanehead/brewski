@@ -16,7 +16,10 @@ export const settings = writable<AppSettings>({});
 
 export async function loadSettings() {
   const s = await getSettings();
-  settings.set(s as AppSettings);
+  const parsed = Object.fromEntries(
+    Object.entries(s).map(([k, v]) => [k, v === "true" ? true : v === "false" ? false : v])
+  );
+  settings.set(parsed as AppSettings);
 }
 
 export async function saveSetting(key: keyof AppSettings, value: string) {
