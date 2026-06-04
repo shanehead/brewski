@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/shanehead/brewski/actions/workflows/ci.yml"><img src="https://github.com/shanehead/brewski/actions/workflows/ci.yml/badge.svg" alt="CI"/></a>
+  <a href="https://githubcom/shanehead/brewski/actions/workflows/ci.yml"><img src="https://github.com/shanehead/brewski/actions/workflows/ci.yml/badge.svg" alt="CI"/></a>
   <a href="https://github.com/shanehead/brewski/releases"><img src="https://img.shields.io/github/v/release/shanehead/brewski?include_prereleases&label=release" alt="Latest release"/></a>
   <img src="https://img.shields.io/badge/platforms-macOS%20%7C%20iOS%20%7C%20Android%20%7C%20Windows%20%7C%20Linux-blue" alt="Platforms"/>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green" alt="MIT license"/></a>
@@ -14,7 +14,7 @@
 
 Brewski is a sleek and modern homebrewing app for managing recipes, tracking brew days, and dialing in your process. Build recipes, log brew days, work out your water chemistry, and keep notes along the way.
 
-Everything stays on your device, no account needed. Runs on macOS, iOS, Android, Windows, and Linux. Free and open source forever, no paywalls.
+Everything stays on your device, no account needed. Runs on macOS, iOS, Android, Windows, and Linux. Free and open source forever for *all* functionality, no paywalls.
 
 ## Features
 
