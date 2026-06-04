@@ -27,19 +27,19 @@ The **Water** tab handles your water chemistry: mineral sources and ion adjustme
 The stats sidebar updates in real time as you add and adjust ingredients. It shows:
 
 - **OG** and **FG**: your estimated original and final gravities
-- **ABV** — estimated alcohol content
-- **IBU** — bitterness from hops
-- **SRM** — estimated color
-- **Pre-boil gravity** — useful for checking your efficiency on brew day
-- **BU:GU ratio** — the balance between bitterness and gravity
-- **Calories** — per serving
-- **Strike temp** — the water temperature you need to hit your mash target
+- **ABV**: estimated alcohol content
+- **IBU**: bitterness from hops
+- **SRM**: estimated color
+- **Pre-boil gravity**: useful for checking your efficiency on brew day
+- **BU:GU ratio**: the balance between bitterness and gravity
+- **Calories**: per serving
+- **Strike temp**: the water temperature you need to hit your mash target
 
 You don't have to hit a target for every number. Use them as a guide.
 
 ## Everything saves automatically
 
-There's no **Save** button. Brewski saves your changes as you make them. Feel free to close a recipe and come back to it later — everything will be right where you left it.
+There's no **Save** button. Brewski saves your changes as you make them. Feel free to close a recipe and come back to it later. Everything will be right where you left it.
 
 ## Starting from a Baseline Recipe
 
