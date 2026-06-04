@@ -5,6 +5,9 @@
   import { settings } from "$lib/stores/settings";
   import { untrack } from "svelte";
   import { cToF, fToC, tempLabel, type Units } from "$lib/units";
+  import Tooltip from "$lib/components/Tooltip.svelte";
+  import DocLink from "$lib/components/DocLink.svelte";
+  import { DOCS } from "$lib/docs-urls";
 
   let {
     batch,
@@ -75,11 +78,14 @@
 </script>
 
 <div>
-  <div
-    class="text-xs mb-3 mt-4 pt-4 border-t font-semibold uppercase tracking-wide"
-    style="color: var(--color-text-secondary); border-color: var(--color-border);"
-  >
-    Carbonation
+  <div class="flex items-center justify-between mb-3 mt-4 pt-4 border-t" style="border-color: var(--color-border);">
+    <div
+      class="text-xs font-semibold uppercase tracking-wide"
+      style="color: var(--color-text-secondary);"
+    >
+      Carbonation
+    </div>
+    <DocLink label="Carbonation guide" url={DOCS.carbonation} />
   </div>
 
   <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-4">
@@ -88,20 +94,26 @@
       class="p-3 rounded"
       style="background: var(--color-bg-elevated); border: 1px solid var(--color-border); opacity: 0.7;"
     >
-      <div class="text-xs mb-1" style="color: var(--color-text-secondary);">Target CO₂ (vols)</div>
+      <div class="flex items-center gap-1 mb-1">
+        <span class="text-xs" style="color: var(--color-text-secondary);">Target CO₂ (vols)</span>
+        <Tooltip text="How much CO₂ you want dissolved. British ales: 1.8–2.2 vols. American ales: 2.3–2.6 vols. Hefeweizens and Belgians: 3.0+." />
+      </div>
       <div class="text-sm font-medium" style="color: var(--color-text-primary);">{targetVols.toFixed(1)}</div>
       <div class="text-xs mt-0.5" style="color: var(--color-text-muted);">from recipe</div>
     </div>
 
     <!-- Packaging temp -->
     <div class="p-3 rounded" style="background: var(--color-bg-elevated); border: 1px solid var(--color-border);">
-      <label
-        for="carb-temp"
-        class="text-xs block mb-1"
-        style="color: var(--color-text-secondary);"
-      >
-        Packaging Temp ({tempLabel(units)})
-      </label>
+      <div class="flex items-center gap-1 mb-1">
+        <label
+          for="carb-temp"
+          class="text-xs"
+          style="color: var(--color-text-secondary);"
+        >
+          Packaging Temp ({tempLabel(units)})
+        </label>
+        <Tooltip text="Use the temperature at the END of fermentation, not after cold crashing. This estimates how much CO₂ is already dissolved in the beer." />
+      </div>
       <input
         id="carb-temp"
         type="number"

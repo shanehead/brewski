@@ -5,6 +5,9 @@
   import { ipc } from "$lib/stores/error";
   import { settings } from "$lib/stores/settings";
   import { formatSg, gravityStep, gravityPlaceholder } from "$lib/gravity-display";
+  import Tooltip from "$lib/components/Tooltip.svelte";
+  import DocLink from "$lib/components/DocLink.svelte";
+  import { DOCS } from "$lib/docs-urls";
 
   let { batch, onRefresh }: { batch: Batch; onRefresh: () => void } = $props();
 
@@ -82,15 +85,21 @@
   {/if}
 
   <div class="flex flex-col gap-2 pt-2 border-t" style="border-color: var(--color-border);">
-    <div class="text-xs" style="color: var(--color-text-muted);">ADD READING</div>
+    <div class="flex items-center justify-between">
+      <div class="text-xs" style="color: var(--color-text-muted);">ADD READING</div>
+      <DocLink label="Gravity tracking guide" url={DOCS.gravityTracking} />
+    </div>
     <div class="flex gap-2 flex-wrap">
       <input type="date" bind:value={newDate}
         class="px-2 py-1.5 rounded text-sm outline-none"
         style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
-      <input type="number" inputmode="decimal" step={gravityStep(gravityUnit)}
-        placeholder={gravityPlaceholder(gravityUnit)} bind:value={newGravity}
-        class="px-2 py-1.5 rounded text-sm outline-none w-40"
-        style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
+      <div class="flex items-center gap-1">
+        <input type="number" inputmode="decimal" step={gravityStep(gravityUnit)}
+          placeholder={gravityPlaceholder(gravityUnit)} bind:value={newGravity}
+          class="px-2 py-1.5 rounded text-sm outline-none w-40"
+          style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
+        <Tooltip text="Enter your current gravity reading. If using a refractometer post-fermentation, correct the reading first in Tools → Refractometer before logging it." />
+      </div>
       <input type="number" inputmode="decimal" step="0.1" placeholder="Temp °C" bind:value={newTemp}
         class="px-2 py-1.5 rounded text-sm outline-none w-24"
         style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />

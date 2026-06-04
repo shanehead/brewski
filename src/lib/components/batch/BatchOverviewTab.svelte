@@ -9,6 +9,8 @@
   import { formatSg, gravityStep } from "$lib/gravity-display";
   import BatchCarbonationSection from "$lib/components/batch/BatchCarbonationSection.svelte";
   import MarkdownEditor from "$lib/components/MarkdownEditor.svelte";
+  import DocLink from "$lib/components/DocLink.svelte";
+  import { DOCS } from "$lib/docs-urls";
 
   let { batch, onUpdate }: { batch: Batch; onUpdate: (input: UpdateBatchInput) => void } = $props();
 
@@ -110,6 +112,10 @@
 </script>
 
 <div class="p-4 flex flex-col gap-6">
+  <div class="flex justify-end">
+    <DocLink label="Brew day guide" url={DOCS.brewDay} />
+  </div>
+
   {#if batchVersion}
     <div class="text-xs" style="color: var(--color-text-muted);">
       Brewed with
