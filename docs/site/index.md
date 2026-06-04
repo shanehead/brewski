@@ -21,7 +21,7 @@ features:
   - title: Water Chemistry
     details: Set up water profiles, dial in your mineral additions, and see how your water will affect the final beer before you brew.
   - title: Built-In Calculators
-    details: ABV, pitch rate, priming sugar, hydrometer correction, refractometer, gravity conversions, color conversions — all the math done for you.
+    details: ABV, pitch rate, priming sugar, hydrometer correction, refractometer, gravity conversions, color conversions. All the math done for you.
   - title: BeerXML Support
     details: Import recipes from Brewfather, BeerSmith, or any BeerXML-compatible tool. Export your recipes to share with friends or back them up.
   - title: Free & Open Source

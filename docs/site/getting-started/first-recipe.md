@@ -12,7 +12,7 @@ Hit **New Recipe** in the left sidebar. Give it a name, something descriptive en
 
 Open the **Ingredients** tab. It has three sections on the same page: Fermentables, Hops, and Yeast.
 
-In the **Fermentables** section, hit **Add Fermentable** and search for your base malt. "Pale Malt 2-Row" is a common starting point. Set the amount, and Brewski will calculate how it affects your OG and color. Repeat for any specialty malts — Caramel 60, Munich, Roasted Barley. Each one updates the stats sidebar as you go.
+In the **Fermentables** section, hit **Add Fermentable** and search for your base malt. "Pale Malt 2-Row" is a common starting point. Set the amount, and Brewski will calculate how it affects your OG and color. Repeat for any specialty malts: Caramel 60, Munich, Roasted Barley. Each one updates the stats sidebar as you go.
 
 In the **Hops** section, hit **Add Hop**. Search for your variety, set the alpha acid percentage, choose how you're using it (Boil, Whirlpool, or Dry Hop), and set the time. Boil additions drive most of your bitterness. Whirlpool and dry hop additions contribute more to aroma than IBU. Add as many hop additions as your recipe needs.
 
@@ -22,7 +22,7 @@ In the **Yeast** section, hit **Add Yeast** and add your yeast. Set the attenuat
 
 Open the **Mash** tab. Brewski starts you with a default single-infusion step already in place. Adjust the temperature and water-to-grain ratio if you need to. For most ales, a 152–154°F (67–68°C) mash works well.
 
-Watch the stats sidebar as you work — your changes save automatically as you go.
+Watch the stats sidebar as you work. Your changes save automatically as you go.
 
 ::: tip You don't have to fill everything in at once
 Come back any time. A recipe with just a grain bill and a couple of hop additions is a perfectly valid starting point. Add the rest when you're ready.

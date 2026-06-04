@@ -10,7 +10,7 @@ If you've used Brewfather, Brewski will feel familiar. You get the same kind of 
 
 **Track every batch from brew day to packaging.** Log your actual volumes and gravities on brew day, record gravity readings through fermentation, and use the priming or CO2 calculators when it's time to package.
 
-**Do the math automatically.** ABV, bitterness, color, water chemistry, pitch rate, hydrometer correction — Brewski handles all of it.
+**Do the math automatically.** ABV, bitterness, color, water chemistry, pitch rate, hydrometer correction: Brewski handles all of it.
 
 **Import from other tools.** Got recipes in Brewfather or BeerSmith? Brewski supports BeerXML, so you can bring them in and pick up where you left off.
 

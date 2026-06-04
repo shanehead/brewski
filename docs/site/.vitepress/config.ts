@@ -2,7 +2,7 @@ import { defineConfig } from "vitepress";
 
 export default defineConfig({
   title: "Brewski",
-  description: "Documentation for Brewski — the free, open-source homebrewing app",
+  description: "Documentation for Brewski, the free, open-source homebrewing app",
   base: "/brewski/",  // update if deploying to a custom domain (remove base entirely for apex domain)
 
   themeConfig: {
@@ -70,8 +70,8 @@ export default defineConfig({
         text: "Concepts & Glossary",
         items: [
           { text: "Understanding gravity", link: "/concepts/gravity" },
-          { text: "IBU — bitterness explained", link: "/concepts/ibu" },
-          { text: "SRM & EBC — color explained", link: "/concepts/color" },
+          { text: "IBU: bitterness explained", link: "/concepts/ibu" },
+          { text: "SRM & EBC: color explained", link: "/concepts/color" },
           { text: "ABV & attenuation", link: "/concepts/abv-attenuation" },
           { text: "Mash chemistry basics", link: "/concepts/mash-chemistry" },
           { text: "Water ions & their effects", link: "/concepts/water-ions" },
