@@ -84,9 +84,7 @@ describe("BatchGravityTab", () => {
 
   it("converts Brix input to SG before saving", async () => {
     currentGravityUnit = "brix";
-    mockInvoke
-      .mockResolvedValueOnce({ sg: 1.054, plato: 13.3, brix: 13.5 })  // convertGravity for input
-      .mockResolvedValueOnce(undefined);                                  // addGravityReading
+    mockInvoke.mockResolvedValue(undefined);  // addGravityReading
 
     const onRefresh = vi.fn();
     const user = userEvent.setup();
@@ -101,9 +99,10 @@ describe("BatchGravityTab", () => {
     await new Promise(r => setTimeout(r, 0));
     await tick();
 
-    expect(mockInvoke).toHaveBeenCalledWith("convert_gravity", { value: 13.5, fromUnit: "brix" });
+    // convertGravity is now pure TypeScript — no IPC call expected
+    expect(mockInvoke).not.toHaveBeenCalledWith("convert_gravity", expect.anything());
     expect(mockInvoke).toHaveBeenCalledWith("add_gravity_reading",
-      expect.objectContaining({ input: expect.objectContaining({ gravity: 1.054 }) })
+      expect.objectContaining({ input: expect.objectContaining({ gravity: expect.closeTo(1.0547, 3) }) })
     );
   });
 });

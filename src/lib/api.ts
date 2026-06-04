@@ -175,53 +175,50 @@ export const updateSetting = (key: string, value: string) =>
   invoke<void>("update_setting", { key, value });
 
 // --- Tools ---
+import {
+  calculateAbvCalories as _calculateAbvCalories,
+  correctHydrometerTemp as _correctHydrometerTemp,
+  calculateRefractometer as _calculateRefractometer,
+  correctRefractometerFg as _correctRefractometerFg,
+  calculatePrimingSugar as _calculatePrimingSugar,
+  calculateCo2Pressure as _calculateCo2Pressure,
+  convertGravity as _convertGravity,
+  calculatePitchRate as _calculatePitchRate,
+  convertColor as _convertColor,
+} from "$lib/conversions";
 export const calculateAbvCalories = (og: number, fg: number) =>
-  invoke<AbvCaloriesResult>("calculate_abv_calories", { og, fg });
+  Promise.resolve(_calculateAbvCalories(og, fg));
 export const correctHydrometerTemp = (
   measuredSg: number,
   measuredTempC: number,
   calibrationTempC: number,
-) =>
-  invoke<number>("correct_hydrometer_temp", { measuredSg, measuredTempC, calibrationTempC });
+) => Promise.resolve(_correctHydrometerTemp(measuredSg, measuredTempC, calibrationTempC));
 export const calculateRefractometer = (brix: number, wortCorrectionFactor: number) =>
-  invoke<RefractometerResult>("calculate_refractometer", { brix, wortCorrectionFactor });
+  Promise.resolve(_calculateRefractometer(brix, wortCorrectionFactor));
 export const correctRefractometerFg = (
   ogBrix: number,
   fgBrix: number,
   wortCorrectionFactor: number,
-) =>
-  invoke<RefractometerFgResult>("correct_refractometer_fg", {
-    ogBrix,
-    fgBrix,
-    wortCorrectionFactor,
-  });
+) => Promise.resolve(_correctRefractometerFg(ogBrix, fgBrix, wortCorrectionFactor));
 export const calculatePrimingSugar = (
   targetVols: number,
   batchSizeL: number,
   tempC: number,
   sugarType: SugarType,
-) =>
-  invoke<number>("calculate_priming_sugar", { targetVols, batchSizeL, tempC, sugarType });
+) => Promise.resolve(_calculatePrimingSugar(targetVols, batchSizeL, tempC, sugarType));
 export const calculateCo2Pressure = (targetVols: number, tempC: number) =>
-  invoke<number>("calculate_co2_pressure", { targetVols, tempC });
+  Promise.resolve(_calculateCo2Pressure(targetVols, tempC));
 export const convertGravity = (value: number, fromUnit: GravityUnit) =>
-  invoke<GravityConversionResult>("convert_gravity", { value, fromUnit });
+  Promise.resolve(_convertGravity(value, fromUnit));
 export const calculatePitchRate = (
   og: number,
   batchSizeL: number,
   pitchRate: number,
   yeastPackCells: number,
   viabilityPct: number,
-) =>
-  invoke<PitchRateResult>("calculate_pitch_rate", {
-    og,
-    batchSizeL,
-    pitchRate,
-    yeastPackCells,
-    viabilityPct,
-  });
+) => Promise.resolve(_calculatePitchRate(og, batchSizeL, pitchRate, yeastPackCells, viabilityPct));
 export const convertColor = (value: number, fromUnit: ColorUnit) =>
-  invoke<ColorConversionResult>("convert_color", { value, fromUnit });
+  Promise.resolve(_convertColor(value, fromUnit));
 
 // --- Import / export ---
 export const getRecipeBeerxml = (recipeId: string) =>

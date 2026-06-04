@@ -10,5 +10,4 @@ pub mod recipe_image;
 pub mod recipes;
 pub mod settings;
 pub mod sync;
-pub mod tools;
 pub mod water_chemistry;
