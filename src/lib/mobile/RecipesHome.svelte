@@ -100,7 +100,7 @@
     {/each}
 
     <!-- Example Recipes section -->
-    {#if $baselineRecipeList.length > 0}
+    {#if $baselineRecipeList.length > 0 && !$settings.hide_example_recipes}
       <button
         onclick={toggleStarters}
         class="w-full flex items-center justify-between px-4 py-2 border-b"
