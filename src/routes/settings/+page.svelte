@@ -19,6 +19,10 @@
   async function handleGravityUnitChange(e: Event) {
     await ipc(saveSetting("gravity_unit", (e.target as HTMLSelectElement).value));
   }
+
+  async function handleHideExamplesChange(e: Event) {
+    await ipc(saveSetting("hide_example_recipes", (e.target as HTMLInputElement).checked ? "true" : "false"));
+  }
 </script>
 
 <div class="flex-1 overflow-y-auto p-6" style="background: var(--color-bg-base);">
@@ -68,6 +72,22 @@
           <option value="plato">Plato (°P)</option>
           <option value="brix">Brix (°Bx)</option>
         </select>
+      </div>
+    </section>
+
+    <!-- Recipes -->
+    <section class="flex flex-col gap-3">
+      <h2 class="text-sm font-semibold" style="color: var(--color-text-secondary);">Recipes</h2>
+      <div class="flex items-center justify-between">
+        <label for="toggle-hide-examples" class="text-sm" style="color: var(--color-text-primary);">Hide Example Recipes</label>
+        <input
+          id="toggle-hide-examples"
+          type="checkbox"
+          checked={$settings.hide_example_recipes ?? false}
+          onchange={handleHideExamplesChange}
+          class="w-4 h-4 rounded cursor-pointer"
+          style="accent-color: var(--color-accent);"
+        />
       </div>
     </section>
 
