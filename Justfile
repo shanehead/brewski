@@ -57,8 +57,12 @@ build-all: build-macos build-ios build-android build-windows build-linux
 
 # ── Check & Lint ──────────────────────────────────────────────────────────────
 
-# Run all checks (TypeScript + OpenAPI)
-check: check-ts lint-openapi
+# Run all checks (TypeScript + OpenAPI + contrast)
+check: check-ts lint-openapi check-contrast
+
+# Check theme color contrast ratios
+check-contrast:
+    python3 scripts/contrast-check.py
 
 # TypeScript / Svelte type check
 check-ts:
