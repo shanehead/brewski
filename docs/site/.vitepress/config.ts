@@ -6,7 +6,6 @@ export default defineConfig({
   base: "/brewski/",  // update if deploying to a custom domain (remove base entirely for apex domain)
 
   themeConfig: {
-    logo: "/logo.svg",
     nav: [
       { text: "Getting Started", link: "/getting-started/what-is-brewski" },
       { text: "Guides", link: "/guides/building-a-recipe" },
