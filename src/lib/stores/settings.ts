@@ -9,6 +9,7 @@ export interface AppSettings {
   last_route?: string;
   starters_collapsed?: boolean;
   hide_example_recipes?: boolean;
+  show_tooltips?: boolean;
 }
 
 export const settings = writable<AppSettings>({});

@@ -23,6 +23,10 @@
   async function handleHideExamplesChange(e: Event) {
     await ipc(saveSetting("hide_example_recipes", (e.target as HTMLInputElement).checked ? "true" : "false"));
   }
+
+  async function handleTooltipsChange(e: Event) {
+    await ipc(saveSetting("show_tooltips", String((e.target as HTMLInputElement).checked)));
+  }
 </script>
 
 <div class="flex-1 overflow-y-auto p-6" style="background: var(--color-bg-base);">
@@ -89,6 +93,23 @@
           style="accent-color: var(--color-accent);"
         />
       </div>
+    </section>
+
+    <!-- Help -->
+    <section class="flex flex-col gap-3">
+      <h2 class="text-sm font-semibold" style="color: var(--color-text-secondary);">Help</h2>
+      <div class="flex items-center justify-between">
+        <label for="toggle-tooltips" class="text-sm" style="color: var(--color-text-primary);">Show tooltips</label>
+        <input
+          id="toggle-tooltips"
+          type="checkbox"
+          checked={$settings.show_tooltips ?? true}
+          onchange={handleTooltipsChange}
+          class="w-4 h-4 rounded cursor-pointer"
+          style="accent-color: var(--color-accent);"
+        />
+      </div>
+      <p class="text-xs" style="color: var(--color-text-muted);">Turn off once you know your way around.</p>
     </section>
 
     <DatabaseLocation />
