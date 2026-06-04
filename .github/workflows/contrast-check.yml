@@ -1,0 +1,17 @@
+name: Contrast check
+
+on:
+  pull_request:
+  push:
+    branches:
+      - '**'
+
+jobs:
+  contrast:
+    name: Check theme contrast
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run contrast check
+        run: |
+          python3 scripts/contrast-check.py
