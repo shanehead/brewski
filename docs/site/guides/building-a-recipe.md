@@ -16,7 +16,7 @@ If you haven't set up a profile yet, Brewski uses sensible defaults. You'll stil
 
 ## Adding ingredients
 
-The **Ingredients** tab holds your fermentables, hops, and yeast, all in one place. Each ingredient type has its own card section on the page. Work through them in order or jump around — it doesn't matter.
+The **Ingredients** tab holds your fermentables, hops, and yeast, all in one place. Each ingredient type has its own card section on the page. Work through them in order or jump around. It doesn't matter.
 
 The **Mash** tab is where you define your mash steps, temperatures, times, and water amounts.
 
@@ -26,7 +26,7 @@ The **Water** tab handles your water chemistry: mineral sources and ion adjustme
 
 The stats sidebar updates in real time as you add and adjust ingredients. It shows:
 
-- **OG** and **FG** — your estimated original and final gravities
+- **OG** and **FG**: your estimated original and final gravities
 - **ABV** — estimated alcohol content
 - **IBU** — bitterness from hops
 - **SRM** — estimated color
