@@ -63,4 +63,11 @@ describe("Settings page - hide example recipes", () => {
     await fireEvent.click(getByLabelText("Hide Example Recipes"));
     expect(saveSettingMock).toHaveBeenCalledWith("hide_example_recipes", "true");
   });
+
+  it("calls saveSetting with 'false' when checkbox is clicked while checked", async () => {
+    mockSettings = { hide_example_recipes: true };
+    const { getByLabelText } = render(SettingsPage);
+    await fireEvent.click(getByLabelText("Hide Example Recipes"));
+    expect(saveSettingMock).toHaveBeenCalledWith("hide_example_recipes", "false");
+  });
 });

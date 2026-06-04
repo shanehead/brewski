@@ -62,6 +62,13 @@ describe("RecipesHome (mobile) - example recipes visibility", () => {
     expect(getByText("Example Recipes")).toBeInTheDocument();
   });
 
+  it("shows Example Recipes section when setting is false", () => {
+    mockBaselineRecipes = [exampleRecipe];
+    mockSettings = { hide_example_recipes: false };
+    const { getByText } = render(RecipesHome);
+    expect(getByText("Example Recipes")).toBeInTheDocument();
+  });
+
   it("hides Example Recipes section when setting is true", () => {
     mockBaselineRecipes = [exampleRecipe];
     mockSettings = { hide_example_recipes: true };
