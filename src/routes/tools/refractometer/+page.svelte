@@ -6,6 +6,9 @@
     type RefractometerResult,
   } from "$lib/api";
   import { ipc } from "$lib/stores/error";
+  import Tooltip from "$lib/components/Tooltip.svelte";
+  import DocLink from "$lib/components/DocLink.svelte";
+  import { DOCS } from "$lib/docs-urls";
 
   let brix = $state(12);
   let ogBrix = $state(12);
@@ -49,7 +52,10 @@
 </script>
 
 <div class="p-6 md:p-8">
-  <h2 class="text-xl font-semibold" style="color: var(--color-text-primary);">Refractometer / Brix</h2>
+  <div class="flex items-center gap-2">
+    <h2 class="text-xl font-semibold" style="color: var(--color-text-primary);">Refractometer / Brix</h2>
+    <DocLink label="Refractometer reference" url={DOCS.calcRefractometer} />
+  </div>
   <p class="mt-2 max-w-2xl text-sm" style="color: var(--color-text-secondary);">
     Convert raw Brix into pre-fermentation SG, or correct an apparent final reading after alcohol is present.
   </p>
@@ -64,12 +70,15 @@
                style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
       </label>
 
-      <label class="mt-4 block text-sm font-medium" style="color: var(--color-text-primary);">
-        Wort Correction Factor
+      <div class="mt-4">
+        <div class="flex items-center gap-1 mb-1">
+          <span class="text-sm font-medium" style="color: var(--color-text-primary);">Wort Correction Factor</span>
+          <Tooltip text="Wort refracts light slightly differently than pure sugar. The default (1.04) works for most beers. Check your refractometer's manual — some are pre-corrected and should use 1.00." />
+        </div>
         <input bind:value={wortCorrectionFactor} type="number" min="0.9" max="1.2" step="0.01"
-               class="mt-2 w-full rounded px-3 py-2 text-sm"
+               class="w-full rounded px-3 py-2 text-sm"
                style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
-      </label>
+      </div>
 
       <div class="mt-6 rounded-lg border p-4" style="border-color: var(--color-accent);">
         {#if preResult}
@@ -88,12 +97,15 @@
                style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
       </label>
 
-      <label class="mt-4 block text-sm font-medium" style="color: var(--color-text-primary);">
-        Final Brix Reading
+      <div class="mt-4">
+        <div class="flex items-center gap-1 mb-1">
+          <span class="text-sm font-medium" style="color: var(--color-text-primary);">Final Brix Reading</span>
+          <Tooltip text="Your raw refractometer reading post-fermentation. Alcohol skews this reading — the corrected FG shown here uses the Novotný formula." />
+        </div>
         <input bind:value={fgBrix} type="number" min="0" step="0.1"
-               class="mt-2 w-full rounded px-3 py-2 text-sm"
+               class="w-full rounded px-3 py-2 text-sm"
                style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
-      </label>
+      </div>
 
       <div class="mt-6 rounded-lg border p-4" style="border-color: var(--color-accent);">
         {#if postResult}

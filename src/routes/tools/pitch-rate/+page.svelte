@@ -3,6 +3,9 @@
   import { settings } from "$lib/stores/settings";
   import { ipc } from "$lib/stores/error";
   import { galToL, lToGal, volumeLabel, type Units } from "$lib/units";
+  import Tooltip from "$lib/components/Tooltip.svelte";
+  import DocLink from "$lib/components/DocLink.svelte";
+  import { DOCS } from "$lib/docs-urls";
 
   let og = $state(1.05);
   let batchSizeL = $state(20);
@@ -55,7 +58,10 @@
 </script>
 
 <div class="p-6 md:p-8">
-  <h2 class="text-xl font-semibold" style="color: var(--color-text-primary);">Yeast Pitch Rate</h2>
+  <div class="flex items-center gap-2">
+    <h2 class="text-xl font-semibold" style="color: var(--color-text-primary);">Yeast Pitch Rate</h2>
+    <DocLink label="Pitch rate reference" url={DOCS.calcPitchRate} />
+  </div>
   <p class="mt-2 max-w-2xl text-sm" style="color: var(--color-text-secondary);">
     Estimate total cells needed for the batch and a simple starter size based on pack count and viability.
   </p>
@@ -77,26 +83,35 @@
                style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
       </label>
 
-      <label class="mt-4 block text-sm font-medium" style="color: var(--color-text-primary);">
-        Pitch Rate (M cells / mL / °P)
+      <div class="mt-4">
+        <div class="flex items-center gap-1 mb-1">
+          <span class="text-sm font-medium" style="color: var(--color-text-primary);">Pitch Rate (M cells / mL / °P)</span>
+          <Tooltip text="Million cells per mL per degree Plato. Standard: 0.75 for ales, 1.5 for lagers. Higher rates are more reliable for big beers." />
+        </div>
         <input bind:value={pitchRate} type="number" min="0" step="0.05"
-               class="mt-2 w-full rounded px-3 py-2 text-sm"
+               class="w-full rounded px-3 py-2 text-sm"
                style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
-      </label>
+      </div>
 
-      <label class="mt-4 block text-sm font-medium" style="color: var(--color-text-primary);">
-        Yeast Pack Cells (billions)
+      <div class="mt-4">
+        <div class="flex items-center gap-1 mb-1">
+          <span class="text-sm font-medium" style="color: var(--color-text-primary);">Yeast Pack Cells (billions)</span>
+          <Tooltip text="How many billion cells are in your pack. Most liquid packs contain ~100B cells when fresh. Check the manufacture date — viability drops over time." />
+        </div>
         <input bind:value={yeastPackCells} type="number" min="0" step="1"
-               class="mt-2 w-full rounded px-3 py-2 text-sm"
+               class="w-full rounded px-3 py-2 text-sm"
                style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
-      </label>
+      </div>
 
-      <label class="mt-4 block text-sm font-medium" style="color: var(--color-text-primary);">
-        Viability (%)
+      <div class="mt-4">
+        <div class="flex items-center gap-1 mb-1">
+          <span class="text-sm font-medium" style="color: var(--color-text-primary);">Viability (%)</span>
+          <Tooltip text="The percentage of cells in your pack that are still alive. A fresh pack is close to 100%. A few months old might be 65–75%. Some labs publish viability charts on their websites." />
+        </div>
         <input bind:value={viabilityPct} type="number" min="0" max="100" step="1"
-               class="mt-2 w-full rounded px-3 py-2 text-sm"
+               class="w-full rounded px-3 py-2 text-sm"
                style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
-      </label>
+      </div>
     </section>
 
     <section class="rounded-xl border p-5" style="background: var(--color-bg-surface); border-color: var(--color-accent);">

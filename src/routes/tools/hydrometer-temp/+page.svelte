@@ -3,6 +3,9 @@
   import { settings } from "$lib/stores/settings";
   import { ipc } from "$lib/stores/error";
   import { cToF, fToC, tempLabel, type Units } from "$lib/units";
+  import Tooltip from "$lib/components/Tooltip.svelte";
+  import DocLink from "$lib/components/DocLink.svelte";
+  import { DOCS } from "$lib/docs-urls";
 
   let measuredSg = $state(1.05);
   let measuredTempC = $state(20);
@@ -43,7 +46,10 @@
 </script>
 
 <div class="p-6 md:p-8">
-  <h2 class="text-xl font-semibold" style="color: var(--color-text-primary);">Hydrometer Temperature Correction</h2>
+  <div class="flex items-center gap-2">
+    <h2 class="text-xl font-semibold" style="color: var(--color-text-primary);">Hydrometer Temperature Correction</h2>
+    <DocLink label="Hydrometer correction reference" url={DOCS.calcHydrometer} />
+  </div>
   <p class="mt-2 max-w-2xl text-sm" style="color: var(--color-text-secondary);">
     Adjust a hydrometer reading when your wort sample is warmer or cooler than the hydrometer calibration point.
   </p>
@@ -65,13 +71,16 @@
                style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
       </label>
 
-      <label class="mt-4 block text-sm font-medium" style="color: var(--color-text-primary);">
-        Calibration Temperature ({tempLabel(units)})
+      <div class="mt-4">
+        <div class="flex items-center gap-1 mb-1">
+          <span class="text-sm font-medium" style="color: var(--color-text-primary);">Calibration Temperature ({tempLabel(units)})</span>
+          <Tooltip text="The temperature your hydrometer is calibrated for. It's usually printed on the label or the instructions. Most hydrometers are calibrated at 20°C (68°F)." />
+        </div>
         <input value={calibrationTempDisplay} oninput={(e) => updateCalibrationTemp((e.target as HTMLInputElement).value)}
                type="number" step="0.1"
-               class="mt-2 w-full rounded px-3 py-2 text-sm"
+               class="w-full rounded px-3 py-2 text-sm"
                style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
-      </label>
+      </div>
     </section>
 
     <section class="rounded-xl border p-5" style="background: var(--color-bg-surface); border-color: var(--color-accent);">
