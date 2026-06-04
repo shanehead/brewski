@@ -4,7 +4,7 @@ If you're coming from Brewfather, BeerSmith, BrewUnited, or any other homebrewin
 
 ## How to import
 
-In the recipe list sidebar, hit the **Import** button. Pick your `.xml` file and Brewski will pull it in.
+In the recipe list sidebar, hit **Import BeerXML**. Pick your `.xml` file and Brewski will pull it in.
 
 ## What comes through
 
