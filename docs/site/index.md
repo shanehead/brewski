@@ -1,0 +1,29 @@
+---
+layout: home
+
+hero:
+  name: "Brewski"
+  text: "Brew better beer."
+  tagline: Free, open-source homebrewing software for recipe design, batch tracking, and everything in between.
+  actions:
+    - theme: brand
+      text: Get Started
+      link: /getting-started/what-is-brewski
+    - theme: alt
+      text: View on GitHub
+      link: https://github.com/shanehead/brewski
+
+features:
+  - title: Recipe Builder
+    details: Build recipes from a library of hundreds of hops, fermentables, yeasts, and water profiles. The stats sidebar updates in real time as you add ingredients.
+  - title: Batch Tracking
+    details: Log every brew day, record gravity readings, track fermentation, and manage carbonation. Your brew history lives in one place.
+  - title: Water Chemistry
+    details: Set up water profiles, dial in your mineral additions, and see how your water will affect the final beer before you brew.
+  - title: Built-In Calculators
+    details: ABV, pitch rate, priming sugar, hydrometer correction, refractometer, gravity conversions, color conversions — all the math done for you.
+  - title: BeerXML Support
+    details: Import recipes from Brewfather, BeerSmith, or any BeerXML-compatible tool. Export your recipes to share with friends or back them up.
+  - title: Free & Open Source
+    details: Brewski is MIT-licensed and free forever. No subscription, no account required, no data sent to anyone.
+---

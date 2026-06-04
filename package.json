@@ -11,7 +11,10 @@
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "test": "vitest run",
     "test:watch": "vitest",
-    "tauri": "tauri"
+    "tauri": "tauri",
+    "docs:dev": "vitepress dev docs/site",
+    "docs:build": "vitepress build docs/site",
+    "docs:preview": "vitepress preview docs/site"
   },
   "license": "MIT",
   "dependencies": {
@@ -41,6 +44,7 @@
     "svelte-check": "^4.4.8",
     "typescript": "~6.0.3",
     "vite": "^8.0.13",
+    "vitepress": "^1.6.4",
     "vitest": "^4.1.6",
     "yaml": "^2.9.0"
   }
