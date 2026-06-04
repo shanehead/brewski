@@ -21,7 +21,7 @@
   let recipe = $state<Recipe | null>(null);
   let stats = $state<RecipeStats | null>(null);
   let appDataDir = $state("");
-  let fileInput: HTMLInputElement;
+  let fileInput = $state<HTMLInputElement | null>(null);
   let showScaleModal = $state(false);
 
   const gravityUnit = $derived($settings.gravity_unit ?? "sg");
@@ -63,7 +63,7 @@
     const path = (file as File & { path?: string }).path;
     if (!path) return;
     recipe = await ipc(uploadRecipeImage({ recipe_id: recipe.id, source_path: path })) ?? recipe;
-    fileInput.value = "";
+    if (fileInput) fileInput.value = "";
   }
 
   async function handleImageRemove() {
