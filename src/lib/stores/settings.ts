@@ -8,6 +8,7 @@ export interface AppSettings {
   default_equipment_profile_id?: string;
   last_route?: string;
   starters_collapsed?: boolean;
+  hide_example_recipes?: boolean;
 }
 
 export const settings = writable<AppSettings>({});
