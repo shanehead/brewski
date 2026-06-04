@@ -6,6 +6,9 @@
   import { settings } from "$lib/stores/settings";
   import { type Units, cToF, fToC, lToGal, galToL, tempLabel, volumeLabel, lPerKgToQtPerLb, qtPerLbToLPerKg, ratioLabel } from "$lib/units";
   import Card from "$lib/components/Card.svelte";
+  import Tooltip from "$lib/components/Tooltip.svelte";
+  import DocLink from "$lib/components/DocLink.svelte";
+  import { DOCS } from "$lib/docs-urls";
 
   let { recipe, stats, onchange }: { recipe: Recipe; stats: RecipeStats | null; onchange: () => void } = $props();
 
@@ -121,6 +124,9 @@
 </script>
 
 <div class="flex flex-col gap-4 max-w-2xl">
+  <div class="flex justify-end mb-2">
+    <DocLink label="Mash guide" url={DOCS.mash} />
+  </div>
   <Card title="Mash Parameters">
     <div class="grid grid-cols-2 gap-3">
       <div class="flex flex-col gap-1">
@@ -131,7 +137,10 @@
                style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
       </div>
       <div class="flex flex-col gap-1">
-        <label for="mash-grain-temp" class="text-xs font-medium" style="color: var(--color-text-secondary);">Grain Temp ({tempLabel(units)})</label>
+        <div class="flex items-center gap-1">
+          <label for="mash-grain-temp" class="text-xs font-medium" style="color: var(--color-text-secondary);">Grain Temp ({tempLabel(units)})</label>
+          <Tooltip text="The temperature of your grain before mashing. Used to calculate the strike water temperature. Room temperature (around 20°C / 68°F) is fine for most situations." />
+        </div>
         <input id="mash-grain-temp" type="number" inputmode="decimal" step={units === "imperial" ? 1 : 0.5}
                value={(units === "imperial" ? cToF(mash?.grain_temp_c ?? 21) : mash?.grain_temp_c ?? 21).toFixed(1)}
                onblur={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); handleMashField({ grain_temp_c: units === "imperial" ? fToC(v) : v }); }}
@@ -173,7 +182,10 @@
 
       {#if mash && !canAutoDerive}
         <div class="flex flex-col gap-1">
-          <label for="mash-ratio" class="text-xs font-medium" style="color: var(--color-text-secondary);">Water:Grain Ratio ({ratioLabel(units)})</label>
+          <div class="flex items-center gap-1">
+            <label for="mash-ratio" class="text-xs font-medium" style="color: var(--color-text-secondary);">Water:Grain Ratio ({ratioLabel(units)})</label>
+            <Tooltip text="How much water per kg (or lb) of grain you're mashing with. A typical range is 2.5–4 L/kg. BIAB setups often use more. Higher ratio = easier to stir, lower ratio = better efficiency." />
+          </div>
           <input id="mash-ratio" type="number" inputmode="decimal" step="0.1"
                  value={mash.ratio_l_per_kg != null
                    ? (units === "imperial" ? lPerKgToQtPerLb(mash.ratio_l_per_kg) : mash.ratio_l_per_kg).toFixed(2)

@@ -6,6 +6,9 @@
   import { type Units, kgToLb, lbToKg, weightLabel } from "$lib/units";
   import BrewingIcon from "$lib/components/BrewingIcon.svelte";
   import IngredientPicker, { type AddPayload } from "$platform/IngredientPicker.svelte";
+  import Tooltip from "$lib/components/Tooltip.svelte";
+  import DocLink from "$lib/components/DocLink.svelte";
+  import { DOCS } from "$lib/docs-urls";
 
   let { recipe, onchange }: { recipe: Recipe; onchange: () => void } = $props();
 
@@ -47,8 +50,11 @@
       <BrewingIcon name="fermentable" />
       Fermentables
     </h3>
-    <button onclick={() => adding = true} class="text-xs px-2 py-1 rounded"
-            style="background: var(--color-accent); color: #fff;">+ Add</button>
+    <div class="flex items-center gap-2">
+      <DocLink label="Fermentables guide" url={DOCS.fermentables} />
+      <button onclick={() => adding = true} class="text-xs px-2 py-1 rounded"
+              style="background: var(--color-accent); color: #fff;">+ Add</button>
+    </div>
   </div>
 
   <IngredientPicker
@@ -63,7 +69,9 @@
       <thead>
         <tr style="color: var(--color-text-secondary);">
           <th class="text-left py-1 font-medium text-sm">Name</th>
-          <th class="text-right py-1 font-medium text-sm">Lovibond</th>
+          <th class="text-right py-1 font-medium text-sm">
+            <span class="inline-flex items-center gap-1">Lovibond <Tooltip text="The color of this fermentable in degrees Lovibond. Pale malts are 1–3°L. Crystal malts range from 10 to 120°L and above." /></span>
+          </th>
           <th class="text-right py-1 font-medium text-sm">{weightLabel(units)}</th>
           <th class="w-6"></th>
         </tr>

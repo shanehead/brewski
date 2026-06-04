@@ -11,6 +11,9 @@
   } from "$lib/api";
   import { ipc } from "$lib/stores/error";
   import Card from "$lib/components/Card.svelte";
+  import Tooltip from "$lib/components/Tooltip.svelte";
+  import DocLink from "$lib/components/DocLink.svelte";
+  import { DOCS } from "$lib/docs-urls";
 
   let { recipe, onchange }: { recipe: Recipe; onchange: () => void } = $props();
 
@@ -101,6 +104,9 @@
 </script>
 
 <div class="flex flex-col gap-4 max-w-3xl">
+  <div class="flex justify-end mb-2">
+    <DocLink label="Water chemistry guide" url={DOCS.waterChemistry} />
+  </div>
   {#if loading}
     <div style="color: var(--color-text-secondary);">Loading water data…</div>
   {:else}
@@ -175,15 +181,15 @@
         <div class="flex flex-col gap-3">
           <div class="grid grid-cols-3 gap-4">
             {#each [
-              { label: "Calcium", key: "calcium_ppm" },
-              { label: "Magnesium", key: "magnesium_ppm" },
-              { label: "Sodium", key: "sodium_ppm" },
-              { label: "Chloride", key: "chloride_ppm" },
-              { label: "Sulfate", key: "sulfate_ppm" },
-              { label: "Bicarbonate", key: "bicarbonate_ppm" }
+              { label: "Calcium", key: "calcium_ppm", tooltip: "Promotes enzyme activity, yeast health, and clarity. Target 50–150 ppm for most styles." },
+              { label: "Magnesium", key: "magnesium_ppm", tooltip: "A yeast nutrient at low levels. Tastes harsh above 30 ppm — keep it under that." },
+              { label: "Sodium", key: "sodium_ppm", tooltip: "Adds roundness and fullness at under 150 ppm. Salty and harsh above it." },
+              { label: "Chloride", key: "chloride_ppm", tooltip: "Accentuates malt character and body. Higher Cl:SO₄ ratio makes beer taste maltier." },
+              { label: "Sulfate", key: "sulfate_ppm", tooltip: "Accentuates hop dryness and bitterness. Higher SO₄:Cl ratio makes beer taste drier." },
+              { label: "Bicarbonate", key: "bicarbonate_ppm", tooltip: "Raises mash pH. Useful for dark malts. Keep it low for pale styles." }
             ] as item}
               <div class="flex flex-col gap-0.5">
-                <span class="text-xs" style="color: var(--color-text-secondary);">{item.label}</span>
+                <span class="text-xs inline-flex items-center gap-1" style="color: var(--color-text-secondary);">{item.label} <Tooltip text={item.tooltip} /></span>
                 <span class="text-base font-semibold font-mono" style="color: var(--color-text-primary);">
                   {profile.combined[item.key as keyof typeof profile.combined].toFixed(1)}<span class="text-xs font-normal ml-0.5" style="color: var(--color-text-muted);">ppm</span>
                 </span>

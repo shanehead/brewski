@@ -6,6 +6,9 @@
   import { type Units, kgToHopDisplay, hopWeightLabel, cToF, tempLabel } from "$lib/units";
   import BrewingIcon from "$lib/components/BrewingIcon.svelte";
   import IngredientPicker, { type AddPayload } from "$platform/IngredientPicker.svelte";
+  import Tooltip from "$lib/components/Tooltip.svelte";
+  import DocLink from "$lib/components/DocLink.svelte";
+  import { DOCS } from "$lib/docs-urls";
 
   let { recipe, onchange }: { recipe: Recipe; onchange: () => void } = $props();
 
@@ -41,8 +44,11 @@
       <BrewingIcon name="hop" />
       Hops
     </h3>
-    <button onclick={() => adding = true} class="text-xs px-2 py-1 rounded"
-            style="background: var(--color-accent); color: #fff;">+ Add</button>
+    <div class="flex items-center gap-2">
+      <DocLink label="Hops guide" url={DOCS.hops} />
+      <button onclick={() => adding = true} class="text-xs px-2 py-1 rounded"
+              style="background: var(--color-accent); color: #fff;">+ Add</button>
+    </div>
   </div>
 
   <IngredientPicker
@@ -57,9 +63,13 @@
       <thead>
         <tr style="color: var(--color-text-secondary);">
           <th class="text-left py-1 font-medium text-sm">Name</th>
-          <th class="text-right py-1 font-medium text-sm">AA%</th>
+          <th class="text-right py-1 font-medium text-sm">
+            <span class="inline-flex items-center gap-1">AA% <Tooltip text="Alpha acid percentage. This drives bitterness. Higher alpha means fewer grams to hit your IBU target." /></span>
+          </th>
           <th class="text-right py-1 font-medium text-sm">{hopWeightLabel(units)}</th>
-          <th class="text-right py-1 font-medium text-sm">Use</th>
+          <th class="text-right py-1 font-medium text-sm">
+            <span class="inline-flex items-center gap-1">Use <Tooltip text="When the hop is added. Boil adds bitterness. Whirlpool and Hopstand add flavor and aroma. Dry Hop adds aroma only." /></span>
+          </th>
           <th class="text-right py-1 font-medium text-sm">Time</th>
           <th class="w-6"></th>
         </tr>

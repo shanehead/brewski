@@ -4,6 +4,8 @@
   import BrewingIcon from "$lib/components/BrewingIcon.svelte";
   import { ipc } from "$lib/stores/error";
   import IngredientPicker, { type AddPayload } from "$platform/IngredientPicker.svelte";
+  import DocLink from "$lib/components/DocLink.svelte";
+  import { DOCS } from "$lib/docs-urls";
 
   let { recipe, onchange }: { recipe: Recipe; onchange: () => void } = $props();
 
@@ -38,8 +40,11 @@
       <BrewingIcon name="yeast" />
       Yeast
     </h3>
-    <button onclick={() => adding = true} class="text-xs px-2 py-1 rounded"
-            style="background: var(--color-accent); color: #fff;">+ Add</button>
+    <div class="flex items-center gap-2">
+      <DocLink label="Yeast guide" url={DOCS.yeast} />
+      <button onclick={() => adding = true} class="text-xs px-2 py-1 rounded"
+              style="background: var(--color-accent); color: #fff;">+ Add</button>
+    </div>
   </div>
 
   <IngredientPicker
