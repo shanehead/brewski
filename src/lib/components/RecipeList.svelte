@@ -150,7 +150,7 @@
     {/each}
 
     <!-- Example Recipes section -->
-    {#if $baselineRecipeList.length > 0}
+    {#if $baselineRecipeList.length > 0 && !$settings.hide_example_recipes}
       <li>
         <button
           onclick={toggleStarters}
