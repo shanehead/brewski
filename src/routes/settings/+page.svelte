@@ -114,17 +114,5 @@
 
     <DatabaseLocation />
 
-    <!-- Navigation -->
-    <section class="flex flex-col gap-3">
-      <h2 class="text-sm font-semibold" style="color: var(--color-text-secondary);">Ingredients</h2>
-      <a href="/library"
-         class="flex items-center justify-between py-2 px-3 rounded"
-         style="background: var(--color-bg-elevated); color: var(--color-text-primary); text-decoration: none;">
-        <span class="text-sm">Ingredient Library</span>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polyline points="9 18 15 12 9 6"/>
-        </svg>
-      </a>
-    </section>
   </div>
 </div>
