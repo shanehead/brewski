@@ -211,7 +211,7 @@ pub mod error {
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"status\": {"]
-#[doc = "      \"description\": \"planned | brewing | fermenting | conditioning | packaged\","]
+#[doc = "      \"description\": \"planned | brewing | fermenting | packaged\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"updated_at\": {"]
@@ -279,7 +279,7 @@ pub struct Batch {
     pub recipe_version_id: ::std::string::String,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub serving_pressure_kpa: ::std::option::Option<f64>,
-    #[doc = "planned | brewing | fermenting | conditioning | packaged"]
+    #[doc = "planned | brewing | fermenting | packaged"]
     pub status: ::std::string::String,
     pub updated_at: i64,
 }
@@ -419,7 +419,7 @@ impl BatchAttachment {
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"status\": {"]
-#[doc = "      \"description\": \"planned | brewing | fermenting | conditioning | packaged\","]
+#[doc = "      \"description\": \"planned | brewing | fermenting | packaged\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"updated_at\": {"]
@@ -447,7 +447,7 @@ pub struct BatchSummary {
     pub recipe_id: ::std::string::String,
     pub recipe_name: ::std::string::String,
     pub recipe_version_id: ::std::string::String,
-    #[doc = "planned | brewing | fermenting | conditioning | packaged"]
+    #[doc = "planned | brewing | fermenting | packaged"]
     pub status: ::std::string::String,
     pub updated_at: i64,
 }
@@ -512,6 +512,12 @@ impl CalculatedWaterProfile {
 #[doc = "    },"]
 #[doc = "    \"recipe_id\": {"]
 #[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
+#[doc = "    \"version_id\": {"]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
 #[doc = "    }"]
 #[doc = "  }"]
 #[doc = "}"]
@@ -522,6 +528,8 @@ pub struct CreateBatchInput {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub name: ::std::option::Option<::std::string::String>,
     pub recipe_id: ::std::string::String,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub version_id: ::std::option::Option<::std::string::String>,
 }
 impl CreateBatchInput {
     pub fn builder() -> builder::CreateBatchInput {
@@ -7695,12 +7703,17 @@ pub mod builder {
             ::std::string::String,
         >,
         recipe_id: ::std::result::Result<::std::string::String, ::std::string::String>,
+        version_id: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
     }
     impl ::std::default::Default for CreateBatchInput {
         fn default() -> Self {
             Self {
                 name: Ok(Default::default()),
                 recipe_id: Err("no value supplied for recipe_id".to_string()),
+                version_id: Ok(Default::default()),
             }
         }
     }
@@ -7725,6 +7738,16 @@ pub mod builder {
                 .map_err(|e| format!("error converting supplied value for recipe_id: {e}"));
             self
         }
+        pub fn version_id<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.version_id = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for version_id: {e}"));
+            self
+        }
     }
     impl ::std::convert::TryFrom<CreateBatchInput> for super::CreateBatchInput {
         type Error = super::error::ConversionError;
@@ -7734,6 +7757,7 @@ pub mod builder {
             Ok(Self {
                 name: value.name?,
                 recipe_id: value.recipe_id?,
+                version_id: value.version_id?,
             })
         }
     }
@@ -7742,6 +7766,7 @@ pub mod builder {
             Self {
                 name: Ok(value.name),
                 recipe_id: Ok(value.recipe_id),
+                version_id: Ok(value.version_id),
             }
         }
     }

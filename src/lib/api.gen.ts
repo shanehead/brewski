@@ -2068,7 +2068,7 @@ export interface components {
             recipe_name: string;
             recipe_version_id: string;
             name?: string | null;
-            /** @description planned | brewing | fermenting | conditioning | packaged */
+            /** @description planned | brewing | fermenting | packaged */
             status: string;
             /** Format: int64 */
             brew_date?: number | null;
@@ -2086,7 +2086,7 @@ export interface components {
             recipe_name: string;
             recipe_version_id: string;
             name?: string | null;
-            /** @description planned | brewing | fermenting | conditioning | packaged */
+            /** @description planned | brewing | fermenting | packaged */
             status: string;
             /** Format: int64 */
             brew_date?: number | null;
@@ -2127,6 +2127,7 @@ export interface components {
         CreateBatchInput: {
             recipe_id: string;
             name?: string | null;
+            version_id?: string | null;
         };
         UpdateBatchInput: {
             name?: string | null;
