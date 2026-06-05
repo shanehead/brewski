@@ -59,6 +59,12 @@ export type UpdateBatchInput = components["schemas"]["UpdateBatchInput"];
 export type CreateGravityReadingInput = components["schemas"]["CreateGravityReadingInput"];
 export type BatchAttachment = components["schemas"]["BatchAttachment"];
 
+export interface ImageRef {
+  id: string;
+  name: string;
+  assetUrl: string;
+}
+
 export type SugarType = "table_sugar" | "corn_sugar" | "dry_malt_extract";
 export type GravityUnit = "sg" | "plato" | "brix";
 export type ColorUnit = "srm" | "ebc" | "lovibond";
