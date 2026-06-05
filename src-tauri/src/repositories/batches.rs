@@ -23,11 +23,14 @@ impl<'a> BatchRepository<'a> {
 
     pub async fn create(&self, input: CreateBatchInput) -> Result<Batch, AppError> {
         let version_id = if let Some(vid) = input.version_id {
-            recipe_versions::Entity::find_by_id(&vid)
+            let version = recipe_versions::Entity::find_by_id(&vid)
                 .one(self.db)
                 .await?
-                .ok_or(AppError::NotFound)?
-                .id
+                .ok_or(AppError::NotFound)?;
+            if version.recipe_id != input.recipe_id {
+                return Err(AppError::NotFound);
+            }
+            version.id
         } else {
             RecipeVersionRepository::new(self.db)
                 .create_or_reuse(&input.recipe_id)
@@ -352,6 +355,50 @@ mod tests {
             .unwrap();
 
         assert_eq!(batch.recipe_version_id, v1_id);
+    }
+
+    #[tokio::test]
+    async fn test_create_with_version_from_wrong_recipe_returns_not_found() {
+        let db = setup_test_db().await;
+
+        // Create two separate recipes each with a version
+        let recipe_a_id = RecipeRepository::new(&db)
+            .create(CreateRecipeInput {
+                name: "Recipe A".into(),
+                ..Default::default()
+            })
+            .await
+            .unwrap()
+            .id;
+        let version_a = RecipeVersionRepository::new(&db)
+            .create_or_reuse(&recipe_a_id)
+            .await
+            .unwrap();
+
+        let recipe_b_id = RecipeRepository::new(&db)
+            .create(CreateRecipeInput {
+                name: "Recipe B".into(),
+                ..Default::default()
+            })
+            .await
+            .unwrap()
+            .id;
+        let _version_b = RecipeVersionRepository::new(&db)
+            .create_or_reuse(&recipe_b_id)
+            .await
+            .unwrap();
+
+        // Try to create a batch for recipe B using a version from recipe A
+        let repo = BatchRepository::new(&db);
+        let result = repo
+            .create(CreateBatchInput {
+                recipe_id: recipe_b_id.clone(),
+                name: None,
+                version_id: Some(version_a.id.clone()),
+            })
+            .await;
+
+        assert!(result.is_err());
     }
 
     #[tokio::test]
