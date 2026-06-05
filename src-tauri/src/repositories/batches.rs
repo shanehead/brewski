@@ -2,7 +2,7 @@ use sea_orm::{
     ActiveModelTrait, ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter, QueryOrder, Set,
 };
 
-use crate::entities::{batch_gravity_readings, batches, recipes};
+use crate::entities::{batch_gravity_readings, batches, recipe_versions, recipes};
 use crate::error::AppError;
 use crate::models::{
     Batch, BatchSummary, CreateBatchInput, CreateGravityReadingInput, GravityReading,
@@ -22,9 +22,18 @@ impl<'a> BatchRepository<'a> {
     }
 
     pub async fn create(&self, input: CreateBatchInput) -> Result<Batch, AppError> {
-        let version = RecipeVersionRepository::new(self.db)
-            .create_or_reuse(&input.recipe_id)
-            .await?;
+        let version_id = if let Some(vid) = input.version_id {
+            recipe_versions::Entity::find_by_id(&vid)
+                .one(self.db)
+                .await?
+                .ok_or(AppError::NotFound)?
+                .id
+        } else {
+            RecipeVersionRepository::new(self.db)
+                .create_or_reuse(&input.recipe_id)
+                .await?
+                .id
+        };
 
         let id = new_id();
         let now = now_secs() as i32;
@@ -32,7 +41,7 @@ impl<'a> BatchRepository<'a> {
         batches::ActiveModel {
             id: Set(id.clone()),
             recipe_id: Set(input.recipe_id),
-            recipe_version_id: Set(version.id),
+            recipe_version_id: Set(version_id),
             name: Set(input.name),
             status: Set("planned".to_string()),
             brew_date: Set(None),
@@ -313,6 +322,36 @@ mod tests {
 
         let fetched = repo.get(&batch.id).await.unwrap();
         assert_eq!(fetched.id, batch.id);
+    }
+
+    #[tokio::test]
+    async fn test_create_with_explicit_version_id() {
+        let db = setup_test_db().await;
+        // setup() creates v1 via create_or_reuse
+        let (recipe_id, v1_id) = setup(&db).await;
+
+        // Sleep 1s so v2 gets a strictly later created_at than v1; without this,
+        // same-second timestamps make create_or_reuse non-deterministic in tests.
+        tokio::time::sleep(std::time::Duration::from_secs(1)).await;
+
+        // Save v2 — without the fix, create_or_reuse will pick v2 (the latest)
+        let _v2 = RecipeVersionRepository::new(&db)
+            .save_named(&recipe_id, "v2")
+            .await
+            .unwrap();
+
+        let repo = BatchRepository::new(&db);
+        // Explicitly request v1 (the older version) — this must bypass create_or_reuse
+        let batch = repo
+            .create(CreateBatchInput {
+                recipe_id: recipe_id.clone(),
+                name: None,
+                version_id: Some(v1_id.clone()),
+            })
+            .await
+            .unwrap();
+
+        assert_eq!(batch.recipe_version_id, v1_id);
     }
 
     #[tokio::test]
