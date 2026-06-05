@@ -303,6 +303,7 @@ mod tests {
             .create(CreateBatchInput {
                 recipe_id: recipe_id.clone(),
                 name: Some("Batch 1".into()),
+                version_id: None,
             })
             .await
             .unwrap();
@@ -322,12 +323,14 @@ mod tests {
         repo.create(CreateBatchInput {
             recipe_id: recipe_id.clone(),
             name: None,
+            version_id: None,
         })
         .await
         .unwrap();
         repo.create(CreateBatchInput {
             recipe_id: recipe_id.clone(),
             name: None,
+            version_id: None,
         })
         .await
         .unwrap();
@@ -344,6 +347,7 @@ mod tests {
             .create(CreateBatchInput {
                 recipe_id,
                 name: None,
+                version_id: None,
             })
             .await
             .unwrap();
@@ -371,6 +375,7 @@ mod tests {
             .create(CreateBatchInput {
                 recipe_id,
                 name: None,
+                version_id: None,
             })
             .await
             .unwrap();
@@ -400,6 +405,7 @@ mod tests {
             .create(CreateBatchInput {
                 recipe_id,
                 name: None,
+                version_id: None,
             })
             .await
             .unwrap();
@@ -427,6 +433,7 @@ mod tests {
             .create(CreateBatchInput {
                 recipe_id,
                 name: None,
+                version_id: None,
             })
             .await
             .unwrap();
@@ -448,6 +455,7 @@ mod tests {
             .create(CreateBatchInput {
                 recipe_id,
                 name: None,
+                version_id: None,
             })
             .await
             .unwrap();
@@ -482,6 +490,7 @@ mod tests {
             .create(CreateBatchInput {
                 recipe_id,
                 name: None,
+                version_id: None,
             })
             .await
             .unwrap();

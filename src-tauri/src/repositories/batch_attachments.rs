@@ -98,6 +98,7 @@ mod tests {
             .create(CreateBatchInput {
                 recipe_id: recipe.id,
                 name: None,
+                version_id: None,
             })
             .await
             .unwrap();
