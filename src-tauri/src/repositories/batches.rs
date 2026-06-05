@@ -363,7 +363,7 @@ mod tests {
     }
 
     #[tokio::test]
-    async fn test_update_conditioning_date_and_notes() {
+    async fn test_update_packaging_date_and_notes() {
         let db = setup_test_db().await;
         let (recipe_id, _) = setup(&db).await;
         let repo = BatchRepository::new(&db);
@@ -378,7 +378,7 @@ mod tests {
             .update(
                 &batch.id,
                 UpdateBatchInput {
-                    status: Some("conditioning".into()),
+                    status: Some("packaged".into()),
                     conditioning_date: Some(1_700_000_000),
                     notes: Some("Dry hop day 3".into()),
                     ..Default::default()
@@ -386,7 +386,7 @@ mod tests {
             )
             .await
             .unwrap();
-        assert_eq!(updated.status, "conditioning");
+        assert_eq!(updated.status, "packaged");
         assert_eq!(updated.conditioning_date, Some(1_700_000_000));
         assert_eq!(updated.notes, Some("Dry hop day 3".into()));
     }
