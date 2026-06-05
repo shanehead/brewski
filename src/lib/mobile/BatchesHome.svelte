@@ -118,7 +118,6 @@
           onclick={handleBack}
           class="text-xs text-left font-medium py-1"
           style="color: var(--color-accent);"
-          aria-label={pickedRecipe?.name}
         >← {pickedRecipe?.name}</button>
         <div class="font-medium text-sm">Choose a version</div>
         <div class="flex-1 overflow-y-auto flex flex-col gap-1">
