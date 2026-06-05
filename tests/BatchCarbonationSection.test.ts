@@ -27,7 +27,7 @@ function makeBatch(overrides: Partial<Batch> = {}): Batch {
     recipe_name: "Test IPA",
     recipe_version_id: "v1",
     name: null,
-    status: "conditioning",
+    status: "packaged",
     brew_date: null,
     fermenter_date: null,
     conditioning_date: null,
