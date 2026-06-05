@@ -46,11 +46,11 @@
   });
 
   onMount(async () => {
-    const [versions, fetchedRecipe, attachments, appDataDir] = await Promise.all([
+    const appDataDir = await getAppDataDir();
+    const [versions, fetchedRecipe, attachments] = await Promise.all([
       ipc(listRecipeVersions(batch.recipe_id)),
       ipc(getRecipe(batch.recipe_id)),
       ipc(listBatchAttachments(batch.id)),
-      getAppDataDir(),
     ]);
     if (versions) {
       batchVersion = versions.find((v) => v.id === batch.recipe_version_id) ?? null;

@@ -45,10 +45,12 @@
 
   function insertImage(image: ImageRef) {
     if (!textarea) return;
+    // Escape ] in the name so it can't break the markdown link syntax (e.g. "img](copy).jpg")
+    const safeName = image.name.replace(/\]/g, '\\]');
     applyEdit(insertBlock(
       textarea.value,
       textarea.selectionStart,
-      `![${image.name}](attachment://${image.id})`,
+      `![${safeName}](attachment://${image.id})`,
     ));
   }
 
