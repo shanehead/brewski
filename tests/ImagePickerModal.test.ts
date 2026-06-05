@@ -4,8 +4,6 @@ import userEvent from '@testing-library/user-event';
 import ImagePickerModal from '$lib/components/ImagePickerModal.svelte';
 import type { ImageRef } from '$lib/api';
 
-vi.mock('@tauri-apps/api/core', () => ({ invoke: vi.fn(), convertFileSrc: vi.fn((p) => p) }));
-
 const images: ImageRef[] = [
   { id: 'id-1', name: 'brew-day.jpg', assetUrl: 'asset://brew-day.jpg' },
   { id: 'id-2', name: 'grain-bill.jpg', assetUrl: 'asset://grain-bill.jpg' },
@@ -46,5 +44,22 @@ describe('ImagePickerModal', () => {
     render(ImagePickerModal, { images: [], onInsert: vi.fn(), onClose: vi.fn() });
     expect(screen.getByText(/No photos yet/)).toBeTruthy();
     expect(screen.queryByRole('button', { name: 'Insert' })).toBeNull();
+  });
+
+  it('calls onClose when Escape is pressed', async () => {
+    const user = userEvent.setup();
+    const onClose = vi.fn();
+    render(ImagePickerModal, { images, onInsert: vi.fn(), onClose });
+    await user.keyboard('{Escape}');
+    expect(onClose).toHaveBeenCalled();
+  });
+
+  it('calls onClose when backdrop is clicked', async () => {
+    const user = userEvent.setup();
+    const onClose = vi.fn();
+    const { container } = render(ImagePickerModal, { images, onInsert: vi.fn(), onClose });
+    // click the backdrop (the outermost element)
+    await user.click(container.firstElementChild!);
+    expect(onClose).toHaveBeenCalled();
   });
 });

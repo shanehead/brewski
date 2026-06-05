@@ -1,4 +1,6 @@
 <!-- src/lib/components/ImagePickerModal.svelte -->
+<svelte:window onkeydown={(e) => e.key === 'Escape' && onClose()} />
+
 <script lang="ts">
   import type { ImageRef } from '$lib/api';
 
@@ -23,9 +25,8 @@
 
 <div
   class="backdrop"
-  role="presentation"
+  role="none"
   onclick={(e) => e.target === e.currentTarget && onClose()}
-  onkeydown={(e) => e.key === 'Escape' && onClose()}
 >
   <div class="modal" role="dialog" aria-modal="true" aria-label="Insert image">
     <div class="modal-header">
@@ -138,7 +139,7 @@
   .photo-name {
     display: block;
     padding: 3px 6px;
-    font-size: 10px;
+    font-size: 11px;
     color: var(--color-text-muted);
     white-space: nowrap;
     overflow: hidden;
