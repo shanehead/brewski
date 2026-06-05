@@ -5,7 +5,8 @@ import { tick } from "svelte";
 import BatchOverviewTab from "$lib/components/batch/BatchOverviewTab.svelte";
 import type { Batch, UpdateBatchInput } from "$lib/api";
 
-vi.mock("@tauri-apps/api/core", () => ({ invoke: vi.fn() }));
+vi.mock("@tauri-apps/api/core", () => ({ invoke: vi.fn(), convertFileSrc: vi.fn((p: string) => p) }));
+vi.mock("@tauri-apps/api/path", () => ({ appDataDir: vi.fn(async () => "/mock/appdata") }));
 vi.mock("$lib/stores/error", () => ({ ipc: vi.fn((p) => p) }));
 vi.mock("$lib/stores/settings", () => ({
   settings: {
