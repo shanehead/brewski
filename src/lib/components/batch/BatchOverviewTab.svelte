@@ -8,13 +8,19 @@
   import { settings } from "$lib/stores/settings";
   import { formatSg, gravityStep } from "$lib/gravity-display";
   import BatchCarbonationSection from "$lib/components/batch/BatchCarbonationSection.svelte";
+  import BatchGravityTab from "$lib/components/batch/BatchGravityTab.svelte";
+  import BatchTastingTab from "$lib/components/batch/BatchTastingTab.svelte";
   import MarkdownEditor from "$lib/components/MarkdownEditor.svelte";
   import DocLink from "$lib/components/DocLink.svelte";
   import { DOCS } from "$lib/docs-urls";
 
-  let { batch, onUpdate }: { batch: Batch; onUpdate: (input: UpdateBatchInput) => void } = $props();
+  let { batch, onUpdate, onRefresh }: {
+    batch: Batch;
+    onUpdate: (input: UpdateBatchInput) => void;
+    onRefresh: () => void;
+  } = $props();
 
-  const STATUSES = ["planned", "brewing", "fermenting", "conditioning", "packaged"] as const;
+  const STATUSES = ["planned", "brewing", "fermenting", "packaged"] as const;
 
   let batchVersion = $state<RecipeVersionSummary | null>(null);
   let recipe = $state<Recipe | null>(null);
@@ -62,7 +68,6 @@
     const todayTs = Math.floor(Date.now() / 1000);
     if (newStatus === "brewing" && !batch.brew_date) update.brew_date = todayTs;
     if (newStatus === "fermenting" && !batch.fermenter_date) update.fermenter_date = todayTs;
-    if (newStatus === "conditioning" && !batch.conditioning_date) update.conditioning_date = todayTs;
     if (newStatus === "packaged" && !batch.packaging_date) update.packaging_date = todayTs;
     onUpdate(update);
   }
@@ -71,7 +76,6 @@
     planned: [],
     brewing: ["actual_pre_boil_gravity", "actual_og", "actual_post_boil_volume_l"],
     fermenting: ["actual_og", "actual_fg"],
-    conditioning: ["actual_fg", "actual_batch_size_l"],
     packaged: ["actual_og", "actual_fg"],
   };
 
@@ -100,7 +104,6 @@
         if (fg && gravityDisplays.planned_fg) items.push({ label: "Target FG", value: gravityDisplays.planned_fg });
         if (targetAbv) items.push({ label: "Target ABV", value: `${targetAbv}%` });
         break;
-      case "conditioning":
       case "packaged":
         if (actual_og && gravityDisplays.actual_og) items.push({ label: "OG", value: gravityDisplays.actual_og });
         if (actual_fg && gravityDisplays.actual_fg) items.push({ label: "FG", value: gravityDisplays.actual_fg });
@@ -132,7 +135,6 @@
   <!-- Status -->
   <div>
     <div class="text-xs mb-2" style="color: var(--color-text-secondary);">STATUS</div>
-    <!-- Mobile: native select -->
     <select
       class="md:hidden w-full px-3 py-2 rounded text-sm outline-none"
       style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);"
@@ -143,7 +145,6 @@
         <option value={s}>{s.charAt(0).toUpperCase() + s.slice(1)}</option>
       {/each}
     </select>
-    <!-- Desktop: tab bar -->
     <div class="hidden md:block">
       <TabBar
         tabs={STATUSES.map(s => ({ key: s, label: s.charAt(0).toUpperCase() + s.slice(1) }))}
@@ -160,7 +161,7 @@
       style="background: rgba(99,102,241,0.12); border: 1px solid rgba(99,102,241,0.25);"
     >
       <span class="text-xs font-bold uppercase tracking-wide" style="color: var(--color-text-secondary); min-width: 48px;">
-        {batch.status === "conditioning" || batch.status === "packaged" ? "Actuals" : batch.status === "fermenting" ? "Progress" : "Targets"}
+        {batch.status === "packaged" ? "Actuals" : batch.status === "fermenting" ? "Progress" : "Targets"}
       </span>
       {#each stageTargets as t}
         <span style="color: var(--color-text-secondary);">
@@ -232,14 +233,13 @@
     {/if}
   </div>
 
-  <!-- Dates -->
+  <!-- Dates (conditioning_date removed) -->
   <div>
     <div class="text-xs mb-2" style="color: var(--color-text-secondary);">DATES</div>
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
       {#each [
         { label: "Brew Date", field: "brew_date", value: batch.brew_date },
         { label: "Into Fermenter", field: "fermenter_date", value: batch.fermenter_date },
-        { label: "Conditioning", field: "conditioning_date", value: batch.conditioning_date },
         { label: "Packaging", field: "packaging_date", value: batch.packaging_date },
       ] as item}
         <div>
@@ -257,13 +257,32 @@
     </div>
   </div>
 
-  {#if batch.status === "conditioning" || batch.status === "packaged"}
+  <!-- Gravity Log — fermenting stage only -->
+  {#if batch.status === "fermenting"}
+    <div>
+      <div class="text-xs mb-2" style="color: var(--color-text-secondary);">GRAVITY LOG</div>
+      <div class="-mx-4">
+        <BatchGravityTab {batch} {onRefresh} />
+      </div>
+    </div>
+  {/if}
+
+  <!-- Carbonation — packaged stage only -->
+  {#if batch.status === "packaged"}
     <BatchCarbonationSection
       {batch}
       recipePrimaryTempC={recipe?.primary_temp_c ?? null}
       recipeCarbonationVols={recipe?.carbonation_vols ?? null}
       {onUpdate}
     />
+  {/if}
+
+  <!-- Tasting — packaged stage only -->
+  {#if batch.status === "packaged"}
+    <div>
+      <div class="text-xs mb-2" style="color: var(--color-text-secondary);">TASTING</div>
+      <BatchTastingTab {batch} {onUpdate} />
+    </div>
   {/if}
 
   <!-- Notes -->
