@@ -18,7 +18,6 @@
     brewing: "Brewing",
     fermenting: "Fermenting",
     packaged: "Packaged",
-    complete: "Complete",
   };
 
   const STATUS_COLORS: Record<string, string> = {
@@ -26,7 +25,6 @@
     brewing: "#f59e0b",
     fermenting: "#10b981",
     packaged: "#3b82f6",
-    complete: "var(--color-accent)",
   };
 
   function formatDate(ts: number | null | undefined): string {
