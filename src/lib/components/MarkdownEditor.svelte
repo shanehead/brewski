@@ -4,6 +4,8 @@
   import taskLists from 'markdown-it-task-lists';
   import { untrack } from 'svelte';
   import { wrapSelection, insertLinePrefix, insertBlock } from '$lib/markdown';
+  import type { ImageRef } from '$lib/api';
+  import ImagePickerModal from '$lib/components/ImagePickerModal.svelte';
 
   const md = new MarkdownIt({ linkify: true, breaks: true }).use(taskLists);
 
@@ -13,19 +15,20 @@
     placeholder,
     rows = 6,
     id,
+    images,
   }: {
     value: string | null;
     onchange: (value: string | null) => void;
     placeholder?: string;
     rows?: number;
     id?: string;
+    images?: ImageRef[];
   } = $props();
 
   let activeTab: 'write' | 'preview' = $state('write');
   let textarea: HTMLTextAreaElement | undefined = $state();
+  let pickerOpen = $state(false);
 
-  // Local draft tracks the in-progress content so Preview reflects typed
-  // text before the user blurs (which is when onchange fires).
   let draft = $state(untrack(() => value ?? ''));
   $effect(() => {
     draft = value ?? '';
@@ -37,7 +40,25 @@
     textarea.value = result.value;
     textarea.setSelectionRange(result.selStart, result.selEnd);
     textarea.focus();
-    onchange(draft || null);  // commit formatted value immediately
+    onchange(draft || null);
+  }
+
+  function insertImage(image: ImageRef) {
+    if (!textarea) return;
+    applyEdit(insertBlock(
+      textarea.value,
+      textarea.selectionStart,
+      `![${image.name}](attachment://${image.id})`,
+    ));
+  }
+
+  function renderPreview(text: string): string {
+    const html = md.render(text);
+    if (!images?.length) return html;
+    const map = new Map(images.map((img) => [img.id, img.assetUrl]));
+    return html.replace(/src="attachment:\/\/([^"]+)"/g, (_, imgId) => {
+      return `src="${map.get(imgId) ?? ''}"`;
+    });
   }
 </script>
 
@@ -84,6 +105,15 @@
           onmousedown={(e) => e.preventDefault()}
           onclick={() => textarea && applyEdit(insertBlock(textarea.value, textarea.selectionStart, '---'))}
           class="toolbar-btn" title="Rule">—</button>
+        {#if images !== undefined}
+          <div class="toolbar-sep"></div>
+          <button type="button"
+            onmousedown={(e) => e.preventDefault()}
+            onclick={() => (pickerOpen = true)}
+            class="toolbar-btn"
+            title="Insert image"
+            aria-label="Insert image">🖼</button>
+        {/if}
       </div>
     {/if}
   </div>
@@ -106,13 +136,21 @@
       style="background: var(--color-bg-elevated); color: var(--color-text-primary); min-height: {rows * 1.6}em;"
     >
       {#if draft}
-        {@html md.render(draft)}
+        {@html renderPreview(draft)}
       {:else}
         <span style="color: var(--color-text-secondary);">{placeholder ?? ''}</span>
       {/if}
     </div>
   {/if}
 </div>
+
+{#if pickerOpen && images !== undefined}
+  <ImagePickerModal
+    {images}
+    onInsert={insertImage}
+    onClose={() => (pickerOpen = false)}
+  />
+{/if}
 
 <style>
   .tab-btn {
@@ -151,9 +189,7 @@
     align-items: center;
     justify-content: center;
   }
-  .toolbar-btn:hover {
-    background: var(--color-bg-elevated);
-  }
+  .toolbar-btn:hover { background: var(--color-bg-elevated); }
   .toolbar-sep {
     width: 1px;
     height: 14px;
@@ -161,9 +197,6 @@
     margin: 0 2px;
   }
 
-  /* Prose styles for the Preview div. :global is required because {@html}
-     content does not receive Svelte's scoped attribute. The .md-preview
-     class is unique to this component so leakage risk is minimal. */
   :global(.md-preview h1) { font-size: 1.25em; font-weight: 700; margin: 0.75em 0 0.25em; }
   :global(.md-preview h2) { font-size: 1.1em; font-weight: 700; margin: 0.75em 0 0.25em; }
   :global(.md-preview h3) { font-size: 1em; font-weight: 700; margin: 0.5em 0 0.2em; }
@@ -194,5 +227,12 @@
     margin: 0.5em 0;
     padding-left: 1em;
     color: var(--color-text-secondary);
+  }
+  :global(.md-preview img) {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+    margin: 8px 0;
+    display: block;
   }
 </style>

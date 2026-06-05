@@ -3,8 +3,13 @@ import { render, screen } from '@testing-library/svelte';
 import userEvent from '@testing-library/user-event';
 import { tick } from 'svelte';
 import MarkdownEditor from '$lib/components/MarkdownEditor.svelte';
+import type { ImageRef } from '$lib/api';
 
-vi.mock('@tauri-apps/api/core', () => ({ invoke: vi.fn() }));
+vi.mock('@tauri-apps/api/core', () => ({ invoke: vi.fn(), convertFileSrc: vi.fn((p) => p) }));
+
+const images: ImageRef[] = [
+  { id: 'abc-123', name: 'brew.jpg', assetUrl: 'asset://brew.jpg' },
+];
 
 describe('MarkdownEditor', () => {
   it('shows a textarea in Write mode by default', () => {
@@ -71,5 +76,45 @@ describe('MarkdownEditor', () => {
     const textarea = screen.getByRole('textbox') as HTMLTextAreaElement;
     expect(textarea.value).toBe('');
     expect(textarea.placeholder).toBe('Add notes…');
+  });
+});
+
+describe('MarkdownEditor image toolbar', () => {
+  it('does not show the image button when images prop is absent', () => {
+    render(MarkdownEditor, { value: '', onchange: vi.fn() });
+    expect(screen.queryByTitle('Insert image')).toBeNull();
+  });
+
+  it('shows the image button when images prop is provided', () => {
+    render(MarkdownEditor, { value: '', onchange: vi.fn(), images });
+    expect(screen.getByTitle('Insert image')).toBeTruthy();
+  });
+});
+
+describe('MarkdownEditor preview image resolution', () => {
+  it('resolves attachment:// src to the matching assetUrl', async () => {
+    const user = userEvent.setup();
+    const { container } = render(MarkdownEditor, {
+      value: '![brew.jpg](attachment://abc-123)',
+      onchange: vi.fn(),
+      images,
+    });
+    await user.click(screen.getByRole('button', { name: 'Preview' }));
+    await tick();
+    const img = container.querySelector('img');
+    expect(img?.getAttribute('src')).toBe('asset://brew.jpg');
+  });
+
+  it('sets src to empty string when attachment id is not in images', async () => {
+    const user = userEvent.setup();
+    const { container } = render(MarkdownEditor, {
+      value: '![missing.jpg](attachment://unknown-id)',
+      onchange: vi.fn(),
+      images,
+    });
+    await user.click(screen.getByRole('button', { name: 'Preview' }));
+    await tick();
+    const img = container.querySelector('img');
+    expect(img?.getAttribute('src')).toBe('');
   });
 });
