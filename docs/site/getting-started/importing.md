@@ -6,6 +6,8 @@ If you're coming from Brewfather, BeerSmith, BrewUnited, or any other homebrewin
 
 In the recipe list sidebar, hit **Import BeerXML**. Pick your `.xml` file and Brewski will pull it in.
 
+![Import BeerXML button in the recipe list sidebar](/screenshots/docs-gs-import.png)
+
 ## What comes through
 
 Brewski imports the core recipe data:
