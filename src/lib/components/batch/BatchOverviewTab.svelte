@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
   import { goto } from "$app/navigation";
   import TabBar from "$lib/components/TabBar.svelte";
-  import type { Batch, UpdateBatchInput, RecipeVersionSummary, Recipe } from "$lib/api";
+  import type { Batch, UpdateBatchInput, RecipeVersionSummary, Recipe, ImageRef } from "$lib/api";
   import { listRecipeVersions, getRecipe, convertGravity } from "$lib/api";
   import { ipc } from "$lib/stores/error";
   import { settings } from "$lib/stores/settings";
@@ -13,22 +13,18 @@
   import MarkdownEditor from "$lib/components/MarkdownEditor.svelte";
   import DocLink from "$lib/components/DocLink.svelte";
   import { DOCS } from "$lib/docs-urls";
-  import { convertFileSrc } from "@tauri-apps/api/core";
-  import { appDataDir as getAppDataDir } from "@tauri-apps/api/path";
-  import type { ImageRef } from "$lib/api";
-  import { listBatchAttachments } from "$lib/api";
 
-  let { batch, onUpdate, onRefresh }: {
+  let { batch, onUpdate, onRefresh, images = [] }: {
     batch: Batch;
     onUpdate: (input: UpdateBatchInput) => void;
     onRefresh: () => void;
+    images?: ImageRef[];
   } = $props();
 
   const STATUSES = ["planned", "brewing", "fermenting", "packaged"] as const;
 
   let batchVersion = $state<RecipeVersionSummary | null>(null);
   let recipe = $state<Recipe | null>(null);
-  let imageRefs = $state<ImageRef[]>([]);
 
   const gravityUnit = $derived($settings.gravity_unit ?? "sg");
 
@@ -46,26 +42,15 @@
   });
 
   onMount(async () => {
-    const appDataDir = await getAppDataDir();
-    const [versions, fetchedRecipe, attachments] = await Promise.all([
+    const [versions, fetchedRecipe] = await Promise.all([
       ipc(listRecipeVersions(batch.recipe_id)),
       ipc(getRecipe(batch.recipe_id)),
-      ipc(listBatchAttachments(batch.id)),
     ]);
     if (versions) {
       batchVersion = versions.find((v) => v.id === batch.recipe_version_id) ?? null;
     }
     if (fetchedRecipe) {
       recipe = fetchedRecipe;
-    }
-    if (attachments) {
-      imageRefs = attachments
-        .filter((a) => a.mime_type?.startsWith('image/'))
-        .map((a) => ({
-          id: a.id,
-          name: a.original_name,
-          assetUrl: convertFileSrc(`${appDataDir}/attachments/${batch.id}/${a.filename}`),
-        }));
     }
   });
 
@@ -309,7 +294,7 @@
       onchange={(v) => onUpdate({ notes: v })}
       rows={4}
       placeholder="Brew day observations, gravity readings, anything worth remembering…"
-      images={imageRefs}
+      {images}
     />
   </div>
 </div>

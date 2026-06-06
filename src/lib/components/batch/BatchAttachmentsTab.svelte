@@ -14,7 +14,7 @@
   import { ipc } from "$lib/stores/error";
   import ConfirmModal from "$lib/components/ConfirmModal.svelte";
 
-  let { batch }: { batch: Batch } = $props();
+  let { batch, onAttachmentsChange }: { batch: Batch; onAttachmentsChange?: () => void } = $props();
 
   let attachments = $state<BatchAttachment[]>([]);
   let appDataDir = $state("");
@@ -53,6 +53,7 @@
         await ipc(addBatchAttachment(batch.id, p, name));
       }
       await load();
+      onAttachmentsChange?.();
     } finally {
       adding = false;
     }
@@ -70,6 +71,7 @@
     await ipc(deleteBatchAttachment(deleteCandidate.id));
     deleteCandidate = null;
     await load();
+    onAttachmentsChange?.();
   }
 
   async function handleOpen(id: string) {

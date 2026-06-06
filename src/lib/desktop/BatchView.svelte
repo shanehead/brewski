@@ -1,8 +1,10 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { goto } from "$app/navigation";
-  import type { Batch, UpdateBatchInput } from "$lib/api";
-  import { getBatch, updateBatch } from "$lib/api";
+  import type { Batch, UpdateBatchInput, ImageRef } from "$lib/api";
+  import { getBatch, updateBatch, listBatchAttachments } from "$lib/api";
+  import { convertFileSrc } from "@tauri-apps/api/core";
+  import { appDataDir as getAppDataDir } from "@tauri-apps/api/path";
   import { ipc } from "$lib/stores/error";
   import { batchList, refreshBatchList } from "$lib/stores/batches";
   import BatchList from "$lib/components/BatchList.svelte";
@@ -13,9 +15,26 @@
 
   let batch = $state<Batch | null>(null);
   let showAttachments = $state(false);
+  let imageRefs = $state<ImageRef[]>([]);
+
+  async function loadImageRefs() {
+    if (!batch) return;
+    const appDataDir = await getAppDataDir();
+    const attachments = await ipc(listBatchAttachments(batch.id));
+    if (attachments) {
+      imageRefs = attachments
+        .filter((a) => a.mime_type?.startsWith('image/'))
+        .map((a) => ({
+          id: a.id,
+          name: a.original_name,
+          assetUrl: convertFileSrc(`${appDataDir}/attachments/${batch!.id}/${a.filename}`),
+        }));
+    }
+  }
 
   async function loadBatch() {
     batch = await ipc(getBatch(id)) ?? null;
+    await loadImageRefs();
   }
 
   onMount(async () => {
@@ -67,7 +86,7 @@
 
     <!-- Stage content -->
     <div class="flex-1 overflow-y-auto">
-      <BatchOverviewTab {batch} onUpdate={handleUpdate} onRefresh={loadBatch} />
+      <BatchOverviewTab {batch} onUpdate={handleUpdate} onRefresh={loadBatch} images={imageRefs} />
     </div>
 
     <!-- Attachments modal -->
@@ -90,7 +109,7 @@
             >Close</button>
           </div>
           <div class="flex-1 overflow-y-auto">
-            <BatchAttachmentsTab {batch} />
+            <BatchAttachmentsTab {batch} onAttachmentsChange={loadImageRefs} />
           </div>
         </div>
       </div>
