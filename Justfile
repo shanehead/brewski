@@ -26,6 +26,10 @@ dev-android:
 dev-web:
     bun run dev
 
+# Capture README and docs screenshots (requires: just dev-web running on :1420)
+screenshots:
+    bun scripts/capture-screenshots.mjs
+
 # ── Build ─────────────────────────────────────────────────────────────────────
 
 # Build the app for release (no bundling)
