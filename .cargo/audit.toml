@@ -1,0 +1,4 @@
+[advisories]
+# Only surface unsound code warnings — unmaintained and notice are too noisy
+# to be actionable in routine audits.
+informational_warnings = ["unsound"]

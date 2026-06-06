@@ -95,8 +95,8 @@ audit:
     @echo "=== Outdated npm packages ==="
     bun outdated || true
     @echo ""
-    @echo "=== npm security audit ==="
-    bun audit || true
+    @echo "=== npm security audit (moderate+) ==="
+    bun audit --level moderate || true
     @echo ""
     @echo "=== Outdated Rust crates ==="
     cargo outdated --root-deps-only || true
@@ -110,7 +110,7 @@ update:
     cargo update
     @echo ""
     @echo "=== Audit after update ==="
-    bun audit || true
+    bun audit --level moderate || true
     @echo ""
     cargo audit || true
 
