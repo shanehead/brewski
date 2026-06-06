@@ -116,6 +116,18 @@ just test    # Rust + frontend unit tests
 
 Do not commit with failing type errors, test failures, or OpenAPI lint errors. Warnings are acceptable; errors are not.
 
+## Pre-push checklist
+
+Before pushing, review the changes and ask whether they affect user-facing content. Not every push requires both updates — use judgment.
+
+**1. README**
+
+Does this change affect anything shown in `README.md` — feature descriptions, setup steps, or screenshots? If so, update the copy and/or regenerate affected screenshots (see [README screenshots](#readme-screenshots) above).
+
+**2. Docs site (GitHub Pages)**
+
+Does this change affect anything covered in the docs under `docs/site/`? If so, update the relevant pages. Screenshots in the docs follow the same regeneration process as README screenshots.
+
 ## Git commits
 
 Use [Conventional Commits](https://www.conventionalcommits.org/) style: `type(scope): description`.
