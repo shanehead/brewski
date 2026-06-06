@@ -109,7 +109,8 @@ pub fn load_fixture(filename: &str) -> (Recipe, ExpectedStats) {
                 }
             }
             Ok(Event::Text(e)) => {
-                let txt = e.unescape().unwrap().to_string();
+                let decoded = e.decode().unwrap();
+                let txt = quick_xml::escape::unescape(&decoded).unwrap().to_string();
                 match cur_elem.as_str() {
                     "BATCH_SIZE" => {
                         if let Ok(v) = txt.parse::<f64>() {

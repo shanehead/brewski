@@ -32,7 +32,7 @@ fn build_recipe_beerxml(recipe: &Recipe) -> Result<String, quick_xml::Error> {
     let brewer = recipe.brewer.as_deref().unwrap_or("");
     let efficiency = format!("{:.1}", recipe.efficiency_pct.unwrap_or(72.0));
 
-    type E = quick_xml::Error;
+    type E = std::io::Error;
 
     writer
         .create_element("RECIPES")
@@ -637,7 +637,12 @@ fn read_text(reader: &mut Reader<&[u8]>) -> Result<String, String> {
     let mut text = String::new();
     loop {
         match reader.read_event().map_err(|e| e.to_string())? {
-            Event::Text(e) => text = e.unescape().map_err(|e| e.to_string())?.into_owned(),
+            Event::Text(e) => {
+                let decoded = e.decode().map_err(|e| e.to_string())?;
+                text = quick_xml::escape::unescape(&decoded)
+                    .map_err(|e| e.to_string())?
+                    .into_owned();
+            }
             Event::End(_) => break,
             Event::Eof => return Err("Unexpected EOF reading element text".into()),
             _ => {}
