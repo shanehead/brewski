@@ -89,6 +89,14 @@ gen-rust:
     cargo typify /tmp/brewski-schemas.json -o src-tauri/src/models.gen.rs
     cargo fmt --manifest-path src-tauri/Cargo.toml
 
+# Check for outdated and vulnerable npm packages
+audit:
+    @echo "=== Outdated npm packages ==="
+    bun outdated || true
+    @echo ""
+    @echo "=== npm security audit ==="
+    bun audit || true
+
 # ── Test & Coverage ───────────────────────────────────────────────────────────
 
 # Run all tests (Rust + frontend)
