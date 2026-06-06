@@ -217,5 +217,46 @@ await capture(390, 844, "/tools/abv-calories", "tools-abv-mobile", (pg) =>
   fillInputs(pg, [1.06, 1.012]),
 );
 
+// ── Docs: Getting Started (1280×800) ─────────────────────────────────────────
+// docs-gs-overview: recipe list — shows the main app shell
+await capture(1280, 800, "/", "docs-gs-overview", null, DOCS_OUT);
+
+// docs-gs-recipe-new: recipe list — same view, used in first-recipe Step 1
+await capture(1280, 800, "/", "docs-gs-recipe-new", null, DOCS_OUT);
+
+// docs-gs-recipe-ingredients: recipe editor, Ingredients tab
+await capture(1280, 800, "/recipe/r1", "docs-gs-recipe-ingredients", async (pg) => {
+  await pg.getByRole("button", { name: "Ingredients" }).click();
+  await pg.waitForTimeout(400);
+}, DOCS_OUT);
+
+// docs-gs-recipe-mash: recipe editor, Mash tab
+await capture(1280, 800, "/recipe/r1", "docs-gs-recipe-mash", async (pg) => {
+  await pg.getByRole("button", { name: "Mash" }).click();
+  await pg.waitForTimeout(400);
+}, DOCS_OUT);
+
+// docs-gs-batch-overview: recipe editor, Batches tab (shows "Brew this Recipe")
+await capture(1280, 800, "/recipe/r1", "docs-gs-batch-overview", async (pg) => {
+  await pg.getByRole("button", { name: "Batches" }).click();
+  await pg.waitForTimeout(400);
+}, DOCS_OUT);
+
+// docs-gs-batch-gravity: batch detail (fermenting, b1) — shows gravity log
+await capture(1280, 800, "/batches/b1", "docs-gs-batch-gravity", async (pg) => {
+  await pg.getByText("Gravity Log").scrollIntoViewIfNeeded();
+  await pg.waitForTimeout(200);
+}, DOCS_OUT);
+
+// docs-gs-batch-carbonation: batch detail (packaged, b2) — shows carbonation section
+await capture(1280, 800, "/batches/b2", "docs-gs-batch-carbonation", async (pg) => {
+  await pg.getByText("Carbonation").first().scrollIntoViewIfNeeded();
+  await pg.waitForTimeout(200);
+}, DOCS_OUT);
+
+// docs-gs-import: recipe list — shows Import BeerXML button in sidebar
+await capture(1280, 800, "/", "docs-gs-import", null, DOCS_OUT);
+
 await browser.close();
-console.log(`\nScreenshots written to docs/screenshots/`);
+console.log(`\nREADME screenshots → docs/screenshots/`);
+console.log(`Docs screenshots   → docs/site/public/screenshots/`);
