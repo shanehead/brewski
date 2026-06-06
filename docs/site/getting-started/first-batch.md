@@ -6,6 +6,8 @@ A batch is what happens when you actually brew. Where a recipe is a plan, a batc
 
 Open the recipe you want to brew and click the **Batches** tab. Hit **Brew this Recipe** and Brewski links the new batch to the current version of that recipe. If you change the recipe later, your batch still shows exactly what you brewed.
 
+![Batches tab showing the Brew this Recipe button](/screenshots/docs-gs-batch-overview.png)
+
 ## Brew day
 
 On brew day, open the **Overview** tab. Under the measurements section, log your pre-boil volume and gravity, then your post-boil numbers once the boil is done. These aren't required, but they're the best way to track your efficiency over time. A few batches in, you'll start to see patterns in your process.
@@ -14,9 +16,13 @@ On brew day, open the **Overview** tab. Under the measurements section, log your
 
 Once the wort is chilled and pitched, switch to the **Gravity Log** tab. Add a reading whenever you take one. Set the date, enter your gravity (Brewski accepts SG, Plato, or Brix depending on your settings), and optionally log the temperature. Plotting readings over time gives you a clear picture of fermentation progress and tells you when it's actually done rather than when you're just hoping it is.
 
+![Gravity log with readings plotted over fermentation](/screenshots/docs-gs-batch-gravity.png)
+
 ## Packaging and carbonation
 
 When fermentation is finished, set the batch status to **conditioning** or **packaged** in the **Overview** tab. That reveals the carbonation section at the bottom of the page. Use the priming sugar calculator to dial in your bottling additions, or use the CO2 pressure calculator if you're kegging. Enter your target volumes of CO2 and your current beer temperature, and Brewski does the rest.
+
+![Carbonation section with priming sugar calculator](/screenshots/docs-gs-batch-carbonation.png)
 
 ## Finishing the batch
 
