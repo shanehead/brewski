@@ -39,10 +39,61 @@ const TAURI_MOCK = `
         { id: 'r3', name: 'Irish Stout', style_name: 'Irish Stout', type_: 'All Grain', batch_size_l: 19, created_at: 1714000000000, updated_at: 1714000000000, source: 'user' },
       ];
       if (cmd === 'list_baseline_recipes') return [];
-      if (cmd === 'list_batches') return [];
-      if (cmd === 'list_batches_for_recipe') return [];
+      if (cmd === 'list_batches' || cmd === 'list_batches_for_recipe') return [
+        { id: 'b1', recipe_id: 'r1', recipe_name: 'Pliny the Elder Clone', recipe_version_id: 'v1', name: 'Batch 1', status: 'fermenting', brew_date: 1716000000000, actual_og: 1.071, actual_fg: null, rating: null, created_at: 1716000000000, updated_at: 1716100000000 },
+        { id: 'b2', recipe_id: 'r1', recipe_name: 'Pliny the Elder Clone', recipe_version_id: 'v1', name: 'Batch 2', status: 'packaged', brew_date: 1715000000000, actual_og: 1.072, actual_fg: 1.010, rating: 8, created_at: 1715000000000, updated_at: 1715500000000 },
+      ];
       if (cmd === 'list_recipe_versions') return [];
       if (cmd === 'list_equipment_profiles') return [];
+      if (cmd === 'get_batch') {
+        const fermenting = {
+          id: 'b1', recipe_id: 'r1', recipe_name: 'Pliny the Elder Clone',
+          recipe_version_id: 'v1', name: 'Batch 1', status: 'fermenting',
+          brew_date: 1716000000000, fermenter_date: 1716086400000,
+          conditioning_date: null, packaging_date: null,
+          actual_pre_boil_volume_l: 23.5, actual_post_boil_volume_l: 19.2,
+          actual_batch_size_l: 18.9, actual_pre_boil_gravity: 1.063,
+          actual_og: 1.071, actual_fg: null,
+          notes: null, rating: null,
+          planned_og: 1.072, planned_fg: 1.009,
+          planned_pre_boil_gravity: 1.062, planned_post_boil_volume_l: 19,
+          planned_batch_size_l: 19,
+          packaging_temp_c: null, carbonation_sugar_type: null,
+          priming_sugar_g: null, serving_pressure_kpa: null,
+          gravity_readings: [
+            { id: 'g1', batch_id: 'b1', recorded_at: 1716086400000, gravity: 1.071, temp_c: 20.0, notes: 'pitch day' },
+            { id: 'g2', batch_id: 'b1', recorded_at: 1716259200000, gravity: 1.038, temp_c: 20.5, notes: null },
+            { id: 'g3', batch_id: 'b1', recorded_at: 1716432000000, gravity: 1.015, temp_c: 20.0, notes: null },
+            { id: 'g4', batch_id: 'b1', recorded_at: 1716604800000, gravity: 1.010, temp_c: 19.5, notes: 'stable' },
+          ],
+          created_at: 1716000000000, updated_at: 1716604800000,
+        };
+        const packaged = {
+          id: 'b2', recipe_id: 'r1', recipe_name: 'Pliny the Elder Clone',
+          recipe_version_id: 'v1', name: 'Batch 2', status: 'packaged',
+          brew_date: 1715000000000, fermenter_date: 1715086400000,
+          conditioning_date: 1715600000000, packaging_date: 1715700000000,
+          actual_pre_boil_volume_l: 23.0, actual_post_boil_volume_l: 19.0,
+          actual_batch_size_l: 18.9, actual_pre_boil_gravity: 1.062,
+          actual_og: 1.072, actual_fg: 1.010,
+          notes: 'Came out great. Dry hop character was spot on.',
+          rating: 8,
+          planned_og: 1.072, planned_fg: 1.009,
+          planned_pre_boil_gravity: 1.062, planned_post_boil_volume_l: 19,
+          planned_batch_size_l: 19,
+          packaging_temp_c: 18.0, carbonation_sugar_type: 'corn_sugar',
+          priming_sugar_g: 142, serving_pressure_kpa: null,
+          gravity_readings: [
+            { id: 'g5', batch_id: 'b2', recorded_at: 1715086400000, gravity: 1.072, temp_c: 20.0, notes: 'pitch day' },
+            { id: 'g6', batch_id: 'b2', recorded_at: 1715259200000, gravity: 1.035, temp_c: 20.5, notes: null },
+            { id: 'g7', batch_id: 'b2', recorded_at: 1715432000000, gravity: 1.012, temp_c: 20.0, notes: null },
+            { id: 'g8', batch_id: 'b2', recorded_at: 1715604800000, gravity: 1.010, temp_c: 19.5, notes: 'stable, ready to package' },
+          ],
+          created_at: 1715000000000, updated_at: 1715700000000,
+        };
+        return args?.id === 'b2' ? packaged : fermenting;
+      }
+      if (cmd === 'list_batch_attachments') return [];
       if (cmd === 'get_settings') return { database_path: '', unit_system: 'metric' };
       if (cmd === 'get_recipe') return {
         id: 'r1', name: 'Pliny the Elder Clone', type_: 'All Grain',
