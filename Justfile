@@ -89,20 +89,30 @@ gen-rust:
     cargo typify /tmp/brewski-schemas.json -o src-tauri/src/models.gen.rs
     cargo fmt --manifest-path src-tauri/Cargo.toml
 
-# Check for outdated and vulnerable npm packages
+# Check for outdated and vulnerable npm and Rust packages
+# Requires: cargo install cargo-audit cargo-outdated
 audit:
     @echo "=== Outdated npm packages ==="
     bun outdated || true
     @echo ""
     @echo "=== npm security audit ==="
     bun audit || true
+    @echo ""
+    @echo "=== Outdated Rust crates ==="
+    cargo outdated --root-deps-only || true
+    @echo ""
+    @echo "=== Rust security audit ==="
+    cargo audit || true
 
-# Update npm packages to latest compatible versions, then re-audit
+# Update npm and Rust packages to latest compatible versions, then re-audit
 update:
     bun update
+    cargo update
     @echo ""
     @echo "=== Audit after update ==="
     bun audit || true
+    @echo ""
+    cargo audit || true
 
 # ── Test & Coverage ───────────────────────────────────────────────────────────
 
