@@ -1,8 +1,10 @@
 # What is Brewski?
 
-Brewski is a free, open-source homebrewing app for Mac, Windows, and Linux. No subscription, no account, no credit card. You download it, you use it.
+Brewski is a free, open-source homebrewing app for Mac, Windows, Linux, iOS, and Android. Download it, open it, start brewing. That's the whole onboarding experience.
 
 If you've used Brewfather, Brewski will feel familiar. You get the same kind of recipe builder, batch tracking, and stats you'd expect from a paid tool, except nothing is locked behind a paywall and your data never leaves your machine unless you want it to.
+
+![Brewski recipe list](/screenshots/docs-gs-overview.png)
 
 ## What you can do with Brewski
 
@@ -16,12 +18,12 @@ If you've used Brewfather, Brewski will feel familiar. You get the same kind of 
 
 ## Your data stays on your machine
 
-Brewski stores everything in a local SQLite database on your computer. Nothing is synced anywhere by default. If you want cloud backup, you can point Brewski's database at a folder in Google Drive, iCloud, or Dropbox and let those services handle the sync. You're in control.
+Brewski stores everything in a local SQLite database on your device. Nothing is synced anywhere by default. If you want cloud backup, you can point Brewski's database at a folder in Google Drive, iCloud, or Dropbox and let those services handle the sync. You're in control.
 
 ## One opinionated goal
 
-Brewski is built around a single idea: brewing software should be fast, offline-first, and simple to use. There are no subscription tiers. There are no features you can't access. If it's in the app, it's yours.
+Brewski is built around a single idea: brewing software should be fast, offline-first, and simple to use. Open it and everything's right there. If it's in the app, it's yours.
 
 ::: tip Ready to install?
-Head over to [Installation](/getting-started/installation) to download Brewski and get it running on your machine.
+Head over to [Installation](/getting-started/installation) to download Brewski and get it running on your device.
 :::
