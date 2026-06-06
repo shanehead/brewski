@@ -97,6 +97,13 @@ audit:
     @echo "=== npm security audit ==="
     bun audit || true
 
+# Update npm packages to latest compatible versions, then re-audit
+update:
+    bun update
+    @echo ""
+    @echo "=== Audit after update ==="
+    bun audit || true
+
 # ── Test & Coverage ───────────────────────────────────────────────────────────
 
 # Run all tests (Rust + frontend)
