@@ -49,13 +49,41 @@ just dev-android    # Android emulator
 just dev-web        # frontend only (no Tauri)
 ```
 
-## README screenshots
+## Screenshots
 
-Screenshots live in `docs/screenshots/` and are referenced in `README.md`. **Update them whenever a UI change affects a captured screen.** They are generated with Playwright against the `just dev-web` frontend server, with `window.__TAURI_INTERNALS__` mocked so IPC calls return canned data.
+Screenshots are committed PNG assets captured with Playwright against the `just dev-web` frontend server (port 1420). There are two sets:
 
-To regenerate: start `just dev-web`, then run `bun scripts/capture-screenshots.mjs` (requires `playwright` as a dev dependency; install with `bun add -d playwright && bunx playwright install chromium`). The script captures desktop (1280×800) and mobile (390×844) views of the key screens and writes PNGs to `docs/screenshots/`.
+| Set | Output directory | Used in |
+|---|---|---|
+| README | `docs/screenshots/` | `README.md` |
+| Docs (getting-started) | `docs/site/public/screenshots/` | `docs/site/getting-started/*.md` |
+
+**To regenerate:**
+1. Start `just dev-web`
+2. Run `just screenshots`
+3. Review the updated PNGs
+4. Commit the changed images alongside the UI change
+
+**Update when:** a UI change affects any captured screen. Check the table below to know which pages are affected.
+
+### Docs screenshot inventory
+
+| File | Page | What it shows |
+|---|---|---|
+| `docs-gs-overview.png` | `what-is-brewski.md` | Recipe list — main app shell |
+| `docs-gs-recipe-new.png` | `first-recipe.md` | Recipe list sidebar with New Recipe button |
+| `docs-gs-recipe-ingredients.png` | `first-recipe.md` | Ingredients tab, stats sidebar |
+| `docs-gs-recipe-mash.png` | `first-recipe.md` | Mash tab with infusion step |
+| `docs-gs-batch-overview.png` | `first-batch.md` | Batches tab, Brew this Recipe button |
+| `docs-gs-batch-gravity.png` | `first-batch.md` | Gravity log with fermentation readings |
+| `docs-gs-batch-carbonation.png` | `first-batch.md` | Carbonation section, priming sugar |
+| `docs-gs-import.png` | `importing.md` | Recipe list with Import BeerXML button |
+
+### README screenshot inventory
 
 Screens currently captured: `recipes`, `tools`, `tools-abv`, `tools-carbonation`, `library`, `tools-mobile`, `tools-abv-mobile`, `recipes-mobile`.
+
+To regenerate: start `just dev-web`, then run `just screenshots`. The script writes PNGs to `docs/screenshots/`. Requires `playwright` as a dev dependency (`bun add -d playwright`) and `bunx playwright install chromium` on first run.
 
 ## Common commands (via Justfile)
 
@@ -127,6 +155,36 @@ Does this change affect anything shown in `README.md` — feature descriptions, 
 **2. Docs site (GitHub Pages)**
 
 Does this change affect anything covered in the docs under `docs/site/`? If so, update the relevant pages. Screenshots in the docs follow the same regeneration process as README screenshots.
+
+## Documentation writing style
+
+Docs under `docs/site/` are drafted by AI and reviewed/edited by the project author. Write for a human voice the author can ship with minimal edits.
+
+### Do
+
+- Write directly to the brewer: use "you" and "your"
+- Use contractions freely: "you're", "it's", "don't", "here's"
+- Bold UI element names: **Add Hop**, **Save**, **Mash** tab
+- Use `→` for navigation paths: Settings → Units → Gravity Unit
+- Explain the *why*, not just the *how* — "Alpha % is how bitter your hops are, so don't leave it blank"
+- Use analogies where they help — brewing is physical, keep explanations grounded
+- Keep sentences short. If a sentence needs a comma and a semicolon, split it into two.
+
+### Don't
+
+- No em-dashes (—). Use a comma, a period, or a new sentence instead.
+- No "It is important to note that…"
+- No "Navigate to the X section in order to…"
+- No "This feature allows users to…"
+- No passive voice where active works
+- No excessive hedging ("you may want to consider")
+- No marketing language: "powerful", "seamless", "intuitive", "robust", "easy". Show what the feature does; let the reader decide.
+- Don't write to convince — write to inform. The reader already installed the app; they don't need a sales pitch.
+- No negation lists ("no X, no Y, no Z"). They read as defensive. State what's true positively instead.
+
+### Tone target
+
+The docs should read like a knowledgeable friend walking you through the app, not a technical manual or a product brochure. If a sentence sounds like it belongs on a landing page, rewrite it.
 
 ## Git commits
 
