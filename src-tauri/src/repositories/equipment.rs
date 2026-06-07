@@ -46,7 +46,22 @@ impl<'a> EquipmentRepository<'a> {
             boil_size_l: Set(input.boil_size_l),
             batch_size_l: Set(input.batch_size_l),
             boil_time_min: Set(input.boil_time_min.unwrap_or(60.0)),
-            evap_rate_pct_hr: Set(input.evap_rate_pct_hr),
+            evap_rate_l_hr: Set(input.evap_rate_l_hr.unwrap_or(3.8)),
+            tun_heat_capacity_l: Set(input.tun_heat_capacity_l.unwrap_or(0.0)),
+            hopstand_temp_f: Set(input.hopstand_temp_f.unwrap_or(176.0)),
+            grain_absorption_rate_l_per_kg: Set(input
+                .grain_absorption_rate_l_per_kg
+                .unwrap_or(1.04)),
+            water_grain_ratio_l_per_kg: Set(input.water_grain_ratio_l_per_kg.unwrap_or(3.12)),
+            include_grain_volume_in_mash_limits: Set(input
+                .include_grain_volume_in_mash_limits
+                .map(|b| b as i32)
+                .unwrap_or(1)),
+            overflow_target: Set(input.overflow_target.unwrap_or_else(|| "mash".into())),
+            hlt_water_limit_min_l: Set(input.hlt_water_limit_min_l),
+            room_temp_f: Set(input.room_temp_f.unwrap_or(68.0)),
+            grain_temp_f: Set(input.grain_temp_f.unwrap_or(68.0)),
+            sparge_temp_f: Set(input.sparge_temp_f),
             trub_chiller_loss_l: Set(input.trub_chiller_loss_l),
             fermenter_loss_l: Set(input.fermenter_loss_l),
             efficiency_pct: Set(input.efficiency_pct),
@@ -110,9 +125,35 @@ impl<'a> EquipmentRepository<'a> {
         if let Some(v) = input.boil_time_min {
             active.boil_time_min = Set(v);
         }
-        if let Some(v) = input.evap_rate_pct_hr {
-            active.evap_rate_pct_hr = Set(Some(v));
+        if let Some(v) = input.evap_rate_l_hr {
+            active.evap_rate_l_hr = Set(v);
         }
+        if let Some(v) = input.tun_heat_capacity_l {
+            active.tun_heat_capacity_l = Set(v);
+        }
+        if let Some(v) = input.hopstand_temp_f {
+            active.hopstand_temp_f = Set(v);
+        }
+        if let Some(v) = input.grain_absorption_rate_l_per_kg {
+            active.grain_absorption_rate_l_per_kg = Set(v);
+        }
+        if let Some(v) = input.water_grain_ratio_l_per_kg {
+            active.water_grain_ratio_l_per_kg = Set(v);
+        }
+        if let Some(v) = input.include_grain_volume_in_mash_limits {
+            active.include_grain_volume_in_mash_limits = Set(v as i32);
+        }
+        if let Some(v) = input.overflow_target {
+            active.overflow_target = Set(v);
+        }
+        active.hlt_water_limit_min_l = Set(input.hlt_water_limit_min_l);
+        if let Some(v) = input.room_temp_f {
+            active.room_temp_f = Set(v);
+        }
+        if let Some(v) = input.grain_temp_f {
+            active.grain_temp_f = Set(v);
+        }
+        active.sparge_temp_f = Set(input.sparge_temp_f);
         if let Some(v) = input.trub_chiller_loss_l {
             active.trub_chiller_loss_l = Set(Some(v));
         }
@@ -210,19 +251,29 @@ mod tests {
             calc_strike_water_temp: None,
             cooling_shrinkage_pct: None,
             efficiency_pct: 72.0,
-            evap_rate_pct_hr: Some(10.0),
+            evap_rate_l_hr: Some(3.0),
             fermenter_loss_l: Some(1.0),
+            grain_absorption_rate_l_per_kg: None,
+            grain_temp_f: None,
             hlt_deadspace_l: None,
+            hlt_water_limit_min_l: None,
+            hopstand_temp_f: None,
+            include_grain_volume_in_mash_limits: None,
             mash_efficiency_pct: None,
             mash_tun_loss_l: None,
             mash_volume_max_l: None,
             mash_volume_min_l: None,
             name: "10 Gallon Kettle".into(),
             notes: None,
+            overflow_target: None,
+            room_temp_f: None,
             sparge_method: None,
+            sparge_temp_f: None,
             sparge_volume_max_l: None,
             sparge_volume_min_l: None,
             trub_chiller_loss_l: Some(1.5),
+            tun_heat_capacity_l: None,
+            water_grain_ratio_l_per_kg: None,
             whirlpool_time_min: None,
         }
     }
