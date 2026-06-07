@@ -1534,14 +1534,12 @@ export interface components {
             batch_size_l: number;
             calc_boil_volume: boolean;
             tun_volume_l?: number | null;
-            tun_weight_kg?: number | null;
-            tun_specific_heat?: number | null;
             lauter_deadspace_l: number;
             top_up_kettle_l: number;
             /** @description Volume lost to trub and chiller in litres */
             trub_chiller_loss_l: number;
-            /** @description Boil evaporation rate as a percentage per hour */
-            evap_rate_pct_hr: number;
+            /** @description Boil evaporation rate in litres per hour */
+            evap_rate_l_hr: number;
             boil_time_min: number;
             top_up_water_l: number;
             fermenter_loss_l: number;
@@ -1563,10 +1561,12 @@ export interface components {
             calc_mash_efficiency: boolean;
             /** @description Manual mash efficiency percentage, used when calc_mash_efficiency is false */
             mash_efficiency_pct?: number | null;
-            /** @description When true, aroma hop utilization is calculated using the temperature model */
+            /** @description When true, aroma hop utilization is calculated using the hopstand temperature model */
             calc_aroma_hop_utilization: boolean;
             /** @description Utilization percentage for whirlpool/aroma hop additions */
             aroma_hop_utilization_pct: number;
+            /** @description Temperature at which the hopstand is conducted, in Fahrenheit */
+            hopstand_temp_f: number;
             /** @description Time wort sits in the whirlpool before chilling, in minutes */
             whirlpool_time_min?: number | null;
             /** @description When true, boil temperature is calculated from altitude */
@@ -1583,8 +1583,26 @@ export interface components {
             sparge_volume_min_l?: number | null;
             /** @description Maximum sparge water volume in litres */
             sparge_volume_max_l?: number | null;
-            /** @description When true, strike water temperature is calculated from tun thermal mass (calculation deferred) */
+            /** @description When true, strike water temperature is calculated from tun thermal mass and grain/room temperature */
             calc_strike_water_temp: boolean;
+            /** @description Thermal mass of mash tun expressed as litres of equivalent water volume (0 = pre-heated tun) */
+            tun_heat_capacity_l: number;
+            /** @description Volume of water absorbed per kg of grain, in litres/kg */
+            grain_absorption_rate_l_per_kg: number;
+            /** @description Target mash water-to-grain ratio, in litres/kg */
+            water_grain_ratio_l_per_kg: number;
+            /** @description When true, grain displacement is included when checking mash volume limits */
+            include_grain_volume_in_mash_limits: boolean;
+            /** @description Where to redirect overflow when mash volume limits are exceeded. Enum: 'mash' | 'sparge' | 'hlt' */
+            overflow_target: string;
+            /** @description Minimum HLT water volume in litres */
+            hlt_water_limit_min_l?: number | null;
+            /** @description Ambient room temperature for strike water calculation, in Fahrenheit */
+            room_temp_f: number;
+            /** @description Grain temperature for strike water calculation, in Fahrenheit */
+            grain_temp_f: number;
+            /** @description Target sparge water temperature in Fahrenheit */
+            sparge_temp_f?: number | null;
         };
         Fermentable: {
             id: string;
@@ -1996,7 +2014,7 @@ export interface components {
             boil_size_l: number;
             batch_size_l: number;
             boil_time_min?: number;
-            evap_rate_pct_hr?: number;
+            evap_rate_l_hr?: number;
             trub_chiller_loss_l?: number;
             fermenter_loss_l?: number;
             efficiency_pct: number;
@@ -2008,6 +2026,7 @@ export interface components {
             mash_efficiency_pct?: number;
             calc_aroma_hop_utilization?: boolean;
             aroma_hop_utilization_pct?: number;
+            hopstand_temp_f?: number;
             whirlpool_time_min?: number;
             altitude_adjustment?: boolean;
             boil_temp_f?: number;
@@ -2017,6 +2036,15 @@ export interface components {
             sparge_volume_min_l?: number;
             sparge_volume_max_l?: number;
             calc_strike_water_temp?: boolean;
+            tun_heat_capacity_l?: number;
+            grain_absorption_rate_l_per_kg?: number;
+            water_grain_ratio_l_per_kg?: number;
+            include_grain_volume_in_mash_limits?: boolean;
+            overflow_target?: string;
+            hlt_water_limit_min_l?: number;
+            room_temp_f?: number;
+            grain_temp_f?: number;
+            sparge_temp_f?: number;
         };
         UpdateEquipmentProfileInput: {
             name?: string;
@@ -2024,7 +2052,7 @@ export interface components {
             boil_size_l?: number;
             batch_size_l?: number;
             boil_time_min?: number;
-            evap_rate_pct_hr?: number;
+            evap_rate_l_hr?: number;
             trub_chiller_loss_l?: number;
             fermenter_loss_l?: number;
             efficiency_pct?: number;
@@ -2036,6 +2064,7 @@ export interface components {
             mash_efficiency_pct?: number;
             calc_aroma_hop_utilization?: boolean;
             aroma_hop_utilization_pct?: number;
+            hopstand_temp_f?: number;
             whirlpool_time_min?: number;
             altitude_adjustment?: boolean;
             boil_temp_f?: number;
@@ -2045,6 +2074,15 @@ export interface components {
             sparge_volume_min_l?: number;
             sparge_volume_max_l?: number;
             calc_strike_water_temp?: boolean;
+            tun_heat_capacity_l?: number;
+            grain_absorption_rate_l_per_kg?: number;
+            water_grain_ratio_l_per_kg?: number;
+            include_grain_volume_in_mash_limits?: boolean;
+            overflow_target?: string;
+            hlt_water_limit_min_l?: number;
+            room_temp_f?: number;
+            grain_temp_f?: number;
+            sparge_temp_f?: number;
         };
         RecipeVersionSummary: {
             id: string;

@@ -15,7 +15,7 @@ properties:
     type: number
   boil_time_min:
     type: number
-  evap_rate_pct_hr:
+  evap_rate_l_hr:
     type: number
   trub_chiller_loss_l:
     type: number
@@ -39,6 +39,8 @@ properties:
     type: boolean
   aroma_hop_utilization_pct:
     type: number
+  hopstand_temp_f:
+    type: number
   whirlpool_time_min:
     type: number
   altitude_adjustment:
@@ -57,3 +59,21 @@ properties:
     type: number
   calc_strike_water_temp:
     type: boolean
+  tun_heat_capacity_l:
+    type: number
+  grain_absorption_rate_l_per_kg:
+    type: number
+  water_grain_ratio_l_per_kg:
+    type: number
+  include_grain_volume_in_mash_limits:
+    type: boolean
+  overflow_target:
+    type: string
+  hlt_water_limit_min_l:
+    type: number
+  room_temp_f:
+    type: number
+  grain_temp_f:
+    type: number
+  sparge_temp_f:
+    type: number

@@ -586,14 +586,29 @@ impl CreateBatchInput {
 #[doc = "    \"efficiency_pct\": {"]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
-#[doc = "    \"evap_rate_pct_hr\": {"]
+#[doc = "    \"evap_rate_l_hr\": {"]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"fermenter_loss_l\": {"]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
+#[doc = "    \"grain_absorption_rate_l_per_kg\": {"]
+#[doc = "      \"type\": \"number\""]
+#[doc = "    },"]
+#[doc = "    \"grain_temp_f\": {"]
+#[doc = "      \"type\": \"number\""]
+#[doc = "    },"]
 #[doc = "    \"hlt_deadspace_l\": {"]
 #[doc = "      \"type\": \"number\""]
+#[doc = "    },"]
+#[doc = "    \"hlt_water_limit_min_l\": {"]
+#[doc = "      \"type\": \"number\""]
+#[doc = "    },"]
+#[doc = "    \"hopstand_temp_f\": {"]
+#[doc = "      \"type\": \"number\""]
+#[doc = "    },"]
+#[doc = "    \"include_grain_volume_in_mash_limits\": {"]
+#[doc = "      \"type\": \"boolean\""]
 #[doc = "    },"]
 #[doc = "    \"mash_efficiency_pct\": {"]
 #[doc = "      \"type\": \"number\""]
@@ -613,8 +628,17 @@ impl CreateBatchInput {
 #[doc = "    \"notes\": {"]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
+#[doc = "    \"overflow_target\": {"]
+#[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
+#[doc = "    \"room_temp_f\": {"]
+#[doc = "      \"type\": \"number\""]
+#[doc = "    },"]
 #[doc = "    \"sparge_method\": {"]
 #[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
+#[doc = "    \"sparge_temp_f\": {"]
+#[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"sparge_volume_max_l\": {"]
 #[doc = "      \"type\": \"number\""]
@@ -623,6 +647,12 @@ impl CreateBatchInput {
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"trub_chiller_loss_l\": {"]
+#[doc = "      \"type\": \"number\""]
+#[doc = "    },"]
+#[doc = "    \"tun_heat_capacity_l\": {"]
+#[doc = "      \"type\": \"number\""]
+#[doc = "    },"]
+#[doc = "    \"water_grain_ratio_l_per_kg\": {"]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"whirlpool_time_min\": {"]
@@ -656,11 +686,21 @@ pub struct CreateEquipmentProfileInput {
     pub cooling_shrinkage_pct: ::std::option::Option<f64>,
     pub efficiency_pct: f64,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub evap_rate_pct_hr: ::std::option::Option<f64>,
+    pub evap_rate_l_hr: ::std::option::Option<f64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub fermenter_loss_l: ::std::option::Option<f64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub grain_absorption_rate_l_per_kg: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub grain_temp_f: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub hlt_deadspace_l: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub hlt_water_limit_min_l: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub hopstand_temp_f: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub include_grain_volume_in_mash_limits: ::std::option::Option<bool>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub mash_efficiency_pct: ::std::option::Option<f64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -673,13 +713,23 @@ pub struct CreateEquipmentProfileInput {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub notes: ::std::option::Option<::std::string::String>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub overflow_target: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub room_temp_f: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub sparge_method: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub sparge_temp_f: ::std::option::Option<f64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub sparge_volume_max_l: ::std::option::Option<f64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub sparge_volume_min_l: ::std::option::Option<f64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub trub_chiller_loss_l: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub tun_heat_capacity_l: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub water_grain_ratio_l_per_kg: ::std::option::Option<f64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub whirlpool_time_min: ::std::option::Option<f64>,
 }
@@ -2074,18 +2124,26 @@ impl CreateYeastInput {
 #[doc = "    \"cooling_shrinkage_pct\","]
 #[doc = "    \"created_at\","]
 #[doc = "    \"efficiency_pct\","]
-#[doc = "    \"evap_rate_pct_hr\","]
+#[doc = "    \"evap_rate_l_hr\","]
 #[doc = "    \"fermenter_loss_l\","]
+#[doc = "    \"grain_absorption_rate_l_per_kg\","]
+#[doc = "    \"grain_temp_f\","]
 #[doc = "    \"hop_utilization_pct\","]
+#[doc = "    \"hopstand_temp_f\","]
 #[doc = "    \"id\","]
+#[doc = "    \"include_grain_volume_in_mash_limits\","]
 #[doc = "    \"lauter_deadspace_l\","]
 #[doc = "    \"mash_tun_loss_l\","]
 #[doc = "    \"name\","]
+#[doc = "    \"overflow_target\","]
+#[doc = "    \"room_temp_f\","]
 #[doc = "    \"sparge_method\","]
 #[doc = "    \"top_up_kettle_l\","]
 #[doc = "    \"top_up_water_l\","]
 #[doc = "    \"trub_chiller_loss_l\","]
-#[doc = "    \"updated_at\""]
+#[doc = "    \"tun_heat_capacity_l\","]
+#[doc = "    \"updated_at\","]
+#[doc = "    \"water_grain_ratio_l_per_kg\""]
 #[doc = "  ],"]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"altitude_adjustment\": {"]
@@ -2117,7 +2175,7 @@ impl CreateYeastInput {
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"calc_aroma_hop_utilization\": {"]
-#[doc = "      \"description\": \"When true, aroma hop utilization is calculated using the temperature model\","]
+#[doc = "      \"description\": \"When true, aroma hop utilization is calculated using the hopstand temperature model\","]
 #[doc = "      \"type\": \"boolean\""]
 #[doc = "    },"]
 #[doc = "    \"calc_boil_volume\": {"]
@@ -2128,7 +2186,7 @@ impl CreateYeastInput {
 #[doc = "      \"type\": \"boolean\""]
 #[doc = "    },"]
 #[doc = "    \"calc_strike_water_temp\": {"]
-#[doc = "      \"description\": \"When true, strike water temperature is calculated from tun thermal mass (calculation deferred)\","]
+#[doc = "      \"description\": \"When true, strike water temperature is calculated from tun thermal mass and grain/room temperature\","]
 #[doc = "      \"type\": \"boolean\""]
 #[doc = "    },"]
 #[doc = "    \"cooling_shrinkage_pct\": {"]
@@ -2142,11 +2200,19 @@ impl CreateYeastInput {
 #[doc = "    \"efficiency_pct\": {"]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
-#[doc = "    \"evap_rate_pct_hr\": {"]
-#[doc = "      \"description\": \"Boil evaporation rate as a percentage per hour\","]
+#[doc = "    \"evap_rate_l_hr\": {"]
+#[doc = "      \"description\": \"Boil evaporation rate in litres per hour\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"fermenter_loss_l\": {"]
+#[doc = "      \"type\": \"number\""]
+#[doc = "    },"]
+#[doc = "    \"grain_absorption_rate_l_per_kg\": {"]
+#[doc = "      \"description\": \"Volume of water absorbed per kg of grain, in litres/kg\","]
+#[doc = "      \"type\": \"number\""]
+#[doc = "    },"]
+#[doc = "    \"grain_temp_f\": {"]
+#[doc = "      \"description\": \"Grain temperature for strike water calculation, in Fahrenheit\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"hlt_deadspace_l\": {"]
@@ -2156,11 +2222,26 @@ impl CreateYeastInput {
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
+#[doc = "    \"hlt_water_limit_min_l\": {"]
+#[doc = "      \"description\": \"Minimum HLT water volume in litres\","]
+#[doc = "      \"type\": ["]
+#[doc = "        \"number\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
 #[doc = "    \"hop_utilization_pct\": {"]
+#[doc = "      \"type\": \"number\""]
+#[doc = "    },"]
+#[doc = "    \"hopstand_temp_f\": {"]
+#[doc = "      \"description\": \"Temperature at which the hopstand is conducted, in Fahrenheit\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"id\": {"]
 #[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
+#[doc = "    \"include_grain_volume_in_mash_limits\": {"]
+#[doc = "      \"description\": \"When true, grain displacement is included when checking mash volume limits\","]
+#[doc = "      \"type\": \"boolean\""]
 #[doc = "    },"]
 #[doc = "    \"lauter_deadspace_l\": {"]
 #[doc = "      \"type\": \"number\""]
@@ -2199,9 +2280,24 @@ impl CreateYeastInput {
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
+#[doc = "    \"overflow_target\": {"]
+#[doc = "      \"description\": \"Where to redirect overflow when mash volume limits are exceeded. Enum: 'mash' | 'sparge' | 'hlt'\","]
+#[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
+#[doc = "    \"room_temp_f\": {"]
+#[doc = "      \"description\": \"Ambient room temperature for strike water calculation, in Fahrenheit\","]
+#[doc = "      \"type\": \"number\""]
+#[doc = "    },"]
 #[doc = "    \"sparge_method\": {"]
 #[doc = "      \"description\": \"Mash/sparge water calculation method. Enum: 'no_sparge' | 'batch_sparge' | 'fly_sparge'\","]
 #[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
+#[doc = "    \"sparge_temp_f\": {"]
+#[doc = "      \"description\": \"Target sparge water temperature in Fahrenheit\","]
+#[doc = "      \"type\": ["]
+#[doc = "        \"number\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"sparge_volume_max_l\": {"]
 #[doc = "      \"description\": \"Maximum sparge water volume in litres\","]
@@ -2227,19 +2323,11 @@ impl CreateYeastInput {
 #[doc = "      \"description\": \"Volume lost to trub and chiller in litres\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
-#[doc = "    \"tun_specific_heat\": {"]
-#[doc = "      \"type\": ["]
-#[doc = "        \"number\","]
-#[doc = "        \"null\""]
-#[doc = "      ]"]
+#[doc = "    \"tun_heat_capacity_l\": {"]
+#[doc = "      \"description\": \"Thermal mass of mash tun expressed as litres of equivalent water volume (0 = pre-heated tun)\","]
+#[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"tun_volume_l\": {"]
-#[doc = "      \"type\": ["]
-#[doc = "        \"number\","]
-#[doc = "        \"null\""]
-#[doc = "      ]"]
-#[doc = "    },"]
-#[doc = "    \"tun_weight_kg\": {"]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
@@ -2248,6 +2336,10 @@ impl CreateYeastInput {
 #[doc = "    \"updated_at\": {"]
 #[doc = "      \"type\": \"integer\","]
 #[doc = "      \"format\": \"int64\""]
+#[doc = "    },"]
+#[doc = "    \"water_grain_ratio_l_per_kg\": {"]
+#[doc = "      \"description\": \"Target mash water-to-grain ratio, in litres/kg\","]
+#[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"whirlpool_time_min\": {"]
 #[doc = "      \"description\": \"Time wort sits in the whirlpool before chilling, in minutes\","]
@@ -2274,25 +2366,36 @@ pub struct EquipmentProfile {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub boil_temp_f: ::std::option::Option<f64>,
     pub boil_time_min: f64,
-    #[doc = "When true, aroma hop utilization is calculated using the temperature model"]
+    #[doc = "When true, aroma hop utilization is calculated using the hopstand temperature model"]
     pub calc_aroma_hop_utilization: bool,
     pub calc_boil_volume: bool,
     #[doc = "When true, mash efficiency is calculated from brewhouse efficiency and losses"]
     pub calc_mash_efficiency: bool,
-    #[doc = "When true, strike water temperature is calculated from tun thermal mass (calculation deferred)"]
+    #[doc = "When true, strike water temperature is calculated from tun thermal mass and grain/room temperature"]
     pub calc_strike_water_temp: bool,
     #[doc = "Wort volume reduction from boiling temperature to room temperature, as a percentage"]
     pub cooling_shrinkage_pct: f64,
     pub created_at: i64,
     pub efficiency_pct: f64,
-    #[doc = "Boil evaporation rate as a percentage per hour"]
-    pub evap_rate_pct_hr: f64,
+    #[doc = "Boil evaporation rate in litres per hour"]
+    pub evap_rate_l_hr: f64,
     pub fermenter_loss_l: f64,
+    #[doc = "Volume of water absorbed per kg of grain, in litres/kg"]
+    pub grain_absorption_rate_l_per_kg: f64,
+    #[doc = "Grain temperature for strike water calculation, in Fahrenheit"]
+    pub grain_temp_f: f64,
     #[doc = "Volume that remains in the HLT and cannot be transferred, in litres"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub hlt_deadspace_l: ::std::option::Option<f64>,
+    #[doc = "Minimum HLT water volume in litres"]
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub hlt_water_limit_min_l: ::std::option::Option<f64>,
     pub hop_utilization_pct: f64,
+    #[doc = "Temperature at which the hopstand is conducted, in Fahrenheit"]
+    pub hopstand_temp_f: f64,
     pub id: ::std::string::String,
+    #[doc = "When true, grain displacement is included when checking mash volume limits"]
+    pub include_grain_volume_in_mash_limits: bool,
     pub lauter_deadspace_l: f64,
     #[doc = "Manual mash efficiency percentage, used when calc_mash_efficiency is false"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -2308,8 +2411,15 @@ pub struct EquipmentProfile {
     pub name: ::std::string::String,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub notes: ::std::option::Option<::std::string::String>,
+    #[doc = "Where to redirect overflow when mash volume limits are exceeded. Enum: 'mash' | 'sparge' | 'hlt'"]
+    pub overflow_target: ::std::string::String,
+    #[doc = "Ambient room temperature for strike water calculation, in Fahrenheit"]
+    pub room_temp_f: f64,
     #[doc = "Mash/sparge water calculation method. Enum: 'no_sparge' | 'batch_sparge' | 'fly_sparge'"]
     pub sparge_method: ::std::string::String,
+    #[doc = "Target sparge water temperature in Fahrenheit"]
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub sparge_temp_f: ::std::option::Option<f64>,
     #[doc = "Maximum sparge water volume in litres"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub sparge_volume_max_l: ::std::option::Option<f64>,
@@ -2320,13 +2430,13 @@ pub struct EquipmentProfile {
     pub top_up_water_l: f64,
     #[doc = "Volume lost to trub and chiller in litres"]
     pub trub_chiller_loss_l: f64,
-    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub tun_specific_heat: ::std::option::Option<f64>,
+    #[doc = "Thermal mass of mash tun expressed as litres of equivalent water volume (0 = pre-heated tun)"]
+    pub tun_heat_capacity_l: f64,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub tun_volume_l: ::std::option::Option<f64>,
-    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub tun_weight_kg: ::std::option::Option<f64>,
     pub updated_at: i64,
+    #[doc = "Target mash water-to-grain ratio, in litres/kg"]
+    pub water_grain_ratio_l_per_kg: f64,
     #[doc = "Time wort sits in the whirlpool before chilling, in minutes"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub whirlpool_time_min: ::std::option::Option<f64>,
@@ -4849,14 +4959,29 @@ impl UpdateBatchInput {
 #[doc = "    \"efficiency_pct\": {"]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
-#[doc = "    \"evap_rate_pct_hr\": {"]
+#[doc = "    \"evap_rate_l_hr\": {"]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"fermenter_loss_l\": {"]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
+#[doc = "    \"grain_absorption_rate_l_per_kg\": {"]
+#[doc = "      \"type\": \"number\""]
+#[doc = "    },"]
+#[doc = "    \"grain_temp_f\": {"]
+#[doc = "      \"type\": \"number\""]
+#[doc = "    },"]
 #[doc = "    \"hlt_deadspace_l\": {"]
 #[doc = "      \"type\": \"number\""]
+#[doc = "    },"]
+#[doc = "    \"hlt_water_limit_min_l\": {"]
+#[doc = "      \"type\": \"number\""]
+#[doc = "    },"]
+#[doc = "    \"hopstand_temp_f\": {"]
+#[doc = "      \"type\": \"number\""]
+#[doc = "    },"]
+#[doc = "    \"include_grain_volume_in_mash_limits\": {"]
+#[doc = "      \"type\": \"boolean\""]
 #[doc = "    },"]
 #[doc = "    \"mash_efficiency_pct\": {"]
 #[doc = "      \"type\": \"number\""]
@@ -4876,8 +5001,17 @@ impl UpdateBatchInput {
 #[doc = "    \"notes\": {"]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
+#[doc = "    \"overflow_target\": {"]
+#[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
+#[doc = "    \"room_temp_f\": {"]
+#[doc = "      \"type\": \"number\""]
+#[doc = "    },"]
 #[doc = "    \"sparge_method\": {"]
 #[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
+#[doc = "    \"sparge_temp_f\": {"]
+#[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"sparge_volume_max_l\": {"]
 #[doc = "      \"type\": \"number\""]
@@ -4886,6 +5020,12 @@ impl UpdateBatchInput {
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"trub_chiller_loss_l\": {"]
+#[doc = "      \"type\": \"number\""]
+#[doc = "    },"]
+#[doc = "    \"tun_heat_capacity_l\": {"]
+#[doc = "      \"type\": \"number\""]
+#[doc = "    },"]
+#[doc = "    \"water_grain_ratio_l_per_kg\": {"]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"whirlpool_time_min\": {"]
@@ -4922,11 +5062,21 @@ pub struct UpdateEquipmentProfileInput {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub efficiency_pct: ::std::option::Option<f64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub evap_rate_pct_hr: ::std::option::Option<f64>,
+    pub evap_rate_l_hr: ::std::option::Option<f64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub fermenter_loss_l: ::std::option::Option<f64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub grain_absorption_rate_l_per_kg: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub grain_temp_f: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub hlt_deadspace_l: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub hlt_water_limit_min_l: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub hopstand_temp_f: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub include_grain_volume_in_mash_limits: ::std::option::Option<bool>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub mash_efficiency_pct: ::std::option::Option<f64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -4940,13 +5090,23 @@ pub struct UpdateEquipmentProfileInput {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub notes: ::std::option::Option<::std::string::String>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub overflow_target: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub room_temp_f: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub sparge_method: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub sparge_temp_f: ::std::option::Option<f64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub sparge_volume_max_l: ::std::option::Option<f64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub sparge_volume_min_l: ::std::option::Option<f64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub trub_chiller_loss_l: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub tun_heat_capacity_l: ::std::option::Option<f64>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub water_grain_ratio_l_per_kg: ::std::option::Option<f64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub whirlpool_time_min: ::std::option::Option<f64>,
 }
@@ -4965,19 +5125,29 @@ impl ::std::default::Default for UpdateEquipmentProfileInput {
             calc_strike_water_temp: Default::default(),
             cooling_shrinkage_pct: Default::default(),
             efficiency_pct: Default::default(),
-            evap_rate_pct_hr: Default::default(),
+            evap_rate_l_hr: Default::default(),
             fermenter_loss_l: Default::default(),
+            grain_absorption_rate_l_per_kg: Default::default(),
+            grain_temp_f: Default::default(),
             hlt_deadspace_l: Default::default(),
+            hlt_water_limit_min_l: Default::default(),
+            hopstand_temp_f: Default::default(),
+            include_grain_volume_in_mash_limits: Default::default(),
             mash_efficiency_pct: Default::default(),
             mash_tun_loss_l: Default::default(),
             mash_volume_max_l: Default::default(),
             mash_volume_min_l: Default::default(),
             name: Default::default(),
             notes: Default::default(),
+            overflow_target: Default::default(),
+            room_temp_f: Default::default(),
             sparge_method: Default::default(),
+            sparge_temp_f: Default::default(),
             sparge_volume_max_l: Default::default(),
             sparge_volume_min_l: Default::default(),
             trub_chiller_loss_l: Default::default(),
+            tun_heat_capacity_l: Default::default(),
+            water_grain_ratio_l_per_kg: Default::default(),
             whirlpool_time_min: Default::default(),
         }
     }
@@ -7815,9 +7985,17 @@ pub mod builder {
         cooling_shrinkage_pct:
             ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         efficiency_pct: ::std::result::Result<f64, ::std::string::String>,
-        evap_rate_pct_hr: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        evap_rate_l_hr: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         fermenter_loss_l: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        grain_absorption_rate_l_per_kg:
+            ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        grain_temp_f: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         hlt_deadspace_l: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        hlt_water_limit_min_l:
+            ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        hopstand_temp_f: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        include_grain_volume_in_mash_limits:
+            ::std::result::Result<::std::option::Option<bool>, ::std::string::String>,
         mash_efficiency_pct:
             ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         mash_tun_loss_l: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
@@ -7828,15 +8006,25 @@ pub mod builder {
             ::std::option::Option<::std::string::String>,
             ::std::string::String,
         >,
+        overflow_target: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+        room_temp_f: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         sparge_method: ::std::result::Result<
             ::std::option::Option<::std::string::String>,
             ::std::string::String,
         >,
+        sparge_temp_f: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         sparge_volume_max_l:
             ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         sparge_volume_min_l:
             ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         trub_chiller_loss_l:
+            ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        tun_heat_capacity_l:
+            ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        water_grain_ratio_l_per_kg:
             ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         whirlpool_time_min:
             ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
@@ -7856,19 +8044,29 @@ pub mod builder {
                 calc_strike_water_temp: Ok(Default::default()),
                 cooling_shrinkage_pct: Ok(Default::default()),
                 efficiency_pct: Err("no value supplied for efficiency_pct".to_string()),
-                evap_rate_pct_hr: Ok(Default::default()),
+                evap_rate_l_hr: Ok(Default::default()),
                 fermenter_loss_l: Ok(Default::default()),
+                grain_absorption_rate_l_per_kg: Ok(Default::default()),
+                grain_temp_f: Ok(Default::default()),
                 hlt_deadspace_l: Ok(Default::default()),
+                hlt_water_limit_min_l: Ok(Default::default()),
+                hopstand_temp_f: Ok(Default::default()),
+                include_grain_volume_in_mash_limits: Ok(Default::default()),
                 mash_efficiency_pct: Ok(Default::default()),
                 mash_tun_loss_l: Ok(Default::default()),
                 mash_volume_max_l: Ok(Default::default()),
                 mash_volume_min_l: Ok(Default::default()),
                 name: Err("no value supplied for name".to_string()),
                 notes: Ok(Default::default()),
+                overflow_target: Ok(Default::default()),
+                room_temp_f: Ok(Default::default()),
                 sparge_method: Ok(Default::default()),
+                sparge_temp_f: Ok(Default::default()),
                 sparge_volume_max_l: Ok(Default::default()),
                 sparge_volume_min_l: Ok(Default::default()),
                 trub_chiller_loss_l: Ok(Default::default()),
+                tun_heat_capacity_l: Ok(Default::default()),
+                water_grain_ratio_l_per_kg: Ok(Default::default()),
                 whirlpool_time_min: Ok(Default::default()),
             }
         }
@@ -7994,14 +8192,14 @@ pub mod builder {
                 .map_err(|e| format!("error converting supplied value for efficiency_pct: {e}"));
             self
         }
-        pub fn evap_rate_pct_hr<T>(mut self, value: T) -> Self
+        pub fn evap_rate_l_hr<T>(mut self, value: T) -> Self
         where
             T: ::std::convert::TryInto<::std::option::Option<f64>>,
             T::Error: ::std::fmt::Display,
         {
-            self.evap_rate_pct_hr = value
+            self.evap_rate_l_hr = value
                 .try_into()
-                .map_err(|e| format!("error converting supplied value for evap_rate_pct_hr: {e}"));
+                .map_err(|e| format!("error converting supplied value for evap_rate_l_hr: {e}"));
             self
         }
         pub fn fermenter_loss_l<T>(mut self, value: T) -> Self
@@ -8014,6 +8212,26 @@ pub mod builder {
                 .map_err(|e| format!("error converting supplied value for fermenter_loss_l: {e}"));
             self
         }
+        pub fn grain_absorption_rate_l_per_kg<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.grain_absorption_rate_l_per_kg = value.try_into().map_err(|e| {
+                format!("error converting supplied value for grain_absorption_rate_l_per_kg: {e}")
+            });
+            self
+        }
+        pub fn grain_temp_f<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.grain_temp_f = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for grain_temp_f: {e}"));
+            self
+        }
         pub fn hlt_deadspace_l<T>(mut self, value: T) -> Self
         where
             T: ::std::convert::TryInto<::std::option::Option<f64>>,
@@ -8022,6 +8240,38 @@ pub mod builder {
             self.hlt_deadspace_l = value
                 .try_into()
                 .map_err(|e| format!("error converting supplied value for hlt_deadspace_l: {e}"));
+            self
+        }
+        pub fn hlt_water_limit_min_l<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.hlt_water_limit_min_l = value.try_into().map_err(|e| {
+                format!("error converting supplied value for hlt_water_limit_min_l: {e}")
+            });
+            self
+        }
+        pub fn hopstand_temp_f<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.hopstand_temp_f = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for hopstand_temp_f: {e}"));
+            self
+        }
+        pub fn include_grain_volume_in_mash_limits<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<bool>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.include_grain_volume_in_mash_limits = value.try_into().map_err(|e| {
+                format!(
+                    "error converting supplied value for include_grain_volume_in_mash_limits: {e}"
+                )
+            });
             self
         }
         pub fn mash_efficiency_pct<T>(mut self, value: T) -> Self
@@ -8084,6 +8334,26 @@ pub mod builder {
                 .map_err(|e| format!("error converting supplied value for notes: {e}"));
             self
         }
+        pub fn overflow_target<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.overflow_target = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for overflow_target: {e}"));
+            self
+        }
+        pub fn room_temp_f<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.room_temp_f = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for room_temp_f: {e}"));
+            self
+        }
         pub fn sparge_method<T>(mut self, value: T) -> Self
         where
             T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
@@ -8092,6 +8362,16 @@ pub mod builder {
             self.sparge_method = value
                 .try_into()
                 .map_err(|e| format!("error converting supplied value for sparge_method: {e}"));
+            self
+        }
+        pub fn sparge_temp_f<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.sparge_temp_f = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for sparge_temp_f: {e}"));
             self
         }
         pub fn sparge_volume_max_l<T>(mut self, value: T) -> Self
@@ -8124,6 +8404,26 @@ pub mod builder {
             });
             self
         }
+        pub fn tun_heat_capacity_l<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.tun_heat_capacity_l = value.try_into().map_err(|e| {
+                format!("error converting supplied value for tun_heat_capacity_l: {e}")
+            });
+            self
+        }
+        pub fn water_grain_ratio_l_per_kg<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.water_grain_ratio_l_per_kg = value.try_into().map_err(|e| {
+                format!("error converting supplied value for water_grain_ratio_l_per_kg: {e}")
+            });
+            self
+        }
         pub fn whirlpool_time_min<T>(mut self, value: T) -> Self
         where
             T: ::std::convert::TryInto<::std::option::Option<f64>>,
@@ -8153,19 +8453,29 @@ pub mod builder {
                 calc_strike_water_temp: value.calc_strike_water_temp?,
                 cooling_shrinkage_pct: value.cooling_shrinkage_pct?,
                 efficiency_pct: value.efficiency_pct?,
-                evap_rate_pct_hr: value.evap_rate_pct_hr?,
+                evap_rate_l_hr: value.evap_rate_l_hr?,
                 fermenter_loss_l: value.fermenter_loss_l?,
+                grain_absorption_rate_l_per_kg: value.grain_absorption_rate_l_per_kg?,
+                grain_temp_f: value.grain_temp_f?,
                 hlt_deadspace_l: value.hlt_deadspace_l?,
+                hlt_water_limit_min_l: value.hlt_water_limit_min_l?,
+                hopstand_temp_f: value.hopstand_temp_f?,
+                include_grain_volume_in_mash_limits: value.include_grain_volume_in_mash_limits?,
                 mash_efficiency_pct: value.mash_efficiency_pct?,
                 mash_tun_loss_l: value.mash_tun_loss_l?,
                 mash_volume_max_l: value.mash_volume_max_l?,
                 mash_volume_min_l: value.mash_volume_min_l?,
                 name: value.name?,
                 notes: value.notes?,
+                overflow_target: value.overflow_target?,
+                room_temp_f: value.room_temp_f?,
                 sparge_method: value.sparge_method?,
+                sparge_temp_f: value.sparge_temp_f?,
                 sparge_volume_max_l: value.sparge_volume_max_l?,
                 sparge_volume_min_l: value.sparge_volume_min_l?,
                 trub_chiller_loss_l: value.trub_chiller_loss_l?,
+                tun_heat_capacity_l: value.tun_heat_capacity_l?,
+                water_grain_ratio_l_per_kg: value.water_grain_ratio_l_per_kg?,
                 whirlpool_time_min: value.whirlpool_time_min?,
             })
         }
@@ -8185,19 +8495,29 @@ pub mod builder {
                 calc_strike_water_temp: Ok(value.calc_strike_water_temp),
                 cooling_shrinkage_pct: Ok(value.cooling_shrinkage_pct),
                 efficiency_pct: Ok(value.efficiency_pct),
-                evap_rate_pct_hr: Ok(value.evap_rate_pct_hr),
+                evap_rate_l_hr: Ok(value.evap_rate_l_hr),
                 fermenter_loss_l: Ok(value.fermenter_loss_l),
+                grain_absorption_rate_l_per_kg: Ok(value.grain_absorption_rate_l_per_kg),
+                grain_temp_f: Ok(value.grain_temp_f),
                 hlt_deadspace_l: Ok(value.hlt_deadspace_l),
+                hlt_water_limit_min_l: Ok(value.hlt_water_limit_min_l),
+                hopstand_temp_f: Ok(value.hopstand_temp_f),
+                include_grain_volume_in_mash_limits: Ok(value.include_grain_volume_in_mash_limits),
                 mash_efficiency_pct: Ok(value.mash_efficiency_pct),
                 mash_tun_loss_l: Ok(value.mash_tun_loss_l),
                 mash_volume_max_l: Ok(value.mash_volume_max_l),
                 mash_volume_min_l: Ok(value.mash_volume_min_l),
                 name: Ok(value.name),
                 notes: Ok(value.notes),
+                overflow_target: Ok(value.overflow_target),
+                room_temp_f: Ok(value.room_temp_f),
                 sparge_method: Ok(value.sparge_method),
+                sparge_temp_f: Ok(value.sparge_temp_f),
                 sparge_volume_max_l: Ok(value.sparge_volume_max_l),
                 sparge_volume_min_l: Ok(value.sparge_volume_min_l),
                 trub_chiller_loss_l: Ok(value.trub_chiller_loss_l),
+                tun_heat_capacity_l: Ok(value.tun_heat_capacity_l),
+                water_grain_ratio_l_per_kg: Ok(value.water_grain_ratio_l_per_kg),
                 whirlpool_time_min: Ok(value.whirlpool_time_min),
             }
         }
@@ -10560,11 +10880,17 @@ pub mod builder {
         cooling_shrinkage_pct: ::std::result::Result<f64, ::std::string::String>,
         created_at: ::std::result::Result<i64, ::std::string::String>,
         efficiency_pct: ::std::result::Result<f64, ::std::string::String>,
-        evap_rate_pct_hr: ::std::result::Result<f64, ::std::string::String>,
+        evap_rate_l_hr: ::std::result::Result<f64, ::std::string::String>,
         fermenter_loss_l: ::std::result::Result<f64, ::std::string::String>,
+        grain_absorption_rate_l_per_kg: ::std::result::Result<f64, ::std::string::String>,
+        grain_temp_f: ::std::result::Result<f64, ::std::string::String>,
         hlt_deadspace_l: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        hlt_water_limit_min_l:
+            ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         hop_utilization_pct: ::std::result::Result<f64, ::std::string::String>,
+        hopstand_temp_f: ::std::result::Result<f64, ::std::string::String>,
         id: ::std::result::Result<::std::string::String, ::std::string::String>,
+        include_grain_volume_in_mash_limits: ::std::result::Result<bool, ::std::string::String>,
         lauter_deadspace_l: ::std::result::Result<f64, ::std::string::String>,
         mash_efficiency_pct:
             ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
@@ -10576,7 +10902,10 @@ pub mod builder {
             ::std::option::Option<::std::string::String>,
             ::std::string::String,
         >,
+        overflow_target: ::std::result::Result<::std::string::String, ::std::string::String>,
+        room_temp_f: ::std::result::Result<f64, ::std::string::String>,
         sparge_method: ::std::result::Result<::std::string::String, ::std::string::String>,
+        sparge_temp_f: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         sparge_volume_max_l:
             ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         sparge_volume_min_l:
@@ -10584,10 +10913,10 @@ pub mod builder {
         top_up_kettle_l: ::std::result::Result<f64, ::std::string::String>,
         top_up_water_l: ::std::result::Result<f64, ::std::string::String>,
         trub_chiller_loss_l: ::std::result::Result<f64, ::std::string::String>,
-        tun_specific_heat: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        tun_heat_capacity_l: ::std::result::Result<f64, ::std::string::String>,
         tun_volume_l: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
-        tun_weight_kg: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         updated_at: ::std::result::Result<i64, ::std::string::String>,
+        water_grain_ratio_l_per_kg: ::std::result::Result<f64, ::std::string::String>,
         whirlpool_time_min:
             ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
     }
@@ -10616,11 +10945,20 @@ pub mod builder {
                 ),
                 created_at: Err("no value supplied for created_at".to_string()),
                 efficiency_pct: Err("no value supplied for efficiency_pct".to_string()),
-                evap_rate_pct_hr: Err("no value supplied for evap_rate_pct_hr".to_string()),
+                evap_rate_l_hr: Err("no value supplied for evap_rate_l_hr".to_string()),
                 fermenter_loss_l: Err("no value supplied for fermenter_loss_l".to_string()),
+                grain_absorption_rate_l_per_kg: Err(
+                    "no value supplied for grain_absorption_rate_l_per_kg".to_string(),
+                ),
+                grain_temp_f: Err("no value supplied for grain_temp_f".to_string()),
                 hlt_deadspace_l: Ok(Default::default()),
+                hlt_water_limit_min_l: Ok(Default::default()),
                 hop_utilization_pct: Err("no value supplied for hop_utilization_pct".to_string()),
+                hopstand_temp_f: Err("no value supplied for hopstand_temp_f".to_string()),
                 id: Err("no value supplied for id".to_string()),
+                include_grain_volume_in_mash_limits: Err(
+                    "no value supplied for include_grain_volume_in_mash_limits".to_string(),
+                ),
                 lauter_deadspace_l: Err("no value supplied for lauter_deadspace_l".to_string()),
                 mash_efficiency_pct: Ok(Default::default()),
                 mash_tun_loss_l: Err("no value supplied for mash_tun_loss_l".to_string()),
@@ -10628,16 +10966,21 @@ pub mod builder {
                 mash_volume_min_l: Ok(Default::default()),
                 name: Err("no value supplied for name".to_string()),
                 notes: Ok(Default::default()),
+                overflow_target: Err("no value supplied for overflow_target".to_string()),
+                room_temp_f: Err("no value supplied for room_temp_f".to_string()),
                 sparge_method: Err("no value supplied for sparge_method".to_string()),
+                sparge_temp_f: Ok(Default::default()),
                 sparge_volume_max_l: Ok(Default::default()),
                 sparge_volume_min_l: Ok(Default::default()),
                 top_up_kettle_l: Err("no value supplied for top_up_kettle_l".to_string()),
                 top_up_water_l: Err("no value supplied for top_up_water_l".to_string()),
                 trub_chiller_loss_l: Err("no value supplied for trub_chiller_loss_l".to_string()),
-                tun_specific_heat: Ok(Default::default()),
+                tun_heat_capacity_l: Err("no value supplied for tun_heat_capacity_l".to_string()),
                 tun_volume_l: Ok(Default::default()),
-                tun_weight_kg: Ok(Default::default()),
                 updated_at: Err("no value supplied for updated_at".to_string()),
+                water_grain_ratio_l_per_kg: Err(
+                    "no value supplied for water_grain_ratio_l_per_kg".to_string()
+                ),
                 whirlpool_time_min: Ok(Default::default()),
             }
         }
@@ -10783,14 +11126,14 @@ pub mod builder {
                 .map_err(|e| format!("error converting supplied value for efficiency_pct: {e}"));
             self
         }
-        pub fn evap_rate_pct_hr<T>(mut self, value: T) -> Self
+        pub fn evap_rate_l_hr<T>(mut self, value: T) -> Self
         where
             T: ::std::convert::TryInto<f64>,
             T::Error: ::std::fmt::Display,
         {
-            self.evap_rate_pct_hr = value
+            self.evap_rate_l_hr = value
                 .try_into()
-                .map_err(|e| format!("error converting supplied value for evap_rate_pct_hr: {e}"));
+                .map_err(|e| format!("error converting supplied value for evap_rate_l_hr: {e}"));
             self
         }
         pub fn fermenter_loss_l<T>(mut self, value: T) -> Self
@@ -10803,6 +11146,26 @@ pub mod builder {
                 .map_err(|e| format!("error converting supplied value for fermenter_loss_l: {e}"));
             self
         }
+        pub fn grain_absorption_rate_l_per_kg<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<f64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.grain_absorption_rate_l_per_kg = value.try_into().map_err(|e| {
+                format!("error converting supplied value for grain_absorption_rate_l_per_kg: {e}")
+            });
+            self
+        }
+        pub fn grain_temp_f<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<f64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.grain_temp_f = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for grain_temp_f: {e}"));
+            self
+        }
         pub fn hlt_deadspace_l<T>(mut self, value: T) -> Self
         where
             T: ::std::convert::TryInto<::std::option::Option<f64>>,
@@ -10811,6 +11174,16 @@ pub mod builder {
             self.hlt_deadspace_l = value
                 .try_into()
                 .map_err(|e| format!("error converting supplied value for hlt_deadspace_l: {e}"));
+            self
+        }
+        pub fn hlt_water_limit_min_l<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.hlt_water_limit_min_l = value.try_into().map_err(|e| {
+                format!("error converting supplied value for hlt_water_limit_min_l: {e}")
+            });
             self
         }
         pub fn hop_utilization_pct<T>(mut self, value: T) -> Self
@@ -10823,6 +11196,16 @@ pub mod builder {
             });
             self
         }
+        pub fn hopstand_temp_f<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<f64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.hopstand_temp_f = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for hopstand_temp_f: {e}"));
+            self
+        }
         pub fn id<T>(mut self, value: T) -> Self
         where
             T: ::std::convert::TryInto<::std::string::String>,
@@ -10831,6 +11214,18 @@ pub mod builder {
             self.id = value
                 .try_into()
                 .map_err(|e| format!("error converting supplied value for id: {e}"));
+            self
+        }
+        pub fn include_grain_volume_in_mash_limits<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<bool>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.include_grain_volume_in_mash_limits = value.try_into().map_err(|e| {
+                format!(
+                    "error converting supplied value for include_grain_volume_in_mash_limits: {e}"
+                )
+            });
             self
         }
         pub fn lauter_deadspace_l<T>(mut self, value: T) -> Self
@@ -10903,6 +11298,26 @@ pub mod builder {
                 .map_err(|e| format!("error converting supplied value for notes: {e}"));
             self
         }
+        pub fn overflow_target<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::string::String>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.overflow_target = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for overflow_target: {e}"));
+            self
+        }
+        pub fn room_temp_f<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<f64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.room_temp_f = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for room_temp_f: {e}"));
+            self
+        }
         pub fn sparge_method<T>(mut self, value: T) -> Self
         where
             T: ::std::convert::TryInto<::std::string::String>,
@@ -10911,6 +11326,16 @@ pub mod builder {
             self.sparge_method = value
                 .try_into()
                 .map_err(|e| format!("error converting supplied value for sparge_method: {e}"));
+            self
+        }
+        pub fn sparge_temp_f<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.sparge_temp_f = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for sparge_temp_f: {e}"));
             self
         }
         pub fn sparge_volume_max_l<T>(mut self, value: T) -> Self
@@ -10963,14 +11388,14 @@ pub mod builder {
             });
             self
         }
-        pub fn tun_specific_heat<T>(mut self, value: T) -> Self
+        pub fn tun_heat_capacity_l<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T: ::std::convert::TryInto<f64>,
             T::Error: ::std::fmt::Display,
         {
-            self.tun_specific_heat = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for tun_specific_heat: {e}"));
+            self.tun_heat_capacity_l = value.try_into().map_err(|e| {
+                format!("error converting supplied value for tun_heat_capacity_l: {e}")
+            });
             self
         }
         pub fn tun_volume_l<T>(mut self, value: T) -> Self
@@ -10983,16 +11408,6 @@ pub mod builder {
                 .map_err(|e| format!("error converting supplied value for tun_volume_l: {e}"));
             self
         }
-        pub fn tun_weight_kg<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<::std::option::Option<f64>>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.tun_weight_kg = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for tun_weight_kg: {e}"));
-            self
-        }
         pub fn updated_at<T>(mut self, value: T) -> Self
         where
             T: ::std::convert::TryInto<i64>,
@@ -11001,6 +11416,16 @@ pub mod builder {
             self.updated_at = value
                 .try_into()
                 .map_err(|e| format!("error converting supplied value for updated_at: {e}"));
+            self
+        }
+        pub fn water_grain_ratio_l_per_kg<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<f64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.water_grain_ratio_l_per_kg = value.try_into().map_err(|e| {
+                format!("error converting supplied value for water_grain_ratio_l_per_kg: {e}")
+            });
             self
         }
         pub fn whirlpool_time_min<T>(mut self, value: T) -> Self
@@ -11034,11 +11459,16 @@ pub mod builder {
                 cooling_shrinkage_pct: value.cooling_shrinkage_pct?,
                 created_at: value.created_at?,
                 efficiency_pct: value.efficiency_pct?,
-                evap_rate_pct_hr: value.evap_rate_pct_hr?,
+                evap_rate_l_hr: value.evap_rate_l_hr?,
                 fermenter_loss_l: value.fermenter_loss_l?,
+                grain_absorption_rate_l_per_kg: value.grain_absorption_rate_l_per_kg?,
+                grain_temp_f: value.grain_temp_f?,
                 hlt_deadspace_l: value.hlt_deadspace_l?,
+                hlt_water_limit_min_l: value.hlt_water_limit_min_l?,
                 hop_utilization_pct: value.hop_utilization_pct?,
+                hopstand_temp_f: value.hopstand_temp_f?,
                 id: value.id?,
+                include_grain_volume_in_mash_limits: value.include_grain_volume_in_mash_limits?,
                 lauter_deadspace_l: value.lauter_deadspace_l?,
                 mash_efficiency_pct: value.mash_efficiency_pct?,
                 mash_tun_loss_l: value.mash_tun_loss_l?,
@@ -11046,16 +11476,19 @@ pub mod builder {
                 mash_volume_min_l: value.mash_volume_min_l?,
                 name: value.name?,
                 notes: value.notes?,
+                overflow_target: value.overflow_target?,
+                room_temp_f: value.room_temp_f?,
                 sparge_method: value.sparge_method?,
+                sparge_temp_f: value.sparge_temp_f?,
                 sparge_volume_max_l: value.sparge_volume_max_l?,
                 sparge_volume_min_l: value.sparge_volume_min_l?,
                 top_up_kettle_l: value.top_up_kettle_l?,
                 top_up_water_l: value.top_up_water_l?,
                 trub_chiller_loss_l: value.trub_chiller_loss_l?,
-                tun_specific_heat: value.tun_specific_heat?,
+                tun_heat_capacity_l: value.tun_heat_capacity_l?,
                 tun_volume_l: value.tun_volume_l?,
-                tun_weight_kg: value.tun_weight_kg?,
                 updated_at: value.updated_at?,
+                water_grain_ratio_l_per_kg: value.water_grain_ratio_l_per_kg?,
                 whirlpool_time_min: value.whirlpool_time_min?,
             })
         }
@@ -11077,11 +11510,16 @@ pub mod builder {
                 cooling_shrinkage_pct: Ok(value.cooling_shrinkage_pct),
                 created_at: Ok(value.created_at),
                 efficiency_pct: Ok(value.efficiency_pct),
-                evap_rate_pct_hr: Ok(value.evap_rate_pct_hr),
+                evap_rate_l_hr: Ok(value.evap_rate_l_hr),
                 fermenter_loss_l: Ok(value.fermenter_loss_l),
+                grain_absorption_rate_l_per_kg: Ok(value.grain_absorption_rate_l_per_kg),
+                grain_temp_f: Ok(value.grain_temp_f),
                 hlt_deadspace_l: Ok(value.hlt_deadspace_l),
+                hlt_water_limit_min_l: Ok(value.hlt_water_limit_min_l),
                 hop_utilization_pct: Ok(value.hop_utilization_pct),
+                hopstand_temp_f: Ok(value.hopstand_temp_f),
                 id: Ok(value.id),
+                include_grain_volume_in_mash_limits: Ok(value.include_grain_volume_in_mash_limits),
                 lauter_deadspace_l: Ok(value.lauter_deadspace_l),
                 mash_efficiency_pct: Ok(value.mash_efficiency_pct),
                 mash_tun_loss_l: Ok(value.mash_tun_loss_l),
@@ -11089,16 +11527,19 @@ pub mod builder {
                 mash_volume_min_l: Ok(value.mash_volume_min_l),
                 name: Ok(value.name),
                 notes: Ok(value.notes),
+                overflow_target: Ok(value.overflow_target),
+                room_temp_f: Ok(value.room_temp_f),
                 sparge_method: Ok(value.sparge_method),
+                sparge_temp_f: Ok(value.sparge_temp_f),
                 sparge_volume_max_l: Ok(value.sparge_volume_max_l),
                 sparge_volume_min_l: Ok(value.sparge_volume_min_l),
                 top_up_kettle_l: Ok(value.top_up_kettle_l),
                 top_up_water_l: Ok(value.top_up_water_l),
                 trub_chiller_loss_l: Ok(value.trub_chiller_loss_l),
-                tun_specific_heat: Ok(value.tun_specific_heat),
+                tun_heat_capacity_l: Ok(value.tun_heat_capacity_l),
                 tun_volume_l: Ok(value.tun_volume_l),
-                tun_weight_kg: Ok(value.tun_weight_kg),
                 updated_at: Ok(value.updated_at),
+                water_grain_ratio_l_per_kg: Ok(value.water_grain_ratio_l_per_kg),
                 whirlpool_time_min: Ok(value.whirlpool_time_min),
             }
         }
@@ -15218,9 +15659,17 @@ pub mod builder {
         cooling_shrinkage_pct:
             ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         efficiency_pct: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
-        evap_rate_pct_hr: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        evap_rate_l_hr: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         fermenter_loss_l: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        grain_absorption_rate_l_per_kg:
+            ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        grain_temp_f: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         hlt_deadspace_l: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        hlt_water_limit_min_l:
+            ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        hopstand_temp_f: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        include_grain_volume_in_mash_limits:
+            ::std::result::Result<::std::option::Option<bool>, ::std::string::String>,
         mash_efficiency_pct:
             ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         mash_tun_loss_l: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
@@ -15234,15 +15683,25 @@ pub mod builder {
             ::std::option::Option<::std::string::String>,
             ::std::string::String,
         >,
+        overflow_target: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+        room_temp_f: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         sparge_method: ::std::result::Result<
             ::std::option::Option<::std::string::String>,
             ::std::string::String,
         >,
+        sparge_temp_f: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         sparge_volume_max_l:
             ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         sparge_volume_min_l:
             ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         trub_chiller_loss_l:
+            ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        tun_heat_capacity_l:
+            ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        water_grain_ratio_l_per_kg:
             ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         whirlpool_time_min:
             ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
@@ -15262,19 +15721,29 @@ pub mod builder {
                 calc_strike_water_temp: Ok(Default::default()),
                 cooling_shrinkage_pct: Ok(Default::default()),
                 efficiency_pct: Ok(Default::default()),
-                evap_rate_pct_hr: Ok(Default::default()),
+                evap_rate_l_hr: Ok(Default::default()),
                 fermenter_loss_l: Ok(Default::default()),
+                grain_absorption_rate_l_per_kg: Ok(Default::default()),
+                grain_temp_f: Ok(Default::default()),
                 hlt_deadspace_l: Ok(Default::default()),
+                hlt_water_limit_min_l: Ok(Default::default()),
+                hopstand_temp_f: Ok(Default::default()),
+                include_grain_volume_in_mash_limits: Ok(Default::default()),
                 mash_efficiency_pct: Ok(Default::default()),
                 mash_tun_loss_l: Ok(Default::default()),
                 mash_volume_max_l: Ok(Default::default()),
                 mash_volume_min_l: Ok(Default::default()),
                 name: Ok(Default::default()),
                 notes: Ok(Default::default()),
+                overflow_target: Ok(Default::default()),
+                room_temp_f: Ok(Default::default()),
                 sparge_method: Ok(Default::default()),
+                sparge_temp_f: Ok(Default::default()),
                 sparge_volume_max_l: Ok(Default::default()),
                 sparge_volume_min_l: Ok(Default::default()),
                 trub_chiller_loss_l: Ok(Default::default()),
+                tun_heat_capacity_l: Ok(Default::default()),
+                water_grain_ratio_l_per_kg: Ok(Default::default()),
                 whirlpool_time_min: Ok(Default::default()),
             }
         }
@@ -15400,14 +15869,14 @@ pub mod builder {
                 .map_err(|e| format!("error converting supplied value for efficiency_pct: {e}"));
             self
         }
-        pub fn evap_rate_pct_hr<T>(mut self, value: T) -> Self
+        pub fn evap_rate_l_hr<T>(mut self, value: T) -> Self
         where
             T: ::std::convert::TryInto<::std::option::Option<f64>>,
             T::Error: ::std::fmt::Display,
         {
-            self.evap_rate_pct_hr = value
+            self.evap_rate_l_hr = value
                 .try_into()
-                .map_err(|e| format!("error converting supplied value for evap_rate_pct_hr: {e}"));
+                .map_err(|e| format!("error converting supplied value for evap_rate_l_hr: {e}"));
             self
         }
         pub fn fermenter_loss_l<T>(mut self, value: T) -> Self
@@ -15420,6 +15889,26 @@ pub mod builder {
                 .map_err(|e| format!("error converting supplied value for fermenter_loss_l: {e}"));
             self
         }
+        pub fn grain_absorption_rate_l_per_kg<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.grain_absorption_rate_l_per_kg = value.try_into().map_err(|e| {
+                format!("error converting supplied value for grain_absorption_rate_l_per_kg: {e}")
+            });
+            self
+        }
+        pub fn grain_temp_f<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.grain_temp_f = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for grain_temp_f: {e}"));
+            self
+        }
         pub fn hlt_deadspace_l<T>(mut self, value: T) -> Self
         where
             T: ::std::convert::TryInto<::std::option::Option<f64>>,
@@ -15428,6 +15917,38 @@ pub mod builder {
             self.hlt_deadspace_l = value
                 .try_into()
                 .map_err(|e| format!("error converting supplied value for hlt_deadspace_l: {e}"));
+            self
+        }
+        pub fn hlt_water_limit_min_l<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.hlt_water_limit_min_l = value.try_into().map_err(|e| {
+                format!("error converting supplied value for hlt_water_limit_min_l: {e}")
+            });
+            self
+        }
+        pub fn hopstand_temp_f<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.hopstand_temp_f = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for hopstand_temp_f: {e}"));
+            self
+        }
+        pub fn include_grain_volume_in_mash_limits<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<bool>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.include_grain_volume_in_mash_limits = value.try_into().map_err(|e| {
+                format!(
+                    "error converting supplied value for include_grain_volume_in_mash_limits: {e}"
+                )
+            });
             self
         }
         pub fn mash_efficiency_pct<T>(mut self, value: T) -> Self
@@ -15490,6 +16011,26 @@ pub mod builder {
                 .map_err(|e| format!("error converting supplied value for notes: {e}"));
             self
         }
+        pub fn overflow_target<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.overflow_target = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for overflow_target: {e}"));
+            self
+        }
+        pub fn room_temp_f<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.room_temp_f = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for room_temp_f: {e}"));
+            self
+        }
         pub fn sparge_method<T>(mut self, value: T) -> Self
         where
             T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
@@ -15498,6 +16039,16 @@ pub mod builder {
             self.sparge_method = value
                 .try_into()
                 .map_err(|e| format!("error converting supplied value for sparge_method: {e}"));
+            self
+        }
+        pub fn sparge_temp_f<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.sparge_temp_f = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for sparge_temp_f: {e}"));
             self
         }
         pub fn sparge_volume_max_l<T>(mut self, value: T) -> Self
@@ -15530,6 +16081,26 @@ pub mod builder {
             });
             self
         }
+        pub fn tun_heat_capacity_l<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.tun_heat_capacity_l = value.try_into().map_err(|e| {
+                format!("error converting supplied value for tun_heat_capacity_l: {e}")
+            });
+            self
+        }
+        pub fn water_grain_ratio_l_per_kg<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.water_grain_ratio_l_per_kg = value.try_into().map_err(|e| {
+                format!("error converting supplied value for water_grain_ratio_l_per_kg: {e}")
+            });
+            self
+        }
         pub fn whirlpool_time_min<T>(mut self, value: T) -> Self
         where
             T: ::std::convert::TryInto<::std::option::Option<f64>>,
@@ -15559,19 +16130,29 @@ pub mod builder {
                 calc_strike_water_temp: value.calc_strike_water_temp?,
                 cooling_shrinkage_pct: value.cooling_shrinkage_pct?,
                 efficiency_pct: value.efficiency_pct?,
-                evap_rate_pct_hr: value.evap_rate_pct_hr?,
+                evap_rate_l_hr: value.evap_rate_l_hr?,
                 fermenter_loss_l: value.fermenter_loss_l?,
+                grain_absorption_rate_l_per_kg: value.grain_absorption_rate_l_per_kg?,
+                grain_temp_f: value.grain_temp_f?,
                 hlt_deadspace_l: value.hlt_deadspace_l?,
+                hlt_water_limit_min_l: value.hlt_water_limit_min_l?,
+                hopstand_temp_f: value.hopstand_temp_f?,
+                include_grain_volume_in_mash_limits: value.include_grain_volume_in_mash_limits?,
                 mash_efficiency_pct: value.mash_efficiency_pct?,
                 mash_tun_loss_l: value.mash_tun_loss_l?,
                 mash_volume_max_l: value.mash_volume_max_l?,
                 mash_volume_min_l: value.mash_volume_min_l?,
                 name: value.name?,
                 notes: value.notes?,
+                overflow_target: value.overflow_target?,
+                room_temp_f: value.room_temp_f?,
                 sparge_method: value.sparge_method?,
+                sparge_temp_f: value.sparge_temp_f?,
                 sparge_volume_max_l: value.sparge_volume_max_l?,
                 sparge_volume_min_l: value.sparge_volume_min_l?,
                 trub_chiller_loss_l: value.trub_chiller_loss_l?,
+                tun_heat_capacity_l: value.tun_heat_capacity_l?,
+                water_grain_ratio_l_per_kg: value.water_grain_ratio_l_per_kg?,
                 whirlpool_time_min: value.whirlpool_time_min?,
             })
         }
@@ -15591,19 +16172,29 @@ pub mod builder {
                 calc_strike_water_temp: Ok(value.calc_strike_water_temp),
                 cooling_shrinkage_pct: Ok(value.cooling_shrinkage_pct),
                 efficiency_pct: Ok(value.efficiency_pct),
-                evap_rate_pct_hr: Ok(value.evap_rate_pct_hr),
+                evap_rate_l_hr: Ok(value.evap_rate_l_hr),
                 fermenter_loss_l: Ok(value.fermenter_loss_l),
+                grain_absorption_rate_l_per_kg: Ok(value.grain_absorption_rate_l_per_kg),
+                grain_temp_f: Ok(value.grain_temp_f),
                 hlt_deadspace_l: Ok(value.hlt_deadspace_l),
+                hlt_water_limit_min_l: Ok(value.hlt_water_limit_min_l),
+                hopstand_temp_f: Ok(value.hopstand_temp_f),
+                include_grain_volume_in_mash_limits: Ok(value.include_grain_volume_in_mash_limits),
                 mash_efficiency_pct: Ok(value.mash_efficiency_pct),
                 mash_tun_loss_l: Ok(value.mash_tun_loss_l),
                 mash_volume_max_l: Ok(value.mash_volume_max_l),
                 mash_volume_min_l: Ok(value.mash_volume_min_l),
                 name: Ok(value.name),
                 notes: Ok(value.notes),
+                overflow_target: Ok(value.overflow_target),
+                room_temp_f: Ok(value.room_temp_f),
                 sparge_method: Ok(value.sparge_method),
+                sparge_temp_f: Ok(value.sparge_temp_f),
                 sparge_volume_max_l: Ok(value.sparge_volume_max_l),
                 sparge_volume_min_l: Ok(value.sparge_volume_min_l),
                 trub_chiller_loss_l: Ok(value.trub_chiller_loss_l),
+                tun_heat_capacity_l: Ok(value.tun_heat_capacity_l),
+                water_grain_ratio_l_per_kg: Ok(value.water_grain_ratio_l_per_kg),
                 whirlpool_time_min: Ok(value.whirlpool_time_min),
             }
         }
