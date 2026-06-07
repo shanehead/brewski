@@ -250,8 +250,8 @@
           </div>
 
           <div class="flex flex-col gap-1">
-            <label for="eq-evap-rate" class="text-xs" style="color: var(--color-text-secondary);">Boil Off <span style="color: var(--color-text-tertiary);">({evapPct.toFixed(1)}%) {volumeLabel(units)}/hr</span></label>
-            <input id="eq-evap-rate" type="number" inputmode="decimal" step="0.1" value={evapRatePctHr} oninput={(e) => evapRatePctHr = numInput(e)} class="eq-field-input" />
+            <label for="eq-evap-rate" class="text-xs" style="color: var(--color-text-secondary);">Boil Off <span style="color: var(--color-text-tertiary);">({calcEvapPct.toFixed(1)}%) {volumeLabel(units)}/hr</span></label>
+            <input id="eq-evap-rate" type="number" inputmode="decimal" step="0.01" value={volDisp(evapRateLHr)} oninput={(e) => evapRateLHr = volIn(e)} class="eq-field-input" />
           </div>
           <div class="flex flex-col gap-1">
             <label for="eq-trub-loss" class="text-xs" style="color: var(--color-text-secondary);">Trub/Chiller Loss <span style="color: var(--color-text-tertiary);">{volumeLabel(units)}</span></label>
@@ -275,6 +275,12 @@
           <div class="flex flex-col gap-1">
             <label for="eq-ferm-loss" class="text-xs" style="color: var(--color-text-secondary);">Fermenter Loss <span style="color: var(--color-text-tertiary);">{volumeLabel(units)}</span></label>
             <input id="eq-ferm-loss" type="number" inputmode="decimal" step="0.01" value={volDisp(fermenterLossL)} oninput={(e) => fermenterLossL = volIn(e)} class="eq-field-input" />
+          </div>
+          <div></div>
+          <div class="flex flex-col gap-1">
+            <label for="eq-hlt-limit-min" class="text-xs" style="color: var(--color-text-secondary);">HLT Water Limit Min <span style="color: var(--color-text-tertiary);">{volumeLabel(units)}</span></label>
+            <input id="eq-hlt-limit-min" type="number" inputmode="decimal" step="0.1" placeholder="optional"
+                   value={volDispNull(hltWaterLimitMinL)} oninput={(e) => hltWaterLimitMinL = volInNull(e)} class="eq-field-input" />
           </div>
 
           <div class="flex flex-col gap-1">
@@ -332,10 +338,19 @@
               <input id="eq-aroma-util" type="number" inputmode="decimal" step="0.1" value={aromaHopUtilizationPct} oninput={(e) => aromaHopUtilizationPct = numInput(e)} class="eq-field-input" />
             {/if}
           </div>
-          <div class="flex items-center gap-2 col-span-2">
+          <div class="flex items-center gap-2">
             <input type="checkbox" id="calc-aroma" bind:checked={calcAromaHopUtilization} />
             <label for="calc-aroma" class="text-sm" style="color: var(--color-text-primary);">Calc aroma hop utilization</label>
           </div>
+          {#if calcAromaHopUtilization}
+            <div class="flex flex-col gap-1">
+              <label for="eq-hopstand-temp" class="text-xs" style="color: var(--color-text-secondary);">Hopstand Temperature <span style="color: var(--color-text-tertiary);">{tempLabel(units)}</span></label>
+              <input id="eq-hopstand-temp" type="number" inputmode="decimal" step="1"
+                     value={tempDispNull(hopstandTempF)} oninput={(e) => hopstandTempF = tempInNull(e) ?? hopstandTempF} class="eq-field-input" />
+            </div>
+          {:else}
+            <div></div>
+          {/if}
           <div class="flex flex-col gap-1">
             <label for="eq-whirlpool" class="text-xs" style="color: var(--color-text-secondary);">Whirlpool / No-Chill Time <span style="color: var(--color-text-tertiary);">min</span></label>
             <input id="eq-whirlpool" type="number" inputmode="decimal" step="1" placeholder="optional"
@@ -375,9 +390,9 @@
                    value={volDispNull(tunVolumeL)} oninput={(e) => tunVolumeL = volInNull(e)} class="eq-field-input" />
           </div>
           <div class="flex flex-col gap-1">
-            <label for="eq-tun-weight" class="text-xs" style="color: var(--color-text-secondary);">Tun Weight <span style="color: var(--color-text-tertiary);">{weightLabel(units)}</span></label>
-            <input id="eq-tun-weight" type="number" inputmode="decimal" step="0.1" placeholder="optional"
-                   value={weightDispNull(tunWeightKg)} oninput={(e) => tunWeightKg = weightInNull(e)} class="eq-field-input" />
+            <label for="eq-tun-heat-cap" class="text-xs" style="color: var(--color-text-secondary);">Mash-Tun Heat Capacity <span style="color: var(--color-text-tertiary);">{volumeLabel(units)} equiv.</span></label>
+            <input id="eq-tun-heat-cap" type="number" inputmode="decimal" step="0.1"
+                   value={volDisp(tunHeatCapacityL)} oninput={(e) => tunHeatCapacityL = volIn(e)} class="eq-field-input" />
           </div>
           <div class="col-span-2 flex flex-col gap-1">
             <label for="eq-sparge-method" class="text-xs" style="color: var(--color-text-secondary);">Sparge Method</label>
@@ -387,7 +402,21 @@
               <option value="fly_sparge">Fly Sparge</option>
             </select>
           </div>
+          <div class="flex flex-col gap-1">
+            <label for="eq-grain-abs" class="text-xs" style="color: var(--color-text-secondary);">Grain Absorption Rate <span style="color: var(--color-text-tertiary);">{ratioLabel}</span></label>
+            <input id="eq-grain-abs" type="number" inputmode="decimal" step="0.01"
+                   value={ratioDisp(grainAbsorptionRateLPerKg)} oninput={(e) => grainAbsorptionRateLPerKg = ratioIn(e)} class="eq-field-input" />
+          </div>
+          <div class="flex flex-col gap-1">
+            <label for="eq-water-grain" class="text-xs" style="color: var(--color-text-secondary);">Water/Grain Ratio <span style="color: var(--color-text-tertiary);">{ratioLabel}</span></label>
+            <input id="eq-water-grain" type="number" inputmode="decimal" step="0.01"
+                   value={ratioDisp(waterGrainRatioLPerKg)} oninput={(e) => waterGrainRatioLPerKg = ratioIn(e)} class="eq-field-input" />
+          </div>
 
+          <div class="flex items-center gap-2 col-span-2 mt-1">
+            <input type="checkbox" id="include-grain-vol" bind:checked={includeGrainVolumeInMashLimits} />
+            <label for="include-grain-vol" class="text-sm" style="color: var(--color-text-primary);">Include grain volume in mash limits</label>
+          </div>
           <div class="col-span-2 text-xs font-medium mt-1" style="color: var(--color-text-secondary);">Mash Volume Limits</div>
           <div class="flex flex-col gap-1">
             <label for="eq-mash-vol-min" class="text-xs" style="color: var(--color-text-secondary);">Min <span style="color: var(--color-text-tertiary);">{volumeLabel(units)}</span></label>
@@ -412,9 +441,37 @@
                    value={volDispNull(spargeVolumeMaxL)} oninput={(e) => spargeVolumeMaxL = volInNull(e)} class="eq-field-input" />
           </div>
 
+          <div class="col-span-2 flex flex-col gap-1 mt-1">
+            <label for="eq-overflow-target" class="text-xs" style="color: var(--color-text-secondary);">Overflow Target</label>
+            <select id="eq-overflow-target" bind:value={overflowTarget} class="eq-field-input">
+              <option value="mash">Mash</option>
+              <option value="sparge">Sparge</option>
+              <option value="hlt">HLT</option>
+            </select>
+          </div>
           <div class="flex items-center gap-2 col-span-2 mt-1">
             <input type="checkbox" id="calc-strike" bind:checked={calcStrikeWaterTemp} />
             <label for="calc-strike" class="text-sm" style="color: var(--color-text-primary);">Calc strike water temperature</label>
+          </div>
+          {#if calcStrikeWaterTemp}
+            <div class="flex flex-col gap-1">
+              <label for="eq-room-temp" class="text-xs" style="color: var(--color-text-secondary);">Room Temperature <span style="color: var(--color-text-tertiary);">{tempLabel(units)}</span></label>
+              <input id="eq-room-temp" type="number" inputmode="decimal" step="1"
+                     value={tempDispNull(roomTempF)} oninput={(e) => roomTempF = tempInNull(e) ?? roomTempF} class="eq-field-input" />
+            </div>
+            <div class="flex flex-col gap-1">
+              <label for="eq-grain-temp" class="text-xs" style="color: var(--color-text-secondary);">Grain Temperature <span style="color: var(--color-text-tertiary);">{tempLabel(units)}</span></label>
+              <input id="eq-grain-temp" type="number" inputmode="decimal" step="1"
+                     value={tempDispNull(grainTempF)} oninput={(e) => grainTempF = tempInNull(e) ?? grainTempF} class="eq-field-input" />
+            </div>
+            <p class="text-xs col-span-2" style="color: var(--color-text-tertiary);">
+              Set heat capacity to 0 if your mash tun is pre-heated.
+            </p>
+          {/if}
+          <div class="col-span-2 flex flex-col gap-1 mt-1">
+            <label for="eq-sparge-temp" class="text-xs" style="color: var(--color-text-secondary);">Sparge Temperature <span style="color: var(--color-text-tertiary);">{tempLabel(units)}</span></label>
+            <input id="eq-sparge-temp" type="number" inputmode="decimal" step="1" placeholder="optional"
+                   value={tempDispNull(spargeTempF)} oninput={(e) => spargeTempF = tempInNull(e)} class="eq-field-input" />
           </div>
         </div>
       </section>
