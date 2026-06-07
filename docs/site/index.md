@@ -3,7 +3,7 @@ layout: home
 
 hero:
   name: "Brewski"
-  text: "Brew better beer."
+  text: "Brew freely."
   tagline: Free, open-source homebrewing software for recipe design, batch tracking, and everything in between.
   actions:
     - theme: brand
@@ -25,5 +25,7 @@ features:
   - title: BeerXML Support
     details: Import recipes from Brewfather, BeerSmith, or any BeerXML-compatible tool. Export your recipes to share with friends or back them up.
   - title: Free & Open Source
-    details: Brewski is MIT-licensed and free forever. No subscription, no account required, no data sent to anyone.
+    details: Brewski is MIT-licensed and free forever. Everything runs locally, nothing leaves your device.
 ---
+
+Hop, fermentable, and yeast data sourced from [BeerMaverick](https://beermaverick.com). Style guidelines from the [BJCP 2021 Style Guidelines](https://www.bjcp.org/bjcp-style-guidelines/). Thanks to both for making that data available.

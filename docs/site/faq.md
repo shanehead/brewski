@@ -2,7 +2,7 @@
 
 ## Is Brewski free?
 
-Yes. Brewski is free and MIT-licensed. There's no subscription, no account, no credit card, and no features locked behind a paywall. If it's in the app, it's yours.
+Yes. Brewski is free and MIT-licensed. Download it, open it, and the whole thing just works. If it's in the app, it's yours.
 
 ## Does Brewski send my data anywhere?
 
@@ -18,11 +18,11 @@ A few things don't translate perfectly from every tool. The most common one is t
 
 ## What platforms does Brewski run on?
 
-Brewski runs on Mac, Windows, and Linux. It's a desktop app.
+Brewski runs on Mac, Windows, Linux, iOS, and Android.
 
 ## Can I use Brewski on my phone?
 
-Not yet. Brewski is currently desktop-only (Mac, Windows, Linux). A mobile app is planned for the future.
+Yes. Brewski runs on iOS and Android. App Store and Google Play releases are coming soon. In the meantime, you can download the `.ipa` (iOS) or `.apk` (Android) from the [GitHub releases page](https://github.com/shanehead/brewski/releases) and install it on your device.
 
 ## Where is my database stored?
 
@@ -62,4 +62,4 @@ No. Brewski is fully offline. Everything runs locally on your machine. You only 
 
 ## I found a bug or have a feature request. Where do I report it?
 
-Open an issue on [GitHub](https://github.com/shanehead/brewski). That's the best place to report bugs and suggest features.
+Open an issue on [GitHub](https://github.com/shanehead/brewski).
