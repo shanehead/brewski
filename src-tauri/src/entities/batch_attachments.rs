@@ -16,7 +16,7 @@ pub struct Model {
     pub original_name: String,
     #[sea_orm(column_type = "Text", nullable)]
     pub mime_type: Option<String>,
-    pub size_bytes: i64,
+    pub size_bytes: i32,
     pub created_at: i32,
 }
 
