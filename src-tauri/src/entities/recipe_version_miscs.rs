@@ -22,6 +22,8 @@ pub struct Model {
     pub amount_is_weight: Option<i32>,
     pub time_min: f64,
     pub addition_order: i32,
+    #[sea_orm(column_type = "Text")]
+    pub unit: String,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
