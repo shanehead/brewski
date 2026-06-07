@@ -227,6 +227,7 @@ impl<'a> RecipeVersionRepository<'a> {
                 || a.time_min != b.time_min
                 || a.r#type != b.type_
                 || a.r#use != b.use_
+                || a.unit != b.unit
             {
                 return Ok(false);
             }
