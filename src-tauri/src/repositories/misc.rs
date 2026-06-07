@@ -84,9 +84,6 @@ impl<'a> MiscRepository<'a> {
         if let Some(v) = input.amount {
             active.amount = Set(v);
         }
-        if let Some(v) = input.amount_is_weight {
-            active.amount_is_weight = Set(Some(v as i32));
-        }
         if let Some(v) = input.use_ {
             active.r#use = Set(v);
         }
@@ -222,5 +219,26 @@ mod tests {
             .unwrap();
         assert_eq!(created.unit, "tsp");
         assert!(!created.amount_is_weight); // tsp is volume
+    }
+
+    #[tokio::test]
+    async fn test_update_unit() {
+        let db = setup_test_db().await;
+        let recipe_id = make_recipe(&db).await;
+        let repo = MiscRepository::new(&db);
+        let created = repo.create(&recipe_id, input()).await.unwrap();
+        // created has unit="g" (weight)
+        let updated = repo
+            .update(
+                &created.id,
+                UpdateMiscAdditionInput {
+                    unit: Some("oz".into()),
+                    ..Default::default()
+                },
+            )
+            .await
+            .unwrap();
+        assert_eq!(updated.unit, "oz");
+        assert!(updated.amount_is_weight); // oz is weight
     }
 }
