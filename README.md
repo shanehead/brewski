@@ -12,6 +12,8 @@
 
 # Brewski
 
+**Brew freely.**
+
 Brewski is a sleek and modern homebrewing app for managing recipes, tracking brew days, and dialing in your process. Build recipes, log brew days, work out your water chemistry, and keep notes along the way.
 
 Everything stays on your device, no account needed. Runs on macOS, iOS, Android, Windows, and Linux. Free and open source forever for *all* functionality, no paywalls.
