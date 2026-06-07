@@ -427,6 +427,7 @@ impl<'a> RecipeVersionRepository<'a> {
                 r#use: Set(m.use_.clone()),
                 amount: Set(m.amount),
                 amount_is_weight: Set(Some(m.amount_is_weight as i32)),
+                unit: Set(m.unit.clone()),
                 time_min: Set(m.time_min),
                 addition_order: Set(m.addition_order as i32),
             }
@@ -618,6 +619,7 @@ impl<'a> RecipeVersionRepository<'a> {
                 r#use: Set(m.use_.clone()),
                 amount: Set(m.amount),
                 amount_is_weight: Set(Some(m.amount_is_weight as i32)),
+                unit: Set(m.unit.clone()),
                 time_min: Set(m.time_min),
                 addition_order: Set(m.addition_order as i32),
             }
@@ -893,6 +895,7 @@ impl<'a> RecipeVersionRepository<'a> {
                 use_: m.r#use,
                 amount: m.amount,
                 amount_is_weight: m.amount_is_weight.unwrap_or(0) != 0,
+                unit: m.unit,
                 time_min: m.time_min,
                 addition_order: m.addition_order as i64,
             })

@@ -39,6 +39,12 @@ impl<'a> MiscRepository<'a> {
             .count(self.db)
             .await? as i32;
 
+        let amount_is_weight = if ["g", "oz"].contains(&input.unit.as_str()) {
+            1i32
+        } else {
+            0i32
+        };
+
         let id = new_id();
         recipe_addition_miscs::ActiveModel {
             id: Set(id.clone()),
@@ -48,7 +54,8 @@ impl<'a> MiscRepository<'a> {
             r#type: Set(input.type_),
             r#use: Set(input.use_),
             amount: Set(input.amount),
-            amount_is_weight: Set(input.amount_is_weight.map(|v| v as i32)),
+            amount_is_weight: Set(Some(amount_is_weight)),
+            unit: Set(input.unit),
             time_min: Set(input.time_min),
             addition_order: Set(order),
         }
@@ -88,6 +95,15 @@ impl<'a> MiscRepository<'a> {
         }
         if let Some(v) = input.addition_order {
             active.addition_order = Set(v as i32);
+        }
+        if let Some(v) = input.unit {
+            let is_weight = if ["g", "oz"].contains(&v.as_str()) {
+                1i32
+            } else {
+                0i32
+            };
+            active.unit = Set(v);
+            active.amount_is_weight = Set(Some(is_weight));
         }
 
         active.update(self.db).await?;
@@ -132,8 +148,9 @@ mod tests {
             type_: "fining".into(),
             use_: "Boil".into(),
             amount: 1.0,
-            amount_is_weight: Some(true),
+            unit: "g".into(),
             time_min: 15.0,
+            amount_is_weight: None,
         }
     }
 
@@ -164,6 +181,7 @@ mod tests {
                     use_: None,
                     time_min: None,
                     addition_order: None,
+                    unit: None,
                 },
             )
             .await
@@ -179,5 +197,30 @@ mod tests {
         let created = repo.create(&recipe_id, input()).await.unwrap();
         repo.delete(&created.id).await.unwrap();
         assert!(repo.list(&recipe_id).await.unwrap().is_empty());
+    }
+
+    #[tokio::test]
+    async fn test_unit_roundtrips() {
+        let db = setup_test_db().await;
+        let recipe_id = make_recipe(&db).await;
+        let repo = MiscRepository::new(&db);
+        let created = repo
+            .create(
+                &recipe_id,
+                CreateMiscAdditionInput {
+                    misc_id: None,
+                    name: "Coriander".into(),
+                    type_: "Spice".into(),
+                    use_: "Boil".into(),
+                    amount: 2.0,
+                    unit: "tsp".into(),
+                    time_min: 5.0,
+                    amount_is_weight: None,
+                },
+            )
+            .await
+            .unwrap();
+        assert_eq!(created.unit, "tsp");
+        assert!(!created.amount_is_weight); // tsp is volume
     }
 }

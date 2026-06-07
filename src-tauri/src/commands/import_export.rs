@@ -621,6 +621,13 @@ fn parse_misc(reader: &mut Reader<&[u8]>) -> Result<CreateMiscAdditionInput, Str
         }
     }
 
+    // BeerXML doesn't have a unit field; derive a sensible default from amount_is_weight.
+    let unit = if amount_is_weight == Some(true) {
+        "g".to_string()
+    } else {
+        "tsp".to_string()
+    };
+
     Ok(CreateMiscAdditionInput {
         misc_id: None,
         name,
@@ -628,6 +635,7 @@ fn parse_misc(reader: &mut Reader<&[u8]>) -> Result<CreateMiscAdditionInput, Str
         use_,
         amount,
         amount_is_weight,
+        unit,
         time_min,
     })
 }
@@ -1041,6 +1049,7 @@ mod tests {
                 recipe_id: "r1".to_string(),
                 time_min: 15.0,
                 type_: "fining".to_string(),
+                unit: "g".to_string(),
                 use_: "boil".to_string(),
             }],
             waters: vec![],

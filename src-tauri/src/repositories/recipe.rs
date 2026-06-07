@@ -311,6 +311,7 @@ impl<'a> RecipeRepository<'a> {
                         use_: m.use_,
                         amount: m.amount * ratio,
                         amount_is_weight: Some(m.amount_is_weight),
+                        unit: m.unit,
                         time_min: m.time_min,
                     },
                 )
@@ -1072,6 +1073,7 @@ mod tests {
                     use_: "boil".into(),
                     amount: 0.005,
                     amount_is_weight: Some(true),
+                    unit: "g".into(),
                     time_min: 15.0,
                 },
             )

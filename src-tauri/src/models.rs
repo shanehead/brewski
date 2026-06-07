@@ -273,6 +273,7 @@ impl TryFrom<entities::recipe_addition_miscs::Model> for RecipeAdditionMisc {
             amount_is_weight: m.amount_is_weight.unwrap_or(0) != 0,
             time_min: m.time_min,
             addition_order: m.addition_order as i64,
+            unit: m.unit,
         })
     }
 }

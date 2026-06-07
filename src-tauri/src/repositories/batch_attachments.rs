@@ -33,7 +33,7 @@ impl<'a> BatchAttachmentRepository<'a> {
             filename: Set(filename.to_string()),
             original_name: Set(original_name.to_string()),
             mime_type: Set(mime_type.map(|s| s.to_string())),
-            size_bytes: Set(size_bytes),
+            size_bytes: Set(size_bytes as i32),
             created_at: Set(now),
         }
         .insert(self.db)
@@ -72,7 +72,7 @@ impl<'a> BatchAttachmentRepository<'a> {
             filename: m.filename,
             original_name: m.original_name,
             mime_type: m.mime_type,
-            size_bytes: m.size_bytes,
+            size_bytes: m.size_bytes as i64,
             created_at: m.created_at as i64,
         }
     }
