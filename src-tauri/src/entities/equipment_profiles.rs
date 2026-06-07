@@ -16,12 +16,9 @@ pub struct Model {
     pub batch_size_l: f64,
     pub calc_boil_volume: i32,
     pub tun_volume_l: Option<f64>,
-    pub tun_weight_kg: Option<f64>,
-    pub tun_specific_heat: Option<f64>,
     pub lauter_deadspace_l: Option<f64>,
     pub top_up_kettle_l: Option<f64>,
     pub trub_chiller_loss_l: Option<f64>,
-    pub evap_rate_pct_hr: Option<f64>,
     pub boil_time_min: f64,
     pub top_up_water_l: Option<f64>,
     pub fermenter_loss_l: Option<f64>,
@@ -48,6 +45,18 @@ pub struct Model {
     pub sparge_volume_min_l: Option<f64>,
     pub sparge_volume_max_l: Option<f64>,
     pub calc_strike_water_temp: i32,
+    pub evap_rate_l_hr: f64,
+    pub tun_heat_capacity_l: f64,
+    pub hopstand_temp_f: f64,
+    pub grain_absorption_rate_l_per_kg: f64,
+    pub water_grain_ratio_l_per_kg: f64,
+    pub include_grain_volume_in_mash_limits: i32,
+    #[sea_orm(column_type = "Text")]
+    pub overflow_target: String,
+    pub hlt_water_limit_min_l: Option<f64>,
+    pub room_temp_f: f64,
+    pub grain_temp_f: f64,
+    pub sparge_temp_f: Option<f64>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
