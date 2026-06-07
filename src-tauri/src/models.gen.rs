@@ -1200,6 +1200,7 @@ impl CreateMashStepInput {
 #[doc = "    \"name\","]
 #[doc = "    \"time_min\","]
 #[doc = "    \"type_\","]
+#[doc = "    \"unit\","]
 #[doc = "    \"use_\""]
 #[doc = "  ],"]
 #[doc = "  \"properties\": {"]
@@ -1221,6 +1222,10 @@ impl CreateMashStepInput {
 #[doc = "    \"type_\": {"]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
+#[doc = "    \"unit\": {"]
+#[doc = "      \"description\": \"Display unit: g, oz, tsp, tbsp, or mL\","]
+#[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
 #[doc = "    \"use_\": {"]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    }"]
@@ -1238,6 +1243,8 @@ pub struct CreateMiscAdditionInput {
     pub name: ::std::string::String,
     pub time_min: f64,
     pub type_: ::std::string::String,
+    #[doc = "Display unit: g, oz, tsp, tbsp, or mL"]
+    pub unit: ::std::string::String,
     pub use_: ::std::string::String,
 }
 impl CreateMiscAdditionInput {
@@ -3564,6 +3571,7 @@ impl RecipeAdditionHop {
 #[doc = "    \"recipe_id\","]
 #[doc = "    \"time_min\","]
 #[doc = "    \"type_\","]
+#[doc = "    \"unit\","]
 #[doc = "    \"use_\""]
 #[doc = "  ],"]
 #[doc = "  \"properties\": {"]
@@ -3597,6 +3605,10 @@ impl RecipeAdditionHop {
 #[doc = "    \"type_\": {"]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
+#[doc = "    \"unit\": {"]
+#[doc = "      \"description\": \"Display unit: g, oz, tsp, tbsp, or mL\","]
+#[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
 #[doc = "    \"use_\": {"]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    }"]
@@ -3616,6 +3628,8 @@ pub struct RecipeAdditionMisc {
     pub recipe_id: ::std::string::String,
     pub time_min: f64,
     pub type_: ::std::string::String,
+    #[doc = "Display unit: g, oz, tsp, tbsp, or mL"]
+    pub unit: ::std::string::String,
     pub use_: ::std::string::String,
 }
 impl RecipeAdditionMisc {
@@ -5522,6 +5536,10 @@ impl UpdateMashStepInput {
 #[doc = "    \"time_min\": {"]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
+#[doc = "    \"unit\": {"]
+#[doc = "      \"description\": \"Display unit: g, oz, tsp, tbsp, or mL\","]
+#[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
 #[doc = "    \"use_\": {"]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    }"]
@@ -5539,6 +5557,9 @@ pub struct UpdateMiscAdditionInput {
     pub amount_is_weight: ::std::option::Option<bool>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub time_min: ::std::option::Option<f64>,
+    #[doc = "Display unit: g, oz, tsp, tbsp, or mL"]
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub unit: ::std::option::Option<::std::string::String>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub use_: ::std::option::Option<::std::string::String>,
 }
@@ -5549,6 +5570,7 @@ impl ::std::default::Default for UpdateMiscAdditionInput {
             amount: Default::default(),
             amount_is_weight: Default::default(),
             time_min: Default::default(),
+            unit: Default::default(),
             use_: Default::default(),
         }
     }
@@ -9196,6 +9218,7 @@ pub mod builder {
         name: ::std::result::Result<::std::string::String, ::std::string::String>,
         time_min: ::std::result::Result<f64, ::std::string::String>,
         type_: ::std::result::Result<::std::string::String, ::std::string::String>,
+        unit: ::std::result::Result<::std::string::String, ::std::string::String>,
         use_: ::std::result::Result<::std::string::String, ::std::string::String>,
     }
     impl ::std::default::Default for CreateMiscAdditionInput {
@@ -9207,6 +9230,7 @@ pub mod builder {
                 name: Err("no value supplied for name".to_string()),
                 time_min: Err("no value supplied for time_min".to_string()),
                 type_: Err("no value supplied for type_".to_string()),
+                unit: Err("no value supplied for unit".to_string()),
                 use_: Err("no value supplied for use_".to_string()),
             }
         }
@@ -9272,6 +9296,16 @@ pub mod builder {
                 .map_err(|e| format!("error converting supplied value for type_: {e}"));
             self
         }
+        pub fn unit<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::string::String>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.unit = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for unit: {e}"));
+            self
+        }
         pub fn use_<T>(mut self, value: T) -> Self
         where
             T: ::std::convert::TryInto<::std::string::String>,
@@ -9295,6 +9329,7 @@ pub mod builder {
                 name: value.name?,
                 time_min: value.time_min?,
                 type_: value.type_?,
+                unit: value.unit?,
                 use_: value.use_?,
             })
         }
@@ -9308,6 +9343,7 @@ pub mod builder {
                 name: Ok(value.name),
                 time_min: Ok(value.time_min),
                 type_: Ok(value.type_),
+                unit: Ok(value.unit),
                 use_: Ok(value.use_),
             }
         }
@@ -13416,6 +13452,7 @@ pub mod builder {
         recipe_id: ::std::result::Result<::std::string::String, ::std::string::String>,
         time_min: ::std::result::Result<f64, ::std::string::String>,
         type_: ::std::result::Result<::std::string::String, ::std::string::String>,
+        unit: ::std::result::Result<::std::string::String, ::std::string::String>,
         use_: ::std::result::Result<::std::string::String, ::std::string::String>,
     }
     impl ::std::default::Default for RecipeAdditionMisc {
@@ -13430,6 +13467,7 @@ pub mod builder {
                 recipe_id: Err("no value supplied for recipe_id".to_string()),
                 time_min: Err("no value supplied for time_min".to_string()),
                 type_: Err("no value supplied for type_".to_string()),
+                unit: Err("no value supplied for unit".to_string()),
                 use_: Err("no value supplied for use_".to_string()),
             }
         }
@@ -13525,6 +13563,16 @@ pub mod builder {
                 .map_err(|e| format!("error converting supplied value for type_: {e}"));
             self
         }
+        pub fn unit<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::string::String>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.unit = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for unit: {e}"));
+            self
+        }
         pub fn use_<T>(mut self, value: T) -> Self
         where
             T: ::std::convert::TryInto<::std::string::String>,
@@ -13551,6 +13599,7 @@ pub mod builder {
                 recipe_id: value.recipe_id?,
                 time_min: value.time_min?,
                 type_: value.type_?,
+                unit: value.unit?,
                 use_: value.use_?,
             })
         }
@@ -13567,6 +13616,7 @@ pub mod builder {
                 recipe_id: Ok(value.recipe_id),
                 time_min: Ok(value.time_min),
                 type_: Ok(value.type_),
+                unit: Ok(value.unit),
                 use_: Ok(value.use_),
             }
         }
@@ -16491,6 +16541,10 @@ pub mod builder {
         amount: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         amount_is_weight: ::std::result::Result<::std::option::Option<bool>, ::std::string::String>,
         time_min: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        unit: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
         use_: ::std::result::Result<
             ::std::option::Option<::std::string::String>,
             ::std::string::String,
@@ -16503,6 +16557,7 @@ pub mod builder {
                 amount: Ok(Default::default()),
                 amount_is_weight: Ok(Default::default()),
                 time_min: Ok(Default::default()),
+                unit: Ok(Default::default()),
                 use_: Ok(Default::default()),
             }
         }
@@ -16548,6 +16603,16 @@ pub mod builder {
                 .map_err(|e| format!("error converting supplied value for time_min: {e}"));
             self
         }
+        pub fn unit<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.unit = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for unit: {e}"));
+            self
+        }
         pub fn use_<T>(mut self, value: T) -> Self
         where
             T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
@@ -16569,6 +16634,7 @@ pub mod builder {
                 amount: value.amount?,
                 amount_is_weight: value.amount_is_weight?,
                 time_min: value.time_min?,
+                unit: value.unit?,
                 use_: value.use_?,
             })
         }
@@ -16580,6 +16646,7 @@ pub mod builder {
                 amount: Ok(value.amount),
                 amount_is_weight: Ok(value.amount_is_weight),
                 time_min: Ok(value.time_min),
+                unit: Ok(value.unit),
                 use_: Ok(value.use_),
             }
         }

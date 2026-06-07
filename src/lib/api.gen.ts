@@ -1755,6 +1755,8 @@ export interface components {
             amount_is_weight: boolean;
             time_min: number;
             addition_order: number;
+            /** @description Display unit: g, oz, tsp, tbsp, or mL */
+            unit: string;
         };
         RecipeAdditionWater: {
             id: string;
@@ -1940,6 +1942,8 @@ export interface components {
             amount: number;
             amount_is_weight?: boolean;
             time_min: number;
+            /** @description Display unit: g, oz, tsp, tbsp, or mL */
+            unit: string;
         };
         UpdateMiscAdditionInput: {
             amount?: number;
@@ -1947,6 +1951,8 @@ export interface components {
             use_?: string;
             time_min?: number;
             addition_order?: number;
+            /** @description Display unit: g, oz, tsp, tbsp, or mL */
+            unit?: string;
         };
         CreateWaterAdditionInput: {
             water_id?: string;

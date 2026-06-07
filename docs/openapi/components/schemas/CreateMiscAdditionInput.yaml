@@ -5,6 +5,7 @@ required:
   - use_
   - amount
   - time_min
+  - unit
 properties:
   misc_id:
     type: string
@@ -20,3 +21,6 @@ properties:
     type: boolean
   time_min:
     type: number
+  unit:
+    type: string
+    description: "Display unit: g, oz, tsp, tbsp, or mL"

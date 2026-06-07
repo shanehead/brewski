@@ -10,3 +10,6 @@ properties:
     type: number
   addition_order:
     type: integer
+  unit:
+    type: string
+    description: "Display unit: g, oz, tsp, tbsp, or mL"

@@ -9,6 +9,7 @@ required:
   - amount_is_weight
   - time_min
   - addition_order
+  - unit
 properties:
   id:
     type: string
@@ -32,3 +33,6 @@ properties:
     type: number
   addition_order:
     type: integer
+  unit:
+    type: string
+    description: "Display unit: g, oz, tsp, tbsp, or mL"
