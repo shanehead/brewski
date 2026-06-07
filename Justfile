@@ -120,8 +120,9 @@ update:
 
 # ── Test & Coverage ───────────────────────────────────────────────────────────
 
-# Run all tests (Rust + frontend)
-test: test-rust test-frontend
+# Run all tests (Rust + frontend) with a summary table at the end
+test:
+    bash scripts/test-summary.sh
 
 # Run Rust tests
 test-rust:
