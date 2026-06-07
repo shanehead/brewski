@@ -4,6 +4,7 @@
   import FermentablesTable from "$lib/components/ingredients/FermentablesTable.svelte";
   import HopsTable from "$lib/components/ingredients/HopsTable.svelte";
   import YeastsTable from "$lib/components/ingredients/YeastsTable.svelte";
+  import MiscTable from "$lib/components/ingredients/MiscTable.svelte";
   import Card from "$lib/components/Card.svelte";
 
   let { recipe, onchange }: { recipe: Recipe; onchange: () => void } = $props();
@@ -20,5 +21,9 @@
 
   <Card title="Yeast">
     <YeastsTable {recipe} {onchange} />
+  </Card>
+
+  <Card title="Misc">
+    <MiscTable {recipe} {onchange} />
   </Card>
 </div>
