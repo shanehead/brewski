@@ -1,7 +1,9 @@
 <script lang="ts">
   import BrewingIcon from "$lib/components/BrewingIcon.svelte";
-  import type { Hop, Fermentable, Yeast } from '$lib/api';
-  import { listHopLibrary, listFermentableLibrary, listYeastLibrary } from '$lib/api';
+  import type { Hop, Fermentable, Yeast, Misc } from '$lib/api';
+  import {
+    listHopLibrary, listFermentableLibrary, listYeastLibrary, listMiscLibrary,
+  } from '$lib/api';
   import { ipc } from '$lib/stores/error';
   import { settings } from '$lib/stores/settings';
   import {
@@ -15,10 +17,13 @@
   export type AddPayload =
     | { type: 'hop'; item: Hop; form: string; amount_kg: number; use_: string; time_min: number; hopstand_temp_c: number | null }
     | { type: 'fermentable'; item: Fermentable; amount_kg: number }
-    | { type: 'yeast'; item: Yeast; amount: number };
+    | { type: 'yeast'; item: Yeast; amount: number }
+    | { type: 'misc'; item: Misc; amount: number; unit: string; use_: string; time_min: number };
 
   const HOP_USES = ['boil', 'aroma', 'dry hop', 'first wort', 'hopstand'] as const;
   const HOP_FORMS = ['Pellet', 'Cryo', 'CO2 Extract', 'Plug', 'Leaf'] as const;
+  const MISC_USES = ['Boil', 'Mash', 'Primary', 'Secondary', 'Bottling'] as const;
+  const MISC_UNITS = ['g', 'oz', 'tsp', 'tbsp', 'mL'] as const;
 
   let {
     type,
@@ -26,7 +31,7 @@
     onclose,
     onadd,
   }: {
-    type: 'hop' | 'fermentable' | 'yeast';
+    type: 'hop' | 'fermentable' | 'yeast' | 'misc';
     open: boolean;
     onclose: () => void;
     onadd: (payload: AddPayload) => void;
@@ -34,14 +39,17 @@
 
   let screen = $state<'list' | 'detail'>('list');
   let query = $state('');
-  let library = $state<(Hop | Fermentable | Yeast)[]>([]);
+  let library = $state<(Hop | Fermentable | Yeast | Misc)[]>([]);
   let libraryLoaded = $state(false);
-  let selected = $state<Hop | Fermentable | Yeast | null>(null);
+  let selected = $state<Hop | Fermentable | Yeast | Misc | null>(null);
   let amount = $state(0);
   let use_ = $state('boil');
   let time = $state(60);
   let hopstand_temp_c = $state(80);
   let hopForm = $state('Pellet');
+  let miscUse = $state('Boil');
+  let miscUnit = $state('g');
+  let miscTime = $state(15);
 
   const units = $derived<Units>($settings.units === 'imperial' ? 'imperial' : 'metric');
 
@@ -49,7 +57,8 @@
     if (libraryLoaded) return;
     if (type === 'hop') library = (await ipc(listHopLibrary())) ?? [];
     else if (type === 'fermentable') library = (await ipc(listFermentableLibrary())) ?? [];
-    else library = (await ipc(listYeastLibrary())) ?? [];
+    else if (type === 'yeast') library = (await ipc(listYeastLibrary())) ?? [];
+    else library = (await ipc(listMiscLibrary())) ?? [];
     libraryLoaded = true;
   }
 
@@ -73,7 +82,8 @@
       hopForm = h.form;
     }
     else if (type === 'fermentable') { amount = units === 'imperial' ? lbToKg(2) : 1.0; }
-    else { amount = 1; }
+    else if (type === 'yeast') { amount = 1; }
+    else { amount = 1; miscUse = 'Boil'; miscUnit = 'g'; miscTime = 15; }
   });
 
   const filtered = $derived(
@@ -84,7 +94,7 @@
 
   const canAdd = $derived(selected !== null && amount > 0);
 
-  function selectItem(item: Hop | Fermentable | Yeast) {
+  function selectItem(item: Hop | Fermentable | Yeast | Misc) {
     selected = item;
     screen = 'detail';
   }
@@ -95,20 +105,25 @@
       onadd({ type: 'hop', item: selected as Hop, form: hopForm, amount_kg: amount, use_, time_min: time, hopstand_temp_c: use_ === 'hopstand' ? hopstand_temp_c : null });
     } else if (type === 'fermentable') {
       onadd({ type: 'fermentable', item: selected as Fermentable, amount_kg: amount });
-    } else {
+    } else if (type === 'yeast') {
       onadd({ type: 'yeast', item: selected as Yeast, amount });
+    } else {
+      onadd({ type: 'misc', item: selected as Misc, amount, unit: miscUnit, use_: miscUse, time_min: miscTime });
     }
     onclose();
   }
 
-  function rowSubtext(item: Hop | Fermentable | Yeast): string {
+  function rowSubtext(item: Hop | Fermentable | Yeast | Misc): string {
     if (type === 'hop') return `${(item as Hop).alpha_pct}% AA`;
     if (type === 'fermentable') {
       const f = item as Fermentable;
       return `${f.yield_pct.toFixed(0)}% · ${f.color_lovibond}°L`;
     }
-    const y = item as Yeast;
-    return y.laboratory ?? y.form;
+    if (type === 'yeast') {
+      const y = item as Yeast;
+      return y.laboratory ?? y.form;
+    }
+    return (item as Misc).type_;
   }
 
   function fmt(val: number | null, digits = 1): string {
@@ -116,10 +131,10 @@
   }
 
   const headerIcon = $derived<BrewingIconName>(
-    type === "hop" ? "hop" : type === "fermentable" ? "fermentable" : "yeast"
+    type === "hop" ? "hop" : type === "fermentable" ? "fermentable" : type === "yeast" ? "yeast" : "misc"
   );
   const headerTitle = $derived(
-    type === "hop" ? "Add Hop" : type === "fermentable" ? "Add Fermentable" : "Add Yeast"
+    type === "hop" ? "Add Hop" : type === "fermentable" ? "Add Fermentable" : type === "yeast" ? "Add Yeast" : "Add Misc"
   );
 </script>
 
@@ -142,7 +157,7 @@
           </svg>
           <input bind:value={query}
                  aria-label="Search ingredients"
-                 placeholder="Search {type === 'hop' ? 'hops' : type === 'fermentable' ? 'fermentables' : 'yeasts'}…"
+                 placeholder="Search {type === 'hop' ? 'hops' : type === 'fermentable' ? 'fermentables' : type === 'yeast' ? 'yeasts' : 'misc'}…"
                  class="w-full text-sm"
                  style="background: var(--color-bg-elevated); border: 1px solid var(--color-border); border-radius: 8px; padding: 8px 12px 8px 28px; color: var(--color-text-primary); outline: none;" />
         </div>
@@ -226,7 +241,57 @@
         {/if}
       </div>
 
+      {#if selected && type === 'misc'}
+        {@const misc = selected as Misc}
+        <div style="padding: 16px; display: flex; flex-direction: column; gap: 10px;">
+          <div>
+            <h2 style="font-size: 17px; font-weight: 700; margin: 0;">{misc.name}</h2>
+            <div style="display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap;">
+              <span style="background: var(--color-bg-elevated); color: var(--color-text-secondary); padding: 2px 8px; border-radius: 99px; font-size: 11px;">{misc.type_}</span>
+              {#if misc.source === 'user'}
+                <span style="background: color-mix(in srgb, var(--color-accent) 15%, transparent); color: var(--color-accent); padding: 2px 8px; border-radius: 99px; font-size: 11px; border: 1px solid color-mix(in srgb, var(--color-accent) 40%, transparent);">custom</span>
+              {/if}
+            </div>
+          </div>
+          {#if misc.use_for}
+            <p style="font-size: 13px; color: var(--color-text-secondary); line-height: 1.5; margin: 0;">{misc.use_for}</p>
+          {/if}
+          {#if misc.notes}
+            <p style="font-size: 12px; color: var(--color-text-muted); line-height: 1.5; margin: 0;">{misc.notes}</p>
+          {/if}
+          <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end; margin-top: 4px;">
+            <div>
+              <div style="font-size: 11px; color: var(--color-text-secondary); margin-bottom: 4px;">Amount</div>
+              <input type="number" inputmode="decimal" step="0.1" bind:value={amount} min="0.001"
+                style="width: 70px; background: var(--color-bg-elevated); border: 1px solid var(--color-border); border-radius: 5px; padding: 7px 8px; color: var(--color-text-primary); font-size: 14px;" />
+            </div>
+            <div>
+              <div style="font-size: 11px; color: var(--color-text-secondary); margin-bottom: 4px;">Unit</div>
+              <select bind:value={miscUnit} style="background: var(--color-bg-elevated); border: 1px solid var(--color-border); border-radius: 5px; padding: 7px 8px; color: var(--color-text-primary); font-size: 14px;">
+                {#each MISC_UNITS as u}<option value={u}>{u}</option>{/each}
+              </select>
+            </div>
+            <div>
+              <div style="font-size: 11px; color: var(--color-text-secondary); margin-bottom: 4px;">Use</div>
+              <select bind:value={miscUse} style="background: var(--color-bg-elevated); border: 1px solid var(--color-border); border-radius: 5px; padding: 7px 8px; color: var(--color-text-primary); font-size: 14px;">
+                {#each MISC_USES as u}<option value={u}>{u}</option>{/each}
+              </select>
+            </div>
+            <div>
+              <div style="font-size: 11px; color: var(--color-text-secondary); margin-bottom: 4px;">Time (min)</div>
+              <input type="number" inputmode="decimal" step="1" bind:value={miscTime} min="0"
+                style="width: 65px; background: var(--color-bg-elevated); border: 1px solid var(--color-border); border-radius: 5px; padding: 7px 8px; color: var(--color-text-primary); font-size: 14px;" />
+            </div>
+          </div>
+          <button onclick={handleAdd} disabled={!canAdd}
+            style="width: 100%; background: {canAdd ? 'var(--color-accent)' : 'var(--color-bg-elevated)'}; color: {canAdd ? '#fff' : 'var(--color-text-muted)'}; border: none; border-radius: 8px; padding: 12px; font-size: 15px; font-weight: 600; cursor: {canAdd ? 'pointer' : 'default'}; margin-top: 4px;">
+            Add to Recipe
+          </button>
+        </div>
+      {/if}
+
       <!-- Add controls footer -->
+      {#if type !== 'misc'}
       <div class="flex-shrink-0 p-4 flex flex-col gap-3"
            style="border-top: 1px solid var(--color-border); background: var(--color-bg-surface);">
         {#if type === 'hop' && selected}
@@ -292,6 +357,7 @@
           Add to Recipe
         </button>
       </div>
+      {/if}
     {/if}
   </div>
 {/if}
