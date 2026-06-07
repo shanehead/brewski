@@ -2,6 +2,7 @@ export type BrewingIconName =
   | "fermentable"
   | "hop"
   | "yeast"
+  | "misc"
   | "overview"
   | "ingredients"
   | "mash"
@@ -141,5 +142,10 @@ export const ICONS: Record<BrewingIconName, string> = {
     <circle cx="9" cy="16" r="2" fill="white" opacity="0.6"/>
     <circle cx="14" cy="14" r="1.5" fill="white" opacity="0.45"/>
     <circle cx="11" cy="18" r="1" fill="white" opacity="0.35"/>
+  `,
+  misc: `
+    <path d="M12 21C12 21 11 16 12 12C13 8 16 5 16 5C16 5 20 8 19 13C18 17 15 19 12 21Z" fill="#10b981"/>
+    <path d="M12 21C12 21 13 16 12 12C11 8 8 5 8 5C8 5 4 8 5 13C6 17 9 19 12 21Z" fill="#059669"/>
+    <rect x="11.25" y="12" width="1.5" height="9" rx="0.75" fill="#065f46"/>
   `,
 };
