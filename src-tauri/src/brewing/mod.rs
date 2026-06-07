@@ -11,7 +11,7 @@ use crate::models::{Recipe, RecipeStats};
 const DEFAULT_EFFICIENCY_PCT: f64 = 72.0;
 const DEFAULT_ATTENUATION_PCT: f64 = 75.0;
 const DEFAULT_HOPSTAND_TEMP_C: f64 = 80.0;
-const DEFAULT_EVAP_RATE_PCT_HR: f64 = 10.0;
+const DEFAULT_EVAP_RATE_L_HR: f64 = 3.8;
 const DEFAULT_TRUB_CHILLER_LOSS_L: f64 = 1.0;
 const DEFAULT_FERMENTER_LOSS_L: f64 = 1.0;
 const DEFAULT_TOP_UP_WATER_L: f64 = 0.0;
@@ -29,8 +29,8 @@ pub fn calculate_stats(recipe: &Recipe) -> RecipeStats {
         .unwrap_or(DEFAULT_EFFICIENCY_PCT);
 
     let evaporation_rate = equipment
-        .map(|e| e.evap_rate_pct_hr)
-        .unwrap_or(DEFAULT_EVAP_RATE_PCT_HR);
+        .map(|e| e.evap_rate_l_hr)
+        .unwrap_or(DEFAULT_EVAP_RATE_L_HR);
     let trub_chiller_loss = equipment
         .map(|e| e.trub_chiller_loss_l)
         .unwrap_or(DEFAULT_TRUB_CHILLER_LOSS_L);
@@ -69,8 +69,7 @@ pub fn calculate_stats(recipe: &Recipe) -> RecipeStats {
     {
         let post_boil = recipe.batch_size_l;
         let boil_hours = recipe.boil_time_min / 60.0;
-        let evap_fraction = evaporation_rate / 100.0 * boil_hours;
-        let pre_boil = post_boil / (1.0 - evap_fraction) + mash_tun_loss;
+        let pre_boil = post_boil + evaporation_rate * boil_hours + mash_tun_loss;
         let fermenter = (post_boil - trub_chiller_loss - fermenter_loss + top_up_water).max(0.0);
         (pre_boil, post_boil, fermenter)
     } else {
@@ -429,12 +428,10 @@ mod tests {
             batch_size_l: 23.0,
             calc_boil_volume: false,
             tun_volume_l: None,
-            tun_weight_kg: None,
-            tun_specific_heat: None,
             lauter_deadspace_l: 0.0,
             top_up_kettle_l: 0.0,
             trub_chiller_loss_l: 1.0,
-            evap_rate_pct_hr: 10.0,
+            evap_rate_l_hr: 2.5,
             boil_time_min: 60.0,
             top_up_water_l: 0.0,
             fermenter_loss_l: 1.0,
@@ -448,6 +445,7 @@ mod tests {
             mash_efficiency_pct: None,
             calc_aroma_hop_utilization: true,
             aroma_hop_utilization_pct: 23.0,
+            hopstand_temp_f: 176.0,
             whirlpool_time_min: None,
             altitude_adjustment: false,
             boil_temp_f: None,
@@ -457,6 +455,15 @@ mod tests {
             sparge_volume_min_l: None,
             sparge_volume_max_l: None,
             calc_strike_water_temp: false,
+            tun_heat_capacity_l: 0.0,
+            grain_absorption_rate_l_per_kg: 1.04,
+            water_grain_ratio_l_per_kg: 3.12,
+            include_grain_volume_in_mash_limits: true,
+            overflow_target: "mash".into(),
+            hlt_water_limit_min_l: None,
+            room_temp_f: 68.0,
+            grain_temp_f: 68.0,
+            sparge_temp_f: None,
             created_at: 0,
             updated_at: 0,
         });
@@ -478,12 +485,10 @@ mod tests {
             batch_size_l: 23.0,
             calc_boil_volume: true,
             tun_volume_l: None,
-            tun_weight_kg: None,
-            tun_specific_heat: None,
             lauter_deadspace_l: 0.0,
             top_up_kettle_l: 0.0,
             trub_chiller_loss_l: 1.0,
-            evap_rate_pct_hr: 10.0,
+            evap_rate_l_hr: 2.5,
             boil_time_min: 60.0,
             top_up_water_l: 0.0,
             fermenter_loss_l: 1.0,
@@ -497,6 +502,7 @@ mod tests {
             mash_efficiency_pct: None,
             calc_aroma_hop_utilization: true,
             aroma_hop_utilization_pct: 23.0,
+            hopstand_temp_f: 176.0,
             whirlpool_time_min: None,
             altitude_adjustment: false,
             boil_temp_f: None,
@@ -506,6 +512,15 @@ mod tests {
             sparge_volume_min_l: None,
             sparge_volume_max_l: None,
             calc_strike_water_temp: false,
+            tun_heat_capacity_l: 0.0,
+            grain_absorption_rate_l_per_kg: 1.04,
+            water_grain_ratio_l_per_kg: 3.12,
+            include_grain_volume_in_mash_limits: true,
+            overflow_target: "mash".into(),
+            hlt_water_limit_min_l: None,
+            room_temp_f: 68.0,
+            grain_temp_f: 68.0,
+            sparge_temp_f: None,
             created_at: 0,
             updated_at: 0,
         }
