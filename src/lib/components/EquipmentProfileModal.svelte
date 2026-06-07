@@ -3,6 +3,8 @@
   import { createEquipmentProfile, updateEquipmentProfile } from "$lib/api";
   import type { EquipmentProfile, CreateEquipmentProfileInput, UpdateEquipmentProfileInput } from "$lib/api";
   import { ipc } from "$lib/stores/error";
+  import { settings } from "$lib/stores/settings";
+  import { lToGal, galToL, volumeLabel, kgToLb, lbToKg, weightLabel, cToF, fToC, tempLabel, type Units } from "$lib/units";
 
   let {
     profile = null,
@@ -25,7 +27,7 @@
   let batchSizeL = $state(untrack(() => profile?.batch_size_l ?? 23));
   let calcBoilVolume = $state(untrack(() => profile?.calc_boil_volume ?? true));
   let boilSizeL = $state(untrack(() => profile?.boil_size_l ?? 27));
-  let evapRatePctHr = $state(untrack(() => profile?.evap_rate_pct_hr ?? 10));
+  let evapRateLHr = $state(untrack(() => profile?.evap_rate_l_hr ?? 3.8));
   let trubChillerLossL = $state(untrack(() => profile?.trub_chiller_loss_l ?? 0));
   let lauterDeadspaceL = $state(untrack(() => profile?.lauter_deadspace_l ?? 0));
   let mashTunLossL = $state(untrack(() => profile?.mash_tun_loss_l ?? 0));
@@ -51,7 +53,6 @@
 
   // Mash / Sparge
   let tunVolumeL = $state<number | null>(untrack(() => profile?.tun_volume_l ?? null));
-  let tunWeightKg = $state<number | null>(untrack(() => profile?.tun_weight_kg ?? null));
   let spargeMethod = $state(untrack(() => profile?.sparge_method ?? "no_sparge"));
   let mashVolumeMinL = $state<number | null>(untrack(() => profile?.mash_volume_min_l ?? null));
   let mashVolumeMaxL = $state<number | null>(untrack(() => profile?.mash_volume_max_l ?? null));
@@ -59,16 +60,63 @@
   let spargeVolumeMaxL = $state<number | null>(untrack(() => profile?.sparge_volume_max_l ?? null));
   let calcStrikeWaterTemp = $state(untrack(() => profile?.calc_strike_water_temp ?? false));
 
+  // New parity fields
+  let tunHeatCapacityL = $state(untrack(() => profile?.tun_heat_capacity_l ?? 0));
+  let hopstandTempF = $state(untrack(() => profile?.hopstand_temp_f ?? 176));
+  let grainAbsorptionRateLPerKg = $state(untrack(() => profile?.grain_absorption_rate_l_per_kg ?? 1.04));
+  let waterGrainRatioLPerKg = $state(untrack(() => profile?.water_grain_ratio_l_per_kg ?? 3.12));
+  let includeGrainVolumeInMashLimits = $state(untrack(() => profile?.include_grain_volume_in_mash_limits ?? true));
+  let overflowTarget = $state(untrack(() => profile?.overflow_target ?? "mash"));
+  let hltWaterLimitMinL = $state<number | null>(untrack(() => profile?.hlt_water_limit_min_l ?? null));
+  let roomTempF = $state(untrack(() => profile?.room_temp_f ?? 68));
+  let grainTempF = $state(untrack(() => profile?.grain_temp_f ?? 68));
+  let spargeTempF = $state<number | null>(untrack(() => profile?.sparge_temp_f ?? null));
+
   let saving = $state(false);
+
+  let units = $derived(($settings.units ?? "metric") as Units);
+
+  // ── unit conversion helpers ──────────────────────────────────────────────
+  function volDisp(l: number): string { return (units === "imperial" ? lToGal(l) : l).toFixed(2); }
+  function volDispNull(l: number | null): string { return l != null ? volDisp(l) : ""; }
+  function volIn(e: Event): number {
+    const v = parseFloat((e.target as HTMLInputElement).value) || 0;
+    return units === "imperial" ? galToL(v) : v;
+  }
+  function volInNull(e: Event): number | null {
+    const v = parseFloat((e.target as HTMLInputElement).value);
+    return isNaN(v) ? null : (units === "imperial" ? galToL(v) : v);
+  }
+  function weightDispNull(kg: number | null): string {
+    return kg != null ? (units === "imperial" ? kgToLb(kg) : kg).toFixed(2) : "";
+  }
+  function weightInNull(e: Event): number | null {
+    const v = parseFloat((e.target as HTMLInputElement).value);
+    return isNaN(v) ? null : (units === "imperial" ? lbToKg(v) : v);
+  }
+  function tempDispNull(f: number | null): string {
+    return f != null ? (units === "imperial" ? f : fToC(f)).toFixed(1) : "";
+  }
+  function tempInNull(e: Event): number | null {
+    const v = parseFloat((e.target as HTMLInputElement).value);
+    return isNaN(v) ? null : (units === "imperial" ? v : cToF(v));
+  }
+  function ratioDisp(lPerKg: number): string {
+    return (units === "imperial" ? lPerKg * 0.4796 : lPerKg).toFixed(2);
+  }
+  function ratioIn(e: Event): number {
+    const v = parseFloat((e.target as HTMLInputElement).value) || 0;
+    return units === "imperial" ? v / 0.4796 : v;
+  }
 
   // ── derived display values ───────────────────────────────────────────────
   let postBoilColdL = $derived(batchSizeL + trubChillerLossL + fermenterLossL - topUpWaterL);
   let boilHours = $derived(boilTimeMin / 60);
-  let evapFraction = $derived(evapRatePctHr / 100 * boilHours);
-  let preBoilColdL = $derived(postBoilColdL / (1 - evapFraction) + mashTunLossL);
+  let preBoilColdL = $derived(postBoilColdL + evapRateLHr * boilHours + mashTunLossL);
   let preBoilHotL = $derived(preBoilColdL * (1 + coolingShrinkagePct / 100));
   let postBoilHotL = $derived(postBoilColdL * (1 + coolingShrinkagePct / 100));
-  let evapPct = $derived(evapRatePctHr * boilHours);
+  let calcEvapPct = $derived(preBoilColdL > 0 ? (evapRateLHr * boilHours / preBoilColdL) * 100 : 0);
+  let ratioLabel = $derived(units === "imperial" ? "qt/lb" : "L/kg");
   let batchLabel = $derived(batchVolumeTarget === "kettle" ? "Batch Volume (Kettle)" : "Batch Volume (Fermenter)");
 
   async function handleSave() {
@@ -81,7 +129,17 @@
       batch_size_l: batchSizeL,
       calc_boil_volume: calcBoilVolume,
       boil_size_l: calcBoilVolume ? preBoilColdL : boilSizeL,
-      evap_rate_pct_hr: evapRatePctHr,
+      evap_rate_l_hr: evapRateLHr,
+      tun_heat_capacity_l: tunHeatCapacityL,
+      hopstand_temp_f: hopstandTempF,
+      grain_absorption_rate_l_per_kg: grainAbsorptionRateLPerKg,
+      water_grain_ratio_l_per_kg: waterGrainRatioLPerKg,
+      include_grain_volume_in_mash_limits: includeGrainVolumeInMashLimits,
+      overflow_target: overflowTarget,
+      hlt_water_limit_min_l: hltWaterLimitMinL ?? undefined,
+      room_temp_f: roomTempF,
+      grain_temp_f: grainTempF,
+      sparge_temp_f: spargeTempF ?? undefined,
       trub_chiller_loss_l: trubChillerLossL,
       lauter_deadspace_l: lauterDeadspaceL,
       mash_tun_loss_l: mashTunLossL,
@@ -99,7 +157,6 @@
       altitude_adjustment: altitudeAdjustment,
       boil_temp_f: boilTempF ?? undefined,
       tun_volume_l: tunVolumeL ?? undefined,
-      tun_weight_kg: tunWeightKg ?? undefined,
       sparge_method: spargeMethod,
       mash_volume_min_l: mashVolumeMinL ?? undefined,
       mash_volume_max_l: mashVolumeMaxL ?? undefined,
@@ -175,8 +232,8 @@
             </select>
           </div>
           <div class="flex flex-col gap-1">
-            <label for="eq-batch-size" class="text-xs" style="color: var(--color-text-secondary);">{batchLabel} <span style="color: var(--color-text-tertiary);">L</span></label>
-            <input id="eq-batch-size" type="number" inputmode="decimal" step="0.1" value={batchSizeL} oninput={(e) => batchSizeL = numInput(e)} class="eq-field-input" />
+            <label for="eq-batch-size" class="text-xs" style="color: var(--color-text-secondary);">{batchLabel} <span style="color: var(--color-text-tertiary);">{volumeLabel(units)}</span></label>
+            <input id="eq-batch-size" type="number" inputmode="decimal" step="0.1" value={volDisp(batchSizeL)} oninput={(e) => batchSizeL = volIn(e)} class="eq-field-input" />
           </div>
 
           <div class="flex items-center gap-2">
@@ -184,46 +241,46 @@
             <label for="calc-boil" class="text-sm" style="color: var(--color-text-primary);">Calc boil volume</label>
           </div>
           <div class="flex flex-col gap-1">
-            <label for="eq-boil-size" class="text-xs" style="color: var(--color-text-secondary);">Pre-Boil Volume* <span style="color: var(--color-text-tertiary);">L</span></label>
+            <label for="eq-boil-size" class="text-xs" style="color: var(--color-text-secondary);">Pre-Boil Volume* <span style="color: var(--color-text-tertiary);">{volumeLabel(units)}</span></label>
             {#if calcBoilVolume}
-              <div id="eq-boil-size" class="eq-field-display">{preBoilHotL.toFixed(2)} <span style="color: var(--color-text-tertiary);">(hot)</span></div>
+              <div id="eq-boil-size" class="eq-field-display">{(units === "imperial" ? lToGal(preBoilHotL) : preBoilHotL).toFixed(2)} <span style="color: var(--color-text-tertiary);">(hot)</span></div>
             {:else}
-              <input id="eq-boil-size" type="number" inputmode="decimal" step="0.1" value={boilSizeL} oninput={(e) => boilSizeL = numInput(e)} class="eq-field-input" />
+              <input id="eq-boil-size" type="number" inputmode="decimal" step="0.1" value={volDisp(boilSizeL)} oninput={(e) => boilSizeL = volIn(e)} class="eq-field-input" />
             {/if}
           </div>
 
           <div class="flex flex-col gap-1">
-            <label for="eq-evap-rate" class="text-xs" style="color: var(--color-text-secondary);">Boil Off <span style="color: var(--color-text-tertiary);">({evapPct.toFixed(1)}%) L/hr</span></label>
+            <label for="eq-evap-rate" class="text-xs" style="color: var(--color-text-secondary);">Boil Off <span style="color: var(--color-text-tertiary);">({evapPct.toFixed(1)}%) {volumeLabel(units)}/hr</span></label>
             <input id="eq-evap-rate" type="number" inputmode="decimal" step="0.1" value={evapRatePctHr} oninput={(e) => evapRatePctHr = numInput(e)} class="eq-field-input" />
           </div>
           <div class="flex flex-col gap-1">
-            <label for="eq-trub-loss" class="text-xs" style="color: var(--color-text-secondary);">Trub/Chiller Loss <span style="color: var(--color-text-tertiary);">L</span></label>
-            <input id="eq-trub-loss" type="number" inputmode="decimal" step="0.01" value={trubChillerLossL} oninput={(e) => trubChillerLossL = numInput(e)} class="eq-field-input" />
+            <label for="eq-trub-loss" class="text-xs" style="color: var(--color-text-secondary);">Trub/Chiller Loss <span style="color: var(--color-text-tertiary);">{volumeLabel(units)}</span></label>
+            <input id="eq-trub-loss" type="number" inputmode="decimal" step="0.01" value={volDisp(trubChillerLossL)} oninput={(e) => trubChillerLossL = volIn(e)} class="eq-field-input" />
           </div>
 
           <div class="flex flex-col gap-1">
-            <label for="eq-lauter-dead" class="text-xs" style="color: var(--color-text-secondary);">Mash-Tun Deadspace <span style="color: var(--color-text-tertiary);">L</span></label>
-            <input id="eq-lauter-dead" type="number" inputmode="decimal" step="0.01" value={lauterDeadspaceL} oninput={(e) => lauterDeadspaceL = numInput(e)} class="eq-field-input" />
+            <label for="eq-lauter-dead" class="text-xs" style="color: var(--color-text-secondary);">Mash-Tun Deadspace <span style="color: var(--color-text-tertiary);">{volumeLabel(units)}</span></label>
+            <input id="eq-lauter-dead" type="number" inputmode="decimal" step="0.01" value={volDisp(lauterDeadspaceL)} oninput={(e) => lauterDeadspaceL = volIn(e)} class="eq-field-input" />
           </div>
           <div class="flex flex-col gap-1">
-            <label for="eq-mash-loss" class="text-xs" style="color: var(--color-text-secondary);">Mash-Tun Loss <span style="color: var(--color-text-tertiary);">L</span></label>
-            <input id="eq-mash-loss" type="number" inputmode="decimal" step="0.01" value={mashTunLossL} oninput={(e) => mashTunLossL = numInput(e)} class="eq-field-input" />
+            <label for="eq-mash-loss" class="text-xs" style="color: var(--color-text-secondary);">Mash-Tun Loss <span style="color: var(--color-text-tertiary);">{volumeLabel(units)}</span></label>
+            <input id="eq-mash-loss" type="number" inputmode="decimal" step="0.01" value={volDisp(mashTunLossL)} oninput={(e) => mashTunLossL = volIn(e)} class="eq-field-input" />
           </div>
 
           <div class="flex flex-col gap-1">
-            <label for="eq-hlt-dead" class="text-xs" style="color: var(--color-text-secondary);">HLT Deadspace <span style="color: var(--color-text-tertiary);">L</span></label>
+            <label for="eq-hlt-dead" class="text-xs" style="color: var(--color-text-secondary);">HLT Deadspace <span style="color: var(--color-text-tertiary);">{volumeLabel(units)}</span></label>
             <input id="eq-hlt-dead" type="number" inputmode="decimal" step="0.01" placeholder="optional"
-                   value={hltDeadspaceL ?? ""} oninput={(e) => hltDeadspaceL = nullableNumInput(e)} class="eq-field-input" />
+                   value={volDispNull(hltDeadspaceL)} oninput={(e) => hltDeadspaceL = volInNull(e)} class="eq-field-input" />
           </div>
           <div class="flex flex-col gap-1">
-            <label for="eq-ferm-loss" class="text-xs" style="color: var(--color-text-secondary);">Fermenter Loss <span style="color: var(--color-text-tertiary);">L</span></label>
-            <input id="eq-ferm-loss" type="number" inputmode="decimal" step="0.01" value={fermenterLossL} oninput={(e) => fermenterLossL = numInput(e)} class="eq-field-input" />
+            <label for="eq-ferm-loss" class="text-xs" style="color: var(--color-text-secondary);">Fermenter Loss <span style="color: var(--color-text-tertiary);">{volumeLabel(units)}</span></label>
+            <input id="eq-ferm-loss" type="number" inputmode="decimal" step="0.01" value={volDisp(fermenterLossL)} oninput={(e) => fermenterLossL = volIn(e)} class="eq-field-input" />
           </div>
 
           <div class="flex flex-col gap-1">
-            <label for="eq-topup" class="text-xs" style="color: var(--color-text-secondary);">Fermenter Top-Up <span style="color: var(--color-text-tertiary);">L</span></label>
+            <label for="eq-topup" class="text-xs" style="color: var(--color-text-secondary);">Fermenter Top-Up <span style="color: var(--color-text-tertiary);">{volumeLabel(units)}</span></label>
             <input id="eq-topup" type="number" inputmode="decimal" step="0.01" placeholder="optional"
-                   value={topUpWaterL || ""} oninput={(e) => topUpWaterL = numInput(e)} class="eq-field-input" />
+                   value={topUpWaterL ? volDisp(topUpWaterL) : ""} oninput={(e) => topUpWaterL = volIn(e)} class="eq-field-input" />
           </div>
           <div class="flex flex-col gap-1">
             <label for="eq-cooling" class="text-xs" style="color: var(--color-text-secondary);">Cooling Shrinkage <span style="color: var(--color-text-tertiary);">%</span></label>
@@ -231,7 +288,7 @@
           </div>
         </div>
         <p class="text-xs mt-2 text-right" style="color: var(--color-text-tertiary);">
-          Post-Boil Kettle: {postBoilHotL.toFixed(2)} L &nbsp;·&nbsp; *Pre-Boil is hot (incl. {coolingShrinkagePct}% expansion)
+          Post-Boil Kettle: {(units === "imperial" ? lToGal(postBoilHotL) : postBoilHotL).toFixed(2)} {volumeLabel(units)} &nbsp;·&nbsp; *Pre-Boil is hot (incl. {coolingShrinkagePct}% expansion)
         </p>
       </section>
 
@@ -296,12 +353,13 @@
             <label for="altitude-adj" class="text-sm" style="color: var(--color-text-primary);">Altitude adjustment</label>
           </div>
           <div class="flex flex-col gap-1">
-            <label for="eq-boil-temp" class="text-xs" style="color: var(--color-text-secondary);">Boil Temperature <span style="color: var(--color-text-tertiary);">°F</span></label>
+            <label for="eq-boil-temp" class="text-xs" style="color: var(--color-text-secondary);">Boil Temperature <span style="color: var(--color-text-tertiary);">{tempLabel(units)}</span></label>
             {#if altitudeAdjustment}
               <div id="eq-boil-temp" class="eq-field-display" style="color: var(--color-text-tertiary);">calculated from altitude</div>
             {:else}
-              <input id="eq-boil-temp" type="number" inputmode="decimal" step="1" placeholder="212"
-                     value={boilTempF ?? ""} oninput={(e) => boilTempF = nullableNumInput(e)} class="eq-field-input" />
+              <input id="eq-boil-temp" type="number" inputmode="decimal" step="1"
+                     placeholder={units === "imperial" ? "212" : "100"}
+                     value={tempDispNull(boilTempF)} oninput={(e) => boilTempF = tempInNull(e)} class="eq-field-input" />
             {/if}
           </div>
         </div>
@@ -312,14 +370,14 @@
         <h3 class="eq-section-label">Mash / Sparge Water</h3>
         <div class="grid grid-cols-2 gap-4">
           <div class="flex flex-col gap-1">
-            <label for="eq-tun-vol" class="text-xs" style="color: var(--color-text-secondary);">Tun Volume <span style="color: var(--color-text-tertiary);">L</span></label>
+            <label for="eq-tun-vol" class="text-xs" style="color: var(--color-text-secondary);">Tun Volume <span style="color: var(--color-text-tertiary);">{volumeLabel(units)}</span></label>
             <input id="eq-tun-vol" type="number" inputmode="decimal" step="0.1" placeholder="optional"
-                   value={tunVolumeL ?? ""} oninput={(e) => tunVolumeL = nullableNumInput(e)} class="eq-field-input" />
+                   value={volDispNull(tunVolumeL)} oninput={(e) => tunVolumeL = volInNull(e)} class="eq-field-input" />
           </div>
           <div class="flex flex-col gap-1">
-            <label for="eq-tun-weight" class="text-xs" style="color: var(--color-text-secondary);">Tun Weight <span style="color: var(--color-text-tertiary);">kg</span></label>
+            <label for="eq-tun-weight" class="text-xs" style="color: var(--color-text-secondary);">Tun Weight <span style="color: var(--color-text-tertiary);">{weightLabel(units)}</span></label>
             <input id="eq-tun-weight" type="number" inputmode="decimal" step="0.1" placeholder="optional"
-                   value={tunWeightKg ?? ""} oninput={(e) => tunWeightKg = nullableNumInput(e)} class="eq-field-input" />
+                   value={weightDispNull(tunWeightKg)} oninput={(e) => tunWeightKg = weightInNull(e)} class="eq-field-input" />
           </div>
           <div class="col-span-2 flex flex-col gap-1">
             <label for="eq-sparge-method" class="text-xs" style="color: var(--color-text-secondary);">Sparge Method</label>
@@ -332,26 +390,26 @@
 
           <div class="col-span-2 text-xs font-medium mt-1" style="color: var(--color-text-secondary);">Mash Volume Limits</div>
           <div class="flex flex-col gap-1">
-            <label for="eq-mash-vol-min" class="text-xs" style="color: var(--color-text-secondary);">Min <span style="color: var(--color-text-tertiary);">L</span></label>
+            <label for="eq-mash-vol-min" class="text-xs" style="color: var(--color-text-secondary);">Min <span style="color: var(--color-text-tertiary);">{volumeLabel(units)}</span></label>
             <input id="eq-mash-vol-min" type="number" inputmode="decimal" step="0.1" placeholder="optional"
-                   value={mashVolumeMinL ?? ""} oninput={(e) => mashVolumeMinL = nullableNumInput(e)} class="eq-field-input" />
+                   value={volDispNull(mashVolumeMinL)} oninput={(e) => mashVolumeMinL = volInNull(e)} class="eq-field-input" />
           </div>
           <div class="flex flex-col gap-1">
-            <label for="eq-mash-vol-max" class="text-xs" style="color: var(--color-text-secondary);">Max <span style="color: var(--color-text-tertiary);">L</span></label>
+            <label for="eq-mash-vol-max" class="text-xs" style="color: var(--color-text-secondary);">Max <span style="color: var(--color-text-tertiary);">{volumeLabel(units)}</span></label>
             <input id="eq-mash-vol-max" type="number" inputmode="decimal" step="0.1" placeholder="optional"
-                   value={mashVolumeMaxL ?? ""} oninput={(e) => mashVolumeMaxL = nullableNumInput(e)} class="eq-field-input" />
+                   value={volDispNull(mashVolumeMaxL)} oninput={(e) => mashVolumeMaxL = volInNull(e)} class="eq-field-input" />
           </div>
 
           <div class="col-span-2 text-xs font-medium mt-1" style="color: var(--color-text-secondary);">Sparge Volume Limits</div>
           <div class="flex flex-col gap-1">
-            <label for="eq-sparge-vol-min" class="text-xs" style="color: var(--color-text-secondary);">Min <span style="color: var(--color-text-tertiary);">L</span></label>
+            <label for="eq-sparge-vol-min" class="text-xs" style="color: var(--color-text-secondary);">Min <span style="color: var(--color-text-tertiary);">{volumeLabel(units)}</span></label>
             <input id="eq-sparge-vol-min" type="number" inputmode="decimal" step="0.1" placeholder="optional"
-                   value={spargeVolumeMinL ?? ""} oninput={(e) => spargeVolumeMinL = nullableNumInput(e)} class="eq-field-input" />
+                   value={volDispNull(spargeVolumeMinL)} oninput={(e) => spargeVolumeMinL = volInNull(e)} class="eq-field-input" />
           </div>
           <div class="flex flex-col gap-1">
-            <label for="eq-sparge-vol-max" class="text-xs" style="color: var(--color-text-secondary);">Max <span style="color: var(--color-text-tertiary);">L</span></label>
+            <label for="eq-sparge-vol-max" class="text-xs" style="color: var(--color-text-secondary);">Max <span style="color: var(--color-text-tertiary);">{volumeLabel(units)}</span></label>
             <input id="eq-sparge-vol-max" type="number" inputmode="decimal" step="0.1" placeholder="optional"
-                   value={spargeVolumeMaxL ?? ""} oninput={(e) => spargeVolumeMaxL = nullableNumInput(e)} class="eq-field-input" />
+                   value={volDispNull(spargeVolumeMaxL)} oninput={(e) => spargeVolumeMaxL = volInNull(e)} class="eq-field-input" />
           </div>
 
           <div class="flex items-center gap-2 col-span-2 mt-1">
