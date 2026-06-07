@@ -163,9 +163,9 @@ impl<'a> WaterChemistryRepository<'a> {
 
         // Calculate sparge volume
         let boil_evaporation = if let Some(equipment) = &recipe.equipment_profile {
-            (equipment.evap_rate_pct_hr / 100.0) * recipe.boil_time_min / 60.0 * recipe.boil_size_l
+            equipment.evap_rate_l_hr * recipe.boil_time_min / 60.0
         } else {
-            (10.0 / 100.0) * recipe.boil_time_min / 60.0 * recipe.boil_size_l
+            3.8 * recipe.boil_time_min / 60.0
         };
         let sparge_volume_l = recipe.batch_size_l + boil_evaporation - mash_volume_l;
 
