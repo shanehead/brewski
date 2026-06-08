@@ -50,5 +50,5 @@ properties:
   hop_stats:
     type: array
     items:
-      $ref: ./HopStat.yaml
+      $ref: "./HopStat.yaml"
     description: Per-hop IBU contributions, keyed by hop addition ID
