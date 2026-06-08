@@ -49,6 +49,6 @@ describe("EquipmentPage", () => {
     await tick();
     await tick();
     // Check that the profile details are rendered (not just in dropdown)
-    expect(getByText(/23L batch · 72% efficiency/)).toBeInTheDocument();
+    expect(getByText(/23.0L batch · 72% efficiency/)).toBeInTheDocument();
   });
 });

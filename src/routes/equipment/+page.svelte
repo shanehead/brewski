@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { settings, loadSettings, saveSetting } from "$lib/stores/settings";
+  import { lToGal, volumeLabel } from "$lib/units";
   import { listEquipmentProfiles, createEquipmentProfile, deleteEquipmentProfile, copyEquipmentProfile } from "$lib/api";
   import type { EquipmentProfile } from "$lib/api";
   import { ipc } from "$lib/stores/error";
@@ -129,7 +130,7 @@
           <div>
             <p class="text-sm" style="color: var(--color-text-primary);">{p.name}</p>
             <p class="text-xs" style="color: var(--color-text-secondary);">
-              {p.batch_size_l}L batch · {p.efficiency_pct}% efficiency
+              {($settings.units === "imperial" ? lToGal(p.batch_size_l) : p.batch_size_l).toFixed(1)}{volumeLabel($settings.units ?? "metric")} batch · {p.efficiency_pct}% efficiency
             </p>
           </div>
           <div class="flex gap-2">

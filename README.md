@@ -3,6 +3,7 @@
 </p>
 
 <p align="center">
+  <a href="https://shanehead.github.io/brewski/"><img src="https://img.shields.io/badge/docs-online-blue" alt="Documentation"/></a>
   <a href="https://github.com/shanehead/brewski/actions/workflows/ci.yml"><img src="https://github.com/shanehead/brewski/actions/workflows/ci.yml/badge.svg" alt="CI"/></a>
   <a href="https://github.com/shanehead/brewski/releases"><img src="https://img.shields.io/github/v/release/shanehead/brewski?include_prereleases&label=release" alt="Latest release"/></a>
   <img src="https://img.shields.io/badge/platforms-macOS%20%7C%20iOS%20%7C%20Android%20%7C%20Windows%20%7C%20Linux-blue" alt="Platforms"/>
