@@ -1,9 +1,9 @@
 <script lang="ts">
-  import type { Recipe, RecipeStats } from "$lib/api";
-  import { createRecipeHop, deleteRecipeHop } from "$lib/api";
+  import type { Recipe, RecipeStats, UpdateHopAdditionInput } from "$lib/api";
+  import { createRecipeHop, updateRecipeHop, deleteRecipeHop } from "$lib/api";
   import { ipc } from "$lib/stores/error";
   import { settings } from "$lib/stores/settings";
-  import { type Units, kgToHopDisplay, hopWeightLabel, cToF, tempLabel } from "$lib/units";
+  import { type Units, kgToHopDisplay, hopDisplayToKg, hopWeightLabel, cToF, fToC, tempLabel } from "$lib/units";
   import BrewingIcon from "$lib/components/BrewingIcon.svelte";
   import IngredientPicker, { type AddPayload } from "$platform/IngredientPicker.svelte";
   import Tooltip from "$lib/components/Tooltip.svelte";
@@ -14,6 +14,8 @@
 
   let adding = $state(false);
   const units = $derived<Units>($settings.units === "imperial" ? "imperial" : "metric");
+
+  const HOP_USES = ['boil', 'aroma', 'dry hop', 'first wort', 'hopstand'] as const;
 
   const hopIbus = $derived(
     new Map(stats?.hop_stats.map(s => [s.hop_id, s.ibu]) ?? [])
@@ -33,6 +35,11 @@
     }));
     if (result === undefined) return;
     adding = false;
+    onchange();
+  }
+
+  async function handleUpdate(id: string, input: UpdateHopAdditionInput) {
+    await ipc(updateRecipeHop(id, input));
     onchange();
   }
 
@@ -94,15 +101,59 @@
               {/if}
             </td>
             <td class="text-right py-1.5" style="color: var(--color-text-secondary);">{h.alpha_pct}%</td>
-            <td class="text-right py-1.5" style="color: var(--color-text-secondary);">{kgToHopDisplay(h.amount_kg, units).toFixed(units === "imperial" ? 2 : 0)}{hopWeightLabel(units)}</td>
-            <td class="text-right py-1.5" style="color: var(--color-text-secondary);">
-              {#if h.use_ === 'hopstand' && h.hopstand_temp_c != null}
-                {h.use_} ({units === 'imperial' ? cToF(h.hopstand_temp_c).toFixed(0) : h.hopstand_temp_c.toFixed(0)}{tempLabel(units)})
-              {:else}
-                {h.use_}
-              {/if}
+            <td class="text-right py-1.5">
+              <input type="number" inputmode="decimal"
+                     step={units === "imperial" ? 0.1 : 1}
+                     value={kgToHopDisplay(h.amount_kg, units).toFixed(units === "imperial" ? 2 : 0)}
+                     onblur={(e) => {
+                       const v = parseFloat((e.target as HTMLInputElement).value);
+                       if (!isNaN(v) && v > 0) handleUpdate(h.id, { amount_kg: hopDisplayToKg(v, units) });
+                     }}
+                     class="w-16 text-right px-1 rounded text-xs"
+                     style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid transparent;" />
             </td>
-            <td class="text-right py-1.5" style="color: var(--color-text-secondary);">{h.time_min}min</td>
+            <td class="text-right py-1.5">
+              <div class="flex flex-col items-end gap-0.5">
+                <select
+                  value={h.use_}
+                  onchange={(e) => {
+                    const newUse = (e.target as HTMLSelectElement).value;
+                    const input: UpdateHopAdditionInput = { use_: newUse };
+                    if (newUse !== 'hopstand') input.hopstand_temp_c = undefined;
+                    handleUpdate(h.id, input);
+                  }}
+                  class="text-xs px-1 py-0.5 rounded text-right"
+                  style="background: var(--color-bg-elevated); color: var(--color-text-secondary); border: 1px solid transparent;"
+                >
+                  {#each HOP_USES as u}
+                    <option value={u}>{u}</option>
+                  {/each}
+                </select>
+                {#if h.use_ === 'hopstand'}
+                  <input type="number" inputmode="decimal" step={units === "imperial" ? 1 : 1}
+                         value={h.hopstand_temp_c != null
+                           ? (units === "imperial" ? cToF(h.hopstand_temp_c).toFixed(0) : h.hopstand_temp_c.toFixed(0))
+                           : ""}
+                         placeholder={units === "imperial" ? "170°F" : "80°C"}
+                         onblur={(e) => {
+                           const v = parseFloat((e.target as HTMLInputElement).value);
+                           if (!isNaN(v)) handleUpdate(h.id, { hopstand_temp_c: units === "imperial" ? fToC(v) : v });
+                         }}
+                         class="w-16 text-right px-1 rounded text-xs"
+                         style="background: var(--color-bg-elevated); color: var(--color-text-secondary); border: 1px solid transparent;" />
+                {/if}
+              </div>
+            </td>
+            <td class="text-right py-1.5">
+              <input type="number" inputmode="decimal" step="1"
+                     value={h.time_min}
+                     onblur={(e) => {
+                       const v = parseInt((e.target as HTMLInputElement).value, 10);
+                       if (!isNaN(v) && v >= 0) handleUpdate(h.id, { time_min: v });
+                     }}
+                     class="w-14 text-right px-1 rounded text-xs"
+                     style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid transparent;" />
+            </td>
             <td class="text-right py-1.5" style="color: var(--color-text-secondary);">
               {ibu != null && ibu > 0 ? ibu.toFixed(0) : '—'}
             </td>
