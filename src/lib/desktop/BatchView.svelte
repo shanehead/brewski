@@ -49,6 +49,7 @@
   async function handleUpdate(input: UpdateBatchInput) {
     if (!batch) return;
     batch = await ipc(updateBatch(batch.id, input)) ?? batch;
+    await refreshBatchList();
   }
 </script>
 
