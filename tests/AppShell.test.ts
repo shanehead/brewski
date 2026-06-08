@@ -3,7 +3,7 @@ import { render } from "@testing-library/svelte";
 import AppShell from "../src/lib/desktop/AppShell.svelte";
 
 // Capture the afterNavigate callback so we can trigger it manually
-let afterNavigateCb: ((nav: { to: { url: { pathname: string } } | null }) => void) | null = null;
+let afterNavigateCb: ((nav: { to: { url: { pathname: string; search: string } } | null }) => void) | null = null;
 
 const { gotoMock, saveSettingMock } = vi.hoisted(() => ({
   gotoMock: vi.fn(),
@@ -19,7 +19,7 @@ let mockPathname = "/";
 vi.mock("$app/stores", () => ({
   page: {
     subscribe: vi.fn((fn) => {
-      fn({ url: { pathname: mockPathname } });
+      fn({ url: { pathname: mockPathname, search: "" } });
       return () => {};
     }),
   },
@@ -119,7 +119,7 @@ describe("AppShell last route", () => {
 
   it("calls saveSetting with the navigated-to pathname", () => {
     render(AppShell, { children: () => null });
-    afterNavigateCb!({ to: { url: { pathname: "/library" } } });
+    afterNavigateCb!({ to: { url: { pathname: "/library", search: "" } } });
     expect(saveSettingMock).toHaveBeenCalledWith("last_route", "/library");
   });
 
@@ -141,5 +141,63 @@ describe("AppShell success banner", () => {
     mockLastSuccess = null;
     const { queryByText } = render(AppShell, { children: () => null });
     expect(queryByText(/recipes imported/)).toBeNull();
+  });
+});
+
+describe("AppShell section key saving", () => {
+  it("saves last_route_recipes when navigating to /recipe/abc", () => {
+    render(AppShell, { children: () => null });
+    afterNavigateCb!({ to: { url: { pathname: "/recipe/abc", search: "" } } });
+    expect(saveSettingMock).toHaveBeenCalledWith("last_route_recipes", "/recipe/abc");
+  });
+
+  it("saves last_route_recipes when navigating to /", () => {
+    render(AppShell, { children: () => null });
+    afterNavigateCb!({ to: { url: { pathname: "/", search: "" } } });
+    expect(saveSettingMock).toHaveBeenCalledWith("last_route_recipes", "/");
+  });
+
+  it("saves last_route_batches when navigating to /batches/xyz", () => {
+    render(AppShell, { children: () => null });
+    afterNavigateCb!({ to: { url: { pathname: "/batches/xyz", search: "" } } });
+    expect(saveSettingMock).toHaveBeenCalledWith("last_route_batches", "/batches/xyz");
+  });
+
+  it("saves last_route_tools when navigating to /tools/carbonation", () => {
+    render(AppShell, { children: () => null });
+    afterNavigateCb!({ to: { url: { pathname: "/tools/carbonation", search: "" } } });
+    expect(saveSettingMock).toHaveBeenCalledWith("last_route_tools", "/tools/carbonation");
+  });
+
+  it("saves last_route_equipment when navigating to /equipment", () => {
+    render(AppShell, { children: () => null });
+    afterNavigateCb!({ to: { url: { pathname: "/equipment", search: "" } } });
+    expect(saveSettingMock).toHaveBeenCalledWith("last_route_equipment", "/equipment");
+  });
+
+  it("saves last_route_library when navigating to /library", () => {
+    render(AppShell, { children: () => null });
+    afterNavigateCb!({ to: { url: { pathname: "/library", search: "" } } });
+    expect(saveSettingMock).toHaveBeenCalledWith("last_route_library", "/library");
+  });
+
+  it("saves last_route_settings when navigating to /settings", () => {
+    render(AppShell, { children: () => null });
+    afterNavigateCb!({ to: { url: { pathname: "/settings", search: "" } } });
+    expect(saveSettingMock).toHaveBeenCalledWith("last_route_settings", "/settings");
+  });
+
+  it("includes query string in saved URL", () => {
+    render(AppShell, { children: () => null });
+    afterNavigateCb!({ to: { url: { pathname: "/recipe/abc", search: "?tab=mash" } } });
+    expect(saveSettingMock).toHaveBeenCalledWith("last_route", "/recipe/abc?tab=mash");
+    expect(saveSettingMock).toHaveBeenCalledWith("last_route_recipes", "/recipe/abc?tab=mash");
+  });
+
+  it("does not save a section key for unrecognised paths", () => {
+    render(AppShell, { children: () => null });
+    afterNavigateCb!({ to: { url: { pathname: "/baseline-recipe/abc", search: "" } } });
+    // baseline-recipe belongs to the recipes section
+    expect(saveSettingMock).toHaveBeenCalledWith("last_route_recipes", "/baseline-recipe/abc");
   });
 });
