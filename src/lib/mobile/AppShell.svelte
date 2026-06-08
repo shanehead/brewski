@@ -3,20 +3,39 @@
   import { afterNavigate, goto } from "$app/navigation";
   import { page } from "$app/stores";
   import { loadSettings, settings, saveSetting } from "$lib/stores/settings";
+  import type { AppSettings } from "$lib/stores/settings";
   import { lastError, lastSuccess } from "$lib/stores/error";
   import BottomTabBar from "./BottomTabBar.svelte";
 
   let { children } = $props();
 
+  function sectionKeyFor(pathname: string): keyof AppSettings | null {
+    if (pathname === "/" || pathname.startsWith("/recipe") || pathname.startsWith("/baseline-recipe"))
+      return "last_route_recipes";
+    if (pathname.startsWith("/batches"))   return "last_route_batches";
+    if (pathname.startsWith("/tools"))     return "last_route_tools";
+    if (pathname.startsWith("/equipment")) return "last_route_equipment";
+    if (pathname.startsWith("/library"))   return "last_route_library";
+    if (pathname.startsWith("/settings"))  return "last_route_settings";
+    return null;
+  }
+
   onMount(async () => {
     await loadSettings();
-    if ($settings.last_route && $settings.last_route !== $page.url.pathname) {
-      goto($settings.last_route);
+    const lastRoute = $settings.last_route;
+    const currentUrl = $page.url.pathname + $page.url.search;
+    if (lastRoute && lastRoute !== currentUrl) {
+      goto(lastRoute);
     }
   });
 
   afterNavigate(({ to }) => {
-    if (to) saveSetting('last_route', to.url.pathname);
+    if (to) {
+      const url = to.url.pathname + to.url.search;
+      saveSetting("last_route", url);
+      const key = sectionKeyFor(to.url.pathname);
+      if (key) saveSetting(key, url);
+    }
   });
 </script>
 
