@@ -1,3 +1,4 @@
+description: Input for adding a yeast to a recipe.
 type: object
 required:
   - name
@@ -8,31 +9,42 @@ properties:
     oneOf:
       - type: string
       - type: "null"
+    description: ID of a library yeast to link; omit or null for a manually entered addition.
   name:
     type: string
+    description: Yeast strain name.
   type_:
     type: string
+    description: Ale, Lager, Wheat, Wine, Champagne
   form:
     type: string
+    description: Liquid, Dry, Slant, Culture
   laboratory:
     oneOf:
       - type: string
       - type: "null"
+    description: Yeast laboratory or manufacturer.
   product_id:
     oneOf:
       - type: string
       - type: "null"
+    description: Manufacturer's product identifier.
   attenuation_pct:
     oneOf:
       - type: number
       - type: "null"
+    description: Expected attenuation percentage for this yeast strain.
   amount:
     oneOf:
       - type: number
       - type: "null"
+    description: Quantity of yeast pitched; unit depends on amount_is_weight.
   amount_is_weight:
     type: boolean
+    description: When true, amount is in grams (dry yeast); when false, amount is in millilitres (liquid yeast).
   add_to_secondary:
     type: boolean
+    description: When true, yeast is added at secondary fermentation rather than primary.
   times_cultured:
     type: integer
+    description: Number of times this yeast has been repitched from a previous batch.

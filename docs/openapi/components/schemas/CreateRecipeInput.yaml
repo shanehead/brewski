@@ -1,24 +1,32 @@
+description: Input for creating a new recipe.
 type: object
 required:
   - name
 properties:
   name:
     type: string
+    description: Recipe name.
   type_:
     type: string
+    description: Recipe type (e.g. All Grain, Extract, Partial Mash).
   batch_size_l:
     type: number
+    description: Target batch volume in litres.
   boil_size_l:
     type: number
+    description: Pre-boil kettle volume in litres.
   boil_time_min:
     type: number
+    description: Boil duration in minutes.
   equipment_profile_id:
     type: string
+    description: ID of the equipment profile to associate with this recipe.
   source_id:
     type: string
     description: ID of a recipe to copy ingredients from
   style_id:
     type: string
+    description: ID of the beer style to associate with this recipe.
   hopstand_temp_c:
     type: number
     description: Default hopstand temperature in °C

@@ -1,3 +1,4 @@
+description: Mineral ion concentrations and chloride-to-sulfate ratio for a water volume.
 type: object
 required:
   - calcium_ppm
@@ -10,15 +11,22 @@ required:
 properties:
   calcium_ppm:
     type: number
+    description: Calcium concentration in parts per million (mg/L).
   magnesium_ppm:
     type: number
+    description: Magnesium concentration in parts per million (mg/L).
   sodium_ppm:
     type: number
+    description: Sodium concentration in parts per million (mg/L).
   chloride_ppm:
     type: number
+    description: Chloride concentration in parts per million (mg/L).
   sulfate_ppm:
     type: number
+    description: Sulfate concentration in parts per million (mg/L).
   bicarbonate_ppm:
     type: number
+    description: Bicarbonate (alkalinity) concentration in parts per million (mg/L).
   cl_so4_ratio:
     type: number
+    description: Chloride-to-sulfate ratio; higher values favor malt character, lower values favor hop bitterness.

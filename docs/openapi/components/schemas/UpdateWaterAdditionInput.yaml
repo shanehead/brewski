@@ -1,4 +1,6 @@
+description: Fields that can be updated on a recipe water source addition.
 type: object
 properties:
   amount_l:
     type: number
+    description: Updated volume of this water source in litres.

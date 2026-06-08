@@ -1,3 +1,4 @@
+description: A hop addition on a recipe.
 type: object
 required:
   - id
@@ -12,28 +13,36 @@ required:
 properties:
   id:
     type: string
+    description: Unique addition identifier.
   recipe_id:
     type: string
+    description: ID of the recipe this addition belongs to.
   hop_id:
     type:
       - string
       - "null"
+    description: Source library hop ID; null if manually entered.
   name:
     type: string
+    description: Hop variety name.
   alpha_pct:
     type: number
+    description: Alpha acid percentage used for IBU calculations.
   form:
     type: string
     description: "Pellet, Plug, Leaf, Cryo, CO2 Extract"
   amount_kg:
     type: number
+    description: Amount of this hop addition in kilograms.
   use_:
     type: string
     description: "Boil, Dry Hop, Mash, First Wort, Aroma, Hopstand"
   time_min:
     type: number
+    description: "Addition time; meaning depends on use_. For Boil: minutes remaining in boil. For Dry Hop: days. For others: minutes."
   addition_order:
     type: integer
+    description: Display sort order among hop additions on this recipe.
   hopstand_temp_c:
     type:
       - number

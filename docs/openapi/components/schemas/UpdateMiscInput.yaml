@@ -1,20 +1,28 @@
+description: Fields that can be updated on an existing library misc ingredient.
 type: object
 properties:
   name:
     type: string
+    description: Ingredient name.
   type_:
     type: string
+    description: Spice, Fining, Water Agent, Herb, Flavor, Other
   use_:
     type: string
+    description: Boil, Mash, Primary, Secondary, Bottling
   time_min:
     type: number
+    description: Default usage time in minutes.
   notes:
     type:
       - string
       - "null"
+    description: Brewer's notes about this ingredient.
   use_for:
     type:
       - string
       - "null"
+    description: Description of the purpose or effect of this ingredient.
   amount_is_weight:
     type: boolean
+    description: When true, amounts are measured by weight (grams); when false, by volume (millilitres).

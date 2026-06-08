@@ -1,3 +1,4 @@
+description: A file attachment associated with a brew batch (e.g. a brew-day photo).
 type: object
 required:
   - id
@@ -9,8 +10,10 @@ required:
 properties:
   id:
     type: string
+    description: Unique attachment identifier.
   batch_id:
     type: string
+    description: ID of the batch this attachment belongs to.
   filename:
     type: string
     description: UUID-based on-disk filename, e.g. "a1b2c3d4.jpg"
@@ -19,9 +22,12 @@ properties:
     description: User-facing display name, e.g. "brew-day.jpg"
   mime_type:
     type: [string, "null"]
+    description: MIME type of the file, e.g. "image/jpeg".
   size_bytes:
     type: integer
     format: int64
+    description: File size in bytes.
   created_at:
     type: integer
     format: int64
+    description: Unix timestamp in milliseconds when the attachment was added.

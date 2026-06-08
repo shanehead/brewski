@@ -1,3 +1,4 @@
+description: Input for creating a new yeast strain in the library.
 type: object
 required:
   - name
@@ -7,10 +8,12 @@ required:
 properties:
   name:
     type: string
+    description: Yeast strain name.
   forked_from_id:
     type:
       - string
       - "null"
+    description: ID of the seeded yeast this entry is forked from, or null if original.
   type_:
     type: string
     description: Ale, Lager, Wheat, Wine, Champagne
@@ -21,73 +24,92 @@ properties:
     type:
       - string
       - "null"
+    description: Yeast laboratory or manufacturer.
   product_id:
     type:
       - string
       - "null"
+    description: Manufacturer's product identifier.
   min_temperature_c:
     type:
       - number
       - "null"
+    description: Minimum recommended fermentation temperature in degrees Celsius.
   max_temperature_c:
     type:
       - number
       - "null"
+    description: Maximum recommended fermentation temperature in degrees Celsius.
   flocculation:
     type:
       - string
       - "null"
+    description: Low, Medium, High, Very High
   attenuation_pct:
     type:
       - number
       - "null"
+    description: BeerXML single attenuation value; see min/max fields for range.
   min_attenuation_pct:
     type:
       - number
       - "null"
+    description: Attenuation range lower bound.
   max_attenuation_pct:
     type:
       - number
       - "null"
+    description: Attenuation range upper bound.
   alcohol_tolerance:
     type:
       - string
       - "null"
+    description: low, medium, high, very_high
   flavor_profile:
     type:
       - string
       - "null"
+    description: Flavor and aroma characteristics of this yeast strain.
   styles:
     type:
       - string
       - "null"
+    description: Suitable beer styles, comma-separated.
   substitutes:
     type:
       - string
       - "null"
+    description: Substitute yeast strains, comma-separated.
   species:
     type:
       - string
       - "null"
+    description: "e.g. Saccharomyces cerevisiae"
   pof_positive:
     type:
       - boolean
       - "null"
+    description: Phenolic Off-Flavor gene present.
   sta1_positive:
     type:
       - boolean
       - "null"
+    description: STA-1 dextrin-fermenting gene present.
   notes:
     type:
       - string
       - "null"
+    description: Brewer's notes about this yeast strain.
   best_for:
     type:
       - string
       - "null"
+    description: Beer styles this yeast is best suited for.
   max_reuse:
     type:
       - integer
       - "null"
+    description: Maximum number of times this yeast can be repitched.
   add_to_secondary:
     type: boolean
+    description: When true, yeast is added at secondary fermentation rather than primary.

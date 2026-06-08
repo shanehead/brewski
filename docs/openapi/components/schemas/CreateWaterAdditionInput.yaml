@@ -1,3 +1,4 @@
+description: Input for adding a water source to a recipe.
 type: object
 required:
   - name
@@ -5,7 +6,10 @@ required:
 properties:
   water_id:
     type: string
+    description: ID of a library water profile to link; omit to create an unlinked entry.
   name:
     type: string
+    description: Name of the water source (e.g. "RO Water", "Tap Water").
   amount_l:
     type: number
+    description: Volume of this water source in litres.

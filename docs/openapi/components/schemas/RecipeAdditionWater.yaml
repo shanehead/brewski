@@ -1,3 +1,4 @@
+description: A water source addition on a recipe.
 type: object
 required:
   - id
@@ -7,13 +8,18 @@ required:
 properties:
   id:
     type: string
+    description: Unique addition identifier.
   recipe_id:
     type: string
+    description: ID of the recipe this addition belongs to.
   water_id:
     type:
       - string
       - "null"
+    description: Source library water profile ID; null if manually entered.
   name:
     type: string
+    description: Water source name.
   amount_l:
     type: number
+    description: Volume of this water source in litres.

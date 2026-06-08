@@ -1,15 +1,21 @@
+description: Fields that can be updated on an existing misc addition.
 type: object
 properties:
   amount:
     type: number
+    description: Quantity of this ingredient in the unit specified by the unit field.
   amount_is_weight:
     type: boolean
+    description: When true, amounts are measured by weight; when false, by volume.
   use_:
     type: string
+    description: Boil, Mash, Primary, Secondary, Bottling
   time_min:
     type: number
+    description: Usage time in minutes (meaning depends on use_).
   addition_order:
     type: integer
+    description: Display sort order among misc additions on this recipe.
   unit:
     type: string
     description: "Display unit: g, oz, tsp, tbsp, or mL"

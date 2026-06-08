@@ -1,3 +1,4 @@
+description: A yeast strain in the library.
 type: object
 required:
   - id
@@ -9,8 +10,10 @@ required:
 properties:
   id:
     type: string
+    description: Unique yeast identifier.
   name:
     type: string
+    description: Yeast strain name (e.g. "American Ale", "WLP001").
   type_:
     type: string
     description: Ale, Lager, Wheat, Wine, Champagne
@@ -21,18 +24,22 @@ properties:
     type:
       - string
       - "null"
+    description: Yeast laboratory or manufacturer (e.g. "White Labs", "Wyeast").
   product_id:
     type:
       - string
       - "null"
+    description: Manufacturer's product identifier (e.g. "WLP001", "1056").
   min_temperature_c:
     type:
       - number
       - "null"
+    description: Minimum recommended fermentation temperature in degrees Celsius.
   max_temperature_c:
     type:
       - number
       - "null"
+    description: Maximum recommended fermentation temperature in degrees Celsius.
   flocculation:
     type:
       - string
@@ -47,16 +54,20 @@ properties:
     type:
       - string
       - "null"
+    description: Brewer's notes about this yeast strain.
   best_for:
     type:
       - string
       - "null"
+    description: Beer styles this yeast is best suited for.
   max_reuse:
     type:
       - integer
       - "null"
+    description: Maximum number of times this yeast can be repitched.
   add_to_secondary:
     type: boolean
+    description: When true, yeast is added at secondary fermentation rather than primary.
   min_attenuation_pct:
     type:
       - number
@@ -76,6 +87,7 @@ properties:
     type:
       - string
       - "null"
+    description: Flavor and aroma characteristics of this yeast strain.
   styles:
     type:
       - string
@@ -90,7 +102,7 @@ properties:
     type:
       - string
       - "null"
-    description: e.g. Saccharomyces cerevisiae
+    description: "e.g. Saccharomyces cerevisiae"
   pof_positive:
     type:
       - boolean
@@ -108,3 +120,4 @@ properties:
     type:
       - string
       - "null"
+    description: ID of the seeded yeast this entry was forked from, or null if original.

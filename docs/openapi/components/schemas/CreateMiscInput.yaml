@@ -1,3 +1,4 @@
+description: Input for creating a new miscellaneous ingredient in the library.
 type: object
 required:
   - name
@@ -8,10 +9,12 @@ required:
 properties:
   name:
     type: string
+    description: Ingredient name (e.g. "Irish Moss", "Whirlfloc", "Coriander Seed").
   forked_from_id:
     type:
       - string
       - "null"
+    description: ID of the seeded misc ingredient this entry is forked from, or null if original.
   type_:
     type: string
     description: Spice, Fining, Water Agent, Herb, Flavor, Other
@@ -20,13 +23,17 @@ properties:
     description: Boil, Mash, Primary, Secondary, Bottling
   time_min:
     type: number
+    description: Default usage time in minutes.
   notes:
     type:
       - string
       - "null"
+    description: Brewer's notes about this ingredient.
   use_for:
     type:
       - string
       - "null"
+    description: Description of the purpose or effect of this ingredient.
   amount_is_weight:
     type: boolean
+    description: When true, amounts are measured by weight (grams); when false, by volume (millilitres).

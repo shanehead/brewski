@@ -1,3 +1,4 @@
+description: A brew session (batch) tracking the progression of a recipe from planning through packaging.
 type: object
 required:
   - id
@@ -11,45 +12,62 @@ required:
 properties:
   id:
     type: string
+    description: Unique batch identifier.
   recipe_id:
     type: string
+    description: ID of the recipe this batch is based on.
   recipe_name:
     type: string
+    description: Name of the recipe at the time the batch was created.
   recipe_version_id:
     type: string
+    description: ID of the recipe version this batch was brewed from.
   name:
     type: [string, "null"]
+    description: Optional user-given name for this batch (e.g. "Batch #3").
   status:
     type: string
     description: "planned | brewing | fermenting | packaged"
   brew_date:
     type: [integer, "null"]
     format: int64
+    description: Unix timestamp in milliseconds of brew day.
   fermenter_date:
     type: [integer, "null"]
     format: int64
+    description: Unix timestamp in milliseconds when the wort was transferred to the fermenter.
   conditioning_date:
     type: [integer, "null"]
     format: int64
+    description: Unix timestamp in milliseconds when conditioning began.
   packaging_date:
     type: [integer, "null"]
     format: int64
+    description: Unix timestamp in milliseconds when the batch was packaged.
   actual_pre_boil_volume_l:
     type: [number, "null"]
+    description: Measured pre-boil wort volume in litres.
   actual_post_boil_volume_l:
     type: [number, "null"]
+    description: Measured post-boil wort volume in litres.
   actual_batch_size_l:
     type: [number, "null"]
+    description: Measured volume transferred to the fermenter in litres.
   actual_pre_boil_gravity:
     type: [number, "null"]
+    description: Measured pre-boil specific gravity.
   actual_og:
     type: [number, "null"]
+    description: Measured original gravity at the start of fermentation.
   actual_fg:
     type: [number, "null"]
+    description: Measured final gravity after fermentation.
   notes:
     type: [string, "null"]
+    description: Brewer's notes for this batch.
   rating:
     type: [integer, "null"]
+    description: User rating for this batch (e.g. 1–5).
   planned_og:
     type: [number, "null"]
     description: Planned OG from recipe stats
@@ -67,19 +85,26 @@ properties:
     description: Planned batch size from recipe
   packaging_temp_c:
     type: [number, "null"]
+    description: Temperature at packaging in degrees Celsius, used for priming sugar calculations.
   carbonation_sugar_type:
     type: [string, "null"]
+    description: Type of priming sugar used for carbonation (e.g. "Corn Sugar", "Table Sugar").
   priming_sugar_g:
     type: [number, "null"]
+    description: Amount of priming sugar added at packaging in grams.
   serving_pressure_kpa:
     type: [number, "null"]
+    description: Serving pressure for kegged beer in kilopascals.
   gravity_readings:
     type: array
     items:
       $ref: "./GravityReading.yaml"
+    description: Hydrometer or refractometer readings taken during fermentation.
   created_at:
     type: integer
     format: int64
+    description: Unix timestamp in milliseconds when the batch was created.
   updated_at:
     type: integer
     format: int64
+    description: Unix timestamp in milliseconds when the batch was last updated.

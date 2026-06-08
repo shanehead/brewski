@@ -1,3 +1,4 @@
+description: Mineral ion concentrations for mash, sparge, and combined water volumes, calculated from source water profiles and mineral additions.
 type: object
 required:
   - mash
@@ -5,8 +6,11 @@ required:
   - combined
 properties:
   mash:
+    description: Mineral profile of the mash water after additions.
     $ref: "./WaterProfile.yaml"
   sparge:
+    description: Mineral profile of the sparge water after additions.
     $ref: "./WaterProfile.yaml"
   combined:
+    description: Blended mineral profile of mash and sparge water weighted by volume.
     $ref: "./WaterProfile.yaml"

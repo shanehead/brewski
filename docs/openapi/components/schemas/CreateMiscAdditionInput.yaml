@@ -1,3 +1,4 @@
+description: Input for adding a miscellaneous ingredient to a recipe.
 type: object
 required:
   - name
@@ -9,18 +10,25 @@ required:
 properties:
   misc_id:
     type: string
+    description: ID of a library misc ingredient to link; omit for a manually entered addition.
   name:
     type: string
+    description: Ingredient name.
   type_:
     type: string
+    description: Spice, Fining, Water Agent, Herb, Flavor, Other
   use_:
     type: string
+    description: Boil, Mash, Primary, Secondary, Bottling
   amount:
     type: number
+    description: Quantity of this ingredient in the unit specified by the unit field.
   amount_is_weight:
     type: boolean
+    description: When true, amounts are measured by weight; when false, by volume.
   time_min:
     type: number
+    description: Usage time in minutes (meaning depends on use_).
   unit:
     type: string
     description: "Display unit: g, oz, tsp, tbsp, or mL"

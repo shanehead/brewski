@@ -1,12 +1,18 @@
+description: Fields that can be updated on an existing yeast addition.
 type: object
 properties:
   attenuation_pct:
     type: number
+    description: Expected attenuation percentage for this yeast strain.
   amount:
     type: number
+    description: Quantity of yeast pitched; unit depends on amount_is_weight.
   amount_is_weight:
     type: boolean
+    description: When true, amount is in grams (dry yeast); when false, amount is in millilitres (liquid yeast).
   add_to_secondary:
     type: boolean
+    description: When true, yeast is added at secondary fermentation rather than primary.
   times_cultured:
     type: integer
+    description: Number of times this yeast has been repitched from a previous batch.

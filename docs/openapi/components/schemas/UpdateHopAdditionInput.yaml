@@ -1,13 +1,18 @@
+description: Fields that can be updated on an existing hop addition.
 type: object
 properties:
   amount_kg:
     type: number
+    description: Amount of this hop addition in kilograms.
   use_:
     type: string
+    description: "Boil, Dry Hop, Mash, First Wort, Aroma, Hopstand"
   time_min:
     type: number
+    description: "Addition time; meaning depends on use_. For Boil: minutes remaining in boil. For Dry Hop: days. For others: minutes."
   addition_order:
     type: integer
+    description: Display sort order among hop additions on this recipe.
   hopstand_temp_c:
     type: number
     description: Hopstand temperature override for this addition in °C

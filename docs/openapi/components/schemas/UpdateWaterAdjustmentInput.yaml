@@ -1,7 +1,9 @@
+description: Fields that can be updated on an existing water adjustment.
 type: object
 properties:
   addition:
     type: string
+    description: Mineral salt or acid being added.
     enum:
       - gypsum
       - calcium_chloride
@@ -13,6 +15,7 @@ properties:
       - phosphoric_acid
   target:
     type: string
+    description: Whether the addition is applied to the mash or sparge water.
     enum:
       - mash
       - sparge

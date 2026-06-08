@@ -1,3 +1,4 @@
+description: Calculated statistics for a recipe, including predicted gravity, bitterness, color, and per-hop IBU contributions.
 type: object
 required:
   - og

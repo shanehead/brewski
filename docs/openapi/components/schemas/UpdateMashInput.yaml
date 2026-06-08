@@ -1,17 +1,24 @@
+description: Fields that can be updated on an existing mash schedule.
 type: object
 properties:
   name:
     type: string
+    description: Mash schedule name.
   grain_temp_c:
     type: number
+    description: Temperature of the grain before doughing in, in degrees Celsius.
   tun_temp_c:
     type: number
+    description: Initial mash tun temperature before adding grain, in degrees Celsius.
   sparge_temp_c:
     type: number
+    description: Target sparge water temperature in degrees Celsius.
   ph:
     type: number
+    description: Target mash pH.
   notes:
     type: string
+    description: Brewer's notes about this mash schedule.
   ratio_l_per_kg:
     type: number
     description: Water-to-grain ratio in litres per kilogram

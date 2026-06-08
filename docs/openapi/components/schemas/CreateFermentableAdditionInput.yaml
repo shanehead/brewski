@@ -1,3 +1,4 @@
+description: Input for adding a fermentable ingredient to a recipe.
 type: object
 required:
   - name
@@ -8,15 +9,22 @@ required:
 properties:
   fermentable_id:
     type: string
+    description: ID of a library fermentable to link; omit for a manually entered addition.
   name:
     type: string
+    description: Fermentable name.
   type_:
     type: string
+    description: Grain, Sugar, Extract, Dry Extract, Adjunct
   yield_pct:
     type: number
+    description: Maximum extractable sugar yield as a percentage of dry weight.
   color_lovibond:
     type: number
+    description: Color contribution in degrees Lovibond.
   amount_kg:
     type: number
+    description: Amount of this fermentable in kilograms.
   add_after_boil:
     type: boolean
+    description: When true, this fermentable is added after the boil.

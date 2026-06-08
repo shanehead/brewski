@@ -1,3 +1,4 @@
+description: A single hydrometer or refractometer gravity reading taken during a brew batch.
 type: object
 required:
   - id
@@ -7,14 +8,20 @@ required:
 properties:
   id:
     type: string
+    description: Unique gravity reading identifier.
   batch_id:
     type: string
+    description: ID of the batch this reading belongs to.
   recorded_at:
     type: integer
     format: int64
+    description: Unix timestamp in milliseconds when the reading was taken.
   gravity:
     type: number
+    description: Specific gravity measurement (e.g. 1.050).
   temp_c:
     type: [number, "null"]
+    description: Sample temperature in degrees Celsius, used for temperature-corrected readings.
   notes:
     type: [string, "null"]
+    description: Optional brewer notes for this reading.

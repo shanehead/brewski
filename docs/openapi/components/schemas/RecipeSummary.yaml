@@ -1,3 +1,4 @@
+description: Lightweight summary of a recipe for list views.
 type: object
 required:
   - id
@@ -10,12 +11,15 @@ required:
 properties:
   id:
     type: string
+    description: Unique recipe identifier.
   name:
     type: string
+    description: Recipe name.
   style_name:
     type:
       - string
       - "null"
+    description: Name of the beer style associated with this recipe, or null if none set.
   type_:
     type: string
     description: Recipe type (e.g. All Grain, Extract, Partial Mash)

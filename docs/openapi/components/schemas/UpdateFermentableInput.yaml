@@ -1,52 +1,68 @@
+description: Fields that can be updated on an existing library fermentable.
 type: object
 properties:
   name:
     type: string
+    description: Fermentable name.
   type_:
     type: string
+    description: Grain, Sugar, Extract, Dry Extract, Adjunct
   yield_pct:
     type: number
+    description: Maximum extractable sugar yield as a percentage of dry weight.
   color_lovibond:
     type: number
+    description: Color contribution in degrees Lovibond.
   origin:
     type:
       - string
       - "null"
+    description: Country or region of origin.
   supplier:
     type:
       - string
       - "null"
+    description: Maltster or supplier name.
   notes:
     type:
       - string
       - "null"
+    description: Brewer's notes about this fermentable.
   add_after_boil:
     type: boolean
+    description: When true, this fermentable is added after the boil.
   coarse_fine_diff_pct:
     type:
       - number
       - "null"
+    description: Difference between coarse and fine grind extract yield, as a percentage.
   moisture_pct:
     type:
       - number
       - "null"
+    description: Moisture content of the grain as a percentage.
   diastatic_power_lintner:
     type:
       - number
       - "null"
+    description: Enzymatic activity in degrees Lintner; indicates mash conversion ability.
   protein_pct:
     type:
       - number
       - "null"
+    description: Total protein content as a percentage.
   max_in_batch_pct:
     type:
       - number
       - "null"
+    description: Recommended maximum usage as a percentage of total grain bill.
   recommend_mash:
     type:
       - boolean
       - "null"
+    description: When true, this fermentable requires mashing rather than steeping.
   ibu_gal_per_lb:
     type:
       - number
       - "null"
+    description: Bitterness contribution in IBU per gallon per pound; used for adjuncts like black malt.

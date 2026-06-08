@@ -1,3 +1,4 @@
+description: Lightweight summary of a brew batch for list views.
 type: object
 required:
   - id
@@ -10,29 +11,40 @@ required:
 properties:
   id:
     type: string
+    description: Unique batch identifier.
   recipe_id:
     type: string
+    description: ID of the recipe this batch is based on.
   recipe_name:
     type: string
+    description: Name of the recipe at the time the batch was created.
   recipe_version_id:
     type: string
+    description: ID of the recipe version this batch was brewed from.
   name:
     type: [string, "null"]
+    description: Optional user-given name for this batch.
   status:
     type: string
     description: "planned | brewing | fermenting | packaged"
   brew_date:
     type: [integer, "null"]
     format: int64
+    description: Unix timestamp in milliseconds of brew day.
   actual_og:
     type: [number, "null"]
+    description: Measured original gravity at the start of fermentation.
   actual_fg:
     type: [number, "null"]
+    description: Measured final gravity after fermentation.
   rating:
     type: [integer, "null"]
+    description: User rating for this batch (e.g. 1–5).
   created_at:
     type: integer
     format: int64
+    description: Unix timestamp in milliseconds when the batch was created.
   updated_at:
     type: integer
     format: int64
+    description: Unix timestamp in milliseconds when the batch was last updated.

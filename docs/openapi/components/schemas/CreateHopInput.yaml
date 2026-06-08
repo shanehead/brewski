@@ -1,3 +1,4 @@
+description: Input for creating a new hop variety in the library.
 type: object
 required:
   - name
@@ -6,16 +7,20 @@ required:
 properties:
   name:
     type: string
+    description: Hop variety name (e.g. "Centennial", "Saaz").
   forked_from_id:
     type:
       - string
       - "null"
+    description: ID of the seeded hop this entry is forked from, or null if original.
   alpha_pct:
     type: number
+    description: Alpha acid percentage, used for IBU calculations.
   beta_pct:
     type:
       - number
       - "null"
+    description: Beta acid percentage.
   form:
     type: string
     description: "Pellet, Plug, Leaf, Cryo, CO2 Extract"
@@ -23,39 +28,49 @@ properties:
     type:
       - string
       - "null"
+    description: Bittering, Aroma, Both
   origin:
     type:
       - string
       - "null"
+    description: Country or region of origin.
   year:
     type:
       - string
       - "null"
+    description: Harvest year for this batch of hops.
   notes:
     type:
       - string
       - "null"
+    description: Brewer's notes about this hop variety.
   substitutes:
     type:
       - string
       - "null"
+    description: Suggested substitute varieties, comma-separated.
   hsi_pct:
     type:
       - number
       - "null"
+    description: Hop Storage Index; indicates freshness degradation rate as a percentage.
   humulene_pct:
     type:
       - number
       - "null"
+    description: Humulene oil content as a percentage of total oils.
   caryophyllene_pct:
     type:
       - number
       - "null"
+    description: Caryophyllene oil content as a percentage of total oils.
   cohumulone_pct:
     type:
       - number
       - "null"
+    description: Cohumulone content as a percentage of alpha acids; higher values produce harsher bitterness.
   myrcene_pct:
     type:
       - number
       - "null"
+    description: Myrcene oil content as a percentage of total oils.

@@ -1,3 +1,4 @@
+description: A full homebrewing recipe including all ingredient additions, fermentation schedule, and carbonation settings.
 type: object
 required:
   - id
@@ -19,8 +20,10 @@ required:
 properties:
   id:
     type: string
+    description: Unique recipe identifier.
   name:
     type: string
+    description: Recipe name.
   type_:
     type: string
     description: Recipe type (e.g. All Grain, Extract, Partial Mash)
@@ -28,40 +31,51 @@ properties:
     type:
       - string
       - "null"
+    description: Name of the primary brewer.
   asst_brewer:
     type:
       - string
       - "null"
+    description: Name of the assistant brewer.
   batch_size_l:
     type: number
+    description: Target batch volume in litres.
   boil_size_l:
     type: number
+    description: Pre-boil kettle volume in litres.
   boil_time_min:
     type: number
+    description: Boil duration in minutes.
   efficiency_pct:
     type:
       - number
       - "null"
+    description: Brewhouse efficiency percentage.
   style_id:
     type:
       - string
       - "null"
+    description: ID of the beer style associated with this recipe.
   equipment_profile_id:
     type:
       - string
       - "null"
+    description: ID of the equipment profile associated with this recipe.
   notes:
     type:
       - string
       - "null"
+    description: Brewer's notes for the recipe.
   taste_notes:
     type:
       - string
       - "null"
+    description: Tasting notes for the recipe.
   taste_rating:
     type:
       - number
       - "null"
+    description: Taste rating (e.g. 1–50 on the BeerXML scale).
   og:
     type:
       - number
@@ -74,30 +88,37 @@ properties:
     description: Measured final gravity
   fermentation_stages:
     type: integer
+    description: Number of fermentation stages (1 = primary only, 2 = primary + secondary, etc.).
   primary_age_days:
     type:
       - number
       - "null"
+    description: Duration of primary fermentation in days.
   primary_temp_c:
     type:
       - number
       - "null"
+    description: Primary fermentation temperature in degrees Celsius.
   secondary_age_days:
     type:
       - number
       - "null"
+    description: Duration of secondary fermentation in days.
   secondary_temp_c:
     type:
       - number
       - "null"
+    description: Secondary fermentation temperature in degrees Celsius.
   tertiary_age_days:
     type:
       - number
       - "null"
+    description: Duration of tertiary fermentation in days.
   tertiary_temp_c:
     type:
       - number
       - "null"
+    description: Tertiary fermentation temperature in degrees Celsius.
   age_days:
     type:
       - number
@@ -107,6 +128,7 @@ properties:
     type:
       - number
       - "null"
+    description: Conditioning temperature in degrees Celsius.
   carbonation_vols:
     type:
       - number
@@ -114,22 +136,27 @@ properties:
     description: Target carbonation in volumes of CO2
   forced_carbonation:
     type: boolean
+    description: When true, the beer is force-carbonated (kegged); when false, priming sugar is used.
   priming_sugar_name:
     type:
       - string
       - "null"
+    description: Name of the priming sugar used for bottle conditioning.
   carbonation_temp_c:
     type:
       - number
       - "null"
+    description: Temperature at carbonation time in degrees Celsius, used for priming calculations.
   priming_sugar_equiv:
     type:
       - number
       - "null"
+    description: Priming sugar equivalent weight relative to sucrose.
   keg_priming_factor:
     type:
       - number
       - "null"
+    description: Correction factor applied when calculating priming sugar for kegs.
   date:
     type:
       - string
@@ -138,18 +165,22 @@ properties:
   created_at:
     type: integer
     format: int64
+    description: Unix timestamp in milliseconds when the recipe was created.
   updated_at:
     type: integer
     format: int64
+    description: Unix timestamp in milliseconds when the recipe was last updated.
   source:
     type: string
     enum: [user, seeded]
     description: "'user' = created by the user; 'seeded' = built-in starter recipe"
   equipment_profile:
+    description: The full equipment profile associated with this recipe, or null if none set.
     oneOf:
       - $ref: "./EquipmentProfile.yaml"
       - type: "null"
   style:
+    description: The full beer style associated with this recipe, or null if none set.
     oneOf:
       - $ref: "./Style.yaml"
       - type: "null"
@@ -157,26 +188,32 @@ properties:
     type: array
     items:
       $ref: "./RecipeAdditionFermentable.yaml"
+    description: Fermentable ingredient additions on this recipe.
   hops:
     type: array
     items:
       $ref: "./RecipeAdditionHop.yaml"
+    description: Hop additions on this recipe.
   yeasts:
     type: array
     items:
       $ref: "./RecipeAdditionYeast.yaml"
+    description: Yeast additions on this recipe.
   miscs:
     type: array
     items:
       $ref: "./RecipeAdditionMisc.yaml"
+    description: Miscellaneous ingredient additions on this recipe.
   waters:
     type: array
     items:
       $ref: "./RecipeAdditionWater.yaml"
+    description: Water source additions on this recipe.
   water_adjustments:
     type: array
     items:
       $ref: "./RecipeWaterAdjustment.yaml"
+    description: Mineral and acid water adjustments on this recipe.
   mash_water_id:
     type:
       - string
@@ -193,6 +230,7 @@ properties:
       - "null"
     description: Default hopstand temperature in °C for this recipe
   mash:
+    description: The mash schedule for this recipe, or null if not set.
     oneOf:
       - $ref: "./Mash.yaml"
       - type: "null"

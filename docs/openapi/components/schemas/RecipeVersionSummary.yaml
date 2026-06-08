@@ -1,3 +1,4 @@
+description: Summary of a saved recipe version snapshot.
 type: object
 required:
   - id
@@ -7,14 +8,20 @@ required:
 properties:
   id:
     type: string
+    description: Unique version identifier.
   recipe_id:
     type: string
+    description: ID of the parent recipe.
   version_number:
     type: integer
+    description: Sequential version number within the recipe.
   name:
     type: [string, "null"]
+    description: Optional human-readable label for this version.
   parent_version_id:
     type: [string, "null"]
+    description: ID of the version this one was branched from; null for the root version.
   created_at:
     type: integer
     format: int64
+    description: Unix timestamp in milliseconds when this version was saved.

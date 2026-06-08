@@ -1,3 +1,4 @@
+description: The mash schedule for a recipe, including temperature, water parameters, and steps.
 type: object
 required:
   - id
@@ -9,34 +10,44 @@ required:
 properties:
   id:
     type: string
+    description: Unique mash identifier.
   recipe_id:
     type: string
+    description: ID of the recipe this mash belongs to.
   name:
     type: string
+    description: Mash schedule name (e.g. "Single Infusion, Medium Body").
   grain_temp_c:
     type: number
+    description: Temperature of the grain before doughing in, in degrees Celsius.
   tun_temp_c:
     type:
       - number
       - "null"
+    description: Initial mash tun temperature before adding grain, in degrees Celsius.
   sparge_temp_c:
     type:
       - number
       - "null"
+    description: Target sparge water temperature in degrees Celsius.
   ph:
     type:
       - number
       - "null"
+    description: Target mash pH.
   tun_weight_kg:
     type:
       - number
       - "null"
+    description: Dry weight of the mash tun in kilograms, used for strike water temperature calculations.
   tun_specific_heat:
     type:
       - number
       - "null"
+    description: Specific heat of the mash tun material in cal/(g·°C).
   equip_adjust:
     type: boolean
+    description: When true, strike water temperature is adjusted for tun thermal mass.
   ratio_l_per_kg:
     type:
       - number
@@ -46,7 +57,9 @@ properties:
     type:
       - string
       - "null"
+    description: Brewer's notes about this mash schedule.
   steps:
     type: array
     items:
       $ref: "./MashStep.yaml"
+    description: Ordered list of mash steps.

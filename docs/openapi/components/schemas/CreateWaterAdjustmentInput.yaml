@@ -1,3 +1,4 @@
+description: Input for adding a mineral or acid water adjustment to a recipe.
 type: object
 required:
   - addition
@@ -6,6 +7,7 @@ required:
 properties:
   addition:
     type: string
+    description: Mineral salt or acid to add.
     enum:
       - gypsum
       - calcium_chloride
@@ -17,6 +19,7 @@ properties:
       - phosphoric_acid
   target:
     type: string
+    description: Whether to apply the addition to the mash or sparge water.
     enum:
       - mash
       - sparge

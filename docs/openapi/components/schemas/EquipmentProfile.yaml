@@ -1,3 +1,4 @@
+description: An equipment profile defining brew system volumes, losses, and calculation settings.
 type: object
 required:
   - id
@@ -36,26 +37,35 @@ required:
 properties:
   id:
     type: string
+    description: Unique equipment profile identifier.
   name:
     type: string
+    description: Equipment profile name.
   notes:
     type:
       - string
       - "null"
+    description: Optional notes about this equipment setup.
   boil_size_l:
     type: number
+    description: Pre-boil kettle volume in litres.
   batch_size_l:
     type: number
+    description: Target batch size in litres (into fermenter or kettle, depending on batch_volume_target).
   calc_boil_volume:
     type: boolean
+    description: When true, boil volume is calculated from batch size, evaporation rate, and losses.
   tun_volume_l:
     type:
       - number
       - "null"
+    description: Mash tun capacity in litres.
   lauter_deadspace_l:
     type: number
+    description: Volume that remains in the lauter tun and cannot be transferred, in litres.
   top_up_kettle_l:
     type: number
+    description: Volume of water added to the kettle before the boil, in litres.
   trub_chiller_loss_l:
     type: number
     description: Volume lost to trub and chiller in litres
@@ -64,20 +74,27 @@ properties:
     description: Boil evaporation rate in litres per hour
   boil_time_min:
     type: number
+    description: Default boil duration in minutes.
   top_up_water_l:
     type: number
+    description: Volume of water added to the fermenter after the boil, in litres.
   fermenter_loss_l:
     type: number
+    description: Volume lost to fermenter trub and yeast cake, in litres.
   hop_utilization_pct:
     type: number
+    description: Global hop utilization correction factor as a percentage.
   efficiency_pct:
     type: number
+    description: Brewhouse efficiency percentage.
   created_at:
     type: integer
     format: int64
+    description: Unix timestamp in milliseconds when the profile was created.
   updated_at:
     type: integer
     format: int64
+    description: Unix timestamp in milliseconds when the profile was last updated.
   batch_volume_target:
     type: string
     description: "Whether batch_size_l targets the fermenter or the kettle. Enum: 'fermenter' | 'kettle'"

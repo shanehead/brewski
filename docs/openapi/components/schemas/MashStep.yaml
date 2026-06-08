@@ -1,3 +1,4 @@
+description: A single step within a mash schedule (infusion, temperature rest, or decoction).
 type: object
 required:
   - id
@@ -10,10 +11,13 @@ required:
 properties:
   id:
     type: string
+    description: Unique mash step identifier.
   mash_id:
     type: string
+    description: ID of the mash schedule this step belongs to.
   name:
     type: string
+    description: Step name (e.g. "Protein Rest", "Saccharification", "Mash Out").
   type_:
     type: string
     description: Infusion, Temperature, Decoction
@@ -21,17 +25,23 @@ properties:
     type:
       - number
       - "null"
+    description: Volume of water to infuse in litres; applicable for Infusion steps.
   step_temp_c:
     type: number
+    description: Target step temperature in degrees Celsius.
   step_time_min:
     type: integer
+    description: Duration of this step in minutes.
   ramp_time_min:
     type:
       - integer
       - "null"
+    description: Time to ramp to step_temp_c from the previous step temperature, in minutes.
   end_temp_c:
     type:
       - number
       - "null"
+    description: Temperature at the end of this step in degrees Celsius; used for decoction steps.
   step_order:
     type: integer
+    description: Position of this step within the mash schedule (1-based).

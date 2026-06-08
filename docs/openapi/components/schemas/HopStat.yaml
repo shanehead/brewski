@@ -1,3 +1,4 @@
+description: IBU contribution from a single hop addition.
 type: object
 required:
   - hop_id

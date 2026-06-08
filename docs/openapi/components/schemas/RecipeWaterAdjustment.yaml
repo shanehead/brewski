@@ -1,3 +1,4 @@
+description: A mineral or acid water adjustment applied to a recipe's mash or sparge water.
 type: object
 required:
   - id
@@ -8,10 +9,13 @@ required:
 properties:
   id:
     type: string
+    description: Unique water adjustment identifier.
   recipe_id:
     type: string
+    description: ID of the recipe this adjustment belongs to.
   addition:
     type: string
+    description: Mineral salt or acid being added.
     enum:
       - gypsum
       - calcium_chloride
@@ -23,6 +27,7 @@ properties:
       - phosphoric_acid
   target:
     type: string
+    description: Whether the addition is applied to the mash or sparge water.
     enum:
       - mash
       - sparge

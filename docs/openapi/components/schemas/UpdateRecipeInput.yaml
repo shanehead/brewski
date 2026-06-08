@@ -1,63 +1,93 @@
+description: Fields that can be updated on an existing recipe. All fields are optional; only provided fields are changed.
 type: object
 properties:
   name:
     type: string
+    description: Recipe name.
   type_:
     type: string
+    description: Recipe type (e.g. All Grain, Extract, Partial Mash).
   brewer:
     type: string
+    description: Name of the primary brewer.
   asst_brewer:
     type: string
+    description: Name of the assistant brewer.
   batch_size_l:
     type: number
+    description: Target batch volume in litres.
   boil_size_l:
     type: number
+    description: Pre-boil kettle volume in litres.
   boil_time_min:
     type: number
+    description: Boil duration in minutes.
   efficiency_pct:
     type: number
+    description: Brewhouse efficiency percentage.
   style_id:
     type: string
+    description: ID of the beer style to associate with this recipe.
   equipment_profile_id:
     type: string
+    description: ID of the equipment profile to associate with this recipe.
   notes:
     type: string
+    description: Brewer's notes for the recipe.
   taste_notes:
     type: string
+    description: Tasting notes for the recipe.
   taste_rating:
     type: number
+    description: Taste rating (e.g. 1–50 on the BeerXML scale).
   fermentation_stages:
     type: integer
+    description: Number of fermentation stages (1 = primary only, 2 = primary + secondary, etc.).
   primary_age_days:
     type: number
+    description: Duration of primary fermentation in days.
   primary_temp_c:
     type: number
+    description: Primary fermentation temperature in degrees Celsius.
   secondary_age_days:
     type: number
+    description: Duration of secondary fermentation in days.
   secondary_temp_c:
     type: number
+    description: Secondary fermentation temperature in degrees Celsius.
   tertiary_age_days:
     type: number
+    description: Duration of tertiary fermentation in days.
   tertiary_temp_c:
     type: number
+    description: Tertiary fermentation temperature in degrees Celsius.
   age_days:
     type: number
+    description: Conditioning or bottle-age duration in days.
   age_temp_c:
     type: number
+    description: Conditioning temperature in degrees Celsius.
   carbonation_vols:
     type: number
+    description: Target carbonation level in volumes of CO2.
   forced_carbonation:
     type: boolean
+    description: When true, the beer is force-carbonated (kegged); when false, priming sugar is used.
   priming_sugar_name:
     type: string
+    description: Name of the priming sugar used for bottle conditioning.
   carbonation_temp_c:
     type: number
+    description: Temperature at carbonation time in degrees Celsius, used for priming calculations.
   priming_sugar_equiv:
     type: number
+    description: Priming sugar equivalent weight relative to sucrose.
   keg_priming_factor:
     type: number
+    description: Correction factor applied when calculating priming sugar for kegs.
   date:
     type: string
+    description: Brew date as a free-form string.
   hopstand_temp_c:
     type: number
     description: Default hopstand temperature in °C

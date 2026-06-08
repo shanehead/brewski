@@ -1,8 +1,12 @@
+description: Fields that can be updated on an existing fermentable addition.
 type: object
 properties:
   amount_kg:
     type: number
+    description: Amount of this fermentable in kilograms.
   add_after_boil:
     type: boolean
+    description: When true, this fermentable is added after the boil.
   addition_order:
     type: integer
+    description: Display sort order among fermentable additions on this recipe.

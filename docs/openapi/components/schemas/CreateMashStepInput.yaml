@@ -1,3 +1,4 @@
+description: Input for adding a step to a mash schedule.
 type: object
 required:
   - name
@@ -6,15 +7,22 @@ required:
 properties:
   name:
     type: string
+    description: Step name (e.g. "Protein Rest", "Saccharification", "Mash Out").
   type_:
     type: string
+    description: Infusion, Temperature, Decoction
   infuse_amount_l:
     type: number
+    description: Volume of water to infuse in litres; applicable for Infusion steps.
   step_temp_c:
     type: number
+    description: Target step temperature in degrees Celsius.
   step_time_min:
     type: integer
+    description: Duration of this step in minutes.
   ramp_time_min:
     type: integer
+    description: Time to ramp to step_temp_c from the previous step temperature, in minutes.
   end_temp_c:
     type: number
+    description: Temperature at the end of this step in degrees Celsius; used for decoction steps.
