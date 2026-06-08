@@ -145,14 +145,19 @@
               </div>
             </td>
             <td class="text-right py-1.5">
-              <input type="number" inputmode="decimal" step="1"
-                     value={h.time_min}
-                     onblur={(e) => {
-                       const v = parseInt((e.target as HTMLInputElement).value, 10);
-                       if (!isNaN(v) && v >= 0) handleUpdate(h.id, { time_min: v });
-                     }}
-                     class="w-14 text-right px-1 rounded text-xs"
-                     style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid transparent;" />
+              <div class="inline-flex items-center gap-0.5 justify-end">
+                <input type="number" inputmode="decimal" step="1"
+                       value={h.time_min}
+                       onblur={(e) => {
+                         const v = parseInt((e.target as HTMLInputElement).value, 10);
+                         if (!isNaN(v) && v >= 0) handleUpdate(h.id, { time_min: v });
+                       }}
+                       class="w-12 text-right px-1 rounded text-xs"
+                       style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid transparent;" />
+                <span class="text-xs" style="color: var(--color-text-muted);">
+                  {h.use_ === 'dry hop' ? 'd' : 'min'}
+                </span>
+              </div>
             </td>
             <td class="text-right py-1.5" style="color: var(--color-text-secondary);">
               {ibu != null && ibu > 0 ? ibu.toFixed(0) : '—'}
