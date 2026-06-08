@@ -2,6 +2,7 @@
   import { onMount } from "svelte";
   import { goto } from "$app/navigation";
   import TabBar from "$lib/components/TabBar.svelte";
+  import type { BrewingIconName } from "$lib/icons";
   import type { Batch, UpdateBatchInput, RecipeVersionSummary, Recipe, ImageRef } from "$lib/api";
   import { listRecipeVersions, getRecipe, convertGravity } from "$lib/api";
   import { ipc } from "$lib/stores/error";
@@ -21,7 +22,12 @@
     images?: ImageRef[];
   } = $props();
 
-  const STATUSES = ["planned", "brewing", "fermenting", "packaged"] as const;
+  const STATUSES: { key: string; label: string; icon: BrewingIconName }[] = [
+    { key: "planned",    label: "Planned",    icon: "planned" },
+    { key: "brewing",    label: "Brewing",    icon: "brewing" },
+    { key: "fermenting", label: "Fermenting", icon: "fermenting" },
+    { key: "packaged",   label: "Packaged",   icon: "packaged" },
+  ];
 
   let batchVersion = $state<RecipeVersionSummary | null>(null);
   let recipe = $state<Recipe | null>(null);
@@ -143,12 +149,12 @@
       onchange={(e) => onStatusChange(e.currentTarget.value)}
     >
       {#each STATUSES as s}
-        <option value={s}>{s.charAt(0).toUpperCase() + s.slice(1)}</option>
+        <option value={s.key}>{s.label}</option>
       {/each}
     </select>
     <div class="hidden md:block">
       <TabBar
-        tabs={STATUSES.map(s => ({ key: s, label: s.charAt(0).toUpperCase() + s.slice(1) }))}
+        tabs={STATUSES}
         active={batch.status}
         onchange={(key) => onStatusChange(key)}
       />

@@ -14,7 +14,11 @@ export type BrewingIconName =
   | "tools"
   | "equipment"
   | "library"
-  | "settings";
+  | "settings"
+  | "planned"
+  | "brewing"
+  | "fermenting"
+  | "packaged";
 
 export const ICONS: Record<BrewingIconName, string> = {
   recipes: `
@@ -147,5 +151,44 @@ export const ICONS: Record<BrewingIconName, string> = {
     <path d="M12 21C12 21 11 16 12 12C13 8 16 5 16 5C16 5 20 8 19 13C18 17 15 19 12 21Z" fill="#10b981"/>
     <path d="M12 21C12 21 13 16 12 12C11 8 8 5 8 5C8 5 4 8 5 13C6 17 9 19 12 21Z" fill="#059669"/>
     <rect x="11.25" y="12" width="1.5" height="9" rx="0.75" fill="#065f46"/>
+  `,
+  planned: `
+    <rect x="3" y="5" width="18" height="16" rx="2" fill="#3b82f6"/>
+    <rect x="3" y="5" width="18" height="7" rx="2" fill="#2563eb"/>
+    <rect x="3" y="9" width="18" height="3" fill="#2563eb"/>
+    <rect x="8" y="2" width="2.5" height="5" rx="1.25" fill="#93c5fd"/>
+    <rect x="13.5" y="2" width="2.5" height="5" rx="1.25" fill="#93c5fd"/>
+    <rect x="6" y="14" width="3" height="2.5" rx="0.75" fill="white" opacity="0.6"/>
+    <rect x="10.5" y="14" width="3" height="2.5" rx="0.75" fill="white" opacity="0.35"/>
+    <rect x="15" y="14" width="3" height="2.5" rx="0.75" fill="white" opacity="0.35"/>
+  `,
+  brewing: `
+    <rect x="5" y="10" width="14" height="11" rx="3" fill="#f59e0b"/>
+    <rect x="5" y="10" width="14" height="5" rx="3" fill="#d97706"/>
+    <rect x="3" y="8" width="18" height="3" rx="1.5" fill="#fbbf24"/>
+    <rect x="2" y="10" width="3.5" height="2" rx="1" fill="#94a3b8"/>
+    <rect x="18.5" y="10" width="3.5" height="2" rx="1" fill="#94a3b8"/>
+    <path d="M9 3C9 3 8 5 9 7" stroke="#94a3b8" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+    <path d="M12 2C12 2 11 4 12 6" stroke="#94a3b8" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+    <path d="M15 3C15 3 14 5 15 7" stroke="#94a3b8" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+  `,
+  fermenting: `
+    <path d="M8 8L6 19C6 20.1 6.9 21 8 21H16C17.1 21 18 20.1 18 19L16 8Z" fill="#10b981"/>
+    <path d="M16 8L18 19C18 20.1 17.1 21 16 21H12L12 8Z" fill="#059669"/>
+    <rect x="7" y="6" width="10" height="3" rx="1.5" fill="#34d399"/>
+    <rect x="10" y="3" width="4" height="4" rx="1" fill="#6ee7b7"/>
+    <rect x="9" y="2" width="6" height="2" rx="1" fill="#34d399"/>
+    <circle cx="10" cy="14" r="1.5" fill="#6ee7b7" opacity="0.7"/>
+    <circle cx="14" cy="12" r="1" fill="#6ee7b7" opacity="0.5"/>
+    <circle cx="11" cy="17" r="1" fill="#6ee7b7" opacity="0.4"/>
+  `,
+  packaged: `
+    <rect x="9" y="2" width="6" height="3" rx="1" fill="#64748b"/>
+    <rect x="8" y="4" width="8" height="3" rx="1" fill="#94a3b8"/>
+    <path d="M8 7L7 19C7 20.1 7.9 21 9 21H15C16.1 21 17 20.1 17 19L16 7Z" fill="#3b82f6"/>
+    <path d="M16 7L17 19C17 20.1 16.1 21 15 21H12L12 7Z" fill="#2563eb"/>
+    <rect x="8" y="9" width="8" height="2" fill="white" opacity="0.2"/>
+    <rect x="9" y="13" width="6" height="1.5" rx="0.75" fill="white" opacity="0.35"/>
+    <rect x="9" y="16" width="4" height="1.5" rx="0.75" fill="white" opacity="0.25"/>
   `,
 };
