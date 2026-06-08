@@ -2803,6 +2803,42 @@ impl Hop {
         Default::default()
     }
 }
+#[doc = "`HopStat`"]
+#[doc = r""]
+#[doc = r" <details><summary>JSON schema</summary>"]
+#[doc = r""]
+#[doc = r" ```json"]
+#[doc = "{"]
+#[doc = "  \"type\": \"object\","]
+#[doc = "  \"required\": ["]
+#[doc = "    \"hop_id\","]
+#[doc = "    \"ibu\""]
+#[doc = "  ],"]
+#[doc = "  \"properties\": {"]
+#[doc = "    \"hop_id\": {"]
+#[doc = "      \"description\": \"The RecipeAdditionHop.id this stat corresponds to\","]
+#[doc = "      \"type\": \"string\""]
+#[doc = "    },"]
+#[doc = "    \"ibu\": {"]
+#[doc = "      \"description\": \"IBU contribution from this hop addition\","]
+#[doc = "      \"type\": \"number\""]
+#[doc = "    }"]
+#[doc = "  }"]
+#[doc = "}"]
+#[doc = r" ```"]
+#[doc = r" </details>"]
+#[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+pub struct HopStat {
+    #[doc = "The RecipeAdditionHop.id this stat corresponds to"]
+    pub hop_id: ::std::string::String,
+    #[doc = "IBU contribution from this hop addition"]
+    pub ibu: f64,
+}
+impl HopStat {
+    pub fn builder() -> builder::HopStat {
+        Default::default()
+    }
+}
 #[doc = "`Mash`"]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
@@ -3984,6 +4020,7 @@ impl ::std::convert::TryFrom<::std::string::String> for RecipeSource {
 #[doc = "    \"bu_gu_ratio\","]
 #[doc = "    \"calories_per_355ml\","]
 #[doc = "    \"fg\","]
+#[doc = "    \"hop_stats\","]
 #[doc = "    \"ibu\","]
 #[doc = "    \"og\","]
 #[doc = "    \"post_boil_volume_l\","]
@@ -4007,6 +4044,13 @@ impl ::std::convert::TryFrom<::std::string::String> for RecipeSource {
 #[doc = "    \"fg\": {"]
 #[doc = "      \"description\": \"Calculated final gravity (specific gravity)\","]
 #[doc = "      \"type\": \"number\""]
+#[doc = "    },"]
+#[doc = "    \"hop_stats\": {"]
+#[doc = "      \"description\": \"Per-hop IBU contributions, keyed by hop addition ID\","]
+#[doc = "      \"type\": \"array\","]
+#[doc = "      \"items\": {"]
+#[doc = "        \"$ref\": \"#/components/schemas/HopStat\""]
+#[doc = "      }"]
 #[doc = "    },"]
 #[doc = "    \"ibu\": {"]
 #[doc = "      \"description\": \"International Bitterness Units\","]
@@ -4053,6 +4097,8 @@ pub struct RecipeStats {
     pub calories_per_355ml: f64,
     #[doc = "Calculated final gravity (specific gravity)"]
     pub fg: f64,
+    #[doc = "Per-hop IBU contributions, keyed by hop addition ID"]
+    pub hop_stats: ::std::vec::Vec<HopStat>,
     #[doc = "International Bitterness Units"]
     pub ibu: f64,
     #[doc = "Calculated original gravity (specific gravity)"]
@@ -12230,6 +12276,58 @@ pub mod builder {
         }
     }
     #[derive(Clone, Debug)]
+    pub struct HopStat {
+        hop_id: ::std::result::Result<::std::string::String, ::std::string::String>,
+        ibu: ::std::result::Result<f64, ::std::string::String>,
+    }
+    impl ::std::default::Default for HopStat {
+        fn default() -> Self {
+            Self {
+                hop_id: Err("no value supplied for hop_id".to_string()),
+                ibu: Err("no value supplied for ibu".to_string()),
+            }
+        }
+    }
+    impl HopStat {
+        pub fn hop_id<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::string::String>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.hop_id = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for hop_id: {e}"));
+            self
+        }
+        pub fn ibu<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<f64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.ibu = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for ibu: {e}"));
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<HopStat> for super::HopStat {
+        type Error = super::error::ConversionError;
+        fn try_from(value: HopStat) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self {
+                hop_id: value.hop_id?,
+                ibu: value.ibu?,
+            })
+        }
+    }
+    impl ::std::convert::From<super::HopStat> for HopStat {
+        fn from(value: super::HopStat) -> Self {
+            Self {
+                hop_id: Ok(value.hop_id),
+                ibu: Ok(value.ibu),
+            }
+        }
+    }
+    #[derive(Clone, Debug)]
     pub struct Mash {
         equip_adjust: ::std::result::Result<bool, ::std::string::String>,
         grain_temp_c: ::std::result::Result<f64, ::std::string::String>,
@@ -14384,6 +14482,7 @@ pub mod builder {
         bu_gu_ratio: ::std::result::Result<f64, ::std::string::String>,
         calories_per_355ml: ::std::result::Result<f64, ::std::string::String>,
         fg: ::std::result::Result<f64, ::std::string::String>,
+        hop_stats: ::std::result::Result<::std::vec::Vec<super::HopStat>, ::std::string::String>,
         ibu: ::std::result::Result<f64, ::std::string::String>,
         og: ::std::result::Result<f64, ::std::string::String>,
         post_boil_volume_l: ::std::result::Result<f64, ::std::string::String>,
@@ -14399,6 +14498,7 @@ pub mod builder {
                 bu_gu_ratio: Err("no value supplied for bu_gu_ratio".to_string()),
                 calories_per_355ml: Err("no value supplied for calories_per_355ml".to_string()),
                 fg: Err("no value supplied for fg".to_string()),
+                hop_stats: Err("no value supplied for hop_stats".to_string()),
                 ibu: Err("no value supplied for ibu".to_string()),
                 og: Err("no value supplied for og".to_string()),
                 post_boil_volume_l: Err("no value supplied for post_boil_volume_l".to_string()),
@@ -14448,6 +14548,16 @@ pub mod builder {
             self.fg = value
                 .try_into()
                 .map_err(|e| format!("error converting supplied value for fg: {e}"));
+            self
+        }
+        pub fn hop_stats<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::vec::Vec<super::HopStat>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.hop_stats = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for hop_stats: {e}"));
             self
         }
         pub fn ibu<T>(mut self, value: T) -> Self
@@ -14531,6 +14641,7 @@ pub mod builder {
                 bu_gu_ratio: value.bu_gu_ratio?,
                 calories_per_355ml: value.calories_per_355ml?,
                 fg: value.fg?,
+                hop_stats: value.hop_stats?,
                 ibu: value.ibu?,
                 og: value.og?,
                 post_boil_volume_l: value.post_boil_volume_l?,
@@ -14548,6 +14659,7 @@ pub mod builder {
                 bu_gu_ratio: Ok(value.bu_gu_ratio),
                 calories_per_355ml: Ok(value.calories_per_355ml),
                 fg: Ok(value.fg),
+                hop_stats: Ok(value.hop_stats),
                 ibu: Ok(value.ibu),
                 og: Ok(value.og),
                 post_boil_volume_l: Ok(value.post_boil_volume_l),

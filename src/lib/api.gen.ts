@@ -1500,6 +1500,14 @@ export interface components {
             post_boil_volume_l: number;
             /** @description Calculated strike water temperature in degrees Celsius */
             strike_temp_c?: number | null;
+            /** @description Per-hop IBU contributions, keyed by hop addition ID */
+            hop_stats: components["schemas"]["HopStat"][];
+        };
+        HopStat: {
+            /** @description The RecipeAdditionHop.id this stat corresponds to */
+            hop_id: string;
+            /** @description IBU contribution from this hop addition */
+            ibu: number;
         };
         Style: {
             id: string;

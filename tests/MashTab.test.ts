@@ -77,6 +77,7 @@ function makeStats(overrides: Partial<RecipeStats> = {}): RecipeStats {
     pre_boil_volume_l: 27,
     post_boil_volume_l: 23,
     strike_temp_c: null,
+    hop_stats: [],
     ...overrides,
   };
 }

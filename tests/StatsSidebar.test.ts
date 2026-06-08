@@ -32,6 +32,8 @@ function makeStats(og = 1.054, fg = 1.010): RecipeStats {
     pre_boil_gravity: 1.040,
     pre_boil_volume_l: 26,
     post_boil_volume_l: 23,
+    strike_temp_c: null,
+    hop_stats: [],
   } as RecipeStats;
 }
 
