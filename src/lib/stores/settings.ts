@@ -7,6 +7,12 @@ export interface AppSettings {
   theme?: string;
   default_equipment_profile_id?: string;
   last_route?: string;
+  last_route_recipes?: string;
+  last_route_batches?: string;
+  last_route_tools?: string;
+  last_route_equipment?: string;
+  last_route_library?: string;
+  last_route_settings?: string;
   starters_collapsed?: boolean;
   hide_example_recipes?: boolean;
   show_tooltips?: boolean;
