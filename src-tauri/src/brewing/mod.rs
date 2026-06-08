@@ -6,7 +6,7 @@ pub mod strike;
 pub mod volumes;
 pub mod water;
 
-use crate::models::{Recipe, RecipeStats};
+use crate::models::{HopStat, Recipe, RecipeStats};
 
 const DEFAULT_EFFICIENCY_PCT: f64 = 72.0;
 const DEFAULT_ATTENUATION_PCT: f64 = 75.0;
@@ -124,7 +124,17 @@ pub fn calculate_stats(recipe: &Recipe) -> RecipeStats {
         })
         .collect();
 
-    let ibu = ibu::tinseth_ibu(&hop_inputs, og, post_boil_volume_l, recipe.boil_time_min);
+    let hop_stats: Vec<HopStat> = recipe
+        .hops
+        .iter()
+        .zip(hop_inputs.iter())
+        .map(|(h, input)| HopStat {
+            hop_id: h.id.clone(),
+            ibu: ibu::tinseth_ibu(input, og, post_boil_volume_l, recipe.boil_time_min),
+        })
+        .collect();
+
+    let ibu: f64 = hop_stats.iter().map(|s| s.ibu).sum();
 
     let srm_inputs: Vec<(&f64, &f64)> = recipe
         .fermentables
@@ -172,7 +182,7 @@ pub fn calculate_stats(recipe: &Recipe) -> RecipeStats {
         pre_boil_volume_l,
         post_boil_volume_l,
         strike_temp_c,
-        hop_stats: vec![],
+        hop_stats,
     }
 }
 
@@ -296,6 +306,12 @@ mod tests {
         let stats = calculate_stats(&recipe);
         assert!(stats.ibu > 0.0);
         assert!(stats.bu_gu_ratio > 0.0);
+        assert_eq!(stats.hop_stats.len(), 1);
+        assert_eq!(stats.hop_stats[0].hop_id, "h1");
+        assert!(stats.hop_stats[0].ibu > 0.0);
+        // Individual hop sum must equal reported total.
+        let sum: f64 = stats.hop_stats.iter().map(|s| s.ibu).sum();
+        assert!((sum - stats.ibu).abs() < 0.001);
     }
 
     #[test]
