@@ -11,11 +11,11 @@
 >
   <button
     onclick={() => goto($settings.last_route_recipes ?? "/")}
-    aria-current={($page.url.pathname === "/" || $page.url.pathname.startsWith("/recipe")) ? "page" : undefined}
+    aria-current={($page.url.pathname === "/" || $page.url.pathname.startsWith("/recipe") || $page.url.pathname.startsWith("/baseline-recipe")) ? "page" : undefined}
     class="flex flex-col items-center justify-center flex-1 py-2 gap-1 text-xs transition-colors"
-    style={($page.url.pathname === "/" || $page.url.pathname.startsWith("/recipe")) ? "color: var(--color-accent);" : "color: var(--color-text-secondary);"}
+    style={($page.url.pathname === "/" || $page.url.pathname.startsWith("/recipe") || $page.url.pathname.startsWith("/baseline-recipe")) ? "color: var(--color-accent);" : "color: var(--color-text-secondary);"}
   >
-    <span style={($page.url.pathname === "/" || $page.url.pathname.startsWith("/recipe")) ? "opacity: 1; transition: opacity 0.15s;" : "opacity: 0.45; transition: opacity 0.15s;"}>
+    <span style={($page.url.pathname === "/" || $page.url.pathname.startsWith("/recipe") || $page.url.pathname.startsWith("/baseline-recipe")) ? "opacity: 1; transition: opacity 0.15s;" : "opacity: 0.45; transition: opacity 0.15s;"}>
       <BrewingIcon name="recipes" size={22} />
     </span>
     Recipes
