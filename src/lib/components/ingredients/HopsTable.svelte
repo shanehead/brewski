@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Recipe } from "$lib/api";
+  import type { Recipe, RecipeStats } from "$lib/api";
   import { createRecipeHop, deleteRecipeHop } from "$lib/api";
   import { ipc } from "$lib/stores/error";
   import { settings } from "$lib/stores/settings";
@@ -10,10 +10,14 @@
   import DocLink from "$lib/components/DocLink.svelte";
   import { DOCS } from "$lib/docs-urls";
 
-  let { recipe, onchange }: { recipe: Recipe; onchange: () => void } = $props();
+  let { recipe, stats, onchange }: { recipe: Recipe; stats: RecipeStats | null; onchange: () => void } = $props();
 
   let adding = $state(false);
   const units = $derived<Units>($settings.units === "imperial" ? "imperial" : "metric");
+
+  const hopIbus = $derived(
+    new Map(stats?.hop_stats?.map(s => [s.hop_id, s.ibu]) ?? [])
+  );
 
   async function handlePickerAdd(payload: AddPayload) {
     if (payload.type !== "hop") return;
@@ -71,11 +75,13 @@
             <span class="inline-flex items-center gap-1">Use <Tooltip text="When the hop is added. Boil adds bitterness. Whirlpool and Hopstand add flavor and aroma. Dry Hop adds aroma only." /></span>
           </th>
           <th class="text-right py-1 font-medium text-sm">Time</th>
+          <th class="text-right py-1 font-medium text-sm">IBU</th>
           <th class="w-6"></th>
         </tr>
       </thead>
       <tbody>
         {#each recipe.hops as h (h.id)}
+          {@const ibu = hopIbus.get(h.id)}
           <tr class="border-t" style="border-color: var(--color-border);">
             <td class="py-1.5" style="color: var(--color-text-primary);">
               {h.name}
@@ -97,6 +103,9 @@
               {/if}
             </td>
             <td class="text-right py-1.5" style="color: var(--color-text-secondary);">{h.time_min}min</td>
+            <td class="text-right py-1.5" style="color: var(--color-text-secondary);">
+              {ibu != null && ibu > 0 ? ibu.toFixed(0) : '—'}
+            </td>
             <td class="pl-1">
               <button onclick={() => handleDelete(h.id)} class="text-xs opacity-40 hover:opacity-100"
                       style="color: var(--color-text-secondary);">×</button>
