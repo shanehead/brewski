@@ -7,6 +7,7 @@
   import { settings } from "$lib/stores/settings";
   import { type Units, lToGal, galToL, volumeLabel } from "$lib/units";
   import Card from "$lib/components/Card.svelte";
+  import FieldLabel from "$lib/components/FieldLabel.svelte";
 
   let { recipe, onchange }: { recipe: Recipe; onchange: () => void } = $props();
 
@@ -33,7 +34,7 @@
   <Card title="Recipe Details">
     <div class="grid grid-cols-2 gap-x-4 gap-y-3">
       <div class="flex flex-col gap-1">
-        <label for="overview-type" class="text-xs font-medium" style="color: var(--color-text-secondary);">Recipe Type</label>
+        <FieldLabel for="overview-type">Recipe Type</FieldLabel>
         <select id="overview-type" value={recipe.type_} onchange={(e) => save("type_", (e.target as HTMLSelectElement).value)}
                 class="w-full px-2 py-1.5 rounded text-sm"
                 style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);">
@@ -44,7 +45,7 @@
       </div>
 
       <div class="flex flex-col gap-1">
-        <label for="overview-brewer" class="text-xs font-medium" style="color: var(--color-text-secondary);">Brewer</label>
+        <FieldLabel for="overview-brewer">Brewer</FieldLabel>
         <input id="overview-brewer" type="text" value={recipe.brewer ?? ""}
                onblur={(e) => save("brewer", (e.target as HTMLInputElement).value)}
                class="w-full px-2 py-1.5 rounded text-sm"
@@ -52,7 +53,7 @@
       </div>
 
       <div class="flex flex-col gap-1">
-        <label for="overview-style" class="text-xs font-medium" style="color: var(--color-text-secondary);">Style</label>
+        <FieldLabel for="overview-style">Style</FieldLabel>
         <select id="overview-style" value={recipe.style_id ?? ""}
                 onchange={(e) => save("style_id", (e.target as HTMLSelectElement).value || null)}
                 class="w-full px-2 py-1.5 rounded text-sm"
@@ -65,7 +66,7 @@
       </div>
 
       <div class="flex flex-col gap-1">
-        <label for="overview-date" class="text-xs font-medium" style="color: var(--color-text-secondary);">Date</label>
+        <FieldLabel for="overview-date">Date</FieldLabel>
         <input id="overview-date" type="date" value={recipe.date ?? ""}
                onblur={(e) => save("date", (e.target as HTMLInputElement).value || null)}
                class="w-full px-2 py-1.5 rounded text-sm"
@@ -73,7 +74,7 @@
       </div>
 
       <div class="flex flex-col gap-1 col-span-2">
-        <label for="overview-equipment" class="text-xs font-medium" style="color: var(--color-text-secondary);">Equipment Profile</label>
+        <FieldLabel for="overview-equipment">Equipment Profile</FieldLabel>
         <select id="overview-equipment" value={recipe.equipment_profile_id ?? ""}
                 onchange={(e) => save("equipment_profile_id", (e.target as HTMLSelectElement).value || null)}
                 class="w-full px-2 py-1.5 rounded text-sm"
@@ -90,7 +91,7 @@
   <Card title="Volumes & Timing">
     <div class="grid grid-cols-2 gap-x-4 gap-y-3">
       <div class="flex flex-col gap-1">
-        <label for="overview-batch-size" class="text-xs font-medium" style="color: var(--color-text-secondary);">Batch Size ({volumeLabel(units)})</label>
+        <FieldLabel for="overview-batch-size">Batch Size ({volumeLabel(units)})</FieldLabel>
         <input id="overview-batch-size" type="number" inputmode="decimal" step="0.1"
                value={(units === "imperial" ? lToGal(recipe.batch_size_l) : recipe.batch_size_l).toFixed(1)}
                onblur={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); save("batch_size_l", units === "imperial" ? galToL(v) : v); }}
@@ -99,7 +100,7 @@
       </div>
 
       <div class="flex flex-col gap-1">
-        <label for="overview-boil-size" class="text-xs font-medium" style="color: var(--color-text-secondary);">Boil Size ({volumeLabel(units)})</label>
+        <FieldLabel for="overview-boil-size">Boil Size ({volumeLabel(units)})</FieldLabel>
         <input id="overview-boil-size" type="number" inputmode="decimal" step="0.1"
                value={(units === "imperial" ? lToGal(recipe.boil_size_l) : recipe.boil_size_l).toFixed(1)}
                onblur={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); save("boil_size_l", units === "imperial" ? galToL(v) : v); }}
@@ -108,7 +109,7 @@
       </div>
 
       <div class="flex flex-col gap-1">
-        <label for="overview-boil-time" class="text-xs font-medium" style="color: var(--color-text-secondary);">Boil Time (min)</label>
+        <FieldLabel for="overview-boil-time">Boil Time (min)</FieldLabel>
         <input id="overview-boil-time" type="number" inputmode="decimal" step="5" value={recipe.boil_time_min}
                onblur={(e) => save("boil_time_min", parseFloat((e.target as HTMLInputElement).value))}
                class="w-full px-2 py-1.5 rounded text-sm"
@@ -116,7 +117,7 @@
       </div>
 
       <div class="flex flex-col gap-1">
-        <label for="overview-efficiency" class="text-xs font-medium" style="color: var(--color-text-secondary);">Efficiency (%)</label>
+        <FieldLabel for="overview-efficiency">Efficiency (%)</FieldLabel>
         <input id="overview-efficiency" type="number" inputmode="decimal" step="1" value={recipe.efficiency_pct ?? ""}
                placeholder="From equipment profile"
                onblur={(e) => {

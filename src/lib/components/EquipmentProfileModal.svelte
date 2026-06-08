@@ -5,6 +5,7 @@
   import { ipc } from "$lib/stores/error";
   import { settings } from "$lib/stores/settings";
   import { lToGal, galToL, volumeLabel, kgToLb, lbToKg, weightLabel, cToF, fToC, tempLabel, type Units } from "$lib/units";
+  import FieldLabel from "$lib/components/FieldLabel.svelte";
 
   let {
     profile = null,
@@ -417,7 +418,7 @@
             <input type="checkbox" id="include-grain-vol" bind:checked={includeGrainVolumeInMashLimits} />
             <label for="include-grain-vol" class="text-sm" style="color: var(--color-text-primary);">Include grain volume in mash limits</label>
           </div>
-          <div class="col-span-2 text-xs font-medium mt-1" style="color: var(--color-text-secondary);">Mash Volume Limits</div>
+          <FieldLabel class="col-span-2 mt-1">Mash Volume Limits</FieldLabel>
           <div class="flex flex-col gap-1">
             <label for="eq-mash-vol-min" class="text-xs" style="color: var(--color-text-secondary);">Min <span style="color: var(--color-text-tertiary);">{volumeLabel(units)}</span></label>
             <input id="eq-mash-vol-min" type="number" inputmode="decimal" step="0.1" placeholder="optional"
@@ -429,7 +430,7 @@
                    value={volDispNull(mashVolumeMaxL)} oninput={(e) => mashVolumeMaxL = volInNull(e)} class="eq-field-input" />
           </div>
 
-          <div class="col-span-2 text-xs font-medium mt-1" style="color: var(--color-text-secondary);">Sparge Volume Limits</div>
+          <FieldLabel class="col-span-2 mt-1">Sparge Volume Limits</FieldLabel>
           <div class="flex flex-col gap-1">
             <label for="eq-sparge-vol-min" class="text-xs" style="color: var(--color-text-secondary);">Min <span style="color: var(--color-text-tertiary);">{volumeLabel(units)}</span></label>
             <input id="eq-sparge-vol-min" type="number" inputmode="decimal" step="0.1" placeholder="optional"

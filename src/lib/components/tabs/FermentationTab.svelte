@@ -4,6 +4,7 @@
   import { updateRecipe } from "$lib/api";
   import { ipc } from "$lib/stores/error";
   import Card from "$lib/components/Card.svelte";
+  import FieldLabel from "$lib/components/FieldLabel.svelte";
 
   let { recipe, onchange }: { recipe: Recipe; onchange: () => void } = $props();
 
@@ -25,7 +26,7 @@
         { field: "tertiary_temp_c", label: "Tertiary Temp (°C)" },
       ] as row}
         <div class="flex flex-col gap-1">
-          <label for="ferm-{row.field}" class="text-xs font-medium" style="color: var(--color-text-secondary);">{row.label}</label>
+          <FieldLabel for="ferm-{row.field}">{row.label}</FieldLabel>
           <input id="ferm-{row.field}" type="number" inputmode="decimal" step="1"
                  value={(recipe as any)[row.field] ?? ""}
                  onblur={(e) => {
@@ -42,7 +43,7 @@
   <Card title="Carbonation">
     <div class="grid grid-cols-2 gap-x-4 gap-y-3">
       <div class="flex flex-col gap-1">
-        <label for="ferm-carb-vols" class="text-xs font-medium" style="color: var(--color-text-secondary);">CO₂ Volumes</label>
+        <FieldLabel for="ferm-carb-vols">CO₂ Volumes</FieldLabel>
         <input id="ferm-carb-vols" type="number" inputmode="decimal" step="0.1" value={recipe.carbonation_vols ?? ""}
                onblur={(e) => {
                  const v = (e.target as HTMLInputElement).value;
@@ -53,7 +54,7 @@
       </div>
 
       <div class="flex flex-col gap-1 justify-end">
-        <p class="text-xs font-medium" style="color: var(--color-text-secondary);">Forced Carbonation</p>
+        <FieldLabel>Forced Carbonation</FieldLabel>
         <label class="flex items-center gap-2 py-1.5 cursor-pointer">
           <input type="checkbox" checked={recipe.forced_carbonation}
                  onchange={(e) => save("forced_carbonation", (e.target as HTMLInputElement).checked)}

@@ -6,6 +6,7 @@
   import { settings } from "$lib/stores/settings";
   import { type Units, cToF, fToC, lToGal, galToL, tempLabel, volumeLabel, lPerKgToQtPerLb, qtPerLbToLPerKg, ratioLabel } from "$lib/units";
   import Card from "$lib/components/Card.svelte";
+  import FieldLabel from "$lib/components/FieldLabel.svelte";
   import Tooltip from "$lib/components/Tooltip.svelte";
   import DocLink from "$lib/components/DocLink.svelte";
   import { DOCS } from "$lib/docs-urls";
@@ -130,7 +131,7 @@
   <Card title="Mash Parameters">
     <div class="grid grid-cols-2 gap-3">
       <div class="flex flex-col gap-1">
-        <label for="mash-name" class="text-xs font-medium" style="color: var(--color-text-secondary);">Profile Name</label>
+        <FieldLabel for="mash-name">Profile Name</FieldLabel>
         <input id="mash-name" type="text" value={mash?.name ?? "Single Infusion"}
                onblur={(e) => handleMashField({ name: (e.target as HTMLInputElement).value })}
                class="px-2 py-1.5 rounded text-sm"
@@ -138,7 +139,7 @@
       </div>
       <div class="flex flex-col gap-1">
         <div class="flex items-center gap-1">
-          <label for="mash-grain-temp" class="text-xs font-medium" style="color: var(--color-text-secondary);">Grain Temp ({tempLabel(units)})</label>
+          <FieldLabel for="mash-grain-temp">Grain Temp ({tempLabel(units)})</FieldLabel>
           <Tooltip text="The temperature of your grain before mashing. Used to calculate the strike water temperature. Room temperature (around 20°C / 68°F) is fine for most situations." />
         </div>
         <input id="mash-grain-temp" type="number" inputmode="decimal" step={units === "imperial" ? 1 : 0.5}
@@ -148,7 +149,7 @@
                style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
       </div>
       <div class="flex flex-col gap-1">
-        <label for="mash-sparge-temp" class="text-xs font-medium" style="color: var(--color-text-secondary);">Sparge Temp ({tempLabel(units)})</label>
+        <FieldLabel for="mash-sparge-temp">Sparge Temp ({tempLabel(units)})</FieldLabel>
         <input id="mash-sparge-temp" type="number" inputmode="decimal" step={units === "imperial" ? 1 : 0.5}
                value={mash?.sparge_temp_c != null ? (units === "imperial" ? cToF(mash.sparge_temp_c) : mash.sparge_temp_c).toFixed(1) : ""}
                placeholder={units === "imperial" ? "167" : "75"}
@@ -160,7 +161,7 @@
                style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
       </div>
       <div class="flex flex-col gap-1">
-        <label for="mash-ph" class="text-xs font-medium" style="color: var(--color-text-secondary);">Mash pH</label>
+        <FieldLabel for="mash-ph">Mash pH</FieldLabel>
         <input id="mash-ph" type="number" inputmode="decimal" step="0.1" value={mash?.ph ?? ""}
                placeholder="5.4"
                onblur={(e) => {
@@ -173,7 +174,7 @@
 
       {#if stats?.strike_temp_c != null}
         <div class="flex flex-col gap-1">
-          <span class="text-xs font-medium" style="color: var(--color-text-secondary);">Strike Temp ({tempLabel(units)})</span>
+          <FieldLabel>Strike Temp ({tempLabel(units)})</FieldLabel>
           <span class="px-2 py-1.5 text-sm" style="color: var(--color-text-primary);">
             {(units === "imperial" ? cToF(stats.strike_temp_c) : stats.strike_temp_c).toFixed(1)}{tempLabel(units)}
           </span>
@@ -183,7 +184,7 @@
       {#if mash && !canAutoDerive}
         <div class="flex flex-col gap-1">
           <div class="flex items-center gap-1">
-            <label for="mash-ratio" class="text-xs font-medium" style="color: var(--color-text-secondary);">Water:Grain Ratio ({ratioLabel(units)})</label>
+            <FieldLabel for="mash-ratio">Water:Grain Ratio ({ratioLabel(units)})</FieldLabel>
             <Tooltip text="How much water per kg (or lb) of grain you're mashing with. A typical range is 2.5–4 L/kg. BIAB setups often use more. Higher ratio = easier to stir, lower ratio = better efficiency." />
           </div>
           <input id="mash-ratio" type="number" inputmode="decimal" step="0.1"

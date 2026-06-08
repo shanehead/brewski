@@ -11,6 +11,7 @@
   } from "$lib/api";
   import { ipc } from "$lib/stores/error";
   import Card from "$lib/components/Card.svelte";
+  import FieldLabel from "$lib/components/FieldLabel.svelte";
   import Tooltip from "$lib/components/Tooltip.svelte";
   import DocLink from "$lib/components/DocLink.svelte";
   import { DOCS } from "$lib/docs-urls";
@@ -113,7 +114,7 @@
     <Card title="Source Water">
       <div class="flex flex-col gap-3">
         <div class="flex flex-col gap-1">
-          <label for="mash-water" class="text-xs font-medium" style="color: var(--color-text-secondary);">Mash Water</label>
+          <FieldLabel for="mash-water">Mash Water</FieldLabel>
           <select id="mash-water" value={recipe.mash_water_id ?? ""} onchange={handleMashWaterChange}
                   class="px-2 py-1.5 rounded text-sm"
                   style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);">
@@ -124,7 +125,7 @@
           </select>
         </div>
         <div class="flex flex-col gap-1">
-          <label for="sparge-water" class="text-xs font-medium" style="color: var(--color-text-secondary);">Sparge Water</label>
+          <FieldLabel for="sparge-water">Sparge Water</FieldLabel>
           <select id="sparge-water" value={recipe.sparge_water_id ?? ""} onchange={handleSpargeWaterChange}
                   class="flex-1 px-2 py-1.5 rounded text-sm"
                   style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);">
