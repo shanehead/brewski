@@ -16,7 +16,7 @@
   const units = $derived<Units>($settings.units === "imperial" ? "imperial" : "metric");
 
   const hopIbus = $derived(
-    new Map(stats?.hop_stats?.map(s => [s.hop_id, s.ibu]) ?? [])
+    new Map(stats?.hop_stats.map(s => [s.hop_id, s.ibu]) ?? [])
   );
 
   async function handlePickerAdd(payload: AddPayload) {
