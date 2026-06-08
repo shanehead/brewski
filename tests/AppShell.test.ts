@@ -194,10 +194,17 @@ describe("AppShell section key saving", () => {
     expect(saveSettingMock).toHaveBeenCalledWith("last_route_recipes", "/recipe/abc?tab=mash");
   });
 
-  it("does not save a section key for unrecognised paths", () => {
+  it("saves last_route_recipes when navigating to /baseline-recipe/abc", () => {
     render(AppShell, { children: () => null });
     afterNavigateCb!({ to: { url: { pathname: "/baseline-recipe/abc", search: "" } } });
     // baseline-recipe belongs to the recipes section
     expect(saveSettingMock).toHaveBeenCalledWith("last_route_recipes", "/baseline-recipe/abc");
+  });
+
+  it("does not save a section key for unrecognised paths", () => {
+    render(AppShell, { children: () => null });
+    afterNavigateCb!({ to: { url: { pathname: "/admin", search: "" } } });
+    expect(saveSettingMock).toHaveBeenCalledTimes(1);
+    expect(saveSettingMock).toHaveBeenCalledWith("last_route", "/admin");
   });
 });
