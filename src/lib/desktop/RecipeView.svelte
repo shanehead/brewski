@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { goto } from "$app/navigation";
+  import { page } from "$app/stores";
   import {
     getRecipe,
     getRecipeStats,
@@ -40,7 +41,14 @@
 
   let recipe = $state<Recipe | null>(null);
   let stats = $state<RecipeStats | null>(null);
-  let activeTab = $state<"overview" | "ingredients" | "mash" | "water" | "fermentation" | "notes" | "batches">("overview");
+
+  const VALID_TABS = ["overview", "ingredients", "mash", "water", "fermentation", "notes", "batches"] as const;
+  type TabKey = typeof VALID_TABS[number];
+
+  const activeTab = $derived.by<TabKey>(() => {
+    const raw = $page.url.searchParams.get("tab") ?? "";
+    return (VALID_TABS as readonly string[]).includes(raw) ? (raw as TabKey) : "overview";
+  });
   let saving = $state(false);
   let appDataDir = $state("");
 
@@ -397,7 +405,7 @@
     <!-- Tab bar -->
     <nav class="px-4 pt-1 flex-shrink-0"
          style="background: var(--color-bg-surface);">
-      <TabBar tabs={TABS} active={activeTab} onchange={(key) => activeTab = key as typeof activeTab} />
+      <TabBar tabs={TABS} active={activeTab} onchange={(key) => goto(`/recipe/${id}?tab=${key}`, { replaceState: true, noScroll: true })} />
     </nav>
 
     <!-- Tab content + stats sidebar + version panel -->
