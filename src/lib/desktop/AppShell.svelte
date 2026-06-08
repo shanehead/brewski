@@ -55,43 +55,49 @@
   <nav class="flex flex-col items-center w-14 py-3 gap-2 border-r flex-shrink-0"
        style="background: var(--color-bg-surface); border-color: var(--color-border);">
 
-    <a href="/" class="w-9 h-9 flex items-center justify-center rounded-lg transition-colors"
-       aria-label="Recipes"
-       style={isRecipes ? "background: color-mix(in srgb, var(--color-accent) 18%, transparent);" : ""}>
+    <button onclick={() => goto($settings.last_route_recipes ?? "/")}
+            class="w-9 h-9 flex items-center justify-center rounded-lg transition-colors"
+            aria-label="Recipes"
+            style={isRecipes ? "background: color-mix(in srgb, var(--color-accent) 18%, transparent);" : ""}>
       <BrewingIcon name="recipes" size={22} />
-    </a>
+    </button>
 
-    <a href="/batches" class="w-9 h-9 flex items-center justify-center rounded-lg transition-colors"
-       aria-label="Batches"
-       style={isBatches ? "background: color-mix(in srgb, var(--color-accent) 18%, transparent);" : ""}>
+    <button onclick={() => goto($settings.last_route_batches ?? "/batches")}
+            class="w-9 h-9 flex items-center justify-center rounded-lg transition-colors"
+            aria-label="Batches"
+            style={isBatches ? "background: color-mix(in srgb, var(--color-accent) 18%, transparent);" : ""}>
       <BrewingIcon name="batches" size={22} />
-    </a>
+    </button>
 
-    <a href="/tools" class="w-9 h-9 flex items-center justify-center rounded-lg transition-colors"
-       aria-label="Tools"
-       style={isTools ? "background: color-mix(in srgb, var(--color-accent) 18%, transparent);" : ""}>
+    <button onclick={() => goto($settings.last_route_tools ?? "/tools")}
+            class="w-9 h-9 flex items-center justify-center rounded-lg transition-colors"
+            aria-label="Tools"
+            style={isTools ? "background: color-mix(in srgb, var(--color-accent) 18%, transparent);" : ""}>
       <BrewingIcon name="tools" size={22} />
-    </a>
+    </button>
 
-    <a href="/equipment" class="w-9 h-9 flex items-center justify-center rounded-lg transition-colors"
-       aria-label="Equipment"
-       style={isEquipment ? "background: color-mix(in srgb, var(--color-accent) 18%, transparent);" : ""}>
+    <button onclick={() => goto($settings.last_route_equipment ?? "/equipment")}
+            class="w-9 h-9 flex items-center justify-center rounded-lg transition-colors"
+            aria-label="Equipment"
+            style={isEquipment ? "background: color-mix(in srgb, var(--color-accent) 18%, transparent);" : ""}>
       <BrewingIcon name="equipment" size={22} />
-    </a>
+    </button>
 
-    <a href="/library" class="w-9 h-9 flex items-center justify-center rounded-lg transition-colors"
-       aria-label="Library"
-       style={isLibrary ? "background: color-mix(in srgb, var(--color-accent) 18%, transparent);" : ""}>
+    <button onclick={() => goto($settings.last_route_library ?? "/library")}
+            class="w-9 h-9 flex items-center justify-center rounded-lg transition-colors"
+            aria-label="Library"
+            style={isLibrary ? "background: color-mix(in srgb, var(--color-accent) 18%, transparent);" : ""}>
       <BrewingIcon name="library" size={22} />
-    </a>
+    </button>
 
     <div class="flex-1"></div>
 
-    <a href="/settings" class="w-9 h-9 flex items-center justify-center rounded-lg transition-colors"
-       aria-label="Settings"
-       style={$page.url.pathname.startsWith('/settings') ? "background: color-mix(in srgb, var(--color-accent) 18%, transparent);" : ""}>
+    <button onclick={() => goto($settings.last_route_settings ?? "/settings")}
+            class="w-9 h-9 flex items-center justify-center rounded-lg transition-colors"
+            aria-label="Settings"
+            style={$page.url.pathname.startsWith("/settings") ? "background: color-mix(in srgb, var(--color-accent) 18%, transparent);" : ""}>
       <BrewingIcon name="settings" size={22} />
-    </a>
+    </button>
   </nav>
 
   <!-- Main content area -->

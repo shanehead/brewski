@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
+import { tick } from "svelte";
 import { render } from "@testing-library/svelte";
 import AppShell from "../src/lib/desktop/AppShell.svelte";
 
@@ -67,27 +68,55 @@ beforeEach(() => {
 });
 
 describe("AppShell rail", () => {
-  it("renders an Equipment nav link", () => {
+  it("renders an Equipment nav button", () => {
     const { container } = render(AppShell, { children: () => null });
-    const links = container.querySelectorAll("nav a");
-    const hrefs = Array.from(links).map((a) => a.getAttribute("href"));
-    expect(hrefs).toContain("/equipment");
+    const btn = container.querySelector('button[aria-label="Equipment"]');
+    expect(btn).not.toBeNull();
   });
 
-  it("Equipment link has aria-label Equipment", () => {
+  it("Equipment button has aria-label Equipment", () => {
     const { container } = render(AppShell, { children: () => null });
-    const equipLink = container.querySelector('a[href="/equipment"]');
-    expect(equipLink?.getAttribute("aria-label")).toBe("Equipment");
+    const btn = container.querySelector('button[aria-label="Equipment"]');
+    expect(btn?.getAttribute("aria-label")).toBe("Equipment");
   });
 
-  it("Equipment link appears before the spacer and after the Tools link", () => {
+  it("Equipment button appears after Tools and before Settings in the rail", () => {
     const { container } = render(AppShell, { children: () => null });
-    const links = Array.from(container.querySelectorAll("nav a"));
-    const toolsIdx = links.findIndex((a) => a.getAttribute("href") === "/tools");
-    const equipIdx = links.findIndex((a) => a.getAttribute("href") === "/equipment");
-    const settingsIdx = links.findIndex((a) => a.getAttribute("href") === "/settings");
+    const buttons = Array.from(container.querySelectorAll("nav button"));
+    const toolsIdx = buttons.findIndex((b) => b.getAttribute("aria-label") === "Tools");
+    const equipIdx = buttons.findIndex((b) => b.getAttribute("aria-label") === "Equipment");
+    const settingsIdx = buttons.findIndex((b) => b.getAttribute("aria-label") === "Settings");
     expect(equipIdx).toBeGreaterThan(toolsIdx);
     expect(equipIdx).toBeLessThan(settingsIdx);
+  });
+});
+
+describe("AppShell rail dynamic navigation", () => {
+  it("Recipes button navigates to last_route_recipes when set", async () => {
+    mockSettings = { last_route_recipes: "/recipe/abc?tab=mash" };
+    const { container } = render(AppShell, { children: () => null });
+    const btn = container.querySelector('button[aria-label="Recipes"]') as HTMLButtonElement;
+    btn.click();
+    await tick();
+    expect(gotoMock).toHaveBeenCalledWith("/recipe/abc?tab=mash");
+  });
+
+  it("Recipes button falls back to / when no last_route_recipes", async () => {
+    mockSettings = {};
+    const { container } = render(AppShell, { children: () => null });
+    const btn = container.querySelector('button[aria-label="Recipes"]') as HTMLButtonElement;
+    btn.click();
+    await tick();
+    expect(gotoMock).toHaveBeenCalledWith("/");
+  });
+
+  it("Batches button navigates to last_route_batches when set", async () => {
+    mockSettings = { last_route_batches: "/batches/xyz" };
+    const { container } = render(AppShell, { children: () => null });
+    const btn = container.querySelector('button[aria-label="Batches"]') as HTMLButtonElement;
+    btn.click();
+    await tick();
+    expect(gotoMock).toHaveBeenCalledWith("/batches/xyz");
   });
 });
 
