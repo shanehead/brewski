@@ -10,6 +10,7 @@ required:
   - pre_boil_gravity
   - pre_boil_volume_l
   - post_boil_volume_l
+  - hop_stats
 properties:
   og:
     type: number
@@ -46,3 +47,8 @@ properties:
       - number
       - "null"
     description: Calculated strike water temperature in degrees Celsius
+  hop_stats:
+    type: array
+    items:
+      $ref: ./HopStat.yaml
+    description: Per-hop IBU contributions, keyed by hop addition ID

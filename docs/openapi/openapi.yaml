@@ -219,6 +219,8 @@ components:
       $ref: ./components/schemas/Recipe.yaml
     RecipeStats:
       $ref: ./components/schemas/RecipeStats.yaml
+    HopStat:
+      $ref: ./components/schemas/HopStat.yaml
     Style:
       $ref: ./components/schemas/Style.yaml
     EquipmentProfile:

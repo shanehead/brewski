@@ -1,0 +1,11 @@
+type: object
+required:
+  - hop_id
+  - ibu
+properties:
+  hop_id:
+    type: string
+    description: The RecipeAdditionHop.id this stat corresponds to
+  ibu:
+    type: number
+    description: IBU contribution from this hop addition
