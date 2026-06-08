@@ -407,7 +407,7 @@
           {#if activeTab === "overview"}
             <OverviewTab recipe={displayRecipe} onchange={refreshRecipe} />
           {:else if activeTab === "ingredients"}
-            <IngredientsTab recipe={displayRecipe} onchange={refreshRecipe} />
+            <IngredientsTab recipe={displayRecipe} {stats} onchange={refreshRecipe} />
           {:else if activeTab === "mash"}
             <MashTab recipe={displayRecipe} {stats} onchange={refreshRecipe} />
           {:else if activeTab === "water"}

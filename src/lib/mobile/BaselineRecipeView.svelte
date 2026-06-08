@@ -112,7 +112,7 @@
         <section>
           <div class="text-xs font-semibold uppercase tracking-wider mb-3"
                style="color: var(--color-text-secondary);">Ingredients</div>
-          <IngredientsTab {recipe} onchange={() => {}} />
+          <IngredientsTab {recipe} {stats} onchange={() => {}} />
         </section>
 
         <!-- Mash -->
