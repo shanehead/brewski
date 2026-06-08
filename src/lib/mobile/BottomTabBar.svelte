@@ -9,18 +9,13 @@
   class="flex border-t flex-shrink-0"
   style="background: var(--color-bg-surface); border-color: var(--color-border); padding-bottom: env(safe-area-inset-bottom, 0px);"
 >
-  {@const recipesActive = $page.url.pathname === "/" || $page.url.pathname.startsWith("/recipe")}
-  {@const batchesActive = $page.url.pathname.startsWith("/batches")}
-  {@const toolsActive   = $page.url.pathname.startsWith("/tools")}
-  {@const moreActive    = $page.url.pathname.startsWith("/settings") || $page.url.pathname.startsWith("/equipment") || $page.url.pathname.startsWith("/library")}
-
   <button
     onclick={() => goto($settings.last_route_recipes ?? "/")}
-    aria-current={recipesActive ? "page" : undefined}
+    aria-current={($page.url.pathname === "/" || $page.url.pathname.startsWith("/recipe")) ? "page" : undefined}
     class="flex flex-col items-center justify-center flex-1 py-2 gap-1 text-xs transition-colors"
-    style={recipesActive ? "color: var(--color-accent);" : "color: var(--color-text-secondary);"}
+    style={($page.url.pathname === "/" || $page.url.pathname.startsWith("/recipe")) ? "color: var(--color-accent);" : "color: var(--color-text-secondary);"}
   >
-    <span style={recipesActive ? "opacity: 1; transition: opacity 0.15s;" : "opacity: 0.45; transition: opacity 0.15s;"}>
+    <span style={($page.url.pathname === "/" || $page.url.pathname.startsWith("/recipe")) ? "opacity: 1; transition: opacity 0.15s;" : "opacity: 0.45; transition: opacity 0.15s;"}>
       <BrewingIcon name="recipes" size={22} />
     </span>
     Recipes
@@ -28,11 +23,11 @@
 
   <button
     onclick={() => goto($settings.last_route_batches ?? "/batches")}
-    aria-current={batchesActive ? "page" : undefined}
+    aria-current={$page.url.pathname.startsWith("/batches") ? "page" : undefined}
     class="flex flex-col items-center justify-center flex-1 py-2 gap-1 text-xs transition-colors"
-    style={batchesActive ? "color: var(--color-accent);" : "color: var(--color-text-secondary);"}
+    style={$page.url.pathname.startsWith("/batches") ? "color: var(--color-accent);" : "color: var(--color-text-secondary);"}
   >
-    <span style={batchesActive ? "opacity: 1; transition: opacity 0.15s;" : "opacity: 0.45; transition: opacity 0.15s;"}>
+    <span style={$page.url.pathname.startsWith("/batches") ? "opacity: 1; transition: opacity 0.15s;" : "opacity: 0.45; transition: opacity 0.15s;"}>
       <BrewingIcon name="batches" size={22} />
     </span>
     Batches
@@ -40,11 +35,11 @@
 
   <button
     onclick={() => goto($settings.last_route_tools ?? "/tools")}
-    aria-current={toolsActive ? "page" : undefined}
+    aria-current={$page.url.pathname.startsWith("/tools") ? "page" : undefined}
     class="flex flex-col items-center justify-center flex-1 py-2 gap-1 text-xs transition-colors"
-    style={toolsActive ? "color: var(--color-accent);" : "color: var(--color-text-secondary);"}
+    style={$page.url.pathname.startsWith("/tools") ? "color: var(--color-accent);" : "color: var(--color-text-secondary);"}
   >
-    <span style={toolsActive ? "opacity: 1; transition: opacity 0.15s;" : "opacity: 0.45; transition: opacity 0.15s;"}>
+    <span style={$page.url.pathname.startsWith("/tools") ? "opacity: 1; transition: opacity 0.15s;" : "opacity: 0.45; transition: opacity 0.15s;"}>
       <BrewingIcon name="tools" size={22} />
     </span>
     Tools
@@ -52,11 +47,11 @@
 
   <button
     onclick={() => goto($settings.last_route_settings ?? $settings.last_route_equipment ?? $settings.last_route_library ?? "/settings")}
-    aria-current={moreActive ? "page" : undefined}
+    aria-current={($page.url.pathname.startsWith("/settings") || $page.url.pathname.startsWith("/equipment") || $page.url.pathname.startsWith("/library")) ? "page" : undefined}
     class="flex flex-col items-center justify-center flex-1 py-2 gap-1 text-xs transition-colors"
-    style={moreActive ? "color: var(--color-accent);" : "color: var(--color-text-secondary);"}
+    style={($page.url.pathname.startsWith("/settings") || $page.url.pathname.startsWith("/equipment") || $page.url.pathname.startsWith("/library")) ? "color: var(--color-accent);" : "color: var(--color-text-secondary);"}
   >
-    <span style={moreActive ? "opacity: 1; transition: opacity 0.15s;" : "opacity: 0.45; transition: opacity 0.15s;"}>
+    <span style={($page.url.pathname.startsWith("/settings") || $page.url.pathname.startsWith("/equipment") || $page.url.pathname.startsWith("/library")) ? "opacity: 1; transition: opacity 0.15s;" : "opacity: 0.45; transition: opacity 0.15s;"}>
       <BrewingIcon name="settings" size={22} />
     </span>
     More
