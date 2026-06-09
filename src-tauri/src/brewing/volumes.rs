@@ -32,12 +32,12 @@ pub fn calculate_pre_boil_gravity(og: f64, post_boil_volume_l: f64, pre_boil_vol
     1.0 + pre_boil_gravity_points / 1000.0
 }
 
+// Standard homebrew value: milled grain displaces ~0.67 L/kg in water
 const GRAIN_DISPLACEMENT_L_PER_KG: f64 = 0.67;
 
 /// Calculate water volumes for a recipe.
 ///
-/// Returns `(mash_water_l, sparge_water_l, top_up_water_l, total_water_l,
-///          mash_volume_l, mash_volume_excess_l)`
+/// Returns `(mash_water_l, sparge_water_l, total_water_l, mash_volume_l, mash_volume_excess_l)`
 ///
 /// - `total_water_l`: all water before fermentation (pre_boil + grain absorption + lauter loss)
 /// - `mash_water_l`: water added to the grain bill
@@ -52,10 +52,9 @@ pub fn calculate_water_volumes(
     total_grain_kg: f64,
     mash_infuse_l: Option<f64>,
     mash_ratio_l_per_kg: Option<f64>,
-    top_up_water_l: f64,
     sparge_method: &str,
     tun_volume_l: Option<f64>,
-) -> (f64, f64, f64, f64, f64, Option<f64>) {
+) -> (f64, f64, f64, f64, Option<f64>) {
     let total_water_l =
         pre_boil_volume_l + grain_absorption_rate_l_per_kg * total_grain_kg + lauter_deadspace_l;
 
@@ -90,7 +89,6 @@ pub fn calculate_water_volumes(
     (
         mash_water_l,
         sparge_water_l,
-        top_up_water_l,
         total_water_l,
         mash_volume_l,
         mash_volume_excess_l,
@@ -163,10 +161,9 @@ mod water_volume_tests {
         grain_kg: f64,
         infuse: Option<f64>,
         ratio: Option<f64>,
-        top_up: f64,
         sparge_method: &str,
         tun: Option<f64>,
-    ) -> (f64, f64, f64, f64, f64, Option<f64>) {
+    ) -> (f64, f64, f64, f64, Option<f64>) {
         calculate_water_volumes(
             pre_boil,
             absorption,
@@ -174,7 +171,6 @@ mod water_volume_tests {
             grain_kg,
             infuse,
             ratio,
-            top_up,
             sparge_method,
             tun,
         )
@@ -183,8 +179,7 @@ mod water_volume_tests {
     #[test]
     fn no_sparge_all_water_is_mash() {
         // pre_boil=20L, absorption=1L/kg, lauter=0, grain=4kg → total=24L
-        let (mash, sparge, _, total, _, _) =
-            call(20.0, 1.0, 0.0, 4.0, None, None, 0.0, "no_sparge", None);
+        let (mash, sparge, total, _, _) = call(20.0, 1.0, 0.0, 4.0, None, None, "no_sparge", None);
         assert!((total - 24.0).abs() < 0.01, "total={total:.3}");
         assert!((mash - 24.0).abs() < 0.01, "mash={mash:.3}");
         assert!((sparge - 0.0).abs() < 0.01, "sparge={sparge:.3}");
@@ -193,17 +188,8 @@ mod water_volume_tests {
     #[test]
     fn sparge_with_infuse_amount_splits_correctly() {
         // total=24L, infuse=16L → sparge=8L
-        let (mash, sparge, _, total, _, _) = call(
-            20.0,
-            1.0,
-            0.0,
-            4.0,
-            Some(16.0),
-            None,
-            0.0,
-            "fly_sparge",
-            None,
-        );
+        let (mash, sparge, total, _, _) =
+            call(20.0, 1.0, 0.0, 4.0, Some(16.0), None, "fly_sparge", None);
         assert!((total - 24.0).abs() < 0.01, "total={total:.3}");
         assert!((mash - 16.0).abs() < 0.01, "mash={mash:.3}");
         assert!((sparge - 8.0).abs() < 0.01, "sparge={sparge:.3}");
@@ -212,17 +198,8 @@ mod water_volume_tests {
     #[test]
     fn sparge_with_ratio_splits_correctly() {
         // ratio=3L/kg * 4kg = 12L mash; total=24L → sparge=12L
-        let (mash, sparge, _, total, _, _) = call(
-            20.0,
-            1.0,
-            0.0,
-            4.0,
-            None,
-            Some(3.0),
-            0.0,
-            "batch_sparge",
-            None,
-        );
+        let (mash, sparge, total, _, _) =
+            call(20.0, 1.0, 0.0, 4.0, None, Some(3.0), "batch_sparge", None);
         assert!((total - 24.0).abs() < 0.01, "total={total:.3}");
         assert!((mash - 12.0).abs() < 0.01, "mash={mash:.3}");
         assert!((sparge - 12.0).abs() < 0.01, "sparge={sparge:.3}");
@@ -231,26 +208,17 @@ mod water_volume_tests {
     #[test]
     fn sparge_without_infuse_or_ratio_falls_back_to_no_sparge() {
         // No infuse, no ratio → mash=total, sparge=0
-        let (mash, sparge, _, _, _, _) =
-            call(20.0, 1.0, 0.0, 4.0, None, None, 0.0, "fly_sparge", None);
+        let (_mash, sparge, _, _, _) = call(20.0, 1.0, 0.0, 4.0, None, None, "fly_sparge", None);
         assert!(
             (sparge - 0.0).abs() < 0.01,
             "sparge should be 0, got {sparge:.3}"
         );
-        assert_eq!(mash, mash + sparge); // mash == total
-    }
-
-    #[test]
-    fn top_up_water_passes_through() {
-        let (_, _, top_up, _, _, _) = call(20.0, 1.0, 0.0, 4.0, None, None, 1.5, "no_sparge", None);
-        assert!((top_up - 1.5).abs() < 0.01, "top_up={top_up:.3}");
     }
 
     #[test]
     fn mash_volume_includes_grain_displacement() {
         // mash=24L, grain=4kg → mash_volume = 24 + 4*0.67 = 26.68L
-        let (mash, _, _, _, mash_vol, _) =
-            call(20.0, 1.0, 0.0, 4.0, None, None, 0.0, "no_sparge", None);
+        let (mash, _, _, mash_vol, _) = call(20.0, 1.0, 0.0, 4.0, None, None, "no_sparge", None);
         let expected = mash + 4.0 * 0.67;
         assert!(
             (mash_vol - expected).abs() < 0.01,
@@ -261,17 +229,8 @@ mod water_volume_tests {
     #[test]
     fn tun_overflow_warning_when_exceeded() {
         // mash_vol ≈ 26.68L, tun=25L → excess ≈ 1.68L
-        let (_, _, _, _, mash_vol, excess) = call(
-            20.0,
-            1.0,
-            0.0,
-            4.0,
-            None,
-            None,
-            0.0,
-            "no_sparge",
-            Some(25.0),
-        );
+        let (_, _, _, mash_vol, excess) =
+            call(20.0, 1.0, 0.0, 4.0, None, None, "no_sparge", Some(25.0));
         assert!(excess.is_some(), "should have overflow");
         let e = excess.unwrap();
         assert!((e - (mash_vol - 25.0)).abs() < 0.01, "excess={e:.3}");
@@ -279,23 +238,21 @@ mod water_volume_tests {
 
     #[test]
     fn no_overflow_when_within_tun_volume() {
-        let (_, _, _, _, _, excess) = call(
-            20.0,
-            1.0,
-            0.0,
-            4.0,
-            None,
-            None,
-            0.0,
-            "no_sparge",
-            Some(30.0),
-        );
+        let (_, _, _, _, excess) = call(20.0, 1.0, 0.0, 4.0, None, None, "no_sparge", Some(30.0));
         assert!(excess.is_none(), "should be None when under tun volume");
     }
 
     #[test]
     fn no_overflow_when_no_tun_volume_set() {
-        let (_, _, _, _, _, excess) = call(20.0, 1.0, 0.0, 4.0, None, None, 0.0, "no_sparge", None);
+        let (_, _, _, _, excess) = call(20.0, 1.0, 0.0, 4.0, None, None, "no_sparge", None);
         assert!(excess.is_none(), "should be None when tun_volume_l is None");
+    }
+
+    #[test]
+    fn zero_grain_falls_back_to_full_mash_water() {
+        let (mash, sparge, total, _, _) = call(20.0, 1.0, 0.0, 0.0, None, None, "fly_sparge", None);
+        assert!((total - 20.0).abs() < 0.01, "total={total:.3}");
+        assert!((mash - 20.0).abs() < 0.01, "mash={mash:.3}");
+        assert!((sparge - 0.0).abs() < 0.01, "sparge={sparge:.3}");
     }
 }
