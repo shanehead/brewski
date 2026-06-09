@@ -28,6 +28,10 @@
 
   const units = $derived<Units>($settings.units === "imperial" ? "imperial" : "metric");
 
+  const fmtVol = $derived((l: number) =>
+    (units === "imperial" ? lToGal(l) : l).toFixed(2)
+  );
+
   const ADDITIONS = [
     { value: "gypsum", label: "Gypsum" },
     { value: "calcium_chloride", label: "Calcium Chloride" },
@@ -119,14 +123,14 @@
           <div class="flex justify-between items-baseline">
             <span style="color: var(--color-text-secondary);">Mash water</span>
             <span class="font-semibold font-mono" style="color: var(--color-text-primary);">
-              {(units === "imperial" ? lToGal(stats.mash_water_l) : stats.mash_water_l).toFixed(2)}<span class="text-xs font-normal ml-0.5" style="color: var(--color-text-muted);">{volumeLabel(units)}</span>
+              {fmtVol(stats.mash_water_l)}<span class="text-xs font-normal ml-0.5" style="color: var(--color-text-muted);">{volumeLabel(units)}</span>
             </span>
           </div>
           {#if stats.sparge_water_l > 0}
             <div class="flex justify-between items-baseline">
               <span style="color: var(--color-text-secondary);">Sparge water</span>
               <span class="font-semibold font-mono" style="color: var(--color-text-primary);">
-                {(units === "imperial" ? lToGal(stats.sparge_water_l) : stats.sparge_water_l).toFixed(2)}<span class="text-xs font-normal ml-0.5" style="color: var(--color-text-muted);">{volumeLabel(units)}</span>
+                {fmtVol(stats.sparge_water_l)}<span class="text-xs font-normal ml-0.5" style="color: var(--color-text-muted);">{volumeLabel(units)}</span>
               </span>
             </div>
           {/if}
@@ -134,7 +138,7 @@
             <div class="flex justify-between items-baseline">
               <span style="color: var(--color-text-secondary);">Top-up water</span>
               <span class="font-semibold font-mono" style="color: var(--color-text-primary);">
-                {(units === "imperial" ? lToGal(stats.top_up_water_l) : stats.top_up_water_l).toFixed(2)}<span class="text-xs font-normal ml-0.5" style="color: var(--color-text-muted);">{volumeLabel(units)}</span>
+                {fmtVol(stats.top_up_water_l)}<span class="text-xs font-normal ml-0.5" style="color: var(--color-text-muted);">{volumeLabel(units)}</span>
               </span>
             </div>
           {/if}
@@ -142,20 +146,20 @@
           <div class="flex justify-between items-baseline">
             <span class="font-medium" style="color: var(--color-text-primary);">Total water</span>
             <span class="font-semibold font-mono" style="color: var(--color-text-primary);">
-              {(units === "imperial" ? lToGal(stats.total_water_l) : stats.total_water_l).toFixed(2)}<span class="text-xs font-normal ml-0.5" style="color: var(--color-text-muted);">{volumeLabel(units)}</span>
+              {fmtVol(stats.total_water_l)}<span class="text-xs font-normal ml-0.5" style="color: var(--color-text-muted);">{volumeLabel(units)}</span>
             </span>
           </div>
           <div class="flex justify-between items-baseline">
             <span style="color: var(--color-text-secondary);">Mash volume <span class="text-xs" style="color: var(--color-text-muted);">(water + grain)</span></span>
             <span class="font-semibold font-mono" style="color: var(--color-text-primary);">
-              {(units === "imperial" ? lToGal(stats.mash_volume_l) : stats.mash_volume_l).toFixed(2)}<span class="text-xs font-normal ml-0.5" style="color: var(--color-text-muted);">{volumeLabel(units)}</span>
+              {fmtVol(stats.mash_volume_l)}<span class="text-xs font-normal ml-0.5" style="color: var(--color-text-muted);">{volumeLabel(units)}</span>
             </span>
           </div>
           {#if stats.mash_volume_excess_l != null}
-            <div class="flex gap-2 items-start text-xs mt-1 px-2 py-1.5 rounded"
-                 style="background: rgba(239,68,68,0.08); color: #f87171; border: 1px solid rgba(239,68,68,0.2);">
-              <span>⚠</span>
-              <span>Mash volume exceeds tun capacity by {(units === "imperial" ? lToGal(stats.mash_volume_excess_l) : stats.mash_volume_excess_l).toFixed(2)} {volumeLabel(units)}.</span>
+            <div role="alert" class="flex gap-2 items-start text-xs mt-1 px-2 py-1.5 rounded"
+                 style="background: color-mix(in srgb, var(--color-danger) 8%, transparent); color: var(--color-danger); border: 1px solid color-mix(in srgb, var(--color-danger) 20%, transparent);">
+              <span aria-hidden="true">⚠</span>
+              <span>Mash volume exceeds tun capacity by {fmtVol(stats.mash_volume_excess_l)} {volumeLabel(units)}.</span>
             </div>
           {/if}
         </div>
