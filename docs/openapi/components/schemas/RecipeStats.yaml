@@ -12,6 +12,11 @@ required:
   - pre_boil_volume_l
   - post_boil_volume_l
   - hop_stats
+  - mash_water_l
+  - sparge_water_l
+  - top_up_water_l
+  - total_water_l
+  - mash_volume_l
 properties:
   og:
     type: number
@@ -48,6 +53,26 @@ properties:
       - number
       - "null"
     description: Calculated strike water temperature in degrees Celsius
+  mash_water_l:
+    type: number
+    description: Estimated mash water volume in litres
+  sparge_water_l:
+    type: number
+    description: Estimated sparge water volume in litres (0 for no-sparge or no split defined)
+  top_up_water_l:
+    type: number
+    description: Post-boil top-up water added to the fermenter, in litres
+  total_water_l:
+    type: number
+    description: Total water needed (mash + sparge; does not include top-up) in litres
+  mash_volume_l:
+    type: number
+    description: Volume occupied in the mash tun (water + grain displacement) in litres
+  mash_volume_excess_l:
+    type:
+      - number
+      - "null"
+    description: Litres by which mash volume exceeds tun capacity; null when within limits or no tun volume is set
   hop_stats:
     type: array
     items:

@@ -1385,9 +1385,13 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /** @description Lightweight summary of a recipe for list views. */
         RecipeSummary: {
+            /** @description Unique recipe identifier. */
             id: string;
+            /** @description Recipe name. */
             name: string;
+            /** @description Name of the beer style associated with this recipe, or null if none set. */
             style_name?: string | null;
             /** @description Recipe type (e.g. All Grain, Extract, Partial Mash) */
             type_: string;
@@ -1411,61 +1415,102 @@ export interface components {
             /** @description Filename of the recipe's image in {appDataDir}/images/ */
             image_path?: string | null;
         };
+        /** @description A full homebrewing recipe including all ingredient additions, fermentation schedule, and carbonation settings. */
         Recipe: {
+            /** @description Unique recipe identifier. */
             id: string;
+            /** @description Recipe name. */
             name: string;
             /** @description Recipe type (e.g. All Grain, Extract, Partial Mash) */
             type_: string;
+            /** @description Name of the primary brewer. */
             brewer?: string | null;
+            /** @description Name of the assistant brewer. */
             asst_brewer?: string | null;
+            /** @description Target batch volume in litres. */
             batch_size_l: number;
+            /** @description Pre-boil kettle volume in litres. */
             boil_size_l: number;
+            /** @description Boil duration in minutes. */
             boil_time_min: number;
+            /** @description Brewhouse efficiency percentage. */
             efficiency_pct?: number | null;
+            /** @description ID of the beer style associated with this recipe. */
             style_id?: string | null;
+            /** @description ID of the equipment profile associated with this recipe. */
             equipment_profile_id?: string | null;
+            /** @description Brewer's notes for the recipe. */
             notes?: string | null;
+            /** @description Tasting notes for the recipe. */
             taste_notes?: string | null;
+            /** @description Taste rating (e.g. 1–50 on the BeerXML scale). */
             taste_rating?: number | null;
             /** @description Measured original gravity */
             og?: number | null;
             /** @description Measured final gravity */
             fg?: number | null;
+            /** @description Number of fermentation stages (1 = primary only, 2 = primary + secondary, etc.). */
             fermentation_stages: number;
+            /** @description Duration of primary fermentation in days. */
             primary_age_days?: number | null;
+            /** @description Primary fermentation temperature in degrees Celsius. */
             primary_temp_c?: number | null;
+            /** @description Duration of secondary fermentation in days. */
             secondary_age_days?: number | null;
+            /** @description Secondary fermentation temperature in degrees Celsius. */
             secondary_temp_c?: number | null;
+            /** @description Duration of tertiary fermentation in days. */
             tertiary_age_days?: number | null;
+            /** @description Tertiary fermentation temperature in degrees Celsius. */
             tertiary_temp_c?: number | null;
             /** @description Conditioning/bottle age in days */
             age_days?: number | null;
+            /** @description Conditioning temperature in degrees Celsius. */
             age_temp_c?: number | null;
             /** @description Target carbonation in volumes of CO2 */
             carbonation_vols?: number | null;
+            /** @description When true, the beer is force-carbonated (kegged); when false, priming sugar is used. */
             forced_carbonation: boolean;
+            /** @description Name of the priming sugar used for bottle conditioning. */
             priming_sugar_name?: string | null;
+            /** @description Temperature at carbonation time in degrees Celsius, used for priming calculations. */
             carbonation_temp_c?: number | null;
+            /** @description Priming sugar equivalent weight relative to sucrose. */
             priming_sugar_equiv?: number | null;
+            /** @description Correction factor applied when calculating priming sugar for kegs. */
             keg_priming_factor?: number | null;
             /** @description Brew date (free-form string) */
             date?: string | null;
-            /** Format: int64 */
+            /**
+             * Format: int64
+             * @description Unix timestamp in milliseconds when the recipe was created.
+             */
             created_at: number;
-            /** Format: int64 */
+            /**
+             * Format: int64
+             * @description Unix timestamp in milliseconds when the recipe was last updated.
+             */
             updated_at: number;
             /**
              * @description 'user' = created by the user; 'seeded' = built-in starter recipe
              * @enum {string}
              */
             source: "user" | "seeded";
+            /** @description The full equipment profile associated with this recipe, or null if none set. */
             equipment_profile?: components["schemas"]["EquipmentProfile"] | null;
+            /** @description The full beer style associated with this recipe, or null if none set. */
             style?: components["schemas"]["Style"] | null;
+            /** @description Fermentable ingredient additions on this recipe. */
             fermentables: components["schemas"]["RecipeAdditionFermentable"][];
+            /** @description Hop additions on this recipe. */
             hops: components["schemas"]["RecipeAdditionHop"][];
+            /** @description Yeast additions on this recipe. */
             yeasts: components["schemas"]["RecipeAdditionYeast"][];
+            /** @description Miscellaneous ingredient additions on this recipe. */
             miscs: components["schemas"]["RecipeAdditionMisc"][];
+            /** @description Water source additions on this recipe. */
             waters: components["schemas"]["RecipeAdditionWater"][];
+            /** @description Mineral and acid water adjustments on this recipe. */
             water_adjustments?: components["schemas"]["RecipeWaterAdjustment"][];
             /** @description ID of the mash water profile */
             mash_water_id?: string | null;
@@ -1473,10 +1518,12 @@ export interface components {
             sparge_water_id?: string | null;
             /** @description Default hopstand temperature in °C for this recipe */
             hopstand_temp_c?: number | null;
+            /** @description The mash schedule for this recipe, or null if not set. */
             mash?: components["schemas"]["Mash"] | null;
             /** @description Filename of the recipe's image in {appDataDir}/images/ */
             image_path?: string | null;
         };
+        /** @description Calculated statistics for a recipe, including predicted gravity, bitterness, color, and per-hop IBU contributions. */
         RecipeStats: {
             /** @description Calculated original gravity (specific gravity) */
             og: number;
@@ -1500,62 +1547,120 @@ export interface components {
             post_boil_volume_l: number;
             /** @description Calculated strike water temperature in degrees Celsius */
             strike_temp_c?: number | null;
+            /** @description Estimated mash water volume in litres */
+            mash_water_l: number;
+            /** @description Estimated sparge water volume in litres (0 for no-sparge or no split defined) */
+            sparge_water_l: number;
+            /** @description Post-boil top-up water added to the fermenter, in litres */
+            top_up_water_l: number;
+            /** @description Total water needed (mash + sparge; does not include top-up) in litres */
+            total_water_l: number;
+            /** @description Volume occupied in the mash tun (water + grain displacement) in litres */
+            mash_volume_l: number;
+            /** @description Litres by which mash volume exceeds tun capacity; null when within limits or no tun volume is set */
+            mash_volume_excess_l?: number | null;
             /** @description Per-hop IBU contributions, keyed by hop addition ID */
             hop_stats: components["schemas"]["HopStat"][];
         };
+        /** @description IBU contribution from a single hop addition. */
         HopStat: {
             /** @description The RecipeAdditionHop.id this stat corresponds to */
             hop_id: string;
             /** @description IBU contribution from this hop addition */
             ibu: number;
         };
+        /** @description A beer style with guideline ranges for gravity, bitterness, color, and carbonation. */
         Style: {
+            /** @description Unique style identifier. */
             id: string;
+            /** @description Style name (e.g. "American IPA", "Dry Stout"). */
             name: string;
+            /** @description Style category name (e.g. "India Pale Ale"). */
             category: string;
+            /** @description Style guide category number (e.g. "21"). */
             category_number: string;
+            /** @description Style guide subcategory letter (e.g. "A"). */
             style_letter: string;
+            /** @description Name of the style guide this style is from (e.g. "BJCP 2021"). */
             style_guide: string;
+            /** @description Style type (e.g. Lager, Ale, Mead, Cider, Wheat, Mixed). */
             type_: string;
+            /** @description Minimum original gravity guideline. */
             og_min: number;
+            /** @description Maximum original gravity guideline. */
             og_max: number;
+            /** @description Minimum final gravity guideline. */
             fg_min: number;
+            /** @description Maximum final gravity guideline. */
             fg_max: number;
+            /** @description Minimum IBU guideline. */
             ibu_min: number;
+            /** @description Maximum IBU guideline. */
             ibu_max: number;
+            /** @description Minimum color guideline in SRM. */
             color_min_srm: number;
+            /** @description Maximum color guideline in SRM. */
             color_max_srm: number;
+            /** @description Minimum carbonation guideline in volumes of CO2. */
             carb_min_vols?: number | null;
+            /** @description Maximum carbonation guideline in volumes of CO2. */
             carb_max_vols?: number | null;
+            /** @description Minimum ABV guideline as a percentage. */
             abv_min_pct?: number | null;
+            /** @description Maximum ABV guideline as a percentage. */
             abv_max_pct?: number | null;
+            /** @description Style guide notes and history. */
             notes?: string | null;
+            /** @description Description of the aroma, flavor, and appearance characteristics. */
             profile?: string | null;
+            /** @description Typical ingredients for this style. */
             ingredients?: string | null;
+            /** @description Commercial examples of this style. */
             examples?: string | null;
         };
+        /** @description An equipment profile defining brew system volumes, losses, and calculation settings. */
         EquipmentProfile: {
+            /** @description Unique equipment profile identifier. */
             id: string;
+            /** @description Equipment profile name. */
             name: string;
+            /** @description Optional notes about this equipment setup. */
             notes?: string | null;
+            /** @description Pre-boil kettle volume in litres. */
             boil_size_l: number;
+            /** @description Target batch size in litres (into fermenter or kettle, depending on batch_volume_target). */
             batch_size_l: number;
+            /** @description When true, boil volume is calculated from batch size, evaporation rate, and losses. */
             calc_boil_volume: boolean;
+            /** @description Mash tun capacity in litres. */
             tun_volume_l?: number | null;
+            /** @description Volume that remains in the lauter tun and cannot be transferred, in litres. */
             lauter_deadspace_l: number;
+            /** @description Volume of water added to the kettle before the boil, in litres. */
             top_up_kettle_l: number;
             /** @description Volume lost to trub and chiller in litres */
             trub_chiller_loss_l: number;
             /** @description Boil evaporation rate in litres per hour */
             evap_rate_l_hr: number;
+            /** @description Default boil duration in minutes. */
             boil_time_min: number;
+            /** @description Volume of water added to the fermenter after the boil, in litres. */
             top_up_water_l: number;
+            /** @description Volume lost to fermenter trub and yeast cake, in litres. */
             fermenter_loss_l: number;
+            /** @description Global hop utilization correction factor as a percentage. */
             hop_utilization_pct: number;
+            /** @description Brewhouse efficiency percentage. */
             efficiency_pct: number;
-            /** Format: int64 */
+            /**
+             * Format: int64
+             * @description Unix timestamp in milliseconds when the profile was created.
+             */
             created_at: number;
-            /** Format: int64 */
+            /**
+             * Format: int64
+             * @description Unix timestamp in milliseconds when the profile was last updated.
+             */
             updated_at: number;
             /** @description Whether batch_size_l targets the fermenter or the kettle. Enum: 'fermenter' | 'kettle' */
             batch_volume_target: string;
@@ -1612,68 +1717,111 @@ export interface components {
             /** @description Target sparge water temperature in Fahrenheit */
             sparge_temp_f?: number | null;
         };
+        /** @description A fermentable ingredient in the library (grain, extract, sugar, or adjunct). */
         Fermentable: {
+            /** @description Unique fermentable identifier. */
             id: string;
+            /** @description Fermentable name (e.g. "Pale Malt 2-Row", "Corn Sugar"). */
             name: string;
             /** @description Grain, Sugar, Extract, Dry Extract, Adjunct */
             type_: string;
+            /** @description Maximum extractable sugar yield as a percentage of dry weight. */
             yield_pct: number;
+            /** @description Color contribution in degrees Lovibond. */
             color_lovibond: number;
+            /** @description Country or region of origin (e.g. "United Kingdom"). */
             origin?: string | null;
+            /** @description Maltster or supplier name. */
             supplier?: string | null;
+            /** @description Brewer's notes about this fermentable. */
             notes?: string | null;
+            /** @description When true, this fermentable is added after the boil (e.g. late extract additions). */
             add_after_boil: boolean;
+            /** @description Difference between coarse and fine grind extract yield, as a percentage. */
             coarse_fine_diff_pct?: number | null;
+            /** @description Moisture content of the grain as a percentage. */
             moisture_pct?: number | null;
+            /** @description Enzymatic activity in degrees Lintner; indicates mash conversion ability. */
             diastatic_power_lintner?: number | null;
+            /** @description Total protein content as a percentage. */
             protein_pct?: number | null;
+            /** @description Recommended maximum usage as a percentage of total grain bill. */
             max_in_batch_pct?: number | null;
+            /** @description When true, this fermentable requires mashing rather than steeping. */
             recommend_mash?: boolean | null;
+            /** @description Bitterness contribution in IBU per gallon per pound; used for adjuncts like black malt. */
             ibu_gal_per_lb?: number | null;
             /** @description 'seeded' | 'user' */
             source: string;
+            /** @description ID of the seeded fermentable this entry was forked from, or null if original. */
             forked_from_id?: string | null;
         };
+        /** @description A hop variety in the library. */
         Hop: {
+            /** @description Unique hop identifier. */
             id: string;
+            /** @description Hop variety name (e.g. "Centennial", "Saaz"). */
             name: string;
+            /** @description Alpha acid percentage, used for IBU calculations. */
             alpha_pct: number;
+            /** @description Beta acid percentage. */
             beta_pct?: number | null;
             /** @description Pellet, Plug, Leaf, Cryo, CO2 Extract */
             form: string;
             /** @description Bittering, Aroma, Both */
             type_?: string | null;
+            /** @description Country or region of origin. */
             origin?: string | null;
+            /** @description Harvest year for this batch of hops. */
             year?: string | null;
+            /** @description Brewer's notes about this hop variety. */
             notes?: string | null;
+            /** @description Suggested substitute varieties, comma-separated. */
             substitutes?: string | null;
+            /** @description Hop Storage Index; indicates freshness degradation rate as a percentage. */
             hsi_pct?: number | null;
+            /** @description Humulene oil content as a percentage of total oils. */
             humulene_pct?: number | null;
+            /** @description Caryophyllene oil content as a percentage of total oils. */
             caryophyllene_pct?: number | null;
+            /** @description Cohumulone content as a percentage of alpha acids; higher values produce harsher bitterness. */
             cohumulone_pct?: number | null;
+            /** @description Myrcene oil content as a percentage of total oils. */
             myrcene_pct?: number | null;
             /** @description 'seeded' | 'user' */
             source: string;
+            /** @description ID of the seeded hop this entry was forked from, or null if original. */
             forked_from_id?: string | null;
         };
+        /** @description A yeast strain in the library. */
         Yeast: {
+            /** @description Unique yeast identifier. */
             id: string;
+            /** @description Yeast strain name (e.g. "American Ale", "WLP001"). */
             name: string;
             /** @description Ale, Lager, Wheat, Wine, Champagne */
             type_: string;
             /** @description Liquid, Dry, Slant, Culture */
             form: string;
+            /** @description Yeast laboratory or manufacturer (e.g. "White Labs", "Wyeast"). */
             laboratory?: string | null;
+            /** @description Manufacturer's product identifier (e.g. "WLP001", "1056"). */
             product_id?: string | null;
+            /** @description Minimum recommended fermentation temperature in degrees Celsius. */
             min_temperature_c?: number | null;
+            /** @description Maximum recommended fermentation temperature in degrees Celsius. */
             max_temperature_c?: number | null;
             /** @description Low, Medium, High, Very High */
             flocculation?: string | null;
             /** @description BeerXML single attenuation value; see min/max fields for range */
             attenuation_pct?: number | null;
+            /** @description Brewer's notes about this yeast strain. */
             notes?: string | null;
+            /** @description Beer styles this yeast is best suited for. */
             best_for?: string | null;
+            /** @description Maximum number of times this yeast can be repitched. */
             max_reuse?: number | null;
+            /** @description When true, yeast is added at secondary fermentation rather than primary. */
             add_to_secondary: boolean;
             /** @description BeerMaverick attenuation range lower bound */
             min_attenuation_pct?: number | null;
@@ -1681,6 +1829,7 @@ export interface components {
             max_attenuation_pct?: number | null;
             /** @description low, medium, high, very_high */
             alcohol_tolerance?: string | null;
+            /** @description Flavor and aroma characteristics of this yeast strain. */
             flavor_profile?: string | null;
             /** @description Suitable beer styles, comma-separated */
             styles?: string | null;
@@ -1694,467 +1843,858 @@ export interface components {
             sta1_positive?: boolean | null;
             /** @description 'seeded' | 'user' */
             source: string;
+            /** @description ID of the seeded yeast this entry was forked from, or null if original. */
             forked_from_id?: string | null;
         };
+        /** @description A miscellaneous ingredient in the library (spice, fining, water agent, etc.). */
         Misc: {
+            /** @description Unique misc ingredient identifier. */
             id: string;
+            /** @description Ingredient name (e.g. "Irish Moss", "Whirlfloc", "Coriander Seed"). */
             name: string;
             /** @description Spice, Fining, Water Agent, Herb, Flavor, Other */
             type_: string;
             /** @description Boil, Mash, Primary, Secondary, Bottling */
             use_: string;
+            /** @description Default usage time in minutes (meaning depends on use_). */
             time_min: number;
+            /** @description Brewer's notes about this ingredient. */
             notes?: string | null;
+            /** @description Description of the purpose or effect of this ingredient. */
             use_for?: string | null;
+            /** @description When true, amounts are measured by weight (grams); when false, by volume (millilitres). */
             amount_is_weight: boolean;
             /** @description 'seeded' | 'user' */
             source: string;
+            /** @description ID of the seeded misc ingredient this entry was forked from, or null if original. */
             forked_from_id?: string | null;
         };
+        /** @description A water source profile in the library, defined by its mineral ion concentrations. */
         Water: {
+            /** @description Unique water profile identifier. */
             id: string;
+            /** @description Water source name (e.g. "London", "Pilsen", "RO Water"). */
             name: string;
+            /** @description Calcium concentration in parts per million (mg/L). */
             calcium_ppm: number;
+            /** @description Bicarbonate (alkalinity) concentration in parts per million (mg/L). */
             bicarbonate_ppm: number;
+            /** @description Sulfate concentration in parts per million (mg/L). */
             sulfate_ppm: number;
+            /** @description Chloride concentration in parts per million (mg/L). */
             chloride_ppm: number;
+            /** @description Sodium concentration in parts per million (mg/L). */
             sodium_ppm: number;
+            /** @description Magnesium concentration in parts per million (mg/L). */
             magnesium_ppm: number;
+            /** @description Source water pH. */
             ph?: number | null;
+            /** @description Notes about this water source. */
             notes?: string | null;
             /** @description 'seeded' | 'user' */
             source: string;
+            /** @description ID of the seeded water profile this entry was forked from, or null if original. */
             forked_from_id?: string | null;
         };
+        /** @description A fermentable ingredient addition on a recipe. */
         RecipeAdditionFermentable: {
+            /** @description Unique addition identifier. */
             id: string;
+            /** @description ID of the recipe this addition belongs to. */
             recipe_id: string;
             /** @description Source library ingredient ID (null if manually entered) */
             fermentable_id?: string | null;
+            /** @description Fermentable name. */
             name: string;
+            /** @description Grain, Sugar, Extract, Dry Extract, Adjunct */
             type_: string;
+            /** @description Maximum extractable sugar yield as a percentage of dry weight. */
             yield_pct: number;
+            /** @description Color contribution in degrees Lovibond. */
             color_lovibond: number;
+            /** @description Amount of this fermentable in kilograms. */
             amount_kg: number;
+            /** @description When true, this fermentable is added after the boil. */
             add_after_boil: boolean;
+            /** @description Display sort order among fermentable additions on this recipe. */
             addition_order: number;
         };
+        /** @description A hop addition on a recipe. */
         RecipeAdditionHop: {
+            /** @description Unique addition identifier. */
             id: string;
+            /** @description ID of the recipe this addition belongs to. */
             recipe_id: string;
+            /** @description Source library hop ID; null if manually entered. */
             hop_id?: string | null;
+            /** @description Hop variety name. */
             name: string;
+            /** @description Alpha acid percentage used for IBU calculations. */
             alpha_pct: number;
             /** @description Pellet, Plug, Leaf, Cryo, CO2 Extract */
             form: string;
+            /** @description Amount of this hop addition in kilograms. */
             amount_kg: number;
             /** @description Boil, Dry Hop, Mash, First Wort, Aroma, Hopstand */
             use_: string;
+            /** @description Addition time; meaning depends on use_. For Boil: minutes remaining in boil. For Dry Hop: days. For others: minutes. */
             time_min: number;
+            /** @description Display sort order among hop additions on this recipe. */
             addition_order: number;
             /** @description Hopstand temperature in °C for this addition (overrides recipe-level setting) */
             hopstand_temp_c?: number | null;
         };
+        /** @description A yeast addition on a recipe. */
         RecipeAdditionYeast: {
+            /** @description Unique addition identifier. */
             id: string;
+            /** @description ID of the recipe this addition belongs to. */
             recipe_id: string;
+            /** @description Source library yeast ID; null if manually entered. */
             yeast_id?: string | null;
+            /** @description Yeast strain name. */
             name: string;
+            /** @description Ale, Lager, Wheat, Wine, Champagne */
             type_: string;
+            /** @description Liquid, Dry, Slant, Culture */
             form: string;
+            /** @description Yeast laboratory or manufacturer. */
             laboratory?: string | null;
+            /** @description Manufacturer's product identifier. */
             product_id?: string | null;
+            /** @description Expected attenuation percentage for this yeast strain. */
             attenuation_pct?: number | null;
+            /** @description Quantity of yeast pitched; unit depends on amount_is_weight. */
             amount?: number | null;
+            /** @description When true, amount is in grams (dry yeast); when false, amount is in millilitres (liquid yeast). */
             amount_is_weight: boolean;
+            /** @description When true, yeast is added at secondary fermentation rather than primary. */
             add_to_secondary: boolean;
+            /** @description Number of times this yeast has been repitched from a previous batch. */
             times_cultured: number;
         };
+        /** @description A miscellaneous ingredient addition on a recipe. */
         RecipeAdditionMisc: {
+            /** @description Unique addition identifier. */
             id: string;
+            /** @description ID of the recipe this addition belongs to. */
             recipe_id: string;
+            /** @description Source library ingredient ID; null if manually entered. */
             misc_id?: string | null;
+            /** @description Ingredient name. */
             name: string;
+            /** @description Spice, Fining, Water Agent, Herb, Flavor, Other */
             type_: string;
+            /** @description Boil, Mash, Primary, Secondary, Bottling */
             use_: string;
+            /** @description Quantity of this ingredient in the unit specified by the unit field. */
             amount: number;
+            /** @description When true, amounts are measured by weight; when false, by volume. */
             amount_is_weight: boolean;
+            /** @description Usage time in minutes (meaning depends on use_). */
             time_min: number;
+            /** @description Display sort order among misc additions on this recipe. */
             addition_order: number;
             /** @description Display unit: g, oz, tsp, tbsp, or mL */
             unit: string;
         };
+        /** @description A water source addition on a recipe. */
         RecipeAdditionWater: {
+            /** @description Unique addition identifier. */
             id: string;
+            /** @description ID of the recipe this addition belongs to. */
             recipe_id: string;
+            /** @description Source library water profile ID; null if manually entered. */
             water_id?: string | null;
+            /** @description Water source name. */
             name: string;
+            /** @description Volume of this water source in litres. */
             amount_l: number;
         };
+        /** @description Mineral ion concentrations and chloride-to-sulfate ratio for a water volume. */
         WaterProfile: {
+            /** @description Calcium concentration in parts per million (mg/L). */
             calcium_ppm: number;
+            /** @description Magnesium concentration in parts per million (mg/L). */
             magnesium_ppm: number;
+            /** @description Sodium concentration in parts per million (mg/L). */
             sodium_ppm: number;
+            /** @description Chloride concentration in parts per million (mg/L). */
             chloride_ppm: number;
+            /** @description Sulfate concentration in parts per million (mg/L). */
             sulfate_ppm: number;
+            /** @description Bicarbonate (alkalinity) concentration in parts per million (mg/L). */
             bicarbonate_ppm: number;
+            /** @description Chloride-to-sulfate ratio; higher values favor malt character, lower values favor hop bitterness. */
             cl_so4_ratio: number;
         };
+        /** @description Mineral ion concentrations for mash, sparge, and combined water volumes, calculated from source water profiles and mineral additions. */
         CalculatedWaterProfile: {
+            /** @description Mineral profile of the mash water after additions. */
             mash: components["schemas"]["WaterProfile"];
+            /** @description Mineral profile of the sparge water after additions. */
             sparge: components["schemas"]["WaterProfile"];
+            /** @description Blended mineral profile of mash and sparge water weighted by volume. */
             combined: components["schemas"]["WaterProfile"];
         };
+        /** @description A mineral or acid water adjustment applied to a recipe's mash or sparge water. */
         RecipeWaterAdjustment: {
+            /** @description Unique water adjustment identifier. */
             id: string;
+            /** @description ID of the recipe this adjustment belongs to. */
             recipe_id: string;
-            /** @enum {string} */
+            /**
+             * @description Mineral salt or acid being added.
+             * @enum {string}
+             */
             addition: "gypsum" | "calcium_chloride" | "epsom_salt" | "table_salt" | "baking_soda" | "chalk" | "lactic_acid" | "phosphoric_acid";
-            /** @enum {string} */
+            /**
+             * @description Whether the addition is applied to the mash or sparge water.
+             * @enum {string}
+             */
             target: "mash" | "sparge";
             /** @description Amount in grams for salts, ml for acids */
             amount: number;
         };
+        /** @description Input for adding a mineral or acid water adjustment to a recipe. */
         CreateWaterAdjustmentInput: {
-            /** @enum {string} */
+            /**
+             * @description Mineral salt or acid to add.
+             * @enum {string}
+             */
             addition: "gypsum" | "calcium_chloride" | "epsom_salt" | "table_salt" | "baking_soda" | "chalk" | "lactic_acid" | "phosphoric_acid";
-            /** @enum {string} */
+            /**
+             * @description Whether to apply the addition to the mash or sparge water.
+             * @enum {string}
+             */
             target: "mash" | "sparge";
             /** @description Amount in grams for salts, ml for acids */
             amount: number;
         };
+        /** @description Fields that can be updated on an existing water adjustment. */
         UpdateWaterAdjustmentInput: {
-            /** @enum {string} */
+            /**
+             * @description Mineral salt or acid being added.
+             * @enum {string}
+             */
             addition?: "gypsum" | "calcium_chloride" | "epsom_salt" | "table_salt" | "baking_soda" | "chalk" | "lactic_acid" | "phosphoric_acid";
-            /** @enum {string} */
+            /**
+             * @description Whether the addition is applied to the mash or sparge water.
+             * @enum {string}
+             */
             target?: "mash" | "sparge";
             /** @description Amount in grams for salts, ml for acids */
             amount?: number;
         };
+        /** @description The mash schedule for a recipe, including temperature, water parameters, and steps. */
         Mash: {
+            /** @description Unique mash identifier. */
             id: string;
+            /** @description ID of the recipe this mash belongs to. */
             recipe_id: string;
+            /** @description Mash schedule name (e.g. "Single Infusion, Medium Body"). */
             name: string;
+            /** @description Temperature of the grain before doughing in, in degrees Celsius. */
             grain_temp_c: number;
+            /** @description Initial mash tun temperature before adding grain, in degrees Celsius. */
             tun_temp_c?: number | null;
+            /** @description Target sparge water temperature in degrees Celsius. */
             sparge_temp_c?: number | null;
+            /** @description Target mash pH. */
             ph?: number | null;
+            /** @description Dry weight of the mash tun in kilograms, used for strike water temperature calculations. */
             tun_weight_kg?: number | null;
+            /** @description Specific heat of the mash tun material in cal/(g·°C). */
             tun_specific_heat?: number | null;
+            /** @description When true, strike water temperature is adjusted for tun thermal mass. */
             equip_adjust: boolean;
             /** @description Water-to-grain ratio in litres per kilogram */
             ratio_l_per_kg?: number | null;
+            /** @description Brewer's notes about this mash schedule. */
             notes?: string | null;
+            /** @description Ordered list of mash steps. */
             steps: components["schemas"]["MashStep"][];
         };
+        /** @description A single step within a mash schedule (infusion, temperature rest, or decoction). */
         MashStep: {
+            /** @description Unique mash step identifier. */
             id: string;
+            /** @description ID of the mash schedule this step belongs to. */
             mash_id: string;
+            /** @description Step name (e.g. "Protein Rest", "Saccharification", "Mash Out"). */
             name: string;
             /** @description Infusion, Temperature, Decoction */
             type_: string;
+            /** @description Volume of water to infuse in litres; applicable for Infusion steps. */
             infuse_amount_l?: number | null;
+            /** @description Target step temperature in degrees Celsius. */
             step_temp_c: number;
+            /** @description Duration of this step in minutes. */
             step_time_min: number;
+            /** @description Time to ramp to step_temp_c from the previous step temperature, in minutes. */
             ramp_time_min?: number | null;
+            /** @description Temperature at the end of this step in degrees Celsius; used for decoction steps. */
             end_temp_c?: number | null;
+            /** @description Position of this step within the mash schedule (1-based). */
             step_order: number;
         };
+        /** @description Input for creating a new recipe. */
         CreateRecipeInput: {
+            /** @description Recipe name. */
             name: string;
+            /** @description Recipe type (e.g. All Grain, Extract, Partial Mash). */
             type_?: string;
+            /** @description Target batch volume in litres. */
             batch_size_l?: number;
+            /** @description Pre-boil kettle volume in litres. */
             boil_size_l?: number;
+            /** @description Boil duration in minutes. */
             boil_time_min?: number;
+            /** @description ID of the equipment profile to associate with this recipe. */
             equipment_profile_id?: string;
             /** @description ID of a recipe to copy ingredients from */
             source_id?: string;
+            /** @description ID of the beer style to associate with this recipe. */
             style_id?: string;
             /** @description Default hopstand temperature in °C */
             hopstand_temp_c?: number;
         };
+        /** @description Fields that can be updated on an existing recipe. All fields are optional; only provided fields are changed. */
         UpdateRecipeInput: {
+            /** @description Recipe name. */
             name?: string;
+            /** @description Recipe type (e.g. All Grain, Extract, Partial Mash). */
             type_?: string;
+            /** @description Name of the primary brewer. */
             brewer?: string;
+            /** @description Name of the assistant brewer. */
             asst_brewer?: string;
+            /** @description Target batch volume in litres. */
             batch_size_l?: number;
+            /** @description Pre-boil kettle volume in litres. */
             boil_size_l?: number;
+            /** @description Boil duration in minutes. */
             boil_time_min?: number;
+            /** @description Brewhouse efficiency percentage. */
             efficiency_pct?: number;
+            /** @description ID of the beer style to associate with this recipe. */
             style_id?: string;
+            /** @description ID of the equipment profile to associate with this recipe. */
             equipment_profile_id?: string;
+            /** @description Brewer's notes for the recipe. */
             notes?: string;
+            /** @description Tasting notes for the recipe. */
             taste_notes?: string;
+            /** @description Taste rating (e.g. 1–50 on the BeerXML scale). */
             taste_rating?: number;
+            /** @description Number of fermentation stages (1 = primary only, 2 = primary + secondary, etc.). */
             fermentation_stages?: number;
+            /** @description Duration of primary fermentation in days. */
             primary_age_days?: number;
+            /** @description Primary fermentation temperature in degrees Celsius. */
             primary_temp_c?: number;
+            /** @description Duration of secondary fermentation in days. */
             secondary_age_days?: number;
+            /** @description Secondary fermentation temperature in degrees Celsius. */
             secondary_temp_c?: number;
+            /** @description Duration of tertiary fermentation in days. */
             tertiary_age_days?: number;
+            /** @description Tertiary fermentation temperature in degrees Celsius. */
             tertiary_temp_c?: number;
+            /** @description Conditioning or bottle-age duration in days. */
             age_days?: number;
+            /** @description Conditioning temperature in degrees Celsius. */
             age_temp_c?: number;
+            /** @description Target carbonation level in volumes of CO2. */
             carbonation_vols?: number;
+            /** @description When true, the beer is force-carbonated (kegged); when false, priming sugar is used. */
             forced_carbonation?: boolean;
+            /** @description Name of the priming sugar used for bottle conditioning. */
             priming_sugar_name?: string;
+            /** @description Temperature at carbonation time in degrees Celsius, used for priming calculations. */
             carbonation_temp_c?: number;
+            /** @description Priming sugar equivalent weight relative to sucrose. */
             priming_sugar_equiv?: number;
+            /** @description Correction factor applied when calculating priming sugar for kegs. */
             keg_priming_factor?: number;
+            /** @description Brew date as a free-form string. */
             date?: string;
             /** @description Default hopstand temperature in °C */
             hopstand_temp_c?: number;
         };
+        /** @description Input for adding a fermentable ingredient to a recipe. */
         CreateFermentableAdditionInput: {
+            /** @description ID of a library fermentable to link; omit for a manually entered addition. */
             fermentable_id?: string;
+            /** @description Fermentable name. */
             name: string;
+            /** @description Grain, Sugar, Extract, Dry Extract, Adjunct */
             type_: string;
+            /** @description Maximum extractable sugar yield as a percentage of dry weight. */
             yield_pct: number;
+            /** @description Color contribution in degrees Lovibond. */
             color_lovibond: number;
+            /** @description Amount of this fermentable in kilograms. */
             amount_kg: number;
+            /** @description When true, this fermentable is added after the boil. */
             add_after_boil?: boolean;
         };
+        /** @description Fields that can be updated on an existing fermentable addition. */
         UpdateFermentableAdditionInput: {
+            /** @description Amount of this fermentable in kilograms. */
             amount_kg?: number;
+            /** @description When true, this fermentable is added after the boil. */
             add_after_boil?: boolean;
+            /** @description Display sort order among fermentable additions on this recipe. */
             addition_order?: number;
         };
+        /** @description Input for adding a hop addition to a recipe. */
         CreateHopAdditionInput: {
+            /** @description ID of a library hop to link; omit for a manually entered addition. */
             hop_id?: string;
+            /** @description Hop variety name. */
             name: string;
+            /** @description Alpha acid percentage used for IBU calculations. */
             alpha_pct: number;
             /** @description Pellet, Plug, Leaf, Cryo, CO2 Extract */
             form?: string;
+            /** @description Amount of this hop addition in kilograms. */
             amount_kg: number;
+            /** @description Boil, Dry Hop, Mash, First Wort, Aroma, Hopstand */
             use_: string;
+            /** @description Addition time; meaning depends on use_. For Boil: minutes remaining in boil. For Dry Hop: days. For others: minutes. */
             time_min: number;
             /** @description Hopstand temperature override for this addition in °C */
             hopstand_temp_c?: number;
         };
+        /** @description Fields that can be updated on an existing hop addition. */
         UpdateHopAdditionInput: {
+            /** @description Amount of this hop addition in kilograms. */
             amount_kg?: number;
+            /** @description Boil, Dry Hop, Mash, First Wort, Aroma, Hopstand */
             use_?: string;
+            /** @description Addition time; meaning depends on use_. For Boil: minutes remaining in boil. For Dry Hop: days. For others: minutes. */
             time_min?: number;
+            /** @description Display sort order among hop additions on this recipe. */
             addition_order?: number;
             /** @description Hopstand temperature override for this addition in °C */
             hopstand_temp_c?: number;
         };
+        /** @description Input for adding a yeast to a recipe. */
         CreateYeastAdditionInput: {
+            /** @description ID of a library yeast to link; omit or null for a manually entered addition. */
             yeast_id?: string | null;
+            /** @description Yeast strain name. */
             name: string;
+            /** @description Ale, Lager, Wheat, Wine, Champagne */
             type_: string;
+            /** @description Liquid, Dry, Slant, Culture */
             form: string;
+            /** @description Yeast laboratory or manufacturer. */
             laboratory?: string | null;
+            /** @description Manufacturer's product identifier. */
             product_id?: string | null;
+            /** @description Expected attenuation percentage for this yeast strain. */
             attenuation_pct?: number | null;
+            /** @description Quantity of yeast pitched; unit depends on amount_is_weight. */
             amount?: number | null;
+            /** @description When true, amount is in grams (dry yeast); when false, amount is in millilitres (liquid yeast). */
             amount_is_weight?: boolean;
+            /** @description When true, yeast is added at secondary fermentation rather than primary. */
             add_to_secondary?: boolean;
+            /** @description Number of times this yeast has been repitched from a previous batch. */
             times_cultured?: number;
         };
+        /** @description Fields that can be updated on an existing yeast addition. */
         UpdateYeastAdditionInput: {
+            /** @description Expected attenuation percentage for this yeast strain. */
             attenuation_pct?: number;
+            /** @description Quantity of yeast pitched; unit depends on amount_is_weight. */
             amount?: number;
+            /** @description When true, amount is in grams (dry yeast); when false, amount is in millilitres (liquid yeast). */
             amount_is_weight?: boolean;
+            /** @description When true, yeast is added at secondary fermentation rather than primary. */
             add_to_secondary?: boolean;
+            /** @description Number of times this yeast has been repitched from a previous batch. */
             times_cultured?: number;
         };
+        /** @description Input for adding a miscellaneous ingredient to a recipe. */
         CreateMiscAdditionInput: {
+            /** @description ID of a library misc ingredient to link; omit for a manually entered addition. */
             misc_id?: string;
+            /** @description Ingredient name. */
             name: string;
+            /** @description Spice, Fining, Water Agent, Herb, Flavor, Other */
             type_: string;
+            /** @description Boil, Mash, Primary, Secondary, Bottling */
             use_: string;
+            /** @description Quantity of this ingredient in the unit specified by the unit field. */
             amount: number;
+            /** @description When true, amounts are measured by weight; when false, by volume. */
             amount_is_weight?: boolean;
+            /** @description Usage time in minutes (meaning depends on use_). */
             time_min: number;
             /** @description Display unit: g, oz, tsp, tbsp, or mL */
             unit: string;
         };
+        /** @description Fields that can be updated on an existing misc addition. */
         UpdateMiscAdditionInput: {
+            /** @description Quantity of this ingredient in the unit specified by the unit field. */
             amount?: number;
+            /** @description When true, amounts are measured by weight; when false, by volume. */
             amount_is_weight?: boolean;
+            /** @description Boil, Mash, Primary, Secondary, Bottling */
             use_?: string;
+            /** @description Usage time in minutes (meaning depends on use_). */
             time_min?: number;
+            /** @description Display sort order among misc additions on this recipe. */
             addition_order?: number;
             /** @description Display unit: g, oz, tsp, tbsp, or mL */
             unit?: string;
         };
+        /** @description Input for adding a water source to a recipe. */
         CreateWaterAdditionInput: {
+            /** @description ID of a library water profile to link; omit to create an unlinked entry. */
             water_id?: string;
+            /** @description Name of the water source (e.g. "RO Water", "Tap Water"). */
             name: string;
+            /** @description Volume of this water source in litres. */
             amount_l: number;
         };
+        /** @description Fields that can be updated on a recipe water source addition. */
         UpdateWaterAdditionInput: {
+            /** @description Updated volume of this water source in litres. */
             amount_l?: number;
         };
+        /** @description Fields that can be updated on an existing mash schedule. */
         UpdateMashInput: {
+            /** @description Mash schedule name. */
             name?: string;
+            /** @description Temperature of the grain before doughing in, in degrees Celsius. */
             grain_temp_c?: number;
+            /** @description Initial mash tun temperature before adding grain, in degrees Celsius. */
             tun_temp_c?: number;
+            /** @description Target sparge water temperature in degrees Celsius. */
             sparge_temp_c?: number;
+            /** @description Target mash pH. */
             ph?: number;
+            /** @description Brewer's notes about this mash schedule. */
             notes?: string;
             /** @description Water-to-grain ratio in litres per kilogram */
             ratio_l_per_kg?: number;
         };
+        /** @description Input for adding a step to a mash schedule. */
         CreateMashStepInput: {
+            /** @description Step name (e.g. "Protein Rest", "Saccharification", "Mash Out"). */
             name: string;
+            /** @description Infusion, Temperature, Decoction */
             type_?: string;
+            /** @description Volume of water to infuse in litres; applicable for Infusion steps. */
             infuse_amount_l?: number;
+            /** @description Target step temperature in degrees Celsius. */
             step_temp_c: number;
+            /** @description Duration of this step in minutes. */
             step_time_min: number;
+            /** @description Time to ramp to step_temp_c from the previous step temperature, in minutes. */
             ramp_time_min?: number;
+            /** @description Temperature at the end of this step in degrees Celsius; used for decoction steps. */
             end_temp_c?: number;
         };
+        /** @description Fields that can be updated on an existing mash step. */
         UpdateMashStepInput: {
+            /** @description Step name. */
             name?: string;
+            /** @description Infusion, Temperature, Decoction */
             type_?: string;
+            /** @description Volume of water to infuse in litres; applicable for Infusion steps. */
             infuse_amount_l?: number;
+            /** @description Target step temperature in degrees Celsius. */
             step_temp_c?: number;
+            /** @description Duration of this step in minutes. */
             step_time_min?: number;
+            /** @description Time to ramp to step_temp_c from the previous step temperature, in minutes. */
             ramp_time_min?: number;
+            /** @description Temperature at the end of this step in degrees Celsius; used for decoction steps. */
             end_temp_c?: number;
         };
+        /** @description Input for creating a new equipment profile. */
         CreateEquipmentProfileInput: {
+            /** @description Equipment profile name. */
             name: string;
+            /** @description Optional notes about this equipment setup. */
             notes?: string;
+            /** @description Pre-boil kettle volume in litres. */
             boil_size_l: number;
+            /** @description Target batch size in litres. */
             batch_size_l: number;
+            /** @description Default boil duration in minutes. */
             boil_time_min?: number;
+            /** @description Boil evaporation rate in litres per hour. */
             evap_rate_l_hr?: number;
+            /** @description Volume lost to trub and chiller in litres. */
             trub_chiller_loss_l?: number;
+            /** @description Volume lost to fermenter trub and yeast cake, in litres. */
             fermenter_loss_l?: number;
+            /** @description Brewhouse efficiency percentage. */
             efficiency_pct: number;
+            /** @description Whether batch_size_l targets the fermenter or the kettle. Enum: 'fermenter' | 'kettle' */
             batch_volume_target?: string;
+            /** @description Volume left in the mash tun after lautering, in litres. */
             mash_tun_loss_l?: number;
+            /** @description Volume that remains in the HLT and cannot be transferred, in litres. */
             hlt_deadspace_l?: number;
+            /** @description Wort volume reduction from boiling temperature to room temperature, as a percentage. */
             cooling_shrinkage_pct?: number;
+            /** @description When true, mash efficiency is calculated from brewhouse efficiency and losses. */
             calc_mash_efficiency?: boolean;
+            /** @description Manual mash efficiency percentage, used when calc_mash_efficiency is false. */
             mash_efficiency_pct?: number;
+            /** @description When true, aroma hop utilization is calculated using the hopstand temperature model. */
             calc_aroma_hop_utilization?: boolean;
+            /** @description Utilization percentage for whirlpool/aroma hop additions. */
             aroma_hop_utilization_pct?: number;
+            /** @description Temperature at which the hopstand is conducted, in Fahrenheit. */
             hopstand_temp_f?: number;
+            /** @description Time wort sits in the whirlpool before chilling, in minutes. */
             whirlpool_time_min?: number;
+            /** @description When true, boil temperature is calculated from altitude. */
             altitude_adjustment?: boolean;
+            /** @description Manual boil temperature in Fahrenheit, used when altitude_adjustment is false. */
             boil_temp_f?: number;
+            /** @description Mash/sparge water calculation method. Enum: 'no_sparge' | 'batch_sparge' | 'fly_sparge' */
             sparge_method?: string;
+            /** @description Minimum mash tun volume in litres. */
             mash_volume_min_l?: number;
+            /** @description Maximum mash tun volume in litres. */
             mash_volume_max_l?: number;
+            /** @description Minimum sparge water volume in litres. */
             sparge_volume_min_l?: number;
+            /** @description Maximum sparge water volume in litres. */
             sparge_volume_max_l?: number;
+            /** @description When true, strike water temperature is calculated from tun thermal mass and grain/room temperature. */
             calc_strike_water_temp?: boolean;
+            /** @description Thermal mass of mash tun expressed as litres of equivalent water volume (0 = pre-heated tun). */
             tun_heat_capacity_l?: number;
+            /** @description Volume of water absorbed per kg of grain, in litres/kg. */
             grain_absorption_rate_l_per_kg?: number;
+            /** @description Target mash water-to-grain ratio, in litres/kg. */
             water_grain_ratio_l_per_kg?: number;
+            /** @description When true, grain displacement is included when checking mash volume limits. */
             include_grain_volume_in_mash_limits?: boolean;
+            /** @description Where to redirect overflow when mash volume limits are exceeded. Enum: 'mash' | 'sparge' | 'hlt' */
             overflow_target?: string;
+            /** @description Minimum HLT water volume in litres. */
             hlt_water_limit_min_l?: number;
+            /** @description Ambient room temperature for strike water calculation, in Fahrenheit. */
             room_temp_f?: number;
+            /** @description Grain temperature for strike water calculation, in Fahrenheit. */
             grain_temp_f?: number;
+            /** @description Target sparge water temperature in Fahrenheit. */
             sparge_temp_f?: number;
         };
+        /** @description Fields that can be updated on an existing equipment profile. */
         UpdateEquipmentProfileInput: {
+            /** @description Equipment profile name. */
             name?: string;
+            /** @description Optional notes about this equipment setup. */
             notes?: string;
+            /** @description Pre-boil kettle volume in litres. */
             boil_size_l?: number;
+            /** @description Target batch size in litres. */
             batch_size_l?: number;
+            /** @description Default boil duration in minutes. */
             boil_time_min?: number;
+            /** @description Boil evaporation rate in litres per hour. */
             evap_rate_l_hr?: number;
+            /** @description Volume lost to trub and chiller in litres. */
             trub_chiller_loss_l?: number;
+            /** @description Volume lost to fermenter trub and yeast cake, in litres. */
             fermenter_loss_l?: number;
+            /** @description Brewhouse efficiency percentage. */
             efficiency_pct?: number;
+            /** @description Whether batch_size_l targets the fermenter or the kettle. Enum: 'fermenter' | 'kettle' */
             batch_volume_target?: string;
+            /** @description Volume left in the mash tun after lautering, in litres. */
             mash_tun_loss_l?: number;
+            /** @description Volume that remains in the HLT and cannot be transferred, in litres. */
             hlt_deadspace_l?: number;
+            /** @description Wort volume reduction from boiling temperature to room temperature, as a percentage. */
             cooling_shrinkage_pct?: number;
+            /** @description When true, mash efficiency is calculated from brewhouse efficiency and losses. */
             calc_mash_efficiency?: boolean;
+            /** @description Manual mash efficiency percentage, used when calc_mash_efficiency is false. */
             mash_efficiency_pct?: number;
+            /** @description When true, aroma hop utilization is calculated using the hopstand temperature model. */
             calc_aroma_hop_utilization?: boolean;
+            /** @description Utilization percentage for whirlpool/aroma hop additions. */
             aroma_hop_utilization_pct?: number;
+            /** @description Temperature at which the hopstand is conducted, in Fahrenheit. */
             hopstand_temp_f?: number;
+            /** @description Time wort sits in the whirlpool before chilling, in minutes. */
             whirlpool_time_min?: number;
+            /** @description When true, boil temperature is calculated from altitude. */
             altitude_adjustment?: boolean;
+            /** @description Manual boil temperature in Fahrenheit, used when altitude_adjustment is false. */
             boil_temp_f?: number;
+            /** @description Mash/sparge water calculation method. Enum: 'no_sparge' | 'batch_sparge' | 'fly_sparge' */
             sparge_method?: string;
+            /** @description Minimum mash tun volume in litres. */
             mash_volume_min_l?: number;
+            /** @description Maximum mash tun volume in litres. */
             mash_volume_max_l?: number;
+            /** @description Minimum sparge water volume in litres. */
             sparge_volume_min_l?: number;
+            /** @description Maximum sparge water volume in litres. */
             sparge_volume_max_l?: number;
+            /** @description When true, strike water temperature is calculated from tun thermal mass and grain/room temperature. */
             calc_strike_water_temp?: boolean;
+            /** @description Thermal mass of mash tun expressed as litres of equivalent water volume (0 = pre-heated tun). */
             tun_heat_capacity_l?: number;
+            /** @description Volume of water absorbed per kg of grain, in litres/kg. */
             grain_absorption_rate_l_per_kg?: number;
+            /** @description Target mash water-to-grain ratio, in litres/kg. */
             water_grain_ratio_l_per_kg?: number;
+            /** @description When true, grain displacement is included when checking mash volume limits. */
             include_grain_volume_in_mash_limits?: boolean;
+            /** @description Where to redirect overflow when mash volume limits are exceeded. Enum: 'mash' | 'sparge' | 'hlt' */
             overflow_target?: string;
+            /** @description Minimum HLT water volume in litres. */
             hlt_water_limit_min_l?: number;
+            /** @description Ambient room temperature for strike water calculation, in Fahrenheit. */
             room_temp_f?: number;
+            /** @description Grain temperature for strike water calculation, in Fahrenheit. */
             grain_temp_f?: number;
+            /** @description Target sparge water temperature in Fahrenheit. */
             sparge_temp_f?: number;
         };
+        /** @description Summary of a saved recipe version snapshot. */
         RecipeVersionSummary: {
+            /** @description Unique version identifier. */
             id: string;
+            /** @description ID of the parent recipe. */
             recipe_id: string;
+            /** @description Sequential version number within the recipe. */
             version_number: number;
+            /** @description Optional human-readable label for this version. */
             name?: string | null;
+            /** @description ID of the version this one was branched from; null for the root version. */
             parent_version_id?: string | null;
-            /** Format: int64 */
+            /**
+             * Format: int64
+             * @description Unix timestamp in milliseconds when this version was saved.
+             */
             created_at: number;
         };
+        /** @description Input for saving a named snapshot of a recipe's current state. */
         SaveRecipeVersionInput: {
+            /** @description ID of the recipe to snapshot. */
             recipe_id: string;
+            /** @description Human-readable label for this version (e.g. "Pre-competition tweak"). */
             name: string;
         };
+        /** @description A single hydrometer or refractometer gravity reading taken during a brew batch. */
         GravityReading: {
+            /** @description Unique gravity reading identifier. */
             id: string;
+            /** @description ID of the batch this reading belongs to. */
             batch_id: string;
-            /** Format: int64 */
+            /**
+             * Format: int64
+             * @description Unix timestamp in milliseconds when the reading was taken.
+             */
             recorded_at: number;
+            /** @description Specific gravity measurement (e.g. 1.050). */
             gravity: number;
+            /** @description Sample temperature in degrees Celsius, used for temperature-corrected readings. */
             temp_c?: number | null;
+            /** @description Optional brewer notes for this reading. */
             notes?: string | null;
         };
+        /** @description Lightweight summary of a brew batch for list views. */
         BatchSummary: {
+            /** @description Unique batch identifier. */
             id: string;
+            /** @description ID of the recipe this batch is based on. */
             recipe_id: string;
+            /** @description Name of the recipe at the time the batch was created. */
             recipe_name: string;
+            /** @description ID of the recipe version this batch was brewed from. */
             recipe_version_id: string;
+            /** @description Optional user-given name for this batch. */
             name?: string | null;
             /** @description planned | brewing | fermenting | packaged */
             status: string;
-            /** Format: int64 */
+            /**
+             * Format: int64
+             * @description Unix timestamp in milliseconds of brew day.
+             */
             brew_date?: number | null;
+            /** @description Measured original gravity at the start of fermentation. */
             actual_og?: number | null;
+            /** @description Measured final gravity after fermentation. */
             actual_fg?: number | null;
+            /** @description User rating for this batch (e.g. 1–5). */
             rating?: number | null;
-            /** Format: int64 */
+            /**
+             * Format: int64
+             * @description Unix timestamp in milliseconds when the batch was created.
+             */
             created_at: number;
-            /** Format: int64 */
+            /**
+             * Format: int64
+             * @description Unix timestamp in milliseconds when the batch was last updated.
+             */
             updated_at: number;
         };
+        /** @description A brew session (batch) tracking the progression of a recipe from planning through packaging. */
         Batch: {
+            /** @description Unique batch identifier. */
             id: string;
+            /** @description ID of the recipe this batch is based on. */
             recipe_id: string;
+            /** @description Name of the recipe at the time the batch was created. */
             recipe_name: string;
+            /** @description ID of the recipe version this batch was brewed from. */
             recipe_version_id: string;
+            /** @description Optional user-given name for this batch (e.g. "Batch */
             name?: string | null;
             /** @description planned | brewing | fermenting | packaged */
             status: string;
-            /** Format: int64 */
+            /**
+             * Format: int64
+             * @description Unix timestamp in milliseconds of brew day.
+             */
             brew_date?: number | null;
-            /** Format: int64 */
+            /**
+             * Format: int64
+             * @description Unix timestamp in milliseconds when the wort was transferred to the fermenter.
+             */
             fermenter_date?: number | null;
-            /** Format: int64 */
+            /**
+             * Format: int64
+             * @description Unix timestamp in milliseconds when conditioning began.
+             */
             conditioning_date?: number | null;
-            /** Format: int64 */
+            /**
+             * Format: int64
+             * @description Unix timestamp in milliseconds when the batch was packaged.
+             */
             packaging_date?: number | null;
+            /** @description Measured pre-boil wort volume in litres. */
             actual_pre_boil_volume_l?: number | null;
+            /** @description Measured post-boil wort volume in litres. */
             actual_post_boil_volume_l?: number | null;
+            /** @description Measured volume transferred to the fermenter in litres. */
             actual_batch_size_l?: number | null;
+            /** @description Measured pre-boil specific gravity. */
             actual_pre_boil_gravity?: number | null;
+            /** @description Measured original gravity at the start of fermentation. */
             actual_og?: number | null;
+            /** @description Measured final gravity after fermentation. */
             actual_fg?: number | null;
+            /** @description Brewer's notes for this batch. */
             notes?: string | null;
+            /** @description User rating for this batch (e.g. 1–5). */
             rating?: number | null;
             /** @description Planned OG from recipe stats */
             planned_og?: number | null;
@@ -2166,223 +2706,415 @@ export interface components {
             planned_post_boil_volume_l?: number | null;
             /** @description Planned batch size from recipe */
             planned_batch_size_l?: number | null;
+            /** @description Temperature at packaging in degrees Celsius, used for priming sugar calculations. */
             packaging_temp_c?: number | null;
+            /** @description Type of priming sugar used for carbonation (e.g. "Corn Sugar", "Table Sugar"). */
             carbonation_sugar_type?: string | null;
+            /** @description Amount of priming sugar added at packaging in grams. */
             priming_sugar_g?: number | null;
+            /** @description Serving pressure for kegged beer in kilopascals. */
             serving_pressure_kpa?: number | null;
+            /** @description Hydrometer or refractometer readings taken during fermentation. */
             gravity_readings: components["schemas"]["GravityReading"][];
-            /** Format: int64 */
+            /**
+             * Format: int64
+             * @description Unix timestamp in milliseconds when the batch was created.
+             */
             created_at: number;
-            /** Format: int64 */
+            /**
+             * Format: int64
+             * @description Unix timestamp in milliseconds when the batch was last updated.
+             */
             updated_at: number;
         };
+        /** @description Input for creating a new brew batch from a recipe. */
         CreateBatchInput: {
+            /** @description ID of the recipe to brew. */
             recipe_id: string;
+            /** @description Optional user-given name for this batch. */
             name?: string | null;
+            /** @description ID of a specific recipe version to brew; defaults to the current state if omitted. */
             version_id?: string | null;
         };
+        /** @description Fields that can be updated on an existing brew batch. All fields are optional; only provided fields are changed. */
         UpdateBatchInput: {
+            /** @description User-given name for this batch. */
             name?: string | null;
+            /** @description planned | brewing | fermenting | packaged */
             status?: string | null;
+            /** @description Unix timestamp in milliseconds of brew day. */
             brew_date?: number | null;
+            /** @description Unix timestamp in milliseconds when the wort was transferred to the fermenter. */
             fermenter_date?: number | null;
+            /** @description Unix timestamp in milliseconds when conditioning began. */
             conditioning_date?: number | null;
+            /** @description Unix timestamp in milliseconds when the batch was packaged. */
             packaging_date?: number | null;
+            /** @description Measured pre-boil wort volume in litres. */
             actual_pre_boil_volume_l?: number | null;
+            /** @description Measured post-boil wort volume in litres. */
             actual_post_boil_volume_l?: number | null;
+            /** @description Measured volume transferred to the fermenter in litres. */
             actual_batch_size_l?: number | null;
+            /** @description Measured pre-boil specific gravity. */
             actual_pre_boil_gravity?: number | null;
+            /** @description Measured original gravity at the start of fermentation. */
             actual_og?: number | null;
+            /** @description Measured final gravity after fermentation. */
             actual_fg?: number | null;
+            /** @description Brewer's notes for this batch. */
             notes?: string | null;
+            /** @description User rating for this batch (e.g. 1–5). */
             rating?: number | null;
+            /** @description Temperature at packaging in degrees Celsius, used for priming sugar calculations. */
             packaging_temp_c?: number | null;
+            /** @description Type of priming sugar used for carbonation (e.g. "Corn Sugar", "Table Sugar"). */
             carbonation_sugar_type?: string | null;
+            /** @description Amount of priming sugar added at packaging in grams. */
             priming_sugar_g?: number | null;
+            /** @description Serving pressure for kegged beer in kilopascals. */
             serving_pressure_kpa?: number | null;
         };
+        /** @description Input for recording a gravity reading during fermentation. */
         CreateGravityReadingInput: {
+            /** @description Unix timestamp in milliseconds when the reading was taken. */
             recorded_at: number;
+            /** @description Specific gravity measurement (e.g. 1.050). */
             gravity: number;
+            /** @description Sample temperature in degrees Celsius, used for temperature-corrected readings. */
             temp_c?: number | null;
+            /** @description Optional brewer notes for this reading. */
             notes?: string | null;
         };
+        /** @description A file attachment associated with a brew batch (e.g. a brew-day photo). */
         BatchAttachment: {
+            /** @description Unique attachment identifier. */
             id: string;
+            /** @description ID of the batch this attachment belongs to. */
             batch_id: string;
             /** @description UUID-based on-disk filename, e.g. "a1b2c3d4.jpg" */
             filename: string;
             /** @description User-facing display name, e.g. "brew-day.jpg" */
             original_name: string;
+            /** @description MIME type of the file, e.g. "image/jpeg". */
             mime_type?: string | null;
-            /** Format: int64 */
+            /**
+             * Format: int64
+             * @description File size in bytes.
+             */
             size_bytes: number;
-            /** Format: int64 */
+            /**
+             * Format: int64
+             * @description Unix timestamp in milliseconds when the attachment was added.
+             */
             created_at: number;
         };
+        /** @description Input for creating a new hop variety in the library. */
         CreateHopInput: {
+            /** @description Hop variety name (e.g. "Centennial", "Saaz"). */
             name: string;
+            /** @description ID of the seeded hop this entry is forked from, or null if original. */
             forked_from_id?: string | null;
+            /** @description Alpha acid percentage, used for IBU calculations. */
             alpha_pct: number;
+            /** @description Beta acid percentage. */
             beta_pct?: number | null;
             /** @description Pellet, Plug, Leaf, Cryo, CO2 Extract */
             form: string;
+            /** @description Bittering, Aroma, Both */
             type_?: string | null;
+            /** @description Country or region of origin. */
             origin?: string | null;
+            /** @description Harvest year for this batch of hops. */
             year?: string | null;
+            /** @description Brewer's notes about this hop variety. */
             notes?: string | null;
+            /** @description Suggested substitute varieties, comma-separated. */
             substitutes?: string | null;
+            /** @description Hop Storage Index; indicates freshness degradation rate as a percentage. */
             hsi_pct?: number | null;
+            /** @description Humulene oil content as a percentage of total oils. */
             humulene_pct?: number | null;
+            /** @description Caryophyllene oil content as a percentage of total oils. */
             caryophyllene_pct?: number | null;
+            /** @description Cohumulone content as a percentage of alpha acids; higher values produce harsher bitterness. */
             cohumulone_pct?: number | null;
+            /** @description Myrcene oil content as a percentage of total oils. */
             myrcene_pct?: number | null;
         };
+        /** @description Fields that can be updated on an existing library hop variety. */
         UpdateHopInput: {
+            /** @description Hop variety name. */
             name?: string;
+            /** @description Alpha acid percentage, used for IBU calculations. */
             alpha_pct?: number;
+            /** @description Beta acid percentage. */
             beta_pct?: number | null;
+            /** @description Pellet, Plug, Leaf, Cryo, CO2 Extract */
             form?: string;
+            /** @description Bittering, Aroma, Both */
             type_?: string | null;
+            /** @description Country or region of origin. */
             origin?: string | null;
+            /** @description Harvest year for this batch of hops. */
             year?: string | null;
+            /** @description Brewer's notes about this hop variety. */
             notes?: string | null;
+            /** @description Suggested substitute varieties, comma-separated. */
             substitutes?: string | null;
+            /** @description Hop Storage Index; indicates freshness degradation rate as a percentage. */
             hsi_pct?: number | null;
+            /** @description Humulene oil content as a percentage of total oils. */
             humulene_pct?: number | null;
+            /** @description Caryophyllene oil content as a percentage of total oils. */
             caryophyllene_pct?: number | null;
+            /** @description Cohumulone content as a percentage of alpha acids; higher values produce harsher bitterness. */
             cohumulone_pct?: number | null;
+            /** @description Myrcene oil content as a percentage of total oils. */
             myrcene_pct?: number | null;
         };
+        /** @description Input for creating a new fermentable in the library. */
         CreateFermentableInput: {
+            /** @description Fermentable name (e.g. "Pale Malt 2-Row", "Corn Sugar"). */
             name: string;
+            /** @description ID of the seeded fermentable this entry is forked from, or null if original. */
             forked_from_id?: string | null;
             /** @description Grain, Sugar, Extract, Dry Extract, Adjunct */
             type_: string;
+            /** @description Maximum extractable sugar yield as a percentage of dry weight. */
             yield_pct: number;
+            /** @description Color contribution in degrees Lovibond. */
             color_lovibond: number;
+            /** @description Country or region of origin. */
             origin?: string | null;
+            /** @description Maltster or supplier name. */
             supplier?: string | null;
+            /** @description Brewer's notes about this fermentable. */
             notes?: string | null;
+            /** @description When true, this fermentable is added after the boil. */
             add_after_boil: boolean;
+            /** @description Difference between coarse and fine grind extract yield, as a percentage. */
             coarse_fine_diff_pct?: number | null;
+            /** @description Moisture content of the grain as a percentage. */
             moisture_pct?: number | null;
+            /** @description Enzymatic activity in degrees Lintner; indicates mash conversion ability. */
             diastatic_power_lintner?: number | null;
+            /** @description Total protein content as a percentage. */
             protein_pct?: number | null;
+            /** @description Recommended maximum usage as a percentage of total grain bill. */
             max_in_batch_pct?: number | null;
+            /** @description When true, this fermentable requires mashing rather than steeping. */
             recommend_mash?: boolean | null;
+            /** @description Bitterness contribution in IBU per gallon per pound; used for adjuncts like black malt. */
             ibu_gal_per_lb?: number | null;
         };
+        /** @description Fields that can be updated on an existing library fermentable. */
         UpdateFermentableInput: {
+            /** @description Fermentable name. */
             name?: string;
+            /** @description Grain, Sugar, Extract, Dry Extract, Adjunct */
             type_?: string;
+            /** @description Maximum extractable sugar yield as a percentage of dry weight. */
             yield_pct?: number;
+            /** @description Color contribution in degrees Lovibond. */
             color_lovibond?: number;
+            /** @description Country or region of origin. */
             origin?: string | null;
+            /** @description Maltster or supplier name. */
             supplier?: string | null;
+            /** @description Brewer's notes about this fermentable. */
             notes?: string | null;
+            /** @description When true, this fermentable is added after the boil. */
             add_after_boil?: boolean;
+            /** @description Difference between coarse and fine grind extract yield, as a percentage. */
             coarse_fine_diff_pct?: number | null;
+            /** @description Moisture content of the grain as a percentage. */
             moisture_pct?: number | null;
+            /** @description Enzymatic activity in degrees Lintner; indicates mash conversion ability. */
             diastatic_power_lintner?: number | null;
+            /** @description Total protein content as a percentage. */
             protein_pct?: number | null;
+            /** @description Recommended maximum usage as a percentage of total grain bill. */
             max_in_batch_pct?: number | null;
+            /** @description When true, this fermentable requires mashing rather than steeping. */
             recommend_mash?: boolean | null;
+            /** @description Bitterness contribution in IBU per gallon per pound; used for adjuncts like black malt. */
             ibu_gal_per_lb?: number | null;
         };
+        /** @description Input for creating a new yeast strain in the library. */
         CreateYeastInput: {
+            /** @description Yeast strain name. */
             name: string;
+            /** @description ID of the seeded yeast this entry is forked from, or null if original. */
             forked_from_id?: string | null;
             /** @description Ale, Lager, Wheat, Wine, Champagne */
             type_: string;
             /** @description Liquid, Dry, Slant, Culture */
             form: string;
+            /** @description Yeast laboratory or manufacturer. */
             laboratory?: string | null;
+            /** @description Manufacturer's product identifier. */
             product_id?: string | null;
+            /** @description Minimum recommended fermentation temperature in degrees Celsius. */
             min_temperature_c?: number | null;
+            /** @description Maximum recommended fermentation temperature in degrees Celsius. */
             max_temperature_c?: number | null;
+            /** @description Low, Medium, High, Very High */
             flocculation?: string | null;
+            /** @description BeerXML single attenuation value; see min/max fields for range. */
             attenuation_pct?: number | null;
+            /** @description Attenuation range lower bound. */
             min_attenuation_pct?: number | null;
+            /** @description Attenuation range upper bound. */
             max_attenuation_pct?: number | null;
+            /** @description low, medium, high, very_high */
             alcohol_tolerance?: string | null;
+            /** @description Flavor and aroma characteristics of this yeast strain. */
             flavor_profile?: string | null;
+            /** @description Suitable beer styles, comma-separated. */
             styles?: string | null;
+            /** @description Substitute yeast strains, comma-separated. */
             substitutes?: string | null;
+            /** @description e.g. Saccharomyces cerevisiae */
             species?: string | null;
+            /** @description Phenolic Off-Flavor gene present. */
             pof_positive?: boolean | null;
+            /** @description STA-1 dextrin-fermenting gene present. */
             sta1_positive?: boolean | null;
+            /** @description Brewer's notes about this yeast strain. */
             notes?: string | null;
+            /** @description Beer styles this yeast is best suited for. */
             best_for?: string | null;
+            /** @description Maximum number of times this yeast can be repitched. */
             max_reuse?: number | null;
+            /** @description When true, yeast is added at secondary fermentation rather than primary. */
             add_to_secondary: boolean;
         };
+        /** @description Fields that can be updated on an existing library yeast strain. */
         UpdateYeastInput: {
+            /** @description Yeast strain name. */
             name?: string;
+            /** @description Ale, Lager, Wheat, Wine, Champagne */
             type_?: string;
+            /** @description Liquid, Dry, Slant, Culture */
             form?: string;
+            /** @description Yeast laboratory or manufacturer. */
             laboratory?: string | null;
+            /** @description Manufacturer's product identifier. */
             product_id?: string | null;
+            /** @description Minimum recommended fermentation temperature in degrees Celsius. */
             min_temperature_c?: number | null;
+            /** @description Maximum recommended fermentation temperature in degrees Celsius. */
             max_temperature_c?: number | null;
+            /** @description Low, Medium, High, Very High */
             flocculation?: string | null;
+            /** @description BeerXML single attenuation value; see min/max fields for range. */
             attenuation_pct?: number | null;
+            /** @description Attenuation range lower bound. */
             min_attenuation_pct?: number | null;
+            /** @description Attenuation range upper bound. */
             max_attenuation_pct?: number | null;
+            /** @description low, medium, high, very_high */
             alcohol_tolerance?: string | null;
+            /** @description Flavor and aroma characteristics of this yeast strain. */
             flavor_profile?: string | null;
+            /** @description Suitable beer styles, comma-separated. */
             styles?: string | null;
+            /** @description Substitute yeast strains, comma-separated. */
             substitutes?: string | null;
+            /** @description e.g. Saccharomyces cerevisiae */
             species?: string | null;
+            /** @description Phenolic Off-Flavor gene present. */
             pof_positive?: boolean | null;
+            /** @description STA-1 dextrin-fermenting gene present. */
             sta1_positive?: boolean | null;
+            /** @description Brewer's notes about this yeast strain. */
             notes?: string | null;
+            /** @description Beer styles this yeast is best suited for. */
             best_for?: string | null;
+            /** @description Maximum number of times this yeast can be repitched. */
             max_reuse?: number | null;
+            /** @description When true, yeast is added at secondary fermentation rather than primary. */
             add_to_secondary?: boolean;
         };
+        /** @description Input for creating a new miscellaneous ingredient in the library. */
         CreateMiscInput: {
+            /** @description Ingredient name (e.g. "Irish Moss", "Whirlfloc", "Coriander Seed"). */
             name: string;
+            /** @description ID of the seeded misc ingredient this entry is forked from, or null if original. */
             forked_from_id?: string | null;
             /** @description Spice, Fining, Water Agent, Herb, Flavor, Other */
             type_: string;
             /** @description Boil, Mash, Primary, Secondary, Bottling */
             use_: string;
+            /** @description Default usage time in minutes. */
             time_min: number;
+            /** @description Brewer's notes about this ingredient. */
             notes?: string | null;
+            /** @description Description of the purpose or effect of this ingredient. */
             use_for?: string | null;
+            /** @description When true, amounts are measured by weight (grams); when false, by volume (millilitres). */
             amount_is_weight: boolean;
         };
+        /** @description Fields that can be updated on an existing library misc ingredient. */
         UpdateMiscInput: {
+            /** @description Ingredient name. */
             name?: string;
+            /** @description Spice, Fining, Water Agent, Herb, Flavor, Other */
             type_?: string;
+            /** @description Boil, Mash, Primary, Secondary, Bottling */
             use_?: string;
+            /** @description Default usage time in minutes. */
             time_min?: number;
+            /** @description Brewer's notes about this ingredient. */
             notes?: string | null;
+            /** @description Description of the purpose or effect of this ingredient. */
             use_for?: string | null;
+            /** @description When true, amounts are measured by weight (grams); when false, by volume (millilitres). */
             amount_is_weight?: boolean;
         };
+        /** @description Input for creating a new water source profile in the library. */
         CreateWaterInput: {
+            /** @description Water source name (e.g. "London", "Pilsen", "RO Water"). */
             name: string;
+            /** @description ID of the seeded water profile this entry is forked from, or null if original. */
             forked_from_id?: string | null;
+            /** @description Calcium concentration in parts per million (mg/L). */
             calcium_ppm: number;
+            /** @description Bicarbonate (alkalinity) concentration in parts per million (mg/L). */
             bicarbonate_ppm: number;
+            /** @description Sulfate concentration in parts per million (mg/L). */
             sulfate_ppm: number;
+            /** @description Chloride concentration in parts per million (mg/L). */
             chloride_ppm: number;
+            /** @description Sodium concentration in parts per million (mg/L). */
             sodium_ppm: number;
+            /** @description Magnesium concentration in parts per million (mg/L). */
             magnesium_ppm: number;
+            /** @description Source water pH. */
             ph?: number | null;
+            /** @description Notes about this water source. */
             notes?: string | null;
         };
+        /** @description Fields that can be updated on an existing library water source profile. */
         UpdateWaterInput: {
+            /** @description Water source name. */
             name?: string;
+            /** @description Calcium concentration in parts per million (mg/L). */
             calcium_ppm?: number;
+            /** @description Bicarbonate (alkalinity) concentration in parts per million (mg/L). */
             bicarbonate_ppm?: number;
+            /** @description Sulfate concentration in parts per million (mg/L). */
             sulfate_ppm?: number;
+            /** @description Chloride concentration in parts per million (mg/L). */
             chloride_ppm?: number;
+            /** @description Sodium concentration in parts per million (mg/L). */
             sodium_ppm?: number;
+            /** @description Magnesium concentration in parts per million (mg/L). */
             magnesium_ppm?: number;
+            /** @description Source water pH. */
             ph?: number | null;
+            /** @description Notes about this water source. */
             notes?: string | null;
         };
     };

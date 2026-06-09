@@ -29,12 +29,13 @@ pub mod error {
         }
     }
 }
-#[doc = "`Batch`"]
+#[doc = "A brew session (batch) tracking the progression of a recipe from planning through packaging."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"A brew session (batch) tracking the progression of a recipe from planning through packaging.\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"required\": ["]
 #[doc = "    \"created_at\","]
@@ -48,42 +49,49 @@ pub mod error {
 #[doc = "  ],"]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"actual_batch_size_l\": {"]
+#[doc = "      \"description\": \"Measured volume transferred to the fermenter in litres.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"actual_fg\": {"]
+#[doc = "      \"description\": \"Measured final gravity after fermentation.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"actual_og\": {"]
+#[doc = "      \"description\": \"Measured original gravity at the start of fermentation.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"actual_post_boil_volume_l\": {"]
+#[doc = "      \"description\": \"Measured post-boil wort volume in litres.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"actual_pre_boil_gravity\": {"]
+#[doc = "      \"description\": \"Measured pre-boil specific gravity.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"actual_pre_boil_volume_l\": {"]
+#[doc = "      \"description\": \"Measured pre-boil wort volume in litres.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"brew_date\": {"]
+#[doc = "      \"description\": \"Unix timestamp in milliseconds of brew day.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"integer\","]
 #[doc = "        \"null\""]
@@ -91,12 +99,14 @@ pub mod error {
 #[doc = "      \"format\": \"int64\""]
 #[doc = "    },"]
 #[doc = "    \"carbonation_sugar_type\": {"]
+#[doc = "      \"description\": \"Type of priming sugar used for carbonation (e.g. \\\"Corn Sugar\\\", \\\"Table Sugar\\\").\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"conditioning_date\": {"]
+#[doc = "      \"description\": \"Unix timestamp in milliseconds when conditioning began.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"integer\","]
 #[doc = "        \"null\""]
@@ -104,10 +114,12 @@ pub mod error {
 #[doc = "      \"format\": \"int64\""]
 #[doc = "    },"]
 #[doc = "    \"created_at\": {"]
+#[doc = "      \"description\": \"Unix timestamp in milliseconds when the batch was created.\","]
 #[doc = "      \"type\": \"integer\","]
 #[doc = "      \"format\": \"int64\""]
 #[doc = "    },"]
 #[doc = "    \"fermenter_date\": {"]
+#[doc = "      \"description\": \"Unix timestamp in milliseconds when the wort was transferred to the fermenter.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"integer\","]
 #[doc = "        \"null\""]
@@ -115,27 +127,32 @@ pub mod error {
 #[doc = "      \"format\": \"int64\""]
 #[doc = "    },"]
 #[doc = "    \"gravity_readings\": {"]
+#[doc = "      \"description\": \"Hydrometer or refractometer readings taken during fermentation.\","]
 #[doc = "      \"type\": \"array\","]
 #[doc = "      \"items\": {"]
 #[doc = "        \"$ref\": \"#/components/schemas/GravityReading\""]
 #[doc = "      }"]
 #[doc = "    },"]
 #[doc = "    \"id\": {"]
+#[doc = "      \"description\": \"Unique batch identifier.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"name\": {"]
+#[doc = "      \"description\": \"Optional user-given name for this batch (e.g. \\\"Batch\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"notes\": {"]
+#[doc = "      \"description\": \"Brewer's notes for this batch.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"packaging_date\": {"]
+#[doc = "      \"description\": \"Unix timestamp in milliseconds when the batch was packaged.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"integer\","]
 #[doc = "        \"null\""]
@@ -143,6 +160,7 @@ pub mod error {
 #[doc = "      \"format\": \"int64\""]
 #[doc = "    },"]
 #[doc = "    \"packaging_temp_c\": {"]
+#[doc = "      \"description\": \"Temperature at packaging in degrees Celsius, used for priming sugar calculations.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
@@ -184,27 +202,33 @@ pub mod error {
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"priming_sugar_g\": {"]
+#[doc = "      \"description\": \"Amount of priming sugar added at packaging in grams.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"rating\": {"]
+#[doc = "      \"description\": \"User rating for this batch (e.g. 1–5).\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"integer\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"recipe_id\": {"]
+#[doc = "      \"description\": \"ID of the recipe this batch is based on.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"recipe_name\": {"]
+#[doc = "      \"description\": \"Name of the recipe at the time the batch was created.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"recipe_version_id\": {"]
+#[doc = "      \"description\": \"ID of the recipe version this batch was brewed from.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"serving_pressure_kpa\": {"]
+#[doc = "      \"description\": \"Serving pressure for kegged beer in kilopascals.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
@@ -215,6 +239,7 @@ pub mod error {
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"updated_at\": {"]
+#[doc = "      \"description\": \"Unix timestamp in milliseconds when the batch was last updated.\","]
 #[doc = "      \"type\": \"integer\","]
 #[doc = "      \"format\": \"int64\""]
 #[doc = "    }"]
@@ -224,35 +249,52 @@ pub mod error {
 #[doc = r" </details>"]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
 pub struct Batch {
+    #[doc = "Measured volume transferred to the fermenter in litres."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub actual_batch_size_l: ::std::option::Option<f64>,
+    #[doc = "Measured final gravity after fermentation."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub actual_fg: ::std::option::Option<f64>,
+    #[doc = "Measured original gravity at the start of fermentation."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub actual_og: ::std::option::Option<f64>,
+    #[doc = "Measured post-boil wort volume in litres."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub actual_post_boil_volume_l: ::std::option::Option<f64>,
+    #[doc = "Measured pre-boil specific gravity."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub actual_pre_boil_gravity: ::std::option::Option<f64>,
+    #[doc = "Measured pre-boil wort volume in litres."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub actual_pre_boil_volume_l: ::std::option::Option<f64>,
+    #[doc = "Unix timestamp in milliseconds of brew day."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub brew_date: ::std::option::Option<i64>,
+    #[doc = "Type of priming sugar used for carbonation (e.g. \"Corn Sugar\", \"Table Sugar\")."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub carbonation_sugar_type: ::std::option::Option<::std::string::String>,
+    #[doc = "Unix timestamp in milliseconds when conditioning began."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub conditioning_date: ::std::option::Option<i64>,
+    #[doc = "Unix timestamp in milliseconds when the batch was created."]
     pub created_at: i64,
+    #[doc = "Unix timestamp in milliseconds when the wort was transferred to the fermenter."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub fermenter_date: ::std::option::Option<i64>,
+    #[doc = "Hydrometer or refractometer readings taken during fermentation."]
     pub gravity_readings: ::std::vec::Vec<GravityReading>,
+    #[doc = "Unique batch identifier."]
     pub id: ::std::string::String,
+    #[doc = "Optional user-given name for this batch (e.g. \"Batch"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub name: ::std::option::Option<::std::string::String>,
+    #[doc = "Brewer's notes for this batch."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub notes: ::std::option::Option<::std::string::String>,
+    #[doc = "Unix timestamp in milliseconds when the batch was packaged."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub packaging_date: ::std::option::Option<i64>,
+    #[doc = "Temperature at packaging in degrees Celsius, used for priming sugar calculations."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub packaging_temp_c: ::std::option::Option<f64>,
     #[doc = "Planned batch size from recipe"]
@@ -270,17 +312,24 @@ pub struct Batch {
     #[doc = "Planned pre-boil gravity from recipe stats"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub planned_pre_boil_gravity: ::std::option::Option<f64>,
+    #[doc = "Amount of priming sugar added at packaging in grams."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub priming_sugar_g: ::std::option::Option<f64>,
+    #[doc = "User rating for this batch (e.g. 1–5)."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub rating: ::std::option::Option<i64>,
+    #[doc = "ID of the recipe this batch is based on."]
     pub recipe_id: ::std::string::String,
+    #[doc = "Name of the recipe at the time the batch was created."]
     pub recipe_name: ::std::string::String,
+    #[doc = "ID of the recipe version this batch was brewed from."]
     pub recipe_version_id: ::std::string::String,
+    #[doc = "Serving pressure for kegged beer in kilopascals."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub serving_pressure_kpa: ::std::option::Option<f64>,
     #[doc = "planned | brewing | fermenting | packaged"]
     pub status: ::std::string::String,
+    #[doc = "Unix timestamp in milliseconds when the batch was last updated."]
     pub updated_at: i64,
 }
 impl Batch {
@@ -288,12 +337,13 @@ impl Batch {
         Default::default()
     }
 }
-#[doc = "`BatchAttachment`"]
+#[doc = "A file attachment associated with a brew batch (e.g. a brew-day photo)."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"A file attachment associated with a brew batch (e.g. a brew-day photo).\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"required\": ["]
 #[doc = "    \"batch_id\","]
@@ -305,9 +355,11 @@ impl Batch {
 #[doc = "  ],"]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"batch_id\": {"]
+#[doc = "      \"description\": \"ID of the batch this attachment belongs to.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"created_at\": {"]
+#[doc = "      \"description\": \"Unix timestamp in milliseconds when the attachment was added.\","]
 #[doc = "      \"type\": \"integer\","]
 #[doc = "      \"format\": \"int64\""]
 #[doc = "    },"]
@@ -316,9 +368,11 @@ impl Batch {
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"id\": {"]
+#[doc = "      \"description\": \"Unique attachment identifier.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"mime_type\": {"]
+#[doc = "      \"description\": \"MIME type of the file, e.g. \\\"image/jpeg\\\".\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
@@ -329,6 +383,7 @@ impl Batch {
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"size_bytes\": {"]
+#[doc = "      \"description\": \"File size in bytes.\","]
 #[doc = "      \"type\": \"integer\","]
 #[doc = "      \"format\": \"int64\""]
 #[doc = "    }"]
@@ -338,15 +393,20 @@ impl Batch {
 #[doc = r" </details>"]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
 pub struct BatchAttachment {
+    #[doc = "ID of the batch this attachment belongs to."]
     pub batch_id: ::std::string::String,
+    #[doc = "Unix timestamp in milliseconds when the attachment was added."]
     pub created_at: i64,
     #[doc = "UUID-based on-disk filename, e.g. \"a1b2c3d4.jpg\""]
     pub filename: ::std::string::String,
+    #[doc = "Unique attachment identifier."]
     pub id: ::std::string::String,
+    #[doc = "MIME type of the file, e.g. \"image/jpeg\"."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub mime_type: ::std::option::Option<::std::string::String>,
     #[doc = "User-facing display name, e.g. \"brew-day.jpg\""]
     pub original_name: ::std::string::String,
+    #[doc = "File size in bytes."]
     pub size_bytes: i64,
 }
 impl BatchAttachment {
@@ -354,12 +414,13 @@ impl BatchAttachment {
         Default::default()
     }
 }
-#[doc = "`BatchSummary`"]
+#[doc = "Lightweight summary of a brew batch for list views."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"Lightweight summary of a brew batch for list views.\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"required\": ["]
 #[doc = "    \"created_at\","]
@@ -372,18 +433,21 @@ impl BatchAttachment {
 #[doc = "  ],"]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"actual_fg\": {"]
+#[doc = "      \"description\": \"Measured final gravity after fermentation.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"actual_og\": {"]
+#[doc = "      \"description\": \"Measured original gravity at the start of fermentation.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"brew_date\": {"]
+#[doc = "      \"description\": \"Unix timestamp in milliseconds of brew day.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"integer\","]
 #[doc = "        \"null\""]
@@ -391,31 +455,38 @@ impl BatchAttachment {
 #[doc = "      \"format\": \"int64\""]
 #[doc = "    },"]
 #[doc = "    \"created_at\": {"]
+#[doc = "      \"description\": \"Unix timestamp in milliseconds when the batch was created.\","]
 #[doc = "      \"type\": \"integer\","]
 #[doc = "      \"format\": \"int64\""]
 #[doc = "    },"]
 #[doc = "    \"id\": {"]
+#[doc = "      \"description\": \"Unique batch identifier.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"name\": {"]
+#[doc = "      \"description\": \"Optional user-given name for this batch.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"rating\": {"]
+#[doc = "      \"description\": \"User rating for this batch (e.g. 1–5).\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"integer\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"recipe_id\": {"]
+#[doc = "      \"description\": \"ID of the recipe this batch is based on.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"recipe_name\": {"]
+#[doc = "      \"description\": \"Name of the recipe at the time the batch was created.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"recipe_version_id\": {"]
+#[doc = "      \"description\": \"ID of the recipe version this batch was brewed from.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"status\": {"]
@@ -423,6 +494,7 @@ impl BatchAttachment {
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"updated_at\": {"]
+#[doc = "      \"description\": \"Unix timestamp in milliseconds when the batch was last updated.\","]
 #[doc = "      \"type\": \"integer\","]
 #[doc = "      \"format\": \"int64\""]
 #[doc = "    }"]
@@ -432,23 +504,34 @@ impl BatchAttachment {
 #[doc = r" </details>"]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
 pub struct BatchSummary {
+    #[doc = "Measured final gravity after fermentation."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub actual_fg: ::std::option::Option<f64>,
+    #[doc = "Measured original gravity at the start of fermentation."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub actual_og: ::std::option::Option<f64>,
+    #[doc = "Unix timestamp in milliseconds of brew day."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub brew_date: ::std::option::Option<i64>,
+    #[doc = "Unix timestamp in milliseconds when the batch was created."]
     pub created_at: i64,
+    #[doc = "Unique batch identifier."]
     pub id: ::std::string::String,
+    #[doc = "Optional user-given name for this batch."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub name: ::std::option::Option<::std::string::String>,
+    #[doc = "User rating for this batch (e.g. 1–5)."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub rating: ::std::option::Option<i64>,
+    #[doc = "ID of the recipe this batch is based on."]
     pub recipe_id: ::std::string::String,
+    #[doc = "Name of the recipe at the time the batch was created."]
     pub recipe_name: ::std::string::String,
+    #[doc = "ID of the recipe version this batch was brewed from."]
     pub recipe_version_id: ::std::string::String,
     #[doc = "planned | brewing | fermenting | packaged"]
     pub status: ::std::string::String,
+    #[doc = "Unix timestamp in milliseconds when the batch was last updated."]
     pub updated_at: i64,
 }
 impl BatchSummary {
@@ -456,12 +539,13 @@ impl BatchSummary {
         Default::default()
     }
 }
-#[doc = "`CalculatedWaterProfile`"]
+#[doc = "Mineral ion concentrations for mash, sparge, and combined water volumes, calculated from source water profiles and mineral additions."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"Mineral ion concentrations for mash, sparge, and combined water volumes, calculated from source water profiles and mineral additions.\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"required\": ["]
 #[doc = "    \"combined\","]
@@ -470,12 +554,15 @@ impl BatchSummary {
 #[doc = "  ],"]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"combined\": {"]
+#[doc = "      \"description\": \"Blended mineral profile of mash and sparge water weighted by volume.\","]
 #[doc = "      \"$ref\": \"#/components/schemas/WaterProfile\""]
 #[doc = "    },"]
 #[doc = "    \"mash\": {"]
+#[doc = "      \"description\": \"Mineral profile of the mash water after additions.\","]
 #[doc = "      \"$ref\": \"#/components/schemas/WaterProfile\""]
 #[doc = "    },"]
 #[doc = "    \"sparge\": {"]
+#[doc = "      \"description\": \"Mineral profile of the sparge water after additions.\","]
 #[doc = "      \"$ref\": \"#/components/schemas/WaterProfile\""]
 #[doc = "    }"]
 #[doc = "  }"]
@@ -484,8 +571,11 @@ impl BatchSummary {
 #[doc = r" </details>"]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
 pub struct CalculatedWaterProfile {
+    #[doc = "Blended mineral profile of mash and sparge water weighted by volume."]
     pub combined: WaterProfile,
+    #[doc = "Mineral profile of the mash water after additions."]
     pub mash: WaterProfile,
+    #[doc = "Mineral profile of the sparge water after additions."]
     pub sparge: WaterProfile,
 }
 impl CalculatedWaterProfile {
@@ -493,27 +583,31 @@ impl CalculatedWaterProfile {
         Default::default()
     }
 }
-#[doc = "`CreateBatchInput`"]
+#[doc = "Input for creating a new brew batch from a recipe."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"Input for creating a new brew batch from a recipe.\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"required\": ["]
 #[doc = "    \"recipe_id\""]
 #[doc = "  ],"]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"name\": {"]
+#[doc = "      \"description\": \"Optional user-given name for this batch.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"recipe_id\": {"]
+#[doc = "      \"description\": \"ID of the recipe to brew.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"version_id\": {"]
+#[doc = "      \"description\": \"ID of a specific recipe version to brew; defaults to the current state if omitted.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
@@ -525,9 +619,12 @@ impl CalculatedWaterProfile {
 #[doc = r" </details>"]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
 pub struct CreateBatchInput {
+    #[doc = "Optional user-given name for this batch."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub name: ::std::option::Option<::std::string::String>,
+    #[doc = "ID of the recipe to brew."]
     pub recipe_id: ::std::string::String,
+    #[doc = "ID of a specific recipe version to brew; defaults to the current state if omitted."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub version_id: ::std::option::Option<::std::string::String>,
 }
@@ -536,12 +633,13 @@ impl CreateBatchInput {
         Default::default()
     }
 }
-#[doc = "`CreateEquipmentProfileInput`"]
+#[doc = "Input for creating a new equipment profile."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"Input for creating a new equipment profile.\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"required\": ["]
 #[doc = "    \"batch_size_l\","]
@@ -551,111 +649,147 @@ impl CreateBatchInput {
 #[doc = "  ],"]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"altitude_adjustment\": {"]
+#[doc = "      \"description\": \"When true, boil temperature is calculated from altitude.\","]
 #[doc = "      \"type\": \"boolean\""]
 #[doc = "    },"]
 #[doc = "    \"aroma_hop_utilization_pct\": {"]
+#[doc = "      \"description\": \"Utilization percentage for whirlpool/aroma hop additions.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"batch_size_l\": {"]
+#[doc = "      \"description\": \"Target batch size in litres.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"batch_volume_target\": {"]
+#[doc = "      \"description\": \"Whether batch_size_l targets the fermenter or the kettle. Enum: 'fermenter' | 'kettle'\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"boil_size_l\": {"]
+#[doc = "      \"description\": \"Pre-boil kettle volume in litres.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"boil_temp_f\": {"]
+#[doc = "      \"description\": \"Manual boil temperature in Fahrenheit, used when altitude_adjustment is false.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"boil_time_min\": {"]
+#[doc = "      \"description\": \"Default boil duration in minutes.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"calc_aroma_hop_utilization\": {"]
+#[doc = "      \"description\": \"When true, aroma hop utilization is calculated using the hopstand temperature model.\","]
 #[doc = "      \"type\": \"boolean\""]
 #[doc = "    },"]
 #[doc = "    \"calc_mash_efficiency\": {"]
+#[doc = "      \"description\": \"When true, mash efficiency is calculated from brewhouse efficiency and losses.\","]
 #[doc = "      \"type\": \"boolean\""]
 #[doc = "    },"]
 #[doc = "    \"calc_strike_water_temp\": {"]
+#[doc = "      \"description\": \"When true, strike water temperature is calculated from tun thermal mass and grain/room temperature.\","]
 #[doc = "      \"type\": \"boolean\""]
 #[doc = "    },"]
 #[doc = "    \"cooling_shrinkage_pct\": {"]
+#[doc = "      \"description\": \"Wort volume reduction from boiling temperature to room temperature, as a percentage.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"efficiency_pct\": {"]
+#[doc = "      \"description\": \"Brewhouse efficiency percentage.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"evap_rate_l_hr\": {"]
+#[doc = "      \"description\": \"Boil evaporation rate in litres per hour.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"fermenter_loss_l\": {"]
+#[doc = "      \"description\": \"Volume lost to fermenter trub and yeast cake, in litres.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"grain_absorption_rate_l_per_kg\": {"]
+#[doc = "      \"description\": \"Volume of water absorbed per kg of grain, in litres/kg.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"grain_temp_f\": {"]
+#[doc = "      \"description\": \"Grain temperature for strike water calculation, in Fahrenheit.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"hlt_deadspace_l\": {"]
+#[doc = "      \"description\": \"Volume that remains in the HLT and cannot be transferred, in litres.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"hlt_water_limit_min_l\": {"]
+#[doc = "      \"description\": \"Minimum HLT water volume in litres.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"hopstand_temp_f\": {"]
+#[doc = "      \"description\": \"Temperature at which the hopstand is conducted, in Fahrenheit.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"include_grain_volume_in_mash_limits\": {"]
+#[doc = "      \"description\": \"When true, grain displacement is included when checking mash volume limits.\","]
 #[doc = "      \"type\": \"boolean\""]
 #[doc = "    },"]
 #[doc = "    \"mash_efficiency_pct\": {"]
+#[doc = "      \"description\": \"Manual mash efficiency percentage, used when calc_mash_efficiency is false.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"mash_tun_loss_l\": {"]
+#[doc = "      \"description\": \"Volume left in the mash tun after lautering, in litres.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"mash_volume_max_l\": {"]
+#[doc = "      \"description\": \"Maximum mash tun volume in litres.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"mash_volume_min_l\": {"]
+#[doc = "      \"description\": \"Minimum mash tun volume in litres.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"name\": {"]
+#[doc = "      \"description\": \"Equipment profile name.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"notes\": {"]
+#[doc = "      \"description\": \"Optional notes about this equipment setup.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"overflow_target\": {"]
+#[doc = "      \"description\": \"Where to redirect overflow when mash volume limits are exceeded. Enum: 'mash' | 'sparge' | 'hlt'\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"room_temp_f\": {"]
+#[doc = "      \"description\": \"Ambient room temperature for strike water calculation, in Fahrenheit.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"sparge_method\": {"]
+#[doc = "      \"description\": \"Mash/sparge water calculation method. Enum: 'no_sparge' | 'batch_sparge' | 'fly_sparge'\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"sparge_temp_f\": {"]
+#[doc = "      \"description\": \"Target sparge water temperature in Fahrenheit.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"sparge_volume_max_l\": {"]
+#[doc = "      \"description\": \"Maximum sparge water volume in litres.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"sparge_volume_min_l\": {"]
+#[doc = "      \"description\": \"Minimum sparge water volume in litres.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"trub_chiller_loss_l\": {"]
+#[doc = "      \"description\": \"Volume lost to trub and chiller in litres.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"tun_heat_capacity_l\": {"]
+#[doc = "      \"description\": \"Thermal mass of mash tun expressed as litres of equivalent water volume (0 = pre-heated tun).\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"water_grain_ratio_l_per_kg\": {"]
+#[doc = "      \"description\": \"Target mash water-to-grain ratio, in litres/kg.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"whirlpool_time_min\": {"]
+#[doc = "      \"description\": \"Time wort sits in the whirlpool before chilling, in minutes.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    }"]
 #[doc = "  }"]
@@ -664,72 +798,108 @@ impl CreateBatchInput {
 #[doc = r" </details>"]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
 pub struct CreateEquipmentProfileInput {
+    #[doc = "When true, boil temperature is calculated from altitude."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub altitude_adjustment: ::std::option::Option<bool>,
+    #[doc = "Utilization percentage for whirlpool/aroma hop additions."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub aroma_hop_utilization_pct: ::std::option::Option<f64>,
+    #[doc = "Target batch size in litres."]
     pub batch_size_l: f64,
+    #[doc = "Whether batch_size_l targets the fermenter or the kettle. Enum: 'fermenter' | 'kettle'"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub batch_volume_target: ::std::option::Option<::std::string::String>,
+    #[doc = "Pre-boil kettle volume in litres."]
     pub boil_size_l: f64,
+    #[doc = "Manual boil temperature in Fahrenheit, used when altitude_adjustment is false."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub boil_temp_f: ::std::option::Option<f64>,
+    #[doc = "Default boil duration in minutes."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub boil_time_min: ::std::option::Option<f64>,
+    #[doc = "When true, aroma hop utilization is calculated using the hopstand temperature model."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub calc_aroma_hop_utilization: ::std::option::Option<bool>,
+    #[doc = "When true, mash efficiency is calculated from brewhouse efficiency and losses."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub calc_mash_efficiency: ::std::option::Option<bool>,
+    #[doc = "When true, strike water temperature is calculated from tun thermal mass and grain/room temperature."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub calc_strike_water_temp: ::std::option::Option<bool>,
+    #[doc = "Wort volume reduction from boiling temperature to room temperature, as a percentage."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub cooling_shrinkage_pct: ::std::option::Option<f64>,
+    #[doc = "Brewhouse efficiency percentage."]
     pub efficiency_pct: f64,
+    #[doc = "Boil evaporation rate in litres per hour."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub evap_rate_l_hr: ::std::option::Option<f64>,
+    #[doc = "Volume lost to fermenter trub and yeast cake, in litres."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub fermenter_loss_l: ::std::option::Option<f64>,
+    #[doc = "Volume of water absorbed per kg of grain, in litres/kg."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub grain_absorption_rate_l_per_kg: ::std::option::Option<f64>,
+    #[doc = "Grain temperature for strike water calculation, in Fahrenheit."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub grain_temp_f: ::std::option::Option<f64>,
+    #[doc = "Volume that remains in the HLT and cannot be transferred, in litres."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub hlt_deadspace_l: ::std::option::Option<f64>,
+    #[doc = "Minimum HLT water volume in litres."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub hlt_water_limit_min_l: ::std::option::Option<f64>,
+    #[doc = "Temperature at which the hopstand is conducted, in Fahrenheit."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub hopstand_temp_f: ::std::option::Option<f64>,
+    #[doc = "When true, grain displacement is included when checking mash volume limits."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub include_grain_volume_in_mash_limits: ::std::option::Option<bool>,
+    #[doc = "Manual mash efficiency percentage, used when calc_mash_efficiency is false."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub mash_efficiency_pct: ::std::option::Option<f64>,
+    #[doc = "Volume left in the mash tun after lautering, in litres."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub mash_tun_loss_l: ::std::option::Option<f64>,
+    #[doc = "Maximum mash tun volume in litres."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub mash_volume_max_l: ::std::option::Option<f64>,
+    #[doc = "Minimum mash tun volume in litres."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub mash_volume_min_l: ::std::option::Option<f64>,
+    #[doc = "Equipment profile name."]
     pub name: ::std::string::String,
+    #[doc = "Optional notes about this equipment setup."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub notes: ::std::option::Option<::std::string::String>,
+    #[doc = "Where to redirect overflow when mash volume limits are exceeded. Enum: 'mash' | 'sparge' | 'hlt'"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub overflow_target: ::std::option::Option<::std::string::String>,
+    #[doc = "Ambient room temperature for strike water calculation, in Fahrenheit."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub room_temp_f: ::std::option::Option<f64>,
+    #[doc = "Mash/sparge water calculation method. Enum: 'no_sparge' | 'batch_sparge' | 'fly_sparge'"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub sparge_method: ::std::option::Option<::std::string::String>,
+    #[doc = "Target sparge water temperature in Fahrenheit."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub sparge_temp_f: ::std::option::Option<f64>,
+    #[doc = "Maximum sparge water volume in litres."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub sparge_volume_max_l: ::std::option::Option<f64>,
+    #[doc = "Minimum sparge water volume in litres."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub sparge_volume_min_l: ::std::option::Option<f64>,
+    #[doc = "Volume lost to trub and chiller in litres."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub trub_chiller_loss_l: ::std::option::Option<f64>,
+    #[doc = "Thermal mass of mash tun expressed as litres of equivalent water volume (0 = pre-heated tun)."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub tun_heat_capacity_l: ::std::option::Option<f64>,
+    #[doc = "Target mash water-to-grain ratio, in litres/kg."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub water_grain_ratio_l_per_kg: ::std::option::Option<f64>,
+    #[doc = "Time wort sits in the whirlpool before chilling, in minutes."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub whirlpool_time_min: ::std::option::Option<f64>,
 }
@@ -738,12 +908,13 @@ impl CreateEquipmentProfileInput {
         Default::default()
     }
 }
-#[doc = "`CreateFermentableAdditionInput`"]
+#[doc = "Input for adding a fermentable ingredient to a recipe."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"Input for adding a fermentable ingredient to a recipe.\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"required\": ["]
 #[doc = "    \"amount_kg\","]
@@ -754,24 +925,31 @@ impl CreateEquipmentProfileInput {
 #[doc = "  ],"]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"add_after_boil\": {"]
+#[doc = "      \"description\": \"When true, this fermentable is added after the boil.\","]
 #[doc = "      \"type\": \"boolean\""]
 #[doc = "    },"]
 #[doc = "    \"amount_kg\": {"]
+#[doc = "      \"description\": \"Amount of this fermentable in kilograms.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"color_lovibond\": {"]
+#[doc = "      \"description\": \"Color contribution in degrees Lovibond.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"fermentable_id\": {"]
+#[doc = "      \"description\": \"ID of a library fermentable to link; omit for a manually entered addition.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"name\": {"]
+#[doc = "      \"description\": \"Fermentable name.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"type_\": {"]
+#[doc = "      \"description\": \"Grain, Sugar, Extract, Dry Extract, Adjunct\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"yield_pct\": {"]
+#[doc = "      \"description\": \"Maximum extractable sugar yield as a percentage of dry weight.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    }"]
 #[doc = "  }"]
@@ -780,14 +958,21 @@ impl CreateEquipmentProfileInput {
 #[doc = r" </details>"]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
 pub struct CreateFermentableAdditionInput {
+    #[doc = "When true, this fermentable is added after the boil."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub add_after_boil: ::std::option::Option<bool>,
+    #[doc = "Amount of this fermentable in kilograms."]
     pub amount_kg: f64,
+    #[doc = "Color contribution in degrees Lovibond."]
     pub color_lovibond: f64,
+    #[doc = "ID of a library fermentable to link; omit for a manually entered addition."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub fermentable_id: ::std::option::Option<::std::string::String>,
+    #[doc = "Fermentable name."]
     pub name: ::std::string::String,
+    #[doc = "Grain, Sugar, Extract, Dry Extract, Adjunct"]
     pub type_: ::std::string::String,
+    #[doc = "Maximum extractable sugar yield as a percentage of dry weight."]
     pub yield_pct: f64,
 }
 impl CreateFermentableAdditionInput {
@@ -795,12 +980,13 @@ impl CreateFermentableAdditionInput {
         Default::default()
     }
 }
-#[doc = "`CreateFermentableInput`"]
+#[doc = "Input for creating a new fermentable in the library."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"Input for creating a new fermentable in the library.\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"required\": ["]
 #[doc = "    \"add_after_boil\","]
@@ -811,75 +997,89 @@ impl CreateFermentableAdditionInput {
 #[doc = "  ],"]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"add_after_boil\": {"]
+#[doc = "      \"description\": \"When true, this fermentable is added after the boil.\","]
 #[doc = "      \"type\": \"boolean\""]
 #[doc = "    },"]
 #[doc = "    \"coarse_fine_diff_pct\": {"]
+#[doc = "      \"description\": \"Difference between coarse and fine grind extract yield, as a percentage.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"color_lovibond\": {"]
+#[doc = "      \"description\": \"Color contribution in degrees Lovibond.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"diastatic_power_lintner\": {"]
+#[doc = "      \"description\": \"Enzymatic activity in degrees Lintner; indicates mash conversion ability.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"forked_from_id\": {"]
+#[doc = "      \"description\": \"ID of the seeded fermentable this entry is forked from, or null if original.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"ibu_gal_per_lb\": {"]
+#[doc = "      \"description\": \"Bitterness contribution in IBU per gallon per pound; used for adjuncts like black malt.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"max_in_batch_pct\": {"]
+#[doc = "      \"description\": \"Recommended maximum usage as a percentage of total grain bill.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"moisture_pct\": {"]
+#[doc = "      \"description\": \"Moisture content of the grain as a percentage.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"name\": {"]
+#[doc = "      \"description\": \"Fermentable name (e.g. \\\"Pale Malt 2-Row\\\", \\\"Corn Sugar\\\").\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"notes\": {"]
+#[doc = "      \"description\": \"Brewer's notes about this fermentable.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"origin\": {"]
+#[doc = "      \"description\": \"Country or region of origin.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"protein_pct\": {"]
+#[doc = "      \"description\": \"Total protein content as a percentage.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"recommend_mash\": {"]
+#[doc = "      \"description\": \"When true, this fermentable requires mashing rather than steeping.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"boolean\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"supplier\": {"]
+#[doc = "      \"description\": \"Maltster or supplier name.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
@@ -890,6 +1090,7 @@ impl CreateFermentableAdditionInput {
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"yield_pct\": {"]
+#[doc = "      \"description\": \"Maximum extractable sugar yield as a percentage of dry weight.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    }"]
 #[doc = "  }"]
@@ -898,33 +1099,48 @@ impl CreateFermentableAdditionInput {
 #[doc = r" </details>"]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
 pub struct CreateFermentableInput {
+    #[doc = "When true, this fermentable is added after the boil."]
     pub add_after_boil: bool,
+    #[doc = "Difference between coarse and fine grind extract yield, as a percentage."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub coarse_fine_diff_pct: ::std::option::Option<f64>,
+    #[doc = "Color contribution in degrees Lovibond."]
     pub color_lovibond: f64,
+    #[doc = "Enzymatic activity in degrees Lintner; indicates mash conversion ability."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub diastatic_power_lintner: ::std::option::Option<f64>,
+    #[doc = "ID of the seeded fermentable this entry is forked from, or null if original."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub forked_from_id: ::std::option::Option<::std::string::String>,
+    #[doc = "Bitterness contribution in IBU per gallon per pound; used for adjuncts like black malt."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub ibu_gal_per_lb: ::std::option::Option<f64>,
+    #[doc = "Recommended maximum usage as a percentage of total grain bill."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub max_in_batch_pct: ::std::option::Option<f64>,
+    #[doc = "Moisture content of the grain as a percentage."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub moisture_pct: ::std::option::Option<f64>,
+    #[doc = "Fermentable name (e.g. \"Pale Malt 2-Row\", \"Corn Sugar\")."]
     pub name: ::std::string::String,
+    #[doc = "Brewer's notes about this fermentable."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub notes: ::std::option::Option<::std::string::String>,
+    #[doc = "Country or region of origin."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub origin: ::std::option::Option<::std::string::String>,
+    #[doc = "Total protein content as a percentage."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub protein_pct: ::std::option::Option<f64>,
+    #[doc = "When true, this fermentable requires mashing rather than steeping."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub recommend_mash: ::std::option::Option<bool>,
+    #[doc = "Maltster or supplier name."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub supplier: ::std::option::Option<::std::string::String>,
     #[doc = "Grain, Sugar, Extract, Dry Extract, Adjunct"]
     pub type_: ::std::string::String,
+    #[doc = "Maximum extractable sugar yield as a percentage of dry weight."]
     pub yield_pct: f64,
 }
 impl CreateFermentableInput {
@@ -932,12 +1148,13 @@ impl CreateFermentableInput {
         Default::default()
     }
 }
-#[doc = "`CreateGravityReadingInput`"]
+#[doc = "Input for recording a gravity reading during fermentation."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"Input for recording a gravity reading during fermentation.\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"required\": ["]
 #[doc = "    \"gravity\","]
@@ -945,18 +1162,22 @@ impl CreateFermentableInput {
 #[doc = "  ],"]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"gravity\": {"]
+#[doc = "      \"description\": \"Specific gravity measurement (e.g. 1.050).\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"notes\": {"]
+#[doc = "      \"description\": \"Optional brewer notes for this reading.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"recorded_at\": {"]
+#[doc = "      \"description\": \"Unix timestamp in milliseconds when the reading was taken.\","]
 #[doc = "      \"type\": \"integer\""]
 #[doc = "    },"]
 #[doc = "    \"temp_c\": {"]
+#[doc = "      \"description\": \"Sample temperature in degrees Celsius, used for temperature-corrected readings.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
@@ -968,10 +1189,14 @@ impl CreateFermentableInput {
 #[doc = r" </details>"]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
 pub struct CreateGravityReadingInput {
+    #[doc = "Specific gravity measurement (e.g. 1.050)."]
     pub gravity: f64,
+    #[doc = "Optional brewer notes for this reading."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub notes: ::std::option::Option<::std::string::String>,
+    #[doc = "Unix timestamp in milliseconds when the reading was taken."]
     pub recorded_at: i64,
+    #[doc = "Sample temperature in degrees Celsius, used for temperature-corrected readings."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub temp_c: ::std::option::Option<f64>,
 }
@@ -980,12 +1205,13 @@ impl CreateGravityReadingInput {
         Default::default()
     }
 }
-#[doc = "`CreateHopAdditionInput`"]
+#[doc = "Input for adding a hop addition to a recipe."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"Input for adding a hop addition to a recipe.\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"required\": ["]
 #[doc = "    \"alpha_pct\","]
@@ -996,9 +1222,11 @@ impl CreateGravityReadingInput {
 #[doc = "  ],"]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"alpha_pct\": {"]
+#[doc = "      \"description\": \"Alpha acid percentage used for IBU calculations.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"amount_kg\": {"]
+#[doc = "      \"description\": \"Amount of this hop addition in kilograms.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"form\": {"]
@@ -1006,6 +1234,7 @@ impl CreateGravityReadingInput {
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"hop_id\": {"]
+#[doc = "      \"description\": \"ID of a library hop to link; omit for a manually entered addition.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"hopstand_temp_c\": {"]
@@ -1013,12 +1242,15 @@ impl CreateGravityReadingInput {
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"name\": {"]
+#[doc = "      \"description\": \"Hop variety name.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"time_min\": {"]
+#[doc = "      \"description\": \"Addition time; meaning depends on use_. For Boil: minutes remaining in boil. For Dry Hop: days. For others: minutes.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"use_\": {"]
+#[doc = "      \"description\": \"Boil, Dry Hop, Mash, First Wort, Aroma, Hopstand\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    }"]
 #[doc = "  }"]
@@ -1027,18 +1259,24 @@ impl CreateGravityReadingInput {
 #[doc = r" </details>"]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
 pub struct CreateHopAdditionInput {
+    #[doc = "Alpha acid percentage used for IBU calculations."]
     pub alpha_pct: f64,
+    #[doc = "Amount of this hop addition in kilograms."]
     pub amount_kg: f64,
     #[doc = "Pellet, Plug, Leaf, Cryo, CO2 Extract"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub form: ::std::option::Option<::std::string::String>,
+    #[doc = "ID of a library hop to link; omit for a manually entered addition."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub hop_id: ::std::option::Option<::std::string::String>,
     #[doc = "Hopstand temperature override for this addition in °C"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub hopstand_temp_c: ::std::option::Option<f64>,
+    #[doc = "Hop variety name."]
     pub name: ::std::string::String,
+    #[doc = "Addition time; meaning depends on use_. For Boil: minutes remaining in boil. For Dry Hop: days. For others: minutes."]
     pub time_min: f64,
+    #[doc = "Boil, Dry Hop, Mash, First Wort, Aroma, Hopstand"]
     pub use_: ::std::string::String,
 }
 impl CreateHopAdditionInput {
@@ -1046,12 +1284,13 @@ impl CreateHopAdditionInput {
         Default::default()
     }
 }
-#[doc = "`CreateHopInput`"]
+#[doc = "Input for creating a new hop variety in the library."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"Input for creating a new hop variety in the library.\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"required\": ["]
 #[doc = "    \"alpha_pct\","]
@@ -1060,27 +1299,32 @@ impl CreateHopAdditionInput {
 #[doc = "  ],"]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"alpha_pct\": {"]
+#[doc = "      \"description\": \"Alpha acid percentage, used for IBU calculations.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"beta_pct\": {"]
+#[doc = "      \"description\": \"Beta acid percentage.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"caryophyllene_pct\": {"]
+#[doc = "      \"description\": \"Caryophyllene oil content as a percentage of total oils.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"cohumulone_pct\": {"]
+#[doc = "      \"description\": \"Cohumulone content as a percentage of alpha acids; higher values produce harsher bitterness.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"forked_from_id\": {"]
+#[doc = "      \"description\": \"ID of the seeded hop this entry is forked from, or null if original.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
@@ -1091,51 +1335,60 @@ impl CreateHopAdditionInput {
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"hsi_pct\": {"]
+#[doc = "      \"description\": \"Hop Storage Index; indicates freshness degradation rate as a percentage.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"humulene_pct\": {"]
+#[doc = "      \"description\": \"Humulene oil content as a percentage of total oils.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"myrcene_pct\": {"]
+#[doc = "      \"description\": \"Myrcene oil content as a percentage of total oils.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"name\": {"]
+#[doc = "      \"description\": \"Hop variety name (e.g. \\\"Centennial\\\", \\\"Saaz\\\").\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"notes\": {"]
+#[doc = "      \"description\": \"Brewer's notes about this hop variety.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"origin\": {"]
+#[doc = "      \"description\": \"Country or region of origin.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"substitutes\": {"]
+#[doc = "      \"description\": \"Suggested substitute varieties, comma-separated.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"type_\": {"]
+#[doc = "      \"description\": \"Bittering, Aroma, Both\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"year\": {"]
+#[doc = "      \"description\": \"Harvest year for this batch of hops.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
@@ -1147,32 +1400,46 @@ impl CreateHopAdditionInput {
 #[doc = r" </details>"]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
 pub struct CreateHopInput {
+    #[doc = "Alpha acid percentage, used for IBU calculations."]
     pub alpha_pct: f64,
+    #[doc = "Beta acid percentage."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub beta_pct: ::std::option::Option<f64>,
+    #[doc = "Caryophyllene oil content as a percentage of total oils."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub caryophyllene_pct: ::std::option::Option<f64>,
+    #[doc = "Cohumulone content as a percentage of alpha acids; higher values produce harsher bitterness."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub cohumulone_pct: ::std::option::Option<f64>,
+    #[doc = "ID of the seeded hop this entry is forked from, or null if original."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub forked_from_id: ::std::option::Option<::std::string::String>,
     #[doc = "Pellet, Plug, Leaf, Cryo, CO2 Extract"]
     pub form: ::std::string::String,
+    #[doc = "Hop Storage Index; indicates freshness degradation rate as a percentage."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub hsi_pct: ::std::option::Option<f64>,
+    #[doc = "Humulene oil content as a percentage of total oils."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub humulene_pct: ::std::option::Option<f64>,
+    #[doc = "Myrcene oil content as a percentage of total oils."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub myrcene_pct: ::std::option::Option<f64>,
+    #[doc = "Hop variety name (e.g. \"Centennial\", \"Saaz\")."]
     pub name: ::std::string::String,
+    #[doc = "Brewer's notes about this hop variety."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub notes: ::std::option::Option<::std::string::String>,
+    #[doc = "Country or region of origin."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub origin: ::std::option::Option<::std::string::String>,
+    #[doc = "Suggested substitute varieties, comma-separated."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub substitutes: ::std::option::Option<::std::string::String>,
+    #[doc = "Bittering, Aroma, Both"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub type_: ::std::option::Option<::std::string::String>,
+    #[doc = "Harvest year for this batch of hops."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub year: ::std::option::Option<::std::string::String>,
 }
@@ -1181,12 +1448,13 @@ impl CreateHopInput {
         Default::default()
     }
 }
-#[doc = "`CreateMashStepInput`"]
+#[doc = "Input for adding a step to a mash schedule."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"Input for adding a step to a mash schedule.\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"required\": ["]
 #[doc = "    \"name\","]
@@ -1195,24 +1463,31 @@ impl CreateHopInput {
 #[doc = "  ],"]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"end_temp_c\": {"]
+#[doc = "      \"description\": \"Temperature at the end of this step in degrees Celsius; used for decoction steps.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"infuse_amount_l\": {"]
+#[doc = "      \"description\": \"Volume of water to infuse in litres; applicable for Infusion steps.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"name\": {"]
+#[doc = "      \"description\": \"Step name (e.g. \\\"Protein Rest\\\", \\\"Saccharification\\\", \\\"Mash Out\\\").\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"ramp_time_min\": {"]
+#[doc = "      \"description\": \"Time to ramp to step_temp_c from the previous step temperature, in minutes.\","]
 #[doc = "      \"type\": \"integer\""]
 #[doc = "    },"]
 #[doc = "    \"step_temp_c\": {"]
+#[doc = "      \"description\": \"Target step temperature in degrees Celsius.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"step_time_min\": {"]
+#[doc = "      \"description\": \"Duration of this step in minutes.\","]
 #[doc = "      \"type\": \"integer\""]
 #[doc = "    },"]
 #[doc = "    \"type_\": {"]
+#[doc = "      \"description\": \"Infusion, Temperature, Decoction\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    }"]
 #[doc = "  }"]
@@ -1221,15 +1496,22 @@ impl CreateHopInput {
 #[doc = r" </details>"]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
 pub struct CreateMashStepInput {
+    #[doc = "Temperature at the end of this step in degrees Celsius; used for decoction steps."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub end_temp_c: ::std::option::Option<f64>,
+    #[doc = "Volume of water to infuse in litres; applicable for Infusion steps."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub infuse_amount_l: ::std::option::Option<f64>,
+    #[doc = "Step name (e.g. \"Protein Rest\", \"Saccharification\", \"Mash Out\")."]
     pub name: ::std::string::String,
+    #[doc = "Time to ramp to step_temp_c from the previous step temperature, in minutes."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub ramp_time_min: ::std::option::Option<i64>,
+    #[doc = "Target step temperature in degrees Celsius."]
     pub step_temp_c: f64,
+    #[doc = "Duration of this step in minutes."]
     pub step_time_min: i64,
+    #[doc = "Infusion, Temperature, Decoction"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub type_: ::std::option::Option<::std::string::String>,
 }
@@ -1238,12 +1520,13 @@ impl CreateMashStepInput {
         Default::default()
     }
 }
-#[doc = "`CreateMiscAdditionInput`"]
+#[doc = "Input for adding a miscellaneous ingredient to a recipe."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"Input for adding a miscellaneous ingredient to a recipe.\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"required\": ["]
 #[doc = "    \"amount\","]
@@ -1255,21 +1538,27 @@ impl CreateMashStepInput {
 #[doc = "  ],"]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"amount\": {"]
+#[doc = "      \"description\": \"Quantity of this ingredient in the unit specified by the unit field.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"amount_is_weight\": {"]
+#[doc = "      \"description\": \"When true, amounts are measured by weight; when false, by volume.\","]
 #[doc = "      \"type\": \"boolean\""]
 #[doc = "    },"]
 #[doc = "    \"misc_id\": {"]
+#[doc = "      \"description\": \"ID of a library misc ingredient to link; omit for a manually entered addition.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"name\": {"]
+#[doc = "      \"description\": \"Ingredient name.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"time_min\": {"]
+#[doc = "      \"description\": \"Usage time in minutes (meaning depends on use_).\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"type_\": {"]
+#[doc = "      \"description\": \"Spice, Fining, Water Agent, Herb, Flavor, Other\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"unit\": {"]
@@ -1277,6 +1566,7 @@ impl CreateMashStepInput {
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"use_\": {"]
+#[doc = "      \"description\": \"Boil, Mash, Primary, Secondary, Bottling\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    }"]
 #[doc = "  }"]
@@ -1285,16 +1575,23 @@ impl CreateMashStepInput {
 #[doc = r" </details>"]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
 pub struct CreateMiscAdditionInput {
+    #[doc = "Quantity of this ingredient in the unit specified by the unit field."]
     pub amount: f64,
+    #[doc = "When true, amounts are measured by weight; when false, by volume."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub amount_is_weight: ::std::option::Option<bool>,
+    #[doc = "ID of a library misc ingredient to link; omit for a manually entered addition."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub misc_id: ::std::option::Option<::std::string::String>,
+    #[doc = "Ingredient name."]
     pub name: ::std::string::String,
+    #[doc = "Usage time in minutes (meaning depends on use_)."]
     pub time_min: f64,
+    #[doc = "Spice, Fining, Water Agent, Herb, Flavor, Other"]
     pub type_: ::std::string::String,
     #[doc = "Display unit: g, oz, tsp, tbsp, or mL"]
     pub unit: ::std::string::String,
+    #[doc = "Boil, Mash, Primary, Secondary, Bottling"]
     pub use_: ::std::string::String,
 }
 impl CreateMiscAdditionInput {
@@ -1302,12 +1599,13 @@ impl CreateMiscAdditionInput {
         Default::default()
     }
 }
-#[doc = "`CreateMiscInput`"]
+#[doc = "Input for creating a new miscellaneous ingredient in the library."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"Input for creating a new miscellaneous ingredient in the library.\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"required\": ["]
 #[doc = "    \"amount_is_weight\","]
@@ -1318,24 +1616,29 @@ impl CreateMiscAdditionInput {
 #[doc = "  ],"]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"amount_is_weight\": {"]
+#[doc = "      \"description\": \"When true, amounts are measured by weight (grams); when false, by volume (millilitres).\","]
 #[doc = "      \"type\": \"boolean\""]
 #[doc = "    },"]
 #[doc = "    \"forked_from_id\": {"]
+#[doc = "      \"description\": \"ID of the seeded misc ingredient this entry is forked from, or null if original.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"name\": {"]
+#[doc = "      \"description\": \"Ingredient name (e.g. \\\"Irish Moss\\\", \\\"Whirlfloc\\\", \\\"Coriander Seed\\\").\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"notes\": {"]
+#[doc = "      \"description\": \"Brewer's notes about this ingredient.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"time_min\": {"]
+#[doc = "      \"description\": \"Default usage time in minutes.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"type_\": {"]
@@ -1347,6 +1650,7 @@ impl CreateMiscAdditionInput {
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"use_for\": {"]
+#[doc = "      \"description\": \"Description of the purpose or effect of this ingredient.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
@@ -1358,17 +1662,23 @@ impl CreateMiscAdditionInput {
 #[doc = r" </details>"]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
 pub struct CreateMiscInput {
+    #[doc = "When true, amounts are measured by weight (grams); when false, by volume (millilitres)."]
     pub amount_is_weight: bool,
+    #[doc = "ID of the seeded misc ingredient this entry is forked from, or null if original."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub forked_from_id: ::std::option::Option<::std::string::String>,
+    #[doc = "Ingredient name (e.g. \"Irish Moss\", \"Whirlfloc\", \"Coriander Seed\")."]
     pub name: ::std::string::String,
+    #[doc = "Brewer's notes about this ingredient."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub notes: ::std::option::Option<::std::string::String>,
+    #[doc = "Default usage time in minutes."]
     pub time_min: f64,
     #[doc = "Spice, Fining, Water Agent, Herb, Flavor, Other"]
     pub type_: ::std::string::String,
     #[doc = "Boil, Mash, Primary, Secondary, Bottling"]
     pub use_: ::std::string::String,
+    #[doc = "Description of the purpose or effect of this ingredient."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub use_for: ::std::option::Option<::std::string::String>,
 }
@@ -1377,27 +1687,32 @@ impl CreateMiscInput {
         Default::default()
     }
 }
-#[doc = "`CreateRecipeInput`"]
+#[doc = "Input for creating a new recipe."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"Input for creating a new recipe.\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"required\": ["]
 #[doc = "    \"name\""]
 #[doc = "  ],"]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"batch_size_l\": {"]
+#[doc = "      \"description\": \"Target batch volume in litres.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"boil_size_l\": {"]
+#[doc = "      \"description\": \"Pre-boil kettle volume in litres.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"boil_time_min\": {"]
+#[doc = "      \"description\": \"Boil duration in minutes.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"equipment_profile_id\": {"]
+#[doc = "      \"description\": \"ID of the equipment profile to associate with this recipe.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"hopstand_temp_c\": {"]
@@ -1405,6 +1720,7 @@ impl CreateMiscInput {
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"name\": {"]
+#[doc = "      \"description\": \"Recipe name.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"source_id\": {"]
@@ -1412,9 +1728,11 @@ impl CreateMiscInput {
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"style_id\": {"]
+#[doc = "      \"description\": \"ID of the beer style to associate with this recipe.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"type_\": {"]
+#[doc = "      \"description\": \"Recipe type (e.g. All Grain, Extract, Partial Mash).\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    }"]
 #[doc = "  }"]
@@ -1423,23 +1741,30 @@ impl CreateMiscInput {
 #[doc = r" </details>"]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
 pub struct CreateRecipeInput {
+    #[doc = "Target batch volume in litres."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub batch_size_l: ::std::option::Option<f64>,
+    #[doc = "Pre-boil kettle volume in litres."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub boil_size_l: ::std::option::Option<f64>,
+    #[doc = "Boil duration in minutes."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub boil_time_min: ::std::option::Option<f64>,
+    #[doc = "ID of the equipment profile to associate with this recipe."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub equipment_profile_id: ::std::option::Option<::std::string::String>,
     #[doc = "Default hopstand temperature in °C"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub hopstand_temp_c: ::std::option::Option<f64>,
+    #[doc = "Recipe name."]
     pub name: ::std::string::String,
     #[doc = "ID of a recipe to copy ingredients from"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub source_id: ::std::option::Option<::std::string::String>,
+    #[doc = "ID of the beer style to associate with this recipe."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub style_id: ::std::option::Option<::std::string::String>,
+    #[doc = "Recipe type (e.g. All Grain, Extract, Partial Mash)."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub type_: ::std::option::Option<::std::string::String>,
 }
@@ -1448,12 +1773,13 @@ impl CreateRecipeInput {
         Default::default()
     }
 }
-#[doc = "`CreateWaterAdditionInput`"]
+#[doc = "Input for adding a water source to a recipe."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"Input for adding a water source to a recipe.\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"required\": ["]
 #[doc = "    \"amount_l\","]
@@ -1461,12 +1787,15 @@ impl CreateRecipeInput {
 #[doc = "  ],"]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"amount_l\": {"]
+#[doc = "      \"description\": \"Volume of this water source in litres.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"name\": {"]
+#[doc = "      \"description\": \"Name of the water source (e.g. \\\"RO Water\\\", \\\"Tap Water\\\").\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"water_id\": {"]
+#[doc = "      \"description\": \"ID of a library water profile to link; omit to create an unlinked entry.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    }"]
 #[doc = "  }"]
@@ -1475,8 +1804,11 @@ impl CreateRecipeInput {
 #[doc = r" </details>"]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
 pub struct CreateWaterAdditionInput {
+    #[doc = "Volume of this water source in litres."]
     pub amount_l: f64,
+    #[doc = "Name of the water source (e.g. \"RO Water\", \"Tap Water\")."]
     pub name: ::std::string::String,
+    #[doc = "ID of a library water profile to link; omit to create an unlinked entry."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub water_id: ::std::option::Option<::std::string::String>,
 }
@@ -1485,12 +1817,13 @@ impl CreateWaterAdditionInput {
         Default::default()
     }
 }
-#[doc = "`CreateWaterAdjustmentInput`"]
+#[doc = "Input for adding a mineral or acid water adjustment to a recipe."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"Input for adding a mineral or acid water adjustment to a recipe.\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"required\": ["]
 #[doc = "    \"addition\","]
@@ -1499,6 +1832,7 @@ impl CreateWaterAdditionInput {
 #[doc = "  ],"]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"addition\": {"]
+#[doc = "      \"description\": \"Mineral salt or acid to add.\","]
 #[doc = "      \"type\": \"string\","]
 #[doc = "      \"enum\": ["]
 #[doc = "        \"gypsum\","]
@@ -1516,6 +1850,7 @@ impl CreateWaterAdditionInput {
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"target\": {"]
+#[doc = "      \"description\": \"Whether to apply the addition to the mash or sparge water.\","]
 #[doc = "      \"type\": \"string\","]
 #[doc = "      \"enum\": ["]
 #[doc = "        \"mash\","]
@@ -1528,9 +1863,11 @@ impl CreateWaterAdditionInput {
 #[doc = r" </details>"]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
 pub struct CreateWaterAdjustmentInput {
+    #[doc = "Mineral salt or acid to add."]
     pub addition: CreateWaterAdjustmentInputAddition,
     #[doc = "Amount in grams for salts, ml for acids"]
     pub amount: f64,
+    #[doc = "Whether to apply the addition to the mash or sparge water."]
     pub target: CreateWaterAdjustmentInputTarget,
 }
 impl CreateWaterAdjustmentInput {
@@ -1538,12 +1875,13 @@ impl CreateWaterAdjustmentInput {
         Default::default()
     }
 }
-#[doc = "`CreateWaterAdjustmentInputAddition`"]
+#[doc = "Mineral salt or acid to add."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"Mineral salt or acid to add.\","]
 #[doc = "  \"type\": \"string\","]
 #[doc = "  \"enum\": ["]
 #[doc = "    \"gypsum\","]
@@ -1640,12 +1978,13 @@ impl ::std::convert::TryFrom<::std::string::String> for CreateWaterAdjustmentInp
         value.parse()
     }
 }
-#[doc = "`CreateWaterAdjustmentInputTarget`"]
+#[doc = "Whether to apply the addition to the mash or sparge water."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"Whether to apply the addition to the mash or sparge water.\","]
 #[doc = "  \"type\": \"string\","]
 #[doc = "  \"enum\": ["]
 #[doc = "    \"mash\","]
@@ -1712,12 +2051,13 @@ impl ::std::convert::TryFrom<::std::string::String> for CreateWaterAdjustmentInp
         value.parse()
     }
 }
-#[doc = "`CreateWaterInput`"]
+#[doc = "Input for creating a new water source profile in the library."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"Input for creating a new water source profile in the library.\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"required\": ["]
 #[doc = "    \"bicarbonate_ppm\","]
@@ -1730,42 +2070,52 @@ impl ::std::convert::TryFrom<::std::string::String> for CreateWaterAdjustmentInp
 #[doc = "  ],"]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"bicarbonate_ppm\": {"]
+#[doc = "      \"description\": \"Bicarbonate (alkalinity) concentration in parts per million (mg/L).\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"calcium_ppm\": {"]
+#[doc = "      \"description\": \"Calcium concentration in parts per million (mg/L).\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"chloride_ppm\": {"]
+#[doc = "      \"description\": \"Chloride concentration in parts per million (mg/L).\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"forked_from_id\": {"]
+#[doc = "      \"description\": \"ID of the seeded water profile this entry is forked from, or null if original.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"magnesium_ppm\": {"]
+#[doc = "      \"description\": \"Magnesium concentration in parts per million (mg/L).\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"name\": {"]
+#[doc = "      \"description\": \"Water source name (e.g. \\\"London\\\", \\\"Pilsen\\\", \\\"RO Water\\\").\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"notes\": {"]
+#[doc = "      \"description\": \"Notes about this water source.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"ph\": {"]
+#[doc = "      \"description\": \"Source water pH.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"sodium_ppm\": {"]
+#[doc = "      \"description\": \"Sodium concentration in parts per million (mg/L).\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"sulfate_ppm\": {"]
+#[doc = "      \"description\": \"Sulfate concentration in parts per million (mg/L).\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    }"]
 #[doc = "  }"]
@@ -1774,18 +2124,28 @@ impl ::std::convert::TryFrom<::std::string::String> for CreateWaterAdjustmentInp
 #[doc = r" </details>"]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
 pub struct CreateWaterInput {
+    #[doc = "Bicarbonate (alkalinity) concentration in parts per million (mg/L)."]
     pub bicarbonate_ppm: f64,
+    #[doc = "Calcium concentration in parts per million (mg/L)."]
     pub calcium_ppm: f64,
+    #[doc = "Chloride concentration in parts per million (mg/L)."]
     pub chloride_ppm: f64,
+    #[doc = "ID of the seeded water profile this entry is forked from, or null if original."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub forked_from_id: ::std::option::Option<::std::string::String>,
+    #[doc = "Magnesium concentration in parts per million (mg/L)."]
     pub magnesium_ppm: f64,
+    #[doc = "Water source name (e.g. \"London\", \"Pilsen\", \"RO Water\")."]
     pub name: ::std::string::String,
+    #[doc = "Notes about this water source."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub notes: ::std::option::Option<::std::string::String>,
+    #[doc = "Source water pH."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub ph: ::std::option::Option<f64>,
+    #[doc = "Sodium concentration in parts per million (mg/L)."]
     pub sodium_ppm: f64,
+    #[doc = "Sulfate concentration in parts per million (mg/L)."]
     pub sulfate_ppm: f64,
 }
 impl CreateWaterInput {
@@ -1793,12 +2153,13 @@ impl CreateWaterInput {
         Default::default()
     }
 }
-#[doc = "`CreateYeastAdditionInput`"]
+#[doc = "Input for adding a yeast to a recipe."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"Input for adding a yeast to a recipe.\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"required\": ["]
 #[doc = "    \"form\","]
@@ -1807,9 +2168,11 @@ impl CreateWaterInput {
 #[doc = "  ],"]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"add_to_secondary\": {"]
+#[doc = "      \"description\": \"When true, yeast is added at secondary fermentation rather than primary.\","]
 #[doc = "      \"type\": \"boolean\""]
 #[doc = "    },"]
 #[doc = "    \"amount\": {"]
+#[doc = "      \"description\": \"Quantity of yeast pitched; unit depends on amount_is_weight.\","]
 #[doc = "      \"oneOf\": ["]
 #[doc = "        {"]
 #[doc = "          \"type\": \"number\""]
@@ -1820,9 +2183,11 @@ impl CreateWaterInput {
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"amount_is_weight\": {"]
+#[doc = "      \"description\": \"When true, amount is in grams (dry yeast); when false, amount is in millilitres (liquid yeast).\","]
 #[doc = "      \"type\": \"boolean\""]
 #[doc = "    },"]
 #[doc = "    \"attenuation_pct\": {"]
+#[doc = "      \"description\": \"Expected attenuation percentage for this yeast strain.\","]
 #[doc = "      \"oneOf\": ["]
 #[doc = "        {"]
 #[doc = "          \"type\": \"number\""]
@@ -1833,9 +2198,11 @@ impl CreateWaterInput {
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"form\": {"]
+#[doc = "      \"description\": \"Liquid, Dry, Slant, Culture\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"laboratory\": {"]
+#[doc = "      \"description\": \"Yeast laboratory or manufacturer.\","]
 #[doc = "      \"oneOf\": ["]
 #[doc = "        {"]
 #[doc = "          \"type\": \"string\""]
@@ -1846,9 +2213,11 @@ impl CreateWaterInput {
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"name\": {"]
+#[doc = "      \"description\": \"Yeast strain name.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"product_id\": {"]
+#[doc = "      \"description\": \"Manufacturer's product identifier.\","]
 #[doc = "      \"oneOf\": ["]
 #[doc = "        {"]
 #[doc = "          \"type\": \"string\""]
@@ -1859,12 +2228,15 @@ impl CreateWaterInput {
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"times_cultured\": {"]
+#[doc = "      \"description\": \"Number of times this yeast has been repitched from a previous batch.\","]
 #[doc = "      \"type\": \"integer\""]
 #[doc = "    },"]
 #[doc = "    \"type_\": {"]
+#[doc = "      \"description\": \"Ale, Lager, Wheat, Wine, Champagne\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"yeast_id\": {"]
+#[doc = "      \"description\": \"ID of a library yeast to link; omit or null for a manually entered addition.\","]
 #[doc = "      \"oneOf\": ["]
 #[doc = "        {"]
 #[doc = "          \"type\": \"string\""]
@@ -1880,23 +2252,34 @@ impl CreateWaterInput {
 #[doc = r" </details>"]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
 pub struct CreateYeastAdditionInput {
+    #[doc = "When true, yeast is added at secondary fermentation rather than primary."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub add_to_secondary: ::std::option::Option<bool>,
+    #[doc = "Quantity of yeast pitched; unit depends on amount_is_weight."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub amount: ::std::option::Option<f64>,
+    #[doc = "When true, amount is in grams (dry yeast); when false, amount is in millilitres (liquid yeast)."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub amount_is_weight: ::std::option::Option<bool>,
+    #[doc = "Expected attenuation percentage for this yeast strain."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub attenuation_pct: ::std::option::Option<f64>,
+    #[doc = "Liquid, Dry, Slant, Culture"]
     pub form: ::std::string::String,
+    #[doc = "Yeast laboratory or manufacturer."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub laboratory: ::std::option::Option<::std::string::String>,
+    #[doc = "Yeast strain name."]
     pub name: ::std::string::String,
+    #[doc = "Manufacturer's product identifier."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub product_id: ::std::option::Option<::std::string::String>,
+    #[doc = "Number of times this yeast has been repitched from a previous batch."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub times_cultured: ::std::option::Option<i64>,
+    #[doc = "Ale, Lager, Wheat, Wine, Champagne"]
     pub type_: ::std::string::String,
+    #[doc = "ID of a library yeast to link; omit or null for a manually entered addition."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub yeast_id: ::std::option::Option<::std::string::String>,
 }
@@ -1905,12 +2288,13 @@ impl CreateYeastAdditionInput {
         Default::default()
     }
 }
-#[doc = "`CreateYeastInput`"]
+#[doc = "Input for creating a new yeast strain in the library."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"Input for creating a new yeast strain in the library.\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"required\": ["]
 #[doc = "    \"add_to_secondary\","]
@@ -1920,39 +2304,46 @@ impl CreateYeastAdditionInput {
 #[doc = "  ],"]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"add_to_secondary\": {"]
+#[doc = "      \"description\": \"When true, yeast is added at secondary fermentation rather than primary.\","]
 #[doc = "      \"type\": \"boolean\""]
 #[doc = "    },"]
 #[doc = "    \"alcohol_tolerance\": {"]
+#[doc = "      \"description\": \"low, medium, high, very_high\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"attenuation_pct\": {"]
+#[doc = "      \"description\": \"BeerXML single attenuation value; see min/max fields for range.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"best_for\": {"]
+#[doc = "      \"description\": \"Beer styles this yeast is best suited for.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"flavor_profile\": {"]
+#[doc = "      \"description\": \"Flavor and aroma characteristics of this yeast strain.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"flocculation\": {"]
+#[doc = "      \"description\": \"Low, Medium, High, Very High\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"forked_from_id\": {"]
+#[doc = "      \"description\": \"ID of the seeded yeast this entry is forked from, or null if original.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
@@ -1963,81 +2354,95 @@ impl CreateYeastAdditionInput {
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"laboratory\": {"]
+#[doc = "      \"description\": \"Yeast laboratory or manufacturer.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"max_attenuation_pct\": {"]
+#[doc = "      \"description\": \"Attenuation range upper bound.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"max_reuse\": {"]
+#[doc = "      \"description\": \"Maximum number of times this yeast can be repitched.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"integer\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"max_temperature_c\": {"]
+#[doc = "      \"description\": \"Maximum recommended fermentation temperature in degrees Celsius.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"min_attenuation_pct\": {"]
+#[doc = "      \"description\": \"Attenuation range lower bound.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"min_temperature_c\": {"]
+#[doc = "      \"description\": \"Minimum recommended fermentation temperature in degrees Celsius.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"name\": {"]
+#[doc = "      \"description\": \"Yeast strain name.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"notes\": {"]
+#[doc = "      \"description\": \"Brewer's notes about this yeast strain.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"pof_positive\": {"]
+#[doc = "      \"description\": \"Phenolic Off-Flavor gene present.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"boolean\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"product_id\": {"]
+#[doc = "      \"description\": \"Manufacturer's product identifier.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"species\": {"]
+#[doc = "      \"description\": \"e.g. Saccharomyces cerevisiae\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"sta1_positive\": {"]
+#[doc = "      \"description\": \"STA-1 dextrin-fermenting gene present.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"boolean\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"styles\": {"]
+#[doc = "      \"description\": \"Suitable beer styles, comma-separated.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"substitutes\": {"]
+#[doc = "      \"description\": \"Substitute yeast strains, comma-separated.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
@@ -2053,46 +2458,67 @@ impl CreateYeastAdditionInput {
 #[doc = r" </details>"]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
 pub struct CreateYeastInput {
+    #[doc = "When true, yeast is added at secondary fermentation rather than primary."]
     pub add_to_secondary: bool,
+    #[doc = "low, medium, high, very_high"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub alcohol_tolerance: ::std::option::Option<::std::string::String>,
+    #[doc = "BeerXML single attenuation value; see min/max fields for range."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub attenuation_pct: ::std::option::Option<f64>,
+    #[doc = "Beer styles this yeast is best suited for."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub best_for: ::std::option::Option<::std::string::String>,
+    #[doc = "Flavor and aroma characteristics of this yeast strain."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub flavor_profile: ::std::option::Option<::std::string::String>,
+    #[doc = "Low, Medium, High, Very High"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub flocculation: ::std::option::Option<::std::string::String>,
+    #[doc = "ID of the seeded yeast this entry is forked from, or null if original."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub forked_from_id: ::std::option::Option<::std::string::String>,
     #[doc = "Liquid, Dry, Slant, Culture"]
     pub form: ::std::string::String,
+    #[doc = "Yeast laboratory or manufacturer."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub laboratory: ::std::option::Option<::std::string::String>,
+    #[doc = "Attenuation range upper bound."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub max_attenuation_pct: ::std::option::Option<f64>,
+    #[doc = "Maximum number of times this yeast can be repitched."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub max_reuse: ::std::option::Option<i64>,
+    #[doc = "Maximum recommended fermentation temperature in degrees Celsius."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub max_temperature_c: ::std::option::Option<f64>,
+    #[doc = "Attenuation range lower bound."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub min_attenuation_pct: ::std::option::Option<f64>,
+    #[doc = "Minimum recommended fermentation temperature in degrees Celsius."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub min_temperature_c: ::std::option::Option<f64>,
+    #[doc = "Yeast strain name."]
     pub name: ::std::string::String,
+    #[doc = "Brewer's notes about this yeast strain."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub notes: ::std::option::Option<::std::string::String>,
+    #[doc = "Phenolic Off-Flavor gene present."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub pof_positive: ::std::option::Option<bool>,
+    #[doc = "Manufacturer's product identifier."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub product_id: ::std::option::Option<::std::string::String>,
+    #[doc = "e.g. Saccharomyces cerevisiae"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub species: ::std::option::Option<::std::string::String>,
+    #[doc = "STA-1 dextrin-fermenting gene present."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub sta1_positive: ::std::option::Option<bool>,
+    #[doc = "Suitable beer styles, comma-separated."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub styles: ::std::option::Option<::std::string::String>,
+    #[doc = "Substitute yeast strains, comma-separated."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub substitutes: ::std::option::Option<::std::string::String>,
     #[doc = "Ale, Lager, Wheat, Wine, Champagne"]
@@ -2103,12 +2529,13 @@ impl CreateYeastInput {
         Default::default()
     }
 }
-#[doc = "`EquipmentProfile`"]
+#[doc = "An equipment profile defining brew system volumes, losses, and calculation settings."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"An equipment profile defining brew system volumes, losses, and calculation settings.\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"required\": ["]
 #[doc = "    \"altitude_adjustment\","]
@@ -2155,6 +2582,7 @@ impl CreateYeastInput {
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"batch_size_l\": {"]
+#[doc = "      \"description\": \"Target batch size in litres (into fermenter or kettle, depending on batch_volume_target).\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"batch_volume_target\": {"]
@@ -2162,6 +2590,7 @@ impl CreateYeastInput {
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"boil_size_l\": {"]
+#[doc = "      \"description\": \"Pre-boil kettle volume in litres.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"boil_temp_f\": {"]
@@ -2172,6 +2601,7 @@ impl CreateYeastInput {
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"boil_time_min\": {"]
+#[doc = "      \"description\": \"Default boil duration in minutes.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"calc_aroma_hop_utilization\": {"]
@@ -2179,6 +2609,7 @@ impl CreateYeastInput {
 #[doc = "      \"type\": \"boolean\""]
 #[doc = "    },"]
 #[doc = "    \"calc_boil_volume\": {"]
+#[doc = "      \"description\": \"When true, boil volume is calculated from batch size, evaporation rate, and losses.\","]
 #[doc = "      \"type\": \"boolean\""]
 #[doc = "    },"]
 #[doc = "    \"calc_mash_efficiency\": {"]
@@ -2194,10 +2625,12 @@ impl CreateYeastInput {
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"created_at\": {"]
+#[doc = "      \"description\": \"Unix timestamp in milliseconds when the profile was created.\","]
 #[doc = "      \"type\": \"integer\","]
 #[doc = "      \"format\": \"int64\""]
 #[doc = "    },"]
 #[doc = "    \"efficiency_pct\": {"]
+#[doc = "      \"description\": \"Brewhouse efficiency percentage.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"evap_rate_l_hr\": {"]
@@ -2205,6 +2638,7 @@ impl CreateYeastInput {
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"fermenter_loss_l\": {"]
+#[doc = "      \"description\": \"Volume lost to fermenter trub and yeast cake, in litres.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"grain_absorption_rate_l_per_kg\": {"]
@@ -2230,6 +2664,7 @@ impl CreateYeastInput {
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"hop_utilization_pct\": {"]
+#[doc = "      \"description\": \"Global hop utilization correction factor as a percentage.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"hopstand_temp_f\": {"]
@@ -2237,6 +2672,7 @@ impl CreateYeastInput {
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"id\": {"]
+#[doc = "      \"description\": \"Unique equipment profile identifier.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"include_grain_volume_in_mash_limits\": {"]
@@ -2244,6 +2680,7 @@ impl CreateYeastInput {
 #[doc = "      \"type\": \"boolean\""]
 #[doc = "    },"]
 #[doc = "    \"lauter_deadspace_l\": {"]
+#[doc = "      \"description\": \"Volume that remains in the lauter tun and cannot be transferred, in litres.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"mash_efficiency_pct\": {"]
@@ -2272,9 +2709,11 @@ impl CreateYeastInput {
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"name\": {"]
+#[doc = "      \"description\": \"Equipment profile name.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"notes\": {"]
+#[doc = "      \"description\": \"Optional notes about this equipment setup.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
@@ -2314,9 +2753,11 @@ impl CreateYeastInput {
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"top_up_kettle_l\": {"]
+#[doc = "      \"description\": \"Volume of water added to the kettle before the boil, in litres.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"top_up_water_l\": {"]
+#[doc = "      \"description\": \"Volume of water added to the fermenter after the boil, in litres.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"trub_chiller_loss_l\": {"]
@@ -2328,12 +2769,14 @@ impl CreateYeastInput {
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"tun_volume_l\": {"]
+#[doc = "      \"description\": \"Mash tun capacity in litres.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"updated_at\": {"]
+#[doc = "      \"description\": \"Unix timestamp in milliseconds when the profile was last updated.\","]
 #[doc = "      \"type\": \"integer\","]
 #[doc = "      \"format\": \"int64\""]
 #[doc = "    },"]
@@ -2358,16 +2801,20 @@ pub struct EquipmentProfile {
     pub altitude_adjustment: bool,
     #[doc = "Utilization percentage for whirlpool/aroma hop additions"]
     pub aroma_hop_utilization_pct: f64,
+    #[doc = "Target batch size in litres (into fermenter or kettle, depending on batch_volume_target)."]
     pub batch_size_l: f64,
     #[doc = "Whether batch_size_l targets the fermenter or the kettle. Enum: 'fermenter' | 'kettle'"]
     pub batch_volume_target: ::std::string::String,
+    #[doc = "Pre-boil kettle volume in litres."]
     pub boil_size_l: f64,
     #[doc = "Manual boil temperature in Fahrenheit, used when altitude_adjustment is false"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub boil_temp_f: ::std::option::Option<f64>,
+    #[doc = "Default boil duration in minutes."]
     pub boil_time_min: f64,
     #[doc = "When true, aroma hop utilization is calculated using the hopstand temperature model"]
     pub calc_aroma_hop_utilization: bool,
+    #[doc = "When true, boil volume is calculated from batch size, evaporation rate, and losses."]
     pub calc_boil_volume: bool,
     #[doc = "When true, mash efficiency is calculated from brewhouse efficiency and losses"]
     pub calc_mash_efficiency: bool,
@@ -2375,10 +2822,13 @@ pub struct EquipmentProfile {
     pub calc_strike_water_temp: bool,
     #[doc = "Wort volume reduction from boiling temperature to room temperature, as a percentage"]
     pub cooling_shrinkage_pct: f64,
+    #[doc = "Unix timestamp in milliseconds when the profile was created."]
     pub created_at: i64,
+    #[doc = "Brewhouse efficiency percentage."]
     pub efficiency_pct: f64,
     #[doc = "Boil evaporation rate in litres per hour"]
     pub evap_rate_l_hr: f64,
+    #[doc = "Volume lost to fermenter trub and yeast cake, in litres."]
     pub fermenter_loss_l: f64,
     #[doc = "Volume of water absorbed per kg of grain, in litres/kg"]
     pub grain_absorption_rate_l_per_kg: f64,
@@ -2390,12 +2840,15 @@ pub struct EquipmentProfile {
     #[doc = "Minimum HLT water volume in litres"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub hlt_water_limit_min_l: ::std::option::Option<f64>,
+    #[doc = "Global hop utilization correction factor as a percentage."]
     pub hop_utilization_pct: f64,
     #[doc = "Temperature at which the hopstand is conducted, in Fahrenheit"]
     pub hopstand_temp_f: f64,
+    #[doc = "Unique equipment profile identifier."]
     pub id: ::std::string::String,
     #[doc = "When true, grain displacement is included when checking mash volume limits"]
     pub include_grain_volume_in_mash_limits: bool,
+    #[doc = "Volume that remains in the lauter tun and cannot be transferred, in litres."]
     pub lauter_deadspace_l: f64,
     #[doc = "Manual mash efficiency percentage, used when calc_mash_efficiency is false"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -2408,7 +2861,9 @@ pub struct EquipmentProfile {
     #[doc = "Minimum mash tun volume in litres"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub mash_volume_min_l: ::std::option::Option<f64>,
+    #[doc = "Equipment profile name."]
     pub name: ::std::string::String,
+    #[doc = "Optional notes about this equipment setup."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub notes: ::std::option::Option<::std::string::String>,
     #[doc = "Where to redirect overflow when mash volume limits are exceeded. Enum: 'mash' | 'sparge' | 'hlt'"]
@@ -2426,14 +2881,18 @@ pub struct EquipmentProfile {
     #[doc = "Minimum sparge water volume in litres"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub sparge_volume_min_l: ::std::option::Option<f64>,
+    #[doc = "Volume of water added to the kettle before the boil, in litres."]
     pub top_up_kettle_l: f64,
+    #[doc = "Volume of water added to the fermenter after the boil, in litres."]
     pub top_up_water_l: f64,
     #[doc = "Volume lost to trub and chiller in litres"]
     pub trub_chiller_loss_l: f64,
     #[doc = "Thermal mass of mash tun expressed as litres of equivalent water volume (0 = pre-heated tun)"]
     pub tun_heat_capacity_l: f64,
+    #[doc = "Mash tun capacity in litres."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub tun_volume_l: ::std::option::Option<f64>,
+    #[doc = "Unix timestamp in milliseconds when the profile was last updated."]
     pub updated_at: i64,
     #[doc = "Target mash water-to-grain ratio, in litres/kg"]
     pub water_grain_ratio_l_per_kg: f64,
@@ -2446,12 +2905,13 @@ impl EquipmentProfile {
         Default::default()
     }
 }
-#[doc = "`Fermentable`"]
+#[doc = "A fermentable ingredient in the library (grain, extract, sugar, or adjunct)."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"A fermentable ingredient in the library (grain, extract, sugar, or adjunct).\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"required\": ["]
 #[doc = "    \"add_after_boil\","]
@@ -2464,72 +2924,86 @@ impl EquipmentProfile {
 #[doc = "  ],"]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"add_after_boil\": {"]
+#[doc = "      \"description\": \"When true, this fermentable is added after the boil (e.g. late extract additions).\","]
 #[doc = "      \"type\": \"boolean\""]
 #[doc = "    },"]
 #[doc = "    \"coarse_fine_diff_pct\": {"]
+#[doc = "      \"description\": \"Difference between coarse and fine grind extract yield, as a percentage.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"color_lovibond\": {"]
+#[doc = "      \"description\": \"Color contribution in degrees Lovibond.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"diastatic_power_lintner\": {"]
+#[doc = "      \"description\": \"Enzymatic activity in degrees Lintner; indicates mash conversion ability.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"forked_from_id\": {"]
+#[doc = "      \"description\": \"ID of the seeded fermentable this entry was forked from, or null if original.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"ibu_gal_per_lb\": {"]
+#[doc = "      \"description\": \"Bitterness contribution in IBU per gallon per pound; used for adjuncts like black malt.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"id\": {"]
+#[doc = "      \"description\": \"Unique fermentable identifier.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"max_in_batch_pct\": {"]
+#[doc = "      \"description\": \"Recommended maximum usage as a percentage of total grain bill.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"moisture_pct\": {"]
+#[doc = "      \"description\": \"Moisture content of the grain as a percentage.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"name\": {"]
+#[doc = "      \"description\": \"Fermentable name (e.g. \\\"Pale Malt 2-Row\\\", \\\"Corn Sugar\\\").\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"notes\": {"]
+#[doc = "      \"description\": \"Brewer's notes about this fermentable.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"origin\": {"]
+#[doc = "      \"description\": \"Country or region of origin (e.g. \\\"United Kingdom\\\").\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"protein_pct\": {"]
+#[doc = "      \"description\": \"Total protein content as a percentage.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"recommend_mash\": {"]
+#[doc = "      \"description\": \"When true, this fermentable requires mashing rather than steeping.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"boolean\","]
 #[doc = "        \"null\""]
@@ -2540,6 +3014,7 @@ impl EquipmentProfile {
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"supplier\": {"]
+#[doc = "      \"description\": \"Maltster or supplier name.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
@@ -2550,6 +3025,7 @@ impl EquipmentProfile {
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"yield_pct\": {"]
+#[doc = "      \"description\": \"Maximum extractable sugar yield as a percentage of dry weight.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    }"]
 #[doc = "  }"]
@@ -2558,36 +3034,52 @@ impl EquipmentProfile {
 #[doc = r" </details>"]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
 pub struct Fermentable {
+    #[doc = "When true, this fermentable is added after the boil (e.g. late extract additions)."]
     pub add_after_boil: bool,
+    #[doc = "Difference between coarse and fine grind extract yield, as a percentage."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub coarse_fine_diff_pct: ::std::option::Option<f64>,
+    #[doc = "Color contribution in degrees Lovibond."]
     pub color_lovibond: f64,
+    #[doc = "Enzymatic activity in degrees Lintner; indicates mash conversion ability."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub diastatic_power_lintner: ::std::option::Option<f64>,
+    #[doc = "ID of the seeded fermentable this entry was forked from, or null if original."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub forked_from_id: ::std::option::Option<::std::string::String>,
+    #[doc = "Bitterness contribution in IBU per gallon per pound; used for adjuncts like black malt."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub ibu_gal_per_lb: ::std::option::Option<f64>,
+    #[doc = "Unique fermentable identifier."]
     pub id: ::std::string::String,
+    #[doc = "Recommended maximum usage as a percentage of total grain bill."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub max_in_batch_pct: ::std::option::Option<f64>,
+    #[doc = "Moisture content of the grain as a percentage."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub moisture_pct: ::std::option::Option<f64>,
+    #[doc = "Fermentable name (e.g. \"Pale Malt 2-Row\", \"Corn Sugar\")."]
     pub name: ::std::string::String,
+    #[doc = "Brewer's notes about this fermentable."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub notes: ::std::option::Option<::std::string::String>,
+    #[doc = "Country or region of origin (e.g. \"United Kingdom\")."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub origin: ::std::option::Option<::std::string::String>,
+    #[doc = "Total protein content as a percentage."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub protein_pct: ::std::option::Option<f64>,
+    #[doc = "When true, this fermentable requires mashing rather than steeping."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub recommend_mash: ::std::option::Option<bool>,
     #[doc = "'seeded' | 'user'"]
     pub source: ::std::string::String,
+    #[doc = "Maltster or supplier name."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub supplier: ::std::option::Option<::std::string::String>,
     #[doc = "Grain, Sugar, Extract, Dry Extract, Adjunct"]
     pub type_: ::std::string::String,
+    #[doc = "Maximum extractable sugar yield as a percentage of dry weight."]
     pub yield_pct: f64,
 }
 impl Fermentable {
@@ -2595,12 +3087,13 @@ impl Fermentable {
         Default::default()
     }
 }
-#[doc = "`GravityReading`"]
+#[doc = "A single hydrometer or refractometer gravity reading taken during a brew batch."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"A single hydrometer or refractometer gravity reading taken during a brew batch.\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"required\": ["]
 #[doc = "    \"batch_id\","]
@@ -2610,25 +3103,31 @@ impl Fermentable {
 #[doc = "  ],"]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"batch_id\": {"]
+#[doc = "      \"description\": \"ID of the batch this reading belongs to.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"gravity\": {"]
+#[doc = "      \"description\": \"Specific gravity measurement (e.g. 1.050).\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"id\": {"]
+#[doc = "      \"description\": \"Unique gravity reading identifier.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"notes\": {"]
+#[doc = "      \"description\": \"Optional brewer notes for this reading.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"recorded_at\": {"]
+#[doc = "      \"description\": \"Unix timestamp in milliseconds when the reading was taken.\","]
 #[doc = "      \"type\": \"integer\","]
 #[doc = "      \"format\": \"int64\""]
 #[doc = "    },"]
 #[doc = "    \"temp_c\": {"]
+#[doc = "      \"description\": \"Sample temperature in degrees Celsius, used for temperature-corrected readings.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
@@ -2640,12 +3139,18 @@ impl Fermentable {
 #[doc = r" </details>"]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
 pub struct GravityReading {
+    #[doc = "ID of the batch this reading belongs to."]
     pub batch_id: ::std::string::String,
+    #[doc = "Specific gravity measurement (e.g. 1.050)."]
     pub gravity: f64,
+    #[doc = "Unique gravity reading identifier."]
     pub id: ::std::string::String,
+    #[doc = "Optional brewer notes for this reading."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub notes: ::std::option::Option<::std::string::String>,
+    #[doc = "Unix timestamp in milliseconds when the reading was taken."]
     pub recorded_at: i64,
+    #[doc = "Sample temperature in degrees Celsius, used for temperature-corrected readings."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub temp_c: ::std::option::Option<f64>,
 }
@@ -2654,12 +3159,13 @@ impl GravityReading {
         Default::default()
     }
 }
-#[doc = "`Hop`"]
+#[doc = "A hop variety in the library."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"A hop variety in the library.\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"required\": ["]
 #[doc = "    \"alpha_pct\","]
@@ -2670,27 +3176,32 @@ impl GravityReading {
 #[doc = "  ],"]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"alpha_pct\": {"]
+#[doc = "      \"description\": \"Alpha acid percentage, used for IBU calculations.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"beta_pct\": {"]
+#[doc = "      \"description\": \"Beta acid percentage.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"caryophyllene_pct\": {"]
+#[doc = "      \"description\": \"Caryophyllene oil content as a percentage of total oils.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"cohumulone_pct\": {"]
+#[doc = "      \"description\": \"Cohumulone content as a percentage of alpha acids; higher values produce harsher bitterness.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"forked_from_id\": {"]
+#[doc = "      \"description\": \"ID of the seeded hop this entry was forked from, or null if original.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
@@ -2701,36 +3212,43 @@ impl GravityReading {
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"hsi_pct\": {"]
+#[doc = "      \"description\": \"Hop Storage Index; indicates freshness degradation rate as a percentage.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"humulene_pct\": {"]
+#[doc = "      \"description\": \"Humulene oil content as a percentage of total oils.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"id\": {"]
+#[doc = "      \"description\": \"Unique hop identifier.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"myrcene_pct\": {"]
+#[doc = "      \"description\": \"Myrcene oil content as a percentage of total oils.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"name\": {"]
+#[doc = "      \"description\": \"Hop variety name (e.g. \\\"Centennial\\\", \\\"Saaz\\\").\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"notes\": {"]
+#[doc = "      \"description\": \"Brewer's notes about this hop variety.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"origin\": {"]
+#[doc = "      \"description\": \"Country or region of origin.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
@@ -2741,6 +3259,7 @@ impl GravityReading {
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"substitutes\": {"]
+#[doc = "      \"description\": \"Suggested substitute varieties, comma-separated.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
@@ -2754,6 +3273,7 @@ impl GravityReading {
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"year\": {"]
+#[doc = "      \"description\": \"Harvest year for this batch of hops.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
@@ -2765,36 +3285,50 @@ impl GravityReading {
 #[doc = r" </details>"]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
 pub struct Hop {
+    #[doc = "Alpha acid percentage, used for IBU calculations."]
     pub alpha_pct: f64,
+    #[doc = "Beta acid percentage."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub beta_pct: ::std::option::Option<f64>,
+    #[doc = "Caryophyllene oil content as a percentage of total oils."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub caryophyllene_pct: ::std::option::Option<f64>,
+    #[doc = "Cohumulone content as a percentage of alpha acids; higher values produce harsher bitterness."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub cohumulone_pct: ::std::option::Option<f64>,
+    #[doc = "ID of the seeded hop this entry was forked from, or null if original."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub forked_from_id: ::std::option::Option<::std::string::String>,
     #[doc = "Pellet, Plug, Leaf, Cryo, CO2 Extract"]
     pub form: ::std::string::String,
+    #[doc = "Hop Storage Index; indicates freshness degradation rate as a percentage."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub hsi_pct: ::std::option::Option<f64>,
+    #[doc = "Humulene oil content as a percentage of total oils."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub humulene_pct: ::std::option::Option<f64>,
+    #[doc = "Unique hop identifier."]
     pub id: ::std::string::String,
+    #[doc = "Myrcene oil content as a percentage of total oils."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub myrcene_pct: ::std::option::Option<f64>,
+    #[doc = "Hop variety name (e.g. \"Centennial\", \"Saaz\")."]
     pub name: ::std::string::String,
+    #[doc = "Brewer's notes about this hop variety."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub notes: ::std::option::Option<::std::string::String>,
+    #[doc = "Country or region of origin."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub origin: ::std::option::Option<::std::string::String>,
     #[doc = "'seeded' | 'user'"]
     pub source: ::std::string::String,
+    #[doc = "Suggested substitute varieties, comma-separated."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub substitutes: ::std::option::Option<::std::string::String>,
     #[doc = "Bittering, Aroma, Both"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub type_: ::std::option::Option<::std::string::String>,
+    #[doc = "Harvest year for this batch of hops."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub year: ::std::option::Option<::std::string::String>,
 }
@@ -2803,12 +3337,13 @@ impl Hop {
         Default::default()
     }
 }
-#[doc = "`HopStat`"]
+#[doc = "IBU contribution from a single hop addition."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"IBU contribution from a single hop addition.\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"required\": ["]
 #[doc = "    \"hop_id\","]
@@ -2839,12 +3374,13 @@ impl HopStat {
         Default::default()
     }
 }
-#[doc = "`Mash`"]
+#[doc = "The mash schedule for a recipe, including temperature, water parameters, and steps."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"The mash schedule for a recipe, including temperature, water parameters, and steps.\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"required\": ["]
 #[doc = "    \"equip_adjust\","]
@@ -2856,24 +3392,30 @@ impl HopStat {
 #[doc = "  ],"]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"equip_adjust\": {"]
+#[doc = "      \"description\": \"When true, strike water temperature is adjusted for tun thermal mass.\","]
 #[doc = "      \"type\": \"boolean\""]
 #[doc = "    },"]
 #[doc = "    \"grain_temp_c\": {"]
+#[doc = "      \"description\": \"Temperature of the grain before doughing in, in degrees Celsius.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"id\": {"]
+#[doc = "      \"description\": \"Unique mash identifier.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"name\": {"]
+#[doc = "      \"description\": \"Mash schedule name (e.g. \\\"Single Infusion, Medium Body\\\").\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"notes\": {"]
+#[doc = "      \"description\": \"Brewer's notes about this mash schedule.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"ph\": {"]
+#[doc = "      \"description\": \"Target mash pH.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
@@ -2887,33 +3429,39 @@ impl HopStat {
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"recipe_id\": {"]
+#[doc = "      \"description\": \"ID of the recipe this mash belongs to.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"sparge_temp_c\": {"]
+#[doc = "      \"description\": \"Target sparge water temperature in degrees Celsius.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"steps\": {"]
+#[doc = "      \"description\": \"Ordered list of mash steps.\","]
 #[doc = "      \"type\": \"array\","]
 #[doc = "      \"items\": {"]
 #[doc = "        \"$ref\": \"#/components/schemas/MashStep\""]
 #[doc = "      }"]
 #[doc = "    },"]
 #[doc = "    \"tun_specific_heat\": {"]
+#[doc = "      \"description\": \"Specific heat of the mash tun material in cal/(g·°C).\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"tun_temp_c\": {"]
+#[doc = "      \"description\": \"Initial mash tun temperature before adding grain, in degrees Celsius.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"tun_weight_kg\": {"]
+#[doc = "      \"description\": \"Dry weight of the mash tun in kilograms, used for strike water temperature calculations.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
@@ -2925,25 +3473,37 @@ impl HopStat {
 #[doc = r" </details>"]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
 pub struct Mash {
+    #[doc = "When true, strike water temperature is adjusted for tun thermal mass."]
     pub equip_adjust: bool,
+    #[doc = "Temperature of the grain before doughing in, in degrees Celsius."]
     pub grain_temp_c: f64,
+    #[doc = "Unique mash identifier."]
     pub id: ::std::string::String,
+    #[doc = "Mash schedule name (e.g. \"Single Infusion, Medium Body\")."]
     pub name: ::std::string::String,
+    #[doc = "Brewer's notes about this mash schedule."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub notes: ::std::option::Option<::std::string::String>,
+    #[doc = "Target mash pH."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub ph: ::std::option::Option<f64>,
     #[doc = "Water-to-grain ratio in litres per kilogram"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub ratio_l_per_kg: ::std::option::Option<f64>,
+    #[doc = "ID of the recipe this mash belongs to."]
     pub recipe_id: ::std::string::String,
+    #[doc = "Target sparge water temperature in degrees Celsius."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub sparge_temp_c: ::std::option::Option<f64>,
+    #[doc = "Ordered list of mash steps."]
     pub steps: ::std::vec::Vec<MashStep>,
+    #[doc = "Specific heat of the mash tun material in cal/(g·°C)."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub tun_specific_heat: ::std::option::Option<f64>,
+    #[doc = "Initial mash tun temperature before adding grain, in degrees Celsius."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub tun_temp_c: ::std::option::Option<f64>,
+    #[doc = "Dry weight of the mash tun in kilograms, used for strike water temperature calculations."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub tun_weight_kg: ::std::option::Option<f64>,
 }
@@ -2952,12 +3512,13 @@ impl Mash {
         Default::default()
     }
 }
-#[doc = "`MashStep`"]
+#[doc = "A single step within a mash schedule (infusion, temperature rest, or decoction)."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"A single step within a mash schedule (infusion, temperature rest, or decoction).\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"required\": ["]
 #[doc = "    \"id\","]
@@ -2970,39 +3531,48 @@ impl Mash {
 #[doc = "  ],"]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"end_temp_c\": {"]
+#[doc = "      \"description\": \"Temperature at the end of this step in degrees Celsius; used for decoction steps.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"id\": {"]
+#[doc = "      \"description\": \"Unique mash step identifier.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"infuse_amount_l\": {"]
+#[doc = "      \"description\": \"Volume of water to infuse in litres; applicable for Infusion steps.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"mash_id\": {"]
+#[doc = "      \"description\": \"ID of the mash schedule this step belongs to.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"name\": {"]
+#[doc = "      \"description\": \"Step name (e.g. \\\"Protein Rest\\\", \\\"Saccharification\\\", \\\"Mash Out\\\").\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"ramp_time_min\": {"]
+#[doc = "      \"description\": \"Time to ramp to step_temp_c from the previous step temperature, in minutes.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"integer\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"step_order\": {"]
+#[doc = "      \"description\": \"Position of this step within the mash schedule (1-based).\","]
 #[doc = "      \"type\": \"integer\""]
 #[doc = "    },"]
 #[doc = "    \"step_temp_c\": {"]
+#[doc = "      \"description\": \"Target step temperature in degrees Celsius.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"step_time_min\": {"]
+#[doc = "      \"description\": \"Duration of this step in minutes.\","]
 #[doc = "      \"type\": \"integer\""]
 #[doc = "    },"]
 #[doc = "    \"type_\": {"]
@@ -3015,17 +3585,26 @@ impl Mash {
 #[doc = r" </details>"]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
 pub struct MashStep {
+    #[doc = "Temperature at the end of this step in degrees Celsius; used for decoction steps."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub end_temp_c: ::std::option::Option<f64>,
+    #[doc = "Unique mash step identifier."]
     pub id: ::std::string::String,
+    #[doc = "Volume of water to infuse in litres; applicable for Infusion steps."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub infuse_amount_l: ::std::option::Option<f64>,
+    #[doc = "ID of the mash schedule this step belongs to."]
     pub mash_id: ::std::string::String,
+    #[doc = "Step name (e.g. \"Protein Rest\", \"Saccharification\", \"Mash Out\")."]
     pub name: ::std::string::String,
+    #[doc = "Time to ramp to step_temp_c from the previous step temperature, in minutes."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub ramp_time_min: ::std::option::Option<i64>,
+    #[doc = "Position of this step within the mash schedule (1-based)."]
     pub step_order: i64,
+    #[doc = "Target step temperature in degrees Celsius."]
     pub step_temp_c: f64,
+    #[doc = "Duration of this step in minutes."]
     pub step_time_min: i64,
     #[doc = "Infusion, Temperature, Decoction"]
     pub type_: ::std::string::String,
@@ -3035,12 +3614,13 @@ impl MashStep {
         Default::default()
     }
 }
-#[doc = "`Misc`"]
+#[doc = "A miscellaneous ingredient in the library (spice, fining, water agent, etc.)."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"A miscellaneous ingredient in the library (spice, fining, water agent, etc.).\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"required\": ["]
 #[doc = "    \"amount_is_weight\","]
@@ -3053,21 +3633,26 @@ impl MashStep {
 #[doc = "  ],"]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"amount_is_weight\": {"]
+#[doc = "      \"description\": \"When true, amounts are measured by weight (grams); when false, by volume (millilitres).\","]
 #[doc = "      \"type\": \"boolean\""]
 #[doc = "    },"]
 #[doc = "    \"forked_from_id\": {"]
+#[doc = "      \"description\": \"ID of the seeded misc ingredient this entry was forked from, or null if original.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"id\": {"]
+#[doc = "      \"description\": \"Unique misc ingredient identifier.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"name\": {"]
+#[doc = "      \"description\": \"Ingredient name (e.g. \\\"Irish Moss\\\", \\\"Whirlfloc\\\", \\\"Coriander Seed\\\").\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"notes\": {"]
+#[doc = "      \"description\": \"Brewer's notes about this ingredient.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
@@ -3078,6 +3663,7 @@ impl MashStep {
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"time_min\": {"]
+#[doc = "      \"description\": \"Default usage time in minutes (meaning depends on use_).\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"type_\": {"]
@@ -3089,6 +3675,7 @@ impl MashStep {
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"use_for\": {"]
+#[doc = "      \"description\": \"Description of the purpose or effect of this ingredient.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
@@ -3100,20 +3687,27 @@ impl MashStep {
 #[doc = r" </details>"]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
 pub struct Misc {
+    #[doc = "When true, amounts are measured by weight (grams); when false, by volume (millilitres)."]
     pub amount_is_weight: bool,
+    #[doc = "ID of the seeded misc ingredient this entry was forked from, or null if original."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub forked_from_id: ::std::option::Option<::std::string::String>,
+    #[doc = "Unique misc ingredient identifier."]
     pub id: ::std::string::String,
+    #[doc = "Ingredient name (e.g. \"Irish Moss\", \"Whirlfloc\", \"Coriander Seed\")."]
     pub name: ::std::string::String,
+    #[doc = "Brewer's notes about this ingredient."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub notes: ::std::option::Option<::std::string::String>,
     #[doc = "'seeded' | 'user'"]
     pub source: ::std::string::String,
+    #[doc = "Default usage time in minutes (meaning depends on use_)."]
     pub time_min: f64,
     #[doc = "Spice, Fining, Water Agent, Herb, Flavor, Other"]
     pub type_: ::std::string::String,
     #[doc = "Boil, Mash, Primary, Secondary, Bottling"]
     pub use_: ::std::string::String,
+    #[doc = "Description of the purpose or effect of this ingredient."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub use_for: ::std::option::Option<::std::string::String>,
 }
@@ -3122,12 +3716,13 @@ impl Misc {
         Default::default()
     }
 }
-#[doc = "`Recipe`"]
+#[doc = "A full homebrewing recipe including all ingredient additions, fermentation schedule, and carbonation settings."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"A full homebrewing recipe including all ingredient additions, fermentation schedule, and carbonation settings.\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"required\": ["]
 #[doc = "    \"batch_size_l\","]
@@ -3156,33 +3751,40 @@ impl Misc {
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"age_temp_c\": {"]
+#[doc = "      \"description\": \"Conditioning temperature in degrees Celsius.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"asst_brewer\": {"]
+#[doc = "      \"description\": \"Name of the assistant brewer.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"batch_size_l\": {"]
+#[doc = "      \"description\": \"Target batch volume in litres.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"boil_size_l\": {"]
+#[doc = "      \"description\": \"Pre-boil kettle volume in litres.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"boil_time_min\": {"]
+#[doc = "      \"description\": \"Boil duration in minutes.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"brewer\": {"]
+#[doc = "      \"description\": \"Name of the primary brewer.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"carbonation_temp_c\": {"]
+#[doc = "      \"description\": \"Temperature at carbonation time in degrees Celsius, used for priming calculations.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
@@ -3196,6 +3798,7 @@ impl Misc {
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"created_at\": {"]
+#[doc = "      \"description\": \"Unix timestamp in milliseconds when the recipe was created.\","]
 #[doc = "      \"type\": \"integer\","]
 #[doc = "      \"format\": \"int64\""]
 #[doc = "    },"]
@@ -3207,12 +3810,14 @@ impl Misc {
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"efficiency_pct\": {"]
+#[doc = "      \"description\": \"Brewhouse efficiency percentage.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"equipment_profile\": {"]
+#[doc = "      \"description\": \"The full equipment profile associated with this recipe, or null if none set.\","]
 #[doc = "      \"oneOf\": ["]
 #[doc = "        {"]
 #[doc = "          \"$ref\": \"#/components/schemas/EquipmentProfile\""]
@@ -3223,18 +3828,21 @@ impl Misc {
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"equipment_profile_id\": {"]
+#[doc = "      \"description\": \"ID of the equipment profile associated with this recipe.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"fermentables\": {"]
+#[doc = "      \"description\": \"Fermentable ingredient additions on this recipe.\","]
 #[doc = "      \"type\": \"array\","]
 #[doc = "      \"items\": {"]
 #[doc = "        \"$ref\": \"#/components/schemas/RecipeAdditionFermentable\""]
 #[doc = "      }"]
 #[doc = "    },"]
 #[doc = "    \"fermentation_stages\": {"]
+#[doc = "      \"description\": \"Number of fermentation stages (1 = primary only, 2 = primary + secondary, etc.).\","]
 #[doc = "      \"type\": \"integer\""]
 #[doc = "    },"]
 #[doc = "    \"fg\": {"]
@@ -3245,9 +3853,11 @@ impl Misc {
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"forced_carbonation\": {"]
+#[doc = "      \"description\": \"When true, the beer is force-carbonated (kegged); when false, priming sugar is used.\","]
 #[doc = "      \"type\": \"boolean\""]
 #[doc = "    },"]
 #[doc = "    \"hops\": {"]
+#[doc = "      \"description\": \"Hop additions on this recipe.\","]
 #[doc = "      \"type\": \"array\","]
 #[doc = "      \"items\": {"]
 #[doc = "        \"$ref\": \"#/components/schemas/RecipeAdditionHop\""]
@@ -3261,6 +3871,7 @@ impl Misc {
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"id\": {"]
+#[doc = "      \"description\": \"Unique recipe identifier.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"image_path\": {"]
@@ -3271,12 +3882,14 @@ impl Misc {
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"keg_priming_factor\": {"]
+#[doc = "      \"description\": \"Correction factor applied when calculating priming sugar for kegs.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"mash\": {"]
+#[doc = "      \"description\": \"The mash schedule for this recipe, or null if not set.\","]
 #[doc = "      \"oneOf\": ["]
 #[doc = "        {"]
 #[doc = "          \"$ref\": \"#/components/schemas/Mash\""]
@@ -3294,15 +3907,18 @@ impl Misc {
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"miscs\": {"]
+#[doc = "      \"description\": \"Miscellaneous ingredient additions on this recipe.\","]
 #[doc = "      \"type\": \"array\","]
 #[doc = "      \"items\": {"]
 #[doc = "        \"$ref\": \"#/components/schemas/RecipeAdditionMisc\""]
 #[doc = "      }"]
 #[doc = "    },"]
 #[doc = "    \"name\": {"]
+#[doc = "      \"description\": \"Recipe name.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"notes\": {"]
+#[doc = "      \"description\": \"Brewer's notes for the recipe.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
@@ -3316,36 +3932,42 @@ impl Misc {
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"primary_age_days\": {"]
+#[doc = "      \"description\": \"Duration of primary fermentation in days.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"primary_temp_c\": {"]
+#[doc = "      \"description\": \"Primary fermentation temperature in degrees Celsius.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"priming_sugar_equiv\": {"]
+#[doc = "      \"description\": \"Priming sugar equivalent weight relative to sucrose.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"priming_sugar_name\": {"]
+#[doc = "      \"description\": \"Name of the priming sugar used for bottle conditioning.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"secondary_age_days\": {"]
+#[doc = "      \"description\": \"Duration of secondary fermentation in days.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"secondary_temp_c\": {"]
+#[doc = "      \"description\": \"Secondary fermentation temperature in degrees Celsius.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
@@ -3367,6 +3989,7 @@ impl Misc {
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"style\": {"]
+#[doc = "      \"description\": \"The full beer style associated with this recipe, or null if none set.\","]
 #[doc = "      \"oneOf\": ["]
 #[doc = "        {"]
 #[doc = "          \"$ref\": \"#/components/schemas/Style\""]
@@ -3377,30 +4000,35 @@ impl Misc {
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"style_id\": {"]
+#[doc = "      \"description\": \"ID of the beer style associated with this recipe.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"taste_notes\": {"]
+#[doc = "      \"description\": \"Tasting notes for the recipe.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"taste_rating\": {"]
+#[doc = "      \"description\": \"Taste rating (e.g. 1–50 on the BeerXML scale).\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"tertiary_age_days\": {"]
+#[doc = "      \"description\": \"Duration of tertiary fermentation in days.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"tertiary_temp_c\": {"]
+#[doc = "      \"description\": \"Tertiary fermentation temperature in degrees Celsius.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
@@ -3411,22 +4039,26 @@ impl Misc {
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"updated_at\": {"]
+#[doc = "      \"description\": \"Unix timestamp in milliseconds when the recipe was last updated.\","]
 #[doc = "      \"type\": \"integer\","]
 #[doc = "      \"format\": \"int64\""]
 #[doc = "    },"]
 #[doc = "    \"water_adjustments\": {"]
+#[doc = "      \"description\": \"Mineral and acid water adjustments on this recipe.\","]
 #[doc = "      \"type\": \"array\","]
 #[doc = "      \"items\": {"]
 #[doc = "        \"$ref\": \"#/components/schemas/RecipeWaterAdjustment\""]
 #[doc = "      }"]
 #[doc = "    },"]
 #[doc = "    \"waters\": {"]
+#[doc = "      \"description\": \"Water source additions on this recipe.\","]
 #[doc = "      \"type\": \"array\","]
 #[doc = "      \"items\": {"]
 #[doc = "        \"$ref\": \"#/components/schemas/RecipeAdditionWater\""]
 #[doc = "      }"]
 #[doc = "    },"]
 #[doc = "    \"yeasts\": {"]
+#[doc = "      \"description\": \"Yeast additions on this recipe.\","]
 #[doc = "      \"type\": \"array\","]
 #[doc = "      \"items\": {"]
 #[doc = "        \"$ref\": \"#/components/schemas/RecipeAdditionYeast\""]
@@ -3441,68 +4073,95 @@ pub struct Recipe {
     #[doc = "Conditioning/bottle age in days"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub age_days: ::std::option::Option<f64>,
+    #[doc = "Conditioning temperature in degrees Celsius."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub age_temp_c: ::std::option::Option<f64>,
+    #[doc = "Name of the assistant brewer."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub asst_brewer: ::std::option::Option<::std::string::String>,
+    #[doc = "Target batch volume in litres."]
     pub batch_size_l: f64,
+    #[doc = "Pre-boil kettle volume in litres."]
     pub boil_size_l: f64,
+    #[doc = "Boil duration in minutes."]
     pub boil_time_min: f64,
+    #[doc = "Name of the primary brewer."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub brewer: ::std::option::Option<::std::string::String>,
+    #[doc = "Temperature at carbonation time in degrees Celsius, used for priming calculations."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub carbonation_temp_c: ::std::option::Option<f64>,
     #[doc = "Target carbonation in volumes of CO2"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub carbonation_vols: ::std::option::Option<f64>,
+    #[doc = "Unix timestamp in milliseconds when the recipe was created."]
     pub created_at: i64,
     #[doc = "Brew date (free-form string)"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub date: ::std::option::Option<::std::string::String>,
+    #[doc = "Brewhouse efficiency percentage."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub efficiency_pct: ::std::option::Option<f64>,
+    #[doc = "The full equipment profile associated with this recipe, or null if none set."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub equipment_profile: ::std::option::Option<EquipmentProfile>,
+    #[doc = "ID of the equipment profile associated with this recipe."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub equipment_profile_id: ::std::option::Option<::std::string::String>,
+    #[doc = "Fermentable ingredient additions on this recipe."]
     pub fermentables: ::std::vec::Vec<RecipeAdditionFermentable>,
+    #[doc = "Number of fermentation stages (1 = primary only, 2 = primary + secondary, etc.)."]
     pub fermentation_stages: i64,
     #[doc = "Measured final gravity"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub fg: ::std::option::Option<f64>,
+    #[doc = "When true, the beer is force-carbonated (kegged); when false, priming sugar is used."]
     pub forced_carbonation: bool,
+    #[doc = "Hop additions on this recipe."]
     pub hops: ::std::vec::Vec<RecipeAdditionHop>,
     #[doc = "Default hopstand temperature in °C for this recipe"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub hopstand_temp_c: ::std::option::Option<f64>,
+    #[doc = "Unique recipe identifier."]
     pub id: ::std::string::String,
     #[doc = "Filename of the recipe's image in {appDataDir}/images/"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub image_path: ::std::option::Option<::std::string::String>,
+    #[doc = "Correction factor applied when calculating priming sugar for kegs."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub keg_priming_factor: ::std::option::Option<f64>,
+    #[doc = "The mash schedule for this recipe, or null if not set."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub mash: ::std::option::Option<Mash>,
     #[doc = "ID of the mash water profile"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub mash_water_id: ::std::option::Option<::std::string::String>,
+    #[doc = "Miscellaneous ingredient additions on this recipe."]
     pub miscs: ::std::vec::Vec<RecipeAdditionMisc>,
+    #[doc = "Recipe name."]
     pub name: ::std::string::String,
+    #[doc = "Brewer's notes for the recipe."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub notes: ::std::option::Option<::std::string::String>,
     #[doc = "Measured original gravity"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub og: ::std::option::Option<f64>,
+    #[doc = "Duration of primary fermentation in days."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub primary_age_days: ::std::option::Option<f64>,
+    #[doc = "Primary fermentation temperature in degrees Celsius."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub primary_temp_c: ::std::option::Option<f64>,
+    #[doc = "Priming sugar equivalent weight relative to sucrose."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub priming_sugar_equiv: ::std::option::Option<f64>,
+    #[doc = "Name of the priming sugar used for bottle conditioning."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub priming_sugar_name: ::std::option::Option<::std::string::String>,
+    #[doc = "Duration of secondary fermentation in days."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub secondary_age_days: ::std::option::Option<f64>,
+    #[doc = "Secondary fermentation temperature in degrees Celsius."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub secondary_temp_c: ::std::option::Option<f64>,
     #[doc = "'user' = created by the user; 'seeded' = built-in starter recipe"]
@@ -3510,24 +4169,34 @@ pub struct Recipe {
     #[doc = "ID of the sparge water profile (null means use mash water)"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub sparge_water_id: ::std::option::Option<::std::string::String>,
+    #[doc = "The full beer style associated with this recipe, or null if none set."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub style: ::std::option::Option<Style>,
+    #[doc = "ID of the beer style associated with this recipe."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub style_id: ::std::option::Option<::std::string::String>,
+    #[doc = "Tasting notes for the recipe."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub taste_notes: ::std::option::Option<::std::string::String>,
+    #[doc = "Taste rating (e.g. 1–50 on the BeerXML scale)."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub taste_rating: ::std::option::Option<f64>,
+    #[doc = "Duration of tertiary fermentation in days."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub tertiary_age_days: ::std::option::Option<f64>,
+    #[doc = "Tertiary fermentation temperature in degrees Celsius."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub tertiary_temp_c: ::std::option::Option<f64>,
     #[doc = "Recipe type (e.g. All Grain, Extract, Partial Mash)"]
     pub type_: ::std::string::String,
+    #[doc = "Unix timestamp in milliseconds when the recipe was last updated."]
     pub updated_at: i64,
+    #[doc = "Mineral and acid water adjustments on this recipe."]
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub water_adjustments: ::std::vec::Vec<RecipeWaterAdjustment>,
+    #[doc = "Water source additions on this recipe."]
     pub waters: ::std::vec::Vec<RecipeAdditionWater>,
+    #[doc = "Yeast additions on this recipe."]
     pub yeasts: ::std::vec::Vec<RecipeAdditionYeast>,
 }
 impl Recipe {
@@ -3535,12 +4204,13 @@ impl Recipe {
         Default::default()
     }
 }
-#[doc = "`RecipeAdditionFermentable`"]
+#[doc = "A fermentable ingredient addition on a recipe."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"A fermentable ingredient addition on a recipe.\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"required\": ["]
 #[doc = "    \"add_after_boil\","]
@@ -3555,15 +4225,19 @@ impl Recipe {
 #[doc = "  ],"]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"add_after_boil\": {"]
+#[doc = "      \"description\": \"When true, this fermentable is added after the boil.\","]
 #[doc = "      \"type\": \"boolean\""]
 #[doc = "    },"]
 #[doc = "    \"addition_order\": {"]
+#[doc = "      \"description\": \"Display sort order among fermentable additions on this recipe.\","]
 #[doc = "      \"type\": \"integer\""]
 #[doc = "    },"]
 #[doc = "    \"amount_kg\": {"]
+#[doc = "      \"description\": \"Amount of this fermentable in kilograms.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"color_lovibond\": {"]
+#[doc = "      \"description\": \"Color contribution in degrees Lovibond.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"fermentable_id\": {"]
@@ -3574,18 +4248,23 @@ impl Recipe {
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"id\": {"]
+#[doc = "      \"description\": \"Unique addition identifier.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"name\": {"]
+#[doc = "      \"description\": \"Fermentable name.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"recipe_id\": {"]
+#[doc = "      \"description\": \"ID of the recipe this addition belongs to.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"type_\": {"]
+#[doc = "      \"description\": \"Grain, Sugar, Extract, Dry Extract, Adjunct\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"yield_pct\": {"]
+#[doc = "      \"description\": \"Maximum extractable sugar yield as a percentage of dry weight.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    }"]
 #[doc = "  }"]
@@ -3594,17 +4273,26 @@ impl Recipe {
 #[doc = r" </details>"]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
 pub struct RecipeAdditionFermentable {
+    #[doc = "When true, this fermentable is added after the boil."]
     pub add_after_boil: bool,
+    #[doc = "Display sort order among fermentable additions on this recipe."]
     pub addition_order: i64,
+    #[doc = "Amount of this fermentable in kilograms."]
     pub amount_kg: f64,
+    #[doc = "Color contribution in degrees Lovibond."]
     pub color_lovibond: f64,
     #[doc = "Source library ingredient ID (null if manually entered)"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub fermentable_id: ::std::option::Option<::std::string::String>,
+    #[doc = "Unique addition identifier."]
     pub id: ::std::string::String,
+    #[doc = "Fermentable name."]
     pub name: ::std::string::String,
+    #[doc = "ID of the recipe this addition belongs to."]
     pub recipe_id: ::std::string::String,
+    #[doc = "Grain, Sugar, Extract, Dry Extract, Adjunct"]
     pub type_: ::std::string::String,
+    #[doc = "Maximum extractable sugar yield as a percentage of dry weight."]
     pub yield_pct: f64,
 }
 impl RecipeAdditionFermentable {
@@ -3612,12 +4300,13 @@ impl RecipeAdditionFermentable {
         Default::default()
     }
 }
-#[doc = "`RecipeAdditionHop`"]
+#[doc = "A hop addition on a recipe."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"A hop addition on a recipe.\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"required\": ["]
 #[doc = "    \"addition_order\","]
@@ -3632,12 +4321,15 @@ impl RecipeAdditionFermentable {
 #[doc = "  ],"]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"addition_order\": {"]
+#[doc = "      \"description\": \"Display sort order among hop additions on this recipe.\","]
 #[doc = "      \"type\": \"integer\""]
 #[doc = "    },"]
 #[doc = "    \"alpha_pct\": {"]
+#[doc = "      \"description\": \"Alpha acid percentage used for IBU calculations.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"amount_kg\": {"]
+#[doc = "      \"description\": \"Amount of this hop addition in kilograms.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"form\": {"]
@@ -3645,6 +4337,7 @@ impl RecipeAdditionFermentable {
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"hop_id\": {"]
+#[doc = "      \"description\": \"Source library hop ID; null if manually entered.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
@@ -3658,15 +4351,19 @@ impl RecipeAdditionFermentable {
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"id\": {"]
+#[doc = "      \"description\": \"Unique addition identifier.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"name\": {"]
+#[doc = "      \"description\": \"Hop variety name.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"recipe_id\": {"]
+#[doc = "      \"description\": \"ID of the recipe this addition belongs to.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"time_min\": {"]
+#[doc = "      \"description\": \"Addition time; meaning depends on use_. For Boil: minutes remaining in boil. For Dry Hop: days. For others: minutes.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"use_\": {"]
@@ -3679,19 +4376,27 @@ impl RecipeAdditionFermentable {
 #[doc = r" </details>"]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
 pub struct RecipeAdditionHop {
+    #[doc = "Display sort order among hop additions on this recipe."]
     pub addition_order: i64,
+    #[doc = "Alpha acid percentage used for IBU calculations."]
     pub alpha_pct: f64,
+    #[doc = "Amount of this hop addition in kilograms."]
     pub amount_kg: f64,
     #[doc = "Pellet, Plug, Leaf, Cryo, CO2 Extract"]
     pub form: ::std::string::String,
+    #[doc = "Source library hop ID; null if manually entered."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub hop_id: ::std::option::Option<::std::string::String>,
     #[doc = "Hopstand temperature in °C for this addition (overrides recipe-level setting)"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub hopstand_temp_c: ::std::option::Option<f64>,
+    #[doc = "Unique addition identifier."]
     pub id: ::std::string::String,
+    #[doc = "Hop variety name."]
     pub name: ::std::string::String,
+    #[doc = "ID of the recipe this addition belongs to."]
     pub recipe_id: ::std::string::String,
+    #[doc = "Addition time; meaning depends on use_. For Boil: minutes remaining in boil. For Dry Hop: days. For others: minutes."]
     pub time_min: f64,
     #[doc = "Boil, Dry Hop, Mash, First Wort, Aroma, Hopstand"]
     pub use_: ::std::string::String,
@@ -3701,12 +4406,13 @@ impl RecipeAdditionHop {
         Default::default()
     }
 }
-#[doc = "`RecipeAdditionMisc`"]
+#[doc = "A miscellaneous ingredient addition on a recipe."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"A miscellaneous ingredient addition on a recipe.\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"required\": ["]
 #[doc = "    \"addition_order\","]
@@ -3722,33 +4428,42 @@ impl RecipeAdditionHop {
 #[doc = "  ],"]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"addition_order\": {"]
+#[doc = "      \"description\": \"Display sort order among misc additions on this recipe.\","]
 #[doc = "      \"type\": \"integer\""]
 #[doc = "    },"]
 #[doc = "    \"amount\": {"]
+#[doc = "      \"description\": \"Quantity of this ingredient in the unit specified by the unit field.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"amount_is_weight\": {"]
+#[doc = "      \"description\": \"When true, amounts are measured by weight; when false, by volume.\","]
 #[doc = "      \"type\": \"boolean\""]
 #[doc = "    },"]
 #[doc = "    \"id\": {"]
+#[doc = "      \"description\": \"Unique addition identifier.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"misc_id\": {"]
+#[doc = "      \"description\": \"Source library ingredient ID; null if manually entered.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"name\": {"]
+#[doc = "      \"description\": \"Ingredient name.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"recipe_id\": {"]
+#[doc = "      \"description\": \"ID of the recipe this addition belongs to.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"time_min\": {"]
+#[doc = "      \"description\": \"Usage time in minutes (meaning depends on use_).\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"type_\": {"]
+#[doc = "      \"description\": \"Spice, Fining, Water Agent, Herb, Flavor, Other\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"unit\": {"]
@@ -3756,6 +4471,7 @@ impl RecipeAdditionHop {
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"use_\": {"]
+#[doc = "      \"description\": \"Boil, Mash, Primary, Secondary, Bottling\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    }"]
 #[doc = "  }"]
@@ -3764,18 +4480,28 @@ impl RecipeAdditionHop {
 #[doc = r" </details>"]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
 pub struct RecipeAdditionMisc {
+    #[doc = "Display sort order among misc additions on this recipe."]
     pub addition_order: i64,
+    #[doc = "Quantity of this ingredient in the unit specified by the unit field."]
     pub amount: f64,
+    #[doc = "When true, amounts are measured by weight; when false, by volume."]
     pub amount_is_weight: bool,
+    #[doc = "Unique addition identifier."]
     pub id: ::std::string::String,
+    #[doc = "Source library ingredient ID; null if manually entered."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub misc_id: ::std::option::Option<::std::string::String>,
+    #[doc = "Ingredient name."]
     pub name: ::std::string::String,
+    #[doc = "ID of the recipe this addition belongs to."]
     pub recipe_id: ::std::string::String,
+    #[doc = "Usage time in minutes (meaning depends on use_)."]
     pub time_min: f64,
+    #[doc = "Spice, Fining, Water Agent, Herb, Flavor, Other"]
     pub type_: ::std::string::String,
     #[doc = "Display unit: g, oz, tsp, tbsp, or mL"]
     pub unit: ::std::string::String,
+    #[doc = "Boil, Mash, Primary, Secondary, Bottling"]
     pub use_: ::std::string::String,
 }
 impl RecipeAdditionMisc {
@@ -3783,12 +4509,13 @@ impl RecipeAdditionMisc {
         Default::default()
     }
 }
-#[doc = "`RecipeAdditionWater`"]
+#[doc = "A water source addition on a recipe."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"A water source addition on a recipe.\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"required\": ["]
 #[doc = "    \"amount_l\","]
@@ -3798,18 +4525,23 @@ impl RecipeAdditionMisc {
 #[doc = "  ],"]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"amount_l\": {"]
+#[doc = "      \"description\": \"Volume of this water source in litres.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"id\": {"]
+#[doc = "      \"description\": \"Unique addition identifier.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"name\": {"]
+#[doc = "      \"description\": \"Water source name.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"recipe_id\": {"]
+#[doc = "      \"description\": \"ID of the recipe this addition belongs to.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"water_id\": {"]
+#[doc = "      \"description\": \"Source library water profile ID; null if manually entered.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
@@ -3821,10 +4553,15 @@ impl RecipeAdditionMisc {
 #[doc = r" </details>"]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
 pub struct RecipeAdditionWater {
+    #[doc = "Volume of this water source in litres."]
     pub amount_l: f64,
+    #[doc = "Unique addition identifier."]
     pub id: ::std::string::String,
+    #[doc = "Water source name."]
     pub name: ::std::string::String,
+    #[doc = "ID of the recipe this addition belongs to."]
     pub recipe_id: ::std::string::String,
+    #[doc = "Source library water profile ID; null if manually entered."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub water_id: ::std::option::Option<::std::string::String>,
 }
@@ -3833,12 +4570,13 @@ impl RecipeAdditionWater {
         Default::default()
     }
 }
-#[doc = "`RecipeAdditionYeast`"]
+#[doc = "A yeast addition on a recipe."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"A yeast addition on a recipe.\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"required\": ["]
 #[doc = "    \"add_to_secondary\","]
@@ -3852,54 +4590,67 @@ impl RecipeAdditionWater {
 #[doc = "  ],"]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"add_to_secondary\": {"]
+#[doc = "      \"description\": \"When true, yeast is added at secondary fermentation rather than primary.\","]
 #[doc = "      \"type\": \"boolean\""]
 #[doc = "    },"]
 #[doc = "    \"amount\": {"]
+#[doc = "      \"description\": \"Quantity of yeast pitched; unit depends on amount_is_weight.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"amount_is_weight\": {"]
+#[doc = "      \"description\": \"When true, amount is in grams (dry yeast); when false, amount is in millilitres (liquid yeast).\","]
 #[doc = "      \"type\": \"boolean\""]
 #[doc = "    },"]
 #[doc = "    \"attenuation_pct\": {"]
+#[doc = "      \"description\": \"Expected attenuation percentage for this yeast strain.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"form\": {"]
+#[doc = "      \"description\": \"Liquid, Dry, Slant, Culture\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"id\": {"]
+#[doc = "      \"description\": \"Unique addition identifier.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"laboratory\": {"]
+#[doc = "      \"description\": \"Yeast laboratory or manufacturer.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"name\": {"]
+#[doc = "      \"description\": \"Yeast strain name.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"product_id\": {"]
+#[doc = "      \"description\": \"Manufacturer's product identifier.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"recipe_id\": {"]
+#[doc = "      \"description\": \"ID of the recipe this addition belongs to.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"times_cultured\": {"]
+#[doc = "      \"description\": \"Number of times this yeast has been repitched from a previous batch.\","]
 #[doc = "      \"type\": \"integer\""]
 #[doc = "    },"]
 #[doc = "    \"type_\": {"]
+#[doc = "      \"description\": \"Ale, Lager, Wheat, Wine, Champagne\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"yeast_id\": {"]
+#[doc = "      \"description\": \"Source library yeast ID; null if manually entered.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
@@ -3911,22 +4662,35 @@ impl RecipeAdditionWater {
 #[doc = r" </details>"]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
 pub struct RecipeAdditionYeast {
+    #[doc = "When true, yeast is added at secondary fermentation rather than primary."]
     pub add_to_secondary: bool,
+    #[doc = "Quantity of yeast pitched; unit depends on amount_is_weight."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub amount: ::std::option::Option<f64>,
+    #[doc = "When true, amount is in grams (dry yeast); when false, amount is in millilitres (liquid yeast)."]
     pub amount_is_weight: bool,
+    #[doc = "Expected attenuation percentage for this yeast strain."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub attenuation_pct: ::std::option::Option<f64>,
+    #[doc = "Liquid, Dry, Slant, Culture"]
     pub form: ::std::string::String,
+    #[doc = "Unique addition identifier."]
     pub id: ::std::string::String,
+    #[doc = "Yeast laboratory or manufacturer."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub laboratory: ::std::option::Option<::std::string::String>,
+    #[doc = "Yeast strain name."]
     pub name: ::std::string::String,
+    #[doc = "Manufacturer's product identifier."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub product_id: ::std::option::Option<::std::string::String>,
+    #[doc = "ID of the recipe this addition belongs to."]
     pub recipe_id: ::std::string::String,
+    #[doc = "Number of times this yeast has been repitched from a previous batch."]
     pub times_cultured: i64,
+    #[doc = "Ale, Lager, Wheat, Wine, Champagne"]
     pub type_: ::std::string::String,
+    #[doc = "Source library yeast ID; null if manually entered."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub yeast_id: ::std::option::Option<::std::string::String>,
 }
@@ -4008,12 +4772,13 @@ impl ::std::convert::TryFrom<::std::string::String> for RecipeSource {
         value.parse()
     }
 }
-#[doc = "`RecipeStats`"]
+#[doc = "Calculated statistics for a recipe, including predicted gravity, bitterness, color, and per-hop IBU contributions."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"Calculated statistics for a recipe, including predicted gravity, bitterness, color, and per-hop IBU contributions.\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"required\": ["]
 #[doc = "    \"abv_pct\","]
@@ -4022,11 +4787,16 @@ impl ::std::convert::TryFrom<::std::string::String> for RecipeSource {
 #[doc = "    \"fg\","]
 #[doc = "    \"hop_stats\","]
 #[doc = "    \"ibu\","]
+#[doc = "    \"mash_volume_l\","]
+#[doc = "    \"mash_water_l\","]
 #[doc = "    \"og\","]
 #[doc = "    \"post_boil_volume_l\","]
 #[doc = "    \"pre_boil_gravity\","]
 #[doc = "    \"pre_boil_volume_l\","]
-#[doc = "    \"srm\""]
+#[doc = "    \"sparge_water_l\","]
+#[doc = "    \"srm\","]
+#[doc = "    \"top_up_water_l\","]
+#[doc = "    \"total_water_l\""]
 #[doc = "  ],"]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"abv_pct\": {"]
@@ -4056,6 +4826,21 @@ impl ::std::convert::TryFrom<::std::string::String> for RecipeSource {
 #[doc = "      \"description\": \"International Bitterness Units\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
+#[doc = "    \"mash_volume_excess_l\": {"]
+#[doc = "      \"description\": \"Litres by which mash volume exceeds tun capacity; null when within limits or no tun volume is set\","]
+#[doc = "      \"type\": ["]
+#[doc = "        \"number\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"mash_volume_l\": {"]
+#[doc = "      \"description\": \"Volume occupied in the mash tun (water + grain displacement) in litres\","]
+#[doc = "      \"type\": \"number\""]
+#[doc = "    },"]
+#[doc = "    \"mash_water_l\": {"]
+#[doc = "      \"description\": \"Estimated mash water volume in litres\","]
+#[doc = "      \"type\": \"number\""]
+#[doc = "    },"]
 #[doc = "    \"og\": {"]
 #[doc = "      \"description\": \"Calculated original gravity (specific gravity)\","]
 #[doc = "      \"type\": \"number\""]
@@ -4072,6 +4857,10 @@ impl ::std::convert::TryFrom<::std::string::String> for RecipeSource {
 #[doc = "      \"description\": \"Estimated pre-boil volume in litres\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
+#[doc = "    \"sparge_water_l\": {"]
+#[doc = "      \"description\": \"Estimated sparge water volume in litres (0 for no-sparge or no split defined)\","]
+#[doc = "      \"type\": \"number\""]
+#[doc = "    },"]
 #[doc = "    \"srm\": {"]
 #[doc = "      \"description\": \"Standard Reference Method color value\","]
 #[doc = "      \"type\": \"number\""]
@@ -4082,6 +4871,14 @@ impl ::std::convert::TryFrom<::std::string::String> for RecipeSource {
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"top_up_water_l\": {"]
+#[doc = "      \"description\": \"Post-boil top-up water added to the fermenter, in litres\","]
+#[doc = "      \"type\": \"number\""]
+#[doc = "    },"]
+#[doc = "    \"total_water_l\": {"]
+#[doc = "      \"description\": \"Total water needed (mash + sparge; does not include top-up) in litres\","]
+#[doc = "      \"type\": \"number\""]
 #[doc = "    }"]
 #[doc = "  }"]
 #[doc = "}"]
@@ -4101,6 +4898,13 @@ pub struct RecipeStats {
     pub hop_stats: ::std::vec::Vec<HopStat>,
     #[doc = "International Bitterness Units"]
     pub ibu: f64,
+    #[doc = "Litres by which mash volume exceeds tun capacity; null when within limits or no tun volume is set"]
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub mash_volume_excess_l: ::std::option::Option<f64>,
+    #[doc = "Volume occupied in the mash tun (water + grain displacement) in litres"]
+    pub mash_volume_l: f64,
+    #[doc = "Estimated mash water volume in litres"]
+    pub mash_water_l: f64,
     #[doc = "Calculated original gravity (specific gravity)"]
     pub og: f64,
     #[doc = "Estimated post-boil volume in litres"]
@@ -4109,23 +4913,30 @@ pub struct RecipeStats {
     pub pre_boil_gravity: f64,
     #[doc = "Estimated pre-boil volume in litres"]
     pub pre_boil_volume_l: f64,
+    #[doc = "Estimated sparge water volume in litres (0 for no-sparge or no split defined)"]
+    pub sparge_water_l: f64,
     #[doc = "Standard Reference Method color value"]
     pub srm: f64,
     #[doc = "Calculated strike water temperature in degrees Celsius"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub strike_temp_c: ::std::option::Option<f64>,
+    #[doc = "Post-boil top-up water added to the fermenter, in litres"]
+    pub top_up_water_l: f64,
+    #[doc = "Total water needed (mash + sparge; does not include top-up) in litres"]
+    pub total_water_l: f64,
 }
 impl RecipeStats {
     pub fn builder() -> builder::RecipeStats {
         Default::default()
     }
 }
-#[doc = "`RecipeSummary`"]
+#[doc = "Lightweight summary of a recipe for list views."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"Lightweight summary of a recipe for list views.\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"required\": ["]
 #[doc = "    \"batch_size_l\","]
@@ -4147,6 +4958,7 @@ impl RecipeStats {
 #[doc = "      \"format\": \"int64\""]
 #[doc = "    },"]
 #[doc = "    \"id\": {"]
+#[doc = "      \"description\": \"Unique recipe identifier.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"image_path\": {"]
@@ -4157,6 +4969,7 @@ impl RecipeStats {
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"name\": {"]
+#[doc = "      \"description\": \"Recipe name.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"source\": {"]
@@ -4168,6 +4981,7 @@ impl RecipeStats {
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"style_name\": {"]
+#[doc = "      \"description\": \"Name of the beer style associated with this recipe, or null if none set.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
@@ -4192,13 +5006,16 @@ pub struct RecipeSummary {
     pub batch_size_l: f64,
     #[doc = "Unix timestamp (milliseconds)"]
     pub created_at: i64,
+    #[doc = "Unique recipe identifier."]
     pub id: ::std::string::String,
     #[doc = "Filename of the recipe's image in {appDataDir}/images/"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub image_path: ::std::option::Option<::std::string::String>,
+    #[doc = "Recipe name."]
     pub name: ::std::string::String,
     #[doc = "'user' = created by the user; 'seeded' = built-in starter recipe"]
     pub source: RecipeSummarySource,
+    #[doc = "Name of the beer style associated with this recipe, or null if none set."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub style_name: ::std::option::Option<::std::string::String>,
     #[doc = "Recipe type (e.g. All Grain, Extract, Partial Mash)"]
@@ -4284,12 +5101,13 @@ impl ::std::convert::TryFrom<::std::string::String> for RecipeSummarySource {
         value.parse()
     }
 }
-#[doc = "`RecipeVersionSummary`"]
+#[doc = "Summary of a saved recipe version snapshot."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"Summary of a saved recipe version snapshot.\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"required\": ["]
 #[doc = "    \"created_at\","]
@@ -4299,28 +5117,34 @@ impl ::std::convert::TryFrom<::std::string::String> for RecipeSummarySource {
 #[doc = "  ],"]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"created_at\": {"]
+#[doc = "      \"description\": \"Unix timestamp in milliseconds when this version was saved.\","]
 #[doc = "      \"type\": \"integer\","]
 #[doc = "      \"format\": \"int64\""]
 #[doc = "    },"]
 #[doc = "    \"id\": {"]
+#[doc = "      \"description\": \"Unique version identifier.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"name\": {"]
+#[doc = "      \"description\": \"Optional human-readable label for this version.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"parent_version_id\": {"]
+#[doc = "      \"description\": \"ID of the version this one was branched from; null for the root version.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"recipe_id\": {"]
+#[doc = "      \"description\": \"ID of the parent recipe.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"version_number\": {"]
+#[doc = "      \"description\": \"Sequential version number within the recipe.\","]
 #[doc = "      \"type\": \"integer\""]
 #[doc = "    }"]
 #[doc = "  }"]
@@ -4329,13 +5153,19 @@ impl ::std::convert::TryFrom<::std::string::String> for RecipeSummarySource {
 #[doc = r" </details>"]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
 pub struct RecipeVersionSummary {
+    #[doc = "Unix timestamp in milliseconds when this version was saved."]
     pub created_at: i64,
+    #[doc = "Unique version identifier."]
     pub id: ::std::string::String,
+    #[doc = "Optional human-readable label for this version."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub name: ::std::option::Option<::std::string::String>,
+    #[doc = "ID of the version this one was branched from; null for the root version."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub parent_version_id: ::std::option::Option<::std::string::String>,
+    #[doc = "ID of the parent recipe."]
     pub recipe_id: ::std::string::String,
+    #[doc = "Sequential version number within the recipe."]
     pub version_number: i64,
 }
 impl RecipeVersionSummary {
@@ -4343,12 +5173,13 @@ impl RecipeVersionSummary {
         Default::default()
     }
 }
-#[doc = "`RecipeWaterAdjustment`"]
+#[doc = "A mineral or acid water adjustment applied to a recipe's mash or sparge water."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"A mineral or acid water adjustment applied to a recipe's mash or sparge water.\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"required\": ["]
 #[doc = "    \"addition\","]
@@ -4359,6 +5190,7 @@ impl RecipeVersionSummary {
 #[doc = "  ],"]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"addition\": {"]
+#[doc = "      \"description\": \"Mineral salt or acid being added.\","]
 #[doc = "      \"type\": \"string\","]
 #[doc = "      \"enum\": ["]
 #[doc = "        \"gypsum\","]
@@ -4376,12 +5208,15 @@ impl RecipeVersionSummary {
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"id\": {"]
+#[doc = "      \"description\": \"Unique water adjustment identifier.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"recipe_id\": {"]
+#[doc = "      \"description\": \"ID of the recipe this adjustment belongs to.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"target\": {"]
+#[doc = "      \"description\": \"Whether the addition is applied to the mash or sparge water.\","]
 #[doc = "      \"type\": \"string\","]
 #[doc = "      \"enum\": ["]
 #[doc = "        \"mash\","]
@@ -4394,11 +5229,15 @@ impl RecipeVersionSummary {
 #[doc = r" </details>"]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
 pub struct RecipeWaterAdjustment {
+    #[doc = "Mineral salt or acid being added."]
     pub addition: RecipeWaterAdjustmentAddition,
     #[doc = "Amount in grams for salts, ml for acids"]
     pub amount: f64,
+    #[doc = "Unique water adjustment identifier."]
     pub id: ::std::string::String,
+    #[doc = "ID of the recipe this adjustment belongs to."]
     pub recipe_id: ::std::string::String,
+    #[doc = "Whether the addition is applied to the mash or sparge water."]
     pub target: RecipeWaterAdjustmentTarget,
 }
 impl RecipeWaterAdjustment {
@@ -4406,12 +5245,13 @@ impl RecipeWaterAdjustment {
         Default::default()
     }
 }
-#[doc = "`RecipeWaterAdjustmentAddition`"]
+#[doc = "Mineral salt or acid being added."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"Mineral salt or acid being added.\","]
 #[doc = "  \"type\": \"string\","]
 #[doc = "  \"enum\": ["]
 #[doc = "    \"gypsum\","]
@@ -4508,12 +5348,13 @@ impl ::std::convert::TryFrom<::std::string::String> for RecipeWaterAdjustmentAdd
         value.parse()
     }
 }
-#[doc = "`RecipeWaterAdjustmentTarget`"]
+#[doc = "Whether the addition is applied to the mash or sparge water."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"Whether the addition is applied to the mash or sparge water.\","]
 #[doc = "  \"type\": \"string\","]
 #[doc = "  \"enum\": ["]
 #[doc = "    \"mash\","]
@@ -4580,12 +5421,13 @@ impl ::std::convert::TryFrom<::std::string::String> for RecipeWaterAdjustmentTar
         value.parse()
     }
 }
-#[doc = "`SaveRecipeVersionInput`"]
+#[doc = "Input for saving a named snapshot of a recipe's current state."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"Input for saving a named snapshot of a recipe's current state.\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"required\": ["]
 #[doc = "    \"name\","]
@@ -4593,9 +5435,11 @@ impl ::std::convert::TryFrom<::std::string::String> for RecipeWaterAdjustmentTar
 #[doc = "  ],"]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"name\": {"]
+#[doc = "      \"description\": \"Human-readable label for this version (e.g. \\\"Pre-competition tweak\\\").\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"recipe_id\": {"]
+#[doc = "      \"description\": \"ID of the recipe to snapshot.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    }"]
 #[doc = "  }"]
@@ -4604,7 +5448,9 @@ impl ::std::convert::TryFrom<::std::string::String> for RecipeWaterAdjustmentTar
 #[doc = r" </details>"]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
 pub struct SaveRecipeVersionInput {
+    #[doc = "Human-readable label for this version (e.g. \"Pre-competition tweak\")."]
     pub name: ::std::string::String,
+    #[doc = "ID of the recipe to snapshot."]
     pub recipe_id: ::std::string::String,
 }
 impl SaveRecipeVersionInput {
@@ -4612,12 +5458,13 @@ impl SaveRecipeVersionInput {
         Default::default()
     }
 }
-#[doc = "`Style`"]
+#[doc = "A beer style with guideline ranges for gravity, bitterness, color, and carbonation."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"A beer style with guideline ranges for gravity, bitterness, color, and carbonation.\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"required\": ["]
 #[doc = "    \"category\","]
@@ -4638,96 +5485,119 @@ impl SaveRecipeVersionInput {
 #[doc = "  ],"]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"abv_max_pct\": {"]
+#[doc = "      \"description\": \"Maximum ABV guideline as a percentage.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"abv_min_pct\": {"]
+#[doc = "      \"description\": \"Minimum ABV guideline as a percentage.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"carb_max_vols\": {"]
+#[doc = "      \"description\": \"Maximum carbonation guideline in volumes of CO2.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"carb_min_vols\": {"]
+#[doc = "      \"description\": \"Minimum carbonation guideline in volumes of CO2.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"category\": {"]
+#[doc = "      \"description\": \"Style category name (e.g. \\\"India Pale Ale\\\").\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"category_number\": {"]
+#[doc = "      \"description\": \"Style guide category number (e.g. \\\"21\\\").\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"color_max_srm\": {"]
+#[doc = "      \"description\": \"Maximum color guideline in SRM.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"color_min_srm\": {"]
+#[doc = "      \"description\": \"Minimum color guideline in SRM.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"examples\": {"]
+#[doc = "      \"description\": \"Commercial examples of this style.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"fg_max\": {"]
+#[doc = "      \"description\": \"Maximum final gravity guideline.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"fg_min\": {"]
+#[doc = "      \"description\": \"Minimum final gravity guideline.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"ibu_max\": {"]
+#[doc = "      \"description\": \"Maximum IBU guideline.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"ibu_min\": {"]
+#[doc = "      \"description\": \"Minimum IBU guideline.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"id\": {"]
+#[doc = "      \"description\": \"Unique style identifier.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"ingredients\": {"]
+#[doc = "      \"description\": \"Typical ingredients for this style.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"name\": {"]
+#[doc = "      \"description\": \"Style name (e.g. \\\"American IPA\\\", \\\"Dry Stout\\\").\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"notes\": {"]
+#[doc = "      \"description\": \"Style guide notes and history.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"og_max\": {"]
+#[doc = "      \"description\": \"Maximum original gravity guideline.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"og_min\": {"]
+#[doc = "      \"description\": \"Minimum original gravity guideline.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"profile\": {"]
+#[doc = "      \"description\": \"Description of the aroma, flavor, and appearance characteristics.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"style_guide\": {"]
+#[doc = "      \"description\": \"Name of the style guide this style is from (e.g. \\\"BJCP 2021\\\").\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"style_letter\": {"]
+#[doc = "      \"description\": \"Style guide subcategory letter (e.g. \\\"A\\\").\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"type_\": {"]
+#[doc = "      \"description\": \"Style type (e.g. Lager, Ale, Mead, Cider, Wheat, Mixed).\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    }"]
 #[doc = "  }"]
@@ -4736,36 +5606,59 @@ impl SaveRecipeVersionInput {
 #[doc = r" </details>"]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
 pub struct Style {
+    #[doc = "Maximum ABV guideline as a percentage."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub abv_max_pct: ::std::option::Option<f64>,
+    #[doc = "Minimum ABV guideline as a percentage."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub abv_min_pct: ::std::option::Option<f64>,
+    #[doc = "Maximum carbonation guideline in volumes of CO2."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub carb_max_vols: ::std::option::Option<f64>,
+    #[doc = "Minimum carbonation guideline in volumes of CO2."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub carb_min_vols: ::std::option::Option<f64>,
+    #[doc = "Style category name (e.g. \"India Pale Ale\")."]
     pub category: ::std::string::String,
+    #[doc = "Style guide category number (e.g. \"21\")."]
     pub category_number: ::std::string::String,
+    #[doc = "Maximum color guideline in SRM."]
     pub color_max_srm: f64,
+    #[doc = "Minimum color guideline in SRM."]
     pub color_min_srm: f64,
+    #[doc = "Commercial examples of this style."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub examples: ::std::option::Option<::std::string::String>,
+    #[doc = "Maximum final gravity guideline."]
     pub fg_max: f64,
+    #[doc = "Minimum final gravity guideline."]
     pub fg_min: f64,
+    #[doc = "Maximum IBU guideline."]
     pub ibu_max: f64,
+    #[doc = "Minimum IBU guideline."]
     pub ibu_min: f64,
+    #[doc = "Unique style identifier."]
     pub id: ::std::string::String,
+    #[doc = "Typical ingredients for this style."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub ingredients: ::std::option::Option<::std::string::String>,
+    #[doc = "Style name (e.g. \"American IPA\", \"Dry Stout\")."]
     pub name: ::std::string::String,
+    #[doc = "Style guide notes and history."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub notes: ::std::option::Option<::std::string::String>,
+    #[doc = "Maximum original gravity guideline."]
     pub og_max: f64,
+    #[doc = "Minimum original gravity guideline."]
     pub og_min: f64,
+    #[doc = "Description of the aroma, flavor, and appearance characteristics."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub profile: ::std::option::Option<::std::string::String>,
+    #[doc = "Name of the style guide this style is from (e.g. \"BJCP 2021\")."]
     pub style_guide: ::std::string::String,
+    #[doc = "Style guide subcategory letter (e.g. \"A\")."]
     pub style_letter: ::std::string::String,
+    #[doc = "Style type (e.g. Lager, Ale, Mead, Cider, Wheat, Mixed)."]
     pub type_: ::std::string::String,
 }
 impl Style {
@@ -4773,117 +5666,136 @@ impl Style {
         Default::default()
     }
 }
-#[doc = "`UpdateBatchInput`"]
+#[doc = "Fields that can be updated on an existing brew batch. All fields are optional; only provided fields are changed."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"Fields that can be updated on an existing brew batch. All fields are optional; only provided fields are changed.\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"actual_batch_size_l\": {"]
+#[doc = "      \"description\": \"Measured volume transferred to the fermenter in litres.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"actual_fg\": {"]
+#[doc = "      \"description\": \"Measured final gravity after fermentation.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"actual_og\": {"]
+#[doc = "      \"description\": \"Measured original gravity at the start of fermentation.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"actual_post_boil_volume_l\": {"]
+#[doc = "      \"description\": \"Measured post-boil wort volume in litres.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"actual_pre_boil_gravity\": {"]
+#[doc = "      \"description\": \"Measured pre-boil specific gravity.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"actual_pre_boil_volume_l\": {"]
+#[doc = "      \"description\": \"Measured pre-boil wort volume in litres.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"brew_date\": {"]
+#[doc = "      \"description\": \"Unix timestamp in milliseconds of brew day.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"integer\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"carbonation_sugar_type\": {"]
+#[doc = "      \"description\": \"Type of priming sugar used for carbonation (e.g. \\\"Corn Sugar\\\", \\\"Table Sugar\\\").\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"conditioning_date\": {"]
+#[doc = "      \"description\": \"Unix timestamp in milliseconds when conditioning began.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"integer\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"fermenter_date\": {"]
+#[doc = "      \"description\": \"Unix timestamp in milliseconds when the wort was transferred to the fermenter.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"integer\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"name\": {"]
+#[doc = "      \"description\": \"User-given name for this batch.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"notes\": {"]
+#[doc = "      \"description\": \"Brewer's notes for this batch.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"packaging_date\": {"]
+#[doc = "      \"description\": \"Unix timestamp in milliseconds when the batch was packaged.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"integer\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"packaging_temp_c\": {"]
+#[doc = "      \"description\": \"Temperature at packaging in degrees Celsius, used for priming sugar calculations.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"priming_sugar_g\": {"]
+#[doc = "      \"description\": \"Amount of priming sugar added at packaging in grams.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"rating\": {"]
+#[doc = "      \"description\": \"User rating for this batch (e.g. 1–5).\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"integer\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"serving_pressure_kpa\": {"]
+#[doc = "      \"description\": \"Serving pressure for kegged beer in kilopascals.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"status\": {"]
+#[doc = "      \"description\": \"planned | brewing | fermenting | packaged\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
@@ -4895,40 +5807,58 @@ impl Style {
 #[doc = r" </details>"]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
 pub struct UpdateBatchInput {
+    #[doc = "Measured volume transferred to the fermenter in litres."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub actual_batch_size_l: ::std::option::Option<f64>,
+    #[doc = "Measured final gravity after fermentation."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub actual_fg: ::std::option::Option<f64>,
+    #[doc = "Measured original gravity at the start of fermentation."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub actual_og: ::std::option::Option<f64>,
+    #[doc = "Measured post-boil wort volume in litres."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub actual_post_boil_volume_l: ::std::option::Option<f64>,
+    #[doc = "Measured pre-boil specific gravity."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub actual_pre_boil_gravity: ::std::option::Option<f64>,
+    #[doc = "Measured pre-boil wort volume in litres."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub actual_pre_boil_volume_l: ::std::option::Option<f64>,
+    #[doc = "Unix timestamp in milliseconds of brew day."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub brew_date: ::std::option::Option<i64>,
+    #[doc = "Type of priming sugar used for carbonation (e.g. \"Corn Sugar\", \"Table Sugar\")."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub carbonation_sugar_type: ::std::option::Option<::std::string::String>,
+    #[doc = "Unix timestamp in milliseconds when conditioning began."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub conditioning_date: ::std::option::Option<i64>,
+    #[doc = "Unix timestamp in milliseconds when the wort was transferred to the fermenter."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub fermenter_date: ::std::option::Option<i64>,
+    #[doc = "User-given name for this batch."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub name: ::std::option::Option<::std::string::String>,
+    #[doc = "Brewer's notes for this batch."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub notes: ::std::option::Option<::std::string::String>,
+    #[doc = "Unix timestamp in milliseconds when the batch was packaged."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub packaging_date: ::std::option::Option<i64>,
+    #[doc = "Temperature at packaging in degrees Celsius, used for priming sugar calculations."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub packaging_temp_c: ::std::option::Option<f64>,
+    #[doc = "Amount of priming sugar added at packaging in grams."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub priming_sugar_g: ::std::option::Option<f64>,
+    #[doc = "User rating for this batch (e.g. 1–5)."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub rating: ::std::option::Option<i64>,
+    #[doc = "Serving pressure for kegged beer in kilopascals."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub serving_pressure_kpa: ::std::option::Option<f64>,
+    #[doc = "planned | brewing | fermenting | packaged"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub status: ::std::option::Option<::std::string::String>,
 }
@@ -4961,120 +5891,157 @@ impl UpdateBatchInput {
         Default::default()
     }
 }
-#[doc = "`UpdateEquipmentProfileInput`"]
+#[doc = "Fields that can be updated on an existing equipment profile."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"Fields that can be updated on an existing equipment profile.\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"altitude_adjustment\": {"]
+#[doc = "      \"description\": \"When true, boil temperature is calculated from altitude.\","]
 #[doc = "      \"type\": \"boolean\""]
 #[doc = "    },"]
 #[doc = "    \"aroma_hop_utilization_pct\": {"]
+#[doc = "      \"description\": \"Utilization percentage for whirlpool/aroma hop additions.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"batch_size_l\": {"]
+#[doc = "      \"description\": \"Target batch size in litres.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"batch_volume_target\": {"]
+#[doc = "      \"description\": \"Whether batch_size_l targets the fermenter or the kettle. Enum: 'fermenter' | 'kettle'\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"boil_size_l\": {"]
+#[doc = "      \"description\": \"Pre-boil kettle volume in litres.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"boil_temp_f\": {"]
+#[doc = "      \"description\": \"Manual boil temperature in Fahrenheit, used when altitude_adjustment is false.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"boil_time_min\": {"]
+#[doc = "      \"description\": \"Default boil duration in minutes.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"calc_aroma_hop_utilization\": {"]
+#[doc = "      \"description\": \"When true, aroma hop utilization is calculated using the hopstand temperature model.\","]
 #[doc = "      \"type\": \"boolean\""]
 #[doc = "    },"]
 #[doc = "    \"calc_mash_efficiency\": {"]
+#[doc = "      \"description\": \"When true, mash efficiency is calculated from brewhouse efficiency and losses.\","]
 #[doc = "      \"type\": \"boolean\""]
 #[doc = "    },"]
 #[doc = "    \"calc_strike_water_temp\": {"]
+#[doc = "      \"description\": \"When true, strike water temperature is calculated from tun thermal mass and grain/room temperature.\","]
 #[doc = "      \"type\": \"boolean\""]
 #[doc = "    },"]
 #[doc = "    \"cooling_shrinkage_pct\": {"]
+#[doc = "      \"description\": \"Wort volume reduction from boiling temperature to room temperature, as a percentage.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"efficiency_pct\": {"]
+#[doc = "      \"description\": \"Brewhouse efficiency percentage.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"evap_rate_l_hr\": {"]
+#[doc = "      \"description\": \"Boil evaporation rate in litres per hour.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"fermenter_loss_l\": {"]
+#[doc = "      \"description\": \"Volume lost to fermenter trub and yeast cake, in litres.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"grain_absorption_rate_l_per_kg\": {"]
+#[doc = "      \"description\": \"Volume of water absorbed per kg of grain, in litres/kg.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"grain_temp_f\": {"]
+#[doc = "      \"description\": \"Grain temperature for strike water calculation, in Fahrenheit.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"hlt_deadspace_l\": {"]
+#[doc = "      \"description\": \"Volume that remains in the HLT and cannot be transferred, in litres.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"hlt_water_limit_min_l\": {"]
+#[doc = "      \"description\": \"Minimum HLT water volume in litres.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"hopstand_temp_f\": {"]
+#[doc = "      \"description\": \"Temperature at which the hopstand is conducted, in Fahrenheit.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"include_grain_volume_in_mash_limits\": {"]
+#[doc = "      \"description\": \"When true, grain displacement is included when checking mash volume limits.\","]
 #[doc = "      \"type\": \"boolean\""]
 #[doc = "    },"]
 #[doc = "    \"mash_efficiency_pct\": {"]
+#[doc = "      \"description\": \"Manual mash efficiency percentage, used when calc_mash_efficiency is false.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"mash_tun_loss_l\": {"]
+#[doc = "      \"description\": \"Volume left in the mash tun after lautering, in litres.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"mash_volume_max_l\": {"]
+#[doc = "      \"description\": \"Maximum mash tun volume in litres.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"mash_volume_min_l\": {"]
+#[doc = "      \"description\": \"Minimum mash tun volume in litres.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"name\": {"]
+#[doc = "      \"description\": \"Equipment profile name.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"notes\": {"]
+#[doc = "      \"description\": \"Optional notes about this equipment setup.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"overflow_target\": {"]
+#[doc = "      \"description\": \"Where to redirect overflow when mash volume limits are exceeded. Enum: 'mash' | 'sparge' | 'hlt'\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"room_temp_f\": {"]
+#[doc = "      \"description\": \"Ambient room temperature for strike water calculation, in Fahrenheit.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"sparge_method\": {"]
+#[doc = "      \"description\": \"Mash/sparge water calculation method. Enum: 'no_sparge' | 'batch_sparge' | 'fly_sparge'\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"sparge_temp_f\": {"]
+#[doc = "      \"description\": \"Target sparge water temperature in Fahrenheit.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"sparge_volume_max_l\": {"]
+#[doc = "      \"description\": \"Maximum sparge water volume in litres.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"sparge_volume_min_l\": {"]
+#[doc = "      \"description\": \"Minimum sparge water volume in litres.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"trub_chiller_loss_l\": {"]
+#[doc = "      \"description\": \"Volume lost to trub and chiller in litres.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"tun_heat_capacity_l\": {"]
+#[doc = "      \"description\": \"Thermal mass of mash tun expressed as litres of equivalent water volume (0 = pre-heated tun).\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"water_grain_ratio_l_per_kg\": {"]
+#[doc = "      \"description\": \"Target mash water-to-grain ratio, in litres/kg.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"whirlpool_time_min\": {"]
+#[doc = "      \"description\": \"Time wort sits in the whirlpool before chilling, in minutes.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    }"]
 #[doc = "  }"]
@@ -5083,76 +6050,112 @@ impl UpdateBatchInput {
 #[doc = r" </details>"]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
 pub struct UpdateEquipmentProfileInput {
+    #[doc = "When true, boil temperature is calculated from altitude."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub altitude_adjustment: ::std::option::Option<bool>,
+    #[doc = "Utilization percentage for whirlpool/aroma hop additions."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub aroma_hop_utilization_pct: ::std::option::Option<f64>,
+    #[doc = "Target batch size in litres."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub batch_size_l: ::std::option::Option<f64>,
+    #[doc = "Whether batch_size_l targets the fermenter or the kettle. Enum: 'fermenter' | 'kettle'"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub batch_volume_target: ::std::option::Option<::std::string::String>,
+    #[doc = "Pre-boil kettle volume in litres."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub boil_size_l: ::std::option::Option<f64>,
+    #[doc = "Manual boil temperature in Fahrenheit, used when altitude_adjustment is false."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub boil_temp_f: ::std::option::Option<f64>,
+    #[doc = "Default boil duration in minutes."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub boil_time_min: ::std::option::Option<f64>,
+    #[doc = "When true, aroma hop utilization is calculated using the hopstand temperature model."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub calc_aroma_hop_utilization: ::std::option::Option<bool>,
+    #[doc = "When true, mash efficiency is calculated from brewhouse efficiency and losses."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub calc_mash_efficiency: ::std::option::Option<bool>,
+    #[doc = "When true, strike water temperature is calculated from tun thermal mass and grain/room temperature."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub calc_strike_water_temp: ::std::option::Option<bool>,
+    #[doc = "Wort volume reduction from boiling temperature to room temperature, as a percentage."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub cooling_shrinkage_pct: ::std::option::Option<f64>,
+    #[doc = "Brewhouse efficiency percentage."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub efficiency_pct: ::std::option::Option<f64>,
+    #[doc = "Boil evaporation rate in litres per hour."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub evap_rate_l_hr: ::std::option::Option<f64>,
+    #[doc = "Volume lost to fermenter trub and yeast cake, in litres."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub fermenter_loss_l: ::std::option::Option<f64>,
+    #[doc = "Volume of water absorbed per kg of grain, in litres/kg."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub grain_absorption_rate_l_per_kg: ::std::option::Option<f64>,
+    #[doc = "Grain temperature for strike water calculation, in Fahrenheit."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub grain_temp_f: ::std::option::Option<f64>,
+    #[doc = "Volume that remains in the HLT and cannot be transferred, in litres."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub hlt_deadspace_l: ::std::option::Option<f64>,
+    #[doc = "Minimum HLT water volume in litres."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub hlt_water_limit_min_l: ::std::option::Option<f64>,
+    #[doc = "Temperature at which the hopstand is conducted, in Fahrenheit."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub hopstand_temp_f: ::std::option::Option<f64>,
+    #[doc = "When true, grain displacement is included when checking mash volume limits."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub include_grain_volume_in_mash_limits: ::std::option::Option<bool>,
+    #[doc = "Manual mash efficiency percentage, used when calc_mash_efficiency is false."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub mash_efficiency_pct: ::std::option::Option<f64>,
+    #[doc = "Volume left in the mash tun after lautering, in litres."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub mash_tun_loss_l: ::std::option::Option<f64>,
+    #[doc = "Maximum mash tun volume in litres."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub mash_volume_max_l: ::std::option::Option<f64>,
+    #[doc = "Minimum mash tun volume in litres."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub mash_volume_min_l: ::std::option::Option<f64>,
+    #[doc = "Equipment profile name."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub name: ::std::option::Option<::std::string::String>,
+    #[doc = "Optional notes about this equipment setup."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub notes: ::std::option::Option<::std::string::String>,
+    #[doc = "Where to redirect overflow when mash volume limits are exceeded. Enum: 'mash' | 'sparge' | 'hlt'"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub overflow_target: ::std::option::Option<::std::string::String>,
+    #[doc = "Ambient room temperature for strike water calculation, in Fahrenheit."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub room_temp_f: ::std::option::Option<f64>,
+    #[doc = "Mash/sparge water calculation method. Enum: 'no_sparge' | 'batch_sparge' | 'fly_sparge'"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub sparge_method: ::std::option::Option<::std::string::String>,
+    #[doc = "Target sparge water temperature in Fahrenheit."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub sparge_temp_f: ::std::option::Option<f64>,
+    #[doc = "Maximum sparge water volume in litres."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub sparge_volume_max_l: ::std::option::Option<f64>,
+    #[doc = "Minimum sparge water volume in litres."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub sparge_volume_min_l: ::std::option::Option<f64>,
+    #[doc = "Volume lost to trub and chiller in litres."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub trub_chiller_loss_l: ::std::option::Option<f64>,
+    #[doc = "Thermal mass of mash tun expressed as litres of equivalent water volume (0 = pre-heated tun)."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub tun_heat_capacity_l: ::std::option::Option<f64>,
+    #[doc = "Target mash water-to-grain ratio, in litres/kg."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub water_grain_ratio_l_per_kg: ::std::option::Option<f64>,
+    #[doc = "Time wort sits in the whirlpool before chilling, in minutes."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub whirlpool_time_min: ::std::option::Option<f64>,
 }
@@ -5203,21 +6206,25 @@ impl UpdateEquipmentProfileInput {
         Default::default()
     }
 }
-#[doc = "`UpdateFermentableAdditionInput`"]
+#[doc = "Fields that can be updated on an existing fermentable addition."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"Fields that can be updated on an existing fermentable addition.\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"add_after_boil\": {"]
+#[doc = "      \"description\": \"When true, this fermentable is added after the boil.\","]
 #[doc = "      \"type\": \"boolean\""]
 #[doc = "    },"]
 #[doc = "    \"addition_order\": {"]
+#[doc = "      \"description\": \"Display sort order among fermentable additions on this recipe.\","]
 #[doc = "      \"type\": \"integer\""]
 #[doc = "    },"]
 #[doc = "    \"amount_kg\": {"]
+#[doc = "      \"description\": \"Amount of this fermentable in kilograms.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    }"]
 #[doc = "  }"]
@@ -5226,10 +6233,13 @@ impl UpdateEquipmentProfileInput {
 #[doc = r" </details>"]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
 pub struct UpdateFermentableAdditionInput {
+    #[doc = "When true, this fermentable is added after the boil."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub add_after_boil: ::std::option::Option<bool>,
+    #[doc = "Display sort order among fermentable additions on this recipe."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub addition_order: ::std::option::Option<i64>,
+    #[doc = "Amount of this fermentable in kilograms."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub amount_kg: ::std::option::Option<f64>,
 }
@@ -5247,87 +6257,103 @@ impl UpdateFermentableAdditionInput {
         Default::default()
     }
 }
-#[doc = "`UpdateFermentableInput`"]
+#[doc = "Fields that can be updated on an existing library fermentable."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"Fields that can be updated on an existing library fermentable.\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"add_after_boil\": {"]
+#[doc = "      \"description\": \"When true, this fermentable is added after the boil.\","]
 #[doc = "      \"type\": \"boolean\""]
 #[doc = "    },"]
 #[doc = "    \"coarse_fine_diff_pct\": {"]
+#[doc = "      \"description\": \"Difference between coarse and fine grind extract yield, as a percentage.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"color_lovibond\": {"]
+#[doc = "      \"description\": \"Color contribution in degrees Lovibond.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"diastatic_power_lintner\": {"]
+#[doc = "      \"description\": \"Enzymatic activity in degrees Lintner; indicates mash conversion ability.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"ibu_gal_per_lb\": {"]
+#[doc = "      \"description\": \"Bitterness contribution in IBU per gallon per pound; used for adjuncts like black malt.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"max_in_batch_pct\": {"]
+#[doc = "      \"description\": \"Recommended maximum usage as a percentage of total grain bill.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"moisture_pct\": {"]
+#[doc = "      \"description\": \"Moisture content of the grain as a percentage.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"name\": {"]
+#[doc = "      \"description\": \"Fermentable name.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"notes\": {"]
+#[doc = "      \"description\": \"Brewer's notes about this fermentable.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"origin\": {"]
+#[doc = "      \"description\": \"Country or region of origin.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"protein_pct\": {"]
+#[doc = "      \"description\": \"Total protein content as a percentage.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"recommend_mash\": {"]
+#[doc = "      \"description\": \"When true, this fermentable requires mashing rather than steeping.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"boolean\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"supplier\": {"]
+#[doc = "      \"description\": \"Maltster or supplier name.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"type_\": {"]
+#[doc = "      \"description\": \"Grain, Sugar, Extract, Dry Extract, Adjunct\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"yield_pct\": {"]
+#[doc = "      \"description\": \"Maximum extractable sugar yield as a percentage of dry weight.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    }"]
 #[doc = "  }"]
@@ -5336,34 +6362,49 @@ impl UpdateFermentableAdditionInput {
 #[doc = r" </details>"]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
 pub struct UpdateFermentableInput {
+    #[doc = "When true, this fermentable is added after the boil."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub add_after_boil: ::std::option::Option<bool>,
+    #[doc = "Difference between coarse and fine grind extract yield, as a percentage."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub coarse_fine_diff_pct: ::std::option::Option<f64>,
+    #[doc = "Color contribution in degrees Lovibond."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub color_lovibond: ::std::option::Option<f64>,
+    #[doc = "Enzymatic activity in degrees Lintner; indicates mash conversion ability."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub diastatic_power_lintner: ::std::option::Option<f64>,
+    #[doc = "Bitterness contribution in IBU per gallon per pound; used for adjuncts like black malt."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub ibu_gal_per_lb: ::std::option::Option<f64>,
+    #[doc = "Recommended maximum usage as a percentage of total grain bill."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub max_in_batch_pct: ::std::option::Option<f64>,
+    #[doc = "Moisture content of the grain as a percentage."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub moisture_pct: ::std::option::Option<f64>,
+    #[doc = "Fermentable name."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub name: ::std::option::Option<::std::string::String>,
+    #[doc = "Brewer's notes about this fermentable."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub notes: ::std::option::Option<::std::string::String>,
+    #[doc = "Country or region of origin."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub origin: ::std::option::Option<::std::string::String>,
+    #[doc = "Total protein content as a percentage."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub protein_pct: ::std::option::Option<f64>,
+    #[doc = "When true, this fermentable requires mashing rather than steeping."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub recommend_mash: ::std::option::Option<bool>,
+    #[doc = "Maltster or supplier name."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub supplier: ::std::option::Option<::std::string::String>,
+    #[doc = "Grain, Sugar, Extract, Dry Extract, Adjunct"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub type_: ::std::option::Option<::std::string::String>,
+    #[doc = "Maximum extractable sugar yield as a percentage of dry weight."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub yield_pct: ::std::option::Option<f64>,
 }
@@ -5393,18 +6434,21 @@ impl UpdateFermentableInput {
         Default::default()
     }
 }
-#[doc = "`UpdateHopAdditionInput`"]
+#[doc = "Fields that can be updated on an existing hop addition."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"Fields that can be updated on an existing hop addition.\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"addition_order\": {"]
+#[doc = "      \"description\": \"Display sort order among hop additions on this recipe.\","]
 #[doc = "      \"type\": \"integer\""]
 #[doc = "    },"]
 #[doc = "    \"amount_kg\": {"]
+#[doc = "      \"description\": \"Amount of this hop addition in kilograms.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"hopstand_temp_c\": {"]
@@ -5412,9 +6456,11 @@ impl UpdateFermentableInput {
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"time_min\": {"]
+#[doc = "      \"description\": \"Addition time; meaning depends on use_. For Boil: minutes remaining in boil. For Dry Hop: days. For others: minutes.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"use_\": {"]
+#[doc = "      \"description\": \"Boil, Dry Hop, Mash, First Wort, Aroma, Hopstand\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    }"]
 #[doc = "  }"]
@@ -5423,15 +6469,19 @@ impl UpdateFermentableInput {
 #[doc = r" </details>"]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
 pub struct UpdateHopAdditionInput {
+    #[doc = "Display sort order among hop additions on this recipe."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub addition_order: ::std::option::Option<i64>,
+    #[doc = "Amount of this hop addition in kilograms."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub amount_kg: ::std::option::Option<f64>,
     #[doc = "Hopstand temperature override for this addition in °C"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub hopstand_temp_c: ::std::option::Option<f64>,
+    #[doc = "Addition time; meaning depends on use_. For Boil: minutes remaining in boil. For Dry Hop: days. For others: minutes."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub time_min: ::std::option::Option<f64>,
+    #[doc = "Boil, Dry Hop, Mash, First Wort, Aroma, Hopstand"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub use_: ::std::option::Option<::std::string::String>,
 }
@@ -5451,84 +6501,99 @@ impl UpdateHopAdditionInput {
         Default::default()
     }
 }
-#[doc = "`UpdateHopInput`"]
+#[doc = "Fields that can be updated on an existing library hop variety."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"Fields that can be updated on an existing library hop variety.\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"alpha_pct\": {"]
+#[doc = "      \"description\": \"Alpha acid percentage, used for IBU calculations.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"beta_pct\": {"]
+#[doc = "      \"description\": \"Beta acid percentage.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"caryophyllene_pct\": {"]
+#[doc = "      \"description\": \"Caryophyllene oil content as a percentage of total oils.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"cohumulone_pct\": {"]
+#[doc = "      \"description\": \"Cohumulone content as a percentage of alpha acids; higher values produce harsher bitterness.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"form\": {"]
+#[doc = "      \"description\": \"Pellet, Plug, Leaf, Cryo, CO2 Extract\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"hsi_pct\": {"]
+#[doc = "      \"description\": \"Hop Storage Index; indicates freshness degradation rate as a percentage.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"humulene_pct\": {"]
+#[doc = "      \"description\": \"Humulene oil content as a percentage of total oils.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"myrcene_pct\": {"]
+#[doc = "      \"description\": \"Myrcene oil content as a percentage of total oils.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"name\": {"]
+#[doc = "      \"description\": \"Hop variety name.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"notes\": {"]
+#[doc = "      \"description\": \"Brewer's notes about this hop variety.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"origin\": {"]
+#[doc = "      \"description\": \"Country or region of origin.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"substitutes\": {"]
+#[doc = "      \"description\": \"Suggested substitute varieties, comma-separated.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"type_\": {"]
+#[doc = "      \"description\": \"Bittering, Aroma, Both\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"year\": {"]
+#[doc = "      \"description\": \"Harvest year for this batch of hops.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
@@ -5540,32 +6605,46 @@ impl UpdateHopAdditionInput {
 #[doc = r" </details>"]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
 pub struct UpdateHopInput {
+    #[doc = "Alpha acid percentage, used for IBU calculations."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub alpha_pct: ::std::option::Option<f64>,
+    #[doc = "Beta acid percentage."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub beta_pct: ::std::option::Option<f64>,
+    #[doc = "Caryophyllene oil content as a percentage of total oils."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub caryophyllene_pct: ::std::option::Option<f64>,
+    #[doc = "Cohumulone content as a percentage of alpha acids; higher values produce harsher bitterness."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub cohumulone_pct: ::std::option::Option<f64>,
+    #[doc = "Pellet, Plug, Leaf, Cryo, CO2 Extract"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub form: ::std::option::Option<::std::string::String>,
+    #[doc = "Hop Storage Index; indicates freshness degradation rate as a percentage."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub hsi_pct: ::std::option::Option<f64>,
+    #[doc = "Humulene oil content as a percentage of total oils."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub humulene_pct: ::std::option::Option<f64>,
+    #[doc = "Myrcene oil content as a percentage of total oils."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub myrcene_pct: ::std::option::Option<f64>,
+    #[doc = "Hop variety name."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub name: ::std::option::Option<::std::string::String>,
+    #[doc = "Brewer's notes about this hop variety."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub notes: ::std::option::Option<::std::string::String>,
+    #[doc = "Country or region of origin."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub origin: ::std::option::Option<::std::string::String>,
+    #[doc = "Suggested substitute varieties, comma-separated."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub substitutes: ::std::option::Option<::std::string::String>,
+    #[doc = "Bittering, Aroma, Both"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub type_: ::std::option::Option<::std::string::String>,
+    #[doc = "Harvest year for this batch of hops."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub year: ::std::option::Option<::std::string::String>,
 }
@@ -5594,24 +6673,29 @@ impl UpdateHopInput {
         Default::default()
     }
 }
-#[doc = "`UpdateMashInput`"]
+#[doc = "Fields that can be updated on an existing mash schedule."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"Fields that can be updated on an existing mash schedule.\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"grain_temp_c\": {"]
+#[doc = "      \"description\": \"Temperature of the grain before doughing in, in degrees Celsius.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"name\": {"]
+#[doc = "      \"description\": \"Mash schedule name.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"notes\": {"]
+#[doc = "      \"description\": \"Brewer's notes about this mash schedule.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"ph\": {"]
+#[doc = "      \"description\": \"Target mash pH.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"ratio_l_per_kg\": {"]
@@ -5619,9 +6703,11 @@ impl UpdateHopInput {
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"sparge_temp_c\": {"]
+#[doc = "      \"description\": \"Target sparge water temperature in degrees Celsius.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"tun_temp_c\": {"]
+#[doc = "      \"description\": \"Initial mash tun temperature before adding grain, in degrees Celsius.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    }"]
 #[doc = "  }"]
@@ -5630,19 +6716,25 @@ impl UpdateHopInput {
 #[doc = r" </details>"]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
 pub struct UpdateMashInput {
+    #[doc = "Temperature of the grain before doughing in, in degrees Celsius."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub grain_temp_c: ::std::option::Option<f64>,
+    #[doc = "Mash schedule name."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub name: ::std::option::Option<::std::string::String>,
+    #[doc = "Brewer's notes about this mash schedule."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub notes: ::std::option::Option<::std::string::String>,
+    #[doc = "Target mash pH."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub ph: ::std::option::Option<f64>,
     #[doc = "Water-to-grain ratio in litres per kilogram"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub ratio_l_per_kg: ::std::option::Option<f64>,
+    #[doc = "Target sparge water temperature in degrees Celsius."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub sparge_temp_c: ::std::option::Option<f64>,
+    #[doc = "Initial mash tun temperature before adding grain, in degrees Celsius."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub tun_temp_c: ::std::option::Option<f64>,
 }
@@ -5664,33 +6756,41 @@ impl UpdateMashInput {
         Default::default()
     }
 }
-#[doc = "`UpdateMashStepInput`"]
+#[doc = "Fields that can be updated on an existing mash step."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"Fields that can be updated on an existing mash step.\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"end_temp_c\": {"]
+#[doc = "      \"description\": \"Temperature at the end of this step in degrees Celsius; used for decoction steps.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"infuse_amount_l\": {"]
+#[doc = "      \"description\": \"Volume of water to infuse in litres; applicable for Infusion steps.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"name\": {"]
+#[doc = "      \"description\": \"Step name.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"ramp_time_min\": {"]
+#[doc = "      \"description\": \"Time to ramp to step_temp_c from the previous step temperature, in minutes.\","]
 #[doc = "      \"type\": \"integer\""]
 #[doc = "    },"]
 #[doc = "    \"step_temp_c\": {"]
+#[doc = "      \"description\": \"Target step temperature in degrees Celsius.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"step_time_min\": {"]
+#[doc = "      \"description\": \"Duration of this step in minutes.\","]
 #[doc = "      \"type\": \"integer\""]
 #[doc = "    },"]
 #[doc = "    \"type_\": {"]
+#[doc = "      \"description\": \"Infusion, Temperature, Decoction\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    }"]
 #[doc = "  }"]
@@ -5699,18 +6799,25 @@ impl UpdateMashInput {
 #[doc = r" </details>"]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
 pub struct UpdateMashStepInput {
+    #[doc = "Temperature at the end of this step in degrees Celsius; used for decoction steps."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub end_temp_c: ::std::option::Option<f64>,
+    #[doc = "Volume of water to infuse in litres; applicable for Infusion steps."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub infuse_amount_l: ::std::option::Option<f64>,
+    #[doc = "Step name."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub name: ::std::option::Option<::std::string::String>,
+    #[doc = "Time to ramp to step_temp_c from the previous step temperature, in minutes."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub ramp_time_min: ::std::option::Option<i64>,
+    #[doc = "Target step temperature in degrees Celsius."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub step_temp_c: ::std::option::Option<f64>,
+    #[doc = "Duration of this step in minutes."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub step_time_min: ::std::option::Option<i64>,
+    #[doc = "Infusion, Temperature, Decoction"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub type_: ::std::option::Option<::std::string::String>,
 }
@@ -5732,24 +6839,29 @@ impl UpdateMashStepInput {
         Default::default()
     }
 }
-#[doc = "`UpdateMiscAdditionInput`"]
+#[doc = "Fields that can be updated on an existing misc addition."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"Fields that can be updated on an existing misc addition.\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"addition_order\": {"]
+#[doc = "      \"description\": \"Display sort order among misc additions on this recipe.\","]
 #[doc = "      \"type\": \"integer\""]
 #[doc = "    },"]
 #[doc = "    \"amount\": {"]
+#[doc = "      \"description\": \"Quantity of this ingredient in the unit specified by the unit field.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"amount_is_weight\": {"]
+#[doc = "      \"description\": \"When true, amounts are measured by weight; when false, by volume.\","]
 #[doc = "      \"type\": \"boolean\""]
 #[doc = "    },"]
 #[doc = "    \"time_min\": {"]
+#[doc = "      \"description\": \"Usage time in minutes (meaning depends on use_).\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"unit\": {"]
@@ -5757,6 +6869,7 @@ impl UpdateMashStepInput {
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"use_\": {"]
+#[doc = "      \"description\": \"Boil, Mash, Primary, Secondary, Bottling\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    }"]
 #[doc = "  }"]
@@ -5765,17 +6878,22 @@ impl UpdateMashStepInput {
 #[doc = r" </details>"]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
 pub struct UpdateMiscAdditionInput {
+    #[doc = "Display sort order among misc additions on this recipe."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub addition_order: ::std::option::Option<i64>,
+    #[doc = "Quantity of this ingredient in the unit specified by the unit field."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub amount: ::std::option::Option<f64>,
+    #[doc = "When true, amounts are measured by weight; when false, by volume."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub amount_is_weight: ::std::option::Option<bool>,
+    #[doc = "Usage time in minutes (meaning depends on use_)."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub time_min: ::std::option::Option<f64>,
     #[doc = "Display unit: g, oz, tsp, tbsp, or mL"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub unit: ::std::option::Option<::std::string::String>,
+    #[doc = "Boil, Mash, Primary, Secondary, Bottling"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub use_: ::std::option::Option<::std::string::String>,
 }
@@ -5796,36 +6914,44 @@ impl UpdateMiscAdditionInput {
         Default::default()
     }
 }
-#[doc = "`UpdateMiscInput`"]
+#[doc = "Fields that can be updated on an existing library misc ingredient."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"Fields that can be updated on an existing library misc ingredient.\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"amount_is_weight\": {"]
+#[doc = "      \"description\": \"When true, amounts are measured by weight (grams); when false, by volume (millilitres).\","]
 #[doc = "      \"type\": \"boolean\""]
 #[doc = "    },"]
 #[doc = "    \"name\": {"]
+#[doc = "      \"description\": \"Ingredient name.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"notes\": {"]
+#[doc = "      \"description\": \"Brewer's notes about this ingredient.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"time_min\": {"]
+#[doc = "      \"description\": \"Default usage time in minutes.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"type_\": {"]
+#[doc = "      \"description\": \"Spice, Fining, Water Agent, Herb, Flavor, Other\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"use_\": {"]
+#[doc = "      \"description\": \"Boil, Mash, Primary, Secondary, Bottling\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"use_for\": {"]
+#[doc = "      \"description\": \"Description of the purpose or effect of this ingredient.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
@@ -5837,18 +6963,25 @@ impl UpdateMiscAdditionInput {
 #[doc = r" </details>"]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
 pub struct UpdateMiscInput {
+    #[doc = "When true, amounts are measured by weight (grams); when false, by volume (millilitres)."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub amount_is_weight: ::std::option::Option<bool>,
+    #[doc = "Ingredient name."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub name: ::std::option::Option<::std::string::String>,
+    #[doc = "Brewer's notes about this ingredient."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub notes: ::std::option::Option<::std::string::String>,
+    #[doc = "Default usage time in minutes."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub time_min: ::std::option::Option<f64>,
+    #[doc = "Spice, Fining, Water Agent, Herb, Flavor, Other"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub type_: ::std::option::Option<::std::string::String>,
+    #[doc = "Boil, Mash, Primary, Secondary, Bottling"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub use_: ::std::option::Option<::std::string::String>,
+    #[doc = "Description of the purpose or effect of this ingredient."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub use_for: ::std::option::Option<::std::string::String>,
 }
@@ -5870,54 +7003,69 @@ impl UpdateMiscInput {
         Default::default()
     }
 }
-#[doc = "`UpdateRecipeInput`"]
+#[doc = "Fields that can be updated on an existing recipe. All fields are optional; only provided fields are changed."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"Fields that can be updated on an existing recipe. All fields are optional; only provided fields are changed.\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"age_days\": {"]
+#[doc = "      \"description\": \"Conditioning or bottle-age duration in days.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"age_temp_c\": {"]
+#[doc = "      \"description\": \"Conditioning temperature in degrees Celsius.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"asst_brewer\": {"]
+#[doc = "      \"description\": \"Name of the assistant brewer.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"batch_size_l\": {"]
+#[doc = "      \"description\": \"Target batch volume in litres.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"boil_size_l\": {"]
+#[doc = "      \"description\": \"Pre-boil kettle volume in litres.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"boil_time_min\": {"]
+#[doc = "      \"description\": \"Boil duration in minutes.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"brewer\": {"]
+#[doc = "      \"description\": \"Name of the primary brewer.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"carbonation_temp_c\": {"]
+#[doc = "      \"description\": \"Temperature at carbonation time in degrees Celsius, used for priming calculations.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"carbonation_vols\": {"]
+#[doc = "      \"description\": \"Target carbonation level in volumes of CO2.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"date\": {"]
+#[doc = "      \"description\": \"Brew date as a free-form string.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"efficiency_pct\": {"]
+#[doc = "      \"description\": \"Brewhouse efficiency percentage.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"equipment_profile_id\": {"]
+#[doc = "      \"description\": \"ID of the equipment profile to associate with this recipe.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"fermentation_stages\": {"]
+#[doc = "      \"description\": \"Number of fermentation stages (1 = primary only, 2 = primary + secondary, etc.).\","]
 #[doc = "      \"type\": \"integer\""]
 #[doc = "    },"]
 #[doc = "    \"forced_carbonation\": {"]
+#[doc = "      \"description\": \"When true, the beer is force-carbonated (kegged); when false, priming sugar is used.\","]
 #[doc = "      \"type\": \"boolean\""]
 #[doc = "    },"]
 #[doc = "    \"hopstand_temp_c\": {"]
@@ -5925,48 +7073,63 @@ impl UpdateMiscInput {
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"keg_priming_factor\": {"]
+#[doc = "      \"description\": \"Correction factor applied when calculating priming sugar for kegs.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"name\": {"]
+#[doc = "      \"description\": \"Recipe name.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"notes\": {"]
+#[doc = "      \"description\": \"Brewer's notes for the recipe.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"primary_age_days\": {"]
+#[doc = "      \"description\": \"Duration of primary fermentation in days.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"primary_temp_c\": {"]
+#[doc = "      \"description\": \"Primary fermentation temperature in degrees Celsius.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"priming_sugar_equiv\": {"]
+#[doc = "      \"description\": \"Priming sugar equivalent weight relative to sucrose.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"priming_sugar_name\": {"]
+#[doc = "      \"description\": \"Name of the priming sugar used for bottle conditioning.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"secondary_age_days\": {"]
+#[doc = "      \"description\": \"Duration of secondary fermentation in days.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"secondary_temp_c\": {"]
+#[doc = "      \"description\": \"Secondary fermentation temperature in degrees Celsius.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"style_id\": {"]
+#[doc = "      \"description\": \"ID of the beer style to associate with this recipe.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"taste_notes\": {"]
+#[doc = "      \"description\": \"Tasting notes for the recipe.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"taste_rating\": {"]
+#[doc = "      \"description\": \"Taste rating (e.g. 1–50 on the BeerXML scale).\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"tertiary_age_days\": {"]
+#[doc = "      \"description\": \"Duration of tertiary fermentation in days.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"tertiary_temp_c\": {"]
+#[doc = "      \"description\": \"Tertiary fermentation temperature in degrees Celsius.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"type_\": {"]
+#[doc = "      \"description\": \"Recipe type (e.g. All Grain, Extract, Partial Mash).\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    }"]
 #[doc = "  }"]
@@ -5975,65 +7138,94 @@ impl UpdateMiscInput {
 #[doc = r" </details>"]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
 pub struct UpdateRecipeInput {
+    #[doc = "Conditioning or bottle-age duration in days."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub age_days: ::std::option::Option<f64>,
+    #[doc = "Conditioning temperature in degrees Celsius."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub age_temp_c: ::std::option::Option<f64>,
+    #[doc = "Name of the assistant brewer."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub asst_brewer: ::std::option::Option<::std::string::String>,
+    #[doc = "Target batch volume in litres."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub batch_size_l: ::std::option::Option<f64>,
+    #[doc = "Pre-boil kettle volume in litres."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub boil_size_l: ::std::option::Option<f64>,
+    #[doc = "Boil duration in minutes."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub boil_time_min: ::std::option::Option<f64>,
+    #[doc = "Name of the primary brewer."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub brewer: ::std::option::Option<::std::string::String>,
+    #[doc = "Temperature at carbonation time in degrees Celsius, used for priming calculations."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub carbonation_temp_c: ::std::option::Option<f64>,
+    #[doc = "Target carbonation level in volumes of CO2."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub carbonation_vols: ::std::option::Option<f64>,
+    #[doc = "Brew date as a free-form string."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub date: ::std::option::Option<::std::string::String>,
+    #[doc = "Brewhouse efficiency percentage."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub efficiency_pct: ::std::option::Option<f64>,
+    #[doc = "ID of the equipment profile to associate with this recipe."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub equipment_profile_id: ::std::option::Option<::std::string::String>,
+    #[doc = "Number of fermentation stages (1 = primary only, 2 = primary + secondary, etc.)."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub fermentation_stages: ::std::option::Option<i64>,
+    #[doc = "When true, the beer is force-carbonated (kegged); when false, priming sugar is used."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub forced_carbonation: ::std::option::Option<bool>,
     #[doc = "Default hopstand temperature in °C"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub hopstand_temp_c: ::std::option::Option<f64>,
+    #[doc = "Correction factor applied when calculating priming sugar for kegs."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub keg_priming_factor: ::std::option::Option<f64>,
+    #[doc = "Recipe name."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub name: ::std::option::Option<::std::string::String>,
+    #[doc = "Brewer's notes for the recipe."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub notes: ::std::option::Option<::std::string::String>,
+    #[doc = "Duration of primary fermentation in days."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub primary_age_days: ::std::option::Option<f64>,
+    #[doc = "Primary fermentation temperature in degrees Celsius."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub primary_temp_c: ::std::option::Option<f64>,
+    #[doc = "Priming sugar equivalent weight relative to sucrose."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub priming_sugar_equiv: ::std::option::Option<f64>,
+    #[doc = "Name of the priming sugar used for bottle conditioning."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub priming_sugar_name: ::std::option::Option<::std::string::String>,
+    #[doc = "Duration of secondary fermentation in days."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub secondary_age_days: ::std::option::Option<f64>,
+    #[doc = "Secondary fermentation temperature in degrees Celsius."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub secondary_temp_c: ::std::option::Option<f64>,
+    #[doc = "ID of the beer style to associate with this recipe."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub style_id: ::std::option::Option<::std::string::String>,
+    #[doc = "Tasting notes for the recipe."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub taste_notes: ::std::option::Option<::std::string::String>,
+    #[doc = "Taste rating (e.g. 1–50 on the BeerXML scale)."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub taste_rating: ::std::option::Option<f64>,
+    #[doc = "Duration of tertiary fermentation in days."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub tertiary_age_days: ::std::option::Option<f64>,
+    #[doc = "Tertiary fermentation temperature in degrees Celsius."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub tertiary_temp_c: ::std::option::Option<f64>,
+    #[doc = "Recipe type (e.g. All Grain, Extract, Partial Mash)."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub type_: ::std::option::Option<::std::string::String>,
 }
@@ -6078,15 +7270,17 @@ impl UpdateRecipeInput {
         Default::default()
     }
 }
-#[doc = "`UpdateWaterAdditionInput`"]
+#[doc = "Fields that can be updated on a recipe water source addition."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"Fields that can be updated on a recipe water source addition.\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"amount_l\": {"]
+#[doc = "      \"description\": \"Updated volume of this water source in litres.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    }"]
 #[doc = "  }"]
@@ -6095,6 +7289,7 @@ impl UpdateRecipeInput {
 #[doc = r" </details>"]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
 pub struct UpdateWaterAdditionInput {
+    #[doc = "Updated volume of this water source in litres."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub amount_l: ::std::option::Option<f64>,
 }
@@ -6110,15 +7305,17 @@ impl UpdateWaterAdditionInput {
         Default::default()
     }
 }
-#[doc = "`UpdateWaterAdjustmentInput`"]
+#[doc = "Fields that can be updated on an existing water adjustment."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"Fields that can be updated on an existing water adjustment.\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"addition\": {"]
+#[doc = "      \"description\": \"Mineral salt or acid being added.\","]
 #[doc = "      \"type\": \"string\","]
 #[doc = "      \"enum\": ["]
 #[doc = "        \"gypsum\","]
@@ -6136,6 +7333,7 @@ impl UpdateWaterAdditionInput {
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"target\": {"]
+#[doc = "      \"description\": \"Whether the addition is applied to the mash or sparge water.\","]
 #[doc = "      \"type\": \"string\","]
 #[doc = "      \"enum\": ["]
 #[doc = "        \"mash\","]
@@ -6148,11 +7346,13 @@ impl UpdateWaterAdditionInput {
 #[doc = r" </details>"]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
 pub struct UpdateWaterAdjustmentInput {
+    #[doc = "Mineral salt or acid being added."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub addition: ::std::option::Option<UpdateWaterAdjustmentInputAddition>,
     #[doc = "Amount in grams for salts, ml for acids"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub amount: ::std::option::Option<f64>,
+    #[doc = "Whether the addition is applied to the mash or sparge water."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub target: ::std::option::Option<UpdateWaterAdjustmentInputTarget>,
 }
@@ -6170,12 +7370,13 @@ impl UpdateWaterAdjustmentInput {
         Default::default()
     }
 }
-#[doc = "`UpdateWaterAdjustmentInputAddition`"]
+#[doc = "Mineral salt or acid being added."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"Mineral salt or acid being added.\","]
 #[doc = "  \"type\": \"string\","]
 #[doc = "  \"enum\": ["]
 #[doc = "    \"gypsum\","]
@@ -6272,12 +7473,13 @@ impl ::std::convert::TryFrom<::std::string::String> for UpdateWaterAdjustmentInp
         value.parse()
     }
 }
-#[doc = "`UpdateWaterAdjustmentInputTarget`"]
+#[doc = "Whether the addition is applied to the mash or sparge water."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"Whether the addition is applied to the mash or sparge water.\","]
 #[doc = "  \"type\": \"string\","]
 #[doc = "  \"enum\": ["]
 #[doc = "    \"mash\","]
@@ -6344,45 +7546,55 @@ impl ::std::convert::TryFrom<::std::string::String> for UpdateWaterAdjustmentInp
         value.parse()
     }
 }
-#[doc = "`UpdateWaterInput`"]
+#[doc = "Fields that can be updated on an existing library water source profile."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"Fields that can be updated on an existing library water source profile.\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"bicarbonate_ppm\": {"]
+#[doc = "      \"description\": \"Bicarbonate (alkalinity) concentration in parts per million (mg/L).\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"calcium_ppm\": {"]
+#[doc = "      \"description\": \"Calcium concentration in parts per million (mg/L).\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"chloride_ppm\": {"]
+#[doc = "      \"description\": \"Chloride concentration in parts per million (mg/L).\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"magnesium_ppm\": {"]
+#[doc = "      \"description\": \"Magnesium concentration in parts per million (mg/L).\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"name\": {"]
+#[doc = "      \"description\": \"Water source name.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"notes\": {"]
+#[doc = "      \"description\": \"Notes about this water source.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"ph\": {"]
+#[doc = "      \"description\": \"Source water pH.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"sodium_ppm\": {"]
+#[doc = "      \"description\": \"Sodium concentration in parts per million (mg/L).\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"sulfate_ppm\": {"]
+#[doc = "      \"description\": \"Sulfate concentration in parts per million (mg/L).\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    }"]
 #[doc = "  }"]
@@ -6391,22 +7603,31 @@ impl ::std::convert::TryFrom<::std::string::String> for UpdateWaterAdjustmentInp
 #[doc = r" </details>"]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
 pub struct UpdateWaterInput {
+    #[doc = "Bicarbonate (alkalinity) concentration in parts per million (mg/L)."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub bicarbonate_ppm: ::std::option::Option<f64>,
+    #[doc = "Calcium concentration in parts per million (mg/L)."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub calcium_ppm: ::std::option::Option<f64>,
+    #[doc = "Chloride concentration in parts per million (mg/L)."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub chloride_ppm: ::std::option::Option<f64>,
+    #[doc = "Magnesium concentration in parts per million (mg/L)."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub magnesium_ppm: ::std::option::Option<f64>,
+    #[doc = "Water source name."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub name: ::std::option::Option<::std::string::String>,
+    #[doc = "Notes about this water source."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub notes: ::std::option::Option<::std::string::String>,
+    #[doc = "Source water pH."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub ph: ::std::option::Option<f64>,
+    #[doc = "Sodium concentration in parts per million (mg/L)."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub sodium_ppm: ::std::option::Option<f64>,
+    #[doc = "Sulfate concentration in parts per million (mg/L)."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub sulfate_ppm: ::std::option::Option<f64>,
 }
@@ -6430,27 +7651,33 @@ impl UpdateWaterInput {
         Default::default()
     }
 }
-#[doc = "`UpdateYeastAdditionInput`"]
+#[doc = "Fields that can be updated on an existing yeast addition."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"Fields that can be updated on an existing yeast addition.\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"add_to_secondary\": {"]
+#[doc = "      \"description\": \"When true, yeast is added at secondary fermentation rather than primary.\","]
 #[doc = "      \"type\": \"boolean\""]
 #[doc = "    },"]
 #[doc = "    \"amount\": {"]
+#[doc = "      \"description\": \"Quantity of yeast pitched; unit depends on amount_is_weight.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"amount_is_weight\": {"]
+#[doc = "      \"description\": \"When true, amount is in grams (dry yeast); when false, amount is in millilitres (liquid yeast).\","]
 #[doc = "      \"type\": \"boolean\""]
 #[doc = "    },"]
 #[doc = "    \"attenuation_pct\": {"]
+#[doc = "      \"description\": \"Expected attenuation percentage for this yeast strain.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"times_cultured\": {"]
+#[doc = "      \"description\": \"Number of times this yeast has been repitched from a previous batch.\","]
 #[doc = "      \"type\": \"integer\""]
 #[doc = "    }"]
 #[doc = "  }"]
@@ -6459,14 +7686,19 @@ impl UpdateWaterInput {
 #[doc = r" </details>"]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
 pub struct UpdateYeastAdditionInput {
+    #[doc = "When true, yeast is added at secondary fermentation rather than primary."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub add_to_secondary: ::std::option::Option<bool>,
+    #[doc = "Quantity of yeast pitched; unit depends on amount_is_weight."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub amount: ::std::option::Option<f64>,
+    #[doc = "When true, amount is in grams (dry yeast); when false, amount is in millilitres (liquid yeast)."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub amount_is_weight: ::std::option::Option<bool>,
+    #[doc = "Expected attenuation percentage for this yeast strain."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub attenuation_pct: ::std::option::Option<f64>,
+    #[doc = "Number of times this yeast has been repitched from a previous batch."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub times_cultured: ::std::option::Option<i64>,
 }
@@ -6486,132 +7718,155 @@ impl UpdateYeastAdditionInput {
         Default::default()
     }
 }
-#[doc = "`UpdateYeastInput`"]
+#[doc = "Fields that can be updated on an existing library yeast strain."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"Fields that can be updated on an existing library yeast strain.\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"add_to_secondary\": {"]
+#[doc = "      \"description\": \"When true, yeast is added at secondary fermentation rather than primary.\","]
 #[doc = "      \"type\": \"boolean\""]
 #[doc = "    },"]
 #[doc = "    \"alcohol_tolerance\": {"]
+#[doc = "      \"description\": \"low, medium, high, very_high\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"attenuation_pct\": {"]
+#[doc = "      \"description\": \"BeerXML single attenuation value; see min/max fields for range.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"best_for\": {"]
+#[doc = "      \"description\": \"Beer styles this yeast is best suited for.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"flavor_profile\": {"]
+#[doc = "      \"description\": \"Flavor and aroma characteristics of this yeast strain.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"flocculation\": {"]
+#[doc = "      \"description\": \"Low, Medium, High, Very High\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"form\": {"]
+#[doc = "      \"description\": \"Liquid, Dry, Slant, Culture\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"laboratory\": {"]
+#[doc = "      \"description\": \"Yeast laboratory or manufacturer.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"max_attenuation_pct\": {"]
+#[doc = "      \"description\": \"Attenuation range upper bound.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"max_reuse\": {"]
+#[doc = "      \"description\": \"Maximum number of times this yeast can be repitched.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"integer\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"max_temperature_c\": {"]
+#[doc = "      \"description\": \"Maximum recommended fermentation temperature in degrees Celsius.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"min_attenuation_pct\": {"]
+#[doc = "      \"description\": \"Attenuation range lower bound.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"min_temperature_c\": {"]
+#[doc = "      \"description\": \"Minimum recommended fermentation temperature in degrees Celsius.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"name\": {"]
+#[doc = "      \"description\": \"Yeast strain name.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"notes\": {"]
+#[doc = "      \"description\": \"Brewer's notes about this yeast strain.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"pof_positive\": {"]
+#[doc = "      \"description\": \"Phenolic Off-Flavor gene present.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"boolean\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"product_id\": {"]
+#[doc = "      \"description\": \"Manufacturer's product identifier.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"species\": {"]
+#[doc = "      \"description\": \"e.g. Saccharomyces cerevisiae\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"sta1_positive\": {"]
+#[doc = "      \"description\": \"STA-1 dextrin-fermenting gene present.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"boolean\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"styles\": {"]
+#[doc = "      \"description\": \"Suitable beer styles, comma-separated.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"substitutes\": {"]
+#[doc = "      \"description\": \"Substitute yeast strains, comma-separated.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"type_\": {"]
+#[doc = "      \"description\": \"Ale, Lager, Wheat, Wine, Champagne\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    }"]
 #[doc = "  }"]
@@ -6620,48 +7875,70 @@ impl UpdateYeastAdditionInput {
 #[doc = r" </details>"]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
 pub struct UpdateYeastInput {
+    #[doc = "When true, yeast is added at secondary fermentation rather than primary."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub add_to_secondary: ::std::option::Option<bool>,
+    #[doc = "low, medium, high, very_high"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub alcohol_tolerance: ::std::option::Option<::std::string::String>,
+    #[doc = "BeerXML single attenuation value; see min/max fields for range."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub attenuation_pct: ::std::option::Option<f64>,
+    #[doc = "Beer styles this yeast is best suited for."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub best_for: ::std::option::Option<::std::string::String>,
+    #[doc = "Flavor and aroma characteristics of this yeast strain."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub flavor_profile: ::std::option::Option<::std::string::String>,
+    #[doc = "Low, Medium, High, Very High"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub flocculation: ::std::option::Option<::std::string::String>,
+    #[doc = "Liquid, Dry, Slant, Culture"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub form: ::std::option::Option<::std::string::String>,
+    #[doc = "Yeast laboratory or manufacturer."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub laboratory: ::std::option::Option<::std::string::String>,
+    #[doc = "Attenuation range upper bound."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub max_attenuation_pct: ::std::option::Option<f64>,
+    #[doc = "Maximum number of times this yeast can be repitched."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub max_reuse: ::std::option::Option<i64>,
+    #[doc = "Maximum recommended fermentation temperature in degrees Celsius."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub max_temperature_c: ::std::option::Option<f64>,
+    #[doc = "Attenuation range lower bound."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub min_attenuation_pct: ::std::option::Option<f64>,
+    #[doc = "Minimum recommended fermentation temperature in degrees Celsius."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub min_temperature_c: ::std::option::Option<f64>,
+    #[doc = "Yeast strain name."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub name: ::std::option::Option<::std::string::String>,
+    #[doc = "Brewer's notes about this yeast strain."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub notes: ::std::option::Option<::std::string::String>,
+    #[doc = "Phenolic Off-Flavor gene present."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub pof_positive: ::std::option::Option<bool>,
+    #[doc = "Manufacturer's product identifier."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub product_id: ::std::option::Option<::std::string::String>,
+    #[doc = "e.g. Saccharomyces cerevisiae"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub species: ::std::option::Option<::std::string::String>,
+    #[doc = "STA-1 dextrin-fermenting gene present."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub sta1_positive: ::std::option::Option<bool>,
+    #[doc = "Suitable beer styles, comma-separated."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub styles: ::std::option::Option<::std::string::String>,
+    #[doc = "Substitute yeast strains, comma-separated."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub substitutes: ::std::option::Option<::std::string::String>,
+    #[doc = "Ale, Lager, Wheat, Wine, Champagne"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub type_: ::std::option::Option<::std::string::String>,
 }
@@ -6698,12 +7975,13 @@ impl UpdateYeastInput {
         Default::default()
     }
 }
-#[doc = "`Water`"]
+#[doc = "A water source profile in the library, defined by its mineral ion concentrations."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"A water source profile in the library, defined by its mineral ion concentrations.\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"required\": ["]
 #[doc = "    \"bicarbonate_ppm\","]
@@ -6718,42 +7996,52 @@ impl UpdateYeastInput {
 #[doc = "  ],"]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"bicarbonate_ppm\": {"]
+#[doc = "      \"description\": \"Bicarbonate (alkalinity) concentration in parts per million (mg/L).\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"calcium_ppm\": {"]
+#[doc = "      \"description\": \"Calcium concentration in parts per million (mg/L).\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"chloride_ppm\": {"]
+#[doc = "      \"description\": \"Chloride concentration in parts per million (mg/L).\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"forked_from_id\": {"]
+#[doc = "      \"description\": \"ID of the seeded water profile this entry was forked from, or null if original.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"id\": {"]
+#[doc = "      \"description\": \"Unique water profile identifier.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"magnesium_ppm\": {"]
+#[doc = "      \"description\": \"Magnesium concentration in parts per million (mg/L).\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"name\": {"]
+#[doc = "      \"description\": \"Water source name (e.g. \\\"London\\\", \\\"Pilsen\\\", \\\"RO Water\\\").\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"notes\": {"]
+#[doc = "      \"description\": \"Notes about this water source.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"ph\": {"]
+#[doc = "      \"description\": \"Source water pH.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"sodium_ppm\": {"]
+#[doc = "      \"description\": \"Sodium concentration in parts per million (mg/L).\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"source\": {"]
@@ -6761,6 +8049,7 @@ impl UpdateYeastInput {
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"sulfate_ppm\": {"]
+#[doc = "      \"description\": \"Sulfate concentration in parts per million (mg/L).\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    }"]
 #[doc = "  }"]
@@ -6769,21 +8058,32 @@ impl UpdateYeastInput {
 #[doc = r" </details>"]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
 pub struct Water {
+    #[doc = "Bicarbonate (alkalinity) concentration in parts per million (mg/L)."]
     pub bicarbonate_ppm: f64,
+    #[doc = "Calcium concentration in parts per million (mg/L)."]
     pub calcium_ppm: f64,
+    #[doc = "Chloride concentration in parts per million (mg/L)."]
     pub chloride_ppm: f64,
+    #[doc = "ID of the seeded water profile this entry was forked from, or null if original."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub forked_from_id: ::std::option::Option<::std::string::String>,
+    #[doc = "Unique water profile identifier."]
     pub id: ::std::string::String,
+    #[doc = "Magnesium concentration in parts per million (mg/L)."]
     pub magnesium_ppm: f64,
+    #[doc = "Water source name (e.g. \"London\", \"Pilsen\", \"RO Water\")."]
     pub name: ::std::string::String,
+    #[doc = "Notes about this water source."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub notes: ::std::option::Option<::std::string::String>,
+    #[doc = "Source water pH."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub ph: ::std::option::Option<f64>,
+    #[doc = "Sodium concentration in parts per million (mg/L)."]
     pub sodium_ppm: f64,
     #[doc = "'seeded' | 'user'"]
     pub source: ::std::string::String,
+    #[doc = "Sulfate concentration in parts per million (mg/L)."]
     pub sulfate_ppm: f64,
 }
 impl Water {
@@ -6791,12 +8091,13 @@ impl Water {
         Default::default()
     }
 }
-#[doc = "`WaterProfile`"]
+#[doc = "Mineral ion concentrations and chloride-to-sulfate ratio for a water volume."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"Mineral ion concentrations and chloride-to-sulfate ratio for a water volume.\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"required\": ["]
 #[doc = "    \"bicarbonate_ppm\","]
@@ -6809,24 +8110,31 @@ impl Water {
 #[doc = "  ],"]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"bicarbonate_ppm\": {"]
+#[doc = "      \"description\": \"Bicarbonate (alkalinity) concentration in parts per million (mg/L).\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"calcium_ppm\": {"]
+#[doc = "      \"description\": \"Calcium concentration in parts per million (mg/L).\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"chloride_ppm\": {"]
+#[doc = "      \"description\": \"Chloride concentration in parts per million (mg/L).\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"cl_so4_ratio\": {"]
+#[doc = "      \"description\": \"Chloride-to-sulfate ratio; higher values favor malt character, lower values favor hop bitterness.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"magnesium_ppm\": {"]
+#[doc = "      \"description\": \"Magnesium concentration in parts per million (mg/L).\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"sodium_ppm\": {"]
+#[doc = "      \"description\": \"Sodium concentration in parts per million (mg/L).\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"sulfate_ppm\": {"]
+#[doc = "      \"description\": \"Sulfate concentration in parts per million (mg/L).\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    }"]
 #[doc = "  }"]
@@ -6835,12 +8143,19 @@ impl Water {
 #[doc = r" </details>"]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
 pub struct WaterProfile {
+    #[doc = "Bicarbonate (alkalinity) concentration in parts per million (mg/L)."]
     pub bicarbonate_ppm: f64,
+    #[doc = "Calcium concentration in parts per million (mg/L)."]
     pub calcium_ppm: f64,
+    #[doc = "Chloride concentration in parts per million (mg/L)."]
     pub chloride_ppm: f64,
+    #[doc = "Chloride-to-sulfate ratio; higher values favor malt character, lower values favor hop bitterness."]
     pub cl_so4_ratio: f64,
+    #[doc = "Magnesium concentration in parts per million (mg/L)."]
     pub magnesium_ppm: f64,
+    #[doc = "Sodium concentration in parts per million (mg/L)."]
     pub sodium_ppm: f64,
+    #[doc = "Sulfate concentration in parts per million (mg/L)."]
     pub sulfate_ppm: f64,
 }
 impl WaterProfile {
@@ -6848,12 +8163,13 @@ impl WaterProfile {
         Default::default()
     }
 }
-#[doc = "`Yeast`"]
+#[doc = "A yeast strain in the library."]
 #[doc = r""]
 #[doc = r" <details><summary>JSON schema</summary>"]
 #[doc = r""]
 #[doc = r" ```json"]
 #[doc = "{"]
+#[doc = "  \"description\": \"A yeast strain in the library.\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"required\": ["]
 #[doc = "    \"add_to_secondary\","]
@@ -6865,6 +8181,7 @@ impl WaterProfile {
 #[doc = "  ],"]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"add_to_secondary\": {"]
+#[doc = "      \"description\": \"When true, yeast is added at secondary fermentation rather than primary.\","]
 #[doc = "      \"type\": \"boolean\""]
 #[doc = "    },"]
 #[doc = "    \"alcohol_tolerance\": {"]
@@ -6882,12 +8199,14 @@ impl WaterProfile {
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"best_for\": {"]
+#[doc = "      \"description\": \"Beer styles this yeast is best suited for.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"flavor_profile\": {"]
+#[doc = "      \"description\": \"Flavor and aroma characteristics of this yeast strain.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
@@ -6901,6 +8220,7 @@ impl WaterProfile {
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"forked_from_id\": {"]
+#[doc = "      \"description\": \"ID of the seeded yeast this entry was forked from, or null if original.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
@@ -6911,9 +8231,11 @@ impl WaterProfile {
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"id\": {"]
+#[doc = "      \"description\": \"Unique yeast identifier.\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"laboratory\": {"]
+#[doc = "      \"description\": \"Yeast laboratory or manufacturer (e.g. \\\"White Labs\\\", \\\"Wyeast\\\").\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
@@ -6927,12 +8249,14 @@ impl WaterProfile {
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"max_reuse\": {"]
+#[doc = "      \"description\": \"Maximum number of times this yeast can be repitched.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"integer\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"max_temperature_c\": {"]
+#[doc = "      \"description\": \"Maximum recommended fermentation temperature in degrees Celsius.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
@@ -6946,15 +8270,18 @@ impl WaterProfile {
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"min_temperature_c\": {"]
+#[doc = "      \"description\": \"Minimum recommended fermentation temperature in degrees Celsius.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"name\": {"]
+#[doc = "      \"description\": \"Yeast strain name (e.g. \\\"American Ale\\\", \\\"WLP001\\\").\","]
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"notes\": {"]
+#[doc = "      \"description\": \"Brewer's notes about this yeast strain.\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
@@ -6968,6 +8295,7 @@ impl WaterProfile {
 #[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"product_id\": {"]
+#[doc = "      \"description\": \"Manufacturer's product identifier (e.g. \\\"WLP001\\\", \\\"1056\\\").\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"string\","]
 #[doc = "        \"null\""]
@@ -7015,6 +8343,7 @@ impl WaterProfile {
 #[doc = r" </details>"]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
 pub struct Yeast {
+    #[doc = "When true, yeast is added at secondary fermentation rather than primary."]
     pub add_to_secondary: bool,
     #[doc = "low, medium, high, very_high"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -7022,38 +8351,49 @@ pub struct Yeast {
     #[doc = "BeerXML single attenuation value; see min/max fields for range"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub attenuation_pct: ::std::option::Option<f64>,
+    #[doc = "Beer styles this yeast is best suited for."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub best_for: ::std::option::Option<::std::string::String>,
+    #[doc = "Flavor and aroma characteristics of this yeast strain."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub flavor_profile: ::std::option::Option<::std::string::String>,
     #[doc = "Low, Medium, High, Very High"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub flocculation: ::std::option::Option<::std::string::String>,
+    #[doc = "ID of the seeded yeast this entry was forked from, or null if original."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub forked_from_id: ::std::option::Option<::std::string::String>,
     #[doc = "Liquid, Dry, Slant, Culture"]
     pub form: ::std::string::String,
+    #[doc = "Unique yeast identifier."]
     pub id: ::std::string::String,
+    #[doc = "Yeast laboratory or manufacturer (e.g. \"White Labs\", \"Wyeast\")."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub laboratory: ::std::option::Option<::std::string::String>,
     #[doc = "BeerMaverick attenuation range upper bound"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub max_attenuation_pct: ::std::option::Option<f64>,
+    #[doc = "Maximum number of times this yeast can be repitched."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub max_reuse: ::std::option::Option<i64>,
+    #[doc = "Maximum recommended fermentation temperature in degrees Celsius."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub max_temperature_c: ::std::option::Option<f64>,
     #[doc = "BeerMaverick attenuation range lower bound"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub min_attenuation_pct: ::std::option::Option<f64>,
+    #[doc = "Minimum recommended fermentation temperature in degrees Celsius."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub min_temperature_c: ::std::option::Option<f64>,
+    #[doc = "Yeast strain name (e.g. \"American Ale\", \"WLP001\")."]
     pub name: ::std::string::String,
+    #[doc = "Brewer's notes about this yeast strain."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub notes: ::std::option::Option<::std::string::String>,
     #[doc = "Phenolic Off-Flavor gene present"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub pof_positive: ::std::option::Option<bool>,
+    #[doc = "Manufacturer's product identifier (e.g. \"WLP001\", \"1056\")."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub product_id: ::std::option::Option<::std::string::String>,
     #[doc = "'seeded' | 'user'"]
@@ -14484,12 +15824,19 @@ pub mod builder {
         fg: ::std::result::Result<f64, ::std::string::String>,
         hop_stats: ::std::result::Result<::std::vec::Vec<super::HopStat>, ::std::string::String>,
         ibu: ::std::result::Result<f64, ::std::string::String>,
+        mash_volume_excess_l:
+            ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        mash_volume_l: ::std::result::Result<f64, ::std::string::String>,
+        mash_water_l: ::std::result::Result<f64, ::std::string::String>,
         og: ::std::result::Result<f64, ::std::string::String>,
         post_boil_volume_l: ::std::result::Result<f64, ::std::string::String>,
         pre_boil_gravity: ::std::result::Result<f64, ::std::string::String>,
         pre_boil_volume_l: ::std::result::Result<f64, ::std::string::String>,
+        sparge_water_l: ::std::result::Result<f64, ::std::string::String>,
         srm: ::std::result::Result<f64, ::std::string::String>,
         strike_temp_c: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        top_up_water_l: ::std::result::Result<f64, ::std::string::String>,
+        total_water_l: ::std::result::Result<f64, ::std::string::String>,
     }
     impl ::std::default::Default for RecipeStats {
         fn default() -> Self {
@@ -14500,12 +15847,18 @@ pub mod builder {
                 fg: Err("no value supplied for fg".to_string()),
                 hop_stats: Err("no value supplied for hop_stats".to_string()),
                 ibu: Err("no value supplied for ibu".to_string()),
+                mash_volume_excess_l: Ok(Default::default()),
+                mash_volume_l: Err("no value supplied for mash_volume_l".to_string()),
+                mash_water_l: Err("no value supplied for mash_water_l".to_string()),
                 og: Err("no value supplied for og".to_string()),
                 post_boil_volume_l: Err("no value supplied for post_boil_volume_l".to_string()),
                 pre_boil_gravity: Err("no value supplied for pre_boil_gravity".to_string()),
                 pre_boil_volume_l: Err("no value supplied for pre_boil_volume_l".to_string()),
+                sparge_water_l: Err("no value supplied for sparge_water_l".to_string()),
                 srm: Err("no value supplied for srm".to_string()),
                 strike_temp_c: Ok(Default::default()),
+                top_up_water_l: Err("no value supplied for top_up_water_l".to_string()),
+                total_water_l: Err("no value supplied for total_water_l".to_string()),
             }
         }
     }
@@ -14570,6 +15923,36 @@ pub mod builder {
                 .map_err(|e| format!("error converting supplied value for ibu: {e}"));
             self
         }
+        pub fn mash_volume_excess_l<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.mash_volume_excess_l = value.try_into().map_err(|e| {
+                format!("error converting supplied value for mash_volume_excess_l: {e}")
+            });
+            self
+        }
+        pub fn mash_volume_l<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<f64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.mash_volume_l = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for mash_volume_l: {e}"));
+            self
+        }
+        pub fn mash_water_l<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<f64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.mash_water_l = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for mash_water_l: {e}"));
+            self
+        }
         pub fn og<T>(mut self, value: T) -> Self
         where
             T: ::std::convert::TryInto<f64>,
@@ -14610,6 +15993,16 @@ pub mod builder {
                 .map_err(|e| format!("error converting supplied value for pre_boil_volume_l: {e}"));
             self
         }
+        pub fn sparge_water_l<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<f64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.sparge_water_l = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for sparge_water_l: {e}"));
+            self
+        }
         pub fn srm<T>(mut self, value: T) -> Self
         where
             T: ::std::convert::TryInto<f64>,
@@ -14630,6 +16023,26 @@ pub mod builder {
                 .map_err(|e| format!("error converting supplied value for strike_temp_c: {e}"));
             self
         }
+        pub fn top_up_water_l<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<f64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.top_up_water_l = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for top_up_water_l: {e}"));
+            self
+        }
+        pub fn total_water_l<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<f64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.total_water_l = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for total_water_l: {e}"));
+            self
+        }
     }
     impl ::std::convert::TryFrom<RecipeStats> for super::RecipeStats {
         type Error = super::error::ConversionError;
@@ -14643,12 +16056,18 @@ pub mod builder {
                 fg: value.fg?,
                 hop_stats: value.hop_stats?,
                 ibu: value.ibu?,
+                mash_volume_excess_l: value.mash_volume_excess_l?,
+                mash_volume_l: value.mash_volume_l?,
+                mash_water_l: value.mash_water_l?,
                 og: value.og?,
                 post_boil_volume_l: value.post_boil_volume_l?,
                 pre_boil_gravity: value.pre_boil_gravity?,
                 pre_boil_volume_l: value.pre_boil_volume_l?,
+                sparge_water_l: value.sparge_water_l?,
                 srm: value.srm?,
                 strike_temp_c: value.strike_temp_c?,
+                top_up_water_l: value.top_up_water_l?,
+                total_water_l: value.total_water_l?,
             })
         }
     }
@@ -14661,12 +16080,18 @@ pub mod builder {
                 fg: Ok(value.fg),
                 hop_stats: Ok(value.hop_stats),
                 ibu: Ok(value.ibu),
+                mash_volume_excess_l: Ok(value.mash_volume_excess_l),
+                mash_volume_l: Ok(value.mash_volume_l),
+                mash_water_l: Ok(value.mash_water_l),
                 og: Ok(value.og),
                 post_boil_volume_l: Ok(value.post_boil_volume_l),
                 pre_boil_gravity: Ok(value.pre_boil_gravity),
                 pre_boil_volume_l: Ok(value.pre_boil_volume_l),
+                sparge_water_l: Ok(value.sparge_water_l),
                 srm: Ok(value.srm),
                 strike_temp_c: Ok(value.strike_temp_c),
+                top_up_water_l: Ok(value.top_up_water_l),
+                total_water_l: Ok(value.total_water_l),
             }
         }
     }
