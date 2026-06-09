@@ -70,19 +70,19 @@
   />
 
   {#if recipe.hops.length > 0}
-    <table class="w-full text-sm">
+    <table class="w-full text-base">
       <thead>
         <tr style="color: var(--color-text-secondary);">
-          <th class="text-left py-1 font-medium text-sm">Name</th>
-          <th class="text-right py-1 font-medium text-sm">
+          <th class="text-left py-1 font-medium">Name</th>
+          <th class="text-right py-1 font-medium">
             <span class="inline-flex items-center gap-1">AA% <Tooltip text="Alpha acid percentage. This drives bitterness. Higher alpha means fewer grams to hit your IBU target." /></span>
           </th>
-          <th class="text-right py-1 font-medium text-sm">{hopWeightLabel(units)}</th>
-          <th class="text-right py-1 font-medium text-sm">
+          <th class="text-right py-1 font-medium">{hopWeightLabel(units)}</th>
+          <th class="text-right py-1 font-medium">
             <span class="inline-flex items-center gap-1">Use <Tooltip text="When the hop is added. Boil adds bitterness. Whirlpool and Hopstand add flavor and aroma. Dry Hop adds aroma only." /></span>
           </th>
-          <th class="text-right py-1 font-medium text-sm">Time</th>
-          <th class="text-right py-1 font-medium text-sm">IBU</th>
+          <th class="text-right py-1 font-medium">Time</th>
+          <th class="text-right py-1 font-medium">IBU</th>
           <th class="w-6"></th>
         </tr>
       </thead>
@@ -109,7 +109,7 @@
                        const v = parseFloat((e.target as HTMLInputElement).value);
                        if (!isNaN(v) && v > 0) handleUpdate(h.id, { amount_kg: hopDisplayToKg(v, units) });
                      }}
-                     class="w-16 text-right px-1 rounded text-xs"
+                     class="w-16 text-right px-1 rounded text-sm"
                      style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid transparent;" />
             </td>
             <td class="text-right py-1.5">
@@ -122,7 +122,7 @@
                     if (newUse !== 'hopstand') input.hopstand_temp_c = undefined;
                     handleUpdate(h.id, input);
                   }}
-                  class="text-xs px-1 py-0.5 rounded text-right"
+                  class="text-sm px-1 py-0.5 rounded text-right"
                   style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid transparent;"
                 >
                   {#each HOP_USES as u}
@@ -139,7 +139,7 @@
                            const v = parseFloat((e.target as HTMLInputElement).value);
                            if (!isNaN(v)) handleUpdate(h.id, { hopstand_temp_c: units === "imperial" ? fToC(v) : v });
                          }}
-                         class="w-16 text-right px-1 rounded text-xs"
+                         class="w-16 text-right px-1 rounded text-sm"
                          style="background: var(--color-bg-elevated); color: var(--color-text-secondary); border: 1px solid transparent;" />
                 {/if}
               </div>
@@ -152,9 +152,9 @@
                          const v = parseInt((e.target as HTMLInputElement).value, 10);
                          if (!isNaN(v) && v >= 0) handleUpdate(h.id, { time_min: v });
                        }}
-                       class="w-12 text-right px-1 rounded text-xs"
+                       class="w-12 text-right px-1 rounded text-sm"
                        style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid transparent;" />
-                <span class="text-xs w-7" style="color: var(--color-text-muted);">
+                <span class="text-sm w-8" style="color: var(--color-text-muted);">
                   {h.use_ === 'dry hop' ? 'day' : 'min'}
                 </span>
               </div>
@@ -163,7 +163,7 @@
               {ibu != null && ibu > 0 ? ibu.toFixed(0) : '—'}
             </td>
             <td class="pl-1">
-              <button onclick={() => handleDelete(h.id)} class="text-xs opacity-40 hover:opacity-100"
+              <button onclick={() => handleDelete(h.id)} class="text-sm opacity-40 hover:opacity-100"
                       style="color: var(--color-text-secondary);">×</button>
             </td>
           </tr>
