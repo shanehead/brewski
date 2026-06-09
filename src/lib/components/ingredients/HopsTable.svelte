@@ -123,7 +123,7 @@
                     handleUpdate(h.id, input);
                   }}
                   class="text-xs px-1 py-0.5 rounded text-right"
-                  style="background: var(--color-bg-elevated); color: var(--color-text-secondary); border: 1px solid transparent;"
+                  style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid transparent;"
                 >
                   {#each HOP_USES as u}
                     <option value={u}>{u}</option>
