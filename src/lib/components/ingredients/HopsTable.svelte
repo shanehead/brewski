@@ -154,8 +154,8 @@
                        }}
                        class="w-12 text-right px-1 rounded text-xs"
                        style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid transparent;" />
-                <span class="text-xs" style="color: var(--color-text-muted);">
-                  {h.use_ === 'dry hop' ? 'd' : 'min'}
+                <span class="text-xs w-7" style="color: var(--color-text-muted);">
+                  {h.use_ === 'dry hop' ? 'day' : 'min'}
                 </span>
               </div>
             </td>
