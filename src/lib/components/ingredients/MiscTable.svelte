@@ -54,22 +54,22 @@
   />
 
   {#if recipe.miscs.length > 0}
-    <table class="w-full text-sm">
+    <table class="ingredient-table">
       <thead>
         <tr style="color: var(--color-text-secondary);">
-          <th class="text-left py-1 font-medium text-sm">Name</th>
-          <th class="text-left py-1 font-medium text-sm">Type</th>
-          <th class="text-right py-1 font-medium text-sm">Amount</th>
-          <th class="text-right py-1 font-medium text-sm">Use</th>
-          <th class="text-right py-1 font-medium text-sm">Time</th>
+          <th class="text-left py-1">Name</th>
+          <th class="text-left py-1">Type</th>
+          <th class="text-right py-1">Amount</th>
+          <th class="text-right py-1">Use</th>
+          <th class="text-right py-1">Time</th>
           <th class="w-6"></th>
         </tr>
       </thead>
       <tbody>
         {#each recipe.miscs as m (m.id)}
-          <tr class="border-t" style="border-color: var(--color-border);">
+          <tr>
             <td class="py-1.5" style="color: var(--color-text-primary);">{m.name}</td>
-            <td class="py-1.5 text-xs" style="color: var(--color-text-secondary);">{m.type_}</td>
+            <td class="py-1.5" style="color: var(--color-text-secondary);">{m.type_}</td>
             <td class="text-right py-1.5" style="color: var(--color-text-secondary);"
               >{m.amount} {m.unit}</td
             >
@@ -80,7 +80,7 @@
             <td class="pl-1">
               <button
                 onclick={() => handleDelete(m.id)}
-                class="text-xs opacity-40 hover:opacity-100"
+                class="opacity-40 hover:opacity-100"
                 style="color: var(--color-text-secondary);">×</button
               >
             </td>

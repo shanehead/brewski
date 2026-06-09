@@ -57,12 +57,12 @@
   {#each recipe.yeasts as y (y.id)}
     <div class="flex items-center justify-between py-1.5 border-t" style="border-color: var(--color-border);">
       <div>
-        <p class="text-sm" style="color: var(--color-text-primary);">{y.name}</p>
-        <p class="text-xs" style="color: var(--color-text-secondary);">
+        <p class="ingredient-list-item-primary" style="color: var(--color-text-primary);">{y.name}</p>
+        <p class="ingredient-list-item-secondary" style="color: var(--color-text-secondary);">
           {y.laboratory ?? ""} {y.product_id ?? ""} · {y.attenuation_pct ?? "?"}% attenuation
         </p>
       </div>
-      <button onclick={() => handleDelete(y.id)} class="text-xs opacity-40 hover:opacity-100"
+      <button onclick={() => handleDelete(y.id)} class="opacity-40 hover:opacity-100"
               style="color: var(--color-text-secondary);">×</button>
     </div>
   {/each}

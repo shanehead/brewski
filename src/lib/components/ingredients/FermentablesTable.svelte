@@ -65,31 +65,31 @@
   />
 
   {#if recipe.fermentables.length > 0}
-    <table class="w-full text-sm">
+    <table class="ingredient-table">
       <thead>
         <tr style="color: var(--color-text-secondary);">
-          <th class="text-left py-1 font-medium text-sm">Name</th>
-          <th class="text-right py-1 font-medium text-sm">
+          <th class="text-left py-1">Name</th>
+          <th class="text-right py-1">
             <span class="inline-flex items-center gap-1">Lovibond <Tooltip text="The color of this fermentable in degrees Lovibond. Pale malts are 1–3°L. Crystal malts range from 10 to 120°L and above." /></span>
           </th>
-          <th class="text-right py-1 font-medium text-sm">{weightLabel(units)}</th>
+          <th class="text-right py-1">{weightLabel(units)}</th>
           <th class="w-6"></th>
         </tr>
       </thead>
       <tbody>
         {#each recipe.fermentables as f (f.id)}
-          <tr class="border-t" style="border-color: var(--color-border);">
+          <tr>
             <td class="py-1.5" style="color: var(--color-text-primary);">{f.name}</td>
             <td class="text-right py-1.5" style="color: var(--color-text-secondary);">{f.color_lovibond}°L</td>
             <td class="text-right py-1.5">
               <input type="number" inputmode="decimal" step={units === "imperial" ? 0.1 : 0.05}
                      value={(units === "imperial" ? kgToLb(f.amount_kg) : f.amount_kg).toFixed(2)}
                      onblur={(e) => handleAmountChange(f, (e.target as HTMLInputElement).value)}
-                     class="w-16 text-right px-1 rounded text-xs"
+                     class="w-16 text-right px-1 rounded"
                      style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid transparent;" />
             </td>
             <td class="pl-1">
-              <button onclick={() => handleDelete(f.id)} class="text-xs opacity-40 hover:opacity-100"
+              <button onclick={() => handleDelete(f.id)} class="opacity-40 hover:opacity-100"
                       style="color: var(--color-text-secondary);">×</button>
             </td>
           </tr>

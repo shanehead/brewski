@@ -147,6 +147,34 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Ingredient section tables (Fermentables, Hops, Misc) */
+.ingredient-table {
+  width: 100%;
+  font-size: var(--fs-md);
+}
+
+.ingredient-table th {
+  font-weight: var(--fw-medium);
+}
+
+.ingredient-table tbody tr {
+  border-top: 1px solid var(--color-border);
+}
+
+.ingredient-table input,
+.ingredient-table select {
+  font-size: var(--fs-base);
+}
+
+/* Ingredient section list rows (Yeast) */
+.ingredient-list-item-primary {
+  font-size: var(--fs-md);
+}
+
+.ingredient-list-item-secondary {
+  font-size: var(--fs-base);
+}
+
 /* IngredientPicker: fixed size on desktop, full-screen on mobile */
 .ingredient-picker-dialog {
   width: 80vw;
