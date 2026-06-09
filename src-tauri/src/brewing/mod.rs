@@ -155,14 +155,20 @@ pub fn calculate_stats(recipe: &Recipe) -> RecipeStats {
         let grain_temp_c = mash.grain_temp_c;
         let target_temp_c = mash.steps.first()?.step_temp_c;
         let total_grain_kg: f64 = recipe.fermentables.iter().map(|f| f.amount_kg).sum();
-        let derived_ratio = if total_grain_kg > 0.0 {
-            mash.steps
-                .iter()
-                .find_map(|s| s.infuse_amount_l.map(|vol| vol / total_grain_kg))
-        } else {
-            None
-        };
-        let ratio = derived_ratio.or(mash.ratio_l_per_kg)?;
+        if total_grain_kg <= 0.0 {
+            return None;
+        }
+        let derived_ratio = mash
+            .steps
+            .iter()
+            .find_map(|s| s.infuse_amount_l.map(|vol| vol / total_grain_kg));
+        let equipment_ratio = recipe.equipment_profile.as_ref().map(|eq| {
+            let mash_water_l = pre_boil_volume_l
+                + eq.grain_absorption_rate_l_per_kg * total_grain_kg
+                + eq.lauter_deadspace_l;
+            mash_water_l / total_grain_kg
+        });
+        let ratio = derived_ratio.or(mash.ratio_l_per_kg).or(equipment_ratio)?;
         Some(strike::calculate_strike_temp(
             grain_temp_c,
             target_temp_c,
@@ -183,6 +189,12 @@ pub fn calculate_stats(recipe: &Recipe) -> RecipeStats {
         post_boil_volume_l,
         strike_temp_c,
         hop_stats,
+        mash_water_l: 0.0,
+        sparge_water_l: 0.0,
+        top_up_water_l: 0.0,
+        total_water_l: 0.0,
+        mash_volume_l: 0.0,
+        mash_volume_excess_l: None,
     }
 }
 
@@ -429,6 +441,29 @@ mod tests {
         assert!(
             (strike - 72.78).abs() < 0.5,
             "expected ~72.78°C, got {strike:.2}"
+        );
+    }
+
+    #[test]
+    fn test_strike_temp_fallback_to_equipment_profile() {
+        // No infuse amount, no stored ratio — should derive ratio from equipment profile.
+        // Equipment: grain_absorption=1.04 L/kg, lauter_deadspace=0, pre_boil ~27.5 L
+        // Grain: 4.5 kg; mash_water = 27.5 + 1.04*4.5 + 0 = 32.18 L; ratio = 32.18/4.5 = 7.15 L/kg
+        // strike = (0.41/7.15)*(67-20)+67 = 0.0573*47+67 = 2.7+67 = 69.7°C
+        let mut recipe = minimal_recipe();
+        recipe.fermentables = vec![pale_malt()];
+        let mut mash = mash_with_infusion(20.0, 67.0, 15.0);
+        mash.steps[0].infuse_amount_l = None;
+        mash.ratio_l_per_kg = None;
+        recipe.mash = Some(mash);
+        recipe.equipment_profile = Some(equipment_profile_base());
+        let stats = calculate_stats(&recipe);
+        let strike = stats
+            .strike_temp_c
+            .expect("should derive strike from equipment profile");
+        assert!(
+            strike > 67.0,
+            "strike temp should be above mash target, got {strike:.2}"
         );
     }
 
