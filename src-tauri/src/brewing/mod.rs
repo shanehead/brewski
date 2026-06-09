@@ -144,6 +144,34 @@ pub fn calculate_stats(recipe: &Recipe) -> RecipeStats {
 
     let srm = srm::morey_srm(&srm_inputs, fermenter_volume_l);
 
+    let total_grain_kg: f64 = recipe.fermentables.iter().map(|f| f.amount_kg).sum();
+
+    let grain_absorption_rate = equipment
+        .map(|e| e.grain_absorption_rate_l_per_kg)
+        .unwrap_or(0.0);
+    let lauter_deadspace = equipment.map(|e| e.lauter_deadspace_l).unwrap_or(0.0);
+    let sparge_method = equipment
+        .map(|e| e.sparge_method.as_str())
+        .unwrap_or("no_sparge");
+    let tun_volume_l = equipment.and_then(|e| e.tun_volume_l);
+    let mash_infuse_l = recipe
+        .mash
+        .as_ref()
+        .and_then(|mash| mash.steps.iter().find_map(|s| s.infuse_amount_l));
+    let mash_ratio_l_per_kg = recipe.mash.as_ref().and_then(|mash| mash.ratio_l_per_kg);
+
+    let (mash_water_l, sparge_water_l, total_water_l, mash_volume_l, mash_volume_excess_l) =
+        volumes::calculate_water_volumes(
+            pre_boil_volume_l,
+            grain_absorption_rate,
+            lauter_deadspace,
+            total_grain_kg,
+            mash_infuse_l,
+            mash_ratio_l_per_kg,
+            sparge_method,
+            tun_volume_l,
+        );
+
     let gravity_units = (og - 1.0) * 1000.0;
     let bu_gu_ratio = if gravity_units > 0.0 {
         ibu / gravity_units
@@ -154,7 +182,6 @@ pub fn calculate_stats(recipe: &Recipe) -> RecipeStats {
     let strike_temp_c = recipe.mash.as_ref().and_then(|mash| {
         let grain_temp_c = mash.grain_temp_c;
         let target_temp_c = mash.steps.first()?.step_temp_c;
-        let total_grain_kg: f64 = recipe.fermentables.iter().map(|f| f.amount_kg).sum();
         if total_grain_kg <= 0.0 {
             return None;
         }
@@ -189,12 +216,12 @@ pub fn calculate_stats(recipe: &Recipe) -> RecipeStats {
         post_boil_volume_l,
         strike_temp_c,
         hop_stats,
-        mash_water_l: 0.0,
-        sparge_water_l: 0.0,
-        top_up_water_l: 0.0,
-        total_water_l: 0.0,
-        mash_volume_l: 0.0,
-        mash_volume_excess_l: None,
+        mash_water_l,
+        sparge_water_l,
+        top_up_water_l: top_up_water,
+        total_water_l,
+        mash_volume_l,
+        mash_volume_excess_l,
     }
 }
 
