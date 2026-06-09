@@ -182,7 +182,7 @@
         <section>
           <div class="text-xs font-semibold uppercase tracking-wider mb-3"
                style="color: var(--color-text-secondary);">Water</div>
-          <WaterTab {recipe} onchange={load} />
+          <WaterTab {recipe} {stats} onchange={load} />
         </section>
 
         <!-- Fermentation -->

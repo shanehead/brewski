@@ -126,7 +126,7 @@
         <section>
           <div class="text-xs font-semibold uppercase tracking-wider mb-3"
                style="color: var(--color-text-secondary);">Water</div>
-          <WaterTab {recipe} onchange={() => {}} />
+          <WaterTab {recipe} {stats} onchange={() => {}} />
         </section>
 
         <!-- Fermentation -->

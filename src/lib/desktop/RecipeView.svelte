@@ -419,7 +419,7 @@
           {:else if activeTab === "mash"}
             <MashTab recipe={displayRecipe} {stats} onchange={refreshRecipe} />
           {:else if activeTab === "water"}
-            <WaterTab recipe={displayRecipe} onchange={refreshRecipe} />
+            <WaterTab recipe={displayRecipe} {stats} onchange={refreshRecipe} />
           {:else if activeTab === "fermentation"}
             <FermentationTab recipe={displayRecipe} onchange={refreshRecipe} />
           {:else if activeTab === "notes"}

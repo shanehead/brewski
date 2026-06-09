@@ -34,6 +34,12 @@ function makeStats(og = 1.054, fg = 1.010): RecipeStats {
     post_boil_volume_l: 23,
     strike_temp_c: null,
     hop_stats: [],
+    mash_water_l: 10.0,
+    sparge_water_l: 0.0,
+    top_up_water_l: 0.0,
+    total_water_l: 10.0,
+    mash_volume_l: 12.0,
+    mash_volume_excess_l: null,
   } as RecipeStats;
 }
 
