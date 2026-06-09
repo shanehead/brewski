@@ -15,6 +15,7 @@
   import Tooltip from "$lib/components/Tooltip.svelte";
   import DocLink from "$lib/components/DocLink.svelte";
   import { DOCS } from "$lib/docs-urls";
+  import TabContent from "$lib/components/tabs/TabContent.svelte";
 
   let { recipe, onchange }: { recipe: Recipe; onchange: () => void } = $props();
 
@@ -104,7 +105,7 @@
   });
 </script>
 
-<div class="flex flex-col gap-4 max-w-3xl">
+<TabContent width="3xl">
   <div class="flex justify-end mb-2">
     <DocLink label="Water chemistry guide" url={DOCS.waterChemistry} />
   </div>
@@ -211,4 +212,4 @@
       </Card>
     {/if}
   {/if}
-</div>
+</TabContent>

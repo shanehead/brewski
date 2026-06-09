@@ -3,6 +3,7 @@
   import { updateRecipe } from "$lib/api";
   import { ipc } from "$lib/stores/error";
   import MarkdownEditor from "$lib/components/MarkdownEditor.svelte";
+  import TabContent from "$lib/components/tabs/TabContent.svelte";
 
   let { recipe, onchange }: { recipe: Recipe; onchange: () => void } = $props();
 
@@ -12,7 +13,7 @@
   }
 </script>
 
-<div class="flex flex-col gap-4 max-w-2xl">
+<TabContent>
   <div class="flex flex-col gap-1">
     <label for="notes-recipe" class="text-sm font-medium" style="color: var(--color-text-secondary);">Recipe Notes</label>
     <MarkdownEditor
@@ -46,4 +47,4 @@
            class="w-24 px-2 py-1.5 rounded text-sm"
            style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
   </div>
-</div>
+</TabContent>

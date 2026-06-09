@@ -5,6 +5,7 @@
   import { ipc } from "$lib/stores/error";
   import Card from "$lib/components/Card.svelte";
   import FieldLabel from "$lib/components/FieldLabel.svelte";
+  import TabContent from "$lib/components/tabs/TabContent.svelte";
 
   let { recipe, onchange }: { recipe: Recipe; onchange: () => void } = $props();
 
@@ -14,7 +15,7 @@
   }
 </script>
 
-<div class="flex flex-col gap-4 max-w-xl">
+<TabContent width="xl">
   <Card title="Fermentation Schedule">
     <div class="grid grid-cols-2 gap-x-4 gap-y-3">
       {#each [
@@ -64,4 +65,4 @@
       </div>
     </div>
   </Card>
-</div>
+</TabContent>

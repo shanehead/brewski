@@ -8,6 +8,7 @@
   import { type Units, lToGal, galToL, volumeLabel } from "$lib/units";
   import Card from "$lib/components/Card.svelte";
   import FieldLabel from "$lib/components/FieldLabel.svelte";
+  import TabContent from "$lib/components/tabs/TabContent.svelte";
 
   let { recipe, onchange }: { recipe: Recipe; onchange: () => void } = $props();
 
@@ -30,7 +31,7 @@
   const units = $derived<Units>($settings.units === "imperial" ? "imperial" : "metric");
 </script>
 
-<div class="flex flex-col gap-4 max-w-2xl">
+<TabContent>
   <Card title="Recipe Details">
     <div class="grid grid-cols-2 gap-x-4 gap-y-3">
       <div class="flex flex-col gap-1">
@@ -129,4 +130,4 @@
       </div>
     </div>
   </Card>
-</div>
+</TabContent>

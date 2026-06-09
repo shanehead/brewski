@@ -7,6 +7,7 @@
   import { type Units, cToF, fToC, lToGal, galToL, tempLabel, volumeLabel, lPerKgToQtPerLb, qtPerLbToLPerKg, ratioLabel } from "$lib/units";
   import Card from "$lib/components/Card.svelte";
   import FieldLabel from "$lib/components/FieldLabel.svelte";
+  import TabContent from "$lib/components/tabs/TabContent.svelte";
   import Tooltip from "$lib/components/Tooltip.svelte";
   import DocLink from "$lib/components/DocLink.svelte";
   import { DOCS } from "$lib/docs-urls";
@@ -124,7 +125,7 @@
   });
 </script>
 
-<div class="flex flex-col gap-4 max-w-2xl">
+<TabContent>
   <div class="flex justify-end mb-2">
     <DocLink label="Mash guide" url={DOCS.mash} />
   </div>
@@ -341,4 +342,4 @@
       {/if}
     </div>
   </Card>
-</div>
+</TabContent>

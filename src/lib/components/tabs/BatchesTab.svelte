@@ -32,7 +32,7 @@
   );
 </script>
 
-<div class="p-4 flex flex-col gap-4 overflow-y-auto h-full">
+<div class="p-4 flex flex-col gap-4 overflow-y-auto h-full max-w-2xl">
   <div class="flex items-center justify-between">
     <div class="text-sm" style="color: var(--color-text-muted);">
       {batches.length} batch{batches.length === 1 ? "" : "es"}
