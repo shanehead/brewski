@@ -6,8 +6,8 @@
 </script>
 
 <nav
-  class="flex border-t flex-shrink-0"
-  style="background: var(--color-bg-surface); border-color: var(--color-border); padding-bottom: env(safe-area-inset-bottom, 0px);"
+  class="flex border-t flex-shrink-0 bg-bg-surface border-border"
+  style="padding-bottom: env(safe-area-inset-bottom, 0px);"
 >
   <button
     onclick={() => goto($settings.last_route_recipes ?? "/")}

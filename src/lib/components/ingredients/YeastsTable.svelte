@@ -36,14 +36,14 @@
 
 <div class="flex flex-col gap-2">
   <div class="flex items-center justify-between">
-    <h3 class="text-sm font-semibold flex items-center gap-2" style="color: var(--color-text-primary);">
+    <h3 class="text-sm font-semibold flex items-center gap-2 text-text-primary">
       <BrewingIcon name="yeast" />
       Yeast
     </h3>
     <div class="flex items-center gap-2">
       <DocLink label="Yeast guide" url={DOCS.yeast} />
-      <button onclick={() => adding = true} class="text-xs px-2 py-1 rounded"
-              style="background: var(--color-accent); color: #fff;">+ Add</button>
+      <button onclick={() => adding = true} class="text-xs px-2 py-1 rounded bg-accent"
+              style="color: #fff;">+ Add</button>
     </div>
   </div>
 
@@ -55,15 +55,15 @@
   />
 
   {#each recipe.yeasts as y (y.id)}
-    <div class="flex items-center justify-between py-1.5 border-t" style="border-color: var(--color-border);">
+    <div class="flex items-center justify-between py-1.5 border-t border-border">
       <div>
-        <p class="ingredient-list-item-primary" style="color: var(--color-text-primary);">{y.name}</p>
-        <p class="ingredient-list-item-secondary" style="color: var(--color-text-secondary);">
+        <p class="ingredient-list-item-primary text-text-primary">{y.name}</p>
+        <p class="ingredient-list-item-secondary text-text-secondary">
           {y.laboratory ?? ""} {y.product_id ?? ""} · {y.attenuation_pct ?? "?"}% attenuation
         </p>
       </div>
-      <button onclick={() => handleDelete(y.id)} class="opacity-40 hover:opacity-100"
-              style="color: var(--color-text-secondary);">×</button>
+      <button onclick={() => handleDelete(y.id)} class="opacity-40 hover:opacity-100 text-text-secondary"
+             >×</button>
     </div>
   {/each}
 </div>

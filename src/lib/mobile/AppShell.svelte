@@ -40,13 +40,8 @@
 </script>
 
 <div
-  class="flex flex-col overflow-hidden"
-  style="
-    height: 100dvh;
-    background: var(--color-bg-base);
-    color: var(--color-text-primary);
-    padding-top: env(safe-area-inset-top, 0px);
-  "
+  class="flex flex-col overflow-hidden bg-bg-base text-text-primary"
+  style="height: 100dvh; padding-top: env(safe-area-inset-top, 0px);"
 >
   <div class="flex-1 flex flex-col overflow-hidden min-h-0">
     {@render children()}

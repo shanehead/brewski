@@ -50,10 +50,10 @@
   const isLibrary   = $derived($page.url.pathname.startsWith("/library"));
 </script>
 
-<div class="flex h-screen overflow-hidden" style="background: var(--color-bg-base); color: var(--color-text-primary);">
+<div class="flex h-screen overflow-hidden bg-bg-base text-text-primary">
   <!-- Icon rail -->
-  <nav class="flex flex-col items-center w-14 py-3 gap-2 border-r flex-shrink-0"
-       style="background: var(--color-bg-surface); border-color: var(--color-border);">
+  <nav class="flex flex-col items-center w-14 py-3 gap-2 border-r flex-shrink-0 bg-bg-surface border-border"
+      >
 
     <button onclick={() => goto($settings.last_route_recipes ?? "/")}
             class="w-9 h-9 flex items-center justify-center rounded-lg transition-colors"

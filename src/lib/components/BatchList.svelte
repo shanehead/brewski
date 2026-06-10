@@ -47,17 +47,17 @@
       tabindex="0"
       onclick={() => goto(`/batches/${batch.id}`)}
       onkeydown={(e) => e.key === "Enter" && goto(`/batches/${batch.id}`)}
-      class="flex items-center gap-3 px-3 py-2 rounded cursor-pointer transition-colors"
-      style="background: var(--color-bg-elevated);"
+      class="flex items-center gap-3 px-3 py-2 rounded cursor-pointer transition-colors bg-bg-elevated"
+     
     >
       <div class="flex-1 min-w-0">
         <div class="text-sm font-medium truncate">{batch.recipe_name}</div>
         <div class="flex items-center gap-2 mt-0.5 flex-wrap">
-          <span class="text-xs truncate" style="color: var(--color-text-muted);">
+          <span class="text-xs truncate text-text-muted">
             {batch.name ?? "Batch"} · {formatDate(batch.brew_date)}
           </span>
           {#if batch.actual_og}
-            <span class="text-xs" style="color: var(--color-text-muted);">
+            <span class="text-xs text-text-muted">
               OG {batch.actual_og.toFixed(3)}
             </span>
           {/if}
@@ -71,12 +71,12 @@
       </div>
       <button
         onclick={(e) => handleDelete(batch.id, e)}
-        class="opacity-40 hover:opacity-100 text-xs px-1 flex-shrink-0 self-start"
-        style="color: var(--color-text-muted);"
+        class="opacity-40 hover:opacity-100 text-xs px-1 flex-shrink-0 self-start text-text-muted"
+       
       >✕</button>
     </div>
   {:else}
-    <p class="text-sm px-3 py-4 text-center" style="color: var(--color-text-muted);">
+    <p class="text-sm px-3 py-4 text-center text-text-muted">
       No batches yet
     </p>
   {/each}

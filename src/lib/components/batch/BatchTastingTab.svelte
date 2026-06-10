@@ -10,7 +10,7 @@
 
 <div class="p-4 flex flex-col gap-4 overflow-y-auto">
   <div class="flex flex-col gap-1">
-    <label for="batch-rating" class="text-xs" style="color: var(--color-text-muted);">RATING (1–10)</label>
+    <label for="batch-rating" class="text-xs text-text-muted">RATING (1–10)</label>
     <input
       id="batch-rating"
       type="number" inputmode="decimal"
@@ -23,8 +23,8 @@
         onUpdate({ rating: isNaN(v) ? null : Math.min(10, Math.max(1, v)) });
       }}
       placeholder="—"
-      class="w-24 px-2 py-1.5 rounded text-sm outline-none"
-      style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);"
+      class="w-24 px-2 py-1.5 rounded text-sm outline-none bg-bg-elevated text-text-primary border border-border"
+     
     />
   </div>
 </div>

@@ -4,6 +4,6 @@
 
 <RecipeList />
 
-<div class="flex-1 flex items-center justify-center" style="color: var(--color-text-muted);">
+<div class="flex-1 flex items-center justify-center text-text-muted">
   <p class="text-sm">Select a recipe to edit</p>
 </div>

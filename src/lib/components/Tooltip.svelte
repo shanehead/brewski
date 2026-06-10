@@ -26,8 +26,8 @@
       type="button"
       onclick={toggle}
       aria-label="?"
-      class="inline-flex items-center justify-center w-4 h-4 rounded-full text-[10px] opacity-60 hover:opacity-100 transition-opacity cursor-pointer flex-shrink-0"
-      style="border: 1px solid var(--color-accent); color: var(--color-accent);"
+      class="inline-flex items-center justify-center w-4 h-4 rounded-full text-[10px] opacity-60 hover:opacity-100 transition-opacity cursor-pointer flex-shrink-0 border border-accent text-accent"
+     
     >?</button>
 
     {#if open}
@@ -40,8 +40,8 @@
         <button
           type="button"
           onclick={toggle}
-          class="block mt-1 text-[10px] opacity-40 hover:opacity-70"
-          style="color: var(--color-text-muted);"
+          class="block mt-1 text-[10px] opacity-40 hover:opacity-70 text-text-muted"
+         
         >tap to dismiss</button>
       </div>
     {/if}

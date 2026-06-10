@@ -41,20 +41,20 @@
 </script>
 
 <div
-  class="flex flex-col h-full border-l overflow-hidden"
-  style="background: var(--color-bg-surface); border-color: var(--color-border); min-width: 220px; max-width: 260px;"
+  class="flex flex-col h-full border-l overflow-hidden bg-bg-surface border-border"
+  style="min-width: 220px; max-width: 260px;"
 >
   <div
-    class="flex items-center justify-between px-3 py-2 border-b flex-shrink-0"
-    style="border-color: var(--color-border);"
+    class="flex items-center justify-between px-3 py-2 border-b flex-shrink-0 border-border"
+   
   >
-    <span class="text-xs font-semibold" style="color: var(--color-text-secondary);">
+    <span class="text-xs font-semibold text-text-secondary">
       VERSION HISTORY
     </span>
     <button
       onclick={onclose}
-      class="text-xs px-1"
-      style="color: var(--color-text-muted);"
+      class="text-xs px-1 text-text-muted"
+     
     >✕</button>
   </div>
 
@@ -82,33 +82,33 @@
       >
         <div class="flex items-center gap-1.5">
           {#if indent > 0}
-            <span style="color: var(--color-text-muted); font-size: 0.6rem;">↳</span>
+            <span class="text-text-muted" style="font-size: 0.6rem;">↳</span>
           {/if}
-          <span class="text-xs font-mono" style="color: var(--color-accent);">
+          <span class="text-xs font-mono text-accent">
             v{version.version_number}
           </span>
           {#if version.name}
-            <span class="text-xs truncate" style="color: var(--color-text-primary);">
+            <span class="text-xs truncate text-text-primary">
               {version.name}
             </span>
           {/if}
         </div>
-        <div class="text-xs mt-0.5" style="color: var(--color-text-muted);">
+        <div class="text-xs mt-0.5 text-text-muted">
           {formatDate(version.created_at)}
         </div>
         {#if viewingVersionId === version.id}
           <div class="mt-1 flex gap-1">
             <button
               onclick={(e) => { e.stopPropagation(); onbranch(version); }}
-              class="text-xs px-2 py-0.5 rounded"
-              style="background: var(--color-accent); color: #fff;"
+              class="text-xs px-2 py-0.5 rounded bg-accent"
+              style="color: #fff;"
             >
               Branch from here
             </button>
             <button
               onclick={(e) => handleDeleteClick(version, e)}
-              class="text-xs px-2 py-0.5 rounded"
-              style="background: var(--color-bg-elevated); color: var(--color-text-muted); border: 1px solid var(--color-border); cursor: pointer;"
+              class="text-xs px-2 py-0.5 rounded bg-bg-elevated text-text-muted border border-border"
+              style="cursor: pointer;"
             >
               Delete
             </button>

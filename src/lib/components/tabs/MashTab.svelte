@@ -136,8 +136,8 @@
         <FieldLabel for="mash-name">Profile Name</FieldLabel>
         <input id="mash-name" type="text" value={mash?.name ?? "Single Infusion"}
                onblur={(e) => handleMashField({ name: (e.target as HTMLInputElement).value })}
-               class="px-2 py-1.5 rounded text-sm"
-               style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
+               class="px-2 py-1.5 rounded text-sm bg-bg-elevated text-text-primary border border-border"
+               />
       </div>
       <div class="flex flex-col gap-1">
         <div class="flex items-center gap-1">
@@ -147,8 +147,8 @@
         <input id="mash-grain-temp" type="number" inputmode="decimal" step={units === "imperial" ? 1 : 0.5}
                value={(units === "imperial" ? cToF(mash?.grain_temp_c ?? 21) : mash?.grain_temp_c ?? 21).toFixed(1)}
                onblur={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); handleMashField({ grain_temp_c: units === "imperial" ? fToC(v) : v }); }}
-               class="px-2 py-1.5 rounded text-sm"
-               style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
+               class="px-2 py-1.5 rounded text-sm bg-bg-elevated text-text-primary border border-border"
+               />
       </div>
       <div class="flex flex-col gap-1">
         <FieldLabel for="mash-sparge-temp">Sparge Temp ({tempLabel(units)})</FieldLabel>
@@ -159,8 +159,8 @@
                  const v = (e.target as HTMLInputElement).value;
                  handleMashField({ sparge_temp_c: v ? (units === "imperial" ? fToC(parseFloat(v)) : parseFloat(v)) : undefined });
                }}
-               class="px-2 py-1.5 rounded text-sm"
-               style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
+               class="px-2 py-1.5 rounded text-sm bg-bg-elevated text-text-primary border border-border"
+               />
       </div>
       <div class="flex flex-col gap-1">
         <FieldLabel for="mash-ph">Mash pH</FieldLabel>
@@ -170,14 +170,14 @@
                  const v = (e.target as HTMLInputElement).value;
                  handleMashField({ ph: v ? parseFloat(v) : undefined });
                }}
-               class="px-2 py-1.5 rounded text-sm"
-               style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
+               class="px-2 py-1.5 rounded text-sm bg-bg-elevated text-text-primary border border-border"
+               />
       </div>
 
       {#if stats?.strike_temp_c != null}
         <div class="flex flex-col gap-1">
           <FieldLabel>Strike Temp ({tempLabel(units)})</FieldLabel>
-          <span class="px-2 py-1.5 text-sm" style="color: var(--color-text-primary);">
+          <span class="px-2 py-1.5 text-sm text-text-primary">
             {(units === "imperial" ? cToF(stats.strike_temp_c) : stats.strike_temp_c).toFixed(1)}{tempLabel(units)}
           </span>
         </div>
@@ -201,8 +201,8 @@
                      handleMashField({ ratio_l_per_kg: units === "imperial" ? qtPerLbToLPerKg(parsed) : parsed });
                    }
                  }}
-                 class="px-2 py-1.5 rounded text-sm"
-                 style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
+                 class="px-2 py-1.5 rounded text-sm bg-bg-elevated text-text-primary border border-border"
+                 />
         </div>
       {/if}
     </div>
@@ -211,55 +211,55 @@
   <Card title="Mash Steps">
     <div class="flex flex-col gap-2">
       <div class="flex items-center justify-between mb-1">
-        <span class="text-xs" style="color: var(--color-text-muted);">{mash?.steps.length ?? 0} step{(mash?.steps.length ?? 0) === 1 ? "" : "s"}</span>
-        <button onclick={() => addingStep = !addingStep} class="text-xs px-2 py-1 rounded"
-                style="background: var(--color-accent); color: #fff;">+ Add Step</button>
+        <span class="text-xs text-text-muted">{mash?.steps.length ?? 0} step{(mash?.steps.length ?? 0) === 1 ? "" : "s"}</span>
+        <button onclick={() => addingStep = !addingStep} class="text-xs px-2 py-1 rounded bg-accent"
+                style="color: #fff;">+ Add Step</button>
       </div>
 
       {#if addingStep}
-        <div class="flex flex-wrap items-end gap-2 p-2 rounded" style="background: var(--color-bg-elevated);">
+        <div class="flex flex-wrap items-end gap-2 p-2 rounded bg-bg-elevated">
           <div class="flex flex-col flex-1 min-w-24">
-            <label for="mash-step-name" class="text-xs mb-1" style="color: var(--color-text-secondary);">Name</label>
+            <label for="mash-step-name" class="text-xs mb-1 text-text-secondary">Name</label>
             <input id="mash-step-name" type="text" bind:value={stepName} placeholder="Step name"
-                   class="h-9 px-2 rounded text-sm"
-                   style="background: var(--color-bg-base); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
+                   class="h-9 px-2 rounded text-sm bg-bg-base text-text-primary border border-border"
+                   />
           </div>
           <div class="flex flex-col w-28">
-            <label for="mash-step-type" class="text-xs mb-1" style="color: var(--color-text-secondary);">Type</label>
-            <select id="mash-step-type" bind:value={stepType} class="h-9 px-2 rounded text-sm"
-                    style="background: var(--color-bg-base); color: var(--color-text-primary); border: 1px solid var(--color-border);">
+            <label for="mash-step-type" class="text-xs mb-1 text-text-secondary">Type</label>
+            <select id="mash-step-type" bind:value={stepType} class="h-9 px-2 rounded text-sm bg-bg-base text-text-primary border border-border"
+                   >
               {#each STEP_TYPES as t}
                 <option value={t}>{t}</option>
               {/each}
             </select>
           </div>
           <div class="flex flex-col w-20">
-            <label for="mash-step-temp" class="text-xs mb-1" style="color: var(--color-text-secondary);">Temp ({tempLabel(units)})</label>
+            <label for="mash-step-temp" class="text-xs mb-1 text-text-secondary">Temp ({tempLabel(units)})</label>
             <input id="mash-step-temp" type="number" inputmode="decimal" step={units === "imperial" ? 1 : 0.5}
                    value={(units === "imperial" ? cToF(stepTemp) : stepTemp).toFixed(1)}
                    onblur={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); if (!isNaN(v)) stepTemp = units === "imperial" ? fToC(v) : v; }}
-                   class="h-9 px-2 rounded text-sm"
-                   style="background: var(--color-bg-base); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
+                   class="h-9 px-2 rounded text-sm bg-bg-base text-text-primary border border-border"
+                   />
           </div>
           <div class="flex flex-col w-20">
-            <label for="mash-step-time" class="text-xs mb-1" style="color: var(--color-text-secondary);">Time (min)</label>
+            <label for="mash-step-time" class="text-xs mb-1 text-text-secondary">Time (min)</label>
             <input id="mash-step-time" type="number" inputmode="decimal" bind:value={stepTime} step="5"
-                   class="h-9 px-2 rounded text-sm"
-                   style="background: var(--color-bg-base); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
+                   class="h-9 px-2 rounded text-sm bg-bg-base text-text-primary border border-border"
+                   />
           </div>
           {#if stepType === "infusion"}
             <div class="flex flex-col w-24">
-              <label for="mash-step-infuse" class="text-xs mb-1" style="color: var(--color-text-secondary);">Infuse ({volumeLabel(units)})</label>
+              <label for="mash-step-infuse" class="text-xs mb-1 text-text-secondary">Infuse ({volumeLabel(units)})</label>
               <input id="mash-step-infuse" type="number" inputmode="decimal" step="0.1"
                      placeholder={"Infuse " + volumeLabel(units)}
                      value={stepInfuse != null ? (units === "imperial" ? lToGal(stepInfuse) : stepInfuse).toFixed(1) : ""}
                      onblur={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); stepInfuse = isNaN(v) ? null : (units === "imperial" ? galToL(v) : v); }}
-                     class="h-9 px-2 rounded text-sm"
-                     style="background: var(--color-bg-base); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
+                     class="h-9 px-2 rounded text-sm bg-bg-base text-text-primary border border-border"
+                     />
             </div>
           {/if}
-          <button onclick={handleAddStep} class="text-xs px-3 py-1.5 rounded self-end"
-                  style="background: var(--color-accent); color: #fff;">Add</button>
+          <button onclick={handleAddStep} class="text-xs px-3 py-1.5 rounded self-end bg-accent"
+                  style="color: #fff;">Add</button>
         </div>
       {/if}
 
@@ -277,69 +277,69 @@
                  onkeydown={editingStepId === step.id ? onEditKeydown : undefined}>
               <div class="flex-1">
                 {#if editingStepId === step.id}
-                  <div class="flex flex-wrap gap-2 p-2 rounded" style="background: var(--color-bg-elevated);">
+                  <div class="flex flex-wrap gap-2 p-2 rounded bg-bg-elevated">
                     <div class="flex flex-col min-w-24">
-                      <label for={"step-" + step.id + "-name"} class="text-xs" style="color: var(--color-text-secondary);">Name</label>
+                      <label for={"step-" + step.id + "-name"} class="text-xs text-text-secondary">Name</label>
                       <input id={"step-" + step.id + "-name"} type="text" value={step.name}
                              onclick={(e) => e.stopPropagation()}
                              onblur={(e) => handleUpdateStepField(step.id, 'name', (e.target as HTMLInputElement).value)}
-                             class="flex-1 min-w-24 px-2 py-1.5 h-10 rounded text-sm"
-                             style="background: var(--color-bg-base); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
+                             class="flex-1 min-w-24 px-2 py-1.5 h-10 rounded text-sm bg-bg-base text-text-primary border border-border"
+                             />
                     </div>
                     <div class="flex flex-col w-28">
-                      <label for={"step-" + step.id + "-type"} class="text-xs" style="color: var(--color-text-secondary);">Type</label>
+                      <label for={"step-" + step.id + "-type"} class="text-xs text-text-secondary">Type</label>
                       <select id={"step-" + step.id + "-type"} value={step.type_} onclick={(e) => e.stopPropagation()} onblur={(e) => handleUpdateStepField(step.id, 'type_', (e.target as HTMLSelectElement).value)}
-                              class="w-28 px-2 py-1.5 h-10 rounded text-sm"
-                              style="background: var(--color-bg-base); color: var(--color-text-primary); border: 1px solid var(--color-border);">
+                              class="w-28 px-2 py-1.5 h-10 rounded text-sm bg-bg-base text-text-primary border border-border"
+                             >
                         {#each STEP_TYPES as t}
                           <option value={t}>{t}</option>
                         {/each}
                       </select>
                     </div>
                     <div class="flex flex-col w-20">
-                      <label for={"step-" + step.id + "-temp"} class="text-xs" style="color: var(--color-text-secondary);">Temp ({tempLabel(units)})</label>
+                      <label for={"step-" + step.id + "-temp"} class="text-xs text-text-secondary">Temp ({tempLabel(units)})</label>
                       <input id={"step-" + step.id + "-temp"} type="number" inputmode="decimal" step={units === "imperial" ? 1 : 0.5}
                              value={(units === "imperial" ? cToF(step.step_temp_c) : step.step_temp_c).toFixed(1)}
                              onclick={(e) => e.stopPropagation()}
                              onblur={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); handleUpdateStepField(step.id, 'step_temp_c', units === 'imperial' ? fToC(v) : v); }}
-                             class="w-20 px-2 py-1.5 h-10 rounded text-sm"
-                             style="background: var(--color-bg-base); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
+                             class="w-20 px-2 py-1.5 h-10 rounded text-sm bg-bg-base text-text-primary border border-border"
+                             />
                     </div>
                     <div class="flex flex-col w-20">
-                      <label for={"step-" + step.id + "-time"} class="text-xs" style="color: var(--color-text-secondary);">Time (min)</label>
+                      <label for={"step-" + step.id + "-time"} class="text-xs text-text-secondary">Time (min)</label>
                       <input id={"step-" + step.id + "-time"} type="number" inputmode="decimal" step="5" value={step.step_time_min}
                              onclick={(e) => e.stopPropagation()}
                              onblur={(e) => handleUpdateStepField(step.id, 'step_time_min', parseFloat((e.target as HTMLInputElement).value))}
-                             class="w-20 px-2 py-1.5 h-10 rounded text-sm"
-                             style="background: var(--color-bg-base); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
+                             class="w-20 px-2 py-1.5 h-10 rounded text-sm bg-bg-base text-text-primary border border-border"
+                             />
                     </div>
                     {#if step.type_ === 'infusion'}
                       <div class="flex flex-col w-24">
-                        <label for={"step-" + step.id + "-infuse"} class="text-xs" style="color: var(--color-text-secondary);">Infuse ({volumeLabel(units)})</label>
+                        <label for={"step-" + step.id + "-infuse"} class="text-xs text-text-secondary">Infuse ({volumeLabel(units)})</label>
                         <input id={"step-" + step.id + "-infuse"} type="number" inputmode="decimal" step="0.1"
                                value={step.infuse_amount_l != null ? (units === 'imperial' ? lToGal(step.infuse_amount_l) : step.infuse_amount_l).toFixed(1) : ''}
                                onclick={(e) => e.stopPropagation()}
                                onblur={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); handleUpdateStepField(step.id, 'infuse_amount_l', units === 'imperial' ? galToL(v) : v); }}
-                               class="w-24 px-2 py-1.5 h-10 rounded text-sm"
-                               style="background: var(--color-bg-base); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
+                               class="w-24 px-2 py-1.5 h-10 rounded text-sm bg-bg-base text-text-primary border border-border"
+                               />
                       </div>
                     {/if}
                   </div>
                 {:else}
-                  <p class="text-sm" style="color: var(--color-text-primary);">{step.name}</p>
-                  <p class="text-sm" style="color: var(--color-text-secondary);">
+                  <p class="text-sm text-text-primary">{step.name}</p>
+                  <p class="text-sm text-text-secondary">
                     {(units === "imperial" ? cToF(step.step_temp_c) : step.step_temp_c).toFixed(1)}{tempLabel(units)} · {step.step_time_min} min · {step.type_}
                     {#if step.infuse_amount_l} · {(units === "imperial" ? lToGal(step.infuse_amount_l) : step.infuse_amount_l).toFixed(1)}{volumeLabel(units)}{/if}
                   </p>
                 {/if}
               </div>
-              <button onclick={(e) => { e.stopPropagation(); handleDeleteStep(step.id); }} aria-label="Delete mash step" class="text-xs opacity-40 hover:opacity-100"
-                      style="color: var(--color-text-secondary);">×</button>
+              <button onclick={(e) => { e.stopPropagation(); handleDeleteStep(step.id); }} aria-label="Delete mash step" class="text-xs opacity-40 hover:opacity-100 text-text-secondary"
+                     >×</button>
             </div>
           {/each}
         </div>
       {:else}
-        <p class="text-xs py-2" style="color: var(--color-text-muted);">No mash steps yet</p>
+        <p class="text-xs py-2 text-text-muted">No mash steps yet</p>
       {/if}
     </div>
   </Card>

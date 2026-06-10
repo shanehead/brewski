@@ -121,38 +121,38 @@
       <Card title="Water Volumes">
         <div class="flex flex-col gap-2 text-sm">
           <div class="flex justify-between items-baseline">
-            <span style="color: var(--color-text-secondary);">Mash water</span>
-            <span class="font-semibold font-mono" style="color: var(--color-text-primary);">
-              {fmtVol(stats.mash_water_l)}<span class="text-xs font-normal ml-0.5" style="color: var(--color-text-muted);">{volumeLabel(units)}</span>
+            <span class="text-text-secondary">Mash water</span>
+            <span class="font-semibold font-mono text-text-primary">
+              {fmtVol(stats.mash_water_l)}<span class="text-xs font-normal ml-0.5 text-text-muted">{volumeLabel(units)}</span>
             </span>
           </div>
           {#if stats.sparge_water_l > 0}
             <div class="flex justify-between items-baseline">
-              <span style="color: var(--color-text-secondary);">Sparge water</span>
-              <span class="font-semibold font-mono" style="color: var(--color-text-primary);">
-                {fmtVol(stats.sparge_water_l)}<span class="text-xs font-normal ml-0.5" style="color: var(--color-text-muted);">{volumeLabel(units)}</span>
+              <span class="text-text-secondary">Sparge water</span>
+              <span class="font-semibold font-mono text-text-primary">
+                {fmtVol(stats.sparge_water_l)}<span class="text-xs font-normal ml-0.5 text-text-muted">{volumeLabel(units)}</span>
               </span>
             </div>
           {/if}
           {#if stats.top_up_water_l > 0}
             <div class="flex justify-between items-baseline">
-              <span style="color: var(--color-text-secondary);">Top-up water</span>
-              <span class="font-semibold font-mono" style="color: var(--color-text-primary);">
-                {fmtVol(stats.top_up_water_l)}<span class="text-xs font-normal ml-0.5" style="color: var(--color-text-muted);">{volumeLabel(units)}</span>
+              <span class="text-text-secondary">Top-up water</span>
+              <span class="font-semibold font-mono text-text-primary">
+                {fmtVol(stats.top_up_water_l)}<span class="text-xs font-normal ml-0.5 text-text-muted">{volumeLabel(units)}</span>
               </span>
             </div>
           {/if}
-          <div style="border-top: 1px solid var(--color-border); margin: 2px 0;"></div>
+          <div class="border-t border-border" style="margin: 2px 0;"></div>
           <div class="flex justify-between items-baseline">
-            <span class="font-medium" style="color: var(--color-text-primary);">Total water</span>
-            <span class="font-semibold font-mono" style="color: var(--color-text-primary);">
-              {fmtVol(stats.total_water_l + stats.top_up_water_l)}<span class="text-xs font-normal ml-0.5" style="color: var(--color-text-muted);">{volumeLabel(units)}</span>
+            <span class="font-medium text-text-primary">Total water</span>
+            <span class="font-semibold font-mono text-text-primary">
+              {fmtVol(stats.total_water_l + stats.top_up_water_l)}<span class="text-xs font-normal ml-0.5 text-text-muted">{volumeLabel(units)}</span>
             </span>
           </div>
           <div class="flex justify-between items-baseline">
-            <span style="color: var(--color-text-secondary);">Mash volume <span class="text-xs" style="color: var(--color-text-muted);">(water + grain)</span></span>
-            <span class="font-semibold font-mono" style="color: var(--color-text-primary);">
-              {fmtVol(stats.mash_volume_l)}<span class="text-xs font-normal ml-0.5" style="color: var(--color-text-muted);">{volumeLabel(units)}</span>
+            <span class="text-text-secondary">Mash volume <span class="text-xs text-text-muted">(water + grain)</span></span>
+            <span class="font-semibold font-mono text-text-primary">
+              {fmtVol(stats.mash_volume_l)}<span class="text-xs font-normal ml-0.5 text-text-muted">{volumeLabel(units)}</span>
             </span>
           </div>
           {#if stats.top_up_overflow_l != null && stats.top_up_overflow_l > 0}
@@ -173,15 +173,15 @@
       </Card>
     {/if}
   {#if loading}
-    <div style="color: var(--color-text-secondary);">Loading water data…</div>
+    <div class="text-text-secondary">Loading water data…</div>
   {:else}
     <Card title="Source Water">
       <div class="flex flex-col gap-3">
         <div class="flex flex-col gap-1">
           <FieldLabel for="mash-water">Mash Water</FieldLabel>
           <select id="mash-water" value={recipe.mash_water_id ?? ""} onchange={handleMashWaterChange}
-                  class="px-2 py-1.5 rounded text-sm"
-                  style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);">
+                  class="px-2 py-1.5 rounded text-sm bg-bg-elevated text-text-primary border border-border"
+                 >
             <option value="">— Select water profile —</option>
             {#each waters as water}
               <option value={water.id}>{water.name}</option>
@@ -192,8 +192,8 @@
           <div class="flex flex-col gap-1">
             <FieldLabel for="sparge-water">Sparge Water</FieldLabel>
             <select id="sparge-water" value={recipe.sparge_water_id ?? ""} onchange={handleSpargeWaterChange}
-                    class="flex-1 px-2 py-1.5 rounded text-sm"
-                    style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);">
+                    class="flex-1 px-2 py-1.5 rounded text-sm bg-bg-elevated text-text-primary border border-border"
+                   >
               <option value="">— Same as mash —</option>
               {#each waters as water}
                 <option value={water.id}>{water.name}</option>
@@ -208,20 +208,20 @@
       <div class="flex flex-col gap-5">
         {#each ["mash", "sparge"] as target}
           <div class="flex flex-col gap-2">
-            <h4 class="text-xs font-semibold uppercase tracking-wider capitalize" style="color: var(--color-text-muted);">{target} Additions</h4>
+            <h4 class="text-xs font-semibold uppercase tracking-wider capitalize text-text-muted">{target} Additions</h4>
             <div class="flex flex-col gap-1">
               {#each adjustments.filter(a => a.target === target) as adj}
                 <div class="flex items-center gap-2">
-                  <span class="text-sm flex-1" style="color: var(--color-text-secondary);">{getAdditionLabel(adj.addition)}</span>
+                  <span class="text-sm flex-1 text-text-secondary">{getAdditionLabel(adj.addition)}</span>
                   <input type="number" inputmode="decimal" step="0.1" min="0" value={adj.amount}
                          aria-label="{getAdditionLabel(adj.addition)} amount in grams"
                          onchange={(e) => handleUpdateAddition(adj.id, parseFloat((e.target as HTMLInputElement).value) || 0)}
-                         class="w-20 px-2 py-1 rounded text-sm"
-                         style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
-                  <span class="text-sm" style="color: var(--color-text-muted); width: 30px;">g</span>
+                         class="w-20 px-2 py-1 rounded text-sm bg-bg-elevated text-text-primary border border-border"
+                         />
+                  <span class="text-sm text-text-muted" style="width: 30px;">g</span>
                   <button onclick={() => handleDeleteAddition(adj.id)}
-                          class="px-2 py-1 rounded text-xs"
-                          style="background: var(--color-bg-elevated); color: var(--color-text-secondary); border: 1px solid var(--color-border);">
+                          class="px-2 py-1 rounded text-xs bg-bg-elevated text-text-secondary border border-border"
+                         >
                     ✕
                   </button>
                 </div>
@@ -231,8 +231,8 @@
               {#each ADDITIONS as addition}
                 {#if !adjustments.some(a => a.target === target && a.addition === addition.value)}
                   <button onclick={() => handleAddAddition(target as "mash" | "sparge", addition.value)}
-                          class="px-2 py-1 rounded text-xs"
-                          style="background: var(--color-bg-elevated); color: var(--color-text-secondary); border: 1px solid var(--color-border);">
+                          class="px-2 py-1 rounded text-xs bg-bg-elevated text-text-secondary border border-border"
+                         >
                     + {addition.label}
                   </button>
                 {/if}
@@ -256,20 +256,20 @@
               { label: "Bicarbonate", key: "bicarbonate_ppm", tooltip: "Raises mash pH. Useful for dark malts. Keep it low for pale styles." }
             ] as item}
               <div class="flex flex-col gap-0.5">
-                <span class="text-xs inline-flex items-center gap-1" style="color: var(--color-text-secondary);">{item.label} <Tooltip text={item.tooltip} /></span>
-                <span class="text-base font-semibold font-mono" style="color: var(--color-text-primary);">
-                  {profile.combined[item.key as keyof typeof profile.combined].toFixed(1)}<span class="text-xs font-normal ml-0.5" style="color: var(--color-text-muted);">ppm</span>
+                <span class="text-xs inline-flex items-center gap-1 text-text-secondary">{item.label} <Tooltip text={item.tooltip} /></span>
+                <span class="text-base font-semibold font-mono text-text-primary">
+                  {profile.combined[item.key as keyof typeof profile.combined].toFixed(1)}<span class="text-xs font-normal ml-0.5 text-text-muted">ppm</span>
                 </span>
               </div>
             {/each}
           </div>
-          <div class="pt-2 border-t flex items-center gap-3" style="border-color: var(--color-border);">
+          <div class="pt-2 border-t flex items-center gap-3 border-border">
             <div class="flex flex-col gap-0.5">
-              <span class="text-xs" style="color: var(--color-text-secondary);">Cl:SO₄ Ratio</span>
-              <span class="text-base font-semibold font-mono" style="color: var(--color-text-primary);">{profile.combined.cl_so4_ratio.toFixed(2)}</span>
+              <span class="text-xs text-text-secondary">Cl:SO₄ Ratio</span>
+              <span class="text-base font-semibold font-mono text-text-primary">{profile.combined.cl_so4_ratio.toFixed(2)}</span>
             </div>
-            <span class="text-sm px-2 py-1 rounded"
-                  style="background: var(--color-bg-elevated); color: var(--color-text-secondary);">
+            <span class="text-sm px-2 py-1 rounded bg-bg-elevated text-text-secondary"
+                 >
               {getRatioLabel(profile.combined.cl_so4_ratio)}
             </span>
           </div>

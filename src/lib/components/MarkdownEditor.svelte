@@ -64,8 +64,8 @@
   }
 </script>
 
-<div class="markdown-editor" style="border: 1px solid var(--color-border); border-radius: 4px; overflow: hidden;">
-  <div style="display: flex; align-items: center; border-bottom: 1px solid var(--color-border); height: 32px; background: var(--color-bg-elevated);">
+<div class="markdown-editor border border-border" style="border-radius: 4px; overflow: hidden;">
+  <div class="border-b border-border bg-bg-elevated" style="display: flex; align-items: center; height: 32px;">
     <button
       type="button"
       onclick={() => activeTab = 'write'}
@@ -135,8 +135,8 @@
       value={draft}
       oninput={(e) => { draft = (e.target as HTMLTextAreaElement).value; }}
       onblur={() => onchange(draft || null)}
-      class="w-full px-3 py-2 text-sm resize-none outline-none"
-      style="background: var(--color-bg-elevated); color: var(--color-text-primary); font-family: monospace; display: block; box-sizing: border-box;"
+      class="w-full px-3 py-2 text-sm resize-none outline-none bg-bg-elevated text-text-primary"
+      style="font-family: monospace; display: block; box-sizing: border-box;"
     ></textarea>
   {:else}
     <div
@@ -146,7 +146,7 @@
       {#if draft}
         {@html renderPreview(draft)}
       {:else}
-        <span style="color: var(--color-text-secondary);">{placeholder ?? ''}</span>
+        <span class="text-text-secondary">{placeholder ?? ''}</span>
       {/if}
     </div>
   {/if}

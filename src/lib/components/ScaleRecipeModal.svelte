@@ -52,37 +52,37 @@
     onclick={onClose}
   ></div>
   <div
-    class="p-4 rounded relative flex flex-col gap-3"
-    style="background: var(--color-bg-elevated); border: 1px solid var(--color-border); z-index: 1001; min-width: 280px;"
+    class="p-4 rounded relative flex flex-col gap-3 bg-bg-elevated border border-border"
+    style="z-index: 1001; min-width: 280px;"
   >
-    <div class="text-sm font-semibold" style="color: var(--color-text-primary);">Scale Recipe</div>
+    <div class="text-sm font-semibold text-text-primary">Scale Recipe</div>
     <div class="flex items-center gap-2">
-      <label for="target-batch-size" class="text-sm" style="color: var(--color-text-secondary);">Target Batch Size</label>
+      <label for="target-batch-size" class="text-sm text-text-secondary">Target Batch Size</label>
       <input
         id="target-batch-size"
         type="number"
         bind:value={targetValue}
         min="0.1"
         step="0.1"
-        class="px-2 py-1 rounded text-sm w-24 outline-none"
-        style="background: var(--color-bg-surface); color: var(--color-text-primary); border: 1px solid var(--color-border);"
+        class="px-2 py-1 rounded text-sm w-24 outline-none bg-bg-surface text-text-primary border border-border"
+       
       />
-      <span class="text-sm" style="color: var(--color-text-secondary);">{volumeLabel(units)}</span>
+      <span class="text-sm text-text-secondary">{volumeLabel(units)}</span>
     </div>
     {#if error}
-      <div class="text-xs" style="color: var(--color-text-danger, #e55);">{error}</div>
+      <div class="text-xs text-text-danger">{error}</div>
     {/if}
     <div class="flex justify-end gap-2">
       <button
         onclick={onClose}
-        class="px-3 py-1 rounded text-sm"
-        style="background: var(--color-bg-surface); color: var(--color-text-primary); border: 1px solid var(--color-border);"
+        class="px-3 py-1 rounded text-sm bg-bg-surface text-text-primary border border-border"
+       
       >Cancel</button>
       <button
         onclick={handleConfirm}
         disabled={scaling || !targetValue || targetValue <= 0}
-        class="px-3 py-1 rounded text-sm"
-        style="background: var(--color-accent); color: #fff;"
+        class="px-3 py-1 rounded text-sm bg-accent"
+        style="color: #fff;"
       >
         {scaling ? "Scaling…" : "Scale Recipe"}
       </button>

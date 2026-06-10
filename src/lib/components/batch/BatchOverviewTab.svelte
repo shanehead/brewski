@@ -127,12 +127,12 @@
   </div>
 
   {#if batchVersion}
-    <div class="text-xs" style="color: var(--color-text-muted);">
+    <div class="text-xs text-text-muted">
       Brewed with
       <button
         onclick={() => goto(`/recipe/${batch.recipe_id}`)}
-        class="underline"
-        style="color: var(--color-accent);"
+        class="underline text-accent"
+       
       >
         Recipe v{batchVersion.version_number}{batchVersion.name ? ` · ${batchVersion.name}` : ""}
       </button>
@@ -141,10 +141,10 @@
 
   <!-- Status -->
   <div>
-    <div class="text-xs mb-2" style="color: var(--color-text-secondary);">STATUS</div>
+    <div class="text-xs mb-2 text-text-secondary">STATUS</div>
     <select
-      class="md:hidden w-full px-3 py-2 rounded text-sm outline-none"
-      style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);"
+      class="md:hidden w-full px-3 py-2 rounded text-sm outline-none bg-bg-elevated text-text-primary border border-border"
+     
       value={batch.status}
       onchange={(e) => onStatusChange(e.currentTarget.value)}
     >
@@ -167,12 +167,12 @@
       class="flex items-center gap-4 flex-wrap px-3 py-2 rounded-lg text-sm"
       style="background: rgba(99,102,241,0.12); border: 1px solid rgba(99,102,241,0.25);"
     >
-      <span class="text-xs font-bold uppercase tracking-wide" style="color: var(--color-text-secondary); min-width: 48px;">
+      <span class="text-xs font-bold uppercase tracking-wide text-text-secondary" style="min-width: 48px;">
         {batch.status === "packaged" ? "Actuals" : batch.status === "fermenting" ? "Progress" : "Targets"}
       </span>
       {#each stageTargets as t}
-        <span style="color: var(--color-text-secondary);">
-          {t.label} <strong style="color: var(--color-text-primary);">{t.value}</strong>
+        <span class="text-text-secondary">
+          {t.label} <strong class="text-text-primary">{t.value}</strong>
         </span>
       {/each}
     </div>
@@ -180,7 +180,7 @@
 
   <!-- Measurements -->
   <div>
-    <div class="text-xs mb-2" style="color: var(--color-text-secondary);">MEASUREMENTS</div>
+    <div class="text-xs mb-2 text-text-secondary">MEASUREMENTS</div>
     <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
       {#each [
         { label: "Pre-Boil Gravity", field: "actual_pre_boil_gravity", isGravity: true },
@@ -198,7 +198,7 @@
                  border: 1px solid {highlighted ? 'rgba(99,102,241,0.4)' : 'var(--color-border)'};
                  opacity: {highlighted || rawValue != null ? '1' : '0.55'};"
         >
-          <label for="batch-{row.field}" class="text-xs block mb-1" style="color: var(--color-text-secondary);">{row.label}</label>
+          <label for="batch-{row.field}" class="text-xs block mb-1 text-text-secondary">{row.label}</label>
           {#if row.isGravity}
             <input
               id="batch-{row.field}"
@@ -234,7 +234,7 @@
       {/each}
     </div>
     {#if batch.actual_og && batch.actual_fg}
-      <div class="mt-3 text-sm" style="color: var(--color-text-muted);">
+      <div class="mt-3 text-sm text-text-muted">
         Actual ABV: {((batch.actual_og - batch.actual_fg) * 131.25).toFixed(1)}%
       </div>
     {/if}
@@ -242,7 +242,7 @@
 
   <!-- Dates (conditioning_date removed) -->
   <div>
-    <div class="text-xs mb-2" style="color: var(--color-text-secondary);">DATES</div>
+    <div class="text-xs mb-2 text-text-secondary">DATES</div>
     <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
       {#each [
         { label: "Brew Date", field: "brew_date", value: batch.brew_date },
@@ -250,7 +250,7 @@
         { label: "Packaging", field: "packaging_date", value: batch.packaging_date },
       ] as item}
         <div>
-          <label for="batch-{item.field}" class="text-xs block mb-1" style="color: var(--color-text-secondary);">{item.label}</label>
+          <label for="batch-{item.field}" class="text-xs block mb-1 text-text-secondary">{item.label}</label>
           <input
             id="batch-{item.field}"
             type="date"
@@ -267,7 +267,7 @@
   <!-- Gravity Log — fermenting stage only -->
   {#if batch.status === "fermenting"}
     <div>
-      <div class="text-xs mb-2" style="color: var(--color-text-secondary);">GRAVITY LOG</div>
+      <div class="text-xs mb-2 text-text-secondary">GRAVITY LOG</div>
       <div class="-mx-4">
         <BatchGravityTab {batch} {onRefresh} />
       </div>
@@ -287,14 +287,14 @@
   <!-- Tasting — packaged stage only -->
   {#if batch.status === "packaged"}
     <div>
-      <div class="text-xs mb-2" style="color: var(--color-text-secondary);">TASTING</div>
+      <div class="text-xs mb-2 text-text-secondary">TASTING</div>
       <BatchTastingTab {batch} {onUpdate} />
     </div>
   {/if}
 
   <!-- Notes -->
   <div>
-    <div class="text-xs mb-2" style="color: var(--color-text-secondary);">NOTES</div>
+    <div class="text-xs mb-2 text-text-secondary">NOTES</div>
     <MarkdownEditor
       value={batch.notes ?? null}
       onchange={(v) => onUpdate({ notes: v })}

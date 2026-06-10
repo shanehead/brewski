@@ -1,5 +1,26 @@
 @import "tailwindcss";
 
+/* ---- Theme color utilities ----
+   The actual color values live in src/themes/*.css and are swapped at runtime
+   via :root[data-theme="…"]. `@theme inline` registers them as Tailwind theme
+   colors (generating bg-*, text-*, border-* utilities) without emitting its own
+   :root variables, so the utilities resolve against whichever theme is active. */
+@theme inline {
+  --color-bg-base:        var(--color-bg-base);
+  --color-bg-surface:     var(--color-bg-surface);
+  --color-bg-elevated:    var(--color-bg-elevated);
+  --color-border:         var(--color-border);
+  --color-accent:         var(--color-accent);
+  --color-accent-hover:   var(--color-accent-hover);
+  --color-text-primary:   var(--color-text-primary);
+  --color-text-secondary: var(--color-text-secondary);
+  --color-text-muted:     var(--color-text-muted);
+  /* tertiary = the faintest tier (muted blended toward the background);
+     danger = the feedback red. Both resolve against the active theme. */
+  --color-text-tertiary:  color-mix(in srgb, var(--color-text-muted) 70%, var(--color-bg-base));
+  --color-text-danger:    var(--color-danger);
+}
+
 /* ---- Fonts ---- */
 
 @font-face {

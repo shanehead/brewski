@@ -78,10 +78,10 @@
 </script>
 
 <div>
-  <div class="flex items-center justify-between mb-3 mt-4 pt-4 border-t" style="border-color: var(--color-border);">
+  <div class="flex items-center justify-between mb-3 mt-4 pt-4 border-t border-border">
     <div
-      class="text-xs font-semibold uppercase tracking-wide"
-      style="color: var(--color-text-secondary);"
+      class="text-xs font-semibold uppercase tracking-wide text-text-secondary"
+     
     >
       Carbonation
     </div>
@@ -91,24 +91,24 @@
   <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-4">
     <!-- Target vols — read only from recipe -->
     <div
-      class="p-3 rounded"
-      style="background: var(--color-bg-elevated); border: 1px solid var(--color-border); opacity: 0.7;"
+      class="p-3 rounded bg-bg-elevated border border-border"
+      style="opacity: 0.7;"
     >
       <div class="flex items-center gap-1 mb-1">
-        <span class="text-xs" style="color: var(--color-text-secondary);">Target CO₂ (vols)</span>
+        <span class="text-xs text-text-secondary">Target CO₂ (vols)</span>
         <Tooltip text="How much CO₂ you want dissolved. British ales: 1.8–2.2 vols. American ales: 2.3–2.6 vols. Hefeweizens and Belgians: 3.0+." />
       </div>
-      <div class="text-sm font-medium" style="color: var(--color-text-primary);">{targetVols.toFixed(1)}</div>
-      <div class="text-xs mt-0.5" style="color: var(--color-text-muted);">from recipe</div>
+      <div class="text-sm font-medium text-text-primary">{targetVols.toFixed(1)}</div>
+      <div class="text-xs mt-0.5 text-text-muted">from recipe</div>
     </div>
 
     <!-- Packaging temp -->
-    <div class="p-3 rounded" style="background: var(--color-bg-elevated); border: 1px solid var(--color-border);">
+    <div class="p-3 rounded bg-bg-elevated border border-border">
       <div class="flex items-center gap-1 mb-1">
         <label
           for="carb-temp"
-          class="text-xs"
-          style="color: var(--color-text-secondary);"
+          class="text-xs text-text-secondary"
+         
         >
           Packaging Temp ({tempLabel(units)})
         </label>
@@ -122,17 +122,17 @@
         value={tempDisplay.toFixed(1)}
         oninput={(e) => updateTemp((e.target as HTMLInputElement).value)}
         onblur={() => { hasInteracted = true; }}
-        class="w-full bg-transparent text-sm outline-none"
-        style="color: var(--color-text-primary);"
+        class="w-full bg-transparent text-sm outline-none text-text-primary"
+       
       />
     </div>
 
     <!-- Sugar type -->
     <div
-      class="p-3 rounded col-span-2 md:col-span-1"
-      style="background: var(--color-bg-elevated); border: 1px solid var(--color-border);"
+      class="p-3 rounded col-span-2 md:col-span-1 bg-bg-elevated border border-border"
+     
     >
-      <label for="carb-sugar" class="text-xs block mb-1" style="color: var(--color-text-secondary);">
+      <label for="carb-sugar" class="text-xs block mb-1 text-text-secondary">
         Sugar Type
       </label>
       <select
@@ -142,8 +142,8 @@
           hasInteracted = true;
           sugarType = (e.target as HTMLSelectElement).value as SugarType;
         }}
-        class="w-full bg-transparent text-sm outline-none"
-        style="color: var(--color-text-primary);"
+        class="w-full bg-transparent text-sm outline-none text-text-primary"
+       
       >
         <option value="corn_sugar">Corn sugar</option>
         <option value="table_sugar">Table sugar</option>
@@ -153,7 +153,7 @@
   </div>
 
   {#if batchSizeL === null}
-    <p class="text-sm" style="color: var(--color-text-muted);">
+    <p class="text-sm text-text-muted">
       Enter batch size in Measurements to calculate carbonation.
     </p>
   {:else if primingSugarG !== null && pressureKpa !== null}
@@ -163,17 +163,17 @@
         style="background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.3);"
       >
         <div
-          class="text-xs font-bold uppercase tracking-wide mb-2"
-          style="color: var(--color-text-secondary);"
+          class="text-xs font-bold uppercase tracking-wide mb-2 text-text-secondary"
+         
         >
           Bottle Priming
         </div>
-        <div class="text-3xl font-semibold" style="color: var(--color-text-primary);">
+        <div class="text-3xl font-semibold text-text-primary">
           {primingSugarG.toFixed(0)}<span
-            class="text-base font-normal ml-1"
-            style="color: var(--color-text-secondary);">g</span>
+            class="text-base font-normal ml-1 text-text-secondary"
+           >g</span>
         </div>
-        <div class="text-xs mt-1" style="color: var(--color-text-muted);">
+        <div class="text-xs mt-1 text-text-muted">
           {sugarType.replace(/_/g, " ")} · {batchSizeL.toFixed(1)} L
         </div>
       </div>
@@ -183,17 +183,17 @@
         style="background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.3);"
       >
         <div
-          class="text-xs font-bold uppercase tracking-wide mb-2"
-          style="color: var(--color-text-secondary);"
+          class="text-xs font-bold uppercase tracking-wide mb-2 text-text-secondary"
+         
         >
           Keg Pressure
         </div>
-        <div class="text-3xl font-semibold" style="color: var(--color-text-primary);">
+        <div class="text-3xl font-semibold text-text-primary">
           {pressureKpa.toFixed(0)}<span
-            class="text-base font-normal ml-1"
-            style="color: var(--color-text-secondary);">kPa</span>
+            class="text-base font-normal ml-1 text-text-secondary"
+           >kPa</span>
         </div>
-        <div class="text-xs mt-1" style="color: var(--color-text-muted);">
+        <div class="text-xs mt-1 text-text-muted">
           {(pressureKpa * 0.145038).toFixed(1)} PSI
         </div>
       </div>

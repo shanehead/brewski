@@ -100,14 +100,14 @@
 <div class="p-4 flex flex-col gap-4">
   <!-- Header row -->
   <div class="flex items-center justify-between">
-    <span class="text-xs" style="color: var(--color-text-muted);">
+    <span class="text-xs text-text-muted">
       {attachments.length} attachment{attachments.length === 1 ? "" : "s"}
     </span>
     <button
       onclick={handleAdd}
       disabled={adding}
-      class="px-3 py-1.5 rounded text-sm font-medium"
-      style="background: var(--color-accent); color: #fff;"
+      class="px-3 py-1.5 rounded text-sm font-medium bg-accent"
+      style="color: #fff;"
     >
       {adding ? "Adding…" : "+ Add"}
     </button>
@@ -121,10 +121,10 @@
     >
       {#each photos as photo (photo.id)}
         <div
-          class="photo-cell"
+          class="photo-cell bg-bg-elevated"
           role="button"
           tabindex="0"
-          style="position: relative; aspect-ratio: 1; overflow: hidden; border-radius: 4px; background: var(--color-bg-elevated); cursor: pointer;"
+          style="position: relative; aspect-ratio: 1; overflow: hidden; border-radius: 4px; cursor: pointer;"
           onclick={() => handleOpen(photo.id)}
           onkeydown={(e) => e.key === "Enter" && handleOpen(photo.id)}
         >
@@ -164,25 +164,25 @@
     <div class="flex flex-col gap-1">
       {#each files as file (file.id)}
         <div
-          class="flex items-center gap-2 px-3 py-2 rounded cursor-pointer"
-          style="background: var(--color-bg-elevated); border: 1px solid var(--color-border);"
+          class="flex items-center gap-2 px-3 py-2 rounded cursor-pointer bg-bg-elevated border border-border"
+         
           role="button"
           tabindex="0"
           onclick={() => handleOpen(file.id)}
           onkeydown={(e) => e.key === "Enter" && handleOpen(file.id)}
         >
           <span class="text-base leading-none">{fileIcon(file.mime_type)}</span>
-          <span class="flex-1 text-sm truncate" style="color: var(--color-text-secondary);">
+          <span class="flex-1 text-sm truncate text-text-secondary">
             {file.original_name}
           </span>
-          <span class="text-xs flex-shrink-0" style="color: var(--color-text-muted);">
+          <span class="text-xs flex-shrink-0 text-text-muted">
             {formatSize(file.size_bytes)}
           </span>
           <button
             onclick={(e) => { e.stopPropagation(); handleDelete(file.id); }}
             aria-label="Delete {file.original_name}"
-            class="text-sm flex-shrink-0"
-            style="color: var(--color-text-muted);"
+            class="text-sm flex-shrink-0 text-text-muted"
+           
           >×</button>
         </div>
       {/each}
@@ -190,7 +190,7 @@
   {/if}
 
   {#if attachments.length === 0 && !adding}
-    <p class="text-sm text-center py-8" style="color: var(--color-text-muted);">
+    <p class="text-sm text-center py-8 text-text-muted">
       No attachments yet. Add photos, PDFs, or any files.
     </p>
   {/if}

@@ -20,7 +20,7 @@
   } = $props();
 </script>
 
-<div class="flex gap-0 border-b" style="border-color: var(--color-border);">
+<div class="flex gap-0 border-b border-border">
   {#each tabs as tab}
     <button
       onclick={() => onchange(tab.key)}

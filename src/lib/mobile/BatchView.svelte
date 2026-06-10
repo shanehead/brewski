@@ -50,16 +50,16 @@
 </script>
 
 {#if batch}
-  <div class="flex flex-col h-full overflow-hidden" style="background: var(--color-bg-base);">
-    <div class="flex items-center gap-3 px-4 py-3 border-b flex-shrink-0"
-         style="background: var(--color-bg-surface); border-color: var(--color-border);">
+  <div class="flex flex-col h-full overflow-hidden bg-bg-base">
+    <div class="flex items-center gap-3 px-4 py-3 border-b flex-shrink-0 bg-bg-surface border-border"
+        >
       <button
         onclick={() => goto("/batches")}
-        class="text-sm"
-        style="color: var(--color-accent);"
+        class="text-sm text-accent"
+       
       >‹ Batches</button>
-      <span class="flex-1 font-semibold text-base truncate"
-            style="color: var(--color-text-primary);">{batch.recipe_name}</span>
+      <span class="flex-1 font-semibold text-base truncate text-text-primary"
+           >{batch.recipe_name}</span>
     </div>
 
     <div class="flex-1 overflow-y-auto">
@@ -69,8 +69,8 @@
 
         <!-- Attachments always accessible at bottom on mobile -->
         <section class="px-4">
-          <div class="text-xs font-semibold uppercase tracking-wider mb-3"
-               style="color: var(--color-text-secondary);">Attachments</div>
+          <div class="text-xs font-semibold uppercase tracking-wider mb-3 text-text-secondary"
+              >Attachments</div>
           <BatchAttachmentsTab {batch} onAttachmentsChange={loadImageRefs} />
         </section>
       </div>
@@ -78,6 +78,6 @@
   </div>
 {:else}
   <div class="flex-1 flex items-center justify-center">
-    <p class="text-sm" style="color: var(--color-text-muted);">Loading…</p>
+    <p class="text-sm text-text-muted">Loading…</p>
   </div>
 {/if}

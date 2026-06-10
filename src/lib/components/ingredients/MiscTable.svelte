@@ -35,14 +35,14 @@
 
 <div class="flex flex-col gap-2">
   <div class="flex items-center justify-between">
-    <h3 class="text-sm font-semibold flex items-center gap-2" style="color: var(--color-text-primary);">
+    <h3 class="text-sm font-semibold flex items-center gap-2 text-text-primary">
       <BrewingIcon name="misc" />
       Misc
     </h3>
     <button
       onclick={() => (adding = true)}
-      class="text-xs px-2 py-1 rounded"
-      style="background: var(--color-accent); color: #fff;"
+      class="text-xs px-2 py-1 rounded bg-accent"
+      style="color: #fff;"
     >+ Add</button>
   </div>
 
@@ -56,7 +56,7 @@
   {#if recipe.miscs.length > 0}
     <table class="ingredient-table">
       <thead>
-        <tr style="color: var(--color-text-secondary);">
+        <tr class="text-text-secondary">
           <th class="text-left py-1">Name</th>
           <th class="text-left py-1">Type</th>
           <th class="text-right py-1">Amount</th>
@@ -68,20 +68,20 @@
       <tbody>
         {#each recipe.miscs as m (m.id)}
           <tr>
-            <td class="py-1.5" style="color: var(--color-text-primary);">{m.name}</td>
-            <td class="py-1.5" style="color: var(--color-text-secondary);">{m.type_}</td>
-            <td class="text-right py-1.5" style="color: var(--color-text-secondary);"
+            <td class="py-1.5 text-text-primary">{m.name}</td>
+            <td class="py-1.5 text-text-secondary">{m.type_}</td>
+            <td class="text-right py-1.5 text-text-secondary"
               >{m.amount} {m.unit}</td
             >
-            <td class="text-right py-1.5" style="color: var(--color-text-secondary);">{m.use_}</td>
-            <td class="text-right py-1.5" style="color: var(--color-text-secondary);"
+            <td class="text-right py-1.5 text-text-secondary">{m.use_}</td>
+            <td class="text-right py-1.5 text-text-secondary"
               >{m.time_min}min</td
             >
             <td class="pl-1">
               <button
                 onclick={() => handleDelete(m.id)}
-                class="opacity-40 hover:opacity-100"
-                style="color: var(--color-text-secondary);">×</button
+                class="opacity-40 hover:opacity-100 text-text-secondary"
+               >×</button
               >
             </td>
           </tr>

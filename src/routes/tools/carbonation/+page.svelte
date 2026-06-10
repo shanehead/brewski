@@ -74,49 +74,49 @@
 
 <div class="p-6 md:p-8">
   <div class="flex items-center gap-2">
-    <h2 class="text-xl font-semibold" style="color: var(--color-text-primary);">Carbonation</h2>
+    <h2 class="text-xl font-semibold text-text-primary">Carbonation</h2>
     <DocLink label="Carbonation reference" url={DOCS.calcCarbonation} />
   </div>
-  <p class="mt-2 max-w-2xl text-sm" style="color: var(--color-text-secondary);">
+  <p class="mt-2 max-w-2xl text-sm text-text-secondary">
     Calculate bottle priming sugar or keg pressure for a target carbonation level at a given beer temperature.
   </p>
 
   <div class="mt-6 grid gap-6 lg:grid-cols-[minmax(0,20rem)_minmax(0,1fr)]">
-    <section class="rounded-xl border p-4" style="background: var(--color-bg-surface); border-color: var(--color-border);">
+    <section class="rounded-xl border p-4 bg-bg-surface border-border">
       <div>
         <div class="flex items-center gap-1 mb-1">
-          <span class="text-sm font-medium" style="color: var(--color-text-primary);">Target CO2 Volumes</span>
+          <span class="text-sm font-medium text-text-primary">Target CO2 Volumes</span>
           <Tooltip text="How much CO₂ you want dissolved. British ales: 1.8–2.2 vols. American ales: 2.3–2.6 vols. Hefeweizens and Belgians: 3.0+." />
         </div>
         <input bind:value={targetVols} type="number" min="0.5" max="5" step="0.1"
-               class="w-full rounded px-3 py-2 text-sm"
-               style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
+               class="w-full rounded px-3 py-2 text-sm bg-bg-elevated text-text-primary border border-border"
+               />
       </div>
 
-      <label class="mt-4 block text-sm font-medium" style="color: var(--color-text-primary);">
+      <label class="mt-4 block text-sm font-medium text-text-primary">
         Batch Size ({volumeLabel(units)})
         <input value={batchSizeDisplay} oninput={(e) => updateBatchSize((e.target as HTMLInputElement).value)}
                type="number" min="0" step="0.1"
-               class="mt-2 w-full rounded px-3 py-2 text-sm"
-               style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
+               class="mt-2 w-full rounded px-3 py-2 text-sm bg-bg-elevated text-text-primary border border-border"
+               />
       </label>
 
       <div class="mt-4">
         <div class="flex items-center gap-1 mb-1">
-          <span class="text-sm font-medium" style="color: var(--color-text-primary);">Beer Temperature ({tempLabel(units)})</span>
+          <span class="text-sm font-medium text-text-primary">Beer Temperature ({tempLabel(units)})</span>
           <Tooltip text="Use the temperature at the END of fermentation, not after cold crashing. This estimates residual CO₂ already dissolved in the beer." />
         </div>
         <input value={tempDisplay} oninput={(e) => updateTemp((e.target as HTMLInputElement).value)}
                type="number" step="0.1"
-               class="w-full rounded px-3 py-2 text-sm"
-               style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
+               class="w-full rounded px-3 py-2 text-sm bg-bg-elevated text-text-primary border border-border"
+               />
       </div>
 
-      <label class="mt-4 block text-sm font-medium" style="color: var(--color-text-primary);">
+      <label class="mt-4 block text-sm font-medium text-text-primary">
         Priming Sugar Type
         <select bind:value={sugarType}
-                class="mt-2 w-full rounded px-3 py-2 text-sm"
-                style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);">
+                class="mt-2 w-full rounded px-3 py-2 text-sm bg-bg-elevated text-text-primary border border-border"
+               >
           <option value="corn_sugar">Corn sugar</option>
           <option value="table_sugar">Table sugar</option>
           <option value="dry_malt_extract">Dry malt extract</option>
@@ -124,22 +124,22 @@
       </label>
     </section>
 
-    <section class="rounded-xl border p-5" style="background: var(--color-bg-surface); border-color: var(--color-accent);">
+    <section class="rounded-xl border p-5 bg-bg-surface border-accent">
       {#if primingSugarDisplay !== null && pressureKpa !== null}
         <div class="grid gap-4 md:grid-cols-2">
           <div>
-            <div class="text-xs uppercase tracking-wide" style="color: var(--color-text-secondary);">Priming Sugar</div>
-            <div class="mt-2 text-4xl font-semibold" style="color: var(--color-text-primary);">{primingSugarDisplay.toFixed(1)}</div>
-            <div class="mt-1 text-sm" style="color: var(--color-text-secondary);">{hopWeightLabel(units)}</div>
+            <div class="text-xs uppercase tracking-wide text-text-secondary">Priming Sugar</div>
+            <div class="mt-2 text-4xl font-semibold text-text-primary">{primingSugarDisplay.toFixed(1)}</div>
+            <div class="mt-1 text-sm text-text-secondary">{hopWeightLabel(units)}</div>
           </div>
           <div>
-            <div class="text-xs uppercase tracking-wide" style="color: var(--color-text-secondary);">Serving Pressure</div>
-            <div class="mt-2 text-4xl font-semibold" style="color: var(--color-text-primary);">{pressureKpa.toFixed(0)}</div>
-            <div class="mt-1 text-sm" style="color: var(--color-text-secondary);">kPa</div>
+            <div class="text-xs uppercase tracking-wide text-text-secondary">Serving Pressure</div>
+            <div class="mt-2 text-4xl font-semibold text-text-primary">{pressureKpa.toFixed(0)}</div>
+            <div class="mt-1 text-sm text-text-secondary">kPa</div>
           </div>
         </div>
       {:else}
-        <p class="text-sm" style="color: var(--color-text-secondary);">Enter a valid target, batch size, and temperature to calculate carbonation.</p>
+        <p class="text-sm text-text-secondary">Enter a valid target, batch size, and temperature to calculate carbonation.</p>
       {/if}
     </section>
   </div>

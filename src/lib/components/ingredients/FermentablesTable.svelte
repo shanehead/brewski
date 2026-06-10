@@ -46,14 +46,14 @@
 
 <div class="flex flex-col gap-2">
   <div class="flex items-center justify-between">
-    <h3 class="text-sm font-semibold flex items-center gap-2" style="color: var(--color-text-primary);">
+    <h3 class="text-sm font-semibold flex items-center gap-2 text-text-primary">
       <BrewingIcon name="fermentable" />
       Fermentables
     </h3>
     <div class="flex items-center gap-2">
       <DocLink label="Fermentables guide" url={DOCS.fermentables} />
-      <button onclick={() => adding = true} class="text-xs px-2 py-1 rounded"
-              style="background: var(--color-accent); color: #fff;">+ Add</button>
+      <button onclick={() => adding = true} class="text-xs px-2 py-1 rounded bg-accent"
+              style="color: #fff;">+ Add</button>
     </div>
   </div>
 
@@ -67,7 +67,7 @@
   {#if recipe.fermentables.length > 0}
     <table class="ingredient-table">
       <thead>
-        <tr style="color: var(--color-text-secondary);">
+        <tr class="text-text-secondary">
           <th class="text-left py-1">Name</th>
           <th class="text-right py-1">
             <span class="inline-flex items-center gap-1">Lovibond <Tooltip text="The color of this fermentable in degrees Lovibond. Pale malts are 1–3°L. Crystal malts range from 10 to 120°L and above." /></span>
@@ -79,18 +79,18 @@
       <tbody>
         {#each recipe.fermentables as f (f.id)}
           <tr>
-            <td class="py-1.5" style="color: var(--color-text-primary);">{f.name}</td>
-            <td class="text-right py-1.5" style="color: var(--color-text-secondary);">{f.color_lovibond}°L</td>
+            <td class="py-1.5 text-text-primary">{f.name}</td>
+            <td class="text-right py-1.5 text-text-secondary">{f.color_lovibond}°L</td>
             <td class="text-right py-1.5">
               <input type="number" inputmode="decimal" step={units === "imperial" ? 0.1 : 0.05}
                      value={(units === "imperial" ? kgToLb(f.amount_kg) : f.amount_kg).toFixed(2)}
                      onblur={(e) => handleAmountChange(f, (e.target as HTMLInputElement).value)}
-                     class="w-16 text-right px-1 rounded"
-                     style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid transparent;" />
+                     class="w-16 text-right px-1 rounded bg-bg-elevated text-text-primary"
+                     style="border: 1px solid transparent;" />
             </td>
             <td class="pl-1">
-              <button onclick={() => handleDelete(f.id)} class="opacity-40 hover:opacity-100"
-                      style="color: var(--color-text-secondary);">×</button>
+              <button onclick={() => handleDelete(f.id)} class="opacity-40 hover:opacity-100 text-text-secondary"
+                     >×</button>
             </td>
           </tr>
         {/each}

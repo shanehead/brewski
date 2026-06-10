@@ -34,14 +34,14 @@
 
 <div class="p-4 flex flex-col gap-4 overflow-y-auto h-full max-w-2xl">
   <div class="flex items-center justify-between">
-    <div class="text-sm" style="color: var(--color-text-muted);">
+    <div class="text-sm text-text-muted">
       {batches.length} batch{batches.length === 1 ? "" : "es"}
       {#if avgRating !== null}· avg rating {avgRating}/10{/if}
     </div>
     <button
       onclick={handleBrew}
-      class="px-3 py-1.5 rounded text-sm"
-      style="background: var(--color-accent); color: #fff;"
+      class="px-3 py-1.5 rounded text-sm bg-accent"
+      style="color: #fff;"
     >Brew this Recipe</button>
   </div>
   <BatchList {batches} onRefresh={load} />

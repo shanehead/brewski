@@ -56,12 +56,12 @@
   }
 </script>
 
-<div class="flex flex-col h-full overflow-hidden" style="background: var(--color-bg-surface);">
-  <div class="p-3 border-b flex flex-col gap-2" style="border-color: var(--color-border);">
+<div class="flex flex-col h-full overflow-hidden bg-bg-surface">
+  <div class="p-3 border-b flex flex-col gap-2 border-border">
     <button
       onclick={handleNew}
-      class="w-full py-3 rounded text-sm font-medium"
-      style="background: var(--color-accent); color: #fff;"
+      class="w-full py-3 rounded text-sm font-medium bg-accent"
+      style="color: #fff;"
     >+ New Recipe</button>
     <input
       type="file"
@@ -73,8 +73,8 @@
     <button
       onclick={() => fileInput.click()}
       disabled={importing}
-      class="w-full py-3 rounded text-sm font-medium"
-      style="border: 1px solid var(--color-accent); color: var(--color-accent); background: transparent;"
+      class="w-full py-3 rounded text-sm font-medium border border-accent text-accent"
+      style="background: transparent;"
     >
       {importing ? "Importing…" : "Import BeerXML"}
     </button>
@@ -84,8 +84,8 @@
       {@const thumb = thumbnailSrc(recipe)}
       <a
         href="/recipe/{recipe.id}"
-        class="flex items-center gap-3 px-4 py-3 border-b text-sm"
-        style="border-color: var(--color-border); color: var(--color-text-primary);"
+        class="flex items-center gap-3 px-4 py-3 border-b text-sm border-border text-text-primary"
+       
       >
         {#if thumb}
           <img src={thumb} alt="" class="w-8 h-8 rounded flex-shrink-0 object-cover" />
@@ -93,23 +93,23 @@
           <div class="w-8 h-8 rounded flex-shrink-0" style="background: linear-gradient(135deg, {srmToHex(4)}, {srmToHex(16)});"></div>
         {/if}
         <span class="truncate flex-1">{recipe.name}</span>
-        <span style="color: var(--color-text-muted);">›</span>
+        <span class="text-text-muted">›</span>
       </a>
     {:else}
-      <p class="p-4 text-sm" style="color: var(--color-text-muted);">No recipes yet. Tap + to create one.</p>
+      <p class="p-4 text-sm text-text-muted">No recipes yet. Tap + to create one.</p>
     {/each}
 
     <!-- Example Recipes section -->
     {#if $baselineRecipeList.length > 0 && !$settings.hide_example_recipes}
       <button
         onclick={toggleStarters}
-        class="w-full flex items-center justify-between px-4 py-2 border-b"
-        style="background: var(--color-bg-base); border-color: var(--color-border);"
+        class="w-full flex items-center justify-between px-4 py-2 border-b bg-bg-base border-border"
+       
       >
-        <span class="text-xs font-semibold uppercase tracking-wider" style="color: var(--color-text-muted);">
+        <span class="text-xs font-semibold uppercase tracking-wider text-text-muted">
           Example Recipes
         </span>
-        <span class="text-xs" style="color: var(--color-text-muted);">
+        <span class="text-xs text-text-muted">
           {startersCollapsed ? "▸" : "▾"}
         </span>
       </button>
@@ -118,8 +118,8 @@
           {@const thumb = thumbnailSrc(recipe)}
           <a
             href="/baseline-recipe/{recipe.id}"
-            class="flex items-center gap-3 px-4 py-3 border-b text-sm"
-            style="border-color: var(--color-border); color: var(--color-text-secondary);"
+            class="flex items-center gap-3 px-4 py-3 border-b text-sm border-border text-text-secondary"
+           
           >
             {#if thumb}
               <img src={thumb} alt="" class="w-8 h-8 rounded flex-shrink-0 object-cover" />
@@ -127,7 +127,7 @@
               <div class="w-8 h-8 rounded flex-shrink-0" style="background: linear-gradient(135deg, {srmToHex(4)}, {srmToHex(16)});"></div>
             {/if}
             <span class="truncate flex-1">{recipe.name}</span>
-            <span style="color: var(--color-text-muted);">›</span>
+            <span class="text-text-muted">›</span>
           </a>
         {/each}
       {/if}

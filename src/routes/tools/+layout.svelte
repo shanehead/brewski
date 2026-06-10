@@ -5,13 +5,13 @@
   let { children } = $props();
 </script>
 
-<div class="flex flex-1 flex-col overflow-hidden md:flex-row" style="background: var(--color-bg-base);">
+<div class="flex flex-1 flex-col overflow-hidden md:flex-row bg-bg-base">
   <!-- Desktop: vertical sidebar -->
-  <aside class="hidden md:flex md:flex-col w-80 flex-shrink-0 border-r"
-         style="background: var(--color-bg-surface); border-color: var(--color-border);">
+  <aside class="hidden md:flex md:flex-col w-80 flex-shrink-0 border-r bg-bg-surface border-border"
+        >
     <div class="px-5 py-4">
-      <h1 class="text-lg font-semibold" style="color: var(--color-text-primary);">Tools</h1>
-      <p class="mt-1 text-sm" style="color: var(--color-text-secondary);">
+      <h1 class="text-lg font-semibold text-text-primary">Tools</h1>
+      <p class="mt-1 text-sm text-text-secondary">
         Standalone brewing calculators.
       </p>
     </div>
@@ -27,8 +27,8 @@
               : "border-left-width: 3px; border-color: transparent;"
           }
         >
-          <div class="text-sm font-medium" style="color: var(--color-text-primary);">{tool.name}</div>
-          <div class="mt-1 text-xs" style="color: var(--color-text-secondary);">{tool.description}</div>
+          <div class="text-sm font-medium text-text-primary">{tool.name}</div>
+          <div class="mt-1 text-xs text-text-secondary">{tool.description}</div>
         </a>
       {/each}
     </nav>
@@ -36,13 +36,13 @@
 
   <!-- Mobile: back button when inside a specific tool -->
   {#if $page.url.pathname !== '/tools'}
-    <div class="md:hidden flex items-center gap-3 px-4 border-b flex-shrink-0"
-         style="background: var(--color-bg-surface); border-color: var(--color-border); min-height: 44px;">
-      <a href="/tools" class="flex items-center gap-1 text-sm"
-         style="color: var(--color-accent);">
+    <div class="md:hidden flex items-center gap-3 px-4 border-b flex-shrink-0 bg-bg-surface border-border"
+         style="min-height: 44px;">
+      <a href="/tools" class="flex items-center gap-1 text-sm text-accent"
+        >
         ‹ Tools
       </a>
-      <span class="text-sm font-medium truncate" style="color: var(--color-text-primary);">
+      <span class="text-sm font-medium truncate text-text-primary">
         {TOOLS.find(t => $page.url.pathname === `/tools/${t.slug}`)?.name ?? ""}
       </span>
     </div>

@@ -53,13 +53,13 @@
   }
 </script>
 
-<aside class="w-56 flex flex-col flex-shrink-0 border-r overflow-hidden"
-       style="background: var(--color-bg-surface); border-color: var(--color-border);">
-  <div class="p-2 border-b" style="border-color: var(--color-border);">
+<aside class="w-56 flex flex-col flex-shrink-0 border-r overflow-hidden bg-bg-surface border-border"
+      >
+  <div class="p-2 border-b border-border">
     <button
       onclick={() => goto("/batches")}
-      class="w-full px-2 py-1.5 rounded text-sm text-left"
-      style="background: var(--color-accent); color: #fff;"
+      class="w-full px-2 py-1.5 rounded text-sm text-left bg-accent"
+      style="color: #fff;"
     >+ New Batch</button>
   </div>
   <div class="flex-1 overflow-y-auto">
@@ -70,18 +70,18 @@
 <div class="flex flex-1 flex-col overflow-hidden">
   {#if batch}
     <!-- Header -->
-    <div class="px-4 pt-3 pb-2 flex-shrink-0 flex items-start justify-between gap-2"
-         style="border-bottom: 1px solid var(--color-border);">
+    <div class="px-4 pt-3 pb-2 flex-shrink-0 flex items-start justify-between gap-2 border-b border-border"
+        >
       <div class="min-w-0">
         <div class="font-semibold text-base truncate">{batch.recipe_name}</div>
-        <div class="text-xs" style="color: var(--color-text-muted);">
+        <div class="text-xs text-text-muted">
           {batch.name ?? "Batch"} · v{batch.recipe_version_id.slice(0, 6)}
         </div>
       </div>
       <button
         onclick={() => showAttachments = true}
-        class="flex-shrink-0 px-2 py-1 rounded text-xs mt-0.5"
-        style="background: var(--color-bg-elevated); color: var(--color-text-muted); border: 1px solid var(--color-border);"
+        class="flex-shrink-0 px-2 py-1 rounded text-xs mt-0.5 bg-bg-elevated text-text-muted border border-border"
+       
       >📎 Attachments</button>
     </div>
 
@@ -98,15 +98,15 @@
         role="dialog"
         aria-modal="true"
       >
-        <div class="rounded-lg w-full max-w-2xl max-h-[80vh] flex flex-col overflow-hidden"
-             style="background: var(--color-bg-surface); border: 1px solid var(--color-border);">
-          <div class="flex items-center justify-between px-4 py-3 border-b flex-shrink-0"
-               style="border-color: var(--color-border);">
+        <div class="rounded-lg w-full max-w-2xl max-h-[80vh] flex flex-col overflow-hidden bg-bg-surface border border-border"
+            >
+          <div class="flex items-center justify-between px-4 py-3 border-b flex-shrink-0 border-border"
+              >
             <div class="font-medium text-sm">Attachments</div>
             <button
               onclick={() => showAttachments = false}
-              class="text-xs px-2 py-1 rounded"
-              style="color: var(--color-text-muted); background: var(--color-bg-elevated);"
+              class="text-xs px-2 py-1 rounded text-text-muted bg-bg-elevated"
+             
             >Close</button>
           </div>
           <div class="flex-1 overflow-y-auto">
@@ -116,7 +116,7 @@
       </div>
     {/if}
   {:else}
-    <div class="flex-1 flex items-center justify-center" style="color: var(--color-text-muted);">
+    <div class="flex-1 flex items-center justify-center text-text-muted">
       <p class="text-sm">Loading…</p>
     </div>
   {/if}

@@ -16,8 +16,8 @@
   <button
     type="button"
     onclick={handleClick}
-    class="text-xs opacity-70 hover:opacity-100 transition-opacity cursor-pointer"
-    style="color: var(--color-accent);"
+    class="text-xs opacity-70 hover:opacity-100 transition-opacity cursor-pointer text-accent"
+   
   >
     {label} ↗
   </button>

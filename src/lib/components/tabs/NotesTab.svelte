@@ -16,7 +16,7 @@
 
 <TabContent>
   <div class="flex flex-col gap-1">
-    <label for="notes-recipe" class="text-sm font-medium" style="color: var(--color-text-secondary);">Recipe Notes</label>
+    <label for="notes-recipe" class="text-sm font-medium text-text-secondary">Recipe Notes</label>
     <MarkdownEditor
       id="notes-recipe"
       value={recipe.notes ?? null}
@@ -27,7 +27,7 @@
   </div>
 
   <div class="flex flex-col gap-1">
-    <label for="notes-taste" class="text-sm font-medium" style="color: var(--color-text-secondary);">Taste Notes</label>
+    <label for="notes-taste" class="text-sm font-medium text-text-secondary">Taste Notes</label>
     <MarkdownEditor
       id="notes-taste"
       value={recipe.taste_notes ?? null}
@@ -38,14 +38,14 @@
   </div>
 
   <div class="flex flex-col gap-1">
-    <label for="notes-rating" class="text-sm font-medium" style="color: var(--color-text-secondary);">Taste Rating (0–50)</label>
+    <label for="notes-rating" class="text-sm font-medium text-text-secondary">Taste Rating (0–50)</label>
     <input id="notes-rating" type="number" inputmode="decimal" step="1" min="0" max="50"
            value={recipe.taste_rating ?? ""}
            onblur={(e) => {
              const v = (e.target as HTMLInputElement).value;
              save("taste_rating", v ? parseFloat(v) : null);
            }}
-           class="w-24 px-2 py-1.5 rounded text-sm"
-           style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
+           class="w-24 px-2 py-1.5 rounded text-sm bg-bg-elevated text-text-primary border border-border"
+           />
   </div>
 </TabContent>

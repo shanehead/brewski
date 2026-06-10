@@ -139,39 +139,39 @@
 </script>
 
 {#if open}
-  <div class="fixed inset-0 flex flex-col" style="z-index: 200; background: var(--color-bg-base); color: var(--color-text-primary);">
+  <div class="fixed inset-0 flex flex-col bg-bg-base text-text-primary" style="z-index: 200;">
 
     {#if screen === 'list'}
       <!-- List screen -->
-      <div class="flex items-center gap-3 px-4 py-3 flex-shrink-0"
-           style="border-bottom: 1px solid var(--color-border); background: var(--color-bg-surface);">
-        <button onclick={onclose} style="background: none; border: none; cursor: pointer; color: var(--color-text-secondary); padding: 4px; font-size: 20px; line-height: 1;">×</button>
+      <div class="flex items-center gap-3 px-4 py-3 flex-shrink-0 border-b border-border bg-bg-surface"
+          >
+        <button onclick={onclose} class="text-text-secondary" style="background: none; border: none; cursor: pointer; padding: 4px; font-size: 20px; line-height: 1;">×</button>
         <span style="font-size: 16px; display: inline-flex;"><BrewingIcon name={headerIcon} /></span>
-        <h2 class="text-base font-semibold flex-1" style="color: var(--color-text-primary); margin: 0;">{headerTitle}</h2>
+        <h2 class="text-base font-semibold flex-1 text-text-primary" style="margin: 0;">{headerTitle}</h2>
       </div>
       <div class="px-4 py-2 flex-shrink-0">
         <div class="relative">
-          <svg style="position: absolute; left: 8px; top: 50%; transform: translateY(-50%); pointer-events: none; color: var(--color-text-muted);"
+          <svg class="text-text-muted" style="position: absolute; left: 8px; top: 50%; transform: translateY(-50%); pointer-events: none;"
                width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
             <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
           </svg>
           <input bind:value={query}
                  aria-label="Search ingredients"
                  placeholder="Search {type === 'hop' ? 'hops' : type === 'fermentable' ? 'fermentables' : type === 'yeast' ? 'yeasts' : 'misc'}…"
-                 class="w-full text-sm"
-                 style="background: var(--color-bg-elevated); border: 1px solid var(--color-border); border-radius: 8px; padding: 8px 12px 8px 28px; color: var(--color-text-primary); outline: none;" />
+                 class="w-full text-sm bg-bg-elevated border border-border text-text-primary"
+                 style="border-radius: 8px; padding: 8px 12px 8px 28px; outline: none;" />
         </div>
       </div>
       <div class="flex-1 overflow-y-auto px-4 pb-4 flex flex-col gap-1">
         {#if filtered.length === 0}
-          <p class="text-sm text-center mt-8" style="color: var(--color-text-muted);">No results for "{query}"</p>
+          <p class="text-sm text-center mt-8 text-text-muted">No results for "{query}"</p>
         {:else}
           {#each filtered as item (item.id)}
             <button onclick={() => selectItem(item)}
-                    class="flex items-center justify-between w-full text-left px-3 py-3 rounded-lg"
-                    style="background: var(--color-bg-elevated); border: 1px solid var(--color-border);">
-              <span class="text-sm" style="color: var(--color-text-primary);">{item.name}</span>
-              <span class="text-xs flex-shrink-0 ml-3" style="color: var(--color-text-secondary);">{rowSubtext(item)}</span>
+                    class="flex items-center justify-between w-full text-left px-3 py-3 rounded-lg bg-bg-elevated border border-border"
+                   >
+              <span class="text-sm text-text-primary">{item.name}</span>
+              <span class="text-xs flex-shrink-0 ml-3 text-text-secondary">{rowSubtext(item)}</span>
             </button>
           {/each}
         {/if}
@@ -179,65 +179,65 @@
 
     {:else}
       <!-- Detail screen -->
-      <div class="flex items-center gap-3 px-4 py-3 flex-shrink-0"
-           style="border-bottom: 1px solid var(--color-border); background: var(--color-bg-surface);">
+      <div class="flex items-center gap-3 px-4 py-3 flex-shrink-0 border-b border-border bg-bg-surface"
+          >
         <button onclick={() => { screen = 'list'; selected = null; }}
-                style="background: none; border: none; cursor: pointer; color: var(--color-accent); font-size: 14px; padding: 4px 0; display: flex; align-items: center; gap: 4px;">
+                class="text-accent" style="background: none; border: none; cursor: pointer; font-size: 14px; padding: 4px 0; display: flex; align-items: center; gap: 4px;">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
           Back
         </button>
-        <h2 class="text-base font-semibold flex-1 truncate" style="color: var(--color-text-primary); margin: 0;">{selected?.name ?? ''}</h2>
+        <h2 class="text-base font-semibold flex-1 truncate text-text-primary" style="margin: 0;">{selected?.name ?? ''}</h2>
       </div>
 
       <div class="flex-1 overflow-y-auto p-4 flex flex-col gap-3">
         {#if selected && type === 'hop'}
           {@const hop = selected as Hop}
           <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-            {#if hop.origin}<span style="background: var(--color-bg-elevated); color: var(--color-text-secondary); padding: 3px 10px; border-radius: 99px; font-size: 12px;">{hop.origin}</span>{/if}
-            {#if hop.type_}<span style="background: var(--color-bg-elevated); color: var(--color-text-secondary); padding: 3px 10px; border-radius: 99px; font-size: 12px;">{hop.type_}</span>{/if}
-            <span style="background: var(--color-bg-elevated); color: var(--color-text-secondary); padding: 3px 10px; border-radius: 99px; font-size: 12px;">{hop.form}</span>
+            {#if hop.origin}<span class="bg-bg-elevated text-text-secondary" style="padding: 3px 10px; border-radius: 99px; font-size: 12px;">{hop.origin}</span>{/if}
+            {#if hop.type_}<span class="bg-bg-elevated text-text-secondary" style="padding: 3px 10px; border-radius: 99px; font-size: 12px;">{hop.type_}</span>{/if}
+            <span class="bg-bg-elevated text-text-secondary" style="padding: 3px 10px; border-radius: 99px; font-size: 12px;">{hop.form}</span>
           </div>
           <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;">
             {#each [['Alpha', hop.alpha_pct + '%'], ['Beta', fmt(hop.beta_pct ?? null) + '%'], ['Cohumulone', fmt(hop.cohumulone_pct ?? null) + '%']] as [label, value]}
-              <div style="background: var(--color-bg-elevated); border-radius: 6px; padding: 8px 10px;">
-                <div style="font-size: 11px; color: var(--color-text-secondary);">{label}</div>
+              <div class="bg-bg-elevated" style="border-radius: 6px; padding: 8px 10px;">
+                <div class="text-text-secondary" style="font-size: 11px;">{label}</div>
                 <div style="font-size: 14px; font-weight: 600;">{value}</div>
               </div>
             {/each}
           </div>
-          {#if hop.notes}<p style="font-size: 13px; color: var(--color-text-secondary); line-height: 1.5; margin: 0;">{hop.notes}</p>{/if}
+          {#if hop.notes}<p class="text-text-secondary" style="font-size: 13px; line-height: 1.5; margin: 0;">{hop.notes}</p>{/if}
 
         {:else if selected && type === 'fermentable'}
           {@const ferm = selected as Fermentable}
           <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-            <span style="background: var(--color-bg-elevated); color: var(--color-text-secondary); padding: 3px 10px; border-radius: 99px; font-size: 12px;">{ferm.type_}</span>
+            <span class="bg-bg-elevated text-text-secondary" style="padding: 3px 10px; border-radius: 99px; font-size: 12px;">{ferm.type_}</span>
           </div>
           <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;">
             {#each [['Yield', ferm.yield_pct.toFixed(0) + '%'], ['Color', ferm.color_lovibond + '°L'], ['Origin', ferm.origin ?? '—']] as [label, value]}
-              <div style="background: var(--color-bg-elevated); border-radius: 6px; padding: 8px 10px;">
-                <div style="font-size: 11px; color: var(--color-text-secondary);">{label}</div>
+              <div class="bg-bg-elevated" style="border-radius: 6px; padding: 8px 10px;">
+                <div class="text-text-secondary" style="font-size: 11px;">{label}</div>
                 <div style="font-size: 14px; font-weight: 600;">{value}</div>
               </div>
             {/each}
           </div>
-          {#if ferm.notes}<p style="font-size: 13px; color: var(--color-text-secondary); line-height: 1.5; margin: 0;">{ferm.notes}</p>{/if}
+          {#if ferm.notes}<p class="text-text-secondary" style="font-size: 13px; line-height: 1.5; margin: 0;">{ferm.notes}</p>{/if}
 
         {:else if selected && type === 'yeast'}
           {@const yeast = selected as Yeast}
           <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-            <span style="background: var(--color-bg-elevated); color: var(--color-text-secondary); padding: 3px 10px; border-radius: 99px; font-size: 12px;">{yeast.type_}</span>
-            <span style="background: var(--color-bg-elevated); color: var(--color-text-secondary); padding: 3px 10px; border-radius: 99px; font-size: 12px;">{yeast.form}</span>
-            {#if yeast.laboratory}<span style="background: var(--color-bg-elevated); color: var(--color-text-secondary); padding: 3px 10px; border-radius: 99px; font-size: 12px;">{yeast.laboratory}</span>{/if}
+            <span class="bg-bg-elevated text-text-secondary" style="padding: 3px 10px; border-radius: 99px; font-size: 12px;">{yeast.type_}</span>
+            <span class="bg-bg-elevated text-text-secondary" style="padding: 3px 10px; border-radius: 99px; font-size: 12px;">{yeast.form}</span>
+            {#if yeast.laboratory}<span class="bg-bg-elevated text-text-secondary" style="padding: 3px 10px; border-radius: 99px; font-size: 12px;">{yeast.laboratory}</span>{/if}
           </div>
           <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px;">
             {#each [['Attenuation', fmt(yeast.attenuation_pct ?? null, 0) + '%'], ['Flocculation', yeast.flocculation ?? '—']] as [label, value]}
-              <div style="background: var(--color-bg-elevated); border-radius: 6px; padding: 8px 10px;">
-                <div style="font-size: 11px; color: var(--color-text-secondary);">{label}</div>
+              <div class="bg-bg-elevated" style="border-radius: 6px; padding: 8px 10px;">
+                <div class="text-text-secondary" style="font-size: 11px;">{label}</div>
                 <div style="font-size: 14px; font-weight: 600;">{value}</div>
               </div>
             {/each}
           </div>
-          {#if yeast.notes}<p style="font-size: 13px; color: var(--color-text-secondary); line-height: 1.5; margin: 0;">{yeast.notes}</p>{/if}
+          {#if yeast.notes}<p class="text-text-secondary" style="font-size: 13px; line-height: 1.5; margin: 0;">{yeast.notes}</p>{/if}
         {/if}
       </div>
 
@@ -247,40 +247,40 @@
           <div>
             <h2 style="font-size: 17px; font-weight: 700; margin: 0;">{misc.name}</h2>
             <div style="display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap;">
-              <span style="background: var(--color-bg-elevated); color: var(--color-text-secondary); padding: 2px 8px; border-radius: 99px; font-size: 11px;">{misc.type_}</span>
+              <span class="bg-bg-elevated text-text-secondary" style="padding: 2px 8px; border-radius: 99px; font-size: 11px;">{misc.type_}</span>
               {#if misc.source === 'user'}
-                <span style="background: color-mix(in srgb, var(--color-accent) 15%, transparent); color: var(--color-accent); padding: 2px 8px; border-radius: 99px; font-size: 11px; border: 1px solid color-mix(in srgb, var(--color-accent) 40%, transparent);">custom</span>
+                <span class="text-accent" style="background: color-mix(in srgb, var(--color-accent) 15%, transparent); padding: 2px 8px; border-radius: 99px; font-size: 11px; border: 1px solid color-mix(in srgb, var(--color-accent) 40%, transparent);">custom</span>
               {/if}
             </div>
           </div>
           {#if misc.use_for}
-            <p style="font-size: 13px; color: var(--color-text-secondary); line-height: 1.5; margin: 0;">{misc.use_for}</p>
+            <p class="text-text-secondary" style="font-size: 13px; line-height: 1.5; margin: 0;">{misc.use_for}</p>
           {/if}
           {#if misc.notes}
-            <p style="font-size: 12px; color: var(--color-text-muted); line-height: 1.5; margin: 0;">{misc.notes}</p>
+            <p class="text-text-muted" style="font-size: 12px; line-height: 1.5; margin: 0;">{misc.notes}</p>
           {/if}
           <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end; margin-top: 4px;">
             <div>
-              <div style="font-size: 11px; color: var(--color-text-secondary); margin-bottom: 4px;">Amount</div>
+              <div class="text-text-secondary" style="font-size: 11px; margin-bottom: 4px;">Amount</div>
               <input type="number" inputmode="decimal" step="0.1" bind:value={amount} min="0.001"
-                style="width: 70px; background: var(--color-bg-elevated); border: 1px solid var(--color-border); border-radius: 5px; padding: 7px 8px; color: var(--color-text-primary); font-size: 14px;" />
+                class="bg-bg-elevated border border-border text-text-primary" style="width: 70px; border-radius: 5px; padding: 7px 8px; font-size: 14px;" />
             </div>
             <div>
-              <div style="font-size: 11px; color: var(--color-text-secondary); margin-bottom: 4px;">Unit</div>
-              <select bind:value={miscUnit} style="background: var(--color-bg-elevated); border: 1px solid var(--color-border); border-radius: 5px; padding: 7px 8px; color: var(--color-text-primary); font-size: 14px;">
+              <div class="text-text-secondary" style="font-size: 11px; margin-bottom: 4px;">Unit</div>
+              <select bind:value={miscUnit} class="bg-bg-elevated border border-border text-text-primary" style="border-radius: 5px; padding: 7px 8px; font-size: 14px;">
                 {#each MISC_UNITS as u}<option value={u}>{u}</option>{/each}
               </select>
             </div>
             <div>
-              <div style="font-size: 11px; color: var(--color-text-secondary); margin-bottom: 4px;">Use</div>
-              <select bind:value={miscUse} style="background: var(--color-bg-elevated); border: 1px solid var(--color-border); border-radius: 5px; padding: 7px 8px; color: var(--color-text-primary); font-size: 14px;">
+              <div class="text-text-secondary" style="font-size: 11px; margin-bottom: 4px;">Use</div>
+              <select bind:value={miscUse} class="bg-bg-elevated border border-border text-text-primary" style="border-radius: 5px; padding: 7px 8px; font-size: 14px;">
                 {#each MISC_USES as u}<option value={u}>{u}</option>{/each}
               </select>
             </div>
             <div>
-              <div style="font-size: 11px; color: var(--color-text-secondary); margin-bottom: 4px;">Time (min)</div>
+              <div class="text-text-secondary" style="font-size: 11px; margin-bottom: 4px;">Time (min)</div>
               <input type="number" inputmode="decimal" step="1" bind:value={miscTime} min="0"
-                style="width: 65px; background: var(--color-bg-elevated); border: 1px solid var(--color-border); border-radius: 5px; padding: 7px 8px; color: var(--color-text-primary); font-size: 14px;" />
+                class="bg-bg-elevated border border-border text-text-primary" style="width: 65px; border-radius: 5px; padding: 7px 8px; font-size: 14px;" />
             </div>
           </div>
           <button onclick={handleAdd} disabled={!canAdd}
@@ -292,63 +292,63 @@
 
       <!-- Add controls footer -->
       {#if type !== 'misc'}
-      <div class="flex-shrink-0 p-4 flex flex-col gap-3"
-           style="border-top: 1px solid var(--color-border); background: var(--color-bg-surface);">
+      <div class="flex-shrink-0 p-4 flex flex-col gap-3 border-t border-border bg-bg-surface"
+          >
         {#if type === 'hop' && selected}
           <div class="flex gap-3">
-            <label class="flex flex-col gap-1 flex-1 text-xs" style="color: var(--color-text-secondary);">
+            <label class="flex flex-col gap-1 flex-1 text-xs text-text-secondary">
               Amount ({hopWeightLabel(units)})
               <input type="number" inputmode="decimal" step={units === 'imperial' ? 0.1 : 1}
                      value={kgToHopDisplay(amount, units).toFixed(units === 'imperial' ? 2 : 0)}
                      onblur={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); if (!isNaN(v)) amount = hopDisplayToKg(v, units); }}
-                     min="0.001" class="px-3 py-2 rounded-lg text-sm"
-                     style="background: var(--color-bg-elevated); border: 1px solid var(--color-border); color: var(--color-text-primary);" />
+                     min="0.001" class="px-3 py-2 rounded-lg text-sm bg-bg-elevated border border-border text-text-primary"
+                     />
             </label>
-            <label class="flex flex-col gap-1 text-xs" style="color: var(--color-text-secondary);">
+            <label class="flex flex-col gap-1 text-xs text-text-secondary">
               Form
-              <select bind:value={hopForm} class="px-3 py-2 rounded-lg text-sm"
-                      style="background: var(--color-bg-elevated); border: 1px solid var(--color-border); color: var(--color-text-primary);">
+              <select bind:value={hopForm} class="px-3 py-2 rounded-lg text-sm bg-bg-elevated border border-border text-text-primary"
+                     >
                 {#each HOP_FORMS as f}<option value={f}>{f}</option>{/each}
               </select>
             </label>
-            <label class="flex flex-col gap-1 flex-1 text-xs" style="color: var(--color-text-secondary);">
+            <label class="flex flex-col gap-1 flex-1 text-xs text-text-secondary">
               Use
-              <select bind:value={use_} class="px-3 py-2 rounded-lg text-sm"
-                      style="background: var(--color-bg-elevated); border: 1px solid var(--color-border); color: var(--color-text-primary);">
+              <select bind:value={use_} class="px-3 py-2 rounded-lg text-sm bg-bg-elevated border border-border text-text-primary"
+                     >
                 {#each HOP_USES as u}<option value={u}>{u}</option>{/each}
               </select>
             </label>
-            <label class="flex flex-col gap-1 text-xs" style="color: var(--color-text-secondary); width: 70px;">
+            <label class="flex flex-col gap-1 text-xs text-text-secondary" style="width: 70px;">
               Time (min)
-              <input type="number" inputmode="decimal" step="5" bind:value={time} min="0" class="px-3 py-2 rounded-lg text-sm"
-                     style="background: var(--color-bg-elevated); border: 1px solid var(--color-border); color: var(--color-text-primary);" />
+              <input type="number" inputmode="decimal" step="5" bind:value={time} min="0" class="px-3 py-2 rounded-lg text-sm bg-bg-elevated border border-border text-text-primary"
+                     />
             </label>
           </div>
           {#if use_ === 'hopstand'}
-            <label class="flex flex-col gap-1 text-xs" style="color: var(--color-text-secondary); max-width: 120px;">
+            <label class="flex flex-col gap-1 text-xs text-text-secondary" style="max-width: 120px;">
               Temp ({tempLabel(units)})
               <input type="number" inputmode="decimal" step="1"
                      value={units === 'imperial' ? cToF(hopstand_temp_c).toFixed(0) : hopstand_temp_c}
                      onblur={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); if (!isNaN(v)) hopstand_temp_c = units === 'imperial' ? fToC(v) : v; }}
-                     min="0" class="px-3 py-2 rounded-lg text-sm"
-                     style="background: var(--color-bg-elevated); border: 1px solid var(--color-border); color: var(--color-text-primary);" />
+                     min="0" class="px-3 py-2 rounded-lg text-sm bg-bg-elevated border border-border text-text-primary"
+                     />
             </label>
           {/if}
         {:else if type === 'fermentable' && selected}
-          <label class="flex flex-col gap-1 text-xs" style="color: var(--color-text-secondary);">
+          <label class="flex flex-col gap-1 text-xs text-text-secondary">
             Amount ({weightLabel(units)})
             <input type="number" inputmode="decimal" step="0.1" min="0"
                    value={units === 'imperial' ? kgToLb(amount).toFixed(2) : amount.toFixed(2)}
                    onblur={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); if (!isNaN(v)) amount = units === 'imperial' ? lbToKg(v) : v; }}
-                   class="px-3 py-2 rounded-lg text-sm"
-                   style="background: var(--color-bg-elevated); border: 1px solid var(--color-border); color: var(--color-text-primary); max-width: 150px;" />
+                   class="px-3 py-2 rounded-lg text-sm bg-bg-elevated border border-border text-text-primary"
+                   style="max-width: 150px;" />
           </label>
         {:else if type === 'yeast' && selected}
-          <label class="flex flex-col gap-1 text-xs" style="color: var(--color-text-secondary);">
+          <label class="flex flex-col gap-1 text-xs text-text-secondary">
             Packs / Units
             <input type="number" inputmode="decimal" step="1" min="1" bind:value={amount}
-                   class="px-3 py-2 rounded-lg text-sm"
-                   style="background: var(--color-bg-elevated); border: 1px solid var(--color-border); color: var(--color-text-primary); max-width: 100px;" />
+                   class="px-3 py-2 rounded-lg text-sm bg-bg-elevated border border-border text-text-primary"
+                   style="max-width: 100px;" />
           </label>
         {/if}
         <button onclick={handleAdd} disabled={!canAdd}

@@ -38,8 +38,8 @@
       <div class="flex flex-col gap-1">
         <FieldLabel for="overview-type">Recipe Type</FieldLabel>
         <select id="overview-type" value={recipe.type_} onchange={(e) => save("type_", (e.target as HTMLSelectElement).value)}
-                class="w-full px-2 py-1.5 rounded text-sm"
-                style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);">
+                class="w-full px-2 py-1.5 rounded text-sm bg-bg-elevated text-text-primary border border-border"
+               >
           {#each RECIPE_TYPES as t}
             <option value={t}>{t.replaceAll("_", " ")}</option>
           {/each}
@@ -50,16 +50,16 @@
         <FieldLabel for="overview-brewer">Brewer</FieldLabel>
         <input id="overview-brewer" type="text" value={recipe.brewer ?? ""}
                onblur={(e) => save("brewer", (e.target as HTMLInputElement).value)}
-               class="w-full px-2 py-1.5 rounded text-sm"
-               style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
+               class="w-full px-2 py-1.5 rounded text-sm bg-bg-elevated text-text-primary border border-border"
+               />
       </div>
 
       <div class="flex flex-col gap-1">
         <FieldLabel for="overview-style">Style</FieldLabel>
         <select id="overview-style" value={recipe.style_id ?? ""}
                 onchange={(e) => save("style_id", (e.target as HTMLSelectElement).value || null)}
-                class="w-full px-2 py-1.5 rounded text-sm"
-                style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);">
+                class="w-full px-2 py-1.5 rounded text-sm bg-bg-elevated text-text-primary border border-border"
+               >
           <option value="">None</option>
           {#each styles as s}
             <option value={s.id}>{s.name}</option>
@@ -71,16 +71,16 @@
         <FieldLabel for="overview-date">Date</FieldLabel>
         <input id="overview-date" type="date" value={recipe.date ?? ""}
                onblur={(e) => save("date", (e.target as HTMLInputElement).value || null)}
-               class="w-full px-2 py-1.5 rounded text-sm"
-               style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
+               class="w-full px-2 py-1.5 rounded text-sm bg-bg-elevated text-text-primary border border-border"
+               />
       </div>
 
       <div class="flex flex-col gap-1 col-span-2">
         <FieldLabel for="overview-equipment">Equipment Profile</FieldLabel>
         <select id="overview-equipment" value={recipe.equipment_profile_id ?? ""}
                 onchange={(e) => save("equipment_profile_id", (e.target as HTMLSelectElement).value || null)}
-                class="w-full px-2 py-1.5 rounded text-sm"
-                style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);">
+                class="w-full px-2 py-1.5 rounded text-sm bg-bg-elevated text-text-primary border border-border"
+               >
           <option value="">None</option>
           {#each equipmentProfiles as ep}
             <option value={ep.id}>{ep.name}</option>
@@ -97,8 +97,8 @@
         <input id="overview-batch-size" type="number" inputmode="decimal" step="0.1"
                value={(units === "imperial" ? lToGal(recipe.batch_size_l) : recipe.batch_size_l).toFixed(1)}
                onblur={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); save("batch_size_l", units === "imperial" ? galToL(v) : v); }}
-               class="w-full px-2 py-1.5 rounded text-sm"
-               style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
+               class="w-full px-2 py-1.5 rounded text-sm bg-bg-elevated text-text-primary border border-border"
+               />
       </div>
 
       <div class="flex flex-col gap-1">
@@ -106,16 +106,16 @@
         <input id="overview-boil-size" type="number" inputmode="decimal" step="0.1"
                value={(units === "imperial" ? lToGal(recipe.boil_size_l) : recipe.boil_size_l).toFixed(1)}
                onblur={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); save("boil_size_l", units === "imperial" ? galToL(v) : v); }}
-               class="w-full px-2 py-1.5 rounded text-sm"
-               style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
+               class="w-full px-2 py-1.5 rounded text-sm bg-bg-elevated text-text-primary border border-border"
+               />
       </div>
 
       <div class="flex flex-col gap-1">
         <FieldLabel for="overview-boil-time">Boil Time (min)</FieldLabel>
         <input id="overview-boil-time" type="number" inputmode="decimal" step="5" value={recipe.boil_time_min}
                onblur={(e) => save("boil_time_min", parseFloat((e.target as HTMLInputElement).value))}
-               class="w-full px-2 py-1.5 rounded text-sm"
-               style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
+               class="w-full px-2 py-1.5 rounded text-sm bg-bg-elevated text-text-primary border border-border"
+               />
       </div>
 
       <div class="flex flex-col gap-1">
@@ -126,8 +126,8 @@
                  const v = (e.target as HTMLInputElement).value;
                  save("efficiency_pct", v ? parseFloat(v) : null);
                }}
-               class="w-full px-2 py-1.5 rounded text-sm"
-               style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
+               class="w-full px-2 py-1.5 rounded text-sm bg-bg-elevated text-text-primary border border-border"
+               />
       </div>
     </div>
   </Card>

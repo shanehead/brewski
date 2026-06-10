@@ -53,64 +53,64 @@
 
 <div class="p-6 md:p-8">
   <div class="flex items-center gap-2">
-    <h2 class="text-xl font-semibold" style="color: var(--color-text-primary);">Refractometer / Brix</h2>
+    <h2 class="text-xl font-semibold text-text-primary">Refractometer / Brix</h2>
     <DocLink label="Refractometer reference" url={DOCS.calcRefractometer} />
   </div>
-  <p class="mt-2 max-w-2xl text-sm" style="color: var(--color-text-secondary);">
+  <p class="mt-2 max-w-2xl text-sm text-text-secondary">
     Convert raw Brix into pre-fermentation SG, or correct an apparent final reading after alcohol is present.
   </p>
 
   <div class="mt-6 grid gap-6 xl:grid-cols-2">
-    <section class="rounded-xl border p-4" style="background: var(--color-bg-surface); border-color: var(--color-border);">
-      <h3 class="text-sm font-semibold" style="color: var(--color-text-primary);">Pre-Fermentation</h3>
-      <label class="mt-4 block text-sm font-medium" style="color: var(--color-text-primary);">
+    <section class="rounded-xl border p-4 bg-bg-surface border-border">
+      <h3 class="text-sm font-semibold text-text-primary">Pre-Fermentation</h3>
+      <label class="mt-4 block text-sm font-medium text-text-primary">
         Brix
         <input bind:value={brix} type="number" min="0" step="0.1"
-               class="mt-2 w-full rounded px-3 py-2 text-sm"
-               style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
+               class="mt-2 w-full rounded px-3 py-2 text-sm bg-bg-elevated text-text-primary border border-border"
+               />
       </label>
 
       <div class="mt-4">
         <div class="flex items-center gap-1 mb-1">
-          <span class="text-sm font-medium" style="color: var(--color-text-primary);">Wort Correction Factor</span>
+          <span class="text-sm font-medium text-text-primary">Wort Correction Factor</span>
           <Tooltip text="Wort refracts light slightly differently than pure sugar. The default (1.04) works for most beers. Check your refractometer's manual — some are pre-corrected and should use 1.00." />
         </div>
         <input bind:value={wortCorrectionFactor} type="number" min="0.9" max="1.2" step="0.01"
-               class="w-full rounded px-3 py-2 text-sm"
-               style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
+               class="w-full rounded px-3 py-2 text-sm bg-bg-elevated text-text-primary border border-border"
+               />
       </div>
 
-      <div class="mt-6 rounded-lg border p-4" style="border-color: var(--color-accent);">
+      <div class="mt-6 rounded-lg border p-4 border-accent">
         {#if preResult}
-          <div class="text-xs uppercase tracking-wide" style="color: var(--color-text-secondary);">Estimated SG</div>
-          <div class="mt-2 text-4xl font-semibold" style="color: var(--color-text-primary);">{preResult.sg.toFixed(3)}</div>
+          <div class="text-xs uppercase tracking-wide text-text-secondary">Estimated SG</div>
+          <div class="mt-2 text-4xl font-semibold text-text-primary">{preResult.sg.toFixed(3)}</div>
         {/if}
       </div>
     </section>
 
-    <section class="rounded-xl border p-4" style="background: var(--color-bg-surface); border-color: var(--color-border);">
-      <h3 class="text-sm font-semibold" style="color: var(--color-text-primary);">Post-Fermentation Correction</h3>
-      <label class="mt-4 block text-sm font-medium" style="color: var(--color-text-primary);">
+    <section class="rounded-xl border p-4 bg-bg-surface border-border">
+      <h3 class="text-sm font-semibold text-text-primary">Post-Fermentation Correction</h3>
+      <label class="mt-4 block text-sm font-medium text-text-primary">
         Original Brix
         <input bind:value={ogBrix} type="number" min="0" step="0.1"
-               class="mt-2 w-full rounded px-3 py-2 text-sm"
-               style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
+               class="mt-2 w-full rounded px-3 py-2 text-sm bg-bg-elevated text-text-primary border border-border"
+               />
       </label>
 
       <div class="mt-4">
         <div class="flex items-center gap-1 mb-1">
-          <span class="text-sm font-medium" style="color: var(--color-text-primary);">Final Brix Reading</span>
+          <span class="text-sm font-medium text-text-primary">Final Brix Reading</span>
           <Tooltip text="Your raw refractometer reading post-fermentation. Alcohol skews this reading — the corrected FG shown here uses the Novotný formula." />
         </div>
         <input bind:value={fgBrix} type="number" min="0" step="0.1"
-               class="w-full rounded px-3 py-2 text-sm"
-               style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
+               class="w-full rounded px-3 py-2 text-sm bg-bg-elevated text-text-primary border border-border"
+               />
       </div>
 
-      <div class="mt-6 rounded-lg border p-4" style="border-color: var(--color-accent);">
+      <div class="mt-6 rounded-lg border p-4 border-accent">
         {#if postResult}
-          <div class="text-xs uppercase tracking-wide" style="color: var(--color-text-secondary);">Corrected FG</div>
-          <div class="mt-2 text-4xl font-semibold" style="color: var(--color-text-primary);">{postResult.fgSg.toFixed(3)}</div>
+          <div class="text-xs uppercase tracking-wide text-text-secondary">Corrected FG</div>
+          <div class="mt-2 text-4xl font-semibold text-text-primary">{postResult.fgSg.toFixed(3)}</div>
         {/if}
       </div>
     </section>

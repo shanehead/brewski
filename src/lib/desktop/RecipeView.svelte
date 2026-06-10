@@ -245,13 +245,13 @@
   <div class="flex flex-1 flex-col overflow-hidden">
     <!-- Header -->
     <header
-      class="flex items-center px-4 py-2 border-b gap-3 flex-shrink-0"
-      style="background: var(--color-bg-surface); border-color: var(--color-border);"
+      class="flex items-center px-4 py-2 border-b gap-3 flex-shrink-0 bg-bg-surface border-border"
+     
     >
       <button
         onclick={() => goto("/")}
-        class="text-xs px-2 py-1 rounded"
-        style="color: var(--color-text-secondary); background: var(--color-bg-elevated); border: 1px solid var(--color-border);"
+        class="text-xs px-2 py-1 rounded text-text-secondary bg-bg-elevated border border-border"
+       
       >
         ← Recipes
       </button>
@@ -261,8 +261,8 @@
         <button
           onclick={() => { showImagePopover = !showImagePopover; }}
           aria-label="Photo options"
-          class="w-10 h-10 rounded overflow-hidden block"
-          style="border: 1px solid var(--color-border);"
+          class="w-10 h-10 rounded overflow-hidden block border border-border"
+         
         >
           {#if recipeImageSrc}
             <img src={recipeImageSrc} alt="" class="w-full h-full object-cover" />
@@ -272,19 +272,18 @@
         </button>
         {#if showImagePopover}
           <div
-            class="absolute left-0 top-full mt-1 rounded shadow-lg z-20 flex flex-col overflow-hidden"
-            style="background: var(--color-bg-elevated); border: 1px solid var(--color-border); min-width: 140px;"
+            class="absolute left-0 top-full mt-1 rounded shadow-lg z-20 flex flex-col overflow-hidden bg-bg-elevated border border-border"
+            style="min-width: 140px;"
           >
             <button
               onclick={() => { showImagePopover = false; handleImageUpload(); }}
-              class="px-3 py-2 text-left text-sm hover:bg-[var(--color-bg-surface)] transition-colors"
-              style="color: var(--color-text-primary);"
+              class="px-3 py-2 text-left text-sm hover:bg-[var(--color-bg-surface)] transition-colors text-text-primary"
+             
             >{recipe?.image_path ? "Change photo" : "Add photo"}</button>
             {#if recipe?.image_path}
               <button
                 onclick={() => { showImagePopover = false; handleImageRemove(); }}
-                class="px-3 py-2 text-left text-sm hover:bg-[var(--color-bg-surface)] transition-colors"
-                style="color: var(--color-text-danger, #e55);"
+                class="px-3 py-2 text-left text-sm hover:bg-[var(--color-bg-surface)] transition-colors text-text-danger"
               >Remove photo</button>
             {/if}
           </div>
@@ -303,40 +302,40 @@
         value={recipe.name}
         onblur={handleNameBlur}
         disabled={viewingVersion !== null}
-        class="flex-1 text-base font-semibold bg-transparent outline-none"
-        style="color: var(--color-text-primary);"
+        class="flex-1 text-base font-semibold bg-transparent outline-none text-text-primary"
+       
       />
       {#if saving}
-        <span class="text-xs" style="color: var(--color-text-muted);">Saving…</span>
+        <span class="text-xs text-text-muted">Saving…</span>
       {/if}
 
       <!-- Save Version button -->
       <div class="relative">
         <button
           onclick={() => { showSavePopover = !showSavePopover; }}
-          class="text-xs px-2 py-1 rounded"
-          style="color: var(--color-text-secondary); background: var(--color-bg-elevated); border: 1px solid var(--color-border);"
+          class="text-xs px-2 py-1 rounded text-text-secondary bg-bg-elevated border border-border"
+         
         >
           Save Version
         </button>
         {#if showSavePopover}
           <div
-            class="absolute right-0 top-full mt-1 p-3 rounded shadow-lg z-10 flex flex-col gap-2"
-            style="background: var(--color-bg-elevated); border: 1px solid var(--color-border); min-width: 200px;"
+            class="absolute right-0 top-full mt-1 p-3 rounded shadow-lg z-10 flex flex-col gap-2 bg-bg-elevated border border-border"
+            style="min-width: 200px;"
           >
             <input
               type="text"
               bind:value={saveVersionName}
               placeholder="Version name…"
-              class="px-2 py-1 rounded text-sm outline-none"
-              style="background: var(--color-bg-surface); color: var(--color-text-primary); border: 1px solid var(--color-border);"
+              class="px-2 py-1 rounded text-sm outline-none bg-bg-surface text-text-primary border border-border"
+             
               onkeydown={(e) => { if (e.key === "Enter") handleSaveVersion(); }}
             />
             <button
               onclick={handleSaveVersion}
               disabled={savingVersion || !saveVersionName.trim()}
-              class="px-3 py-1 rounded text-sm"
-              style="background: var(--color-accent); color: #fff;"
+              class="px-3 py-1 rounded text-sm bg-accent"
+              style="color: #fff;"
             >
               {savingVersion ? "Saving…" : "Save"}
             </button>
@@ -347,8 +346,8 @@
       <!-- Scale Recipe button -->
       <button
         onclick={() => { showScaleModal = true; }}
-        class="text-xs px-2 py-1 rounded"
-        style="color: var(--color-text-secondary); background: var(--color-bg-elevated); border: 1px solid var(--color-border);"
+        class="text-xs px-2 py-1 rounded text-text-secondary bg-bg-elevated border border-border"
+       
       >
         Scale Recipe
       </button>
@@ -356,8 +355,8 @@
       <!-- Export BeerXML button -->
       <button
         onclick={handleExport}
-        class="flex items-center gap-1 text-xs px-2 py-1 rounded transition-colors"
-        style="color: var(--color-text-secondary); background: var(--color-bg-elevated); border: 1px solid var(--color-border);"
+        class="flex items-center gap-1 text-xs px-2 py-1 rounded transition-colors text-text-secondary bg-bg-elevated border border-border"
+       
       >
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
@@ -384,25 +383,25 @@
     <!-- Read-only version banner -->
     {#if viewingVersion}
       <div
-        class="flex items-center gap-3 px-4 py-2 text-sm flex-shrink-0"
-        style="background: var(--color-bg-elevated); border-bottom: 1px solid var(--color-border);"
+        class="flex items-center gap-3 px-4 py-2 text-sm flex-shrink-0 bg-bg-elevated border-b border-border"
+       
       >
-        <span style="color: var(--color-text-secondary);">
+        <span class="text-text-secondary">
           Viewing v{viewingVersion.version_number}
           {viewingVersion.name ? `· ${viewingVersion.name}` : ""}
           · {new Date(viewingVersion.created_at * 1000).toLocaleDateString()}
         </span>
         <button
           onclick={() => handleBranchFromVersion(viewingVersion!)}
-          class="px-3 py-1 rounded text-sm"
-          style="background: var(--color-accent); color: #fff;"
+          class="px-3 py-1 rounded text-sm bg-accent"
+          style="color: #fff;"
         >
           Branch from here
         </button>
         <button
           onclick={() => { viewingVersion = null; viewingRecipe = null; }}
-          class="text-xs"
-          style="color: var(--color-text-muted);"
+          class="text-xs text-text-muted"
+         
         >
           Back to current
         </button>
@@ -410,8 +409,8 @@
     {/if}
 
     <!-- Tab bar -->
-    <nav class="px-4 pt-1 flex-shrink-0"
-         style="background: var(--color-bg-surface);">
+    <nav class="px-4 pt-1 flex-shrink-0 bg-bg-surface"
+        >
       <TabBar tabs={TABS} active={activeTab} onchange={(key) => goto(`/recipe/${id}?tab=${key}`, { replaceState: true, noScroll: true })} />
     </nav>
 
@@ -476,6 +475,6 @@
   </div>
 {:else}
   <div class="flex-1 flex items-center justify-center">
-    <p class="text-sm" style="color: var(--color-text-muted);">Loading…</p>
+    <p class="text-sm text-text-muted">Loading…</p>
   </div>
 {/if}

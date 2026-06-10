@@ -29,18 +29,18 @@
   }
 </script>
 
-<div class="flex-1 overflow-y-auto p-6" style="background: var(--color-bg-base);">
-  <h1 class="text-lg font-semibold mb-6" style="color: var(--color-text-primary);">Settings</h1>
+<div class="flex-1 overflow-y-auto p-6 bg-bg-base">
+  <h1 class="text-lg font-semibold mb-6 text-text-primary">Settings</h1>
 
   <div class="flex flex-col gap-6 max-w-md">
     <!-- Appearance -->
     <section class="flex flex-col gap-3">
-      <h2 class="text-sm font-semibold" style="color: var(--color-text-secondary);">Appearance</h2>
+      <h2 class="text-sm font-semibold text-text-secondary">Appearance</h2>
       <div class="flex items-center justify-between">
-        <label for="select-theme" class="text-sm" style="color: var(--color-text-primary);">Theme</label>
+        <label for="select-theme" class="text-sm text-text-primary">Theme</label>
         <select id="select-theme" value={$settings.theme ?? "midnight"} onchange={handleThemeChange}
-                class="px-2 py-1.5 rounded text-sm"
-                style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);">
+                class="px-2 py-1.5 rounded text-sm bg-bg-elevated text-text-primary border border-border"
+               >
           <option value="midnight">Midnight</option>
           <option value="dracula">Dracula</option>
           <option value="tokyo-night">Tokyo Night</option>
@@ -57,21 +57,21 @@
 
     <!-- Units -->
     <section class="flex flex-col gap-3">
-      <h2 class="text-sm font-semibold" style="color: var(--color-text-secondary);">Units</h2>
+      <h2 class="text-sm font-semibold text-text-secondary">Units</h2>
       <div class="flex items-center justify-between">
-        <label for="select-units" class="text-sm" style="color: var(--color-text-primary);">Measurement System</label>
+        <label for="select-units" class="text-sm text-text-primary">Measurement System</label>
         <select id="select-units" value={$settings.units ?? "metric"} onchange={handleUnitsChange}
-                class="px-2 py-1.5 rounded text-sm"
-                style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);">
+                class="px-2 py-1.5 rounded text-sm bg-bg-elevated text-text-primary border border-border"
+               >
           <option value="metric">Metric (L, kg, °C)</option>
           <option value="imperial">Imperial (gal, lb, °F)</option>
         </select>
       </div>
       <div class="flex items-center justify-between">
-        <label for="select-gravity-unit" class="text-sm" style="color: var(--color-text-primary);">Gravity Unit</label>
+        <label for="select-gravity-unit" class="text-sm text-text-primary">Gravity Unit</label>
         <select id="select-gravity-unit" value={$settings.gravity_unit ?? "sg"} onchange={handleGravityUnitChange}
-                class="px-2 py-1.5 rounded text-sm"
-                style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);">
+                class="px-2 py-1.5 rounded text-sm bg-bg-elevated text-text-primary border border-border"
+               >
           <option value="sg">SG (1.050)</option>
           <option value="plato">Plato (°P)</option>
           <option value="brix">Brix (°Bx)</option>
@@ -81,9 +81,9 @@
 
     <!-- Recipes -->
     <section class="flex flex-col gap-3">
-      <h2 class="text-sm font-semibold" style="color: var(--color-text-secondary);">Recipes</h2>
+      <h2 class="text-sm font-semibold text-text-secondary">Recipes</h2>
       <div class="flex items-center justify-between">
-        <label for="toggle-hide-examples" class="text-sm" style="color: var(--color-text-primary);">Hide Example Recipes</label>
+        <label for="toggle-hide-examples" class="text-sm text-text-primary">Hide Example Recipes</label>
         <input
           id="toggle-hide-examples"
           type="checkbox"
@@ -97,9 +97,9 @@
 
     <!-- Help -->
     <section class="flex flex-col gap-3">
-      <h2 class="text-sm font-semibold" style="color: var(--color-text-secondary);">Help</h2>
+      <h2 class="text-sm font-semibold text-text-secondary">Help</h2>
       <div class="flex items-center justify-between">
-        <label for="toggle-tooltips" class="text-sm" style="color: var(--color-text-primary);">Show tooltips</label>
+        <label for="toggle-tooltips" class="text-sm text-text-primary">Show tooltips</label>
         <input
           id="toggle-tooltips"
           type="checkbox"
@@ -109,7 +109,7 @@
           style="accent-color: var(--color-accent);"
         />
       </div>
-      <p class="text-xs" style="color: var(--color-text-muted);">Turn off once you know your way around.</p>
+      <p class="text-xs text-text-muted">Turn off once you know your way around.</p>
     </section>
 
     <DatabaseLocation />

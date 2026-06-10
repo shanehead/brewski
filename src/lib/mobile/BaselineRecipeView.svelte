@@ -54,25 +54,25 @@
 </script>
 
 {#if recipe}
-  <div class="flex flex-col h-full overflow-hidden" style="background: var(--color-bg-base);">
+  <div class="flex flex-col h-full overflow-hidden bg-bg-base">
     <!-- Header with back button and clone action -->
-    <div class="flex items-center gap-3 px-4 py-3 border-b flex-shrink-0"
-         style="background: var(--color-bg-surface); border-color: var(--color-border);">
+    <div class="flex items-center gap-3 px-4 py-3 border-b flex-shrink-0 bg-bg-surface border-border"
+        >
       <button
         onclick={() => goto("/")}
-        class="text-sm flex-shrink-0"
-        style="color: var(--color-accent);"
+        class="text-sm flex-shrink-0 text-accent"
+       
       >‹ Recipes</button>
       <div class="flex-1 min-w-0">
-        <span class="font-semibold text-base truncate block"
-              style="color: var(--color-text-primary);">{recipe.name}</span>
-        <p class="text-xs" style="color: var(--color-text-muted);">Example Recipe — read only</p>
+        <span class="font-semibold text-base truncate block text-text-primary"
+             >{recipe.name}</span>
+        <p class="text-xs text-text-muted">Example Recipe — read only</p>
       </div>
       <button
         onclick={handleClone}
         disabled={cloning}
-        class="px-3 py-2 rounded text-sm font-semibold transition-colors disabled:opacity-50 flex-shrink-0"
-        style="background: var(--color-accent); color: #fff; min-height: 44px; display: flex; align-items: center;"
+        class="px-3 py-2 rounded text-sm font-semibold transition-colors disabled:opacity-50 flex-shrink-0 bg-accent"
+        style="color: #fff; min-height: 44px; display: flex; align-items: center;"
       >
         {cloning ? "Cloning…" : "Clone"}
       </button>
@@ -84,8 +84,8 @@
 
         <!-- Stats card -->
         {#if stats}
-          <div class="rounded-lg p-4 grid grid-cols-5 gap-2"
-               style="background: var(--color-bg-elevated); border: 1px solid var(--color-border);">
+          <div class="rounded-lg p-4 grid grid-cols-5 gap-2 bg-bg-elevated border border-border"
+              >
             {#each [
               { label: "OG", value: displayOg },
               { label: "FG", value: displayFg },
@@ -94,8 +94,8 @@
               { label: "SRM", value: fmt(stats.srm, 1) },
             ] as stat}
               <div class="text-center">
-                <div class="text-sm font-semibold font-mono" style="color: var(--color-accent);">{stat.value}</div>
-                <div class="text-xs" style="color: var(--color-text-muted);">{stat.label}</div>
+                <div class="text-sm font-semibold font-mono text-accent">{stat.value}</div>
+                <div class="text-xs text-text-muted">{stat.label}</div>
               </div>
             {/each}
           </div>
@@ -103,43 +103,43 @@
 
         <!-- Overview -->
         <section>
-          <div class="text-xs font-semibold uppercase tracking-wider mb-3"
-               style="color: var(--color-text-secondary);">Overview</div>
+          <div class="text-xs font-semibold uppercase tracking-wider mb-3 text-text-secondary"
+              >Overview</div>
           <OverviewTab {recipe} onchange={() => {}} />
         </section>
 
         <!-- Ingredients -->
         <section>
-          <div class="text-xs font-semibold uppercase tracking-wider mb-3"
-               style="color: var(--color-text-secondary);">Ingredients</div>
+          <div class="text-xs font-semibold uppercase tracking-wider mb-3 text-text-secondary"
+              >Ingredients</div>
           <IngredientsTab {recipe} {stats} onchange={() => {}} />
         </section>
 
         <!-- Mash -->
         <section>
-          <div class="text-xs font-semibold uppercase tracking-wider mb-3"
-               style="color: var(--color-text-secondary);">Mash</div>
+          <div class="text-xs font-semibold uppercase tracking-wider mb-3 text-text-secondary"
+              >Mash</div>
           <MashTab {recipe} {stats} onchange={() => {}} />
         </section>
 
         <!-- Water -->
         <section>
-          <div class="text-xs font-semibold uppercase tracking-wider mb-3"
-               style="color: var(--color-text-secondary);">Water</div>
+          <div class="text-xs font-semibold uppercase tracking-wider mb-3 text-text-secondary"
+              >Water</div>
           <WaterTab {recipe} {stats} onchange={() => {}} />
         </section>
 
         <!-- Fermentation -->
         <section>
-          <div class="text-xs font-semibold uppercase tracking-wider mb-3"
-               style="color: var(--color-text-secondary);">Fermentation</div>
+          <div class="text-xs font-semibold uppercase tracking-wider mb-3 text-text-secondary"
+              >Fermentation</div>
           <FermentationTab {recipe} onchange={() => {}} />
         </section>
 
         <!-- Notes -->
         <section>
-          <div class="text-xs font-semibold uppercase tracking-wider mb-3"
-               style="color: var(--color-text-secondary);">Notes</div>
+          <div class="text-xs font-semibold uppercase tracking-wider mb-3 text-text-secondary"
+              >Notes</div>
           <NotesTab {recipe} onchange={() => {}} />
         </section>
 
@@ -148,6 +148,6 @@
   </div>
 {:else}
   <div class="flex-1 flex items-center justify-center">
-    <p class="text-sm" style="color: var(--color-text-muted);">Loading…</p>
+    <p class="text-sm text-text-muted">Loading…</p>
   </div>
 {/if}

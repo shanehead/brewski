@@ -39,8 +39,8 @@
                    const v = (e.target as HTMLInputElement).value;
                    save(row.field, v ? parseFloat(v) : null);
                  }}
-                 class="px-2 py-1.5 rounded text-sm"
-                 style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
+                 class="px-2 py-1.5 rounded text-sm bg-bg-elevated text-text-primary border border-border"
+                 />
         </div>
       {/each}
     </div>
@@ -55,8 +55,8 @@
                  const v = (e.target as HTMLInputElement).value;
                  save("carbonation_vols", v ? parseFloat(v) : null);
                }}
-               class="px-2 py-1.5 rounded text-sm"
-               style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
+               class="px-2 py-1.5 rounded text-sm bg-bg-elevated text-text-primary border border-border"
+               />
       </div>
 
       <div class="flex flex-col gap-1 justify-end">
@@ -65,7 +65,7 @@
           <input type="checkbox" checked={recipe.forced_carbonation}
                  onchange={(e) => save("forced_carbonation", (e.target as HTMLInputElement).checked)}
                  class="rounded" />
-          <span class="text-sm" style="color: var(--color-text-secondary);">Yes (kegged)</span>
+          <span class="text-sm text-text-secondary">Yes (kegged)</span>
         </label>
       </div>
     </div>

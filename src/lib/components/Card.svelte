@@ -10,12 +10,12 @@
   } = $props();
 </script>
 
-<div class="rounded-xl overflow-hidden"
-     style="background: var(--color-bg-surface); border: 1px solid var(--color-border);">
-  <div class="px-4 py-2.5 border-b"
-       style="border-color: var(--color-border);">
-    <span class="text-xs font-semibold uppercase tracking-wider"
-          style="color: var(--color-text-muted);">{title}</span>
+<div class="rounded-xl overflow-hidden bg-bg-surface border border-border"
+    >
+  <div class="px-4 py-2.5 border-b border-border"
+      >
+    <span class="text-xs font-semibold uppercase tracking-wider text-text-muted"
+         >{title}</span>
   </div>
   <div class="p-4">
     {@render children()}

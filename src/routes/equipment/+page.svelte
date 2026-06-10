@@ -106,18 +106,18 @@
   />
 {/if}
 
-<div class="flex-1 overflow-y-auto p-6" style="background: var(--color-bg-base);">
-  <h1 class="text-lg font-semibold mb-6" style="color: var(--color-text-primary);">Equipment</h1>
+<div class="flex-1 overflow-y-auto p-6 bg-bg-base">
+  <h1 class="text-lg font-semibold mb-6 text-text-primary">Equipment</h1>
 
   <div class="flex flex-col gap-6 max-w-md">
     <section class="flex flex-col gap-3">
-      <h2 class="text-sm font-semibold" style="color: var(--color-text-secondary);">Equipment Profiles</h2>
+      <h2 class="text-sm font-semibold text-text-secondary">Equipment Profiles</h2>
       <div class="flex items-center justify-between">
-        <label for="select-default-profile" class="text-sm" style="color: var(--color-text-primary);">Default Profile</label>
+        <label for="select-default-profile" class="text-sm text-text-primary">Default Profile</label>
         <select id="select-default-profile" value={$settings.default_equipment_profile_id ?? ""}
                 onchange={handleDefaultEquipChange}
-                class="px-2 py-1.5 rounded text-sm"
-                style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);">
+                class="px-2 py-1.5 rounded text-sm bg-bg-elevated text-text-primary border border-border"
+               >
           <option value="">None</option>
           {#each profiles as p}
             <option value={p.id}>{p.name}</option>
@@ -126,30 +126,30 @@
       </div>
 
       {#each profiles as p (p.id)}
-        <div class="flex items-center justify-between py-1 border-t" style="border-color: var(--color-border);">
+        <div class="flex items-center justify-between py-1 border-t border-border">
           <div>
-            <p class="text-sm" style="color: var(--color-text-primary);">{p.name}</p>
-            <p class="text-xs" style="color: var(--color-text-secondary);">
+            <p class="text-sm text-text-primary">{p.name}</p>
+            <p class="text-xs text-text-secondary">
               {($settings.units === "imperial" ? lToGal(p.batch_size_l) : p.batch_size_l).toFixed(1)}{volumeLabel($settings.units ?? "metric")} batch · {p.efficiency_pct}% efficiency
             </p>
           </div>
           <div class="flex gap-2">
-            <button onclick={() => handleEditProfile(p)} class="text-xs px-2 py-1 rounded"
-                    style="color: var(--color-text-secondary); background: var(--color-bg-elevated);">Edit</button>
-            <button onclick={() => { copyCandidate = p; showCopyModal = true; }} class="text-xs px-2 py-1 rounded"
-                    style="color: var(--color-text-secondary); background: var(--color-bg-elevated);">Copy</button>
-            <button onclick={() => handleDeleteProfile(p)} class="text-xs px-2 py-1 rounded"
-                    style="color: var(--color-text-secondary); background: var(--color-bg-elevated);">Delete</button>
+            <button onclick={() => handleEditProfile(p)} class="text-xs px-2 py-1 rounded text-text-secondary bg-bg-elevated"
+                   >Edit</button>
+            <button onclick={() => { copyCandidate = p; showCopyModal = true; }} class="text-xs px-2 py-1 rounded text-text-secondary bg-bg-elevated"
+                   >Copy</button>
+            <button onclick={() => handleDeleteProfile(p)} class="text-xs px-2 py-1 rounded text-text-secondary bg-bg-elevated"
+                   >Delete</button>
           </div>
         </div>
       {/each}
 
       <div class="flex gap-2 pt-1">
         <input type="text" bind:value={newProfileName} placeholder="New profile name"
-               class="flex-1 px-2 py-1.5 rounded text-sm"
-               style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);" />
-        <button onclick={handleAddProfile} class="text-xs px-3 py-1.5 rounded"
-                style="background: var(--color-accent); color: #fff;">Add</button>
+               class="flex-1 px-2 py-1.5 rounded text-sm bg-bg-elevated text-text-primary border border-border"
+               />
+        <button onclick={handleAddProfile} class="text-xs px-3 py-1.5 rounded bg-accent"
+                style="color: #fff;">Add</button>
       </div>
     </section>
   </div>

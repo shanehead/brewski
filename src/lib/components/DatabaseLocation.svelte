@@ -24,12 +24,12 @@
 </script>
 
 <section class="flex flex-col gap-3">
-  <h2 class="text-sm font-semibold" style="color: var(--color-text-secondary);">
+  <h2 class="text-sm font-semibold text-text-secondary">
     Database Location
   </h2>
 
   {#if currentPath}
-    <p class="text-xs font-mono break-all" style="color: var(--color-text-muted);">
+    <p class="text-xs font-mono break-all text-text-muted">
       {currentPath}
     </p>
   {/if}
@@ -39,14 +39,14 @@
       {#each syncFolders as folder (folder.path)}
         <div class="flex items-center justify-between gap-3">
           <div class="flex flex-col">
-            <span class="text-sm" style="color: var(--color-text-primary);">{folder.name}</span>
-            <span class="text-xs font-mono" style="color: var(--color-text-muted);">{folder.path}</span>
+            <span class="text-sm text-text-primary">{folder.name}</span>
+            <span class="text-xs font-mono text-text-muted">{folder.path}</span>
           </div>
           <button
             disabled={moving}
             on:click={() => handleMove(folder.path)}
-            class="px-3 py-1 text-sm rounded"
-            style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);"
+            class="px-3 py-1 text-sm rounded bg-bg-elevated text-text-primary border border-border"
+           
           >
             Move here
           </button>
@@ -60,20 +60,20 @@
       type="text"
       placeholder="Custom path..."
       bind:value={customPath}
-      class="flex-1 px-2 py-1.5 rounded text-sm"
-      style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);"
+      class="flex-1 px-2 py-1.5 rounded text-sm bg-bg-elevated text-text-primary border border-border"
+     
     />
     <button
       disabled={moving || !customPath.trim()}
       on:click={() => handleMove(customPath)}
-      class="px-3 py-1.5 text-sm rounded"
-      style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);"
+      class="px-3 py-1.5 text-sm rounded bg-bg-elevated text-text-primary border border-border"
+     
     >
       Move here
     </button>
   </div>
 
-  <p class="text-xs" style="color: var(--color-text-muted);">
+  <p class="text-xs text-text-muted">
     <strong>Last write wins</strong> — if you edit on two devices without syncing in between,
     the device that syncs last will overwrite the other.
   </p>

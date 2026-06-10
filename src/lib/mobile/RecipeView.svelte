@@ -85,22 +85,22 @@
 </script>
 
 {#if recipe}
-  <div class="flex flex-col h-full overflow-hidden" style="background: var(--color-bg-base);">
+  <div class="flex flex-col h-full overflow-hidden bg-bg-base">
     <!-- Header with back button -->
-    <div class="flex items-center gap-3 px-4 py-3 border-b flex-shrink-0"
-         style="background: var(--color-bg-surface); border-color: var(--color-border);">
+    <div class="flex items-center gap-3 px-4 py-3 border-b flex-shrink-0 bg-bg-surface border-border"
+        >
       <button
         onclick={() => goto("/")}
-        class="text-sm"
-        style="color: var(--color-accent);"
+        class="text-sm text-accent"
+       
       >‹ Recipes</button>
-      <span class="flex-1 font-semibold text-base truncate"
-            style="color: var(--color-text-primary);">{recipe.name}</span>
+      <span class="flex-1 font-semibold text-base truncate text-text-primary"
+           >{recipe.name}</span>
       <button
         onclick={handleExport}
         aria-label="Export BeerXML"
-        class="flex items-center justify-center rounded flex-shrink-0"
-        style="width: 28px; height: 28px; color: var(--color-text-secondary); background: var(--color-bg-elevated); border: 1px solid var(--color-border); border-radius: var(--radius-md);"
+        class="flex items-center justify-center rounded flex-shrink-0 text-text-secondary bg-bg-elevated border border-border"
+        style="width: 28px; height: 28px; border-radius: var(--radius-md);"
       >
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
@@ -110,8 +110,8 @@
       </button>
       <button
         onclick={() => { showScaleModal = true; }}
-        class="flex items-center justify-center rounded flex-shrink-0 text-xs px-2"
-        style="height: 28px; color: var(--color-text-secondary); background: var(--color-bg-elevated); border: 1px solid var(--color-border); border-radius: var(--radius-md);"
+        class="flex items-center justify-center rounded flex-shrink-0 text-xs px-2 text-text-secondary bg-bg-elevated border border-border"
+        style="height: 28px; border-radius: var(--radius-md);"
       >
         Scale
       </button>
@@ -147,8 +147,8 @@
 
         <!-- Stats card -->
         {#if stats}
-          <div class="rounded-lg p-4 grid grid-cols-5 gap-2"
-               style="background: var(--color-bg-elevated); border: 1px solid var(--color-border);">
+          <div class="rounded-lg p-4 grid grid-cols-5 gap-2 bg-bg-elevated border border-border"
+              >
             {#each [
               { label: "OG", value: displayOg },
               { label: "FG", value: displayFg },
@@ -157,8 +157,8 @@
               { label: "SRM", value: fmt(stats.srm, 1) },
             ] as stat}
               <div class="text-center">
-                <div class="text-sm font-semibold font-mono" style="color: var(--color-accent);">{stat.value}</div>
-                <div class="text-xs" style="color: var(--color-text-muted);">{stat.label}</div>
+                <div class="text-sm font-semibold font-mono text-accent">{stat.value}</div>
+                <div class="text-xs text-text-muted">{stat.label}</div>
               </div>
             {/each}
           </div>
@@ -166,43 +166,43 @@
 
         <!-- Overview -->
         <section>
-          <div class="text-xs font-semibold uppercase tracking-wider mb-3"
-               style="color: var(--color-text-secondary);">Overview</div>
+          <div class="text-xs font-semibold uppercase tracking-wider mb-3 text-text-secondary"
+              >Overview</div>
           <OverviewTab {recipe} onchange={load} />
         </section>
 
         <!-- Ingredients -->
         <section>
-          <div class="text-xs font-semibold uppercase tracking-wider mb-3"
-               style="color: var(--color-text-secondary);">Ingredients</div>
+          <div class="text-xs font-semibold uppercase tracking-wider mb-3 text-text-secondary"
+              >Ingredients</div>
           <IngredientsTab {recipe} {stats} onchange={load} />
         </section>
 
         <!-- Mash -->
         <section>
-          <div class="text-xs font-semibold uppercase tracking-wider mb-3"
-               style="color: var(--color-text-secondary);">Mash</div>
+          <div class="text-xs font-semibold uppercase tracking-wider mb-3 text-text-secondary"
+              >Mash</div>
           <MashTab {recipe} {stats} onchange={load} />
         </section>
 
         <!-- Water -->
         <section>
-          <div class="text-xs font-semibold uppercase tracking-wider mb-3"
-               style="color: var(--color-text-secondary);">Water</div>
+          <div class="text-xs font-semibold uppercase tracking-wider mb-3 text-text-secondary"
+              >Water</div>
           <WaterTab {recipe} {stats} onchange={load} />
         </section>
 
         <!-- Fermentation -->
         <section>
-          <div class="text-xs font-semibold uppercase tracking-wider mb-3"
-               style="color: var(--color-text-secondary);">Fermentation</div>
+          <div class="text-xs font-semibold uppercase tracking-wider mb-3 text-text-secondary"
+              >Fermentation</div>
           <FermentationTab {recipe} onchange={load} />
         </section>
 
         <!-- Notes -->
         <section>
-          <div class="text-xs font-semibold uppercase tracking-wider mb-3"
-               style="color: var(--color-text-secondary);">Notes</div>
+          <div class="text-xs font-semibold uppercase tracking-wider mb-3 text-text-secondary"
+              >Notes</div>
           <NotesTab {recipe} onchange={load} />
         </section>
 
@@ -211,6 +211,6 @@
   </div>
 {:else}
   <div class="flex-1 flex items-center justify-center">
-    <p class="text-sm" style="color: var(--color-text-muted);">Loading…</p>
+    <p class="text-sm text-text-muted">Loading…</p>
   </div>
 {/if}

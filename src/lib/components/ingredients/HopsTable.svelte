@@ -51,14 +51,14 @@
 
 <div class="flex flex-col gap-2">
   <div class="flex items-center justify-between">
-    <h3 class="text-sm font-semibold flex items-center gap-2" style="color: var(--color-text-primary);">
+    <h3 class="text-sm font-semibold flex items-center gap-2 text-text-primary">
       <BrewingIcon name="hop" />
       Hops
     </h3>
     <div class="flex items-center gap-2">
       <DocLink label="Hops guide" url={DOCS.hops} />
-      <button onclick={() => adding = true} class="text-xs px-2 py-1 rounded"
-              style="background: var(--color-accent); color: #fff;">+ Add</button>
+      <button onclick={() => adding = true} class="text-xs px-2 py-1 rounded bg-accent"
+              style="color: #fff;">+ Add</button>
     </div>
   </div>
 
@@ -72,7 +72,7 @@
   {#if recipe.hops.length > 0}
     <table class="ingredient-table">
       <thead>
-        <tr style="color: var(--color-text-secondary);">
+        <tr class="text-text-secondary">
           <th class="text-left py-1">Name</th>
           <th class="text-right py-1">
             <span class="inline-flex items-center gap-1">AA% <Tooltip text="Alpha acid percentage. This drives bitterness. Higher alpha means fewer grams to hit your IBU target." /></span>
@@ -90,7 +90,7 @@
         {#each recipe.hops as h (h.id)}
           {@const ibu = hopIbus.get(h.id)}
           <tr>
-            <td class="py-1.5" style="color: var(--color-text-primary);">
+            <td class="py-1.5 text-text-primary">
               {h.name}
               {#if h.form !== 'Pellet'}
                 {@const badgeColor =
@@ -100,7 +100,7 @@
                 <span style="font-size: 10px; padding: 1px 5px; border-radius: 4px; font-weight: 600; margin-left: 4px; {badgeColor}">{h.form}</span>
               {/if}
             </td>
-            <td class="text-right py-1.5" style="color: var(--color-text-secondary);">{h.alpha_pct}%</td>
+            <td class="text-right py-1.5 text-text-secondary">{h.alpha_pct}%</td>
             <td class="text-right py-1.5">
               <input type="number" inputmode="decimal"
                      step={units === "imperial" ? 0.1 : 1}
@@ -109,8 +109,8 @@
                        const v = parseFloat((e.target as HTMLInputElement).value);
                        if (!isNaN(v) && v > 0) handleUpdate(h.id, { amount_kg: hopDisplayToKg(v, units) });
                      }}
-                     class="w-16 text-right px-1 rounded"
-                     style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid transparent;" />
+                     class="w-16 text-right px-1 rounded bg-bg-elevated text-text-primary"
+                     style="border: 1px solid transparent;" />
             </td>
             <td class="text-right py-1.5">
               <div class="flex flex-col items-end gap-0.5">
@@ -122,8 +122,8 @@
                     if (newUse !== 'hopstand') input.hopstand_temp_c = undefined;
                     handleUpdate(h.id, input);
                   }}
-                  class="px-1 py-0.5 rounded text-right"
-                  style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid transparent;"
+                  class="px-1 py-0.5 rounded text-right bg-bg-elevated text-text-primary"
+                  style="border: 1px solid transparent;"
                 >
                   {#each HOP_USES as u}
                     <option value={u}>{u}</option>
@@ -139,8 +139,8 @@
                            const v = parseFloat((e.target as HTMLInputElement).value);
                            if (!isNaN(v)) handleUpdate(h.id, { hopstand_temp_c: units === "imperial" ? fToC(v) : v });
                          }}
-                         class="w-16 text-right px-1 rounded"
-                         style="background: var(--color-bg-elevated); color: var(--color-text-secondary); border: 1px solid transparent;" />
+                         class="w-16 text-right px-1 rounded bg-bg-elevated text-text-secondary"
+                         style="border: 1px solid transparent;" />
                 {/if}
               </div>
             </td>
@@ -152,19 +152,19 @@
                          const v = parseInt((e.target as HTMLInputElement).value, 10);
                          if (!isNaN(v) && v >= 0) handleUpdate(h.id, { time_min: v });
                        }}
-                       class="w-12 text-right px-1 rounded"
-                       style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid transparent;" />
-                <span class="w-8" style="color: var(--color-text-muted);">
+                       class="w-12 text-right px-1 rounded bg-bg-elevated text-text-primary"
+                       style="border: 1px solid transparent;" />
+                <span class="w-8 text-text-muted">
                   {h.use_ === 'dry hop' ? 'day' : 'min'}
                 </span>
               </div>
             </td>
-            <td class="text-right py-1.5" style="color: var(--color-text-secondary);">
+            <td class="text-right py-1.5 text-text-secondary">
               {ibu != null && ibu > 0 ? ibu.toFixed(0) : '—'}
             </td>
             <td class="pl-1">
-              <button onclick={() => handleDelete(h.id)} class="opacity-40 hover:opacity-100"
-                      style="color: var(--color-text-secondary);">×</button>
+              <button onclick={() => handleDelete(h.id)} class="opacity-40 hover:opacity-100 text-text-secondary"
+                     >×</button>
             </td>
           </tr>
         {/each}

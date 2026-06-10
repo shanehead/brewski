@@ -72,26 +72,26 @@
   }
 </script>
 
-<aside class="w-56 flex flex-col flex-shrink-0 border-r overflow-hidden"
-       style="background: var(--color-bg-surface); border-color: var(--color-border);">
+<aside class="w-56 flex flex-col flex-shrink-0 border-r overflow-hidden bg-bg-surface border-border"
+      >
   <!-- Search + New -->
-  <div class="p-2 flex flex-col gap-1.5 border-b" style="border-color: var(--color-border);">
+  <div class="p-2 flex flex-col gap-1.5 border-b border-border">
     <div class="relative">
-      <svg class="absolute left-2 top-1/2 -translate-y-1/2 pointer-events-none" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-text-muted);">
+      <svg class="absolute left-2 top-1/2 -translate-y-1/2 pointer-events-none text-text-muted" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
       </svg>
       <input
         type="search"
         placeholder="Search recipes…"
         bind:value={search}
-        class="w-full pl-7 pr-2.5 py-1.5 rounded text-sm outline-none"
-        style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);"
+        class="w-full pl-7 pr-2.5 py-1.5 rounded text-sm outline-none bg-bg-elevated text-text-primary border border-border"
+       
       />
     </div>
     <button
       onclick={handleNew}
-      class="w-full py-1.5 rounded text-sm font-medium transition-colors"
-      style="background: var(--color-accent); color: #fff;"
+      class="w-full py-1.5 rounded text-sm font-medium transition-colors bg-accent"
+      style="color: #fff;"
     >
       + New Recipe
     </button>
@@ -105,8 +105,8 @@
     <button
       onclick={() => fileInput.click()}
       disabled={importing}
-      class="w-full py-1.5 rounded text-sm font-medium transition-colors"
-      style="border: 1px solid var(--color-accent); color: var(--color-accent); background: transparent;"
+      class="w-full py-1.5 rounded text-sm font-medium transition-colors border border-accent text-accent"
+      style="background: transparent;"
     >
       {importing ? "Importing…" : "Import BeerXML"}
     </button>
@@ -130,8 +130,8 @@
             <div class="w-8 h-8 rounded flex-shrink-0" style="background: linear-gradient(135deg, {srmToHex(4)}, {srmToHex(16)});"></div>
           {/if}
           <div class="flex flex-col min-w-0 flex-1">
-            <span class="text-sm font-medium truncate" style="color: var(--color-text-primary);">{recipe.name}</span>
-            <span class="text-xs truncate mt-0.5" style="color: var(--color-text-secondary);">
+            <span class="text-sm font-medium truncate text-text-primary">{recipe.name}</span>
+            <span class="text-xs truncate mt-0.5 text-text-secondary">
               {recipe.style_name ?? recipe.type_} · {(units === "imperial" ? lToGal(recipe.batch_size_l) : recipe.batch_size_l).toFixed(1)}{volumeLabel(units)}
             </span>
           </div>
@@ -139,12 +139,12 @@
         <button
           onclick={() => handleDelete(recipe.id)}
           aria-label="Delete recipe"
-          class="absolute right-2 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity text-sm leading-none"
-          style="color: var(--color-text-muted);"
+          class="absolute right-2 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity text-sm leading-none text-text-muted"
+         
         >×</button>
       </li>
     {:else}
-      <li class="px-3 py-6 text-center text-sm" style="color: var(--color-text-muted);">
+      <li class="px-3 py-6 text-center text-sm text-text-muted">
         {search ? "No matches" : "No recipes yet"}
       </li>
     {/each}
@@ -154,13 +154,13 @@
       <li>
         <button
           onclick={toggleStarters}
-          class="w-full flex items-center justify-between px-3 py-1.5 text-left"
-          style="background: var(--color-bg-base); border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border);"
+          class="w-full flex items-center justify-between px-3 py-1.5 text-left bg-bg-base border-t border-border border-b border-border"
+         
         >
-          <span class="text-xs font-semibold uppercase tracking-wider" style="color: var(--color-text-muted);">
+          <span class="text-xs font-semibold uppercase tracking-wider text-text-muted">
             Example Recipes
           </span>
-          <span class="text-xs" style="color: var(--color-text-muted);">
+          <span class="text-xs text-text-muted">
             {startersCollapsed ? "▸" : "▾"}
           </span>
         </button>
@@ -171,8 +171,8 @@
           <li>
             <a
               href="/baseline-recipe/{recipe.id}"
-              class="flex items-center gap-2 px-3 py-2 cursor-pointer transition-colors hover:bg-[var(--color-bg-elevated)]"
-              style="border-left: 2px solid transparent; padding-left: calc(0.75rem - 2px); color: var(--color-text-secondary);"
+              class="flex items-center gap-2 px-3 py-2 cursor-pointer transition-colors hover:bg-[var(--color-bg-elevated)] text-text-secondary"
+              style="border-left: 2px solid transparent; padding-left: calc(0.75rem - 2px);"
             >
               {#if thumb}
                 <img src={thumb} alt="" class="w-8 h-8 rounded flex-shrink-0 object-cover" />
@@ -181,7 +181,7 @@
               {/if}
               <div class="flex flex-col min-w-0 flex-1">
                 <span class="text-sm font-medium truncate">{recipe.name}</span>
-                <span class="text-xs truncate mt-0.5" style="color: var(--color-text-muted);">
+                <span class="text-xs truncate mt-0.5 text-text-muted">
                   {recipe.style_name ?? recipe.type_} · {(units === "imperial" ? lToGal(recipe.batch_size_l) : recipe.batch_size_l).toFixed(1)}{volumeLabel(units)}
                 </span>
               </div>

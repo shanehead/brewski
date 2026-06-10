@@ -68,33 +68,33 @@
   <div class="flex flex-1 flex-col overflow-hidden">
     <!-- Header -->
     <header
-      class="flex items-center px-4 py-2 border-b gap-3 flex-shrink-0"
-      style="background: var(--color-bg-surface); border-color: var(--color-border);"
+      class="flex items-center px-4 py-2 border-b gap-3 flex-shrink-0 bg-bg-surface border-border"
+     
     >
       <button
         onclick={() => goto("/")}
-        class="text-xs px-2 py-1 rounded"
-        style="color: var(--color-text-secondary); background: var(--color-bg-elevated); border: 1px solid var(--color-border);"
+        class="text-xs px-2 py-1 rounded text-text-secondary bg-bg-elevated border border-border"
+       
       >
         ← Recipes
       </button>
       <div class="flex-1">
-        <h1 class="text-base font-semibold" style="color: var(--color-text-primary);">{recipe.name}</h1>
-        <p class="text-xs" style="color: var(--color-text-muted);">Example Recipe — read only</p>
+        <h1 class="text-base font-semibold text-text-primary">{recipe.name}</h1>
+        <p class="text-xs text-text-muted">Example Recipe — read only</p>
       </div>
       <button
         onclick={handleClone}
         disabled={cloning}
-        class="px-4 py-1.5 rounded text-sm font-semibold transition-colors disabled:opacity-50"
-        style="background: var(--color-accent); color: #fff;"
+        class="px-4 py-1.5 rounded text-sm font-semibold transition-colors disabled:opacity-50 bg-accent"
+        style="color: #fff;"
       >
         {cloning ? "Cloning…" : "Clone to My Recipes"}
       </button>
     </header>
 
     <!-- Tab bar -->
-    <nav class="px-4 pt-1 flex-shrink-0"
-         style="background: var(--color-bg-surface);">
+    <nav class="px-4 pt-1 flex-shrink-0 bg-bg-surface"
+        >
       <TabBar tabs={TABS} active={activeTab} onchange={(key) => activeTab = key as typeof activeTab} />
     </nav>
 
@@ -120,6 +120,6 @@
   </div>
 {:else}
   <div class="flex-1 flex items-center justify-center">
-    <p class="text-sm" style="color: var(--color-text-muted);">Loading…</p>
+    <p class="text-sm text-text-muted">Loading…</p>
   </div>
 {/if}
