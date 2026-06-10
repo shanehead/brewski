@@ -1020,7 +1020,7 @@ impl<'a> RecipeVersionRepository<'a> {
                 .map_err(|e| AppError::Internal(format!("invalid source value: {e}")))?,
             mash_water_id: v.mash_water_id,
             sparge_water_id: v.sparge_water_id,
-            hopstand_temp_c: None,
+            hopstand_temp_c: 80.0,
             image_path: None,
             created_at: v.created_at as i64,
             updated_at: v.created_at as i64,

@@ -171,7 +171,7 @@ impl<'a> RecipeRepository<'a> {
             water_adjustments,
             mash_water_id: recipe_row.mash_water_id,
             sparge_water_id: recipe_row.sparge_water_id,
-            hopstand_temp_c: recipe_row.hopstand_temp_c,
+            hopstand_temp_c: recipe_row.hopstand_temp_c.unwrap_or(80.0),
             image_path: recipe_row.image_path,
             mash,
         })
@@ -217,7 +217,7 @@ impl<'a> RecipeRepository<'a> {
             equipment_profile_id: Set(ep_id),
             mash_water_id: Set(mash_water_id),
             sparge_water_id: Set(sparge_water_id),
-            hopstand_temp_c: Set(input.hopstand_temp_c),
+            hopstand_temp_c: Set(Some(input.hopstand_temp_c)),
             created_at: Set(now),
             updated_at: Set(now),
             ..Default::default()
@@ -402,7 +402,7 @@ impl<'a> RecipeRepository<'a> {
             priming_sugar_equiv: Set(src.priming_sugar_equiv),
             keg_priming_factor: Set(src.keg_priming_factor),
             date: Set(src.date),
-            hopstand_temp_c: Set(src.hopstand_temp_c),
+            hopstand_temp_c: Set(Some(src.hopstand_temp_c)),
             mash_water_id: Set(src.mash_water_id),
             sparge_water_id: Set(src.sparge_water_id),
             created_at: Set(now),

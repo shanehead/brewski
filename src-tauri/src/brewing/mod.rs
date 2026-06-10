@@ -10,7 +10,6 @@ use crate::models::{HopStat, Recipe, RecipeStats};
 
 const DEFAULT_EFFICIENCY_PCT: f64 = 72.0;
 const DEFAULT_ATTENUATION_PCT: f64 = 75.0;
-const DEFAULT_HOPSTAND_TEMP_C: f64 = 80.0;
 const DEFAULT_EVAP_RATE_L_HR: f64 = 3.8;
 const DEFAULT_TRUB_CHILLER_LOSS_L: f64 = 1.0;
 const DEFAULT_FERMENTER_LOSS_L: f64 = 1.0;
@@ -44,7 +43,7 @@ pub fn calculate_stats(recipe: &Recipe) -> RecipeStats {
         .map(|e| e.mash_tun_loss_l)
         .unwrap_or(DEFAULT_MASH_TUN_LOSS_L);
     let hlt_deadspace = equipment
-        .and_then(|e| e.hlt_deadspace_l)
+        .map(|e| e.hlt_deadspace_l)
         .unwrap_or(DEFAULT_HLT_DEADSPACE_L);
     let _cooling_shrinkage = equipment
         .map(|e| e.cooling_shrinkage_pct)
@@ -56,7 +55,7 @@ pub fn calculate_stats(recipe: &Recipe) -> RecipeStats {
             Some(e.aroma_hop_utilization_pct / 100.0)
         }
     });
-    let whirlpool_time = equipment.and_then(|e| e.whirlpool_time_min).unwrap_or(0.0);
+    let whirlpool_time = equipment.map(|e| e.whirlpool_time_min).unwrap_or(0.0);
     let batch_volume_target = equipment
         .map(|e| e.batch_volume_target.as_str())
         .unwrap_or("fermenter");
@@ -108,7 +107,7 @@ pub fn calculate_stats(recipe: &Recipe) -> RecipeStats {
     let pre_boil_gravity =
         volumes::calculate_pre_boil_gravity(og, post_boil_volume_l, pre_boil_volume_l);
 
-    let hopstand_default = recipe.hopstand_temp_c.unwrap_or(DEFAULT_HOPSTAND_TEMP_C);
+    let hopstand_default = recipe.hopstand_temp_c;
     let hop_inputs: Vec<ibu::HopIbuInput> = recipe
         .hops
         .iter()
@@ -292,7 +291,7 @@ mod tests {
             water_adjustments: vec![],
             mash_water_id: None,
             sparge_water_id: None,
-            hopstand_temp_c: None,
+            hopstand_temp_c: 80.0,
             image_path: None,
             mash: None,
         }
@@ -526,14 +525,14 @@ mod tests {
             efficiency_pct: 80.0,
             batch_volume_target: "fermenter".into(),
             mash_tun_loss_l: 0.0,
-            hlt_deadspace_l: None,
+            hlt_deadspace_l: 0.0,
             cooling_shrinkage_pct: 4.0,
             calc_mash_efficiency: true,
             mash_efficiency_pct: None,
             calc_aroma_hop_utilization: true,
             aroma_hop_utilization_pct: 23.0,
             hopstand_temp_f: 176.0,
-            whirlpool_time_min: None,
+            whirlpool_time_min: 0.0,
             altitude_adjustment: false,
             boil_temp_f: None,
             sparge_method: "no_sparge".into(),
@@ -582,14 +581,14 @@ mod tests {
             efficiency_pct: 72.0,
             batch_volume_target: "fermenter".into(),
             mash_tun_loss_l: 0.0,
-            hlt_deadspace_l: None,
+            hlt_deadspace_l: 0.0,
             cooling_shrinkage_pct: 4.0,
             calc_mash_efficiency: true,
             mash_efficiency_pct: None,
             calc_aroma_hop_utilization: true,
             aroma_hop_utilization_pct: 23.0,
             hopstand_temp_f: 176.0,
-            whirlpool_time_min: None,
+            whirlpool_time_min: 0.0,
             altitude_adjustment: false,
             boil_temp_f: None,
             sparge_method: "no_sparge".into(),

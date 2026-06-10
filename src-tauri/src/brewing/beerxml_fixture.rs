@@ -280,7 +280,7 @@ pub fn load_fixture(filename: &str) -> (Recipe, ExpectedStats) {
         water_adjustments: vec![],
         mash_water_id: None,
         sparge_water_id: None,
-        hopstand_temp_c: None,
+        hopstand_temp_c: 80.0,
         image_path: None,
         mash: Some(Mash {
             id: "m1".into(),

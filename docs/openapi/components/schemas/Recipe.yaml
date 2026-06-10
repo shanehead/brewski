@@ -225,9 +225,8 @@ properties:
       - "null"
     description: ID of the sparge water profile (null means use mash water)
   hopstand_temp_c:
-    type:
-      - number
-      - "null"
+    type: number
+    default: 80
     description: Default hopstand temperature in °C for this recipe
   mash:
     description: The mash schedule for this recipe, or null if not set.

@@ -55,14 +55,14 @@ impl TryFrom<entities::equipment_profiles::Model> for EquipmentProfile {
             efficiency_pct: m.efficiency_pct,
             batch_volume_target: m.batch_volume_target,
             mash_tun_loss_l: m.mash_tun_loss_l,
-            hlt_deadspace_l: m.hlt_deadspace_l,
+            hlt_deadspace_l: m.hlt_deadspace_l.unwrap_or_default(),
             cooling_shrinkage_pct: m.cooling_shrinkage_pct,
             calc_mash_efficiency: m.calc_mash_efficiency != 0,
             mash_efficiency_pct: m.mash_efficiency_pct,
             calc_aroma_hop_utilization: m.calc_aroma_hop_utilization != 0,
             aroma_hop_utilization_pct: m.aroma_hop_utilization_pct,
             hopstand_temp_f: m.hopstand_temp_f,
-            whirlpool_time_min: m.whirlpool_time_min,
+            whirlpool_time_min: m.whirlpool_time_min.unwrap_or_default(),
             altitude_adjustment: m.altitude_adjustment != 0,
             boil_temp_f: m.boil_temp_f,
             sparge_method: m.sparge_method,
@@ -360,7 +360,7 @@ impl Default for CreateRecipeInput {
             source_id: None,
             style_id: None,
             type_: None,
-            hopstand_temp_c: None,
+            hopstand_temp_c: 80.0,
         }
     }
 }
