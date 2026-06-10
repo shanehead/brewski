@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onDestroy, tick } from "svelte";
-  import type { Recipe, MashStep, RecipeStats, UpdateMashInput } from "$lib/api";
+  import type { Recipe, MashStep, RecipeStats, UpdateMashInput, UpdateMashStepInput } from "$lib/api";
   import { updateMash, createMashStep, deleteMashStep, updateMashStep } from "$lib/api";
   import { ipc } from "$lib/stores/error";
   import { settings } from "$lib/stores/settings";
@@ -69,8 +69,9 @@
   let hoveredStepId = $state<string | null>(null);
   let docClickHandler: ((e: MouseEvent) => void) | null = null;
 
-  async function handleUpdateStepField(id: string, field: string, value: unknown) {
-    await ipc(updateMashStep(id, { [field]: value } as any));
+  async function handleUpdateStepField<K extends keyof UpdateMashStepInput>(id: string, field: K, value: UpdateMashStepInput[K]) {
+    const result = await ipc(updateMashStep(id, { [field]: value } as UpdateMashStepInput));
+    if (!result) return;
     onchange();
   }
 

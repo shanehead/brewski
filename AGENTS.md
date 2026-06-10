@@ -235,6 +235,45 @@ Use full words for local variables — avoid abbreviations except where noted be
 
 In brewing, an *addition* captures a timed event — a hop addition at 60 minutes, a dry-hop addition at day 3 — not just a static ingredient list. The term encodes the temporal/process context that distinguishes a recipe's use of an ingredient from the ingredient itself in the library.
 
+## Frontend IPC patterns
+
+### Typed save functions (no `as any`)
+
+When a component saves a single field via `updateRecipe`, `updateMashStep`, or any other IPC update call, use a typed generic helper instead of casting the computed-property object to `any`:
+
+```ts
+import type { UpdateRecipeInput } from "$lib/api";
+
+async function save<K extends keyof UpdateRecipeInput>(field: K, value: UpdateRecipeInput[K] | null) {
+  const result = await ipc(updateRecipe(recipe.id, { [field]: value } as UpdateRecipeInput));
+  if (!result) return;
+  onchange();
+}
+```
+
+- The generic enforces valid field names and value types at every call site.
+- Use `as InputType` (not `as any`) for the computed-property payload — the cast is still needed because TypeScript cannot narrow computed keys, but it is narrowly typed.
+- Allow `| null` on the value parameter because the DB accepts null to clear optional fields even though the input type declares them as `?: T`.
+- Apply the same pattern for `UpdateMashStepInput`, `CreateWaterAdjustmentInput`, etc.
+
+For enum-typed fields (e.g. `addition` on `CreateWaterAdjustmentInput`), type constant arrays explicitly so callers inherit the literal union rather than `string`:
+
+```ts
+const ADDITIONS: Array<{ value: CreateWaterAdjustmentInput["addition"]; label: string }> = [...];
+```
+
+### Check ipc() results before mutating state
+
+`ipc(promise)` returns `T | undefined` — `undefined` means the call failed and the error toast has already been set. Always check the result before calling `onchange()` or updating local state:
+
+```ts
+const result = await ipc(updateRecipe(...));
+if (!result) return;   // bail out; error shown by ipc
+onchange();
+```
+
+Exception: `void`-returning calls (e.g. `deleteMashStep`, `deleteWaterAdjustment`) return `undefined` on both success and failure, so the check is meaningless — call `onchange()` unconditionally for those.
+
 ## Rust guidelines
 
 When making Rust design decisions — API shape, error handling, naming, trait design, unsafe code, FFI, or library ergonomics — fetch and consult the Microsoft Pragmatic Rust Guidelines before proposing or implementing:

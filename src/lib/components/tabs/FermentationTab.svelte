@@ -1,6 +1,6 @@
 <!-- src/lib/components/tabs/FermentationTab.svelte -->
 <script lang="ts">
-  import type { Recipe } from "$lib/api";
+  import type { Recipe, UpdateRecipeInput } from "$lib/api";
   import { updateRecipe } from "$lib/api";
   import { ipc } from "$lib/stores/error";
   import Card from "$lib/components/Card.svelte";
@@ -9,8 +9,20 @@
 
   let { recipe, onchange }: { recipe: Recipe; onchange: () => void } = $props();
 
-  async function save(field: string, value: unknown) {
-    await ipc(updateRecipe(recipe.id, { [field]: value } as any));
+  type FermField = 'primary_age_days' | 'primary_temp_c' | 'secondary_age_days' | 'secondary_temp_c' | 'tertiary_age_days' | 'tertiary_temp_c';
+
+  const FERM_ROWS: Array<{ field: FermField; label: string }> = [
+    { field: "primary_age_days", label: "Primary (days)" },
+    { field: "primary_temp_c", label: "Primary Temp (°C)" },
+    { field: "secondary_age_days", label: "Secondary (days)" },
+    { field: "secondary_temp_c", label: "Secondary Temp (°C)" },
+    { field: "tertiary_age_days", label: "Tertiary (days)" },
+    { field: "tertiary_temp_c", label: "Tertiary Temp (°C)" },
+  ];
+
+  async function save<K extends keyof UpdateRecipeInput>(field: K, value: UpdateRecipeInput[K] | null) {
+    const result = await ipc(updateRecipe(recipe.id, { [field]: value } as UpdateRecipeInput));
+    if (!result) return;
     onchange();
   }
 </script>
@@ -18,18 +30,11 @@
 <TabContent>
   <Card title="Fermentation Schedule">
     <div class="grid grid-cols-2 gap-x-4 gap-y-3">
-      {#each [
-        { field: "primary_age_days", label: "Primary (days)" },
-        { field: "primary_temp_c", label: "Primary Temp (°C)" },
-        { field: "secondary_age_days", label: "Secondary (days)" },
-        { field: "secondary_temp_c", label: "Secondary Temp (°C)" },
-        { field: "tertiary_age_days", label: "Tertiary (days)" },
-        { field: "tertiary_temp_c", label: "Tertiary Temp (°C)" },
-      ] as row}
+      {#each FERM_ROWS as row}
         <div class="flex flex-col gap-1">
           <FieldLabel for="ferm-{row.field}">{row.label}</FieldLabel>
           <input id="ferm-{row.field}" type="number" inputmode="decimal" step="1"
-                 value={(recipe as any)[row.field] ?? ""}
+                 value={recipe[row.field] ?? ""}
                  onblur={(e) => {
                    const v = (e.target as HTMLInputElement).value;
                    save(row.field, v ? parseFloat(v) : null);

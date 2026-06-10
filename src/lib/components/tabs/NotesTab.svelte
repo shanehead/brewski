@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Recipe } from "$lib/api";
+  import type { Recipe, UpdateRecipeInput } from "$lib/api";
   import { updateRecipe } from "$lib/api";
   import { ipc } from "$lib/stores/error";
   import MarkdownEditor from "$lib/components/MarkdownEditor.svelte";
@@ -7,8 +7,9 @@
 
   let { recipe, onchange }: { recipe: Recipe; onchange: () => void } = $props();
 
-  async function save(field: string, value: unknown) {
-    await ipc(updateRecipe(recipe.id, { [field]: value } as any));
+  async function save<K extends keyof UpdateRecipeInput>(field: K, value: UpdateRecipeInput[K] | null) {
+    const result = await ipc(updateRecipe(recipe.id, { [field]: value } as UpdateRecipeInput));
+    if (!result) return;
     onchange();
   }
 </script>

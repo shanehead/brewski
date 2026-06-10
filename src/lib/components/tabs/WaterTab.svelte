@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import type { Recipe, Water, CalculatedWaterProfile, RecipeWaterAdjustment, RecipeStats } from "$lib/api";
+  import type { Recipe, Water, CalculatedWaterProfile, RecipeWaterAdjustment, RecipeStats, CreateWaterAdjustmentInput } from "$lib/api";
   import { settings } from "$lib/stores/settings";
   import { type Units, lToGal, volumeLabel } from "$lib/units";
   import {
@@ -32,7 +32,7 @@
     (units === "imperial" ? lToGal(l) : l).toFixed(2)
   );
 
-  const ADDITIONS = [
+  const ADDITIONS: Array<{ value: CreateWaterAdjustmentInput["addition"]; label: string }> = [
     { value: "gypsum", label: "Gypsum" },
     { value: "calcium_chloride", label: "Calcium Chloride" },
     { value: "epsom_salt", label: "Epsom Salt" },
@@ -73,8 +73,8 @@
     onchange();
   }
 
-  async function handleAddAddition(target: "mash" | "sparge", addition: string) {
-    const adj = await ipc(createWaterAdjustment(recipe.id, { addition: addition as any, target, amount: 0 })) ?? null;
+  async function handleAddAddition(target: "mash" | "sparge", addition: CreateWaterAdjustmentInput["addition"]) {
+    const adj = await ipc(createWaterAdjustment(recipe.id, { addition, target, amount: 0 })) ?? null;
     if (adj) {
       adjustments = [...adjustments, adj];
       await refreshProfile();
@@ -228,7 +228,7 @@
             <div class="flex gap-1 flex-wrap">
               {#each ADDITIONS as addition}
                 {#if !adjustments.some(a => a.target === target && a.addition === addition.value)}
-                  <button onclick={() => handleAddAddition(target as any, addition.value)}
+                  <button onclick={() => handleAddAddition(target as "mash" | "sparge", addition.value)}
                           class="px-2 py-1 rounded text-xs"
                           style="background: var(--color-bg-elevated); color: var(--color-text-secondary); border: 1px solid var(--color-border);">
                     + {addition.label}

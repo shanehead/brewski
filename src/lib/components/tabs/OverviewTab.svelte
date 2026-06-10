@@ -1,7 +1,7 @@
 <!-- src/lib/components/tabs/OverviewTab.svelte -->
 <script lang="ts">
   import { onMount } from "svelte";
-  import type { Recipe, Style, EquipmentProfile } from "$lib/api";
+  import type { Recipe, Style, EquipmentProfile, UpdateRecipeInput } from "$lib/api";
   import { updateRecipe, listStyles, listEquipmentProfiles } from "$lib/api";
   import { ipc } from "$lib/stores/error";
   import { settings } from "$lib/stores/settings";
@@ -22,8 +22,9 @@
     ]);
   });
 
-  async function save(field: string, value: unknown) {
-    await ipc(updateRecipe(recipe.id, { [field]: value } as any));
+  async function save<K extends keyof UpdateRecipeInput>(field: K, value: UpdateRecipeInput[K] | null) {
+    const result = await ipc(updateRecipe(recipe.id, { [field]: value } as UpdateRecipeInput));
+    if (!result) return;
     onchange();
   }
 
