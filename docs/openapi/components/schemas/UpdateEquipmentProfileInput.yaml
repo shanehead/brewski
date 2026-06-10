@@ -31,6 +31,9 @@ properties:
   batch_volume_target:
     type: string
     description: "Whether batch_size_l targets the fermenter or the kettle. Enum: 'fermenter' | 'kettle'"
+  mash_tun_deadspace_l:
+    type: number
+    description: Dead volume remaining below the lauter screen in the mash tun, in litres.
   mash_tun_loss_l:
     type: number
     description: Volume left in the mash tun after lautering, in litres.

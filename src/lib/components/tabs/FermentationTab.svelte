@@ -15,7 +15,7 @@
   }
 </script>
 
-<TabContent width="xl">
+<TabContent>
   <Card title="Fermentation Schedule">
     <div class="grid grid-cols-2 gap-x-4 gap-y-3">
       {#each [

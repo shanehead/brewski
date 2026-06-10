@@ -155,6 +155,13 @@
               {fmtVol(stats.mash_volume_l)}<span class="text-xs font-normal ml-0.5" style="color: var(--color-text-muted);">{volumeLabel(units)}</span>
             </span>
           </div>
+          {#if stats.top_up_overflow_l != null && stats.top_up_overflow_l > 0}
+            <div role="status" class="flex gap-2 items-start text-xs mt-1 px-2 py-1.5 rounded"
+                 style="background: color-mix(in srgb, var(--color-warning) 10%, transparent); color: var(--color-warning); border: 1px solid color-mix(in srgb, var(--color-warning) 25%, transparent);">
+              <span aria-hidden="true">⚠</span>
+              <span>Water amounts have been adjusted by {fmtVol(stats.top_up_overflow_l)} {volumeLabel(units)} to not exceed mash volume limit.</span>
+            </div>
+          {/if}
           {#if stats.mash_volume_excess_l != null}
             <div role="alert" class="flex gap-2 items-start text-xs mt-1 px-2 py-1.5 rounded"
                  style="background: color-mix(in srgb, var(--color-danger) 8%, transparent); color: var(--color-danger); border: 1px solid color-mix(in srgb, var(--color-danger) 20%, transparent);">

@@ -30,7 +30,7 @@
   let boilSizeL = $state(untrack(() => profile?.boil_size_l ?? 27));
   let evapRateLHr = $state(untrack(() => profile?.evap_rate_l_hr ?? 3.8));
   let trubChillerLossL = $state(untrack(() => profile?.trub_chiller_loss_l ?? 0));
-  let lauterDeadspaceL = $state(untrack(() => profile?.lauter_deadspace_l ?? 0));
+  let mashTunDeadspaceL = $state(untrack(() => profile?.mash_tun_deadspace_l ?? 0));
   let mashTunLossL = $state(untrack(() => profile?.mash_tun_loss_l ?? 0));
   let hltDeadspaceL = $state<number | null>(untrack(() => profile?.hlt_deadspace_l ?? null));
   let fermenterLossL = $state(untrack(() => profile?.fermenter_loss_l ?? 0));
@@ -53,7 +53,6 @@
   let boilTempF = $state<number | null>(untrack(() => profile?.boil_temp_f ?? null));
 
   // Mash / Sparge
-  let tunVolumeL = $state<number | null>(untrack(() => profile?.tun_volume_l ?? null));
   let spargeMethod = $state(untrack(() => profile?.sparge_method ?? "no_sparge"));
   let mashVolumeMinL = $state<number | null>(untrack(() => profile?.mash_volume_min_l ?? null));
   let mashVolumeMaxL = $state<number | null>(untrack(() => profile?.mash_volume_max_l ?? null));
@@ -142,7 +141,7 @@
       grain_temp_f: grainTempF,
       sparge_temp_f: spargeTempF ?? undefined,
       trub_chiller_loss_l: trubChillerLossL,
-      lauter_deadspace_l: lauterDeadspaceL,
+      mash_tun_deadspace_l: mashTunDeadspaceL,
       mash_tun_loss_l: mashTunLossL,
       hlt_deadspace_l: hltDeadspaceL ?? undefined,
       fermenter_loss_l: fermenterLossL,
@@ -157,7 +156,6 @@
       whirlpool_time_min: whirlpoolTimeMin ?? undefined,
       altitude_adjustment: altitudeAdjustment,
       boil_temp_f: boilTempF ?? undefined,
-      tun_volume_l: tunVolumeL ?? undefined,
       sparge_method: spargeMethod,
       mash_volume_min_l: mashVolumeMinL ?? undefined,
       mash_volume_max_l: mashVolumeMaxL ?? undefined,
@@ -261,7 +259,7 @@
 
           <div class="flex flex-col gap-1">
             <label for="eq-lauter-dead" class="text-xs" style="color: var(--color-text-secondary);">Mash-Tun Deadspace <span style="color: var(--color-text-tertiary);">{volumeLabel(units)}</span></label>
-            <input id="eq-lauter-dead" type="number" inputmode="decimal" step="0.01" value={volDisp(lauterDeadspaceL)} oninput={(e) => lauterDeadspaceL = volIn(e)} class="eq-field-input" />
+            <input id="eq-lauter-dead" type="number" inputmode="decimal" step="0.01" value={volDisp(mashTunDeadspaceL)} oninput={(e) => mashTunDeadspaceL = volIn(e)} class="eq-field-input" />
           </div>
           <div class="flex flex-col gap-1">
             <label for="eq-mash-loss" class="text-xs" style="color: var(--color-text-secondary);">Mash-Tun Loss <span style="color: var(--color-text-tertiary);">{volumeLabel(units)}</span></label>
@@ -385,11 +383,6 @@
       <section>
         <h3 class="eq-section-label">Mash / Sparge Water</h3>
         <div class="grid grid-cols-2 gap-4">
-          <div class="flex flex-col gap-1">
-            <label for="eq-tun-vol" class="text-xs" style="color: var(--color-text-secondary);">Tun Volume <span style="color: var(--color-text-tertiary);">{volumeLabel(units)}</span></label>
-            <input id="eq-tun-vol" type="number" inputmode="decimal" step="0.1" placeholder="optional"
-                   value={volDispNull(tunVolumeL)} oninput={(e) => tunVolumeL = volInNull(e)} class="eq-field-input" />
-          </div>
           <div class="flex flex-col gap-1">
             <label for="eq-tun-heat-cap" class="text-xs" style="color: var(--color-text-secondary);">Mash-Tun Heat Capacity <span style="color: var(--color-text-tertiary);">{volumeLabel(units)} equiv.</span></label>
             <input id="eq-tun-heat-cap" type="number" inputmode="decimal" step="0.1"

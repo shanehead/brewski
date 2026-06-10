@@ -1557,8 +1557,10 @@ export interface components {
             total_water_l: number;
             /** @description Volume occupied in the mash tun (water + grain displacement) in litres */
             mash_volume_l: number;
-            /** @description Litres by which mash volume exceeds tun capacity; null when within limits or no tun volume is set */
+            /** @description Litres by which mash volume exceeds tun capacity; null when within limits, no tun volume is set, or overflow was auto-redistributed */
             mash_volume_excess_l?: number | null;
+            /** @description Litres moved from mash water to top-up water to stay within tun capacity; null when no adjustment was needed */
+            top_up_overflow_l?: number | null;
             /** @description Per-hop IBU contributions, keyed by hop addition ID */
             hop_stats: components["schemas"]["HopStat"][];
         };
@@ -1632,10 +1634,8 @@ export interface components {
             batch_size_l: number;
             /** @description When true, boil volume is calculated from batch size, evaporation rate, and losses. */
             calc_boil_volume: boolean;
-            /** @description Mash tun capacity in litres. */
-            tun_volume_l?: number | null;
             /** @description Volume that remains in the lauter tun and cannot be transferred, in litres. */
-            lauter_deadspace_l: number;
+            mash_tun_deadspace_l: number;
             /** @description Volume of water added to the kettle before the boil, in litres. */
             top_up_kettle_l: number;
             /** @description Volume lost to trub and chiller in litres */
@@ -2439,6 +2439,8 @@ export interface components {
             efficiency_pct: number;
             /** @description Whether batch_size_l targets the fermenter or the kettle. Enum: 'fermenter' | 'kettle' */
             batch_volume_target?: string;
+            /** @description Dead volume remaining below the lauter screen in the mash tun, in litres. */
+            mash_tun_deadspace_l?: number;
             /** @description Volume left in the mash tun after lautering, in litres. */
             mash_tun_loss_l?: number;
             /** @description Volume that remains in the HLT and cannot be transferred, in litres. */
@@ -2514,6 +2516,8 @@ export interface components {
             efficiency_pct?: number;
             /** @description Whether batch_size_l targets the fermenter or the kettle. Enum: 'fermenter' | 'kettle' */
             batch_volume_target?: string;
+            /** @description Dead volume remaining below the lauter screen in the mash tun, in litres. */
+            mash_tun_deadspace_l?: number;
             /** @description Volume left in the mash tun after lautering, in litres. */
             mash_tun_loss_l?: number;
             /** @description Volume that remains in the HLT and cannot be transferred, in litres. */

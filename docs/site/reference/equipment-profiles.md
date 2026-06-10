@@ -21,6 +21,26 @@ Access your profiles via the equipment (kettle) icon in the left sidebar.
 | **Calc Mash Efficiency** | Toggle to enable separate mash efficiency tracking. |
 | **Mash Efficiency %** | Your expected mash efficiency as a separate figure (used when the toggle above is on). |
 
+## Mash and sparge water
+
+| Field | What it does |
+|---|---|
+| **Sparge Method** | "No Sparge", "Batch Sparge", or "Fly Sparge". This controls how Brewski splits your water between the mash and sparge. |
+| **Water/Grain Ratio** | Target mash thickness, in L/kg (or qt/lb). A typical infusion mash runs around 2.5 to 3.5 L/kg. |
+| **Grain Absorption Rate** | How much water your grain holds back per kg. The default (1.04 L/kg) works for most setups. Adjust if your efficiency calculations are consistently off. |
+| **Mash-Tun Deadspace** | The volume trapped below your false bottom or screen that can't drain to the kettle. This gets added to your total water on sparge setups so you're collecting enough wort. On no-sparge setups, deadspace drains fully into the kettle and is not counted as a loss. |
+| **Mash Volume Limit** | The maximum mash volume (water plus grain) your tun can hold. When your mash would exceed this, Brewski automatically adjusts water amounts to fit. |
+
+### What happens when the mash is too big
+
+When you've set a **Mash Volume Limit** and your recipe's mash volume would exceed it, Brewski handles it differently depending on your sparge method.
+
+**No sparge:** all your water goes into the mash at once, so there's nowhere else to redirect it. Instead, Brewski reduces mash water and moves the excess to **Top-Up Water** (post-boil fermenter addition). Your total water in doesn't change, just when you add it. The **Water** tab shows a yellow message telling you how much was shifted.
+
+**Batch or fly sparge:** Brewski caps your mash water at the limit and moves the overflow to sparge water. Your total water and pre-boil volume stay the same, it's just redistributed between mash and sparge.
+
+**Kettle batch volume target:** if your equipment profile uses "Kettle" as the batch volume target, the no-sparge redistribution doesn't apply. Pre-boil volume is fixed directly as your batch size, so there's no top-up water to shift into. In that case the **Water** tab shows a red warning if the mash volume is over the limit, and you'll need to adjust your recipe manually.
+
 ## Tips
 
 **Start with typical values.** If you're new to your system, start with an evaporation rate of 10% and kettle loss of 1 L. Measure what actually happens over your first few batches and adjust from there.

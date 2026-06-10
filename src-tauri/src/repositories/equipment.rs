@@ -69,6 +69,7 @@ impl<'a> EquipmentRepository<'a> {
             batch_volume_target: Set(input
                 .batch_volume_target
                 .unwrap_or_else(|| "fermenter".into())),
+            mash_tun_deadspace_l: Set(input.mash_tun_deadspace_l),
             mash_tun_loss_l: Set(input.mash_tun_loss_l.unwrap_or(0.0)),
             hlt_deadspace_l: Set(input.hlt_deadspace_l),
             cooling_shrinkage_pct: Set(input.cooling_shrinkage_pct.unwrap_or(4.0)),
@@ -166,6 +167,9 @@ impl<'a> EquipmentRepository<'a> {
         if let Some(v) = input.batch_volume_target {
             active.batch_volume_target = Set(v);
         }
+        if let Some(v) = input.mash_tun_deadspace_l {
+            active.mash_tun_deadspace_l = Set(Some(v));
+        }
         if let Some(v) = input.mash_tun_loss_l {
             active.mash_tun_loss_l = Set(v);
         }
@@ -257,6 +261,7 @@ mod tests {
             grain_temp_f: None,
             hlt_deadspace_l: None,
             hlt_water_limit_min_l: None,
+            mash_tun_deadspace_l: None,
             hopstand_temp_f: None,
             include_grain_volume_in_mash_limits: None,
             mash_efficiency_pct: None,

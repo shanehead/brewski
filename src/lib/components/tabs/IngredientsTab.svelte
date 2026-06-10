@@ -11,7 +11,7 @@
   let { recipe, stats, onchange }: { recipe: Recipe; stats: RecipeStats | null; onchange: () => void } = $props();
 </script>
 
-<TabContent width="3xl">
+<TabContent>
   <Card title="Fermentables">
     <FermentablesTable {recipe} {onchange} />
   </Card>

@@ -1,0 +1,1 @@
+ALTER TABLE equipment_profiles RENAME COLUMN lauter_deadspace_l TO mash_tun_deadspace_l;

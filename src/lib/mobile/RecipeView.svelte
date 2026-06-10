@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { goto } from "$app/navigation";
+  import { goto, afterNavigate } from "$app/navigation";
   import { getRecipe, getRecipeStats, getRecipeBeerxml, uploadRecipeImage, deleteRecipeImage } from "$lib/api";
   import type { Recipe, RecipeStats } from "$lib/api";
   import { ipc } from "$lib/stores/error";
@@ -38,6 +38,13 @@
     await load();
   });
   $effect(() => { if (id) load(); });
+
+  // Reload stats when navigating back from another section (e.g., after editing equipment).
+  afterNavigate(({ from, to }) => {
+    if (from && from.url.pathname !== to?.url.pathname) {
+      load();
+    }
+  });
 
   async function handleExport() {
     if (!recipe) return;

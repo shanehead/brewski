@@ -6,7 +6,7 @@ required:
   - boil_size_l
   - batch_size_l
   - calc_boil_volume
-  - lauter_deadspace_l
+  - mash_tun_deadspace_l
   - top_up_kettle_l
   - trub_chiller_loss_l
   - evap_rate_l_hr
@@ -55,12 +55,7 @@ properties:
   calc_boil_volume:
     type: boolean
     description: When true, boil volume is calculated from batch size, evaporation rate, and losses.
-  tun_volume_l:
-    type:
-      - number
-      - "null"
-    description: Mash tun capacity in litres.
-  lauter_deadspace_l:
+  mash_tun_deadspace_l:
     type: number
     description: Volume that remains in the lauter tun and cannot be transferred, in litres.
   top_up_kettle_l:

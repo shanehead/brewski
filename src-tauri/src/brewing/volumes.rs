@@ -1,3 +1,97 @@
+pub struct WaterVolumes {
+    pub mash_water_l: f64,
+    pub sparge_water_l: f64,
+    pub total_water_l: f64,
+    pub mash_volume_l: f64,
+    pub mash_volume_excess_l: Option<f64>,
+    pub effective_top_up_l: f64,
+    pub top_up_overflow_l: Option<f64>,
+}
+
+/// Resolves all water volumes, including no-sparge tun overflow redistribution to top-up.
+///
+/// When a no-sparge mash exceeds the tun limit, the excess water is redirected to post-boil
+/// top-up, which changes pre-boil volume. This function iterates once to converge on a
+/// self-consistent result. Sparge-mode overflow is handled inside `calculate_water_volumes`.
+#[allow(clippy::too_many_arguments)]
+pub fn resolve_water_volumes(
+    pre_boil_volume_l: f64,
+    grain_absorption_rate_l_per_kg: f64,
+    mash_tun_deadspace_l: f64,
+    total_grain_kg: f64,
+    mash_infuse_l: Option<f64>,
+    mash_ratio_l_per_kg: Option<f64>,
+    sparge_method: &str,
+    tun_volume_l: Option<f64>,
+    top_up_water_l: f64,
+    batch_size_l: f64,
+    boil_time_min: f64,
+    evap_rate_l_hr: f64,
+    trub_chiller_loss_l: f64,
+    fermenter_loss_l: f64,
+    mash_tun_loss_l: f64,
+    hlt_deadspace_l: f64,
+    is_kettle_mode: bool,
+) -> WaterVolumes {
+    let (mash_water_l, sparge_water_l, total_water_l, mash_volume_l, mash_volume_excess_l) =
+        calculate_water_volumes(
+            pre_boil_volume_l,
+            grain_absorption_rate_l_per_kg,
+            mash_tun_deadspace_l,
+            total_grain_kg,
+            mash_infuse_l,
+            mash_ratio_l_per_kg,
+            sparge_method,
+            tun_volume_l,
+        );
+
+    if sparge_method == "no_sparge" && !is_kettle_mode {
+        if let Some(excess) = mash_volume_excess_l {
+            let adj_top_up = top_up_water_l + excess;
+            let (adj_pre_boil, _, _) = calculate_boil_volumes(
+                batch_size_l,
+                boil_time_min,
+                evap_rate_l_hr,
+                trub_chiller_loss_l,
+                fermenter_loss_l,
+                adj_top_up,
+                mash_tun_loss_l,
+                hlt_deadspace_l,
+            );
+            let (adj_mash, adj_sparge, adj_total, adj_mash_vol, adj_excess) =
+                calculate_water_volumes(
+                    adj_pre_boil,
+                    grain_absorption_rate_l_per_kg,
+                    mash_tun_deadspace_l,
+                    total_grain_kg,
+                    mash_infuse_l,
+                    mash_ratio_l_per_kg,
+                    sparge_method,
+                    tun_volume_l,
+                );
+            return WaterVolumes {
+                mash_water_l: adj_mash,
+                sparge_water_l: adj_sparge,
+                total_water_l: adj_total,
+                mash_volume_l: adj_mash_vol,
+                mash_volume_excess_l: adj_excess,
+                effective_top_up_l: adj_top_up,
+                top_up_overflow_l: Some(excess),
+            };
+        }
+    }
+
+    WaterVolumes {
+        mash_water_l,
+        sparge_water_l,
+        total_water_l,
+        mash_volume_l,
+        mash_volume_excess_l,
+        effective_top_up_l: top_up_water_l,
+        top_up_overflow_l: None,
+    }
+}
+
 /// Returns (pre_boil_volume_l, post_boil_volume_l, total_water_needed_l)
 /// - pre_boil: cold volume needed in the kettle at start of boil
 /// - post_boil: cold volume in kettle after boil
@@ -43,20 +137,27 @@ const GRAIN_DISPLACEMENT_L_PER_KG: f64 = 0.67;
 /// - `mash_water_l`: water added to the grain bill
 /// - `sparge_water_l`: rinse water (0 when sparge_method == "no_sparge" or no split defined)
 /// - `mash_volume_l`: physical volume in the mash tun (water + grain displacement)
-/// - `mash_volume_excess_l`: Some(litres over limit) when mash_volume_l > tun_volume_l
+/// - `mash_volume_excess_l`: Some(litres over limit) for no-sparge overflow that must be
+///   handled upstream; None for sparge modes (overflow is auto-redirected to sparge water)
 #[allow(clippy::too_many_arguments)]
 pub fn calculate_water_volumes(
     pre_boil_volume_l: f64,
     grain_absorption_rate_l_per_kg: f64,
-    lauter_deadspace_l: f64,
+    mash_tun_deadspace_l: f64,
     total_grain_kg: f64,
     mash_infuse_l: Option<f64>,
     mash_ratio_l_per_kg: Option<f64>,
     sparge_method: &str,
     tun_volume_l: Option<f64>,
 ) -> (f64, f64, f64, f64, Option<f64>) {
+    // Lauter deadspace only applies when sparging; no-sparge systems drain fully into the kettle.
+    let effective_deadspace = if sparge_method == "no_sparge" {
+        0.0
+    } else {
+        mash_tun_deadspace_l
+    };
     let total_water_l =
-        pre_boil_volume_l + grain_absorption_rate_l_per_kg * total_grain_kg + lauter_deadspace_l;
+        pre_boil_volume_l + grain_absorption_rate_l_per_kg * total_grain_kg + effective_deadspace;
 
     let mash_water_l = if sparge_method == "no_sparge" || total_grain_kg <= 0.0 {
         total_water_l
@@ -69,10 +170,22 @@ pub fn calculate_water_volumes(
         }
     };
 
-    let sparge_water_l = if sparge_method == "no_sparge" {
-        0.0
+    // Sparge modes: cap mash at tun limit and redirect excess to sparge (total water unchanged).
+    // No-sparge overflow cannot be fixed here — caller must redistribute to top-up.
+    let (mash_water_l, sparge_water_l) = if sparge_method == "no_sparge" {
+        (mash_water_l, 0.0)
     } else {
-        (total_water_l - mash_water_l).max(0.0)
+        let raw_sparge = (total_water_l - mash_water_l).max(0.0);
+        if let Some(tun) = tun_volume_l {
+            let max_mash = (tun - total_grain_kg * GRAIN_DISPLACEMENT_L_PER_KG).max(0.0);
+            if mash_water_l > max_mash {
+                (max_mash, (total_water_l - max_mash).max(0.0))
+            } else {
+                (mash_water_l, raw_sparge)
+            }
+        } else {
+            (mash_water_l, raw_sparge)
+        }
     };
 
     let mash_volume_l = mash_water_l + total_grain_kg * GRAIN_DISPLACEMENT_L_PER_KG;
@@ -246,6 +359,30 @@ mod water_volume_tests {
     fn no_overflow_when_no_tun_volume_set() {
         let (_, _, _, _, excess) = call(20.0, 1.0, 0.0, 4.0, None, None, "no_sparge", None);
         assert!(excess.is_none(), "should be None when tun_volume_l is None");
+    }
+
+    #[test]
+    fn no_sparge_ignores_mash_tun_deadspace() {
+        // With deadspace=5L and no_sparge, total should equal pre_boil + absorption only
+        let (_, _, total_with, _, _) = call(20.0, 1.0, 5.0, 4.0, None, None, "no_sparge", None);
+        let (_, _, total_without, _, _) = call(20.0, 1.0, 0.0, 4.0, None, None, "no_sparge", None);
+        assert!(
+            (total_with - total_without).abs() < 0.01,
+            "no_sparge should ignore deadspace: with={total_with:.3}, without={total_without:.3}"
+        );
+    }
+
+    #[test]
+    fn sparge_includes_mash_tun_deadspace_in_total() {
+        // With deadspace=2L and fly_sparge, total should be 2L more than without
+        let (_, _, total_with, _, _) =
+            call(20.0, 1.0, 2.0, 4.0, None, Some(3.0), "fly_sparge", None);
+        let (_, _, total_without, _, _) =
+            call(20.0, 1.0, 0.0, 4.0, None, Some(3.0), "fly_sparge", None);
+        assert!(
+            (total_with - total_without - 2.0).abs() < 0.01,
+            "sparge should include deadspace: with={total_with:.3}, without={total_without:.3}"
+        );
     }
 
     #[test]

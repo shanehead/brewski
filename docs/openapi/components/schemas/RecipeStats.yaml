@@ -72,7 +72,12 @@ properties:
     type:
       - number
       - "null"
-    description: Litres by which mash volume exceeds tun capacity; null when within limits or no tun volume is set
+    description: Litres by which mash volume exceeds tun capacity; null when within limits, no tun volume is set, or overflow was auto-redistributed
+  top_up_overflow_l:
+    type:
+      - number
+      - "null"
+    description: Litres moved from mash water to top-up water to stay within tun capacity; null when no adjustment was needed
   hop_stats:
     type: array
     items:

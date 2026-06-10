@@ -732,6 +732,10 @@ impl CreateBatchInput {
 #[doc = "      \"description\": \"Manual mash efficiency percentage, used when calc_mash_efficiency is false.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
+#[doc = "    \"mash_tun_deadspace_l\": {"]
+#[doc = "      \"description\": \"Dead volume remaining below the lauter screen in the mash tun, in litres.\","]
+#[doc = "      \"type\": \"number\""]
+#[doc = "    },"]
 #[doc = "    \"mash_tun_loss_l\": {"]
 #[doc = "      \"description\": \"Volume left in the mash tun after lautering, in litres.\","]
 #[doc = "      \"type\": \"number\""]
@@ -858,6 +862,9 @@ pub struct CreateEquipmentProfileInput {
     #[doc = "Manual mash efficiency percentage, used when calc_mash_efficiency is false."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub mash_efficiency_pct: ::std::option::Option<f64>,
+    #[doc = "Dead volume remaining below the lauter screen in the mash tun, in litres."]
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub mash_tun_deadspace_l: ::std::option::Option<f64>,
     #[doc = "Volume left in the mash tun after lautering, in litres."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub mash_tun_loss_l: ::std::option::Option<f64>,
@@ -2559,7 +2566,7 @@ impl CreateYeastInput {
 #[doc = "    \"hopstand_temp_f\","]
 #[doc = "    \"id\","]
 #[doc = "    \"include_grain_volume_in_mash_limits\","]
-#[doc = "    \"lauter_deadspace_l\","]
+#[doc = "    \"mash_tun_deadspace_l\","]
 #[doc = "    \"mash_tun_loss_l\","]
 #[doc = "    \"name\","]
 #[doc = "    \"overflow_target\","]
@@ -2679,16 +2686,16 @@ impl CreateYeastInput {
 #[doc = "      \"description\": \"When true, grain displacement is included when checking mash volume limits\","]
 #[doc = "      \"type\": \"boolean\""]
 #[doc = "    },"]
-#[doc = "    \"lauter_deadspace_l\": {"]
-#[doc = "      \"description\": \"Volume that remains in the lauter tun and cannot be transferred, in litres.\","]
-#[doc = "      \"type\": \"number\""]
-#[doc = "    },"]
 #[doc = "    \"mash_efficiency_pct\": {"]
 #[doc = "      \"description\": \"Manual mash efficiency percentage, used when calc_mash_efficiency is false\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
 #[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"mash_tun_deadspace_l\": {"]
+#[doc = "      \"description\": \"Volume that remains in the lauter tun and cannot be transferred, in litres.\","]
+#[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"mash_tun_loss_l\": {"]
 #[doc = "      \"description\": \"Volume left in the mash tun after lautering, in litres\","]
@@ -2768,13 +2775,6 @@ impl CreateYeastInput {
 #[doc = "      \"description\": \"Thermal mass of mash tun expressed as litres of equivalent water volume (0 = pre-heated tun)\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
-#[doc = "    \"tun_volume_l\": {"]
-#[doc = "      \"description\": \"Mash tun capacity in litres.\","]
-#[doc = "      \"type\": ["]
-#[doc = "        \"number\","]
-#[doc = "        \"null\""]
-#[doc = "      ]"]
-#[doc = "    },"]
 #[doc = "    \"updated_at\": {"]
 #[doc = "      \"description\": \"Unix timestamp in milliseconds when the profile was last updated.\","]
 #[doc = "      \"type\": \"integer\","]
@@ -2848,11 +2848,11 @@ pub struct EquipmentProfile {
     pub id: ::std::string::String,
     #[doc = "When true, grain displacement is included when checking mash volume limits"]
     pub include_grain_volume_in_mash_limits: bool,
-    #[doc = "Volume that remains in the lauter tun and cannot be transferred, in litres."]
-    pub lauter_deadspace_l: f64,
     #[doc = "Manual mash efficiency percentage, used when calc_mash_efficiency is false"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub mash_efficiency_pct: ::std::option::Option<f64>,
+    #[doc = "Volume that remains in the lauter tun and cannot be transferred, in litres."]
+    pub mash_tun_deadspace_l: f64,
     #[doc = "Volume left in the mash tun after lautering, in litres"]
     pub mash_tun_loss_l: f64,
     #[doc = "Maximum mash tun volume in litres"]
@@ -2889,9 +2889,6 @@ pub struct EquipmentProfile {
     pub trub_chiller_loss_l: f64,
     #[doc = "Thermal mass of mash tun expressed as litres of equivalent water volume (0 = pre-heated tun)"]
     pub tun_heat_capacity_l: f64,
-    #[doc = "Mash tun capacity in litres."]
-    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub tun_volume_l: ::std::option::Option<f64>,
     #[doc = "Unix timestamp in milliseconds when the profile was last updated."]
     pub updated_at: i64,
     #[doc = "Target mash water-to-grain ratio, in litres/kg"]
@@ -4827,7 +4824,7 @@ impl ::std::convert::TryFrom<::std::string::String> for RecipeSource {
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"mash_volume_excess_l\": {"]
-#[doc = "      \"description\": \"Litres by which mash volume exceeds tun capacity; null when within limits or no tun volume is set\","]
+#[doc = "      \"description\": \"Litres by which mash volume exceeds tun capacity; null when within limits, no tun volume is set, or overflow was auto-redistributed\","]
 #[doc = "      \"type\": ["]
 #[doc = "        \"number\","]
 #[doc = "        \"null\""]
@@ -4872,6 +4869,13 @@ impl ::std::convert::TryFrom<::std::string::String> for RecipeSource {
 #[doc = "        \"null\""]
 #[doc = "      ]"]
 #[doc = "    },"]
+#[doc = "    \"top_up_overflow_l\": {"]
+#[doc = "      \"description\": \"Litres moved from mash water to top-up water to stay within tun capacity; null when no adjustment was needed\","]
+#[doc = "      \"type\": ["]
+#[doc = "        \"number\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
 #[doc = "    \"top_up_water_l\": {"]
 #[doc = "      \"description\": \"Post-boil top-up water added to the fermenter, in litres\","]
 #[doc = "      \"type\": \"number\""]
@@ -4898,7 +4902,7 @@ pub struct RecipeStats {
     pub hop_stats: ::std::vec::Vec<HopStat>,
     #[doc = "International Bitterness Units"]
     pub ibu: f64,
-    #[doc = "Litres by which mash volume exceeds tun capacity; null when within limits or no tun volume is set"]
+    #[doc = "Litres by which mash volume exceeds tun capacity; null when within limits, no tun volume is set, or overflow was auto-redistributed"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub mash_volume_excess_l: ::std::option::Option<f64>,
     #[doc = "Volume occupied in the mash tun (water + grain displacement) in litres"]
@@ -4920,6 +4924,9 @@ pub struct RecipeStats {
     #[doc = "Calculated strike water temperature in degrees Celsius"]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub strike_temp_c: ::std::option::Option<f64>,
+    #[doc = "Litres moved from mash water to top-up water to stay within tun capacity; null when no adjustment was needed"]
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub top_up_overflow_l: ::std::option::Option<f64>,
     #[doc = "Post-boil top-up water added to the fermenter, in litres"]
     pub top_up_water_l: f64,
     #[doc = "Total water needed (mash + sparge; does not include top-up) in litres"]
@@ -5984,6 +5991,10 @@ impl UpdateBatchInput {
 #[doc = "      \"description\": \"Manual mash efficiency percentage, used when calc_mash_efficiency is false.\","]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
+#[doc = "    \"mash_tun_deadspace_l\": {"]
+#[doc = "      \"description\": \"Dead volume remaining below the lauter screen in the mash tun, in litres.\","]
+#[doc = "      \"type\": \"number\""]
+#[doc = "    },"]
 #[doc = "    \"mash_tun_loss_l\": {"]
 #[doc = "      \"description\": \"Volume left in the mash tun after lautering, in litres.\","]
 #[doc = "      \"type\": \"number\""]
@@ -6113,6 +6124,9 @@ pub struct UpdateEquipmentProfileInput {
     #[doc = "Manual mash efficiency percentage, used when calc_mash_efficiency is false."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub mash_efficiency_pct: ::std::option::Option<f64>,
+    #[doc = "Dead volume remaining below the lauter screen in the mash tun, in litres."]
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub mash_tun_deadspace_l: ::std::option::Option<f64>,
     #[doc = "Volume left in the mash tun after lautering, in litres."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub mash_tun_loss_l: ::std::option::Option<f64>,
@@ -6183,6 +6197,7 @@ impl ::std::default::Default for UpdateEquipmentProfileInput {
             hopstand_temp_f: Default::default(),
             include_grain_volume_in_mash_limits: Default::default(),
             mash_efficiency_pct: Default::default(),
+            mash_tun_deadspace_l: Default::default(),
             mash_tun_loss_l: Default::default(),
             mash_volume_max_l: Default::default(),
             mash_volume_min_l: Default::default(),
@@ -9384,6 +9399,8 @@ pub mod builder {
             ::std::result::Result<::std::option::Option<bool>, ::std::string::String>,
         mash_efficiency_pct:
             ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        mash_tun_deadspace_l:
+            ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         mash_tun_loss_l: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         mash_volume_max_l: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         mash_volume_min_l: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
@@ -9439,6 +9456,7 @@ pub mod builder {
                 hopstand_temp_f: Ok(Default::default()),
                 include_grain_volume_in_mash_limits: Ok(Default::default()),
                 mash_efficiency_pct: Ok(Default::default()),
+                mash_tun_deadspace_l: Ok(Default::default()),
                 mash_tun_loss_l: Ok(Default::default()),
                 mash_volume_max_l: Ok(Default::default()),
                 mash_volume_min_l: Ok(Default::default()),
@@ -9670,6 +9688,16 @@ pub mod builder {
             });
             self
         }
+        pub fn mash_tun_deadspace_l<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.mash_tun_deadspace_l = value.try_into().map_err(|e| {
+                format!("error converting supplied value for mash_tun_deadspace_l: {e}")
+            });
+            self
+        }
         pub fn mash_tun_loss_l<T>(mut self, value: T) -> Self
         where
             T: ::std::convert::TryInto<::std::option::Option<f64>>,
@@ -9848,6 +9876,7 @@ pub mod builder {
                 hopstand_temp_f: value.hopstand_temp_f?,
                 include_grain_volume_in_mash_limits: value.include_grain_volume_in_mash_limits?,
                 mash_efficiency_pct: value.mash_efficiency_pct?,
+                mash_tun_deadspace_l: value.mash_tun_deadspace_l?,
                 mash_tun_loss_l: value.mash_tun_loss_l?,
                 mash_volume_max_l: value.mash_volume_max_l?,
                 mash_volume_min_l: value.mash_volume_min_l?,
@@ -9890,6 +9919,7 @@ pub mod builder {
                 hopstand_temp_f: Ok(value.hopstand_temp_f),
                 include_grain_volume_in_mash_limits: Ok(value.include_grain_volume_in_mash_limits),
                 mash_efficiency_pct: Ok(value.mash_efficiency_pct),
+                mash_tun_deadspace_l: Ok(value.mash_tun_deadspace_l),
                 mash_tun_loss_l: Ok(value.mash_tun_loss_l),
                 mash_volume_max_l: Ok(value.mash_volume_max_l),
                 mash_volume_min_l: Ok(value.mash_volume_min_l),
@@ -12277,9 +12307,9 @@ pub mod builder {
         hopstand_temp_f: ::std::result::Result<f64, ::std::string::String>,
         id: ::std::result::Result<::std::string::String, ::std::string::String>,
         include_grain_volume_in_mash_limits: ::std::result::Result<bool, ::std::string::String>,
-        lauter_deadspace_l: ::std::result::Result<f64, ::std::string::String>,
         mash_efficiency_pct:
             ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        mash_tun_deadspace_l: ::std::result::Result<f64, ::std::string::String>,
         mash_tun_loss_l: ::std::result::Result<f64, ::std::string::String>,
         mash_volume_max_l: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         mash_volume_min_l: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
@@ -12300,7 +12330,6 @@ pub mod builder {
         top_up_water_l: ::std::result::Result<f64, ::std::string::String>,
         trub_chiller_loss_l: ::std::result::Result<f64, ::std::string::String>,
         tun_heat_capacity_l: ::std::result::Result<f64, ::std::string::String>,
-        tun_volume_l: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         updated_at: ::std::result::Result<i64, ::std::string::String>,
         water_grain_ratio_l_per_kg: ::std::result::Result<f64, ::std::string::String>,
         whirlpool_time_min:
@@ -12345,8 +12374,8 @@ pub mod builder {
                 include_grain_volume_in_mash_limits: Err(
                     "no value supplied for include_grain_volume_in_mash_limits".to_string(),
                 ),
-                lauter_deadspace_l: Err("no value supplied for lauter_deadspace_l".to_string()),
                 mash_efficiency_pct: Ok(Default::default()),
+                mash_tun_deadspace_l: Err("no value supplied for mash_tun_deadspace_l".to_string()),
                 mash_tun_loss_l: Err("no value supplied for mash_tun_loss_l".to_string()),
                 mash_volume_max_l: Ok(Default::default()),
                 mash_volume_min_l: Ok(Default::default()),
@@ -12362,7 +12391,6 @@ pub mod builder {
                 top_up_water_l: Err("no value supplied for top_up_water_l".to_string()),
                 trub_chiller_loss_l: Err("no value supplied for trub_chiller_loss_l".to_string()),
                 tun_heat_capacity_l: Err("no value supplied for tun_heat_capacity_l".to_string()),
-                tun_volume_l: Ok(Default::default()),
                 updated_at: Err("no value supplied for updated_at".to_string()),
                 water_grain_ratio_l_per_kg: Err(
                     "no value supplied for water_grain_ratio_l_per_kg".to_string()
@@ -12614,16 +12642,6 @@ pub mod builder {
             });
             self
         }
-        pub fn lauter_deadspace_l<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<f64>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.lauter_deadspace_l = value.try_into().map_err(|e| {
-                format!("error converting supplied value for lauter_deadspace_l: {e}")
-            });
-            self
-        }
         pub fn mash_efficiency_pct<T>(mut self, value: T) -> Self
         where
             T: ::std::convert::TryInto<::std::option::Option<f64>>,
@@ -12631,6 +12649,16 @@ pub mod builder {
         {
             self.mash_efficiency_pct = value.try_into().map_err(|e| {
                 format!("error converting supplied value for mash_efficiency_pct: {e}")
+            });
+            self
+        }
+        pub fn mash_tun_deadspace_l<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<f64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.mash_tun_deadspace_l = value.try_into().map_err(|e| {
+                format!("error converting supplied value for mash_tun_deadspace_l: {e}")
             });
             self
         }
@@ -12784,16 +12812,6 @@ pub mod builder {
             });
             self
         }
-        pub fn tun_volume_l<T>(mut self, value: T) -> Self
-        where
-            T: ::std::convert::TryInto<::std::option::Option<f64>>,
-            T::Error: ::std::fmt::Display,
-        {
-            self.tun_volume_l = value
-                .try_into()
-                .map_err(|e| format!("error converting supplied value for tun_volume_l: {e}"));
-            self
-        }
         pub fn updated_at<T>(mut self, value: T) -> Self
         where
             T: ::std::convert::TryInto<i64>,
@@ -12855,8 +12873,8 @@ pub mod builder {
                 hopstand_temp_f: value.hopstand_temp_f?,
                 id: value.id?,
                 include_grain_volume_in_mash_limits: value.include_grain_volume_in_mash_limits?,
-                lauter_deadspace_l: value.lauter_deadspace_l?,
                 mash_efficiency_pct: value.mash_efficiency_pct?,
+                mash_tun_deadspace_l: value.mash_tun_deadspace_l?,
                 mash_tun_loss_l: value.mash_tun_loss_l?,
                 mash_volume_max_l: value.mash_volume_max_l?,
                 mash_volume_min_l: value.mash_volume_min_l?,
@@ -12872,7 +12890,6 @@ pub mod builder {
                 top_up_water_l: value.top_up_water_l?,
                 trub_chiller_loss_l: value.trub_chiller_loss_l?,
                 tun_heat_capacity_l: value.tun_heat_capacity_l?,
-                tun_volume_l: value.tun_volume_l?,
                 updated_at: value.updated_at?,
                 water_grain_ratio_l_per_kg: value.water_grain_ratio_l_per_kg?,
                 whirlpool_time_min: value.whirlpool_time_min?,
@@ -12906,8 +12923,8 @@ pub mod builder {
                 hopstand_temp_f: Ok(value.hopstand_temp_f),
                 id: Ok(value.id),
                 include_grain_volume_in_mash_limits: Ok(value.include_grain_volume_in_mash_limits),
-                lauter_deadspace_l: Ok(value.lauter_deadspace_l),
                 mash_efficiency_pct: Ok(value.mash_efficiency_pct),
+                mash_tun_deadspace_l: Ok(value.mash_tun_deadspace_l),
                 mash_tun_loss_l: Ok(value.mash_tun_loss_l),
                 mash_volume_max_l: Ok(value.mash_volume_max_l),
                 mash_volume_min_l: Ok(value.mash_volume_min_l),
@@ -12923,7 +12940,6 @@ pub mod builder {
                 top_up_water_l: Ok(value.top_up_water_l),
                 trub_chiller_loss_l: Ok(value.trub_chiller_loss_l),
                 tun_heat_capacity_l: Ok(value.tun_heat_capacity_l),
-                tun_volume_l: Ok(value.tun_volume_l),
                 updated_at: Ok(value.updated_at),
                 water_grain_ratio_l_per_kg: Ok(value.water_grain_ratio_l_per_kg),
                 whirlpool_time_min: Ok(value.whirlpool_time_min),
@@ -15835,6 +15851,7 @@ pub mod builder {
         sparge_water_l: ::std::result::Result<f64, ::std::string::String>,
         srm: ::std::result::Result<f64, ::std::string::String>,
         strike_temp_c: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        top_up_overflow_l: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         top_up_water_l: ::std::result::Result<f64, ::std::string::String>,
         total_water_l: ::std::result::Result<f64, ::std::string::String>,
     }
@@ -15857,6 +15874,7 @@ pub mod builder {
                 sparge_water_l: Err("no value supplied for sparge_water_l".to_string()),
                 srm: Err("no value supplied for srm".to_string()),
                 strike_temp_c: Ok(Default::default()),
+                top_up_overflow_l: Ok(Default::default()),
                 top_up_water_l: Err("no value supplied for top_up_water_l".to_string()),
                 total_water_l: Err("no value supplied for total_water_l".to_string()),
             }
@@ -16023,6 +16041,16 @@ pub mod builder {
                 .map_err(|e| format!("error converting supplied value for strike_temp_c: {e}"));
             self
         }
+        pub fn top_up_overflow_l<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.top_up_overflow_l = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for top_up_overflow_l: {e}"));
+            self
+        }
         pub fn top_up_water_l<T>(mut self, value: T) -> Self
         where
             T: ::std::convert::TryInto<f64>,
@@ -16066,6 +16094,7 @@ pub mod builder {
                 sparge_water_l: value.sparge_water_l?,
                 srm: value.srm?,
                 strike_temp_c: value.strike_temp_c?,
+                top_up_overflow_l: value.top_up_overflow_l?,
                 top_up_water_l: value.top_up_water_l?,
                 total_water_l: value.total_water_l?,
             })
@@ -16090,6 +16119,7 @@ pub mod builder {
                 sparge_water_l: Ok(value.sparge_water_l),
                 srm: Ok(value.srm),
                 strike_temp_c: Ok(value.strike_temp_c),
+                top_up_overflow_l: Ok(value.top_up_overflow_l),
                 top_up_water_l: Ok(value.top_up_water_l),
                 total_water_l: Ok(value.total_water_l),
             }
@@ -17209,6 +17239,8 @@ pub mod builder {
             ::std::result::Result<::std::option::Option<bool>, ::std::string::String>,
         mash_efficiency_pct:
             ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
+        mash_tun_deadspace_l:
+            ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         mash_tun_loss_l: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         mash_volume_max_l: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         mash_volume_min_l: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
@@ -17267,6 +17299,7 @@ pub mod builder {
                 hopstand_temp_f: Ok(Default::default()),
                 include_grain_volume_in_mash_limits: Ok(Default::default()),
                 mash_efficiency_pct: Ok(Default::default()),
+                mash_tun_deadspace_l: Ok(Default::default()),
                 mash_tun_loss_l: Ok(Default::default()),
                 mash_volume_max_l: Ok(Default::default()),
                 mash_volume_min_l: Ok(Default::default()),
@@ -17498,6 +17531,16 @@ pub mod builder {
             });
             self
         }
+        pub fn mash_tun_deadspace_l<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.mash_tun_deadspace_l = value.try_into().map_err(|e| {
+                format!("error converting supplied value for mash_tun_deadspace_l: {e}")
+            });
+            self
+        }
         pub fn mash_tun_loss_l<T>(mut self, value: T) -> Self
         where
             T: ::std::convert::TryInto<::std::option::Option<f64>>,
@@ -17676,6 +17719,7 @@ pub mod builder {
                 hopstand_temp_f: value.hopstand_temp_f?,
                 include_grain_volume_in_mash_limits: value.include_grain_volume_in_mash_limits?,
                 mash_efficiency_pct: value.mash_efficiency_pct?,
+                mash_tun_deadspace_l: value.mash_tun_deadspace_l?,
                 mash_tun_loss_l: value.mash_tun_loss_l?,
                 mash_volume_max_l: value.mash_volume_max_l?,
                 mash_volume_min_l: value.mash_volume_min_l?,
@@ -17718,6 +17762,7 @@ pub mod builder {
                 hopstand_temp_f: Ok(value.hopstand_temp_f),
                 include_grain_volume_in_mash_limits: Ok(value.include_grain_volume_in_mash_limits),
                 mash_efficiency_pct: Ok(value.mash_efficiency_pct),
+                mash_tun_deadspace_l: Ok(value.mash_tun_deadspace_l),
                 mash_tun_loss_l: Ok(value.mash_tun_loss_l),
                 mash_volume_max_l: Ok(value.mash_volume_max_l),
                 mash_volume_min_l: Ok(value.mash_volume_min_l),

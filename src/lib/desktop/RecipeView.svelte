@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { goto } from "$app/navigation";
+  import { goto, afterNavigate } from "$app/navigation";
   import { page } from "$app/stores";
   import {
     getRecipe,
@@ -115,6 +115,13 @@
         await loadRecipeById(id);
         await loadVersions(id);
       })();
+    }
+  });
+
+  // Reload stats when navigating back from another section (e.g., after editing equipment).
+  afterNavigate(({ from, to }) => {
+    if (from && from.url.pathname !== to?.url.pathname) {
+      loadRecipeById(id);
     }
   });
 

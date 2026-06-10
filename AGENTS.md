@@ -156,6 +156,8 @@ Does this change affect anything shown in `README.md` — feature descriptions, 
 
 Does this change affect anything covered in the docs under `docs/site/`? If so, update the relevant pages. Screenshots in the docs follow the same regeneration process as README screenshots.
 
+Any time code takes a different path based on a condition (sparge method, batch volume target, units, etc.), document that branching behavior in the relevant docs page so users understand what the app will do in each case. Don't just document the happy path.
+
 ## Documentation writing style
 
 Docs under `docs/site/` are drafted by AI and reviewed/edited by the project author. Write for a human voice the author can ship with minimal edits.

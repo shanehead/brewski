@@ -149,28 +149,36 @@ pub fn calculate_stats(recipe: &Recipe) -> RecipeStats {
     let grain_absorption_rate = equipment
         .map(|e| e.grain_absorption_rate_l_per_kg)
         .unwrap_or(0.0);
-    let lauter_deadspace = equipment.map(|e| e.lauter_deadspace_l).unwrap_or(0.0);
+    let mash_tun_deadspace = equipment.map(|e| e.mash_tun_deadspace_l).unwrap_or(0.0);
     let sparge_method = equipment
         .map(|e| e.sparge_method.as_str())
         .unwrap_or("no_sparge");
-    let tun_volume_l = equipment.and_then(|e| e.tun_volume_l);
+    let effective_tun_l = equipment.and_then(|e| e.mash_volume_max_l);
     let mash_infuse_l = recipe
         .mash
         .as_ref()
         .and_then(|mash| mash.steps.iter().find_map(|s| s.infuse_amount_l));
     let mash_ratio_l_per_kg = recipe.mash.as_ref().and_then(|mash| mash.ratio_l_per_kg);
 
-    let (mash_water_l, sparge_water_l, total_water_l, mash_volume_l, mash_volume_excess_l) =
-        volumes::calculate_water_volumes(
-            pre_boil_volume_l,
-            grain_absorption_rate,
-            lauter_deadspace,
-            total_grain_kg,
-            mash_infuse_l,
-            mash_ratio_l_per_kg,
-            sparge_method,
-            tun_volume_l,
-        );
+    let water = volumes::resolve_water_volumes(
+        pre_boil_volume_l,
+        grain_absorption_rate,
+        mash_tun_deadspace,
+        total_grain_kg,
+        mash_infuse_l,
+        mash_ratio_l_per_kg,
+        sparge_method,
+        effective_tun_l,
+        top_up_water,
+        recipe.batch_size_l,
+        recipe.boil_time_min,
+        evaporation_rate,
+        trub_chiller_loss,
+        fermenter_loss,
+        mash_tun_loss,
+        hlt_deadspace,
+        batch_volume_target == "kettle",
+    );
 
     let gravity_units = (og - 1.0) * 1000.0;
     let bu_gu_ratio = if gravity_units > 0.0 {
@@ -192,7 +200,7 @@ pub fn calculate_stats(recipe: &Recipe) -> RecipeStats {
         let equipment_ratio = recipe.equipment_profile.as_ref().map(|eq| {
             let mash_water_l = pre_boil_volume_l
                 + eq.grain_absorption_rate_l_per_kg * total_grain_kg
-                + eq.lauter_deadspace_l;
+                + eq.mash_tun_deadspace_l;
             mash_water_l / total_grain_kg
         });
         let ratio = derived_ratio.or(mash.ratio_l_per_kg).or(equipment_ratio)?;
@@ -216,12 +224,13 @@ pub fn calculate_stats(recipe: &Recipe) -> RecipeStats {
         post_boil_volume_l,
         strike_temp_c,
         hop_stats,
-        mash_water_l,
-        sparge_water_l,
-        top_up_water_l: top_up_water,
-        total_water_l,
-        mash_volume_l,
-        mash_volume_excess_l,
+        mash_water_l: water.mash_water_l,
+        sparge_water_l: water.sparge_water_l,
+        top_up_water_l: water.effective_top_up_l,
+        total_water_l: water.total_water_l,
+        mash_volume_l: water.mash_volume_l,
+        mash_volume_excess_l: water.mash_volume_excess_l,
+        top_up_overflow_l: water.top_up_overflow_l,
     }
 }
 
@@ -474,7 +483,7 @@ mod tests {
     #[test]
     fn test_strike_temp_fallback_to_equipment_profile() {
         // No infuse amount, no stored ratio — should derive ratio from equipment profile.
-        // Equipment: grain_absorption=1.04 L/kg, lauter_deadspace=0, pre_boil ~27.5 L
+        // Equipment: grain_absorption=1.04 L/kg, mash_tun_deadspace=0, pre_boil ~27.5 L
         // Grain: 4.5 kg; mash_water = 27.5 + 1.04*4.5 + 0 = 32.18 L; ratio = 32.18/4.5 = 7.15 L/kg
         // strike = (0.41/7.15)*(67-20)+67 = 0.0573*47+67 = 2.7+67 = 69.7°C
         let mut recipe = minimal_recipe();
@@ -506,8 +515,7 @@ mod tests {
             boil_size_l: 27.0,
             batch_size_l: 23.0,
             calc_boil_volume: false,
-            tun_volume_l: None,
-            lauter_deadspace_l: 0.0,
+            mash_tun_deadspace_l: 0.0,
             top_up_kettle_l: 0.0,
             trub_chiller_loss_l: 1.0,
             evap_rate_l_hr: 2.5,
@@ -563,8 +571,7 @@ mod tests {
             boil_size_l: 27.0,
             batch_size_l: 23.0,
             calc_boil_volume: true,
-            tun_volume_l: None,
-            lauter_deadspace_l: 0.0,
+            mash_tun_deadspace_l: 0.0,
             top_up_kettle_l: 0.0,
             trub_chiller_loss_l: 1.0,
             evap_rate_l_hr: 2.5,
@@ -658,6 +665,45 @@ mod tests {
             stats.pre_boil_volume_l > 23.0,
             "kettle mode: pre_boil should exceed batch_size_l due to evaporation, got {:.2}",
             stats.pre_boil_volume_l
+        );
+    }
+
+    #[test]
+    fn test_no_sparge_tun_overflow_redistributes_to_top_up() {
+        // 20 L mash volume limit with 4 kg grain (displacement ~2.68 L) leaves ~17.32 L for water.
+        // Without a limit, mash water would be ~27.5 L (pre_boil=23+2.5+1+1=27.5, plus 4*1.04=4.16 L absorption).
+        // The redistribution should cap mash at 17.32 L and move the ~10+ L excess to top-up.
+        let mut recipe = minimal_recipe();
+        recipe.fermentables = vec![pale_malt()]; // 4.5 kg
+        let mut eq = equipment_profile_base();
+        eq.sparge_method = "no_sparge".into();
+        eq.mash_volume_max_l = Some(20.0);
+        eq.grain_absorption_rate_l_per_kg = 1.04;
+        recipe.equipment_profile = Some(eq);
+        let stats = calculate_stats(&recipe);
+
+        // Mash volume must not exceed tun capacity
+        assert!(
+            stats.mash_volume_l <= 20.0 + 0.01,
+            "mash_volume should fit in tun: {:.3} > 20 L",
+            stats.mash_volume_l
+        );
+        // top_up_overflow_l must be set and positive
+        assert!(
+            stats.top_up_overflow_l.is_some() && stats.top_up_overflow_l.unwrap() > 0.0,
+            "top_up_overflow_l should be Some(>0), got {:?}",
+            stats.top_up_overflow_l
+        );
+        // top_up_water_l must include the overflow
+        assert!(
+            stats.top_up_water_l > 0.0,
+            "top_up_water_l should be > 0 after redistribution, got {:.3}",
+            stats.top_up_water_l
+        );
+        // mash_volume_excess_l should be None (auto-resolved)
+        assert!(
+            stats.mash_volume_excess_l.is_none(),
+            "mash_volume_excess_l should be None after redistribution"
         );
     }
 
