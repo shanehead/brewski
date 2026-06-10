@@ -146,7 +146,7 @@
           <div class="flex justify-between items-baseline">
             <span class="font-medium" style="color: var(--color-text-primary);">Total water</span>
             <span class="font-semibold font-mono" style="color: var(--color-text-primary);">
-              {fmtVol(stats.total_water_l)}<span class="text-xs font-normal ml-0.5" style="color: var(--color-text-muted);">{volumeLabel(units)}</span>
+              {fmtVol(stats.total_water_l + stats.top_up_water_l)}<span class="text-xs font-normal ml-0.5" style="color: var(--color-text-muted);">{volumeLabel(units)}</span>
             </span>
           </div>
           <div class="flex justify-between items-baseline">
@@ -188,17 +188,19 @@
             {/each}
           </select>
         </div>
-        <div class="flex flex-col gap-1">
-          <FieldLabel for="sparge-water">Sparge Water</FieldLabel>
-          <select id="sparge-water" value={recipe.sparge_water_id ?? ""} onchange={handleSpargeWaterChange}
-                  class="flex-1 px-2 py-1.5 rounded text-sm"
-                  style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);">
-            <option value="">— Same as mash —</option>
-            {#each waters as water}
-              <option value={water.id}>{water.name}</option>
-            {/each}
-          </select>
-        </div>
+        {#if recipe.equipment_profile?.sparge_method !== 'no_sparge'}
+          <div class="flex flex-col gap-1">
+            <FieldLabel for="sparge-water">Sparge Water</FieldLabel>
+            <select id="sparge-water" value={recipe.sparge_water_id ?? ""} onchange={handleSpargeWaterChange}
+                    class="flex-1 px-2 py-1.5 rounded text-sm"
+                    style="background: var(--color-bg-elevated); color: var(--color-text-primary); border: 1px solid var(--color-border);">
+              <option value="">— Same as mash —</option>
+              {#each waters as water}
+                <option value={water.id}>{water.name}</option>
+              {/each}
+            </select>
+          </div>
+        {/if}
       </div>
     </Card>
 
