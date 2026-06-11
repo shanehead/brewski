@@ -8,13 +8,13 @@ Versions are something different. They're checkpoints you create deliberately, w
 
 Click the clock icon in the recipe header to open the version history panel.
 
-If your recipe has changed since the last saved version, you'll see a warning at the top of the panel: **un-versioned changes**. This just means your working copy is ahead of the version history. Click **Save as version** to capture it. You can give it a name like "Dropped Mosaic, added Nelson" or "Scaled to 20L", or leave it blank. Either way, the save records the full recipe as it is right now.
+If your recipe has changed since the last saved version, you'll see a warning at the top of the panel: **un-versioned changes**. This just means your live recipe has changes that haven't been saved as a version yet. Click **Save as version** to capture it. You can give it a name like "Dropped Mosaic, added Nelson" or "Scaled to 20L", or leave it blank. Either way, the save records the full recipe as it is right now.
 
 If there's no warning, your working copy is already in sync with the latest version.
 
 ## Viewing a version
 
-Click any version in the panel to see the recipe as it was at that point. Stats, ingredients, mash, water adjustments, all of it. It's read-only. Click outside the panel to return to the live recipe.
+Click any version in the panel to see the recipe as it was at that point. Ingredients, mash, water adjustments, stats. All of it, read-only. Click outside the panel to return to the live recipe.
 
 ## Branching from a version
 
@@ -22,7 +22,7 @@ Branching resets the live recipe back to match a saved version. Select a version
 
 This is useful when a recipe has taken a direction you want to split off. Say you started with a pale ale and evolved it into an IPA across a few versions. Branch from the original pale ale state to develop that direction as its own independent recipe.
 
-Brewski asks for confirmation before branching. Once confirmed, Brewski replaces the live recipe's ingredients and settings with that version's data. The version history stays intact.
+Brewski asks for confirmation before branching. Once you confirm, it replaces the live recipe's ingredients and settings with that version's data. The version history stays intact.
 
 ## How batches connect to versions
 
@@ -38,7 +38,7 @@ Either way, the batch is permanently linked to the exact snapshot it was brewed 
 
 A version captures your recipe's formulation: ingredients and their amounts, the mash profile, water sources, water adjustments, and settings like batch size, boil time, and efficiency.
 
-Equipment profiles and water profiles aren't part of the snapshot. Those are shared and live. Editing your equipment profile affects everywhere it's used. What versions do record is which profile is assigned. If you switch a recipe from one equipment profile to another, that switch is part of the version.
+Equipment profiles and water profiles aren't part of the snapshot. They're shared across all your recipes, not recipe-specific. Editing your equipment profile affects everywhere it's used. But versions do record which profile is assigned. If you switch a recipe from one equipment profile to another, that switch is part of the version.
 
 ## Deleting a version
 
