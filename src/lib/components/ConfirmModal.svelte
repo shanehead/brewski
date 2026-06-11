@@ -14,8 +14,10 @@
   } = $props();
 </script>
 
+<svelte:window onkeydown={(e) => e.key === "Escape" && oncancel()} />
+
 <div class="fixed inset-0 flex items-center justify-center" style="z-index: 1000;">
-  <div class="absolute inset-0" style="background: rgba(0,0,0,0.4);" role="none" onclick={oncancel} onkeydown={oncancel}></div>
+  <div class="absolute inset-0" style="background: rgba(0,0,0,0.4);" role="none" onclick={oncancel} onkeydown={(e) => e.key === "Escape" && oncancel()}></div>
   <div class="p-4 rounded relative bg-bg-elevated border border-border" style="z-index: 1001; min-width: 320px;">
     <div class="text-sm mb-3 text-text-primary">{message}</div>
     <div class="flex justify-end gap-2">

@@ -138,6 +138,8 @@
   );
 </script>
 
+<svelte:window onkeydown={(e) => e.key === "Escape" && open && onclose()} />
+
 {#if open}
   <div class="fixed inset-0 flex flex-col bg-bg-base text-text-primary" style="z-index: 200;">
 

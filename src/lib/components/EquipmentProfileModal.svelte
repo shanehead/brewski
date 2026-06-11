@@ -181,16 +181,16 @@
   }
 </script>
 
+<svelte:window onkeydown={(e) => e.key === "Escape" && oncancel()} />
+
 <div class="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto py-8"
      style="background: rgba(0,0,0,0.6);"
-     role="dialog"
-     aria-modal="true"
-     tabindex="-1"
+     role="none"
      onclick={(e) => e.target === e.currentTarget && oncancel()}
      onkeydown={(e) => e.key === "Escape" && oncancel()}>
 
   <div class="w-full max-w-2xl rounded-lg shadow-xl flex flex-col bg-bg-elevated border border-border"
-      >
+       role="dialog" aria-modal="true">
 
     <!-- Header row -->
     <div class="flex items-center justify-between px-6 py-4 border-b border-border">

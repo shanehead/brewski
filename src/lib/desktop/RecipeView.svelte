@@ -269,6 +269,8 @@
   const srmColor2 = $derived(srmToHex(Math.min((stats?.srm ?? 4) + 12, 40)));
 </script>
 
+<svelte:window onkeydown={(e) => { if (e.key === "Escape") { showSavePopover = false; showImagePopover = false; } }} />
+
 <RecipeList selectedId={id} />
 
 {#if recipe}
@@ -358,8 +360,16 @@
           Save Version
         </button>
         {#if showSavePopover}
+          <!-- Click-away backdrop -->
+          <button
+            class="fixed inset-0 z-10"
+            style="background: transparent;"
+            onclick={() => { showSavePopover = false; }}
+            aria-label="Close menu"
+            tabindex="-1"
+          ></button>
           <div
-            class="absolute right-0 top-full mt-1 p-3 rounded shadow-lg z-10 flex flex-col gap-2 bg-bg-elevated border border-border"
+            class="absolute right-0 top-full mt-1 p-3 rounded shadow-lg z-20 flex flex-col gap-2 bg-bg-elevated border border-border"
             style="min-width: 200px;"
           >
             <input
@@ -367,7 +377,7 @@
               bind:value={saveVersionName}
               placeholder="Version name…"
               class="px-2 py-1 rounded text-sm outline-none bg-bg-surface text-text-primary border border-border"
-             
+
               onkeydown={(e) => { if (e.key === "Enter") handleSaveVersion(); }}
             />
             <button
