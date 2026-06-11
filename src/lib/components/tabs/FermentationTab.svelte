@@ -6,6 +6,7 @@
   import Card from "$lib/components/Card.svelte";
   import FieldLabel from "$lib/components/FieldLabel.svelte";
   import TabContent from "$lib/components/tabs/TabContent.svelte";
+  import { escRevert } from "$lib/actions/escRevert";
 
   let { recipe, onchange }: { recipe: Recipe; onchange: () => void } = $props();
 
@@ -35,6 +36,7 @@
           <FieldLabel for="ferm-{row.field}">{row.label}</FieldLabel>
           <input id="ferm-{row.field}" type="number" inputmode="decimal" step="1"
                  value={recipe[row.field] ?? ""}
+                 use:escRevert
                  onblur={(e) => {
                    const v = (e.target as HTMLInputElement).value;
                    save(row.field, v ? parseFloat(v) : null);
@@ -51,6 +53,7 @@
       <div class="flex flex-col gap-1">
         <FieldLabel for="ferm-carb-vols">CO₂ Volumes</FieldLabel>
         <input id="ferm-carb-vols" type="number" inputmode="decimal" step="0.1" value={recipe.carbonation_vols ?? ""}
+               use:escRevert
                onblur={(e) => {
                  const v = (e.target as HTMLInputElement).value;
                  save("carbonation_vols", v ? parseFloat(v) : null);

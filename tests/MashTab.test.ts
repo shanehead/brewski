@@ -163,6 +163,44 @@ describe("MashTab: infuse amount input in Add Step form", () => {
   });
 });
 
+describe("MashTab: layered Escape in step edit row", () => {
+  it("first Escape reverts the focused field and keeps the row open; second Escape closes it", async () => {
+    const user = userEvent.setup();
+    const recipe = makeRecipe({
+      mash: makeMash({ steps: [makeStep({ id: "s1", name: "Mash In" })] }),
+    });
+
+    render(MashTab, { recipe, stats: makeStats(), onchange: vi.fn() });
+
+    // Open the edit row by clicking the step row (button role).
+    await user.click(screen.getByText("Mash In"));
+    await tick();
+
+    const nameInput = screen.getByLabelText("Name") as HTMLInputElement;
+    expect(nameInput).toBeInTheDocument();
+
+    // Edit the field, then press Escape: escRevert reverts the value + blurs,
+    // and stopPropagation prevents the window listener from closing the row.
+    nameInput.focus();
+    await user.clear(nameInput);
+    await user.type(nameInput, "Changed");
+    expect(nameInput.value).toBe("Changed");
+
+    await user.keyboard("{Escape}");
+    await tick();
+
+    // Field reverted to original value, row still open.
+    expect((screen.getByLabelText("Name") as HTMLInputElement).value).toBe("Mash In");
+    expect(screen.getByLabelText("Name")).toBeInTheDocument();
+
+    // Second Escape (no field focused) reaches the window listener → row closes.
+    await user.keyboard("{Escape}");
+    await tick();
+
+    expect(screen.queryByLabelText("Name")).not.toBeInTheDocument();
+  });
+});
+
 describe("MashTab: water:grain ratio fallback input", () => {
   it("shows ratio input when mash has no step with an infuse amount", () => {
     const recipe = makeRecipe({

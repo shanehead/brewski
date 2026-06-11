@@ -8,6 +8,7 @@
   import Tooltip from "$lib/components/Tooltip.svelte";
   import DocLink from "$lib/components/DocLink.svelte";
   import { DOCS } from "$lib/docs-urls";
+  import { escRevert } from "$lib/actions/escRevert";
 
   let {
     batch,
@@ -120,10 +121,11 @@
         inputmode="decimal"
         step="0.1"
         value={tempDisplay.toFixed(1)}
+        use:escRevert
         oninput={(e) => updateTemp((e.target as HTMLInputElement).value)}
         onblur={() => { hasInteracted = true; }}
         class="w-full bg-transparent text-sm outline-none text-text-primary"
-       
+
       />
     </div>
 

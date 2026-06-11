@@ -298,13 +298,16 @@
   }
 </script>
 
+<svelte:window onkeydown={(e) => e.key === "Escape" && oncancel()} />
+
 <div class="fixed inset-0 flex items-center justify-center" style="z-index: 1000;">
   <!-- Backdrop -->
   <div class="absolute inset-0" style="background: rgba(0,0,0,0.4);" role="none"
-       onclick={oncancel} onkeydown={() => {}}></div>
+       onclick={oncancel} onkeydown={(e) => e.key === "Escape" && oncancel()}></div>
 
   <!-- Modal -->
   <div class="relative flex flex-col rounded-lg overflow-hidden bg-bg-elevated border border-border"
+       role="dialog" aria-modal="true"
        style="z-index: 1001; width: 480px; max-width: 95vw; max-height: 80vh;">
 
     <!-- Header -->

@@ -14,6 +14,7 @@
   import MarkdownEditor from "$lib/components/MarkdownEditor.svelte";
   import DocLink from "$lib/components/DocLink.svelte";
   import { DOCS } from "$lib/docs-urls";
+  import { escRevert } from "$lib/actions/escRevert";
 
   let { batch, onUpdate, onRefresh, images = [] }: {
     batch: Batch;
@@ -205,6 +206,7 @@
               type="number" inputmode="decimal"
               step={gravityStep(gravityUnit)}
               value={gravityDisplays[row.field] ?? ""}
+              use:escRevert
               onblur={async (e) => {
                 const v = e.currentTarget.value;
                 if (!v) { onUpdate({ [row.field]: null } as UpdateBatchInput); return; }
@@ -221,6 +223,7 @@
               type="number" inputmode="decimal"
               step="0.1"
               value={rawValue != null ? rawValue.toFixed(1) : ""}
+              use:escRevert
               onblur={(e) => {
                 const v = e.currentTarget.value;
                 onUpdate({ [row.field]: v ? parseFloat(v) : null } as UpdateBatchInput);

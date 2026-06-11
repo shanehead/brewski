@@ -11,6 +11,7 @@
   import Tooltip from "$lib/components/Tooltip.svelte";
   import DocLink from "$lib/components/DocLink.svelte";
   import { DOCS } from "$lib/docs-urls";
+  import { escRevert } from "$lib/actions/escRevert";
 
   let { recipe, stats, onchange }: { recipe: Recipe; stats: RecipeStats | null; onchange: () => void } = $props();
 
@@ -115,9 +116,23 @@
     detachDocClick();
   }
 
-  function onEditKeydown(e: KeyboardEvent) {
-    if (e.key === "Escape") {
+  function onWindowKeydown(e: KeyboardEvent) {
+    if (e.key === "Escape" && editingStepId) {
       closeEdit();
+    }
+  }
+
+  // Row acts as a button (role="button"); Enter/Space toggle its edit state.
+  // Escape-to-close is handled at the window level so per-field escRevert can
+  // intercept it first.
+  function onRowKeydown(e: KeyboardEvent, id: string) {
+    // Ignore keys originating from form fields inside the row (e.g. typing a
+    // space in an input) so they don't toggle the row's edit state.
+    const tag = (e.target as HTMLElement | null)?.tagName;
+    if (tag === "INPUT" || tag === "SELECT" || tag === "TEXTAREA") return;
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      toggleEditStep(id);
     }
   }
 
@@ -125,6 +140,8 @@
     detachDocClick();
   });
 </script>
+
+<svelte:window onkeydown={onWindowKeydown} />
 
 <TabContent>
   <div class="flex justify-end mb-2">
@@ -135,6 +152,7 @@
       <div class="flex flex-col gap-1">
         <FieldLabel for="mash-name">Profile Name</FieldLabel>
         <input id="mash-name" type="text" value={mash?.name ?? "Single Infusion"}
+               use:escRevert
                onblur={(e) => handleMashField({ name: (e.target as HTMLInputElement).value })}
                class="px-2 py-1.5 rounded text-sm bg-bg-elevated text-text-primary border border-border"
                />
@@ -146,6 +164,7 @@
         </div>
         <input id="mash-grain-temp" type="number" inputmode="decimal" step={units === "imperial" ? 1 : 0.5}
                value={(units === "imperial" ? cToF(mash?.grain_temp_c ?? 21) : mash?.grain_temp_c ?? 21).toFixed(1)}
+               use:escRevert
                onblur={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); handleMashField({ grain_temp_c: units === "imperial" ? fToC(v) : v }); }}
                class="px-2 py-1.5 rounded text-sm bg-bg-elevated text-text-primary border border-border"
                />
@@ -155,6 +174,7 @@
         <input id="mash-sparge-temp" type="number" inputmode="decimal" step={units === "imperial" ? 1 : 0.5}
                value={mash?.sparge_temp_c != null ? (units === "imperial" ? cToF(mash.sparge_temp_c) : mash.sparge_temp_c).toFixed(1) : ""}
                placeholder={units === "imperial" ? "167" : "75"}
+               use:escRevert
                onblur={(e) => {
                  const v = (e.target as HTMLInputElement).value;
                  handleMashField({ sparge_temp_c: v ? (units === "imperial" ? fToC(parseFloat(v)) : parseFloat(v)) : undefined });
@@ -166,6 +186,7 @@
         <FieldLabel for="mash-ph">Mash pH</FieldLabel>
         <input id="mash-ph" type="number" inputmode="decimal" step="0.1" value={mash?.ph ?? ""}
                placeholder="5.4"
+               use:escRevert
                onblur={(e) => {
                  const v = (e.target as HTMLInputElement).value;
                  handleMashField({ ph: v ? parseFloat(v) : undefined });
@@ -194,6 +215,7 @@
                    ? (units === "imperial" ? lPerKgToQtPerLb(mash.ratio_l_per_kg) : mash.ratio_l_per_kg).toFixed(2)
                    : ""}
                  placeholder={units === "imperial" ? "1.5" : "3.0"}
+                 use:escRevert
                  onblur={(e) => {
                    const v = (e.target as HTMLInputElement).value;
                    if (v) {
@@ -274,7 +296,7 @@
                  onmouseenter={() => hoveredStepId = step.id}
                  onmouseleave={() => hoveredStepId = null}
                  tabindex="0"
-                 onkeydown={editingStepId === step.id ? onEditKeydown : undefined}>
+                 onkeydown={(e) => onRowKeydown(e, step.id)}>
               <div class="flex-1">
                 {#if editingStepId === step.id}
                   <div class="flex flex-wrap gap-2 p-2 rounded bg-bg-elevated">
@@ -282,6 +304,7 @@
                       <label for={"step-" + step.id + "-name"} class="text-xs text-text-secondary">Name</label>
                       <input id={"step-" + step.id + "-name"} type="text" value={step.name}
                              onclick={(e) => e.stopPropagation()}
+                             use:escRevert
                              onblur={(e) => handleUpdateStepField(step.id, 'name', (e.target as HTMLInputElement).value)}
                              class="flex-1 min-w-24 px-2 py-1.5 h-10 rounded text-sm bg-bg-base text-text-primary border border-border"
                              />
@@ -301,6 +324,7 @@
                       <input id={"step-" + step.id + "-temp"} type="number" inputmode="decimal" step={units === "imperial" ? 1 : 0.5}
                              value={(units === "imperial" ? cToF(step.step_temp_c) : step.step_temp_c).toFixed(1)}
                              onclick={(e) => e.stopPropagation()}
+                             use:escRevert
                              onblur={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); handleUpdateStepField(step.id, 'step_temp_c', units === 'imperial' ? fToC(v) : v); }}
                              class="w-20 px-2 py-1.5 h-10 rounded text-sm bg-bg-base text-text-primary border border-border"
                              />
@@ -309,6 +333,7 @@
                       <label for={"step-" + step.id + "-time"} class="text-xs text-text-secondary">Time (min)</label>
                       <input id={"step-" + step.id + "-time"} type="number" inputmode="decimal" step="5" value={step.step_time_min}
                              onclick={(e) => e.stopPropagation()}
+                             use:escRevert
                              onblur={(e) => handleUpdateStepField(step.id, 'step_time_min', parseFloat((e.target as HTMLInputElement).value))}
                              class="w-20 px-2 py-1.5 h-10 rounded text-sm bg-bg-base text-text-primary border border-border"
                              />
@@ -319,6 +344,7 @@
                         <input id={"step-" + step.id + "-infuse"} type="number" inputmode="decimal" step="0.1"
                                value={step.infuse_amount_l != null ? (units === 'imperial' ? lToGal(step.infuse_amount_l) : step.infuse_amount_l).toFixed(1) : ''}
                                onclick={(e) => e.stopPropagation()}
+                               use:escRevert
                                onblur={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); handleUpdateStepField(step.id, 'infuse_amount_l', units === 'imperial' ? galToL(v) : v); }}
                                class="w-24 px-2 py-1.5 h-10 rounded text-sm bg-bg-base text-text-primary border border-border"
                                />

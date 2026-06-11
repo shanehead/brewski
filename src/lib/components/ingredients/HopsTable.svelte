@@ -9,6 +9,7 @@
   import Tooltip from "$lib/components/Tooltip.svelte";
   import DocLink from "$lib/components/DocLink.svelte";
   import { DOCS } from "$lib/docs-urls";
+  import { escRevert } from "$lib/actions/escRevert";
 
   let { recipe, stats, onchange }: { recipe: Recipe; stats: RecipeStats | null; onchange: () => void } = $props();
 
@@ -105,6 +106,7 @@
               <input type="number" inputmode="decimal"
                      step={units === "imperial" ? 0.1 : 1}
                      value={kgToHopDisplay(h.amount_kg, units).toFixed(units === "imperial" ? 2 : 0)}
+                     use:escRevert
                      onblur={(e) => {
                        const v = parseFloat((e.target as HTMLInputElement).value);
                        if (!isNaN(v) && v > 0) handleUpdate(h.id, { amount_kg: hopDisplayToKg(v, units) });
@@ -135,6 +137,7 @@
                            ? (units === "imperial" ? cToF(h.hopstand_temp_c).toFixed(0) : h.hopstand_temp_c.toFixed(0))
                            : ""}
                          placeholder={units === "imperial" ? "170°F" : "80°C"}
+                         use:escRevert
                          onblur={(e) => {
                            const v = parseFloat((e.target as HTMLInputElement).value);
                            if (!isNaN(v)) handleUpdate(h.id, { hopstand_temp_c: units === "imperial" ? fToC(v) : v });
@@ -148,6 +151,7 @@
               <div class="inline-flex items-center gap-0.5 justify-end">
                 <input type="number" inputmode="decimal" step="1"
                        value={h.time_min}
+                       use:escRevert
                        onblur={(e) => {
                          const v = parseInt((e.target as HTMLInputElement).value, 10);
                          if (!isNaN(v) && v >= 0) handleUpdate(h.id, { time_min: v });

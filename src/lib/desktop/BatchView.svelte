@@ -53,6 +53,8 @@
   }
 </script>
 
+<svelte:window onkeydown={(e) => e.key === "Escape" && (showAttachments = false)} />
+
 <aside class="w-56 flex flex-col flex-shrink-0 border-r overflow-hidden bg-bg-surface border-border"
       >
   <div class="p-2 border-b border-border">
@@ -95,18 +97,19 @@
       <div
         class="fixed inset-0 z-50 flex items-center justify-center"
         style="background: rgba(0,0,0,0.5);"
-        role="dialog"
-        aria-modal="true"
+        role="none"
+        onclick={(e) => e.target === e.currentTarget && (showAttachments = false)}
+        onkeydown={(e) => e.key === "Escape" && (showAttachments = false)}
       >
         <div class="rounded-lg w-full max-w-2xl max-h-[80vh] flex flex-col overflow-hidden bg-bg-surface border border-border"
-            >
+             role="dialog" aria-modal="true">
           <div class="flex items-center justify-between px-4 py-3 border-b flex-shrink-0 border-border"
               >
             <div class="font-medium text-sm">Attachments</div>
             <button
               onclick={() => showAttachments = false}
               class="text-xs px-2 py-1 rounded text-text-muted bg-bg-elevated"
-             
+
             >Close</button>
           </div>
           <div class="flex-1 overflow-y-auto">
