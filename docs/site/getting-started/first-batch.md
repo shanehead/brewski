@@ -6,9 +6,9 @@ A batch is what happens when you actually brew. Where a recipe is a plan, a batc
 
 Open the recipe you want to brew and click the **Batches** tab, then hit **Brew this Recipe**.
 
-Brewski asks you how to version the recipe before creating the batch. If there are unsaved changes, you'll see **Brew with current changes**: this saves a version right now (you can name it), then creates the batch. If you have saved versions, you'll also see **Brew a saved version**, which lets you pick any previous snapshot instead.
+Brewski asks how you want to version the recipe before creating the batch. If there are unsaved changes, you'll see **Brew with current changes**. That option saves a version right now, with an optional name, then creates the batch. If you've already saved versions, **Brew a saved version** also appears so you can pick an older snapshot instead.
 
-Either way, the batch is permanently linked to an exact recipe snapshot. Change the recipe later and your batch record stays untouched.
+The batch is permanently linked to that recipe snapshot. Change the recipe later and your batch records stay untouched.
 
 ![Batches tab showing the Brew this Recipe button](/screenshots/docs-gs-batch-overview.png)
 
@@ -34,7 +34,7 @@ Once the beer is packaged and conditioned, set the status to **Packaged**. Add n
 
 ## The link between batches and recipes
 
-The batch stays linked to the recipe version you brewed from. Update the recipe next time around and your old batch records are untouched. You'll always know exactly what went into each beer you made.
+Your batch history is a permanent record of every beer you've actually made. Look back at any batch, even years later, and you'll see exactly what went into it.
 
 ::: tip Want to go deeper on versioning?
 Check out the [Recipe versions](/guides/recipe-versions) guide for a full walkthrough of saving, viewing, and branching versions.
