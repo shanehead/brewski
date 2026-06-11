@@ -112,6 +112,7 @@ pub fn run() {
             commands::batches::save_recipe_version,
             commands::batches::branch_from_version,
             commands::batches::delete_recipe_version,
+            commands::batches::recipe_version_status,
             commands::batch_attachments::add_batch_attachment,
             commands::batch_attachments::list_batch_attachments,
             commands::batch_attachments::delete_batch_attachment,

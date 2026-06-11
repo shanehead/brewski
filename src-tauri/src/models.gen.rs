@@ -592,7 +592,8 @@ impl CalculatedWaterProfile {
 #[doc = "  \"description\": \"Input for creating a new brew batch from a recipe.\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"required\": ["]
-#[doc = "    \"recipe_id\""]
+#[doc = "    \"recipe_id\","]
+#[doc = "    \"version_id\""]
 #[doc = "  ],"]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"name\": {"]
@@ -607,11 +608,8 @@ impl CalculatedWaterProfile {
 #[doc = "      \"type\": \"string\""]
 #[doc = "    },"]
 #[doc = "    \"version_id\": {"]
-#[doc = "      \"description\": \"ID of a specific recipe version to brew; defaults to the current state if omitted.\","]
-#[doc = "      \"type\": ["]
-#[doc = "        \"string\","]
-#[doc = "        \"null\""]
-#[doc = "      ]"]
+#[doc = "      \"description\": \"ID of the recipe version snapshot to pin this batch to.\","]
+#[doc = "      \"type\": \"string\""]
 #[doc = "    }"]
 #[doc = "  }"]
 #[doc = "}"]
@@ -624,9 +622,8 @@ pub struct CreateBatchInput {
     pub name: ::std::option::Option<::std::string::String>,
     #[doc = "ID of the recipe to brew."]
     pub recipe_id: ::std::string::String,
-    #[doc = "ID of a specific recipe version to brew; defaults to the current state if omitted."]
-    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-    pub version_id: ::std::option::Option<::std::string::String>,
+    #[doc = "ID of the recipe version snapshot to pin this batch to."]
+    pub version_id: ::std::string::String,
 }
 impl CreateBatchInput {
     pub fn builder() -> builder::CreateBatchInput {
@@ -5482,13 +5479,15 @@ impl ::std::convert::TryFrom<::std::string::String> for RecipeWaterAdjustmentTar
 #[doc = "  \"description\": \"Input for saving a named snapshot of a recipe's current state.\","]
 #[doc = "  \"type\": \"object\","]
 #[doc = "  \"required\": ["]
-#[doc = "    \"name\","]
 #[doc = "    \"recipe_id\""]
 #[doc = "  ],"]
 #[doc = "  \"properties\": {"]
 #[doc = "    \"name\": {"]
-#[doc = "      \"description\": \"Human-readable label for this version (e.g. \\\"Pre-competition tweak\\\").\","]
-#[doc = "      \"type\": \"string\""]
+#[doc = "      \"description\": \"Human-readable label for this version (e.g. \\\"Pre-competition tweak\\\"). Omit to create an unnamed snapshot.\","]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
 #[doc = "    },"]
 #[doc = "    \"recipe_id\": {"]
 #[doc = "      \"description\": \"ID of the recipe to snapshot.\","]
@@ -5500,8 +5499,9 @@ impl ::std::convert::TryFrom<::std::string::String> for RecipeWaterAdjustmentTar
 #[doc = r" </details>"]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
 pub struct SaveRecipeVersionInput {
-    #[doc = "Human-readable label for this version (e.g. \"Pre-competition tweak\")."]
-    pub name: ::std::string::String,
+    #[doc = "Human-readable label for this version (e.g. \"Pre-competition tweak\"). Omit to create an unnamed snapshot."]
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<::std::string::String>,
     #[doc = "ID of the recipe to snapshot."]
     pub recipe_id: ::std::string::String,
 }
@@ -9341,17 +9341,14 @@ pub mod builder {
             ::std::string::String,
         >,
         recipe_id: ::std::result::Result<::std::string::String, ::std::string::String>,
-        version_id: ::std::result::Result<
-            ::std::option::Option<::std::string::String>,
-            ::std::string::String,
-        >,
+        version_id: ::std::result::Result<::std::string::String, ::std::string::String>,
     }
     impl ::std::default::Default for CreateBatchInput {
         fn default() -> Self {
             Self {
                 name: Ok(Default::default()),
                 recipe_id: Err("no value supplied for recipe_id".to_string()),
-                version_id: Ok(Default::default()),
+                version_id: Err("no value supplied for version_id".to_string()),
             }
         }
     }
@@ -9378,7 +9375,7 @@ pub mod builder {
         }
         pub fn version_id<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T: ::std::convert::TryInto<::std::string::String>,
             T::Error: ::std::fmt::Display,
         {
             self.version_id = value
@@ -16618,13 +16615,16 @@ pub mod builder {
     }
     #[derive(Clone, Debug)]
     pub struct SaveRecipeVersionInput {
-        name: ::std::result::Result<::std::string::String, ::std::string::String>,
+        name: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
         recipe_id: ::std::result::Result<::std::string::String, ::std::string::String>,
     }
     impl ::std::default::Default for SaveRecipeVersionInput {
         fn default() -> Self {
             Self {
-                name: Err("no value supplied for name".to_string()),
+                name: Ok(Default::default()),
                 recipe_id: Err("no value supplied for recipe_id".to_string()),
             }
         }
@@ -16632,7 +16632,7 @@ pub mod builder {
     impl SaveRecipeVersionInput {
         pub fn name<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<::std::string::String>,
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
             T::Error: ::std::fmt::Display,
         {
             self.name = value

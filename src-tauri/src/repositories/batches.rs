@@ -22,21 +22,14 @@ impl<'a> BatchRepository<'a> {
     }
 
     pub async fn create(&self, input: CreateBatchInput) -> Result<Batch, AppError> {
-        let version_id = if let Some(vid) = input.version_id {
-            let version = recipe_versions::Entity::find_by_id(&vid)
-                .one(self.db)
-                .await?
-                .ok_or(AppError::NotFound)?;
-            if version.recipe_id != input.recipe_id {
-                return Err(AppError::NotFound);
-            }
-            version.id
-        } else {
-            RecipeVersionRepository::new(self.db)
-                .create_or_reuse(&input.recipe_id)
-                .await?
-                .id
-        };
+        let version = recipe_versions::Entity::find_by_id(&input.version_id)
+            .one(self.db)
+            .await?
+            .ok_or(AppError::NotFound)?;
+        if version.recipe_id != input.recipe_id {
+            return Err(AppError::NotFound);
+        }
+        let version_id = version.id;
 
         let id = new_id();
         let now = now_secs() as i32;
@@ -299,7 +292,7 @@ mod tests {
             .unwrap()
             .id;
         let version_id = RecipeVersionRepository::new(db)
-            .create_or_reuse(&recipe_id)
+            .save_named(&recipe_id, None)
             .await
             .unwrap()
             .id;
@@ -309,13 +302,13 @@ mod tests {
     #[tokio::test]
     async fn test_create_and_get() {
         let db = setup_test_db().await;
-        let (recipe_id, _) = setup(&db).await;
+        let (recipe_id, version_id) = setup(&db).await;
         let repo = BatchRepository::new(&db);
         let batch = repo
             .create(CreateBatchInput {
                 recipe_id: recipe_id.clone(),
                 name: Some("Batch 1".into()),
-                version_id: None,
+                version_id: version_id.clone(),
             })
             .await
             .unwrap();
@@ -330,26 +323,21 @@ mod tests {
     #[tokio::test]
     async fn test_create_with_explicit_version_id() {
         let db = setup_test_db().await;
-        // setup() creates v1 via create_or_reuse
         let (recipe_id, v1_id) = setup(&db).await;
 
-        // Sleep 1s so v2 gets a strictly later created_at than v1; without this,
-        // same-second timestamps make create_or_reuse non-deterministic in tests.
-        tokio::time::sleep(std::time::Duration::from_secs(1)).await;
-
-        // Save v2 — without the fix, create_or_reuse will pick v2 (the latest)
+        // Save v2 explicitly
         let _v2 = RecipeVersionRepository::new(&db)
-            .save_named(&recipe_id, "v2")
+            .save_named(&recipe_id, Some("v2".into()))
             .await
             .unwrap();
 
         let repo = BatchRepository::new(&db);
-        // Explicitly request v1 (the older version) — this must bypass create_or_reuse
+        // Explicitly request v1 (the older version)
         let batch = repo
             .create(CreateBatchInput {
                 recipe_id: recipe_id.clone(),
                 name: None,
-                version_id: Some(v1_id.clone()),
+                version_id: v1_id.clone(),
             })
             .await
             .unwrap();
@@ -371,7 +359,7 @@ mod tests {
             .unwrap()
             .id;
         let version_a = RecipeVersionRepository::new(&db)
-            .create_or_reuse(&recipe_a_id)
+            .save_named(&recipe_a_id, None)
             .await
             .unwrap();
 
@@ -384,7 +372,7 @@ mod tests {
             .unwrap()
             .id;
         let _version_b = RecipeVersionRepository::new(&db)
-            .create_or_reuse(&recipe_b_id)
+            .save_named(&recipe_b_id, None)
             .await
             .unwrap();
 
@@ -394,7 +382,7 @@ mod tests {
             .create(CreateBatchInput {
                 recipe_id: recipe_b_id.clone(),
                 name: None,
-                version_id: Some(version_a.id.clone()),
+                version_id: version_a.id.clone(),
             })
             .await;
 
@@ -404,19 +392,19 @@ mod tests {
     #[tokio::test]
     async fn test_list_and_list_for_recipe() {
         let db = setup_test_db().await;
-        let (recipe_id, _) = setup(&db).await;
+        let (recipe_id, version_id) = setup(&db).await;
         let repo = BatchRepository::new(&db);
         repo.create(CreateBatchInput {
             recipe_id: recipe_id.clone(),
             name: None,
-            version_id: None,
+            version_id: version_id.clone(),
         })
         .await
         .unwrap();
         repo.create(CreateBatchInput {
             recipe_id: recipe_id.clone(),
             name: None,
-            version_id: None,
+            version_id: version_id.clone(),
         })
         .await
         .unwrap();
@@ -427,13 +415,13 @@ mod tests {
     #[tokio::test]
     async fn test_update() {
         let db = setup_test_db().await;
-        let (recipe_id, _) = setup(&db).await;
+        let (recipe_id, version_id) = setup(&db).await;
         let repo = BatchRepository::new(&db);
         let batch = repo
             .create(CreateBatchInput {
                 recipe_id,
                 name: None,
-                version_id: None,
+                version_id,
             })
             .await
             .unwrap();
@@ -455,13 +443,13 @@ mod tests {
     #[tokio::test]
     async fn test_update_packaging_date_and_notes() {
         let db = setup_test_db().await;
-        let (recipe_id, _) = setup(&db).await;
+        let (recipe_id, version_id) = setup(&db).await;
         let repo = BatchRepository::new(&db);
         let batch = repo
             .create(CreateBatchInput {
                 recipe_id,
                 name: None,
-                version_id: None,
+                version_id,
             })
             .await
             .unwrap();
@@ -485,13 +473,13 @@ mod tests {
     #[tokio::test]
     async fn test_delete_cascades_readings() {
         let db = setup_test_db().await;
-        let (recipe_id, _) = setup(&db).await;
+        let (recipe_id, version_id) = setup(&db).await;
         let repo = BatchRepository::new(&db);
         let batch = repo
             .create(CreateBatchInput {
                 recipe_id,
                 name: None,
-                version_id: None,
+                version_id,
             })
             .await
             .unwrap();
@@ -513,13 +501,13 @@ mod tests {
     #[tokio::test]
     async fn test_get_includes_planned_targets() {
         let db = setup_test_db().await;
-        let (recipe_id, _) = setup(&db).await;
+        let (recipe_id, version_id) = setup(&db).await;
         let repo = BatchRepository::new(&db);
         let batch = repo
             .create(CreateBatchInput {
                 recipe_id,
                 name: None,
-                version_id: None,
+                version_id,
             })
             .await
             .unwrap();
@@ -535,13 +523,13 @@ mod tests {
     #[tokio::test]
     async fn test_gravity_readings() {
         let db = setup_test_db().await;
-        let (recipe_id, _) = setup(&db).await;
+        let (recipe_id, version_id) = setup(&db).await;
         let repo = BatchRepository::new(&db);
         let batch = repo
             .create(CreateBatchInput {
                 recipe_id,
                 name: None,
-                version_id: None,
+                version_id,
             })
             .await
             .unwrap();
@@ -570,13 +558,13 @@ mod tests {
     #[tokio::test]
     async fn test_update_carbonation_fields() {
         let db = setup_test_db().await;
-        let (recipe_id, _) = setup(&db).await;
+        let (recipe_id, version_id) = setup(&db).await;
         let repo = BatchRepository::new(&db);
         let batch = repo
             .create(CreateBatchInput {
                 recipe_id,
                 name: None,
-                version_id: None,
+                version_id,
             })
             .await
             .unwrap();

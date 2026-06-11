@@ -84,6 +84,7 @@ mod tests {
     use crate::models::{CreateBatchInput, CreateRecipeInput};
     use crate::repositories::batches::BatchRepository;
     use crate::repositories::recipe::RecipeRepository;
+    use crate::repositories::recipe_version::RecipeVersionRepository;
     use crate::test_helpers::setup_test_db;
 
     async fn setup(db: &DatabaseConnection) -> String {
@@ -94,11 +95,16 @@ mod tests {
             })
             .await
             .unwrap();
+        let version_id = RecipeVersionRepository::new(db)
+            .save_named(&recipe.id, None)
+            .await
+            .unwrap()
+            .id;
         let batch = BatchRepository::new(db)
             .create(CreateBatchInput {
                 recipe_id: recipe.id,
                 name: None,
-                version_id: None,
+                version_id,
             })
             .await
             .unwrap();

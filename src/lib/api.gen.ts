@@ -2623,8 +2623,8 @@ export interface components {
         SaveRecipeVersionInput: {
             /** @description ID of the recipe to snapshot. */
             recipe_id: string;
-            /** @description Human-readable label for this version (e.g. "Pre-competition tweak"). */
-            name: string;
+            /** @description Human-readable label for this version (e.g. "Pre-competition tweak"). Omit to create an unnamed snapshot. */
+            name?: string | null;
         };
         /** @description A single hydrometer or refractometer gravity reading taken during a brew batch. */
         GravityReading: {
@@ -2767,8 +2767,8 @@ export interface components {
             recipe_id: string;
             /** @description Optional user-given name for this batch. */
             name?: string | null;
-            /** @description ID of a specific recipe version to brew; defaults to the current state if omitted. */
-            version_id?: string | null;
+            /** @description ID of the recipe version snapshot to pin this batch to. */
+            version_id: string;
         };
         /** @description Fields that can be updated on an existing brew batch. All fields are optional; only provided fields are changed. */
         UpdateBatchInput: {

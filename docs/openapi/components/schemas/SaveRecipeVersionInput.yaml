@@ -2,11 +2,10 @@ description: Input for saving a named snapshot of a recipe's current state.
 type: object
 required:
   - recipe_id
-  - name
 properties:
   recipe_id:
     type: string
     description: ID of the recipe to snapshot.
   name:
-    type: string
-    description: Human-readable label for this version (e.g. "Pre-competition tweak").
+    type: [string, "null"]
+    description: Human-readable label for this version (e.g. "Pre-competition tweak"). Omit to create an unnamed snapshot.

@@ -2,6 +2,7 @@ description: Input for creating a new brew batch from a recipe.
 type: object
 required:
   - recipe_id
+  - version_id
 properties:
   recipe_id:
     type: string
@@ -10,5 +11,5 @@ properties:
     type: [string, "null"]
     description: Optional user-given name for this batch.
   version_id:
-    type: [string, "null"]
-    description: ID of a specific recipe version to brew; defaults to the current state if omitted.
+    type: string
+    description: ID of the recipe version snapshot to pin this batch to.

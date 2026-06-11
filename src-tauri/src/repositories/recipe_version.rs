@@ -43,272 +43,6 @@ impl<'a> RecipeVersionRepository<'a> {
             .collect()
     }
 
-    pub async fn create_or_reuse(&self, recipe_id: &str) -> Result<RecipeVersionSummary, AppError> {
-        let recipe = RecipeRepository::new(self.db).get(recipe_id).await?;
-
-        let recipe_row = recipes::Entity::find_by_id(recipe_id)
-            .one(self.db)
-            .await?
-            .ok_or(AppError::NotFound)?;
-
-        let branch_parent_id = recipe_row.branch_parent_id.clone();
-
-        // If a branch parent is set, always create a new snapshot branching from it
-        if let Some(bp_id) = branch_parent_id {
-            recipes::ActiveModel {
-                id: Set(recipe_id.to_string()),
-                branch_parent_id: Set(None),
-                ..Default::default()
-            }
-            .update(self.db)
-            .await?;
-
-            let next_number = recipe_versions::Entity::find()
-                .filter(recipe_versions::Column::RecipeId.eq(recipe_id))
-                .order_by_desc(recipe_versions::Column::VersionNumber)
-                .one(self.db)
-                .await?
-                .map(|v| v.version_number + 1)
-                .unwrap_or(1);
-
-            return self
-                .snapshot(recipe_id, &recipe, next_number, None, Some(bp_id))
-                .await;
-        }
-
-        let last = recipe_versions::Entity::find()
-            .filter(recipe_versions::Column::RecipeId.eq(recipe_id))
-            .order_by_desc(recipe_versions::Column::CreatedAt)
-            .one(self.db)
-            .await?;
-
-        if let Some(last_version) = last {
-            if self.matches_current(&last_version.id, &recipe).await? {
-                return RecipeVersionSummary::try_from(last_version);
-            }
-            let next_number = last_version.version_number + 1;
-            let parent_id = Some(last_version.id.clone());
-            self.snapshot(recipe_id, &recipe, next_number, None, parent_id)
-                .await
-        } else {
-            self.snapshot(recipe_id, &recipe, 1, None, None).await
-        }
-    }
-
-    async fn matches_current(
-        &self,
-        version_id: &str,
-        recipe: &crate::models::Recipe,
-    ) -> Result<bool, AppError> {
-        let v = recipe_versions::Entity::find_by_id(version_id)
-            .one(self.db)
-            .await?
-            .ok_or(AppError::NotFound)?;
-
-        // Compare recipe scalars
-        if v.r#type != recipe.type_
-            || v.batch_size_l != recipe.batch_size_l
-            || v.boil_size_l != recipe.boil_size_l
-            || v.boil_time_min != recipe.boil_time_min
-            || v.efficiency_pct != recipe.efficiency_pct
-            || v.style_id != recipe.style_id
-            || v.mash_water_id != recipe.mash_water_id
-            || v.sparge_water_id != recipe.sparge_water_id
-            || v.notes != recipe.notes
-            || v.og != recipe.og
-            || v.fg != recipe.fg
-            || v.primary_age_days != recipe.primary_age_days
-            || v.primary_temp_c != recipe.primary_temp_c
-            || v.secondary_age_days != recipe.secondary_age_days
-            || v.secondary_temp_c != recipe.secondary_temp_c
-            || v.carbonation_vols != recipe.carbonation_vols
-            || v.brewer != recipe.brewer
-        {
-            return Ok(false);
-        }
-
-        // Compare fermentables
-        let vf = recipe_version_fermentables::Entity::find()
-            .filter(recipe_version_fermentables::Column::RecipeVersionId.eq(version_id))
-            .order_by_asc(recipe_version_fermentables::Column::AdditionOrder)
-            .all(self.db)
-            .await?;
-        if vf.len() != recipe.fermentables.len() {
-            return Ok(false);
-        }
-        for (a, b) in vf.iter().zip(recipe.fermentables.iter()) {
-            if a.name != b.name
-                || a.r#type != b.type_
-                || a.yield_pct != b.yield_pct
-                || a.color_lovibond != b.color_lovibond
-                || a.amount_kg != b.amount_kg
-                || a.fermentable_id != b.fermentable_id
-                || a.add_after_boil.unwrap_or(0) != b.add_after_boil as i32
-            {
-                return Ok(false);
-            }
-        }
-
-        // Compare hops
-        let vh = recipe_version_hops::Entity::find()
-            .filter(recipe_version_hops::Column::RecipeVersionId.eq(version_id))
-            .order_by_asc(recipe_version_hops::Column::AdditionOrder)
-            .all(self.db)
-            .await?;
-        if vh.len() != recipe.hops.len() {
-            return Ok(false);
-        }
-        for (a, b) in vh.iter().zip(recipe.hops.iter()) {
-            if a.name != b.name
-                || a.alpha_pct != b.alpha_pct
-                || a.amount_kg != b.amount_kg
-                || a.r#use != b.use_
-                || a.time_min != b.time_min
-                || a.form != b.form
-            {
-                return Ok(false);
-            }
-        }
-
-        // Compare yeasts
-        let vy = recipe_version_yeasts::Entity::find()
-            .filter(recipe_version_yeasts::Column::RecipeVersionId.eq(version_id))
-            .all(self.db)
-            .await?;
-        if vy.len() != recipe.yeasts.len() {
-            return Ok(false);
-        }
-        let mut vy_sorted = vy;
-        vy_sorted.sort_by(|a, b| {
-            a.name.cmp(&b.name).then(
-                a.laboratory
-                    .as_deref()
-                    .unwrap_or("")
-                    .cmp(b.laboratory.as_deref().unwrap_or("")),
-            )
-        });
-        let mut recipe_yeasts_sorted = recipe.yeasts.clone();
-        recipe_yeasts_sorted.sort_by(|a, b| {
-            a.name.cmp(&b.name).then(
-                a.laboratory
-                    .as_deref()
-                    .unwrap_or("")
-                    .cmp(b.laboratory.as_deref().unwrap_or("")),
-            )
-        });
-        for (a, b) in vy_sorted.iter().zip(recipe_yeasts_sorted.iter()) {
-            if a.name != b.name
-                || a.r#type != b.type_
-                || a.form != b.form
-                || a.laboratory != b.laboratory
-                || a.product_id != b.product_id
-                || a.attenuation_pct != b.attenuation_pct
-                || a.amount != b.amount
-                || a.amount_is_weight.unwrap_or(0) != b.amount_is_weight as i32
-                || a.add_to_secondary.unwrap_or(0) != b.add_to_secondary as i32
-                || a.times_cultured.unwrap_or(0) != b.times_cultured as i32
-            {
-                return Ok(false);
-            }
-        }
-
-        // Compare miscs
-        let vm = recipe_version_miscs::Entity::find()
-            .filter(recipe_version_miscs::Column::RecipeVersionId.eq(version_id))
-            .order_by_asc(recipe_version_miscs::Column::AdditionOrder)
-            .all(self.db)
-            .await?;
-        if vm.len() != recipe.miscs.len() {
-            return Ok(false);
-        }
-        for (a, b) in vm.iter().zip(recipe.miscs.iter()) {
-            if a.name != b.name
-                || a.amount != b.amount
-                || a.time_min != b.time_min
-                || a.r#type != b.type_
-                || a.r#use != b.use_
-                || a.unit != b.unit
-            {
-                return Ok(false);
-            }
-        }
-
-        // Compare waters
-        let vw = recipe_version_waters::Entity::find()
-            .filter(recipe_version_waters::Column::RecipeVersionId.eq(version_id))
-            .all(self.db)
-            .await?;
-        if vw.len() != recipe.waters.len() {
-            return Ok(false);
-        }
-        for (a, b) in vw.iter().zip(recipe.waters.iter()) {
-            if a.name != b.name || a.amount_l != b.amount_l {
-                return Ok(false);
-            }
-        }
-
-        // Compare water adjustments
-        let va = recipe_version_water_adjustments::Entity::find()
-            .filter(recipe_version_water_adjustments::Column::RecipeVersionId.eq(version_id))
-            .all(self.db)
-            .await?;
-        if va.len() != recipe.water_adjustments.len() {
-            return Ok(false);
-        }
-        for (a, b) in va.iter().zip(recipe.water_adjustments.iter()) {
-            if a.addition != b.addition.to_string()
-                || a.target != b.target.to_string()
-                || a.amount != b.amount
-            {
-                return Ok(false);
-            }
-        }
-
-        // Compare mash
-        let vmash = recipe_version_mash::Entity::find()
-            .filter(recipe_version_mash::Column::RecipeVersionId.eq(version_id))
-            .one(self.db)
-            .await?;
-        match (&vmash, &recipe.mash) {
-            (None, None) => {}
-            (Some(_), None) | (None, Some(_)) => return Ok(false),
-            (Some(vm), Some(rm)) => {
-                if vm.name != rm.name
-                    || vm.grain_temp_c != rm.grain_temp_c
-                    || vm.ratio_l_per_kg != rm.ratio_l_per_kg
-                    || vm.tun_temp_c != rm.tun_temp_c
-                    || vm.sparge_temp_c != rm.sparge_temp_c
-                    || vm.ph != rm.ph
-                    || vm.notes != rm.notes
-                {
-                    return Ok(false);
-                }
-                let vsteps = recipe_version_mash_steps::Entity::find()
-                    .filter(recipe_version_mash_steps::Column::RecipeVersionMashId.eq(&vm.id))
-                    .order_by_asc(recipe_version_mash_steps::Column::StepOrder)
-                    .all(self.db)
-                    .await?;
-                if vsteps.len() != rm.steps.len() {
-                    return Ok(false);
-                }
-                for (a, b) in vsteps.iter().zip(rm.steps.iter()) {
-                    if a.step_temp_c != b.step_temp_c
-                        || a.step_time_min != b.step_time_min as i32
-                        || a.name != b.name
-                        || a.r#type != b.type_
-                        || a.infuse_amount_l != b.infuse_amount_l
-                        || a.ramp_time_min != b.ramp_time_min.map(|v| v as i32)
-                        || a.end_temp_c != b.end_temp_c
-                    {
-                        return Ok(false);
-                    }
-                }
-            }
-        }
-
-        Ok(true)
-    }
-
     async fn snapshot(
         &self,
         recipe_id: &str,
@@ -741,7 +475,7 @@ impl<'a> RecipeVersionRepository<'a> {
     pub async fn save_named(
         &self,
         recipe_id: &str,
-        name: &str,
+        name: Option<String>,
     ) -> Result<RecipeVersionSummary, AppError> {
         let recipe = RecipeRepository::new(self.db).get(recipe_id).await?;
 
@@ -778,14 +512,8 @@ impl<'a> RecipeVersionRepository<'a> {
             .len() as i32
             + 1;
 
-        self.snapshot(
-            recipe_id,
-            &recipe,
-            next_number,
-            Some(name.to_string()),
-            parent_id,
-        )
-        .await
+        self.snapshot(recipe_id, &recipe, next_number, name, parent_id)
+            .await
     }
 
     pub async fn get_full(&self, version_id: &str) -> Result<Recipe, AppError> {
@@ -1157,60 +885,11 @@ mod tests {
     }
 
     #[tokio::test]
-    async fn test_first_brew_creates_version_1() {
-        let db = setup_test_db().await;
-        let recipe_id = make_recipe(&db).await;
-        let repo = RecipeVersionRepository::new(&db);
-        let v = repo.create_or_reuse(&recipe_id).await.unwrap();
-        assert_eq!(v.version_number, 1);
-    }
-
-    #[tokio::test]
-    async fn test_unchanged_recipe_reuses_version() {
-        let db = setup_test_db().await;
-        let recipe_id = make_recipe(&db).await;
-        let repo = RecipeVersionRepository::new(&db);
-        let v1 = repo.create_or_reuse(&recipe_id).await.unwrap();
-        let v2 = repo.create_or_reuse(&recipe_id).await.unwrap();
-        assert_eq!(v1.id, v2.id);
-        assert_eq!(v2.version_number, 1);
-    }
-
-    #[tokio::test]
-    async fn test_changed_recipe_creates_new_version() {
-        let db = setup_test_db().await;
-        let recipe_id = make_recipe(&db).await;
-        let repo = RecipeVersionRepository::new(&db);
-        let v1 = repo.create_or_reuse(&recipe_id).await.unwrap();
-
-        // Add a fermentable to change the recipe
-        FermentableRepository::new(&db)
-            .create(
-                &recipe_id,
-                CreateFermentableAdditionInput {
-                    fermentable_id: None,
-                    name: "Pale Malt".into(),
-                    type_: "grain".into(),
-                    yield_pct: 78.0,
-                    color_lovibond: 1.8,
-                    amount_kg: 4.5,
-                    add_after_boil: None,
-                },
-            )
-            .await
-            .unwrap();
-
-        let v2 = repo.create_or_reuse(&recipe_id).await.unwrap();
-        assert_ne!(v1.id, v2.id);
-        assert_eq!(v2.version_number, 2);
-    }
-
-    #[tokio::test]
     async fn test_list_for_recipe() {
         let db = setup_test_db().await;
         let recipe_id = make_recipe(&db).await;
         let repo = RecipeVersionRepository::new(&db);
-        repo.create_or_reuse(&recipe_id).await.unwrap();
+        repo.save_named(&recipe_id, None).await.unwrap();
         let versions = repo.list_for_recipe(&recipe_id).await.unwrap();
         assert_eq!(versions.len(), 1);
     }
@@ -1221,65 +900,18 @@ mod tests {
         let recipe_id = make_recipe(&db).await;
         let repo = RecipeVersionRepository::new(&db);
 
-        // First brew creates v1
-        let v1 = repo.create_or_reuse(&recipe_id).await.unwrap();
+        let v1 = repo.save_named(&recipe_id, None).await.unwrap();
 
-        // Manual save with same unchanged recipe still creates v2
-        let v2 = repo.save_named(&recipe_id, "My checkpoint").await.unwrap();
+        // Named save with same unchanged recipe still creates v2
+        let v2 = repo
+            .save_named(&recipe_id, Some("My checkpoint".into()))
+            .await
+            .unwrap();
 
         assert_ne!(v1.id, v2.id);
         assert_eq!(v2.version_number, 2);
         assert_eq!(v2.name.as_deref(), Some("My checkpoint"));
         assert_eq!(v2.parent_version_id.as_deref(), Some(v1.id.as_str()));
-    }
-
-    #[tokio::test]
-    async fn test_create_or_reuse_respects_branch_parent() {
-        let db = setup_test_db().await;
-        let recipe_id = make_recipe(&db).await;
-        let repo = RecipeVersionRepository::new(&db);
-
-        let v1 = repo.create_or_reuse(&recipe_id).await.unwrap();
-
-        // Simulate branch_from_version having been called: set branch_parent_id = v1.id
-        crate::entities::recipes::ActiveModel {
-            id: Set(recipe_id.clone()),
-            branch_parent_id: Set(Some(v1.id.clone())),
-            ..Default::default()
-        }
-        .update(&db)
-        .await
-        .unwrap();
-
-        // Add a fermentable so recipe is "changed" from v1 baseline
-        FermentableRepository::new(&db)
-            .create(
-                &recipe_id,
-                CreateFermentableAdditionInput {
-                    fermentable_id: None,
-                    name: "Crystal 60".into(),
-                    type_: "grain".into(),
-                    yield_pct: 70.0,
-                    color_lovibond: 60.0,
-                    amount_kg: 0.5,
-                    add_after_boil: None,
-                },
-            )
-            .await
-            .unwrap();
-
-        let v2 = repo.create_or_reuse(&recipe_id).await.unwrap();
-
-        assert_ne!(v1.id, v2.id);
-        assert_eq!(v2.parent_version_id.as_deref(), Some(v1.id.as_str()));
-
-        // branch_parent_id should be cleared on the recipe
-        let recipe_row = crate::entities::recipes::Entity::find_by_id(&recipe_id)
-            .one(&db)
-            .await
-            .unwrap()
-            .unwrap();
-        assert!(recipe_row.branch_parent_id.is_none());
     }
 
     #[tokio::test]
@@ -1305,7 +937,7 @@ mod tests {
             .unwrap();
 
         let repo = RecipeVersionRepository::new(&db);
-        let v = repo.create_or_reuse(&recipe_id).await.unwrap();
+        let v = repo.save_named(&recipe_id, None).await.unwrap();
         let full = repo.get_full(&v.id).await.unwrap();
 
         assert_eq!(full.fermentables.len(), 1);
@@ -1352,7 +984,10 @@ mod tests {
             .unwrap();
 
         let repo = RecipeVersionRepository::new(&db);
-        let v = repo.save_named(&recipe_id, "v1").await.unwrap();
+        let v = repo
+            .save_named(&recipe_id, Some("v1".into()))
+            .await
+            .unwrap();
         let live = RecipeRepository::new(&db).get(&recipe_id).await.unwrap();
         let snap = repo.get_full(&v.id).await.unwrap();
 
@@ -1381,7 +1016,9 @@ mod tests {
         let db = setup_test_db().await;
         let recipe_id = make_recipe(&db).await;
         let repo = RecipeVersionRepository::new(&db);
-        repo.save_named(&recipe_id, "v1").await.unwrap();
+        repo.save_named(&recipe_id, Some("v1".into()))
+            .await
+            .unwrap();
         let st = repo.status(&recipe_id).await.unwrap();
         assert_eq!(st.version_count, 1);
         assert!(!st.has_unversioned_changes);
@@ -1393,7 +1030,9 @@ mod tests {
         let db = setup_test_db().await;
         let recipe_id = make_recipe(&db).await;
         let repo = RecipeVersionRepository::new(&db);
-        repo.save_named(&recipe_id, "v1").await.unwrap();
+        repo.save_named(&recipe_id, Some("v1".into()))
+            .await
+            .unwrap();
 
         // Edit a brew-identity field so the live recipe diverges from the snapshot.
         RecipeRepository::new(&db)
@@ -1437,7 +1076,7 @@ mod tests {
             .unwrap();
 
         let repo = RecipeVersionRepository::new(&db);
-        let v1 = repo.create_or_reuse(&recipe_id).await.unwrap();
+        let v1 = repo.save_named(&recipe_id, None).await.unwrap();
 
         // Now change the live recipe (delete the fermentable, add different one)
         let fermentables = FermentableRepository::new(&db)

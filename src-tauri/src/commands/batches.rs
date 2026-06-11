@@ -1,7 +1,7 @@
 use crate::error::AppError;
 use crate::models::{
     Batch, BatchSummary, CreateBatchInput, CreateGravityReadingInput, GravityReading, Recipe,
-    RecipeVersionSummary, SaveRecipeVersionInput, UpdateBatchInput,
+    RecipeVersionStatus, RecipeVersionSummary, SaveRecipeVersionInput, UpdateBatchInput,
 };
 use crate::repositories::batches::BatchRepository;
 use crate::repositories::recipe_version::RecipeVersionRepository;
@@ -95,7 +95,17 @@ pub async fn save_recipe_version(
     input: SaveRecipeVersionInput,
 ) -> Result<RecipeVersionSummary, AppError> {
     RecipeVersionRepository::new(&state.db)
-        .save_named(&input.recipe_id, &input.name)
+        .save_named(&input.recipe_id, input.name)
+        .await
+}
+
+#[tauri::command]
+pub async fn recipe_version_status(
+    state: State<'_, AppState>,
+    recipe_id: String,
+) -> Result<RecipeVersionStatus, AppError> {
+    RecipeVersionRepository::new(&state.db)
+        .status(&recipe_id)
         .await
 }
 
