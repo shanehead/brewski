@@ -1039,6 +1039,52 @@ impl<'a> RecipeVersionRepository<'a> {
         })
     }
 
+    /// Returns the content hash for a version, recomputing (and persisting) it when
+    /// missing or produced by an older projection.
+    async fn version_hash(&self, v: &recipe_versions::Model) -> Result<String, AppError> {
+        let current_prefix = format!("{}:", crate::recipe_hash::PROJECTION_VERSION);
+        if let Some(h) = &v.content_hash {
+            if h.starts_with(&current_prefix) {
+                return Ok(h.clone());
+            }
+        }
+        let snap = self.get_full(&v.id).await?;
+        let h = crate::recipe_hash::recipe_content_hash(&snap)?;
+        recipe_versions::ActiveModel {
+            id: Set(v.id.clone()),
+            content_hash: Set(Some(h.clone())),
+            ..Default::default()
+        }
+        .update(self.db)
+        .await?;
+        Ok(h)
+    }
+
+    pub async fn status(
+        &self,
+        recipe_id: &str,
+    ) -> Result<crate::models::RecipeVersionStatus, AppError> {
+        let versions = recipe_versions::Entity::find()
+            .filter(recipe_versions::Column::RecipeId.eq(recipe_id))
+            .order_by_desc(recipe_versions::Column::VersionNumber)
+            .all(self.db)
+            .await?;
+
+        let has_unversioned_changes = if let Some(latest) = versions.first() {
+            let live = RecipeRepository::new(self.db).get(recipe_id).await?;
+            let live_hash = crate::recipe_hash::recipe_content_hash(&live)?;
+            live_hash != self.version_hash(latest).await?
+        } else {
+            false
+        };
+
+        Ok(crate::models::RecipeVersionStatus {
+            version_count: versions.len() as i64,
+            latest_version_id: versions.first().map(|v| v.id.clone()),
+            has_unversioned_changes,
+        })
+    }
+
     pub async fn delete(&self, version_id: &str) -> Result<(), AppError> {
         // 1. Confirm version exists
         let version = recipe_versions::Entity::find_by_id(version_id)
@@ -1091,6 +1137,7 @@ mod tests {
     use super::*;
     use crate::models::CreateFermentableAdditionInput;
     use crate::models::CreateRecipeInput;
+    use crate::models::UpdateRecipeInput;
     use crate::repositories::fermentable::FermentableRepository;
     use crate::repositories::recipe::RecipeRepository;
     use crate::test_helpers::setup_test_db;
@@ -1313,6 +1360,56 @@ mod tests {
             recipe_content_hash(&live).unwrap(),
             recipe_content_hash(&snap).unwrap(),
             "an unmodified recipe must hash identically to its own snapshot"
+        );
+    }
+
+    #[tokio::test]
+    async fn status_zero_versions_is_not_dirty() {
+        let db = setup_test_db().await;
+        let recipe_id = make_recipe(&db).await;
+        let st = RecipeVersionRepository::new(&db)
+            .status(&recipe_id)
+            .await
+            .unwrap();
+        assert_eq!(st.version_count, 0);
+        assert!(st.latest_version_id.is_none());
+        assert!(!st.has_unversioned_changes);
+    }
+
+    #[tokio::test]
+    async fn status_clean_after_snapshot() {
+        let db = setup_test_db().await;
+        let recipe_id = make_recipe(&db).await;
+        let repo = RecipeVersionRepository::new(&db);
+        repo.save_named(&recipe_id, "v1").await.unwrap();
+        let st = repo.status(&recipe_id).await.unwrap();
+        assert_eq!(st.version_count, 1);
+        assert!(!st.has_unversioned_changes);
+    }
+
+    #[tokio::test]
+    async fn status_dirty_after_edit() {
+        let db = setup_test_db().await;
+        let recipe_id = make_recipe(&db).await;
+        let repo = RecipeVersionRepository::new(&db);
+        repo.save_named(&recipe_id, "v1").await.unwrap();
+
+        // Edit a brew-identity field so the live recipe diverges from the snapshot.
+        RecipeRepository::new(&db)
+            .update(
+                &recipe_id,
+                UpdateRecipeInput {
+                    batch_size_l: Some(19.0),
+                    ..Default::default()
+                },
+            )
+            .await
+            .unwrap();
+
+        let st = repo.status(&recipe_id).await.unwrap();
+        assert!(
+            st.has_unversioned_changes,
+            "editing batch size must mark the recipe dirty"
         );
     }
 

@@ -295,6 +295,8 @@ components:
       $ref: ./components/schemas/UpdateEquipmentProfileInput.yaml
     RecipeVersionSummary:
       $ref: ./components/schemas/RecipeVersionSummary.yaml
+    RecipeVersionStatus:
+      $ref: ./components/schemas/RecipeVersionStatus.yaml
     SaveRecipeVersionInput:
       $ref: ./components/schemas/SaveRecipeVersionInput.yaml
     GravityReading:

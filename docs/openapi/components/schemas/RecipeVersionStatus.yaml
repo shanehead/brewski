@@ -1,0 +1,16 @@
+description: Status of a recipe's versioning state, indicating how many versions exist and whether the live recipe has unversioned changes.
+type: object
+required:
+  - version_count
+  - has_unversioned_changes
+properties:
+  version_count:
+    type: integer
+    format: int64
+    description: Number of saved versions for this recipe.
+  latest_version_id:
+    type: ["string", "null"]
+    description: ID of the most recent saved version, or null if no versions exist.
+  has_unversioned_changes:
+    type: boolean
+    description: True when the live recipe content differs from its latest saved version.

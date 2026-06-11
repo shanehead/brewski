@@ -1516,8 +1516,11 @@ export interface components {
             mash_water_id?: string | null;
             /** @description ID of the sparge water profile (null means use mash water) */
             sparge_water_id?: string | null;
-            /** @description Default hopstand temperature in °C for this recipe */
-            hopstand_temp_c?: number | null;
+            /**
+             * @description Default hopstand temperature in °C for this recipe
+             * @default 80
+             */
+            hopstand_temp_c: number;
             /** @description The mash schedule for this recipe, or null if not set. */
             mash?: components["schemas"]["Mash"] | null;
             /** @description Filename of the recipe's image in {appDataDir}/images/ */
@@ -1666,8 +1669,11 @@ export interface components {
             batch_volume_target: string;
             /** @description Volume left in the mash tun after lautering, in litres */
             mash_tun_loss_l: number;
-            /** @description Volume that remains in the HLT and cannot be transferred, in litres */
-            hlt_deadspace_l?: number | null;
+            /**
+             * @description Volume that remains in the HLT and cannot be transferred, in litres
+             * @default 0
+             */
+            hlt_deadspace_l: number;
             /** @description Wort volume reduction from boiling temperature to room temperature, as a percentage */
             cooling_shrinkage_pct: number;
             /** @description When true, mash efficiency is calculated from brewhouse efficiency and losses */
@@ -1680,8 +1686,11 @@ export interface components {
             aroma_hop_utilization_pct: number;
             /** @description Temperature at which the hopstand is conducted, in Fahrenheit */
             hopstand_temp_f: number;
-            /** @description Time wort sits in the whirlpool before chilling, in minutes */
-            whirlpool_time_min?: number | null;
+            /**
+             * @description Time wort sits in the whirlpool before chilling, in minutes
+             * @default 0
+             */
+            whirlpool_time_min: number;
             /** @description When true, boil temperature is calculated from altitude */
             altitude_adjustment: boolean;
             /** @description Manual boil temperature in Fahrenheit, used when altitude_adjustment is false */
@@ -2156,8 +2165,11 @@ export interface components {
             source_id?: string;
             /** @description ID of the beer style to associate with this recipe. */
             style_id?: string;
-            /** @description Default hopstand temperature in °C */
-            hopstand_temp_c?: number;
+            /**
+             * @description Default hopstand temperature in °C
+             * @default 80
+             */
+            hopstand_temp_c: number;
         };
         /** @description Fields that can be updated on an existing recipe. All fields are optional; only provided fields are changed. */
         UpdateRecipeInput: {
@@ -2443,8 +2455,11 @@ export interface components {
             mash_tun_deadspace_l?: number;
             /** @description Volume left in the mash tun after lautering, in litres. */
             mash_tun_loss_l?: number;
-            /** @description Volume that remains in the HLT and cannot be transferred, in litres. */
-            hlt_deadspace_l?: number;
+            /**
+             * @description Volume that remains in the HLT and cannot be transferred, in litres.
+             * @default 0
+             */
+            hlt_deadspace_l: number;
             /** @description Wort volume reduction from boiling temperature to room temperature, as a percentage. */
             cooling_shrinkage_pct?: number;
             /** @description When true, mash efficiency is calculated from brewhouse efficiency and losses. */
@@ -2457,8 +2472,11 @@ export interface components {
             aroma_hop_utilization_pct?: number;
             /** @description Temperature at which the hopstand is conducted, in Fahrenheit. */
             hopstand_temp_f?: number;
-            /** @description Time wort sits in the whirlpool before chilling, in minutes. */
-            whirlpool_time_min?: number;
+            /**
+             * @description Time wort sits in the whirlpool before chilling, in minutes.
+             * @default 0
+             */
+            whirlpool_time_min: number;
             /** @description When true, boil temperature is calculated from altitude. */
             altitude_adjustment?: boolean;
             /** @description Manual boil temperature in Fahrenheit, used when altitude_adjustment is false. */
@@ -2588,6 +2606,18 @@ export interface components {
              * @description Unix timestamp in milliseconds when this version was saved.
              */
             created_at: number;
+        };
+        /** @description Status of a recipe's versioning state, indicating how many versions exist and whether the live recipe has unversioned changes. */
+        RecipeVersionStatus: {
+            /**
+             * Format: int64
+             * @description Number of saved versions for this recipe.
+             */
+            version_count: number;
+            /** @description ID of the most recent saved version, or null if no versions exist. */
+            latest_version_id?: string | null;
+            /** @description True when the live recipe content differs from its latest saved version. */
+            has_unversioned_changes: boolean;
         };
         /** @description Input for saving a named snapshot of a recipe's current state. */
         SaveRecipeVersionInput: {

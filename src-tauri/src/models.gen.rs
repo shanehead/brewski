@@ -2,7 +2,6 @@
 #![allow(clippy::needless_lifetimes)]
 #![allow(clippy::match_single_binding)]
 #![allow(clippy::clone_on_copy)]
-#![allow(dead_code)]
 
 #[doc = r" Error types."]
 pub mod error {
@@ -5104,6 +5103,54 @@ impl ::std::convert::TryFrom<::std::string::String> for RecipeSummarySource {
         value: ::std::string::String,
     ) -> ::std::result::Result<Self, self::error::ConversionError> {
         value.parse()
+    }
+}
+#[doc = "Status of a recipe's versioning state, indicating how many versions exist and whether the live recipe has unversioned changes."]
+#[doc = r""]
+#[doc = r" <details><summary>JSON schema</summary>"]
+#[doc = r""]
+#[doc = r" ```json"]
+#[doc = "{"]
+#[doc = "  \"description\": \"Status of a recipe's versioning state, indicating how many versions exist and whether the live recipe has unversioned changes.\","]
+#[doc = "  \"type\": \"object\","]
+#[doc = "  \"required\": ["]
+#[doc = "    \"has_unversioned_changes\","]
+#[doc = "    \"version_count\""]
+#[doc = "  ],"]
+#[doc = "  \"properties\": {"]
+#[doc = "    \"has_unversioned_changes\": {"]
+#[doc = "      \"description\": \"True when the live recipe content differs from its latest saved version.\","]
+#[doc = "      \"type\": \"boolean\""]
+#[doc = "    },"]
+#[doc = "    \"latest_version_id\": {"]
+#[doc = "      \"description\": \"ID of the most recent saved version, or null if no versions exist.\","]
+#[doc = "      \"type\": ["]
+#[doc = "        \"string\","]
+#[doc = "        \"null\""]
+#[doc = "      ]"]
+#[doc = "    },"]
+#[doc = "    \"version_count\": {"]
+#[doc = "      \"description\": \"Number of saved versions for this recipe.\","]
+#[doc = "      \"type\": \"integer\","]
+#[doc = "      \"format\": \"int64\""]
+#[doc = "    }"]
+#[doc = "  }"]
+#[doc = "}"]
+#[doc = r" ```"]
+#[doc = r" </details>"]
+#[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+pub struct RecipeVersionStatus {
+    #[doc = "True when the live recipe content differs from its latest saved version."]
+    pub has_unversioned_changes: bool,
+    #[doc = "ID of the most recent saved version, or null if no versions exist."]
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub latest_version_id: ::std::option::Option<::std::string::String>,
+    #[doc = "Number of saved versions for this recipe."]
+    pub version_count: i64,
+}
+impl RecipeVersionStatus {
+    pub fn builder() -> builder::RecipeVersionStatus {
+        Default::default()
     }
 }
 #[doc = "Summary of a saved recipe version snapshot."]
@@ -16280,6 +16327,79 @@ pub mod builder {
                 style_name: Ok(value.style_name),
                 type_: Ok(value.type_),
                 updated_at: Ok(value.updated_at),
+            }
+        }
+    }
+    #[derive(Clone, Debug)]
+    pub struct RecipeVersionStatus {
+        has_unversioned_changes: ::std::result::Result<bool, ::std::string::String>,
+        latest_version_id: ::std::result::Result<
+            ::std::option::Option<::std::string::String>,
+            ::std::string::String,
+        >,
+        version_count: ::std::result::Result<i64, ::std::string::String>,
+    }
+    impl ::std::default::Default for RecipeVersionStatus {
+        fn default() -> Self {
+            Self {
+                has_unversioned_changes: Err(
+                    "no value supplied for has_unversioned_changes".to_string()
+                ),
+                latest_version_id: Ok(Default::default()),
+                version_count: Err("no value supplied for version_count".to_string()),
+            }
+        }
+    }
+    impl RecipeVersionStatus {
+        pub fn has_unversioned_changes<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<bool>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.has_unversioned_changes = value.try_into().map_err(|e| {
+                format!("error converting supplied value for has_unversioned_changes: {e}")
+            });
+            self
+        }
+        pub fn latest_version_id<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.latest_version_id = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for latest_version_id: {e}"));
+            self
+        }
+        pub fn version_count<T>(mut self, value: T) -> Self
+        where
+            T: ::std::convert::TryInto<i64>,
+            T::Error: ::std::fmt::Display,
+        {
+            self.version_count = value
+                .try_into()
+                .map_err(|e| format!("error converting supplied value for version_count: {e}"));
+            self
+        }
+    }
+    impl ::std::convert::TryFrom<RecipeVersionStatus> for super::RecipeVersionStatus {
+        type Error = super::error::ConversionError;
+        fn try_from(
+            value: RecipeVersionStatus,
+        ) -> ::std::result::Result<Self, super::error::ConversionError> {
+            Ok(Self {
+                has_unversioned_changes: value.has_unversioned_changes?,
+                latest_version_id: value.latest_version_id?,
+                version_count: value.version_count?,
+            })
+        }
+    }
+    impl ::std::convert::From<super::RecipeVersionStatus> for RecipeVersionStatus {
+        fn from(value: super::RecipeVersionStatus) -> Self {
+            Self {
+                has_unversioned_changes: Ok(value.has_unversioned_changes),
+                latest_version_id: Ok(value.latest_version_id),
+                version_count: Ok(value.version_count),
             }
         }
     }
