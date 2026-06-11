@@ -54,6 +54,9 @@ pub struct Model {
     pub created_at: i32,
     #[sea_orm(column_type = "Text", nullable)]
     pub parent_version_id: Option<String>,
+    #[sea_orm(column_type = "Text", nullable)]
+    pub content_hash: Option<String>,
+    pub hopstand_temp_c: Option<f64>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]

@@ -1,6 +1,6 @@
 use sea_orm::{
-    ActiveModelTrait, ColumnTrait, DatabaseConnection, EntityTrait, PaginatorTrait, QueryFilter,
-    QueryOrder, Set,
+    ActiveModelTrait, ColumnTrait, DatabaseConnection, EntityTrait, NotSet, PaginatorTrait,
+    QueryFilter, QueryOrder, Set,
 };
 
 use crate::entities::{
@@ -356,6 +356,8 @@ impl<'a> RecipeVersionRepository<'a> {
             keg_priming_factor: Set(recipe.keg_priming_factor),
             created_at: Set(now),
             parent_version_id: Set(parent_version_id),
+            content_hash: NotSet,
+            hopstand_temp_c: NotSet,
         }
         .insert(self.db)
         .await?;
@@ -391,6 +393,7 @@ impl<'a> RecipeVersionRepository<'a> {
                 r#use: Set(h.use_.clone()),
                 time_min: Set(h.time_min),
                 addition_order: Set(h.addition_order as i32),
+                hopstand_temp_c: NotSet,
             }
             .insert(self.db)
             .await?;

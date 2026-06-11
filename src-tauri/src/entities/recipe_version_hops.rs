@@ -22,6 +22,7 @@ pub struct Model {
     pub r#use: String,
     pub time_min: f64,
     pub addition_order: i32,
+    pub hopstand_temp_c: Option<f64>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
