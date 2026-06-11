@@ -6,7 +6,7 @@ A batch is what happens when you actually brew. Where a recipe is a plan, a batc
 
 Open the recipe you want to brew and click the **Batches** tab, then hit **Brew this Recipe**.
 
-Brewski asks how you want to version the recipe before creating the batch. If there are unsaved changes, you'll see **Brew with current changes**. That option saves a version right now, with an optional name, then creates the batch. If you've already saved versions, **Brew a saved version** also appears so you can pick an older snapshot instead.
+Brewski asks how you want to version the recipe before creating the batch. If the recipe has unsaved changes, or if it's never been versioned, you'll see **Brew with current changes**. That option saves a version right now, with an optional name, then creates the batch. If you've already saved versions, **Brew a saved version** also appears so you can pick an older snapshot instead.
 
 The batch is permanently linked to that recipe snapshot. Change the recipe later and your batch records stay untouched.
 

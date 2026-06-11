@@ -26,13 +26,13 @@ Brewski asks for confirmation before branching. Once you confirm, it replaces th
 
 ## How batches connect to versions
 
-When you click **Brew this Recipe**, Brewski shows a modal before creating the batch. You have two paths:
+When you click **Brew this Recipe**, Brewski shows a modal. What appears depends on your recipe's state.
 
-**Brew with current changes** saves the recipe as a new version right now, then creates the batch from it. You can name that version if you want. Use this when you've been tweaking the recipe and are ready to brew it as-is.
+If the recipe has unsaved changes, or if it's never been versioned, you'll see **Brew with current changes**. That saves a version right now, with an optional name, then creates the batch from it.
 
-**Brew a saved version** lets you pick from any version you've already saved. Use this when you want to brew an older iteration, or when you want to brew against a clean known state without auto-saving pending changes.
+If you have saved versions, **Brew a saved version** also appears. Pick any saved version to brew from an older snapshot instead.
 
-Either way, the batch is permanently linked to the exact snapshot it was brewed from. Keep developing the recipe and your batch history stays accurate. You'll always know what was actually in the kettle.
+The batch is permanently linked to whichever snapshot you brewed from. Keep developing the recipe and your batch history stays accurate. You'll always know what was actually in the kettle.
 
 ## What versions track
 
