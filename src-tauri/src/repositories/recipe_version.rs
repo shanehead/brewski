@@ -1,6 +1,6 @@
 use sea_orm::{
-    ActiveModelTrait, ColumnTrait, DatabaseConnection, EntityTrait, NotSet, PaginatorTrait,
-    QueryFilter, QueryOrder, Set,
+    ActiveModelTrait, ColumnTrait, DatabaseConnection, EntityTrait, PaginatorTrait, QueryFilter,
+    QueryOrder, Set,
 };
 
 use crate::entities::{
@@ -356,8 +356,8 @@ impl<'a> RecipeVersionRepository<'a> {
             keg_priming_factor: Set(recipe.keg_priming_factor),
             created_at: Set(now),
             parent_version_id: Set(parent_version_id),
-            content_hash: NotSet,
-            hopstand_temp_c: NotSet,
+            content_hash: Set(Some(crate::recipe_hash::recipe_content_hash(recipe)?)),
+            hopstand_temp_c: Set(Some(recipe.hopstand_temp_c)),
         }
         .insert(self.db)
         .await?;
@@ -393,7 +393,7 @@ impl<'a> RecipeVersionRepository<'a> {
                 r#use: Set(h.use_.clone()),
                 time_min: Set(h.time_min),
                 addition_order: Set(h.addition_order as i32),
-                hopstand_temp_c: NotSet,
+                hopstand_temp_c: Set(h.hopstand_temp_c),
             }
             .insert(self.db)
             .await?;
@@ -858,7 +858,7 @@ impl<'a> RecipeVersionRepository<'a> {
                 use_: m.r#use,
                 time_min: m.time_min,
                 addition_order: m.addition_order as i64,
-                hopstand_temp_c: None, // not captured in version snapshot
+                hopstand_temp_c: m.hopstand_temp_c,
             })
             .collect();
 
@@ -1023,7 +1023,7 @@ impl<'a> RecipeVersionRepository<'a> {
                 .map_err(|e| AppError::Internal(format!("invalid source value: {e}")))?,
             mash_water_id: v.mash_water_id,
             sparge_water_id: v.sparge_water_id,
-            hopstand_temp_c: 80.0,
+            hopstand_temp_c: v.hopstand_temp_c.unwrap_or(80.0),
             image_path: None,
             created_at: v.created_at as i64,
             updated_at: v.created_at as i64,
@@ -1264,6 +1264,56 @@ mod tests {
         assert_eq!(full.fermentables.len(), 1);
         assert_eq!(full.fermentables[0].name, "Pale Malt");
         assert_eq!(full.fermentables[0].amount_kg, 4.5);
+    }
+
+    #[tokio::test]
+    async fn live_and_snapshot_hash_match_for_unchanged_recipe() {
+        use crate::models::{CreateHopAdditionInput, UpdateRecipeInput};
+        use crate::recipe_hash::recipe_content_hash;
+        use crate::repositories::hop::HopRepository;
+        let db = setup_test_db().await;
+        let recipe_id = make_recipe(&db).await;
+
+        // Set a non-default recipe-level hopstand temp so the gap is exercised
+        RecipeRepository::new(&db)
+            .update(
+                &recipe_id,
+                UpdateRecipeInput {
+                    hopstand_temp_c: Some(77.0),
+                    ..Default::default()
+                },
+            )
+            .await
+            .unwrap();
+
+        // Add a hop with a per-hop hopstand override so that field is also exercised
+        HopRepository::new(&db)
+            .create(
+                &recipe_id,
+                CreateHopAdditionInput {
+                    hop_id: None,
+                    name: "Citra".into(),
+                    alpha_pct: 12.0,
+                    amount_kg: 0.05,
+                    form: None,
+                    use_: "Hopstand".into(),
+                    time_min: 0.0,
+                    hopstand_temp_c: Some(75.5),
+                },
+            )
+            .await
+            .unwrap();
+
+        let repo = RecipeVersionRepository::new(&db);
+        let v = repo.save_named(&recipe_id, "v1").await.unwrap();
+        let live = RecipeRepository::new(&db).get(&recipe_id).await.unwrap();
+        let snap = repo.get_full(&v.id).await.unwrap();
+
+        assert_eq!(
+            recipe_content_hash(&live).unwrap(),
+            recipe_content_hash(&snap).unwrap(),
+            "an unmodified recipe must hash identically to its own snapshot"
+        );
     }
 
     #[tokio::test]
