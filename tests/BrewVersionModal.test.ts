@@ -8,14 +8,25 @@ const versions = [
 ] as any;
 
 describe("BrewVersionModal", () => {
-  it("shows the current-changes option only when dirty", () => {
-    const clean = render(BrewVersionModal, {
+  it("hides the current-changes block when clean and versions exist", () => {
+    const { queryByText } = render(BrewVersionModal, {
       props: {
         status: { version_count: 2, latest_version_id: "v2", has_unversioned_changes: false },
         versions, onBrewCurrent: vi.fn(), onBrewVersion: vi.fn(), onCancel: vi.fn(),
       },
     });
-    expect(clean.queryByText(/un-versioned changes/i)).toBeNull();
+    expect(queryByText(/un-versioned changes/i)).toBeNull();
+    expect(queryByText(/isn't saved as a version yet/i)).toBeNull();
+  });
+
+  it("shows the un-versioned-changes warning and hides it when clean", () => {
+    const { queryByText } = render(BrewVersionModal, {
+      props: {
+        status: { version_count: 1, latest_version_id: "v1", has_unversioned_changes: true },
+        versions, onBrewCurrent: vi.fn(), onBrewVersion: vi.fn(), onCancel: vi.fn(),
+      },
+    });
+    expect(queryByText(/un-versioned changes/i)).not.toBeNull();
   });
 
   it("emits onBrewCurrent with the typed name", async () => {
@@ -41,5 +52,18 @@ describe("BrewVersionModal", () => {
     });
     await fireEvent.click(getByText("Brew a saved version"));
     expect(onBrewVersion).toHaveBeenCalledWith("v2");
+  });
+
+  it("shows 'not saved as version yet' warning and no saved-version picker when version_count is 0", () => {
+    const { queryByText, queryByRole } = render(BrewVersionModal, {
+      props: {
+        status: { version_count: 0, latest_version_id: null, has_unversioned_changes: false },
+        versions: [],
+        onBrewCurrent: vi.fn(), onBrewVersion: vi.fn(), onCancel: vi.fn(),
+      },
+    });
+    expect(queryByText(/isn't saved as a version yet/i)).not.toBeNull();
+    expect(queryByText("Brew with current changes")).not.toBeNull();
+    expect(queryByRole("button", { name: /Brew a saved version/i })).toBeNull();
   });
 });

@@ -22,14 +22,10 @@
   onMount(load);
 
   async function handleBrew() {
-    const decision = await startBrew(recipeId);
-    if (!decision) return;
-    if (decision.kind === "auto") {
-      goto(`/batches/${decision.batch.id}`);
-      return;
-    }
-    promptStatus = decision.status;
-    promptVersions = decision.versions;
+    const result = await startBrew(recipeId);
+    if (!result) return;
+    promptStatus = result.status;
+    promptVersions = result.versions;
   }
 
   async function finishBrew(batch: { id: string } | null) {

@@ -23,16 +23,11 @@
 
   async function handlePickRecipe(recipe: RecipeSummary) {
     showPicker = false;
-    const decision = await startBrew(recipe.id);
-    if (!decision) return;
-    if (decision.kind === "auto") {
-      await ipc(refreshBatchList());
-      goto(`/batches/${decision.batch.id}`);
-      return;
-    }
+    const result = await startBrew(recipe.id);
+    if (!result) return;
     promptRecipeId = recipe.id;
-    promptStatus = decision.status;
-    promptVersions = decision.versions;
+    promptStatus = result.status;
+    promptVersions = result.versions;
   }
 
   async function finishBrew(batch: { id: string } | null) {

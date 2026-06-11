@@ -85,11 +85,15 @@ describe.each([
   { label: "desktop", Component: DesktopBatchesHome },
   { label: "mobile", Component: MobileBatchesHome },
 ])("BatchesHome ($label) — version picker", ({ Component }) => {
-  it("creates batch immediately when recipe has only one version (auto decision)", async () => {
+  it("always shows the version modal for a clean recipe (no auto path)", async () => {
     const user = userEvent.setup();
     const recipe = makeRecipe();
     mockListRecipes.mockResolvedValue([recipe]);
-    mockStartBrew.mockResolvedValue({ kind: "auto", batch: { id: "b1" } });
+    const versions = [makeVersion({ id: "ver1", version_number: 1 })];
+    mockStartBrew.mockResolvedValue({
+      status: makeStatus({ has_unversioned_changes: false, latest_version_id: "ver1" }),
+      versions,
+    });
 
     render(Component);
 
@@ -98,13 +102,12 @@ describe.each([
     await user.click(screen.getByText("Pliny the Elder"));
 
     await waitFor(() => expect(mockStartBrew).toHaveBeenCalledWith("r1"));
-    // Auto path side effects: refresh the batch list, then navigate to the new batch.
-    await waitFor(() => expect(goto).toHaveBeenCalledWith("/batches/b1"));
-    expect(mockRefreshBatchList).toHaveBeenCalled();
-    expect(screen.queryByText(/Choose a version/i)).not.toBeInTheDocument();
+    // Modal must appear even for a clean recipe — no auto navigation.
+    await waitFor(() => expect(screen.getByText(/Choose a version to brew/i)).toBeInTheDocument());
+    expect(goto).not.toHaveBeenCalled();
   });
 
-  it("shows version modal when startBrew returns prompt decision", async () => {
+  it("always shows the version modal for a dirty recipe", async () => {
     const user = userEvent.setup();
     const recipe = makeRecipe();
     mockListRecipes.mockResolvedValue([recipe]);
@@ -113,8 +116,7 @@ describe.each([
       makeVersion({ id: "ver1", version_number: 1, name: null, created_at: 1700000000 }),
     ];
     mockStartBrew.mockResolvedValue({
-      kind: "prompt",
-      status: makeStatus({ has_unversioned_changes: false, latest_version_id: "ver2" }),
+      status: makeStatus({ has_unversioned_changes: true, latest_version_id: "ver2" }),
       versions,
     });
 
@@ -138,7 +140,6 @@ describe.each([
       makeVersion({ id: "ver1", version_number: 1, name: null, created_at: 1700000000 }),
     ];
     mockStartBrew.mockResolvedValue({
-      kind: "prompt",
       status: makeStatus({ has_unversioned_changes: false, latest_version_id: "ver2" }),
       versions,
     });
@@ -166,7 +167,6 @@ describe.each([
       makeVersion({ id: "ver1", version_number: 1, created_at: 1700000000 }),
     ];
     mockStartBrew.mockResolvedValue({
-      kind: "prompt",
       status: makeStatus({ has_unversioned_changes: false, latest_version_id: "ver2" }),
       versions,
     });

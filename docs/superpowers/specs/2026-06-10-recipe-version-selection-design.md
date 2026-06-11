@@ -44,10 +44,10 @@ Two problems:
 
 ## Decisions (from brainstorming)
 
-1. **Clean-recipe flow:** when the recipe is unchanged since its latest version,
-   "New Batch" pins the latest version in one click; a "use a different version"
-   picker is available but not forced. The prompt only appears when there are
-   un-versioned changes.
+1. **Version picker always shown:** "New Batch" always opens the version picker
+   modal. It defaults to the latest saved version. A warning appears when there
+   are un-versioned changes or no versions yet. This gives users full visibility
+   and control in every case.
 2. **New-version naming:** "Brew with current changes" offers an *optional* name,
    defaulting to the next auto-number.
 3. **Dirty indicator placement:** both the batch-creation prompt **and** a
@@ -128,15 +128,18 @@ identity set later is therefore a backfill, never a silent mismatch.
 
 One path for both entry points: the global "+ New Batch" button
 (`BatchesHome`, desktop + mobile) and a recipe's Batches tab
-(`BatchesTab`). After the recipe is known, call `recipe_version_status`:
+(`BatchesTab`). After the recipe is known, call `recipe_version_status` and
+`list_recipe_versions`, then always show `BrewVersionModal`:
 
-- **0 versions** → snapshot v1 silently (optional auto-name), create batch, no
-  prompt.
-- **Clean (≥1 version, `has_unversioned_changes == false`)** → pin
-  `latest_version_id` in one click. A "use a different version" affordance opens
-  the version picker (optional).
-- **Un-versioned changes (`has_unversioned_changes == true`)** → prompt with two
-  choices:
+- **0 versions** → modal shows with warning "This recipe isn't saved as a
+  version yet." Only the "Brew with current changes" path is available (which
+  snapshots v1 then creates the batch). The saved-version picker is hidden.
+- **Clean (>=1 version, `has_unversioned_changes == false`)** → modal shows
+  the saved-version picker, defaulting to `latest_version_id`. No warning.
+  User confirms or picks a different version.
+- **Un-versioned changes (`has_unversioned_changes == true`)** → modal shows
+  both the warning ("This recipe has un-versioned changes.") with "Brew with
+  current changes" and the saved-version picker. Two choices:
   - **Brew with current changes** — optional name field →
     `save_recipe_version(name?)` → `create_batch({ version_id: new })`.
   - **Brew a saved version** → version picker → `create_batch({ version_id:
@@ -175,8 +178,9 @@ and the no-choice quick-brew in `BatchesTab` now routes through the same logic.
 
 **Frontend tests:**
 
-- Brew flow branches: 0 versions (silent v1), clean (one-click latest), dirty
-  (prompt → both choices).
+- Brew flow: modal always shown. 0 versions shows only "Brew with current
+  changes" with the not-saved-yet warning. Clean shows saved-version picker,
+  default latest, no warning. Dirty shows both warning and picker.
 - Dirty badge appears/clears with status; "Save as version" creates a version.
 
 **Docs:**
