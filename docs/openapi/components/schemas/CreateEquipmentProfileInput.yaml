@@ -44,7 +44,6 @@ properties:
     description: Volume left in the mash tun after lautering, in litres.
   hlt_deadspace_l:
     type: number
-    default: 0
     description: Volume that remains in the HLT and cannot be transferred, in litres.
   cooling_shrinkage_pct:
     type: number
@@ -66,7 +65,6 @@ properties:
     description: Temperature at which the hopstand is conducted, in Fahrenheit.
   whirlpool_time_min:
     type: number
-    default: 0
     description: Time wort sits in the whirlpool before chilling, in minutes.
   altitude_adjustment:
     type: boolean

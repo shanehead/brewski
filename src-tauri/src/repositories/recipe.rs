@@ -217,7 +217,7 @@ impl<'a> RecipeRepository<'a> {
             equipment_profile_id: Set(ep_id),
             mash_water_id: Set(mash_water_id),
             sparge_water_id: Set(sparge_water_id),
-            hopstand_temp_c: Set(Some(input.hopstand_temp_c)),
+            hopstand_temp_c: Set(Some(input.hopstand_temp_c.unwrap_or(80.0))),
             created_at: Set(now),
             updated_at: Set(now),
             ..Default::default()

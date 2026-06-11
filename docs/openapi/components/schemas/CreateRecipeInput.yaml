@@ -29,5 +29,4 @@ properties:
     description: ID of the beer style to associate with this recipe.
   hopstand_temp_c:
     type: number
-    default: 80
     description: Default hopstand temperature in °C

@@ -360,7 +360,7 @@ impl Default for CreateRecipeInput {
             source_id: None,
             style_id: None,
             type_: None,
-            hopstand_temp_c: 80.0,
+            hopstand_temp_c: None,
         }
     }
 }

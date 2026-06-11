@@ -71,7 +71,7 @@ impl<'a> EquipmentRepository<'a> {
                 .unwrap_or_else(|| "fermenter".into())),
             mash_tun_deadspace_l: Set(input.mash_tun_deadspace_l),
             mash_tun_loss_l: Set(input.mash_tun_loss_l.unwrap_or(0.0)),
-            hlt_deadspace_l: Set(Some(input.hlt_deadspace_l)),
+            hlt_deadspace_l: Set(Some(input.hlt_deadspace_l.unwrap_or(0.0))),
             cooling_shrinkage_pct: Set(input.cooling_shrinkage_pct.unwrap_or(4.0)),
             calc_mash_efficiency: Set(input.calc_mash_efficiency.map(|b| b as i32).unwrap_or(1)),
             mash_efficiency_pct: Set(input.mash_efficiency_pct),
@@ -80,7 +80,7 @@ impl<'a> EquipmentRepository<'a> {
                 .map(|b| b as i32)
                 .unwrap_or(1)),
             aroma_hop_utilization_pct: Set(input.aroma_hop_utilization_pct.unwrap_or(23.0)),
-            whirlpool_time_min: Set(Some(input.whirlpool_time_min)),
+            whirlpool_time_min: Set(Some(input.whirlpool_time_min.unwrap_or(0.0))),
             altitude_adjustment: Set(input.altitude_adjustment.map(|b| b as i32).unwrap_or(0)),
             boil_temp_f: Set(input.boil_temp_f),
             sparge_method: Set(input.sparge_method.unwrap_or_else(|| "no_sparge".into())),
@@ -259,7 +259,7 @@ mod tests {
             fermenter_loss_l: Some(1.0),
             grain_absorption_rate_l_per_kg: None,
             grain_temp_f: None,
-            hlt_deadspace_l: 0.0,
+            hlt_deadspace_l: None,
             hlt_water_limit_min_l: None,
             mash_tun_deadspace_l: None,
             hopstand_temp_f: None,
@@ -279,7 +279,7 @@ mod tests {
             trub_chiller_loss_l: Some(1.5),
             tun_heat_capacity_l: None,
             water_grain_ratio_l_per_kg: None,
-            whirlpool_time_min: 0.0,
+            whirlpool_time_min: None,
         }
     }
 

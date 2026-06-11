@@ -711,7 +711,6 @@ impl CreateBatchInput {
 #[doc = "    },"]
 #[doc = "    \"hlt_deadspace_l\": {"]
 #[doc = "      \"description\": \"Volume that remains in the HLT and cannot be transferred, in litres.\","]
-#[doc = "      \"default\": 0,"]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"hlt_water_limit_min_l\": {"]
@@ -792,7 +791,6 @@ impl CreateBatchInput {
 #[doc = "    },"]
 #[doc = "    \"whirlpool_time_min\": {"]
 #[doc = "      \"description\": \"Time wort sits in the whirlpool before chilling, in minutes.\","]
-#[doc = "      \"default\": 0,"]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    }"]
 #[doc = "  }"]
@@ -847,8 +845,8 @@ pub struct CreateEquipmentProfileInput {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub grain_temp_f: ::std::option::Option<f64>,
     #[doc = "Volume that remains in the HLT and cannot be transferred, in litres."]
-    #[serde(default = "defaults::create_equipment_profile_input_hlt_deadspace_l")]
-    pub hlt_deadspace_l: f64,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub hlt_deadspace_l: ::std::option::Option<f64>,
     #[doc = "Minimum HLT water volume in litres."]
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub hlt_water_limit_min_l: ::std::option::Option<f64>,
@@ -906,8 +904,8 @@ pub struct CreateEquipmentProfileInput {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub water_grain_ratio_l_per_kg: ::std::option::Option<f64>,
     #[doc = "Time wort sits in the whirlpool before chilling, in minutes."]
-    #[serde(default = "defaults::create_equipment_profile_input_whirlpool_time_min")]
-    pub whirlpool_time_min: f64,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub whirlpool_time_min: ::std::option::Option<f64>,
 }
 impl CreateEquipmentProfileInput {
     pub fn builder() -> builder::CreateEquipmentProfileInput {
@@ -1723,7 +1721,6 @@ impl CreateMiscInput {
 #[doc = "    },"]
 #[doc = "    \"hopstand_temp_c\": {"]
 #[doc = "      \"description\": \"Default hopstand temperature in °C\","]
-#[doc = "      \"default\": 80,"]
 #[doc = "      \"type\": \"number\""]
 #[doc = "    },"]
 #[doc = "    \"name\": {"]
@@ -1761,8 +1758,8 @@ pub struct CreateRecipeInput {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub equipment_profile_id: ::std::option::Option<::std::string::String>,
     #[doc = "Default hopstand temperature in °C"]
-    #[serde(default = "defaults::create_recipe_input_hopstand_temp_c")]
-    pub hopstand_temp_c: f64,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub hopstand_temp_c: ::std::option::Option<f64>,
     #[doc = "Recipe name."]
     pub name: ::std::string::String,
     #[doc = "ID of a recipe to copy ingredients from"]
@@ -9433,7 +9430,7 @@ pub mod builder {
         grain_absorption_rate_l_per_kg:
             ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         grain_temp_f: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
-        hlt_deadspace_l: ::std::result::Result<f64, ::std::string::String>,
+        hlt_deadspace_l: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         hlt_water_limit_min_l:
             ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         hopstand_temp_f: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
@@ -9471,7 +9468,8 @@ pub mod builder {
             ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         water_grain_ratio_l_per_kg:
             ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
-        whirlpool_time_min: ::std::result::Result<f64, ::std::string::String>,
+        whirlpool_time_min:
+            ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
     }
     impl ::std::default::Default for CreateEquipmentProfileInput {
         fn default() -> Self {
@@ -9492,9 +9490,7 @@ pub mod builder {
                 fermenter_loss_l: Ok(Default::default()),
                 grain_absorption_rate_l_per_kg: Ok(Default::default()),
                 grain_temp_f: Ok(Default::default()),
-                hlt_deadspace_l: Ok(
-                    super::defaults::create_equipment_profile_input_hlt_deadspace_l(),
-                ),
+                hlt_deadspace_l: Ok(Default::default()),
                 hlt_water_limit_min_l: Ok(Default::default()),
                 hopstand_temp_f: Ok(Default::default()),
                 include_grain_volume_in_mash_limits: Ok(Default::default()),
@@ -9514,9 +9510,7 @@ pub mod builder {
                 trub_chiller_loss_l: Ok(Default::default()),
                 tun_heat_capacity_l: Ok(Default::default()),
                 water_grain_ratio_l_per_kg: Ok(Default::default()),
-                whirlpool_time_min: Ok(
-                    super::defaults::create_equipment_profile_input_whirlpool_time_min(),
-                ),
+                whirlpool_time_min: Ok(Default::default()),
             }
         }
     }
@@ -9683,7 +9677,7 @@ pub mod builder {
         }
         pub fn hlt_deadspace_l<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<f64>,
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
             T::Error: ::std::fmt::Display,
         {
             self.hlt_deadspace_l = value
@@ -9885,7 +9879,7 @@ pub mod builder {
         }
         pub fn whirlpool_time_min<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<f64>,
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
             T::Error: ::std::fmt::Display,
         {
             self.whirlpool_time_min = value.try_into().map_err(|e| {
@@ -11285,7 +11279,7 @@ pub mod builder {
             ::std::option::Option<::std::string::String>,
             ::std::string::String,
         >,
-        hopstand_temp_c: ::std::result::Result<f64, ::std::string::String>,
+        hopstand_temp_c: ::std::result::Result<::std::option::Option<f64>, ::std::string::String>,
         name: ::std::result::Result<::std::string::String, ::std::string::String>,
         source_id: ::std::result::Result<
             ::std::option::Option<::std::string::String>,
@@ -11307,7 +11301,7 @@ pub mod builder {
                 boil_size_l: Ok(Default::default()),
                 boil_time_min: Ok(Default::default()),
                 equipment_profile_id: Ok(Default::default()),
-                hopstand_temp_c: Ok(super::defaults::create_recipe_input_hopstand_temp_c()),
+                hopstand_temp_c: Ok(Default::default()),
                 name: Err("no value supplied for name".to_string()),
                 source_id: Ok(Default::default()),
                 style_id: Ok(Default::default()),
@@ -11358,7 +11352,7 @@ pub mod builder {
         }
         pub fn hopstand_temp_c<T>(mut self, value: T) -> Self
         where
-            T: ::std::convert::TryInto<f64>,
+            T: ::std::convert::TryInto<::std::option::Option<f64>>,
             T::Error: ::std::fmt::Display,
         {
             self.hopstand_temp_c = value
@@ -21052,15 +21046,6 @@ pub mod defaults {
         <T as ::std::convert::TryFrom<i64>>::Error: ::std::fmt::Debug,
     {
         T::try_from(V).unwrap()
-    }
-    pub(super) fn create_equipment_profile_input_hlt_deadspace_l() -> f64 {
-        0_f64
-    }
-    pub(super) fn create_equipment_profile_input_whirlpool_time_min() -> f64 {
-        0_f64
-    }
-    pub(super) fn create_recipe_input_hopstand_temp_c() -> f64 {
-        80_f64
     }
     pub(super) fn equipment_profile_hlt_deadspace_l() -> f64 {
         0_f64
