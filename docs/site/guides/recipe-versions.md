@@ -22,7 +22,7 @@ Branching resets the live recipe back to match a saved version. Select a version
 
 This is useful when a recipe has taken a direction you want to split off. Say you started with a pale ale and evolved it into an IPA across a few versions. Branch from the original pale ale state to develop that direction as its own independent recipe.
 
-Brewski asks for confirmation before branching. Once confirmed, the live recipe's ingredients and settings are replaced with that version's data. The version history stays intact.
+Brewski asks for confirmation before branching. Once confirmed, Brewski replaces the live recipe's ingredients and settings with that version's data. The version history stays intact.
 
 ## How batches connect to versions
 
