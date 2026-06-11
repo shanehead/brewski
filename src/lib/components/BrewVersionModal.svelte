@@ -24,8 +24,14 @@
   }
 </script>
 
-<div class="fixed inset-0 z-50 flex items-center justify-center" style="background: rgba(0,0,0,0.4);">
-  <div class="w-[420px] max-w-[92vw] rounded-lg p-4 flex flex-col gap-3 bg-bg-surface border border-border">
+<svelte:window onkeydown={(e) => e.key === "Escape" && onCancel()} />
+
+<div class="fixed inset-0 z-50 flex items-center justify-center" style="background: rgba(0,0,0,0.4);"
+     role="none"
+     onclick={(e) => e.target === e.currentTarget && onCancel()}
+     onkeydown={(e) => e.key === "Escape" && onCancel()}>
+  <div class="w-[420px] max-w-[92vw] rounded-lg p-4 flex flex-col gap-3 bg-bg-surface border border-border"
+       role="dialog" aria-modal="true">
     <h2 class="text-base font-semibold text-text-primary">Choose a version to brew</h2>
 
     {#if status.has_unversioned_changes || status.version_count === 0}

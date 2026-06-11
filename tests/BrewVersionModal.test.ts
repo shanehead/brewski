@@ -66,4 +66,43 @@ describe("BrewVersionModal", () => {
     expect(queryByText("Brew with current changes")).not.toBeNull();
     expect(queryByRole("button", { name: /Brew a saved version/i })).toBeNull();
   });
+
+  it("emits onCancel when the Cancel button is clicked", async () => {
+    const onCancel = vi.fn();
+    const { getByText } = render(BrewVersionModal, {
+      props: {
+        status: { version_count: 2, latest_version_id: "v2", has_unversioned_changes: false },
+        versions, onBrewCurrent: vi.fn(), onBrewVersion: vi.fn(), onCancel,
+      },
+    });
+    await fireEvent.click(getByText("Cancel"));
+    expect(onCancel).toHaveBeenCalled();
+  });
+
+  it("emits onCancel when Escape is pressed", async () => {
+    const onCancel = vi.fn();
+    render(BrewVersionModal, {
+      props: {
+        status: { version_count: 2, latest_version_id: "v2", has_unversioned_changes: false },
+        versions, onBrewCurrent: vi.fn(), onBrewVersion: vi.fn(), onCancel,
+      },
+    });
+    await fireEvent.keyDown(window, { key: "Escape" });
+    expect(onCancel).toHaveBeenCalled();
+  });
+
+  it("emits onCancel when the backdrop is clicked", async () => {
+    const onCancel = vi.fn();
+    const { getByRole } = render(BrewVersionModal, {
+      props: {
+        status: { version_count: 2, latest_version_id: "v2", has_unversioned_changes: false },
+        versions, onBrewCurrent: vi.fn(), onBrewVersion: vi.fn(), onCancel,
+      },
+    });
+    // The dialog card is inside the backdrop; clicking the dialog must NOT close,
+    // clicking the backdrop (its parent) must.
+    const backdrop = getByRole("dialog").parentElement as HTMLElement;
+    await fireEvent.click(backdrop);
+    expect(onCancel).toHaveBeenCalled();
+  });
 });
