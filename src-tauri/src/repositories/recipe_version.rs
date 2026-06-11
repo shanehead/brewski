@@ -988,25 +988,90 @@ mod tests {
 
     #[tokio::test]
     async fn live_and_snapshot_hash_match_for_unchanged_recipe() {
-        use crate::models::{CreateHopAdditionInput, UpdateRecipeInput};
-        use crate::recipe_hash::recipe_content_hash;
+        use crate::models::{
+            CreateHopAdditionInput, CreateMashStepInput, CreateMiscAdditionInput,
+            CreateWaterAdditionInput, CreateWaterAdjustmentInput,
+            CreateWaterAdjustmentInputAddition, CreateWaterAdjustmentInputTarget,
+            CreateYeastAdditionInput, UpdateMashInput, UpdateRecipeInput,
+        };
         use crate::repositories::hop::HopRepository;
+        use crate::repositories::mash::MashRepository;
+        use crate::repositories::misc::MiscRepository;
+        use crate::repositories::water::WaterRepository;
+        use crate::repositories::water_chemistry::WaterChemistryRepository;
+        use crate::repositories::yeast::YeastRepository;
+
         let db = setup_test_db().await;
         let recipe_id = make_recipe(&db).await;
 
-        // Set a non-default recipe-level hopstand temp so the gap is exercised
+        // Set non-default values for every identity-bearing recipe scalar so that
+        // a dropped or mismatched field cannot hide behind its zero/null default.
         RecipeRepository::new(&db)
             .update(
                 &recipe_id,
                 UpdateRecipeInput {
+                    type_: Some("extract".into()),
+                    batch_size_l: Some(19.0),
+                    boil_size_l: Some(24.0),
+                    boil_time_min: Some(90.0),
+                    efficiency_pct: Some(72.5),
+                    notes: Some("Comprehensive hash guard fixture".into()),
+                    fermentation_stages: Some(3),
+                    primary_age_days: Some(7.0),
+                    primary_temp_c: Some(19.5),
+                    secondary_age_days: Some(14.0),
+                    secondary_temp_c: Some(17.0),
+                    tertiary_age_days: Some(7.0),
+                    tertiary_temp_c: Some(15.5),
+                    age_days: Some(28.0),
+                    age_temp_c: Some(12.0),
+                    carbonation_vols: Some(2.4),
+                    forced_carbonation: Some(true),
+                    priming_sugar_name: Some("Corn Sugar".into()),
+                    carbonation_temp_c: Some(20.5),
+                    priming_sugar_equiv: Some(0.91),
+                    keg_priming_factor: Some(0.5),
                     hopstand_temp_c: Some(77.0),
+                    // date / taste_notes / taste_rating are excluded from hash — omit
                     ..Default::default()
                 },
             )
             .await
             .unwrap();
 
-        // Add a hop with a per-hop hopstand override so that field is also exercised
+        // og/fg are not in UpdateRecipeInput; set them directly on the entity so
+        // the fixture exercises those snapshot/restore paths too.
+        {
+            use sea_orm::Set;
+            recipes::ActiveModel {
+                id: Set(recipe_id.clone()),
+                og: Set(Some(1.058)),
+                fg: Set(Some(1.012)),
+                ..Default::default()
+            }
+            .update(&db)
+            .await
+            .unwrap();
+        }
+
+        // One fermentable with non-default fields
+        FermentableRepository::new(&db)
+            .create(
+                &recipe_id,
+                CreateFermentableAdditionInput {
+                    fermentable_id: None,
+                    name: "Pale Malt".into(),
+                    type_: "grain".into(),
+                    yield_pct: 78.5,
+                    color_lovibond: 2.1,
+                    amount_kg: 4.5,
+                    add_after_boil: Some(true),
+                },
+            )
+            .await
+            .unwrap();
+
+        // One hop with a per-hop hopstand override
         HopRepository::new(&db)
             .create(
                 &recipe_id,
@@ -1015,10 +1080,109 @@ mod tests {
                     name: "Citra".into(),
                     alpha_pct: 12.0,
                     amount_kg: 0.05,
-                    form: None,
+                    form: Some("Pellet".into()),
                     use_: "Hopstand".into(),
                     time_min: 0.0,
                     hopstand_temp_c: Some(75.5),
+                },
+            )
+            .await
+            .unwrap();
+
+        // One yeast with non-default fields
+        YeastRepository::new(&db)
+            .create(
+                &recipe_id,
+                CreateYeastAdditionInput {
+                    yeast_id: None,
+                    name: "US-05".into(),
+                    type_: "ale".into(),
+                    form: "dry".into(),
+                    laboratory: Some("Fermentis".into()),
+                    product_id: Some("US-05".into()),
+                    attenuation_pct: Some(77.0),
+                    amount: Some(11.5),
+                    amount_is_weight: Some(true),
+                    add_to_secondary: Some(false),
+                    times_cultured: Some(2),
+                },
+            )
+            .await
+            .unwrap();
+
+        // One misc with non-default fields
+        MiscRepository::new(&db)
+            .create(
+                &recipe_id,
+                CreateMiscAdditionInput {
+                    misc_id: None,
+                    name: "Irish Moss".into(),
+                    type_: "fining".into(),
+                    use_: "boil".into(),
+                    amount: 0.5,
+                    amount_is_weight: Some(true),
+                    unit: "g".into(),
+                    time_min: 15.0,
+                },
+            )
+            .await
+            .unwrap();
+
+        // One water addition
+        WaterRepository::new(&db)
+            .create(
+                &recipe_id,
+                CreateWaterAdditionInput {
+                    water_id: None,
+                    name: "RO Water".into(),
+                    amount_l: 18.5,
+                },
+            )
+            .await
+            .unwrap();
+
+        // One water adjustment
+        WaterChemistryRepository::new(&db)
+            .create_water_adjustment(
+                &recipe_id,
+                CreateWaterAdjustmentInput {
+                    addition: CreateWaterAdjustmentInputAddition::Gypsum,
+                    target: CreateWaterAdjustmentInputTarget::Mash,
+                    amount: 4.2,
+                },
+            )
+            .await
+            .unwrap();
+
+        // Mash with all optional fields populated + one step with ramp/end temps
+        let mash_repo = MashRepository::new(&db);
+        let mash = mash_repo
+            .upsert_for_recipe(
+                &recipe_id,
+                UpdateMashInput {
+                    name: Some("Single Infusion".into()),
+                    grain_temp_c: Some(18.0),
+                    tun_temp_c: Some(19.0),
+                    sparge_temp_c: Some(76.0),
+                    ph: Some(5.4),
+                    ratio_l_per_kg: Some(3.2),
+                    notes: Some("mash notes".into()),
+                },
+            )
+            .await
+            .unwrap();
+
+        mash_repo
+            .create_step(
+                &mash.id,
+                CreateMashStepInput {
+                    name: "Saccharification".into(),
+                    type_: Some("Infusion".into()),
+                    step_temp_c: 67.0,
+                    step_time_min: 60,
+                    infuse_amount_l: Some(14.5),
+                    ramp_time_min: Some(5),
+                    end_temp_c: Some(68.0),
                 },
             )
             .await
@@ -1032,10 +1196,13 @@ mod tests {
         let live = RecipeRepository::new(&db).get(&recipe_id).await.unwrap();
         let snap = repo.get_full(&v.id).await.unwrap();
 
+        // Emit canonical JSON for both sides on mismatch to pinpoint the differing field.
+        let live_bytes = crate::recipe_hash::canonical_bytes(&live).unwrap();
+        let snap_bytes = crate::recipe_hash::canonical_bytes(&snap).unwrap();
         assert_eq!(
-            recipe_content_hash(&live).unwrap(),
-            recipe_content_hash(&snap).unwrap(),
-            "an unmodified recipe must hash identically to its own snapshot"
+            String::from_utf8(live_bytes).unwrap(),
+            String::from_utf8(snap_bytes).unwrap(),
+            "canonical JSON must be identical — diff the two strings to find the diverging field"
         );
     }
 
