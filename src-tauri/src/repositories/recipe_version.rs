@@ -505,12 +505,15 @@ impl<'a> RecipeVersionRepository<'a> {
                 .map(|v| v.id)
         };
 
+        // Use MAX(version_number) + 1 so numbers stay monotonic; len()+1 would
+        // collide after a version is deleted (e.g. v1,v2,v3 then delete v2).
         let next_number = recipe_versions::Entity::find()
             .filter(recipe_versions::Column::RecipeId.eq(recipe_id))
-            .all(self.db)
+            .order_by_desc(recipe_versions::Column::VersionNumber)
+            .one(self.db)
             .await?
-            .len() as i32
-            + 1;
+            .map(|v| v.version_number + 1)
+            .unwrap_or(1);
 
         self.snapshot(recipe_id, &recipe, next_number, name, parent_id)
             .await
@@ -912,6 +915,44 @@ mod tests {
         assert_eq!(v2.version_number, 2);
         assert_eq!(v2.name.as_deref(), Some("My checkpoint"));
         assert_eq!(v2.parent_version_id.as_deref(), Some(v1.id.as_str()));
+    }
+
+    #[tokio::test]
+    async fn test_version_numbering_survives_delete() {
+        let db = setup_test_db().await;
+        let recipe_id = make_recipe(&db).await;
+        let repo = RecipeVersionRepository::new(&db);
+
+        let v1 = repo.save_named(&recipe_id, None).await.unwrap();
+        let v2 = repo.save_named(&recipe_id, None).await.unwrap();
+        let v3 = repo.save_named(&recipe_id, None).await.unwrap();
+        assert_eq!(v1.version_number, 1);
+        assert_eq!(v2.version_number, 2);
+        assert_eq!(v3.version_number, 3);
+
+        // Delete the middle version; len()-based numbering would now collide.
+        repo.delete(&v2.id).await.unwrap();
+
+        let v4 = repo.save_named(&recipe_id, None).await.unwrap();
+        assert_eq!(
+            v4.version_number, 4,
+            "next version number must be MAX+1, not count+1"
+        );
+
+        // It must not collide with any surviving version number.
+        let existing: Vec<_> = repo
+            .list_for_recipe(&recipe_id)
+            .await
+            .unwrap()
+            .iter()
+            .filter(|v| v.id != v4.id)
+            .map(|v| v.version_number)
+            .collect();
+        assert!(
+            !existing.contains(&v4.version_number),
+            "new version number {} collides with an existing one",
+            v4.version_number
+        );
     }
 
     #[tokio::test]

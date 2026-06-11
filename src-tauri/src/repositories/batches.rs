@@ -27,6 +27,8 @@ impl<'a> BatchRepository<'a> {
             .await?
             .ok_or(AppError::NotFound)?;
         if version.recipe_id != input.recipe_id {
+            // Version exists but belongs to another recipe: the requested
+            // recipe+version combination does not exist, so NotFound is correct.
             return Err(AppError::NotFound);
         }
         let version_id = version.id;
