@@ -58,6 +58,7 @@ export type CreateBatchInput = components["schemas"]["CreateBatchInput"];
 export type UpdateBatchInput = components["schemas"]["UpdateBatchInput"];
 export type CreateGravityReadingInput = components["schemas"]["CreateGravityReadingInput"];
 export type BatchAttachment = components["schemas"]["BatchAttachment"];
+export type RecipeVersionStatus = components["schemas"]["RecipeVersionStatus"];
 
 export interface ImageRef {
   id: string;
@@ -293,6 +294,9 @@ export const branchFromVersion = (recipeId: string, versionId: string) =>
 
 export const deleteRecipeVersion = (id: string) =>
   invoke<void>("delete_recipe_version", { id });
+
+export const recipeVersionStatus = (recipeId: string) =>
+  invoke<RecipeVersionStatus>("recipe_version_status", { recipeId });
 
 // --- Recipe Images ---
 export const uploadRecipeImage = (input: { recipe_id: string; source_path: string }) =>
