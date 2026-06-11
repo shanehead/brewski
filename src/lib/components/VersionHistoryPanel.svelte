@@ -1,5 +1,7 @@
 <script lang="ts">
   import type { RecipeVersionSummary } from "$lib/api";
+  import { saveRecipeVersion } from "$lib/api";
+  import { ipc } from "$lib/stores/error";
 
   let {
     versions,
@@ -8,6 +10,9 @@
     onbranch,
     ondelete,
     onclose,
+    recipeId,
+    hasUnversionedChanges,
+    onSaved,
   }: {
     versions: RecipeVersionSummary[];
     viewingVersionId: string | null;
@@ -15,7 +20,18 @@
     onbranch: (version: RecipeVersionSummary) => void;
     ondelete: (version: RecipeVersionSummary) => void;
     onclose: () => void;
+    recipeId: string;
+    hasUnversionedChanges: boolean;
+    onSaved: () => void;
   } = $props();
+
+  let saving = $state(false);
+  let saveName = $state("");
+
+  async function confirmSave() {
+    const v = await ipc(saveRecipeVersion({ recipe_id: recipeId, name: saveName.trim() || null }));
+    if (v) { saving = false; saveName = ""; onSaved(); }
+  }
 
   function formatDate(ts: number): string {
     return new Date(ts * 1000).toLocaleDateString(undefined, {
@@ -57,6 +73,26 @@
      
     >✕</button>
   </div>
+
+  {#if hasUnversionedChanges}
+    <div class="flex flex-col gap-1 mx-2 mt-2 mb-1 px-2 py-1.5 rounded bg-bg-elevated border border-border">
+      <span class="text-xs text-text-secondary">⚠ un-versioned changes</span>
+      {#if saving}
+        <div class="flex gap-1">
+          <input
+            class="flex-1 px-2 py-1 rounded text-xs bg-bg-base text-text-primary border border-border"
+            placeholder="Name (optional)"
+            bind:value={saveName}
+            onkeydown={(e) => { if (e.key === "Enter") confirmSave(); }}
+          />
+          <button class="text-xs px-2 py-1 rounded bg-accent" style="color:#fff;" onclick={confirmSave}>Save</button>
+          <button class="text-xs px-2 py-1 rounded text-text-secondary" onclick={() => (saving = false)}>Cancel</button>
+        </div>
+      {:else}
+        <button class="text-xs px-2 py-1 rounded bg-accent self-start" style="color:#fff;" onclick={() => (saving = true)}>Save as version</button>
+      {/if}
+    </div>
+  {/if}
 
   <div class="flex-1 overflow-y-auto">
     {#each versions as version}

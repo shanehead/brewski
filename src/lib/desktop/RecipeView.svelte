@@ -12,8 +12,9 @@
     branchFromVersion,
     deleteRecipeVersion,
     writeRecipeBeerxml,
+    recipeVersionStatus,
   } from "$lib/api";
-  import type { Recipe, RecipeStats, RecipeVersionSummary } from "$lib/api";
+  import type { Recipe, RecipeStats, RecipeVersionSummary, RecipeVersionStatus } from "$lib/api";
   import { ipc, lastError } from "$lib/stores/error";
   import { refreshRecipeList } from "$lib/stores/recipes";
   import { save } from "@tauri-apps/plugin-dialog";
@@ -57,6 +58,7 @@
   let versions = $state<RecipeVersionSummary[]>([]);
   let viewingVersion = $state<RecipeVersionSummary | null>(null);
   let viewingRecipe = $state<Recipe | null>(null);
+  let versionStatus = $state<RecipeVersionStatus | null>(null);
 
   // Save Version popover state
   let showSavePopover = $state(false);
@@ -103,10 +105,16 @@
     }
   }
 
+  async function refreshVersionStatus() {
+    if (!id) return;
+    versionStatus = await ipc(recipeVersionStatus(id)) ?? null;
+  }
+
   onMount(async () => {
     appDataDir = await getAppDataDir();
     await loadRecipeById(id);
     await loadVersions(id);
+    await refreshVersionStatus();
   });
 
   $effect(() => {
@@ -114,6 +122,7 @@
       (async () => {
         await loadRecipeById(id);
         await loadVersions(id);
+        await refreshVersionStatus();
       })();
     }
   });
@@ -128,6 +137,7 @@
   async function refreshRecipe() {
     await loadRecipeById(id);
     await loadVersions(id);
+    await refreshVersionStatus();
     viewingVersion = null;
     viewingRecipe = null;
   }
@@ -444,6 +454,9 @@
           onbranch={handleBranchFromVersion}
           ondelete={handleDeleteVersion}
           onclose={() => showVersionPanel = false}
+          recipeId={id}
+          hasUnversionedChanges={versionStatus?.has_unversioned_changes ?? false}
+          onSaved={refreshVersionStatus}
         />
       {/if}
     </div>

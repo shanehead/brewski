@@ -1,8 +1,8 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { goto, afterNavigate } from "$app/navigation";
-  import { getRecipe, getRecipeStats, getRecipeBeerxml, uploadRecipeImage, deleteRecipeImage } from "$lib/api";
-  import type { Recipe, RecipeStats } from "$lib/api";
+  import { getRecipe, getRecipeStats, getRecipeBeerxml, uploadRecipeImage, deleteRecipeImage, recipeVersionStatus, saveRecipeVersion } from "$lib/api";
+  import type { Recipe, RecipeStats, RecipeVersionStatus } from "$lib/api";
   import { ipc } from "$lib/stores/error";
   import { appDataDir as getAppDataDir } from "@tauri-apps/api/path";
   import RecipeHero from "$lib/components/RecipeHero.svelte";
@@ -23,14 +23,28 @@
   let appDataDir = $state("");
   let fileInput = $state<HTMLInputElement | null>(null);
   let showScaleModal = $state(false);
+  let versionStatus = $state<RecipeVersionStatus | null>(null);
+  let savingVersion = $state(false);
+  let versionSaveName = $state("");
 
   const gravityUnit = $derived($settings.gravity_unit ?? "sg");
   const displayOg = $derived(stats?.og != null ? formatSg(stats.og, gravityUnit) : "—");
   const displayFg = $derived(stats?.fg != null ? formatSg(stats.fg, gravityUnit) : "—");
 
+  async function refreshVersionStatus() {
+    if (!id) return;
+    versionStatus = await ipc(recipeVersionStatus(id)) ?? null;
+  }
+
   async function load() {
     recipe = await ipc(getRecipe(id)) ?? null;
     if (recipe) stats = await ipc(getRecipeStats(recipe.id)) ?? null;
+    await refreshVersionStatus();
+  }
+
+  async function confirmVersionSave() {
+    const v = await ipc(saveRecipeVersion({ recipe_id: id, name: versionSaveName.trim() || null }));
+    if (v) { savingVersion = false; versionSaveName = ""; await refreshVersionStatus(); }
   }
 
   onMount(async () => {
@@ -124,6 +138,26 @@
       onchange={handleFileSelected}
       class="hidden"
     />
+
+    {#if versionStatus?.has_unversioned_changes}
+      <div class="flex flex-col gap-1 mx-4 mt-2 px-3 py-2 rounded bg-bg-elevated border border-border">
+        <span class="text-xs text-text-secondary">⚠ un-versioned changes</span>
+        {#if savingVersion}
+          <div class="flex gap-1">
+            <input
+              class="flex-1 px-2 py-1 rounded text-xs bg-bg-base text-text-primary border border-border"
+              placeholder="Name (optional)"
+              bind:value={versionSaveName}
+              onkeydown={(e) => { if (e.key === "Enter") confirmVersionSave(); }}
+            />
+            <button class="text-xs px-2 py-1 rounded bg-accent" style="color:#fff;" onclick={confirmVersionSave}>Save</button>
+            <button class="text-xs px-2 py-1 rounded text-text-secondary" onclick={() => (savingVersion = false)}>Cancel</button>
+          </div>
+        {:else}
+          <button class="text-xs px-2 py-1 rounded bg-accent self-start" style="color:#fff;" onclick={() => (savingVersion = true)}>Save as version</button>
+        {/if}
+      </div>
+    {/if}
 
     {#if showScaleModal && recipe}
       <ScaleRecipeModal
