@@ -125,6 +125,11 @@
 
   $effect(() => {
     if (id) {
+      // Exit any version-viewing when the selected recipe changes; otherwise the
+      // previous recipe's snapshot stays in displayRecipe (dimmed + inert) and the
+      // newly selected recipe never shows.
+      viewingVersion = null;
+      viewingRecipe = null;
       (async () => {
         await loadRecipeById(id);
         await loadVersions(id);
