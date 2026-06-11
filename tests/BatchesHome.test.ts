@@ -4,7 +4,7 @@ import { render, screen, waitFor } from "@testing-library/svelte";
 import userEvent from "@testing-library/user-event";
 import DesktopBatchesHome from "../src/lib/desktop/BatchesHome.svelte";
 import MobileBatchesHome from "../src/lib/mobile/BatchesHome.svelte";
-import type { RecipeSummary, RecipeVersionSummary } from "$lib/api";
+import type { RecipeSummary, RecipeVersionSummary, RecipeVersionStatus } from "$lib/api";
 
 vi.mock("$app/navigation", () => ({ goto: vi.fn() }));
 vi.mock("$lib/stores/error", () => ({ ipc: vi.fn((p) => p) }));
@@ -18,16 +18,21 @@ vi.mock("$lib/stores/batches", () => ({
   refreshBatchList: mockRefreshBatchList,
 }));
 
-const { mockListRecipes, mockListRecipeVersions, mockCreateBatch } = vi.hoisted(() => ({
+const { mockListRecipes, mockStartBrew, mockBrewCurrent, mockBrewVersion } = vi.hoisted(() => ({
   mockListRecipes: vi.fn(),
-  mockListRecipeVersions: vi.fn(),
-  mockCreateBatch: vi.fn(),
+  mockStartBrew: vi.fn(),
+  mockBrewCurrent: vi.fn(),
+  mockBrewVersion: vi.fn(),
 }));
 
 vi.mock("$lib/api", () => ({
   listRecipes: mockListRecipes,
-  listRecipeVersions: mockListRecipeVersions,
-  createBatch: mockCreateBatch,
+}));
+
+vi.mock("$lib/brewFlow", () => ({
+  startBrew: mockStartBrew,
+  brewCurrent: mockBrewCurrent,
+  brewVersion: mockBrewVersion,
 }));
 
 function makeRecipe(overrides: Partial<RecipeSummary> = {}): RecipeSummary {
@@ -57,10 +62,20 @@ function makeVersion(overrides: Partial<RecipeVersionSummary> = {}): RecipeVersi
   };
 }
 
+function makeStatus(overrides: Partial<RecipeVersionStatus> = {}): RecipeVersionStatus {
+  return {
+    version_count: 2,
+    has_unversioned_changes: false,
+    latest_version_id: "ver1",
+    ...overrides,
+  } as RecipeVersionStatus;
+}
+
 beforeEach(() => {
   mockListRecipes.mockReset();
-  mockListRecipeVersions.mockReset();
-  mockCreateBatch.mockReset();
+  mockStartBrew.mockReset();
+  mockBrewCurrent.mockReset();
+  mockBrewVersion.mockReset();
   mockRefreshBatchList.mockClear();
 });
 
@@ -68,12 +83,11 @@ describe.each([
   { label: "desktop", Component: DesktopBatchesHome },
   { label: "mobile", Component: MobileBatchesHome },
 ])("BatchesHome ($label) — version picker", ({ Component }) => {
-  it("creates batch immediately when recipe has only one version", async () => {
+  it("creates batch immediately when recipe has only one version (auto decision)", async () => {
     const user = userEvent.setup();
     const recipe = makeRecipe();
     mockListRecipes.mockResolvedValue([recipe]);
-    mockListRecipeVersions.mockResolvedValue([makeVersion()]);
-    mockCreateBatch.mockResolvedValue({ id: "b1" });
+    mockStartBrew.mockResolvedValue({ kind: "auto", batch: { id: "b1" } });
 
     render(Component);
 
@@ -81,23 +95,23 @@ describe.each([
     await waitFor(() => screen.getByText("Pliny the Elder"));
     await user.click(screen.getByText("Pliny the Elder"));
 
-    await waitFor(() => expect(mockCreateBatch).toHaveBeenCalledWith(
-      expect.objectContaining({ recipe_id: "r1" })
-    ));
-    expect(mockCreateBatch).toHaveBeenCalledWith(
-      expect.not.objectContaining({ version_id: expect.anything() })
-    );
+    await waitFor(() => expect(mockStartBrew).toHaveBeenCalledWith("r1"));
     expect(screen.queryByText(/Choose a version/i)).not.toBeInTheDocument();
   });
 
-  it("shows version picker when recipe has two or more versions", async () => {
+  it("shows version modal when startBrew returns prompt decision", async () => {
     const user = userEvent.setup();
     const recipe = makeRecipe();
     mockListRecipes.mockResolvedValue([recipe]);
-    mockListRecipeVersions.mockResolvedValue([
+    const versions = [
       makeVersion({ id: "ver2", version_number: 2, name: "Added Citra dry hop", created_at: 1710000000 }),
       makeVersion({ id: "ver1", version_number: 1, name: null, created_at: 1700000000 }),
-    ]);
+    ];
+    mockStartBrew.mockResolvedValue({
+      kind: "prompt",
+      status: makeStatus({ has_unversioned_changes: false, latest_version_id: "ver2" }),
+      versions,
+    });
 
     render(Component);
 
@@ -105,20 +119,24 @@ describe.each([
     await waitFor(() => screen.getByText("Pliny the Elder"));
     await user.click(screen.getByText("Pliny the Elder"));
 
-    await waitFor(() => expect(screen.getByText(/v2/i)).toBeInTheDocument());
-    expect(screen.getByText(/v1/i)).toBeInTheDocument();
-    expect(mockCreateBatch).not.toHaveBeenCalled();
+    await waitFor(() => expect(screen.getByText(/Choose a version to brew/i)).toBeInTheDocument());
+    expect(screen.queryByText(/\+ New Batch/i)).toBeInTheDocument(); // picker closed
   });
 
-  it("creates batch with explicit version_id when version is selected", async () => {
+  it("calls brewVersion when a saved version is selected in the modal", async () => {
     const user = userEvent.setup();
     const recipe = makeRecipe();
     mockListRecipes.mockResolvedValue([recipe]);
-    mockListRecipeVersions.mockResolvedValue([
+    const versions = [
       makeVersion({ id: "ver2", version_number: 2, name: "Added Citra dry hop", created_at: 1710000000 }),
       makeVersion({ id: "ver1", version_number: 1, name: null, created_at: 1700000000 }),
-    ]);
-    mockCreateBatch.mockResolvedValue({ id: "b1" });
+    ];
+    mockStartBrew.mockResolvedValue({
+      kind: "prompt",
+      status: makeStatus({ has_unversioned_changes: false, latest_version_id: "ver2" }),
+      versions,
+    });
+    mockBrewVersion.mockResolvedValue({ id: "b1" });
 
     render(Component);
 
@@ -126,22 +144,25 @@ describe.each([
     await waitFor(() => screen.getByText("Pliny the Elder"));
     await user.click(screen.getByText("Pliny the Elder"));
 
-    await waitFor(() => screen.getByText(/v2/i));
-    await user.click(screen.getByText(/v1/i));
+    await waitFor(() => screen.getByText(/Brew a saved version/i));
+    await user.click(screen.getByRole("button", { name: /Brew a saved version/i }));
 
-    await waitFor(() => expect(mockCreateBatch).toHaveBeenCalledWith(
-      expect.objectContaining({ recipe_id: "r1", version_id: "ver1", name: null })
-    ));
+    await waitFor(() => expect(mockBrewVersion).toHaveBeenCalledWith("r1", expect.any(String)));
   });
 
-  it("back link in version picker returns to recipe list", async () => {
+  it("dismisses the modal when Cancel is clicked", async () => {
     const user = userEvent.setup();
     const recipe = makeRecipe();
     mockListRecipes.mockResolvedValue([recipe]);
-    mockListRecipeVersions.mockResolvedValue([
+    const versions = [
       makeVersion({ id: "ver2", version_number: 2, created_at: 1710000000 }),
       makeVersion({ id: "ver1", version_number: 1, created_at: 1700000000 }),
-    ]);
+    ];
+    mockStartBrew.mockResolvedValue({
+      kind: "prompt",
+      status: makeStatus({ has_unversioned_changes: false, latest_version_id: "ver2" }),
+      versions,
+    });
 
     render(Component);
 
@@ -149,10 +170,9 @@ describe.each([
     await waitFor(() => screen.getByText("Pliny the Elder"));
     await user.click(screen.getByText("Pliny the Elder"));
 
-    await waitFor(() => screen.getByText(/v2/i));
-    await user.click(screen.getByRole("button", { name: /Pliny the Elder/i }));
+    await waitFor(() => screen.getByText(/Choose a version to brew/i));
+    await user.click(screen.getByRole("button", { name: /Cancel/i }));
 
-    await waitFor(() => screen.getByText("Pliny the Elder"));
-    expect(screen.queryByText(/v2/i)).not.toBeInTheDocument();
+    await waitFor(() => expect(screen.queryByText(/Choose a version to brew/i)).not.toBeInTheDocument());
   });
 });

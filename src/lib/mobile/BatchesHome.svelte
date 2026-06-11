@@ -2,63 +2,44 @@
   import { onMount } from "svelte";
   import { goto } from "$app/navigation";
   import { batchList, refreshBatchList } from "$lib/stores/batches";
-  import { createBatch, listRecipes, listRecipeVersions } from "$lib/api";
+  import { listRecipes } from "$lib/api";
+  import { startBrew, brewCurrent, brewVersion } from "$lib/brewFlow";
   import { ipc } from "$lib/stores/error";
-  import type { RecipeSummary, RecipeVersionSummary } from "$lib/api";
+  import BrewVersionModal from "$lib/components/BrewVersionModal.svelte";
+  import type { RecipeSummary, RecipeVersionStatus, RecipeVersionSummary } from "$lib/api";
 
   let showPicker = $state(false);
-  let step = $state<"recipe" | "version">("recipe");
   let recipes = $state<RecipeSummary[]>([]);
-  let pickedRecipe = $state<RecipeSummary | null>(null);
-  let versions = $state<RecipeVersionSummary[]>([]);
+  let promptStatus = $state<RecipeVersionStatus | null>(null);
+  let promptVersions = $state<RecipeVersionSummary[]>([]);
+  let promptRecipeId = $state<string | null>(null);
 
   onMount(() => ipc(refreshBatchList()));
 
   async function handleNew() {
     recipes = (await ipc(listRecipes())) ?? [];
-    step = "recipe";
-    pickedRecipe = null;
-    versions = [];
     showPicker = true;
   }
 
   async function handlePickRecipe(recipe: RecipeSummary) {
-    const vers = (await ipc(listRecipeVersions(recipe.id))) ?? [];
-    if (vers.length >= 2) {
-      pickedRecipe = recipe;
-      versions = vers;
-      step = "version";
-    } else {
-      showPicker = false;
-      const batch = await ipc(createBatch({ recipe_id: recipe.id, name: null }));
-      if (!batch) return;
+    showPicker = false;
+    const decision = await startBrew(recipe.id);
+    if (!decision) return;
+    if (decision.kind === "auto") {
       await ipc(refreshBatchList());
-      goto(`/batches/${batch.id}`);
+      goto(`/batches/${decision.batch.id}`);
+      return;
     }
+    promptRecipeId = recipe.id;
+    promptStatus = decision.status;
+    promptVersions = decision.versions;
   }
 
-  async function handlePickVersion(version: RecipeVersionSummary) {
-    showPicker = false;
-    const batch = await ipc(
-      createBatch({ recipe_id: pickedRecipe!.id, version_id: version.id, name: null })
-    );
+  async function finishBrew(batch: { id: string } | null) {
+    promptStatus = null;
     if (!batch) return;
     await ipc(refreshBatchList());
     goto(`/batches/${batch.id}`);
-  }
-
-  function handleBack() {
-    step = "recipe";
-    pickedRecipe = null;
-    versions = [];
-  }
-
-  function formatDate(ts: number): string {
-    return new Date(ts * 1000).toLocaleDateString(undefined, {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-    });
   }
 </script>
 
@@ -75,7 +56,7 @@
       <a
         href="/batches/{batch.id}"
         class="flex items-center justify-between px-4 py-3 border-b text-sm border-border text-text-primary"
-       
+
       >
         <div class="flex flex-col gap-0.5 min-w-0">
           <span class="truncate font-medium">{batch.recipe_name}</span>
@@ -100,42 +81,27 @@
   >
     <div class="rounded-lg p-4 mx-4 max-h-96 flex flex-col gap-2 overflow-hidden bg-bg-surface border border-border"
          style="width: calc(100% - 2rem);">
-      {#if step === "recipe"}
-        <div class="font-medium text-sm">Choose a recipe to brew</div>
-        <div class="flex-1 overflow-y-auto flex flex-col gap-1">
-          {#each recipes as r (r.id)}
-            <button
-              onclick={() => handlePickRecipe(r)}
-              class="text-left px-3 py-3 rounded text-sm bg-bg-elevated text-text-primary"
-             
-            >{r.name}</button>
-          {/each}
-        </div>
-        <button onclick={() => showPicker = false}
-          class="text-xs py-2 text-text-muted">Cancel</button>
-      {:else}
-        <button
-          onclick={handleBack}
-          class="text-xs text-left font-medium py-1 text-accent"
-         
-        >← {pickedRecipe?.name}</button>
-        <div class="font-medium text-sm">Choose a version</div>
-        <div class="flex-1 overflow-y-auto flex flex-col gap-1">
-          {#each versions as v, i (v.id)}
-            <button
-              onclick={() => handlePickVersion(v)}
-              class="text-left px-3 py-3 rounded text-sm"
-              style="background: {i === 0 ? 'var(--color-accent)' : 'var(--color-bg-elevated)'}; color: {i === 0 ? '#fff' : 'var(--color-text-primary)'};"
-            >
-              <span class="font-mono">v{v.version_number}</span>
-              {#if v.name}<span class="ml-1">· {v.name}</span>{/if}
-              <span class="ml-1 text-xs opacity-60">{formatDate(v.created_at)}</span>
-            </button>
-          {/each}
-        </div>
-        <button onclick={() => showPicker = false}
-          class="text-xs py-2 text-text-muted">Cancel</button>
-      {/if}
+      <div class="font-medium text-sm">Choose a recipe to brew</div>
+      <div class="flex-1 overflow-y-auto flex flex-col gap-1">
+        {#each recipes as r (r.id)}
+          <button
+            onclick={() => handlePickRecipe(r)}
+            class="text-left px-3 py-3 rounded text-sm bg-bg-elevated text-text-primary"
+
+          >{r.name}</button>
+        {/each}
+      </div>
+      <button onclick={() => showPicker = false}
+        class="text-xs py-2 text-text-muted">Cancel</button>
     </div>
   </div>
+{/if}
+
+{#if promptStatus && promptRecipeId}
+  <BrewVersionModal
+    status={promptStatus}
+    versions={promptVersions}
+    onBrewCurrent={async (name) => finishBrew(await brewCurrent(promptRecipeId!, name))}
+    onBrewVersion={async (vid) => finishBrew(await brewVersion(promptRecipeId!, vid))}
+    onCancel={() => (promptStatus = null)} />
 {/if}

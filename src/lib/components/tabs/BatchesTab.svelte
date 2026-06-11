@@ -2,14 +2,18 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { goto } from "$app/navigation";
-  import type { BatchSummary } from "$lib/api";
-  import { listBatchesForRecipe, createBatch } from "$lib/api";
+  import type { BatchSummary, RecipeVersionStatus, RecipeVersionSummary } from "$lib/api";
+  import { listBatchesForRecipe } from "$lib/api";
+  import { startBrew, brewCurrent, brewVersion } from "$lib/brewFlow";
   import { ipc } from "$lib/stores/error";
   import BatchList from "$lib/components/BatchList.svelte";
+  import BrewVersionModal from "$lib/components/BrewVersionModal.svelte";
 
   let { recipeId }: { recipeId: string } = $props();
 
   let batches = $state<BatchSummary[]>([]);
+  let promptStatus = $state<RecipeVersionStatus | null>(null);
+  let promptVersions = $state<RecipeVersionSummary[]>([]);
 
   async function load() {
     batches = (await ipc(listBatchesForRecipe(recipeId))) ?? [];
@@ -18,7 +22,18 @@
   onMount(load);
 
   async function handleBrew() {
-    const batch = await ipc(createBatch({ recipe_id: recipeId, name: null }));
+    const decision = await startBrew(recipeId);
+    if (!decision) return;
+    if (decision.kind === "auto") {
+      goto(`/batches/${decision.batch.id}`);
+      return;
+    }
+    promptStatus = decision.status;
+    promptVersions = decision.versions;
+  }
+
+  async function finishBrew(batch: { id: string } | null) {
+    promptStatus = null;
     if (!batch) return;
     goto(`/batches/${batch.id}`);
   }
@@ -46,3 +61,12 @@
   </div>
   <BatchList {batches} onRefresh={load} />
 </div>
+
+{#if promptStatus}
+  <BrewVersionModal
+    status={promptStatus}
+    versions={promptVersions}
+    onBrewCurrent={async (name) => finishBrew(await brewCurrent(recipeId, name))}
+    onBrewVersion={async (vid) => finishBrew(await brewVersion(recipeId, vid))}
+    onCancel={() => (promptStatus = null)} />
+{/if}
