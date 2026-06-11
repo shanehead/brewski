@@ -26,6 +26,7 @@
   let versionStatus = $state<RecipeVersionStatus | null>(null);
   let savingVersion = $state(false);
   let versionSaveName = $state("");
+  let versionInFlight = $state(false);
 
   const gravityUnit = $derived($settings.gravity_unit ?? "sg");
   const displayOg = $derived(stats?.og != null ? formatSg(stats.og, gravityUnit) : "—");
@@ -43,8 +44,14 @@
   }
 
   async function confirmVersionSave() {
-    const v = await ipc(saveRecipeVersion({ recipe_id: id, name: versionSaveName.trim() || null }));
-    if (v) { savingVersion = false; versionSaveName = ""; await refreshVersionStatus(); }
+    if (versionInFlight) return;
+    versionInFlight = true;
+    try {
+      const v = await ipc(saveRecipeVersion({ recipe_id: id, name: versionSaveName.trim() || null }));
+      if (v) { savingVersion = false; versionSaveName = ""; await refreshVersionStatus(); }
+    } finally {
+      versionInFlight = false;
+    }
   }
 
   onMount(async () => {
@@ -150,8 +157,8 @@
               bind:value={versionSaveName}
               onkeydown={(e) => { if (e.key === "Enter") confirmVersionSave(); }}
             />
-            <button class="text-xs px-2 py-1 rounded bg-accent" style="color:#fff;" onclick={confirmVersionSave}>Save</button>
-            <button class="text-xs px-2 py-1 rounded text-text-secondary" onclick={() => (savingVersion = false)}>Cancel</button>
+            <button class="text-xs px-2 py-1 rounded bg-accent" style="color:#fff;" disabled={versionInFlight} onclick={confirmVersionSave}>Save</button>
+            <button class="text-xs px-2 py-1 rounded text-text-secondary" onclick={() => { savingVersion = false; versionSaveName = ""; }}>Cancel</button>
           </div>
         {:else}
           <button class="text-xs px-2 py-1 rounded bg-accent self-start" style="color:#fff;" onclick={() => (savingVersion = true)}>Save as version</button>

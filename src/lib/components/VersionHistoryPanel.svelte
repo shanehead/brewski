@@ -27,10 +27,17 @@
 
   let saving = $state(false);
   let saveName = $state("");
+  let inFlight = $state(false);
 
   async function confirmSave() {
-    const v = await ipc(saveRecipeVersion({ recipe_id: recipeId, name: saveName.trim() || null }));
-    if (v) { saving = false; saveName = ""; onSaved(); }
+    if (inFlight) return;
+    inFlight = true;
+    try {
+      const v = await ipc(saveRecipeVersion({ recipe_id: recipeId, name: saveName.trim() || null }));
+      if (v) { saving = false; saveName = ""; onSaved(); }
+    } finally {
+      inFlight = false;
+    }
   }
 
   function formatDate(ts: number): string {
@@ -85,8 +92,8 @@
             bind:value={saveName}
             onkeydown={(e) => { if (e.key === "Enter") confirmSave(); }}
           />
-          <button class="text-xs px-2 py-1 rounded bg-accent" style="color:#fff;" onclick={confirmSave}>Save</button>
-          <button class="text-xs px-2 py-1 rounded text-text-secondary" onclick={() => (saving = false)}>Cancel</button>
+          <button class="text-xs px-2 py-1 rounded bg-accent" style="color:#fff;" disabled={inFlight} onclick={confirmSave}>Save</button>
+          <button class="text-xs px-2 py-1 rounded text-text-secondary" onclick={() => { saving = false; saveName = ""; }}>Cancel</button>
         </div>
       {:else}
         <button class="text-xs px-2 py-1 rounded bg-accent self-start" style="color:#fff;" onclick={() => (saving = true)}>Save as version</button>

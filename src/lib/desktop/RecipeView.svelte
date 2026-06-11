@@ -204,13 +204,14 @@
   }
 
   async function handleSaveVersion() {
-    if (!recipe || !saveVersionName.trim()) return;
+    if (!recipe || !saveVersionName.trim() || savingVersion) return;
     savingVersion = true;
     await ipc(saveRecipeVersion({ recipe_id: recipe.id, name: saveVersionName.trim() }));
     showSavePopover = false;
     saveVersionName = "";
     savingVersion = false;
     await loadVersions(id);
+    await refreshVersionStatus();
   }
 
   async function handleExport() {
@@ -456,7 +457,7 @@
           onclose={() => showVersionPanel = false}
           recipeId={id}
           hasUnversionedChanges={versionStatus?.has_unversioned_changes ?? false}
-          onSaved={refreshVersionStatus}
+          onSaved={refreshRecipe}
         />
       {/if}
     </div>
