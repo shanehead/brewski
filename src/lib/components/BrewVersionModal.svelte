@@ -45,6 +45,9 @@
                 onclick={() => onBrewCurrent(newName.trim() || null)}>
           Brew with current changes
         </button>
+        <div class="text-xs text-text-secondary">
+          Saves the current recipe as a new version, then brews it.
+        </div>
       </div>
     {/if}
 
