@@ -1,35 +1,47 @@
 # Recipe versions
 
-Recipes evolve. You tweak the grain bill, swap a hop variety, adjust the mash temperature. Brewski tracks those changes automatically so you can always get back to where you were.
+Recipes evolve. Brewski saves your edits automatically, so your live recipe is always current.
 
-## How versions work
+Versions are something different. They're checkpoints you create deliberately, when the recipe is in a state you want to be able to get back to. Once saved, a version is a fixed snapshot you can brew from or restore at any time.
 
-Every time you make a change to a recipe, Brewski saves the previous state as a version. Nothing extra to do on your end. It's always happening in the background.
+## Saving a version
 
-Hit the clock icon in the recipe header to open the version history panel. You'll see all your versions listed in order, newest first.
+Click the clock icon in the recipe header to open the version history panel.
+
+If your recipe has changed since the last saved version, you'll see a warning at the top of the panel: **un-versioned changes**. This just means your working copy is ahead of the version history. Click **Save as version** to capture it. You can give it a name like "Dropped Mosaic, added Nelson" or "Scaled to 20L", or leave it blank. Either way, the save records the full recipe as it is right now.
+
+If there's no warning, your working copy is already in sync with the latest version.
 
 ## Viewing a version
 
-Click any version to see what the recipe looked like at that point. The stats, ingredients, and settings are all shown as they were. It's read-only, but it gives you a full picture of where the recipe was.
+Click any version in the panel to see the recipe as it was at that point. Stats, ingredients, mash, water adjustments, all of it. It's read-only. Click outside the panel to return to the live recipe.
 
 ## Branching from a version
 
-Branching is useful when you want to spin off a variation without overwriting your current recipe. Hit **Branch** on any version and Brewski creates a new independent recipe starting from that point.
+Branching resets the live recipe back to match a saved version. Select a version in the panel, then click **Branch from here**.
 
-For example: you brewed a pale ale, then evolved it into an IPA over a few versions. You could branch from the original pale ale version to keep developing that direction separately.
+This is useful when a recipe has taken a direction you want to split off. Say you started with a pale ale and evolved it into an IPA across a few versions. Branch from the original pale ale state to develop that direction as its own independent recipe.
 
-## Batches stay connected to the right version
+Brewski asks for confirmation before branching. Once confirmed, the live recipe's ingredients and settings are replaced with that version's data. The version history stays intact.
 
-When you brew a batch, Brewski links it to the recipe version that was current at that time. If you change the recipe later, those older batches still show exactly what you actually brewed. Your brew history stays accurate even as the recipe moves forward.
+## How batches connect to versions
 
-## What versions do and don't track
+When you click **Brew this Recipe**, Brewski shows a modal before creating the batch. You have two paths:
 
-Recipe versions capture your recipe's own fields: ingredients, mash profile, water adjustments, and settings like batch size and efficiency. Equipment profiles and source-water profiles are not included.
+**Brew with current changes** saves the recipe as a new version right now, then creates the batch from it. You can name that version if you want. Use this when you've been tweaking the recipe and are ready to brew it as-is.
 
-Those profiles are shared and live. If you edit an equipment profile or a water profile, the change takes effect everywhere that profile is used, including existing recipes and batches that have already been brewed. That's intentional. Your profiles represent your actual setup, and keeping them accurate benefits every recipe at once.
+**Brew a saved version** lets you pick from any version you've already saved. Use this when you want to brew an older iteration, or when you want to brew against a clean known state without auto-saving pending changes.
 
-Because of this, changes to profile values are not captured in recipe versions. What is tracked is which profile a recipe uses. If you switch a recipe from one equipment profile to another, or swap its water profile, Brewski records that as a recipe change and saves the previous state as a version.
+Either way, the batch is permanently linked to the exact snapshot it was brewed from. Keep developing the recipe and your batch history stays accurate. You'll always know what was actually in the kettle.
+
+## What versions track
+
+A version captures your recipe's formulation: ingredients and their amounts, the mash profile, water sources, water adjustments, and settings like batch size, boil time, and efficiency.
+
+Equipment profiles and water profiles aren't part of the snapshot. Those are shared and live. Editing your equipment profile affects everywhere it's used. What versions do record is which profile is assigned. If you switch a recipe from one equipment profile to another, that switch is part of the version.
 
 ## Deleting a version
 
-You can delete a version as long as no batches are linked to it. If a batch was brewed against that version, the version sticks around to preserve the historical record.
+Select a version in the panel and click **Delete**.
+
+Any version not linked to a batch can be deleted. If a batch was brewed from it, the version stays. The historical record matters more than a tidy list.
