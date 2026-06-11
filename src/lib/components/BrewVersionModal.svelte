@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { untrack } from "svelte";
   import type { RecipeVersionSummary, RecipeVersionStatus } from "$lib/api";
 
   let {
@@ -16,7 +17,7 @@
   } = $props();
 
   let newName = $state("");
-  let selected = $state(status.latest_version_id ?? versions[0]?.id ?? "");
+  let selected = $state(untrack(() => status.latest_version_id ?? versions[0]?.id ?? ""));
 
   function label(v: RecipeVersionSummary): string {
     return v.name ? `v${v.version_number} · ${v.name}` : `v${v.version_number}`;
