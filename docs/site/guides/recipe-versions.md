@@ -22,6 +22,14 @@ For example: you brewed a pale ale, then evolved it into an IPA over a few versi
 
 When you brew a batch, Brewski links it to the recipe version that was current at that time. If you change the recipe later, those older batches still show exactly what you actually brewed. Your brew history stays accurate even as the recipe moves forward.
 
+## What versions do and don't track
+
+Recipe versions capture your recipe's own fields: ingredients, mash profile, water adjustments, and settings like batch size and efficiency. Equipment profiles and source-water profiles are not included.
+
+Those profiles are shared and live. If you edit an equipment profile or a water profile, the change takes effect everywhere that profile is used, including existing recipes and batches that have already been brewed. That's intentional. Your profiles represent your actual setup, and keeping them accurate benefits every recipe at once.
+
+Because of this, changes to profile values are not captured in recipe versions. What is tracked is which profile a recipe uses. If you switch a recipe from one equipment profile to another, or swap its water profile, Brewski records that as a recipe change and saves the previous state as a version.
+
 ## Deleting a version
 
 You can delete a version as long as no batches are linked to it. If a batch was brewed against that version, the version sticks around to preserve the historical record.
