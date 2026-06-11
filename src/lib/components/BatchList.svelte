@@ -76,8 +76,8 @@
       >✕</button>
     </div>
   {:else}
-    <p class="text-sm px-3 py-4 text-center text-text-muted">
-      No batches yet
+    <p class="text-sm px-3 py-4 text-center text-text-secondary">
+      No batches yet. Open a recipe and click Brew to create one.
     </p>
   {/each}
 </div>
