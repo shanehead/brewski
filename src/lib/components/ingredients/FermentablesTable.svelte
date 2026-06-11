@@ -9,6 +9,7 @@
   import Tooltip from "$lib/components/Tooltip.svelte";
   import DocLink from "$lib/components/DocLink.svelte";
   import { DOCS } from "$lib/docs-urls";
+  import { escRevert } from "$lib/actions/escRevert";
 
   let { recipe, onchange }: { recipe: Recipe; onchange: () => void } = $props();
 
@@ -84,6 +85,7 @@
             <td class="text-right py-1.5">
               <input type="number" inputmode="decimal" step={units === "imperial" ? 0.1 : 0.05}
                      value={(units === "imperial" ? kgToLb(f.amount_kg) : f.amount_kg).toFixed(2)}
+                     use:escRevert
                      onblur={(e) => handleAmountChange(f, (e.target as HTMLInputElement).value)}
                      class="w-16 text-right px-1 rounded bg-bg-elevated text-text-primary"
                      style="border: 1px solid transparent;" />

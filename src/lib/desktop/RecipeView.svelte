@@ -39,6 +39,7 @@
   import BrewVersionModal from "$lib/components/BrewVersionModal.svelte";
   import { startBrew, brewCurrent, brewVersion } from "$lib/brewFlow";
   import type { BrewingIconName } from "$lib/icons";
+  import { escRevert } from "$lib/actions/escRevert";
 
   let { id }: { id: string } = $props();
 
@@ -333,9 +334,10 @@
       <input
         value={recipe.name}
         onblur={handleNameBlur}
+        use:escRevert
         disabled={viewingVersion !== null}
         class="flex-1 text-base font-semibold bg-transparent outline-none text-text-primary"
-       
+
       />
       {#if saving}
         <span class="text-xs text-text-muted">Saving…</span>

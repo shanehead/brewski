@@ -9,6 +9,7 @@
   import Card from "$lib/components/Card.svelte";
   import FieldLabel from "$lib/components/FieldLabel.svelte";
   import TabContent from "$lib/components/tabs/TabContent.svelte";
+  import { escRevert } from "$lib/actions/escRevert";
 
   let { recipe, onchange }: { recipe: Recipe; onchange: () => void } = $props();
 
@@ -49,6 +50,7 @@
       <div class="flex flex-col gap-1">
         <FieldLabel for="overview-brewer">Brewer</FieldLabel>
         <input id="overview-brewer" type="text" value={recipe.brewer ?? ""}
+               use:escRevert
                onblur={(e) => save("brewer", (e.target as HTMLInputElement).value)}
                class="w-full px-2 py-1.5 rounded text-sm bg-bg-elevated text-text-primary border border-border"
                />
@@ -70,6 +72,7 @@
       <div class="flex flex-col gap-1">
         <FieldLabel for="overview-date">Date</FieldLabel>
         <input id="overview-date" type="date" value={recipe.date ?? ""}
+               use:escRevert
                onblur={(e) => save("date", (e.target as HTMLInputElement).value || null)}
                class="w-full px-2 py-1.5 rounded text-sm bg-bg-elevated text-text-primary border border-border"
                />
@@ -96,6 +99,7 @@
         <FieldLabel for="overview-batch-size">Batch Size ({volumeLabel(units)})</FieldLabel>
         <input id="overview-batch-size" type="number" inputmode="decimal" step="0.1"
                value={(units === "imperial" ? lToGal(recipe.batch_size_l) : recipe.batch_size_l).toFixed(1)}
+               use:escRevert
                onblur={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); save("batch_size_l", units === "imperial" ? galToL(v) : v); }}
                class="w-full px-2 py-1.5 rounded text-sm bg-bg-elevated text-text-primary border border-border"
                />
@@ -105,6 +109,7 @@
         <FieldLabel for="overview-boil-size">Boil Size ({volumeLabel(units)})</FieldLabel>
         <input id="overview-boil-size" type="number" inputmode="decimal" step="0.1"
                value={(units === "imperial" ? lToGal(recipe.boil_size_l) : recipe.boil_size_l).toFixed(1)}
+               use:escRevert
                onblur={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); save("boil_size_l", units === "imperial" ? galToL(v) : v); }}
                class="w-full px-2 py-1.5 rounded text-sm bg-bg-elevated text-text-primary border border-border"
                />
@@ -113,6 +118,7 @@
       <div class="flex flex-col gap-1">
         <FieldLabel for="overview-boil-time">Boil Time (min)</FieldLabel>
         <input id="overview-boil-time" type="number" inputmode="decimal" step="5" value={recipe.boil_time_min}
+               use:escRevert
                onblur={(e) => save("boil_time_min", parseFloat((e.target as HTMLInputElement).value))}
                class="w-full px-2 py-1.5 rounded text-sm bg-bg-elevated text-text-primary border border-border"
                />
@@ -122,6 +128,7 @@
         <FieldLabel for="overview-efficiency">Efficiency (%)</FieldLabel>
         <input id="overview-efficiency" type="number" inputmode="decimal" step="1" value={recipe.efficiency_pct ?? ""}
                placeholder="From equipment profile"
+               use:escRevert
                onblur={(e) => {
                  const v = (e.target as HTMLInputElement).value;
                  save("efficiency_pct", v ? parseFloat(v) : null);

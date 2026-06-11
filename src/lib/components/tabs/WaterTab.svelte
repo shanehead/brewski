@@ -18,6 +18,7 @@
   import DocLink from "$lib/components/DocLink.svelte";
   import { DOCS } from "$lib/docs-urls";
   import TabContent from "$lib/components/tabs/TabContent.svelte";
+  import { escRevert } from "$lib/actions/escRevert";
 
   let { recipe, stats, onchange }: { recipe: Recipe; stats: RecipeStats | null; onchange: () => void } = $props();
 
@@ -215,6 +216,7 @@
                   <span class="text-sm flex-1 text-text-secondary">{getAdditionLabel(adj.addition)}</span>
                   <input type="number" inputmode="decimal" step="0.1" min="0" value={adj.amount}
                          aria-label="{getAdditionLabel(adj.addition)} amount in grams"
+                         use:escRevert
                          onchange={(e) => handleUpdateAddition(adj.id, parseFloat((e.target as HTMLInputElement).value) || 0)}
                          class="w-20 px-2 py-1 rounded text-sm bg-bg-elevated text-text-primary border border-border"
                          />
