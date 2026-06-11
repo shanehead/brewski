@@ -5,9 +5,6 @@
 //! A future recipe field is therefore part of the hash automatically unless it
 //! is named like a surrogate key or added to the metadata exclude set.
 
-// These symbols are wired in by later tasks; suppress transient unused warnings.
-#![allow(dead_code)]
-
 use crate::error::AppError;
 use crate::models::Recipe;
 use serde_json::Value;

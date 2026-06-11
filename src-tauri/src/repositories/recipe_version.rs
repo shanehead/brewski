@@ -1385,6 +1385,7 @@ mod tests {
         let st = repo.status(&recipe_id).await.unwrap();
         assert_eq!(st.version_count, 1);
         assert!(!st.has_unversioned_changes);
+        assert!(st.latest_version_id.is_some());
     }
 
     #[tokio::test]

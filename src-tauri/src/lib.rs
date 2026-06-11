@@ -6,6 +6,7 @@ pub mod entities;
 mod error;
 pub mod models;
 #[allow(clippy::derivable_impls)]
+#[allow(dead_code)]
 #[path = "models.gen.rs"]
 pub mod models_gen;
 mod recipe_hash;
