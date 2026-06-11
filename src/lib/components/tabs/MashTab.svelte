@@ -116,9 +116,23 @@
     detachDocClick();
   }
 
-  function onEditKeydown(e: KeyboardEvent) {
-    if (e.key === "Escape") {
+  function onWindowKeydown(e: KeyboardEvent) {
+    if (e.key === "Escape" && editingStepId) {
       closeEdit();
+    }
+  }
+
+  // Row acts as a button (role="button"); Enter/Space toggle its edit state.
+  // Escape-to-close is handled at the window level so per-field escRevert can
+  // intercept it first.
+  function onRowKeydown(e: KeyboardEvent, id: string) {
+    // Ignore keys originating from form fields inside the row (e.g. typing a
+    // space in an input) so they don't toggle the row's edit state.
+    const tag = (e.target as HTMLElement | null)?.tagName;
+    if (tag === "INPUT" || tag === "SELECT" || tag === "TEXTAREA") return;
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      toggleEditStep(id);
     }
   }
 
@@ -126,6 +140,8 @@
     detachDocClick();
   });
 </script>
+
+<svelte:window onkeydown={onWindowKeydown} />
 
 <TabContent>
   <div class="flex justify-end mb-2">
@@ -280,7 +296,7 @@
                  onmouseenter={() => hoveredStepId = step.id}
                  onmouseleave={() => hoveredStepId = null}
                  tabindex="0"
-                 onkeydown={editingStepId === step.id ? onEditKeydown : undefined}>
+                 onkeydown={(e) => onRowKeydown(e, step.id)}>
               <div class="flex-1">
                 {#if editingStepId === step.id}
                   <div class="flex flex-wrap gap-2 p-2 rounded bg-bg-elevated">
