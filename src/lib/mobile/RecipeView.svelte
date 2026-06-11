@@ -2,7 +2,9 @@
   import { onMount } from "svelte";
   import { goto, afterNavigate } from "$app/navigation";
   import { getRecipe, getRecipeStats, getRecipeBeerxml, uploadRecipeImage, deleteRecipeImage, recipeVersionStatus, saveRecipeVersion } from "$lib/api";
-  import type { Recipe, RecipeStats, RecipeVersionStatus } from "$lib/api";
+  import type { Recipe, RecipeStats, RecipeVersionStatus, RecipeVersionSummary } from "$lib/api";
+  import { startBrew, brewCurrent, brewVersion } from "$lib/brewFlow";
+  import BrewVersionModal from "$lib/components/BrewVersionModal.svelte";
   import { ipc } from "$lib/stores/error";
   import { appDataDir as getAppDataDir } from "@tauri-apps/api/path";
   import RecipeHero from "$lib/components/RecipeHero.svelte";
@@ -27,6 +29,10 @@
   let savingVersion = $state(false);
   let versionSaveName = $state("");
   let versionInFlight = $state(false);
+
+  // Brew flow state
+  let brewStatus = $state<RecipeVersionStatus | null>(null);
+  let brewVersions = $state<RecipeVersionSummary[]>([]);
 
   const gravityUnit = $derived($settings.gravity_unit ?? "sg");
   const displayOg = $derived(stats?.og != null ? formatSg(stats.og, gravityUnit) : "—");
@@ -66,6 +72,19 @@
       load();
     }
   });
+
+  async function handleBrew() {
+    const result = await startBrew(id);
+    if (!result) return;
+    brewStatus = result.status;
+    brewVersions = result.versions;
+  }
+
+  async function finishBrew(batch: { id: string } | null) {
+    brewStatus = null;
+    if (!batch) return;
+    goto(`/batches/${batch.id}`);
+  }
 
   async function handleExport() {
     if (!recipe) return;
@@ -136,6 +155,13 @@
       >
         Scale
       </button>
+      <button
+        onclick={handleBrew}
+        class="flex items-center justify-center rounded flex-shrink-0 text-xs px-2 font-medium bg-accent"
+        style="height: 28px; border-radius: var(--radius-md); color: #fff;"
+      >
+        Brew
+      </button>
     </div>
 
     <input
@@ -172,6 +198,14 @@
         currentBatchSizeL={recipe.batch_size_l}
         onClose={() => { showScaleModal = false; }}
       />
+    {/if}
+    {#if brewStatus}
+      <BrewVersionModal
+        status={brewStatus}
+        versions={brewVersions}
+        onBrewCurrent={async (name) => finishBrew(await brewCurrent(id, name))}
+        onBrewVersion={async (vid) => finishBrew(await brewVersion(id, vid))}
+        onCancel={() => (brewStatus = null)} />
     {/if}
 
     <RecipeHero

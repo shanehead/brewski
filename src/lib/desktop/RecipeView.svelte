@@ -36,6 +36,8 @@
   import VersionHistoryPanel from "$lib/components/VersionHistoryPanel.svelte";
   import ConfirmModal from "$lib/components/ConfirmModal.svelte";
   import ScaleRecipeModal from "$lib/components/ScaleRecipeModal.svelte";
+  import BrewVersionModal from "$lib/components/BrewVersionModal.svelte";
+  import { startBrew, brewCurrent, brewVersion } from "$lib/brewFlow";
   import type { BrewingIconName } from "$lib/icons";
 
   let { id }: { id: string } = $props();
@@ -78,6 +80,10 @@
 
   // Scale recipe modal state
   let showScaleModal = $state(false);
+
+  // Brew flow state
+  let brewStatus = $state<RecipeVersionStatus | null>(null);
+  let brewVersions = $state<RecipeVersionSummary[]>([]);
 
   const TABS: { key: "overview" | "ingredients" | "mash" | "water" | "fermentation" | "notes" | "batches"; label: string; icon: BrewingIconName }[] = [
     { key: "overview", label: "Overview", icon: "overview" },
@@ -214,6 +220,19 @@
     await refreshVersionStatus();
   }
 
+  async function handleBrew() {
+    const result = await startBrew(id);
+    if (!result) return;
+    brewStatus = result.status;
+    brewVersions = result.versions;
+  }
+
+  async function finishBrew(batch: { id: string } | null) {
+    brewStatus = null;
+    if (!batch) return;
+    goto(`/batches/${batch.id}`);
+  }
+
   async function handleExport() {
     if (!recipe) return;
     const path = await save({
@@ -319,6 +338,15 @@
       {#if saving}
         <span class="text-xs text-text-muted">Saving…</span>
       {/if}
+
+      <!-- Brew button -->
+      <button
+        onclick={handleBrew}
+        class="text-xs px-3 py-1 rounded bg-accent font-medium"
+        style="color: #fff;"
+      >
+        Brew
+      </button>
 
       <!-- Save Version button -->
       <div class="relative">
@@ -484,6 +512,14 @@
         currentBatchSizeL={recipe.batch_size_l}
         onClose={() => { showScaleModal = false; }}
       />
+    {/if}
+    {#if brewStatus}
+      <BrewVersionModal
+        status={brewStatus}
+        versions={brewVersions}
+        onBrewCurrent={async (name) => finishBrew(await brewCurrent(id, name))}
+        onBrewVersion={async (vid) => finishBrew(await brewVersion(id, vid))}
+        onCancel={() => (brewStatus = null)} />
     {/if}
 
   </div>
