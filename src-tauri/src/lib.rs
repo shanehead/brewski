@@ -8,6 +8,7 @@ pub mod models;
 #[allow(clippy::derivable_impls)]
 #[path = "models.gen.rs"]
 pub mod models_gen;
+mod recipe_hash;
 pub mod repositories;
 pub mod sync_config;
 

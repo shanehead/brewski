@@ -33,6 +33,7 @@ uuid = { version = "1", features = ["v4"] }
 thiserror = "2"
 quick-xml = { version = "0.40", features = ["serialize"] }
 image = "0.25"
+sha2 = "0.10"
 
 [dev-dependencies]
 tokio = { version = "1", features = ["full", "test-util"] }
