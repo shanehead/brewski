@@ -9,6 +9,7 @@
   import Tooltip from "$lib/components/Tooltip.svelte";
   import DocLink from "$lib/components/DocLink.svelte";
   import { DOCS } from "$lib/docs-urls";
+  import FloatInput from "$lib/components/FloatInput.svelte";
   import { escRevert } from "$lib/actions/escRevert";
 
   let { recipe, stats, onchange }: { recipe: Recipe; stats: RecipeStats | null; onchange: () => void } = $props();
@@ -103,16 +104,13 @@
             </td>
             <td class="text-right py-1.5 text-text-secondary">{h.alpha_pct}%</td>
             <td class="text-right py-1.5">
-              <input type="number" inputmode="decimal"
-                     step={units === "imperial" ? 0.1 : 1}
-                     value={kgToHopDisplay(h.amount_kg, units).toFixed(units === "imperial" ? 2 : 0)}
-                     use:escRevert
-                     onblur={(e) => {
-                       const v = parseFloat((e.target as HTMLInputElement).value);
-                       if (!isNaN(v) && v > 0) handleUpdate(h.id, { amount_kg: hopDisplayToKg(v, units) });
-                     }}
-                     class="w-16 text-right px-1 rounded bg-bg-elevated text-text-primary"
-                     style="border: 1px solid transparent;" />
+              <FloatInput
+                step={units === "imperial" ? 0.1 : 1}
+                decimals={units === "imperial" ? 2 : 0}
+                value={kgToHopDisplay(h.amount_kg, units)}
+                oncommit={(v) => { if (v != null && v > 0) handleUpdate(h.id, { amount_kg: hopDisplayToKg(v, units) }); }}
+                class="w-16 text-right px-1 rounded bg-bg-elevated text-text-primary border border-transparent"
+              />
             </td>
             <td class="text-right py-1.5">
               <div class="flex flex-col items-end gap-0.5">
@@ -132,18 +130,14 @@
                   {/each}
                 </select>
                 {#if h.use_ === 'hopstand'}
-                  <input type="number" inputmode="decimal" step={units === "imperial" ? 1 : 1}
-                         value={h.hopstand_temp_c != null
-                           ? (units === "imperial" ? cToF(h.hopstand_temp_c).toFixed(0) : h.hopstand_temp_c.toFixed(0))
-                           : ""}
-                         placeholder={units === "imperial" ? "170°F" : "80°C"}
-                         use:escRevert
-                         onblur={(e) => {
-                           const v = parseFloat((e.target as HTMLInputElement).value);
-                           if (!isNaN(v)) handleUpdate(h.id, { hopstand_temp_c: units === "imperial" ? fToC(v) : v });
-                         }}
-                         class="w-16 text-right px-1 rounded bg-bg-elevated text-text-secondary"
-                         style="border: 1px solid transparent;" />
+                  <FloatInput
+                    step="1"
+                    decimals={0}
+                    placeholder={units === "imperial" ? "170°F" : "80°C"}
+                    value={h.hopstand_temp_c != null ? (units === "imperial" ? cToF(h.hopstand_temp_c) : h.hopstand_temp_c) : null}
+                    oncommit={(v) => { if (v != null) handleUpdate(h.id, { hopstand_temp_c: units === "imperial" ? fToC(v) : v }); }}
+                    class="w-16 text-right px-1 rounded bg-bg-elevated text-text-secondary border border-transparent"
+                  />
                 {/if}
               </div>
             </td>
