@@ -8,7 +8,7 @@
   import Tooltip from "$lib/components/Tooltip.svelte";
   import DocLink from "$lib/components/DocLink.svelte";
   import { DOCS } from "$lib/docs-urls";
-  import { escRevert } from "$lib/actions/escRevert";
+  import FloatInput from "$lib/components/FloatInput.svelte";
 
   let {
     batch,
@@ -71,10 +71,10 @@
     })();
   });
 
-  function updateTemp(value: string) {
+  function updateTemp(v: number | null) {
     hasInteracted = true;
-    const next = Number(value);
-    tempC = units === "imperial" ? fToC(next) : next;
+    if (v == null) return;
+    tempC = units === "imperial" ? fToC(v) : v;
   }
 </script>
 
@@ -115,17 +115,13 @@
         </label>
         <Tooltip text="Use the temperature at the END of fermentation, not after cold crashing. This estimates how much CO₂ is already dissolved in the beer." />
       </div>
-      <input
+      <FloatInput
         id="carb-temp"
-        type="number"
-        inputmode="decimal"
+        value={tempDisplay}
+        decimals={1}
         step="0.1"
-        value={tempDisplay.toFixed(1)}
-        use:escRevert
-        oninput={(e) => updateTemp((e.target as HTMLInputElement).value)}
-        onblur={() => { hasInteracted = true; }}
+        oncommit={updateTemp}
         class="w-full bg-transparent text-sm outline-none text-text-primary"
-
       />
     </div>
 
