@@ -17,6 +17,7 @@
 
   let activeTab = $state<Tab>('hop');
   let query = $state('');
+  let searchEl = $state<HTMLInputElement | null>(null);
 
   let hops = $state<Hop[]>([]);
   let fermentables = $state<Fermentable[]>([]);
@@ -50,7 +51,10 @@
     await loadTab(tab);
   }
 
-  onMount(() => loadTab('hop'));
+  onMount(() => {
+    loadTab('hop');
+    setTimeout(() => searchEl?.focus(), 0);
+  });
 
   $effect(() => { loadTab(activeTab); });
 
@@ -165,7 +169,8 @@
            width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
       </svg>
-      <input bind:value={query}
+      <input bind:this={searchEl}
+             bind:value={query}
              placeholder="Search {TAB_LABELS[activeTab].toLowerCase()}…"
              class="pl-8 pr-3 py-1.5 rounded text-sm w-full bg-bg-elevated border border-border text-text-primary"
              style="outline: none;" />
