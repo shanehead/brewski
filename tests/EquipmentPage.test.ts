@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import { render } from "@testing-library/svelte";
+import userEvent from "@testing-library/user-event";
 import { tick } from "svelte";
 import EquipmentPage from "../src/routes/equipment/+page.svelte";
 
@@ -50,5 +51,39 @@ describe("EquipmentPage", () => {
     await tick();
     // Check that the profile details are rendered (not just in dropdown)
     expect(getByText(/23.0L batch · 72% efficiency/)).toBeInTheDocument();
+  });
+});
+
+describe("EquipmentPage - search", () => {
+  it("renders the search input", async () => {
+    const { getByPlaceholderText } = render(EquipmentPage);
+    expect(getByPlaceholderText("Search profiles…")).toBeInTheDocument();
+  });
+
+  it("shows a matching profile", async () => {
+    const { getByPlaceholderText, getByText } = render(EquipmentPage);
+    await new Promise((r) => setTimeout(r, 10));
+    await tick();
+    const input = getByPlaceholderText("Search profiles…");
+    await userEvent.type(input, "Kettle");
+    expect(getByText("My Kettle")).toBeInTheDocument();
+  });
+
+  it("hides a non-matching profile", async () => {
+    const { getByPlaceholderText, queryByText } = render(EquipmentPage);
+    await new Promise((r) => setTimeout(r, 10));
+    await tick();
+    const input = getByPlaceholderText("Search profiles…");
+    await userEvent.type(input, "Zzz");
+    expect(queryByText("My Kettle")).toBeNull();
+  });
+
+  it("shows empty state when no profiles match", async () => {
+    const { getByPlaceholderText, getByText } = render(EquipmentPage);
+    await new Promise((r) => setTimeout(r, 10));
+    await tick();
+    const input = getByPlaceholderText("Search profiles…");
+    await userEvent.type(input, "Zzz");
+    expect(getByText(/No profiles match/)).toBeInTheDocument();
   });
 });

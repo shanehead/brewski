@@ -16,10 +16,19 @@
   let editingProfile = $state<EquipmentProfile | null>(null);
   let showCopyModal = $state(false);
   let copyCandidate = $state<EquipmentProfile | null>(null);
+  let searchEl = $state<HTMLInputElement | null>(null);
+  let query = $state("");
+
+  const filtered = $derived(
+    query.trim() === ""
+      ? profiles
+      : profiles.filter((p) => p.name.toLowerCase().includes(query.trim().toLowerCase()))
+  );
 
   onMount(async () => {
     await ipc(loadSettings());
     profiles = await ipc(listEquipmentProfiles()) ?? [];
+    setTimeout(() => searchEl?.focus(), 0);
   });
 
   async function refreshProfiles() {
@@ -112,20 +121,39 @@
   <div class="flex flex-col gap-6 max-w-md">
     <section class="flex flex-col gap-3">
       <h2 class="text-sm font-semibold text-text-secondary">Equipment Profiles</h2>
-      <div class="flex items-center justify-between">
-        <label for="select-default-profile" class="text-sm text-text-primary">Default Profile</label>
-        <select id="select-default-profile" value={$settings.default_equipment_profile_id ?? ""}
-                onchange={handleDefaultEquipChange}
-                class="px-2 py-1.5 rounded text-sm bg-bg-elevated text-text-primary border border-border"
-               >
-          <option value="">None</option>
-          {#each profiles as p}
-            <option value={p.id}>{p.name}</option>
-          {/each}
-        </select>
+      <div class="relative max-w-xs">
+        <svg class="text-text-muted" style="position: absolute; left: 8px; top: 50%; transform: translateY(-50%); pointer-events: none;"
+             width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input
+          bind:this={searchEl}
+          bind:value={query}
+          placeholder="Search profiles…"
+          class="pl-8 pr-3 py-1.5 rounded text-sm w-full bg-bg-elevated border border-border text-text-primary"
+          style="outline: none;"
+        />
       </div>
+      {#if query.trim() === ""}
+        <div class="flex items-center justify-between">
+          <label for="select-default-profile" class="text-sm text-text-primary">Default Profile</label>
+          <select id="select-default-profile" value={$settings.default_equipment_profile_id ?? ""}
+                  onchange={handleDefaultEquipChange}
+                  class="px-2 py-1.5 rounded text-sm bg-bg-elevated text-text-primary border border-border"
+                 >
+            <option value="">None</option>
+            {#each profiles as p}
+              <option value={p.id}>{p.name}</option>
+            {/each}
+          </select>
+        </div>
+      {/if}
 
-      {#each profiles as p (p.id)}
+      {#if filtered.length === 0 && query.trim() !== ""}
+        <p class="text-sm text-text-muted py-2">No profiles match "{query}"</p>
+      {/if}
+
+      {#each filtered as p (p.id)}
         <div class="flex items-center justify-between py-1 border-t border-border">
           <div>
             <p class="text-sm text-text-primary">{p.name}</p>
