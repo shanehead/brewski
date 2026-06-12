@@ -9,7 +9,7 @@
   import Tooltip from "$lib/components/Tooltip.svelte";
   import DocLink from "$lib/components/DocLink.svelte";
   import { DOCS } from "$lib/docs-urls";
-  import { escRevert } from "$lib/actions/escRevert";
+  import FloatInput from "$lib/components/FloatInput.svelte";
 
   let { recipe, onchange }: { recipe: Recipe; onchange: () => void } = $props();
 
@@ -31,10 +31,9 @@
     onchange();
   }
 
-  async function handleAmountChange(f: RecipeAdditionFermentable, value: string) {
-    const display = parseFloat(value);
-    if (!isNaN(display) && display > 0) {
-      await ipc(updateRecipeFermentable(f.id, { amount_kg: units === "imperial" ? lbToKg(display) : display }));
+  async function handleAmountChange(f: RecipeAdditionFermentable, v: number | null) {
+    if (v != null && v > 0) {
+      await ipc(updateRecipeFermentable(f.id, { amount_kg: units === "imperial" ? lbToKg(v) : v }));
       onchange();
     }
   }
@@ -83,12 +82,13 @@
             <td class="py-1.5 text-text-primary">{f.name}</td>
             <td class="text-right py-1.5 text-text-secondary">{f.color_lovibond}°L</td>
             <td class="text-right py-1.5">
-              <input type="number" inputmode="decimal" step={units === "imperial" ? 0.1 : 0.05}
-                     value={(units === "imperial" ? kgToLb(f.amount_kg) : f.amount_kg).toFixed(2)}
-                     use:escRevert
-                     onblur={(e) => handleAmountChange(f, (e.target as HTMLInputElement).value)}
-                     class="w-16 text-right px-1 rounded bg-bg-elevated text-text-primary"
-                     style="border: 1px solid transparent;" />
+              <FloatInput
+                step={units === "imperial" ? 0.1 : 0.05}
+                decimals={2}
+                value={units === "imperial" ? kgToLb(f.amount_kg) : f.amount_kg}
+                oncommit={(v) => handleAmountChange(f, v)}
+                class="w-16 text-right px-1 rounded bg-bg-elevated text-text-primary border border-transparent"
+              />
             </td>
             <td class="pl-1">
               <button onclick={() => handleDelete(f.id)} class="opacity-40 hover:opacity-100 text-text-secondary"
