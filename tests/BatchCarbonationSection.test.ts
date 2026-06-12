@@ -154,6 +154,7 @@ describe("BatchCarbonationSection", () => {
     const input = screen.getByLabelText(/Packaging Temp/i) as HTMLInputElement;
     await user.clear(input);
     await user.type(input, "18");
+    await user.tab(); // trigger blur so oncommit fires
 
     // Flush the recalculation triggered by temp change
     await tick();
