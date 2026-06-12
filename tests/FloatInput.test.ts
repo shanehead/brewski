@@ -62,6 +62,7 @@ describe("FloatInput", () => {
     // jsdom normalizes type="number" values, so "5.0" becomes "5".
     expect(input.value).toBe("5");
     expect(oncommit).not.toHaveBeenCalledWith(99);
+    expect(oncommit).toHaveBeenCalledWith(5);
   });
 
   it("forwards style prop to the input", () => {
