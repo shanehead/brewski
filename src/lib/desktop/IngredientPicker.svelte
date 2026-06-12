@@ -18,6 +18,7 @@
   } from '$lib/units';
   import type { BrewingIconName } from "$lib/icons";
   import { srmToHex } from "$lib/utils/srm";
+  import FloatInput from "$lib/components/FloatInput.svelte";
   export type AddPayload =
     | { type: 'hop'; item: Hop; form: string; amount_kg: number; use_: string; time_min: number; hopstand_temp_c: number | null }
     | { type: 'fermentable'; item: Fermentable; amount_kg: number }
@@ -353,11 +354,14 @@
           <div class="border-t border-border bg-bg-surface" style="padding: 12px 16px; display: flex; gap: 10px; align-items: flex-end; flex-shrink: 0;">
             <div>
               <div class="text-text-secondary" style="font-size: 11px; margin-bottom: 4px;">Amount ({hopWeightLabel(units)})</div>
-              <input type="number" inputmode="decimal" step={units === 'imperial' ? 0.1 : 1}
-                value={kgToHopDisplay(amount, units).toFixed(units === 'imperial' ? 2 : 0)}
-                onblur={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); if (!isNaN(v)) amount = hopDisplayToKg(v, units); }}
-                min="0.001"
-                class="bg-bg-elevated border border-border text-text-primary" style="width: 70px; border-radius: 5px; padding: 5px 8px; font-size: 13px;" />
+              <FloatInput
+                step={units === 'imperial' ? 0.1 : 1}
+                decimals={units === 'imperial' ? 2 : 0}
+                value={kgToHopDisplay(amount, units)}
+                oncommit={(v) => { if (v != null && !isNaN(v)) amount = hopDisplayToKg(v, units); }}
+                class="bg-bg-elevated border border-border text-text-primary"
+                style="width: 70px; border-radius: 5px; padding: 5px 8px; font-size: 13px;"
+              />
             </div>
             <div>
               <div class="text-text-secondary" style="font-size: 11px; margin-bottom: 4px;">Form</div>
@@ -379,11 +383,14 @@
             {#if use_ === 'hopstand'}
             <div>
               <div class="text-text-secondary" style="font-size: 11px; margin-bottom: 4px;">Temp ({tempLabel(units)})</div>
-              <input type="number" inputmode="decimal" step="1"
-                value={units === 'imperial' ? cToF(hopstand_temp_c).toFixed(0) : hopstand_temp_c}
-                onblur={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); if (!isNaN(v)) hopstand_temp_c = units === 'imperial' ? fToC(v) : v; }}
-                min="0"
-                class="bg-bg-elevated border border-border text-text-primary" style="width: 60px; border-radius: 5px; padding: 5px 8px; font-size: 13px;" />
+              <FloatInput
+                step="1"
+                decimals={0}
+                value={units === 'imperial' ? cToF(hopstand_temp_c) : hopstand_temp_c}
+                oncommit={(v) => { if (v != null) hopstand_temp_c = units === 'imperial' ? fToC(v) : v; }}
+                class="bg-bg-elevated border border-border text-text-primary"
+                style="width: 60px; border-radius: 5px; padding: 5px 8px; font-size: 13px;"
+              />
             </div>
             {/if}
             {#if hop.source === 'seeded'}
@@ -456,11 +463,14 @@
           <div class="border-t border-border bg-bg-surface" style="padding: 12px 16px; display: flex; gap: 10px; align-items: flex-end; flex-shrink: 0;">
             <div>
               <div class="text-text-secondary" style="font-size: 11px; margin-bottom: 4px;">Amount ({weightLabel(units)})</div>
-              <input type="number" inputmode="decimal" step="0.1"
-                value={(units === 'imperial' ? kgToLb(amount) : amount).toFixed(2)}
-                onblur={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); if (!isNaN(v)) amount = units === 'imperial' ? lbToKg(v) : v; }}
-                min="0.01"
-                class="bg-bg-elevated border border-border text-text-primary" style="width: 80px; border-radius: 5px; padding: 5px 8px; font-size: 13px;" />
+              <FloatInput
+                step="0.1"
+                decimals={2}
+                value={units === 'imperial' ? kgToLb(amount) : amount}
+                oncommit={(v) => { if (v != null && !isNaN(v)) amount = units === 'imperial' ? lbToKg(v) : v; }}
+                class="bg-bg-elevated border border-border text-text-primary"
+                style="width: 80px; border-radius: 5px; padding: 5px 8px; font-size: 13px;"
+              />
             </div>
             {#if ferm.source === 'seeded'}
               <button onclick={enterForkMode}

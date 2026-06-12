@@ -13,6 +13,7 @@
     type Units,
   } from '$lib/units';
   import type { BrewingIconName } from "$lib/icons";
+  import FloatInput from "$lib/components/FloatInput.svelte";
 
   export type AddPayload =
     | { type: 'hop'; item: Hop; form: string; amount_kg: number; use_: string; time_min: number; hopstand_temp_c: number | null }
@@ -300,10 +301,12 @@
           <div class="flex gap-3">
             <label class="flex flex-col gap-1 flex-1 text-xs text-text-secondary">
               Amount ({hopWeightLabel(units)})
-              <input type="number" inputmode="decimal" step={units === 'imperial' ? 0.1 : 1}
-                     value={kgToHopDisplay(amount, units).toFixed(units === 'imperial' ? 2 : 0)}
-                     onblur={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); if (!isNaN(v)) amount = hopDisplayToKg(v, units); }}
-                     min="0.001" class="px-3 py-2 rounded-lg text-sm bg-bg-elevated border border-border text-text-primary"
+              <FloatInput
+                     step={units === 'imperial' ? 0.1 : 1}
+                     decimals={units === 'imperial' ? 2 : 0}
+                     value={kgToHopDisplay(amount, units)}
+                     oncommit={(v) => { if (v != null && !isNaN(v)) amount = hopDisplayToKg(v, units); }}
+                     class="px-3 py-2 rounded-lg text-sm bg-bg-elevated border border-border text-text-primary"
                      />
             </label>
             <label class="flex flex-col gap-1 text-xs text-text-secondary">
@@ -329,19 +332,23 @@
           {#if use_ === 'hopstand'}
             <label class="flex flex-col gap-1 text-xs text-text-secondary" style="max-width: 120px;">
               Temp ({tempLabel(units)})
-              <input type="number" inputmode="decimal" step="1"
-                     value={units === 'imperial' ? cToF(hopstand_temp_c).toFixed(0) : hopstand_temp_c}
-                     onblur={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); if (!isNaN(v)) hopstand_temp_c = units === 'imperial' ? fToC(v) : v; }}
-                     min="0" class="px-3 py-2 rounded-lg text-sm bg-bg-elevated border border-border text-text-primary"
+              <FloatInput
+                     step="1"
+                     decimals={0}
+                     value={units === 'imperial' ? cToF(hopstand_temp_c) : hopstand_temp_c}
+                     oncommit={(v) => { if (v != null) hopstand_temp_c = units === 'imperial' ? fToC(v) : v; }}
+                     class="px-3 py-2 rounded-lg text-sm bg-bg-elevated border border-border text-text-primary"
                      />
             </label>
           {/if}
         {:else if type === 'fermentable' && selected}
           <label class="flex flex-col gap-1 text-xs text-text-secondary">
             Amount ({weightLabel(units)})
-            <input type="number" inputmode="decimal" step="0.1" min="0"
-                   value={units === 'imperial' ? kgToLb(amount).toFixed(2) : amount.toFixed(2)}
-                   onblur={(e) => { const v = parseFloat((e.target as HTMLInputElement).value); if (!isNaN(v)) amount = units === 'imperial' ? lbToKg(v) : v; }}
+            <FloatInput
+                   step="0.1"
+                   decimals={2}
+                   value={units === 'imperial' ? kgToLb(amount) : amount}
+                   oncommit={(v) => { if (v != null && !isNaN(v)) amount = units === 'imperial' ? lbToKg(v) : v; }}
                    class="px-3 py-2 rounded-lg text-sm bg-bg-elevated border border-border text-text-primary"
                    style="max-width: 150px;" />
           </label>
