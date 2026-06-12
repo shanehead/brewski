@@ -13,6 +13,14 @@
   let fileInput: HTMLInputElement;
   let importing = $state(false);
   let appDataDir = $state("");
+  let searchEl = $state<HTMLInputElement | null>(null);
+  let search = $state("");
+
+  const filtered = $derived(
+    search.trim() === ""
+      ? $recipeList
+      : $recipeList.filter((r) => r.name.toLowerCase().includes(search.trim().toLowerCase()))
+  );
 
   const startersCollapsed = $derived($settings.starters_collapsed ?? false);
 
@@ -20,6 +28,7 @@
     appDataDir = await getAppDataDir();
     ipc(refreshRecipeList());
     ipc(refreshBaselineRecipeList());
+    setTimeout(() => searchEl?.focus(), 0);
   });
 
   function thumbnailSrc(recipe: RecipeSummary): string | null {
@@ -78,9 +87,22 @@
     >
       {importing ? "Importing…" : "Import BeerXML"}
     </button>
+    <div class="relative">
+      <svg class="text-text-muted" style="position: absolute; left: 8px; top: 50%; transform: translateY(-50%); pointer-events: none;"
+           width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <input
+        bind:this={searchEl}
+        type="search"
+        placeholder="Search recipes…"
+        bind:value={search}
+        class="w-full pl-8 pr-2.5 py-2 rounded text-sm outline-none bg-bg-elevated text-text-primary border border-border"
+      />
+    </div>
   </div>
   <div class="flex-1 overflow-y-auto">
-    {#each $recipeList as recipe (recipe.id)}
+    {#each filtered as recipe (recipe.id)}
       {@const thumb = thumbnailSrc(recipe)}
       <a
         href="/recipe/{recipe.id}"
@@ -96,7 +118,9 @@
         <span class="text-text-muted">›</span>
       </a>
     {:else}
-      <p class="p-4 text-sm text-text-muted">No recipes yet. Tap + to create one.</p>
+      <p class="p-4 text-sm text-text-muted">
+        {search ? "No matches" : "No recipes yet. Tap + to create one."}
+      </p>
     {/each}
 
     <!-- Example Recipes section -->
