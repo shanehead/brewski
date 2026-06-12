@@ -28,7 +28,6 @@
     appDataDir = await getAppDataDir();
     ipc(refreshRecipeList());
     ipc(refreshBaselineRecipeList());
-    setTimeout(() => searchEl?.focus(), 0);
   });
 
   function thumbnailSrc(recipe: RecipeSummary): string | null {
