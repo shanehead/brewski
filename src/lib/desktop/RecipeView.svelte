@@ -160,6 +160,7 @@
     saving = true;
     recipe = await ipc(updateRecipe(recipe.id, { name: target.value })) ?? recipe;
     saving = false;
+    refreshRecipeList();
   }
 
   async function handleViewVersion(version: RecipeVersionSummary) {
@@ -310,18 +311,17 @@
         </button>
         {#if showImagePopover}
           <div
-            class="absolute left-0 top-full mt-1 rounded shadow-lg z-20 flex flex-col overflow-hidden bg-bg-elevated border border-border"
-            style="min-width: 140px;"
+            class="absolute left-0 top-full mt-1 rounded z-20 flex flex-col overflow-hidden"
+            style="min-width: 150px; background: var(--color-bg-elevated); border: 1px solid var(--color-text-muted); box-shadow: 0 8px 24px rgba(0,0,0,0.5);"
           >
             <button
               onclick={() => { showImagePopover = false; handleImageUpload(); }}
-              class="px-3 py-2 text-left text-sm hover:bg-[var(--color-bg-surface)] transition-colors text-text-primary"
-             
+              class="image-menu-item px-4 py-2.5 text-left text-sm font-medium text-text-primary"
             >{recipe?.image_path ? "Change photo" : "Add photo"}</button>
             {#if recipe?.image_path}
               <button
                 onclick={() => { showImagePopover = false; handleImageRemove(); }}
-                class="px-3 py-2 text-left text-sm hover:bg-[var(--color-bg-surface)] transition-colors text-text-danger"
+                class="image-menu-item px-4 py-2.5 text-left text-sm font-medium text-text-danger"
               >Remove photo</button>
             {/if}
           </div>
@@ -351,7 +351,7 @@
       <!-- Brew button -->
       <button
         onclick={handleBrew}
-        class="text-xs px-3 py-1 rounded bg-accent font-medium"
+        class="text-sm px-4 py-1.5 rounded bg-accent font-medium"
         style="color: #fff;"
       >
         Brew
@@ -361,8 +361,7 @@
       <div class="relative">
         <button
           onclick={() => { showSavePopover = !showSavePopover; }}
-          class="text-xs px-2 py-1 rounded text-text-secondary bg-bg-elevated border border-border"
-         
+          class="text-sm px-3 py-1.5 rounded text-text-secondary bg-bg-elevated border border-border"
         >
           Save Version
         </button>
@@ -402,8 +401,7 @@
       <!-- Scale Recipe button -->
       <button
         onclick={() => { showScaleModal = true; }}
-        class="text-xs px-2 py-1 rounded text-text-secondary bg-bg-elevated border border-border"
-       
+        class="text-sm px-3 py-1.5 rounded text-text-secondary bg-bg-elevated border border-border"
       >
         Scale Recipe
       </button>
@@ -411,10 +409,9 @@
       <!-- Export BeerXML button -->
       <button
         onclick={handleExport}
-        class="flex items-center gap-1 text-xs px-2 py-1 rounded transition-colors text-text-secondary bg-bg-elevated border border-border"
-       
+        class="flex items-center gap-1.5 text-sm px-3 py-1.5 rounded transition-colors text-text-secondary bg-bg-elevated border border-border"
       >
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
           <polyline points="7 10 12 15 17 10"/>
           <line x1="12" y1="15" x2="12" y2="3"/>
@@ -425,7 +422,7 @@
       <!-- Version history toggle -->
       <button
         onclick={() => { showVersionPanel = !showVersionPanel; }}
-        class="text-xs px-2 py-1 rounded"
+        class="text-sm px-3 py-1.5 rounded"
         style="
           color: {showVersionPanel ? '#fff' : 'var(--color-text-secondary)'};
           background: {showVersionPanel ? 'var(--color-accent)' : 'var(--color-bg-elevated)'};
@@ -545,3 +542,9 @@
     <p class="text-sm text-text-muted">Loading…</p>
   </div>
 {/if}
+
+<style>
+  .image-menu-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+  }
+</style>
