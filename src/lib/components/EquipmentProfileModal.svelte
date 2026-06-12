@@ -185,7 +185,7 @@
         </div>
         <div class="flex flex-col gap-1">
           <label for="eq-boil-time" class="text-xs text-text-secondary">Boil Time <span class="text-text-tertiary">min</span></label>
-          <input id="eq-boil-time" type="number" inputmode="decimal" value={boilTimeMin} onblur={(e) => boilTimeMin = numInput(e)} class="eq-field-input" />
+          <FloatInput id="eq-boil-time" decimals={0} value={boilTimeMin} oncommit={(v) => boilTimeMin = v ?? boilTimeMin} class="eq-field-input" />
         </div>
         <div class="col-span-2 flex flex-col gap-1">
           <label for="eq-notes" class="text-xs text-text-secondary">Description</label>
@@ -206,7 +206,7 @@
           </div>
           <div class="flex flex-col gap-1">
             <label for="eq-batch-size" class="text-xs text-text-secondary">{batchLabel} <span class="text-text-tertiary">{volumeLabel(units)}</span></label>
-            <input id="eq-batch-size" type="number" inputmode="decimal" step="0.1" value={volDisp(batchSizeL)} onblur={(e) => batchSizeL = volIn(e)} class="eq-field-input" />
+            <FloatInput id="eq-batch-size" step="0.1" decimals={2} value={volVal(batchSizeL)} oncommit={(v) => batchSizeL = volSave(v)} class="eq-field-input" />
           </div>
 
           <div class="flex items-center gap-2">
@@ -218,52 +218,49 @@
             {#if calcBoilVolume}
               <div id="eq-boil-size" class="eq-field-display">{(units === "imperial" ? lToGal(preBoilHotL) : preBoilHotL).toFixed(2)} <span class="text-text-tertiary">(hot)</span></div>
             {:else}
-              <input id="eq-boil-size" type="number" inputmode="decimal" step="0.1" value={volDisp(boilSizeL)} onblur={(e) => boilSizeL = volIn(e)} class="eq-field-input" />
+              <FloatInput id="eq-boil-size" step="0.1" decimals={2} value={volVal(boilSizeL)} oncommit={(v) => boilSizeL = volSave(v)} class="eq-field-input" />
             {/if}
           </div>
 
           <div class="flex flex-col gap-1">
             <label for="eq-evap-rate" class="text-xs text-text-secondary">Boil Off <span class="text-text-tertiary">({calcEvapPct.toFixed(1)}%) {volumeLabel(units)}/hr</span></label>
-            <input id="eq-evap-rate" type="number" inputmode="decimal" step="0.01" value={volDisp(evapRateLHr)} onblur={(e) => evapRateLHr = volIn(e)} class="eq-field-input" />
+            <FloatInput id="eq-evap-rate" step="0.01" decimals={2} value={volVal(evapRateLHr)} oncommit={(v) => evapRateLHr = volSave(v)} class="eq-field-input" />
           </div>
           <div class="flex flex-col gap-1">
             <label for="eq-trub-loss" class="text-xs text-text-secondary">Trub/Chiller Loss <span class="text-text-tertiary">{volumeLabel(units)}</span></label>
-            <input id="eq-trub-loss" type="number" inputmode="decimal" step="0.01" value={volDisp(trubChillerLossL)} onblur={(e) => trubChillerLossL = volIn(e)} class="eq-field-input" />
+            <FloatInput id="eq-trub-loss" step="0.01" decimals={2} value={volVal(trubChillerLossL)} oncommit={(v) => trubChillerLossL = volSave(v)} class="eq-field-input" />
           </div>
 
           <div class="flex flex-col gap-1">
             <label for="eq-lauter-dead" class="text-xs text-text-secondary">Mash-Tun Deadspace <span class="text-text-tertiary">{volumeLabel(units)}</span></label>
-            <input id="eq-lauter-dead" type="number" inputmode="decimal" step="0.01" value={volDisp(mashTunDeadspaceL)} onblur={(e) => mashTunDeadspaceL = volIn(e)} class="eq-field-input" />
+            <FloatInput id="eq-lauter-dead" step="0.01" decimals={2} value={volVal(mashTunDeadspaceL)} oncommit={(v) => mashTunDeadspaceL = volSave(v)} class="eq-field-input" />
           </div>
           <div class="flex flex-col gap-1">
             <label for="eq-mash-loss" class="text-xs text-text-secondary">Mash-Tun Loss <span class="text-text-tertiary">{volumeLabel(units)}</span></label>
-            <input id="eq-mash-loss" type="number" inputmode="decimal" step="0.01" value={volDisp(mashTunLossL)} onblur={(e) => mashTunLossL = volIn(e)} class="eq-field-input" />
+            <FloatInput id="eq-mash-loss" step="0.01" decimals={2} value={volVal(mashTunLossL)} oncommit={(v) => mashTunLossL = volSave(v)} class="eq-field-input" />
           </div>
 
           <div class="flex flex-col gap-1">
             <label for="eq-hlt-dead" class="text-xs text-text-secondary">HLT Deadspace <span class="text-text-tertiary">{volumeLabel(units)}</span></label>
-            <input id="eq-hlt-dead" type="number" inputmode="decimal" step="0.01" placeholder="optional"
-                   value={volDispNull(hltDeadspaceL)} onblur={(e) => hltDeadspaceL = volInNull(e)} class="eq-field-input" />
+            <FloatInput id="eq-hlt-dead" step="0.01" decimals={2} placeholder="optional" value={volValNull(hltDeadspaceL)} oncommit={(v) => hltDeadspaceL = volSaveNull(v)} class="eq-field-input" />
           </div>
           <div class="flex flex-col gap-1">
             <label for="eq-ferm-loss" class="text-xs text-text-secondary">Fermenter Loss <span class="text-text-tertiary">{volumeLabel(units)}</span></label>
-            <input id="eq-ferm-loss" type="number" inputmode="decimal" step="0.01" value={volDisp(fermenterLossL)} onblur={(e) => fermenterLossL = volIn(e)} class="eq-field-input" />
+            <FloatInput id="eq-ferm-loss" step="0.01" decimals={2} value={volVal(fermenterLossL)} oncommit={(v) => fermenterLossL = volSave(v)} class="eq-field-input" />
           </div>
           <div></div>
           <div class="flex flex-col gap-1">
             <label for="eq-hlt-limit-min" class="text-xs text-text-secondary">HLT Water Limit Min <span class="text-text-tertiary">{volumeLabel(units)}</span></label>
-            <input id="eq-hlt-limit-min" type="number" inputmode="decimal" step="0.1" placeholder="optional"
-                   value={volDispNull(hltWaterLimitMinL)} onblur={(e) => hltWaterLimitMinL = volInNull(e)} class="eq-field-input" />
+            <FloatInput id="eq-hlt-limit-min" step="0.1" decimals={2} placeholder="optional" value={volValNull(hltWaterLimitMinL)} oncommit={(v) => hltWaterLimitMinL = volSaveNull(v)} class="eq-field-input" />
           </div>
 
           <div class="flex flex-col gap-1">
             <label for="eq-topup" class="text-xs text-text-secondary">Fermenter Top-Up <span class="text-text-tertiary">{volumeLabel(units)}</span></label>
-            <input id="eq-topup" type="number" inputmode="decimal" step="0.01" placeholder="optional"
-                   value={topUpWaterL ? volDisp(topUpWaterL) : ""} onblur={(e) => topUpWaterL = volIn(e)} class="eq-field-input" />
+            <FloatInput id="eq-topup" step="0.01" decimals={2} placeholder="optional" value={volValNull(topUpWaterL)} oncommit={(v) => topUpWaterL = volSave(v)} class="eq-field-input" />
           </div>
           <div class="flex flex-col gap-1">
             <label for="eq-cooling" class="text-xs text-text-secondary">Cooling Shrinkage <span class="text-text-tertiary">%</span></label>
-            <input id="eq-cooling" type="number" inputmode="decimal" step="0.1" value={coolingShrinkagePct} onblur={(e) => coolingShrinkagePct = numInput(e)} class="eq-field-input" />
+            <FloatInput id="eq-cooling" step="0.1" decimals={1} value={coolingShrinkagePct} oncommit={(v) => coolingShrinkagePct = v ?? coolingShrinkagePct} class="eq-field-input" />
           </div>
         </div>
         <p class="text-xs mt-2 text-right text-text-tertiary">
@@ -277,15 +274,14 @@
         <div class="grid grid-cols-2 gap-4">
           <div class="flex flex-col gap-1">
             <label for="eq-efficiency" class="text-xs text-text-secondary">Brewhouse Efficiency <span class="text-text-tertiary">%</span></label>
-            <input id="eq-efficiency" type="number" inputmode="decimal" step="0.1" value={efficiencyPct} onblur={(e) => efficiencyPct = numInput(e)} class="eq-field-input" />
+            <FloatInput id="eq-efficiency" step="0.1" decimals={1} value={efficiencyPct} oncommit={(v) => efficiencyPct = v ?? efficiencyPct} class="eq-field-input" />
           </div>
           <div class="flex flex-col gap-1">
             <label for="eq-mash-eff" class="text-xs text-text-secondary">Mash Efficiency <span class="text-text-tertiary">%</span></label>
             {#if calcMashEfficiency}
               <div id="eq-mash-eff" class="eq-field-display text-text-tertiary">calculated</div>
             {:else}
-              <input id="eq-mash-eff" type="number" inputmode="decimal" step="0.1" placeholder="optional"
-                     value={mashEfficiencyPct ?? ""} onblur={(e) => mashEfficiencyPct = nullableNumInput(e)} class="eq-field-input" />
+              <FloatInput id="eq-mash-eff" step="0.1" decimals={1} placeholder="optional" value={mashEfficiencyPct ?? null} oncommit={(v) => mashEfficiencyPct = v} class="eq-field-input" />
             {/if}
           </div>
           <div class="flex items-center gap-2 col-span-2">
@@ -301,14 +297,14 @@
         <div class="grid grid-cols-2 gap-4">
           <div class="flex flex-col gap-1">
             <label for="eq-hop-util" class="text-xs text-text-secondary">Hop Utilization Multiplier <span class="text-text-tertiary">%</span></label>
-            <input id="eq-hop-util" type="number" inputmode="decimal" step="1" value={hopUtilizationPct} onblur={(e) => hopUtilizationPct = numInput(e)} class="eq-field-input" />
+            <FloatInput id="eq-hop-util" step="1" decimals={1} value={hopUtilizationPct} oncommit={(v) => hopUtilizationPct = v ?? hopUtilizationPct} class="eq-field-input" />
           </div>
           <div class="flex flex-col gap-1">
             <label for="eq-aroma-util" class="text-xs text-text-secondary">Aroma Hop Utilization <span class="text-text-tertiary">%</span></label>
             {#if calcAromaHopUtilization}
               <div id="eq-aroma-util" class="eq-field-display text-text-tertiary">calculated</div>
             {:else}
-              <input id="eq-aroma-util" type="number" inputmode="decimal" step="0.1" value={aromaHopUtilizationPct} onblur={(e) => aromaHopUtilizationPct = numInput(e)} class="eq-field-input" />
+              <FloatInput id="eq-aroma-util" step="0.1" decimals={1} value={aromaHopUtilizationPct} oncommit={(v) => aromaHopUtilizationPct = v ?? aromaHopUtilizationPct} class="eq-field-input" />
             {/if}
           </div>
           <div class="flex items-center gap-2">
@@ -318,16 +314,14 @@
           {#if calcAromaHopUtilization}
             <div class="flex flex-col gap-1">
               <label for="eq-hopstand-temp" class="text-xs text-text-secondary">Hopstand Temperature <span class="text-text-tertiary">{tempLabel(units)}</span></label>
-              <input id="eq-hopstand-temp" type="number" inputmode="decimal" step="1"
-                     value={tempDispNull(hopstandTempF)} onblur={(e) => hopstandTempF = tempInNull(e) ?? hopstandTempF} class="eq-field-input" />
+              <FloatInput id="eq-hopstand-temp" step="1" decimals={1} value={tempVal(hopstandTempF)} oncommit={(v) => { const s = tempSave(v); if (s != null) hopstandTempF = s; }} class="eq-field-input" />
             </div>
           {:else}
             <div></div>
           {/if}
           <div class="flex flex-col gap-1">
             <label for="eq-whirlpool" class="text-xs text-text-secondary">Whirlpool / No-Chill Time <span class="text-text-tertiary">min</span></label>
-            <input id="eq-whirlpool" type="number" inputmode="decimal" step="1" placeholder="optional"
-                   value={whirlpoolTimeMin ?? ""} onblur={(e) => whirlpoolTimeMin = nullableNumInput(e)} class="eq-field-input" />
+            <FloatInput id="eq-whirlpool" step="1" decimals={0} placeholder="optional" value={whirlpoolTimeMin ?? null} oncommit={(v) => whirlpoolTimeMin = v} class="eq-field-input" />
           </div>
         </div>
       </section>
@@ -345,9 +339,7 @@
             {#if altitudeAdjustment}
               <div id="eq-boil-temp" class="eq-field-display text-text-tertiary">calculated from altitude</div>
             {:else}
-              <input id="eq-boil-temp" type="number" inputmode="decimal" step="1"
-                     placeholder={units === "imperial" ? "212" : "100"}
-                     value={tempDispNull(boilTempF)} onblur={(e) => boilTempF = tempInNull(e)} class="eq-field-input" />
+              <FloatInput id="eq-boil-temp" step="1" decimals={1} placeholder={units === "imperial" ? "212" : "100"} value={tempVal(boilTempF)} oncommit={(v) => boilTempF = tempSave(v)} class="eq-field-input" />
             {/if}
           </div>
         </div>
@@ -359,8 +351,7 @@
         <div class="grid grid-cols-2 gap-4">
           <div class="flex flex-col gap-1">
             <label for="eq-tun-heat-cap" class="text-xs text-text-secondary">Mash-Tun Heat Capacity <span class="text-text-tertiary">{volumeLabel(units)} equiv.</span></label>
-            <input id="eq-tun-heat-cap" type="number" inputmode="decimal" step="0.1"
-                   value={volDisp(tunHeatCapacityL)} onblur={(e) => tunHeatCapacityL = volIn(e)} class="eq-field-input" />
+            <FloatInput id="eq-tun-heat-cap" step="0.1" decimals={2} value={volVal(tunHeatCapacityL)} oncommit={(v) => tunHeatCapacityL = volSave(v)} class="eq-field-input" />
           </div>
           <div class="col-span-2 flex flex-col gap-1">
             <label for="eq-sparge-method" class="text-xs text-text-secondary">Sparge Method</label>
@@ -372,13 +363,11 @@
           </div>
           <div class="flex flex-col gap-1">
             <label for="eq-grain-abs" class="text-xs text-text-secondary">Grain Absorption Rate <span class="text-text-tertiary">{ratioLabel}</span></label>
-            <input id="eq-grain-abs" type="number" inputmode="decimal" step="0.01"
-                   value={ratioDisp(grainAbsorptionRateLPerKg)} onblur={(e) => grainAbsorptionRateLPerKg = ratioIn(e)} class="eq-field-input" />
+            <FloatInput id="eq-grain-abs" step="0.01" decimals={2} value={ratioVal(grainAbsorptionRateLPerKg)} oncommit={(v) => grainAbsorptionRateLPerKg = ratioSave(v)} class="eq-field-input" />
           </div>
           <div class="flex flex-col gap-1">
             <label for="eq-water-grain" class="text-xs text-text-secondary">Water/Grain Ratio <span class="text-text-tertiary">{ratioLabel}</span></label>
-            <input id="eq-water-grain" type="number" inputmode="decimal" step="0.01"
-                   value={ratioDisp(waterGrainRatioLPerKg)} onblur={(e) => waterGrainRatioLPerKg = ratioIn(e)} class="eq-field-input" />
+            <FloatInput id="eq-water-grain" step="0.01" decimals={2} value={ratioVal(waterGrainRatioLPerKg)} oncommit={(v) => waterGrainRatioLPerKg = ratioSave(v)} class="eq-field-input" />
           </div>
 
           <div class="flex items-center gap-2 col-span-2 mt-1">
@@ -388,25 +377,21 @@
           <FieldLabel class="col-span-2 mt-1">Mash Volume Limits</FieldLabel>
           <div class="flex flex-col gap-1">
             <label for="eq-mash-vol-min" class="text-xs text-text-secondary">Min <span class="text-text-tertiary">{volumeLabel(units)}</span></label>
-            <input id="eq-mash-vol-min" type="number" inputmode="decimal" step="0.1" placeholder="optional"
-                   value={volDispNull(mashVolumeMinL)} onblur={(e) => mashVolumeMinL = volInNull(e)} class="eq-field-input" />
+            <FloatInput id="eq-mash-vol-min" step="0.1" decimals={2} placeholder="optional" value={volValNull(mashVolumeMinL)} oncommit={(v) => mashVolumeMinL = volSaveNull(v)} class="eq-field-input" />
           </div>
           <div class="flex flex-col gap-1">
             <label for="eq-mash-vol-max" class="text-xs text-text-secondary">Max <span class="text-text-tertiary">{volumeLabel(units)}</span></label>
-            <input id="eq-mash-vol-max" type="number" inputmode="decimal" step="0.1" placeholder="optional"
-                   value={volDispNull(mashVolumeMaxL)} onblur={(e) => mashVolumeMaxL = volInNull(e)} class="eq-field-input" />
+            <FloatInput id="eq-mash-vol-max" step="0.1" decimals={2} placeholder="optional" value={volValNull(mashVolumeMaxL)} oncommit={(v) => mashVolumeMaxL = volSaveNull(v)} class="eq-field-input" />
           </div>
 
           <FieldLabel class="col-span-2 mt-1">Sparge Volume Limits</FieldLabel>
           <div class="flex flex-col gap-1">
             <label for="eq-sparge-vol-min" class="text-xs text-text-secondary">Min <span class="text-text-tertiary">{volumeLabel(units)}</span></label>
-            <input id="eq-sparge-vol-min" type="number" inputmode="decimal" step="0.1" placeholder="optional"
-                   value={volDispNull(spargeVolumeMinL)} onblur={(e) => spargeVolumeMinL = volInNull(e)} class="eq-field-input" />
+            <FloatInput id="eq-sparge-vol-min" step="0.1" decimals={2} placeholder="optional" value={volValNull(spargeVolumeMinL)} oncommit={(v) => spargeVolumeMinL = volSaveNull(v)} class="eq-field-input" />
           </div>
           <div class="flex flex-col gap-1">
             <label for="eq-sparge-vol-max" class="text-xs text-text-secondary">Max <span class="text-text-tertiary">{volumeLabel(units)}</span></label>
-            <input id="eq-sparge-vol-max" type="number" inputmode="decimal" step="0.1" placeholder="optional"
-                   value={volDispNull(spargeVolumeMaxL)} onblur={(e) => spargeVolumeMaxL = volInNull(e)} class="eq-field-input" />
+            <FloatInput id="eq-sparge-vol-max" step="0.1" decimals={2} placeholder="optional" value={volValNull(spargeVolumeMaxL)} oncommit={(v) => spargeVolumeMaxL = volSaveNull(v)} class="eq-field-input" />
           </div>
 
           <div class="col-span-2 flex flex-col gap-1 mt-1">
@@ -424,13 +409,11 @@
           {#if calcStrikeWaterTemp}
             <div class="flex flex-col gap-1">
               <label for="eq-room-temp" class="text-xs text-text-secondary">Room Temperature <span class="text-text-tertiary">{tempLabel(units)}</span></label>
-              <input id="eq-room-temp" type="number" inputmode="decimal" step="1"
-                     value={tempDispNull(roomTempF)} onblur={(e) => roomTempF = tempInNull(e) ?? roomTempF} class="eq-field-input" />
+              <FloatInput id="eq-room-temp" step="1" decimals={1} value={tempVal(roomTempF)} oncommit={(v) => { const s = tempSave(v); if (s != null) roomTempF = s; }} class="eq-field-input" />
             </div>
             <div class="flex flex-col gap-1">
               <label for="eq-grain-temp" class="text-xs text-text-secondary">Grain Temperature <span class="text-text-tertiary">{tempLabel(units)}</span></label>
-              <input id="eq-grain-temp" type="number" inputmode="decimal" step="1"
-                     value={tempDispNull(grainTempF)} onblur={(e) => grainTempF = tempInNull(e) ?? grainTempF} class="eq-field-input" />
+              <FloatInput id="eq-grain-temp" step="1" decimals={1} value={tempVal(grainTempF)} oncommit={(v) => { const s = tempSave(v); if (s != null) grainTempF = s; }} class="eq-field-input" />
             </div>
             <p class="text-xs col-span-2 text-text-tertiary">
               Set heat capacity to 0 if your mash tun is pre-heated.
@@ -438,8 +421,7 @@
           {/if}
           <div class="col-span-2 flex flex-col gap-1 mt-1">
             <label for="eq-sparge-temp" class="text-xs text-text-secondary">Sparge Temperature <span class="text-text-tertiary">{tempLabel(units)}</span></label>
-            <input id="eq-sparge-temp" type="number" inputmode="decimal" step="1" placeholder="optional"
-                   value={tempDispNull(spargeTempF)} onblur={(e) => spargeTempF = tempInNull(e)} class="eq-field-input" />
+            <FloatInput id="eq-sparge-temp" step="1" decimals={1} placeholder="optional" value={tempVal(spargeTempF)} oncommit={(v) => spargeTempF = tempSave(v)} class="eq-field-input" />
           </div>
         </div>
       </section>
