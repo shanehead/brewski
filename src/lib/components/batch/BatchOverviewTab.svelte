@@ -15,6 +15,7 @@
   import DocLink from "$lib/components/DocLink.svelte";
   import { DOCS } from "$lib/docs-urls";
   import { escRevert } from "$lib/actions/escRevert";
+  import FloatInput from "$lib/components/FloatInput.svelte";
 
   let { batch, onUpdate, onRefresh, images = [] }: {
     batch: Batch;
@@ -218,17 +219,13 @@
               style="color: {highlighted ? 'var(--color-accent)' : 'var(--color-text-primary)'}; font-weight: {highlighted ? '600' : '400'};"
             />
           {:else}
-            <input
+            <FloatInput
               id="batch-{row.field}"
-              type="number" inputmode="decimal"
               step="0.1"
-              value={rawValue != null ? rawValue.toFixed(1) : ""}
-              use:escRevert
-              onblur={(e) => {
-                const v = e.currentTarget.value;
-                onUpdate({ [row.field]: v ? parseFloat(v) : null } as UpdateBatchInput);
-              }}
+              decimals={1}
               placeholder="—"
+              value={rawValue}
+              oncommit={(v) => onUpdate({ [row.field]: v } as UpdateBatchInput)}
               class="w-full bg-transparent text-sm outline-none"
               style="color: {highlighted ? 'var(--color-accent)' : 'var(--color-text-primary)'}; font-weight: {highlighted ? '600' : '400'};"
             />
