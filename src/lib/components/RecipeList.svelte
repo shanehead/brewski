@@ -3,6 +3,7 @@
   import { goto } from "$app/navigation";
   import { recipeList, refreshRecipeList, baselineRecipeList, refreshBaselineRecipeList } from "$lib/stores/recipes";
   import { createRecipe, deleteRecipe, createRecipesFromBeerxml } from "$lib/api";
+  import { escClear } from "$lib/actions/escRevert";
   import type { RecipeSummary } from "$lib/api";
   import { ipc, setSuccess } from "$lib/stores/error";
   import { settings, saveSetting } from "$lib/stores/settings";
@@ -84,8 +85,9 @@
         type="search"
         placeholder="Search recipes…"
         bind:value={search}
+        use:escClear
         class="w-full pl-7 pr-2.5 py-1.5 rounded text-sm outline-none bg-bg-elevated text-text-primary border border-border"
-       
+
       />
     </div>
     <button

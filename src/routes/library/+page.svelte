@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount, tick } from 'svelte';
+  import { escClear } from '$lib/actions/escRevert';
   import type { Hop, Fermentable, Yeast, Misc, Water } from '$lib/api';
   import {
     listHopLibrary, deleteHop,
@@ -171,6 +172,7 @@
       </svg>
       <input bind:this={searchEl}
              bind:value={query}
+             use:escClear
              placeholder="Search {TAB_LABELS[activeTab].toLowerCase()}…"
              class="pl-8 pr-3 py-1.5 rounded text-sm w-full bg-bg-elevated border border-border text-text-primary"
              style="outline: none;" />

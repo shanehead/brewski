@@ -1,5 +1,6 @@
 <script lang="ts">
   import BrewingIcon from "$lib/components/BrewingIcon.svelte";
+  import { escClear } from '$lib/actions/escRevert';
   import type { Hop, Fermentable, Yeast } from '$lib/api';
   import { listHopLibrary, listFermentableLibrary, listYeastLibrary } from '$lib/api';
   import { ipc } from '$lib/stores/error';
@@ -156,6 +157,7 @@
         <input
           bind:this={searchInput}
           bind:value={query}
+          use:escClear
           placeholder="Search {type === 'hop' ? 'hops' : type === 'fermentable' ? 'fermentables' : 'yeasts'}…"
           class="bg-bg-elevated border border-border text-text-primary" style="border-radius: 6px; padding: 7px 10px 7px 28px; font-size: 13px; outline: none; width: 100%; box-sizing: border-box;"
         />

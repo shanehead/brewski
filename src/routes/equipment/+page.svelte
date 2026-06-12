@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
+  import { escClear } from "$lib/actions/escRevert";
   import { settings, loadSettings, saveSetting } from "$lib/stores/settings";
   import { lToGal, volumeLabel } from "$lib/units";
   import { listEquipmentProfiles, createEquipmentProfile, deleteEquipmentProfile, copyEquipmentProfile } from "$lib/api";
@@ -129,6 +130,7 @@
         <input
           bind:this={searchEl}
           bind:value={query}
+          use:escClear
           placeholder="Search profiles…"
           class="pl-8 pr-3 py-1.5 rounded text-sm w-full bg-bg-elevated border border-border text-text-primary"
           style="outline: none;"

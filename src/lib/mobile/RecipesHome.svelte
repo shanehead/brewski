@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { goto } from "$app/navigation";
+  import { escClear } from "$lib/actions/escRevert";
   import { recipeList, refreshRecipeList, baselineRecipeList, refreshBaselineRecipeList } from "$lib/stores/recipes";
   import { createRecipe, createRecipesFromBeerxml } from "$lib/api";
   import type { RecipeSummary } from "$lib/api";
@@ -96,6 +97,7 @@
         type="search"
         placeholder="Search recipes…"
         bind:value={search}
+        use:escClear
         class="w-full pl-8 pr-2.5 py-2 rounded text-sm outline-none bg-bg-elevated text-text-primary border border-border"
       />
     </div>
