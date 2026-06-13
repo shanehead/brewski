@@ -55,14 +55,14 @@
   <nav class="flex flex-col items-center w-14 py-3 gap-2 border-r flex-shrink-0 bg-bg-surface border-border"
       >
 
-    <button onclick={() => goto($settings.last_route_recipes ?? "/")}
+    <button onclick={() => goto(isRecipes ? "/" : ($settings.last_route_recipes ?? "/"))}
             class="w-9 h-9 flex items-center justify-center rounded-lg transition-colors"
             aria-label="Recipes"
             style={isRecipes ? "background: color-mix(in srgb, var(--color-accent) 18%, transparent);" : ""}>
       <BrewingIcon name="recipes" size={22} />
     </button>
 
-    <button onclick={() => goto($settings.last_route_batches ?? "/batches")}
+    <button onclick={() => goto(isBatches ? "/batches" : ($settings.last_route_batches ?? "/batches"))}
             class="w-9 h-9 flex items-center justify-center rounded-lg transition-colors"
             aria-label="Batches"
             style={isBatches ? "background: color-mix(in srgb, var(--color-accent) 18%, transparent);" : ""}>

@@ -93,6 +93,7 @@ describe("AppShell rail", () => {
 
 describe("AppShell rail dynamic navigation", () => {
   it("Recipes button navigates to last_route_recipes when set", async () => {
+    mockPathname = "/tools";
     mockSettings = { last_route_recipes: "/recipe/abc?tab=mash" };
     const { container } = render(AppShell, { children: () => null });
     const btn = container.querySelector('button[aria-label="Recipes"]') as HTMLButtonElement;
@@ -117,6 +118,26 @@ describe("AppShell rail dynamic navigation", () => {
     btn.click();
     await tick();
     expect(gotoMock).toHaveBeenCalledWith("/batches/xyz");
+  });
+
+  it("Recipes button navigates to / when already on a recipe page", async () => {
+    mockPathname = "/recipe/abc";
+    mockSettings = { last_route_recipes: "/recipe/abc?tab=mash" };
+    const { container } = render(AppShell, { children: () => null });
+    const btn = container.querySelector('button[aria-label="Recipes"]') as HTMLButtonElement;
+    btn.click();
+    await tick();
+    expect(gotoMock).toHaveBeenCalledWith("/");
+  });
+
+  it("Batches button navigates to /batches when already on a batch page", async () => {
+    mockPathname = "/batches/xyz";
+    mockSettings = { last_route_batches: "/batches/xyz" };
+    const { container } = render(AppShell, { children: () => null });
+    const btn = container.querySelector('button[aria-label="Batches"]') as HTMLButtonElement;
+    btn.click();
+    await tick();
+    expect(gotoMock).toHaveBeenCalledWith("/batches");
   });
 });
 
