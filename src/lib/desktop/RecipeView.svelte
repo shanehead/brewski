@@ -23,7 +23,6 @@
   import { srmToHex } from "$lib/utils/srm";
   import { open } from "@tauri-apps/plugin-dialog";
   import { uploadRecipeImage, deleteRecipeImage } from "$lib/api";
-  import RecipeList from "$lib/components/RecipeList.svelte";
   import StatsSidebar from "$lib/components/StatsSidebar.svelte";
   import OverviewTab from "$lib/components/tabs/OverviewTab.svelte";
   import IngredientsTab from "$lib/components/tabs/IngredientsTab.svelte";
@@ -277,8 +276,6 @@
 </script>
 
 <svelte:window onkeydown={(e) => { if (e.key === "Escape") { showSavePopover = false; showImagePopover = false; } }} />
-
-<RecipeList selectedId={id} />
 
 {#if recipe}
   <div class="flex flex-1 flex-col overflow-hidden">

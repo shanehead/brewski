@@ -4,7 +4,6 @@
   import { getRecipe, getRecipeStats, createRecipe } from "$lib/api";
   import type { Recipe, RecipeStats } from "$lib/api";
   import { ipc } from "$lib/stores/error";
-  import RecipeList from "$lib/components/RecipeList.svelte";
   import StatsSidebar from "$lib/components/StatsSidebar.svelte";
   import OverviewTab from "$lib/components/tabs/OverviewTab.svelte";
   import IngredientsTab from "$lib/components/tabs/IngredientsTab.svelte";
@@ -61,8 +60,6 @@
     { key: "notes", label: "Notes", icon: "notes" },
   ] as const;
 </script>
-
-<RecipeList selectedId={id} />
 
 {#if recipe}
   <div class="flex flex-1 flex-col overflow-hidden">
