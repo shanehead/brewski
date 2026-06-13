@@ -6,8 +6,6 @@
   import { convertFileSrc } from "@tauri-apps/api/core";
   import { appDataDir as getAppDataDir } from "@tauri-apps/api/path";
   import { ipc } from "$lib/stores/error";
-  import { batchList, refreshBatchList } from "$lib/stores/batches";
-  import BatchList from "$lib/components/BatchList.svelte";
   import BatchOverviewTab from "$lib/components/batch/BatchOverviewTab.svelte";
   import BatchAttachmentsTab from "$lib/components/batch/BatchAttachmentsTab.svelte";
 
@@ -38,7 +36,6 @@
   }
 
   onMount(async () => {
-    await refreshBatchList();
     await loadBatch();
   });
 
@@ -49,25 +46,10 @@
   async function handleUpdate(input: UpdateBatchInput) {
     if (!batch) return;
     batch = await ipc(updateBatch(batch.id, input)) ?? batch;
-    await refreshBatchList();
   }
 </script>
 
 <svelte:window onkeydown={(e) => e.key === "Escape" && (showAttachments = false)} />
-
-<aside class="w-56 flex flex-col flex-shrink-0 border-r overflow-hidden bg-bg-surface border-border"
-      >
-  <div class="p-2 border-b border-border">
-    <button
-      onclick={() => goto("/batches")}
-      class="w-full px-2 py-1.5 rounded text-sm text-left bg-accent"
-      style="color: #fff;"
-    >+ New Batch</button>
-  </div>
-  <div class="flex-1 overflow-y-auto">
-    <BatchList batches={$batchList} onRefresh={async () => { await ipc(refreshBatchList()); }} />
-  </div>
-</aside>
 
 <div class="flex flex-1 flex-col overflow-hidden">
   {#if batch}
