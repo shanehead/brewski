@@ -40,8 +40,8 @@ const TAURI_MOCK = `
       ];
       if (cmd === 'list_baseline_recipes') return [];
       if (cmd === 'list_batches' || cmd === 'list_batches_for_recipe') return [
-        { id: 'b1', recipe_id: 'r1', recipe_name: 'Pliny the Elder Clone', recipe_version_id: 'v1', name: 'Batch 1', status: 'fermenting', brew_date: 1716000000000, actual_og: 1.071, actual_fg: null, rating: null, created_at: 1716000000000, updated_at: 1716100000000 },
-        { id: 'b2', recipe_id: 'r1', recipe_name: 'Pliny the Elder Clone', recipe_version_id: 'v1', name: 'Batch 2', status: 'packaged', brew_date: 1715000000000, actual_og: 1.072, actual_fg: 1.010, rating: 8, created_at: 1715000000000, updated_at: 1715500000000 },
+        { id: 'b1', recipe_id: 'r1', recipe_name: 'Pliny the Elder Clone', recipe_version_id: 'v1', name: 'Batch 1', status: 'fermenting', brew_date: 1716000000, actual_og: 1.071, actual_fg: null, rating: null, created_at: 1716000000, updated_at: 1716100000 },
+        { id: 'b2', recipe_id: 'r1', recipe_name: 'Pliny the Elder Clone', recipe_version_id: 'v1', name: 'Batch 2', status: 'packaged', brew_date: 1715000000, actual_og: 1.072, actual_fg: 1.010, rating: 8, created_at: 1715000000, updated_at: 1715500000 },
       ];
       if (cmd === 'list_recipe_versions') return [];
       if (cmd === 'list_equipment_profiles') return [];
@@ -49,7 +49,7 @@ const TAURI_MOCK = `
         const fermenting = {
           id: 'b1', recipe_id: 'r1', recipe_name: 'Pliny the Elder Clone',
           recipe_version_id: 'v1', name: 'Batch 1', status: 'fermenting',
-          brew_date: 1716000000000, fermenter_date: 1716086400000,
+          brew_date: 1716000000, fermenter_date: 1716086400,
           conditioning_date: null, packaging_date: null,
           actual_pre_boil_volume_l: 23.5, actual_post_boil_volume_l: 19.2,
           actual_batch_size_l: 18.9, actual_pre_boil_gravity: 1.063,
@@ -61,18 +61,18 @@ const TAURI_MOCK = `
           packaging_temp_c: null, carbonation_sugar_type: null,
           priming_sugar_g: null, serving_pressure_kpa: null,
           gravity_readings: [
-            { id: 'g1', batch_id: 'b1', recorded_at: 1716086400000, gravity: 1.071, temp_c: 20.0, notes: 'pitch day' },
-            { id: 'g2', batch_id: 'b1', recorded_at: 1716259200000, gravity: 1.038, temp_c: 20.5, notes: null },
-            { id: 'g3', batch_id: 'b1', recorded_at: 1716432000000, gravity: 1.015, temp_c: 20.0, notes: null },
-            { id: 'g4', batch_id: 'b1', recorded_at: 1716604800000, gravity: 1.010, temp_c: 19.5, notes: 'stable' },
+            { id: 'g1', batch_id: 'b1', recorded_at: 1716086400, gravity: 1.071, temp_c: 20.0, notes: 'pitch day' },
+            { id: 'g2', batch_id: 'b1', recorded_at: 1716259200, gravity: 1.038, temp_c: 20.5, notes: null },
+            { id: 'g3', batch_id: 'b1', recorded_at: 1716432000, gravity: 1.015, temp_c: 20.0, notes: null },
+            { id: 'g4', batch_id: 'b1', recorded_at: 1716604800, gravity: 1.010, temp_c: 19.5, notes: 'stable' },
           ],
-          created_at: 1716000000000, updated_at: 1716604800000,
+          created_at: 1716000000, updated_at: 1716604800,
         };
         const packaged = {
           id: 'b2', recipe_id: 'r1', recipe_name: 'Pliny the Elder Clone',
           recipe_version_id: 'v1', name: 'Batch 2', status: 'packaged',
-          brew_date: 1715000000000, fermenter_date: 1715086400000,
-          conditioning_date: 1715600000000, packaging_date: 1715700000000,
+          brew_date: 1715000000, fermenter_date: 1715086400,
+          conditioning_date: 1715600000, packaging_date: 1715700000,
           actual_pre_boil_volume_l: 23.0, actual_post_boil_volume_l: 19.0,
           actual_batch_size_l: 18.9, actual_pre_boil_gravity: 1.062,
           actual_og: 1.072, actual_fg: 1.010,
@@ -84,12 +84,12 @@ const TAURI_MOCK = `
           packaging_temp_c: 18.0, carbonation_sugar_type: 'corn_sugar',
           priming_sugar_g: 142, serving_pressure_kpa: null,
           gravity_readings: [
-            { id: 'g5', batch_id: 'b2', recorded_at: 1715086400000, gravity: 1.072, temp_c: 20.0, notes: 'pitch day' },
-            { id: 'g6', batch_id: 'b2', recorded_at: 1715259200000, gravity: 1.035, temp_c: 20.5, notes: null },
-            { id: 'g7', batch_id: 'b2', recorded_at: 1715432000000, gravity: 1.012, temp_c: 20.0, notes: null },
-            { id: 'g8', batch_id: 'b2', recorded_at: 1715604800000, gravity: 1.010, temp_c: 19.5, notes: 'stable, ready to package' },
+            { id: 'g5', batch_id: 'b2', recorded_at: 1715086400, gravity: 1.072, temp_c: 20.0, notes: 'pitch day' },
+            { id: 'g6', batch_id: 'b2', recorded_at: 1715259200, gravity: 1.035, temp_c: 20.5, notes: null },
+            { id: 'g7', batch_id: 'b2', recorded_at: 1715432000, gravity: 1.012, temp_c: 20.0, notes: null },
+            { id: 'g8', batch_id: 'b2', recorded_at: 1715604800, gravity: 1.010, temp_c: 19.5, notes: 'stable, ready to package' },
           ],
-          created_at: 1715000000000, updated_at: 1715700000000,
+          created_at: 1715000000, updated_at: 1715700000,
         };
         return args?.id === 'b2' ? packaged : fermenting;
       }
@@ -100,7 +100,7 @@ const TAURI_MOCK = `
         batch_size_l: 19, boil_size_l: 23, boil_time_min: 90,
         efficiency_pct: 72, fermentation_stages: 2,
         forced_carbonation: false, source: 'user',
-        created_at: 1716000000000, updated_at: 1716000000000,
+        created_at: 1716000000, updated_at: 1716000000,
         style: { id: 's1', name: 'Imperial IPA', category: 'India Pale Ale', category_number: '22', style_letter: 'C', style_guide: 'BJCP 2021', type_: 'Ale', og_min: 1.065, og_max: 1.085, fg_min: 1.008, fg_max: 1.017, ibu_min: 60, ibu_max: 120, color_min_srm: 6, color_max_srm: 14, abv_min: 7.5, abv_max: 10.0, notes: null },
         fermentables: [
           { id: 'f1', recipe_id: 'r1', name: 'Pale Malt (2-Row)', type_: 'Grain', yield_pct: 80, color_lovibond: 2, amount_kg: 7.26, add_after_boil: false, addition_order: 0 },
@@ -203,6 +203,7 @@ async function fillInputs(pg, values) {
 
 // ── Desktop (1280×800) ───────────────────────────────────────────────────────
 await capture(1280, 800, "/recipe/r1", "recipes");
+await capture(1280, 800, "/batches/b1", "batches");
 await capture(1280, 800, "/tools", "tools");
 await capture(1280, 800, "/tools/abv-calories", "tools-abv", (pg) =>
   fillInputs(pg, [1.06, 1.012]),
@@ -238,7 +239,8 @@ await capture(1280, 800, "/recipe/r1", "docs-gs-recipe-mash", async (pg) => {
 
 // docs-gs-batch-overview: recipe editor, Batches tab (shows "Brew this Recipe")
 await capture(1280, 800, "/recipe/r1", "docs-gs-batch-overview", async (pg) => {
-  await pg.getByRole("button", { name: "Batches" }).click();
+  // Use nth(1) to select the tab bar "Batches" button, not the rail icon (also aria-label="Batches")
+  await pg.getByRole("button", { name: "Batches" }).nth(1).click();
   await pg.waitForTimeout(400);
 }, DOCS_OUT);
 

@@ -61,18 +61,28 @@ Everything stays on your device, no account needed. Runs on macOS, iOS, Android,
 <table>
   <tr>
     <td align="center" width="60%">
-      <img src="docs/screenshots/tools-abv.png" alt="ABV, attenuation, and calorie calculator" style="max-width:100%;"/>
-      <br/><sub>Brewing calculators — desktop</sub>
+      <img src="docs/screenshots/recipes.png" alt="Recipe editor" style="max-width:100%;"/>
+      <br/><sub>Recipe editor — desktop</sub>
     </td>
     <td align="center" width="40%">
-      <img src="docs/screenshots/tools-abv-mobile.png" alt="ABV calculator on mobile" style="max-width:100%;"/>
-      <br/><sub>Mobile view</sub>
+      <img src="docs/screenshots/recipes-mobile.png" alt="Recipe list on mobile" style="max-width:100%;"/>
+      <br/><sub>Recipe list — mobile</sub>
     </td>
   </tr>
   <tr>
     <td align="center" width="60%">
-      <img src="docs/screenshots/recipes.png" alt="Recipe list" style="max-width:100%;"/>
-      <br/><sub>Recipe list — desktop</sub>
+      <img src="docs/screenshots/batches.png" alt="Batch tracking" style="max-width:100%;"/>
+      <br/><sub>Batch tracking — desktop</sub>
+    </td>
+    <td align="center" width="40%">
+      <img src="docs/screenshots/tools-abv-mobile.png" alt="ABV calculator on mobile" style="max-width:100%;"/>
+      <br/><sub>Brewing calculators — mobile</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="60%">
+      <img src="docs/screenshots/tools-abv.png" alt="ABV, attenuation, and calorie calculator" style="max-width:100%;"/>
+      <br/><sub>Brewing calculators — desktop</sub>
     </td>
     <td align="center" width="40%">
       <img src="docs/screenshots/tools-mobile.png" alt="Tools list on mobile" style="max-width:100%;"/>
