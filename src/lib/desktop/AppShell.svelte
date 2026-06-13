@@ -43,7 +43,7 @@
     }
   });
 
-  const isRecipes   = $derived($page.url.pathname === "/" || $page.url.pathname.startsWith("/recipe"));
+  const isRecipes   = $derived($page.url.pathname === "/" || $page.url.pathname.startsWith("/recipe") || $page.url.pathname.startsWith("/baseline-recipe"));
   const isBatches   = $derived($page.url.pathname.startsWith("/batches"));
   const isTools     = $derived($page.url.pathname.startsWith("/tools"));
   const isEquipment = $derived($page.url.pathname.startsWith("/equipment"));

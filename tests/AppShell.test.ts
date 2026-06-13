@@ -139,6 +139,16 @@ describe("AppShell rail dynamic navigation", () => {
     await tick();
     expect(gotoMock).toHaveBeenCalledWith("/batches");
   });
+
+  it("Recipes button navigates to / when already on a baseline recipe page", async () => {
+    mockPathname = "/baseline-recipe/abc";
+    mockSettings = { last_route_recipes: "/baseline-recipe/abc" };
+    const { container } = render(AppShell, { children: () => null });
+    const btn = container.querySelector('button[aria-label="Recipes"]') as HTMLButtonElement;
+    btn.click();
+    await tick();
+    expect(gotoMock).toHaveBeenCalledWith("/");
+  });
 });
 
 describe("AppShell last route", () => {
